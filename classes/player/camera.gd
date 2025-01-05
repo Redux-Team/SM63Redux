@@ -49,6 +49,12 @@ func begin_rezoom() -> void:
 	rezooming = true
 
 
+func cancel_zoom() -> void:
+	target_zoom = current_zoom
+	zoom_timer = ZOOM_TIME
+	rezooming = false
+
+
 func _process(delta):
 	# Advance the zoom in/out animation.
 	if rezooming:
