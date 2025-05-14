@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://swfihpayxhis"
+path="res://.godot/imported/gui_red.fnt-cf0d7a0f4d4cd00f328ad1feb05e8e1f.fontdata"
+
+[deps]
+
+source_file="res://core/theme/fonts/red/gui_red.fnt"
+dest_files=["res://.godot/imported/gui_red.fnt-cf0d7a0f4d4cd00f328ad1feb05e8e1f.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2

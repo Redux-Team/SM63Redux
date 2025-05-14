@@ -1,0 +1,41 @@
+[remap]
+
+importer="font_data_dynamic"
+type="FontFile"
+uid="uid://hhy8cxtk1xcx"
+path="res://.godot/imported/bylight.otf-51b27f153c632bdcd9ab1b704cc7d4ed.fontdata"
+
+[deps]
+
+source_file="res://core/theme/fonts/bylight/bylight.otf"
+dest_files=["res://.godot/imported/bylight.otf-51b27f153c632bdcd9ab1b704cc7d4ed.fontdata"]
+
+[params]
+
+Rendering=null
+antialiasing=0
+generate_mipmaps=false
+disable_embedded_bitmaps=true
+multichannel_signed_distance_field=false
+msdf_pixel_range=8
+msdf_size=48
+allow_system_fallback=true
+force_autohinter=false
+hinting=1
+subpixel_positioning=4
+keep_rounding_remainders=true
+oversampling=0.0
+Fallbacks=null
+fallbacks=[]
+Compress=null
+compress=true
+preload=[{
+"chars": [],
+"glyphs": [],
+"name": "New Configuration",
+"size": Vector2i(16, 0),
+&"variation_embolden": 0.0
+}]
+language_support={}
+script_support={}
+opentype_features={}

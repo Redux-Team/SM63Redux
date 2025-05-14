@@ -1,0 +1,95 @@
+[gd_scene load_steps=9 format=3 uid="uid://c6dic42vckv0e"]
+
+[ext_resource type="Script" uid="uid://bc4sevdr53dpi" path="res://game/ui/components/main_menu_button/main_menu_button.gd" id="1_6rm1l"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_fawul"]
+load_path = "res://.godot/imported/select_mode_button_frame.png-511097e7a4fc55764c93b8f37e2aca24.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_rlo7v"]
+load_path = "res://.godot/imported/select_mode_button_content.png-a569c8bb024d50a836f1d5839aad21f5.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fawul"]
+atlas = SubResource("CompressedTexture2D_rlo7v")
+region = Rect2(0, 0, 126, 36)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_pvhv8"]
+load_path = "res://.godot/imported/menu_titles.png-9eb830350a6341707d05bb3d8308b6ed.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rlo7v"]
+atlas = SubResource("CompressedTexture2D_pvhv8")
+region = Rect2(0, 0, 126, 24)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_6rm1l"]
+load_path = "res://.godot/imported/hook.png-f5adb84b8d88bed4ef684751e638aaba.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pvhv8"]
+atlas = SubResource("CompressedTexture2D_6rm1l")
+region = Rect2(0, 0, 56, 32)
+
+[node name="MainMenuButton" type="Control"]
+layout_mode = 3
+anchor_right = 0.234
+anchor_bottom = 0.172333
+offset_right = 0.23999
+offset_bottom = 5.96
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6rm1l")
+metadata/_edit_use_anchors_ = true
+
+[node name="FrameTexture" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CompressedTexture2D_fawul")
+expand_mode = 1
+
+[node name="ContentTexture" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08
+anchor_top = 0.206
+anchor_right = 0.92
+anchor_bottom = 0.735
+offset_left = -1.0
+offset_top = -1.008
+offset_right = 1.0
+offset_bottom = 1.02
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_fawul")
+expand_mode = 1
+
+[node name="TitleTexture" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08
+anchor_top = 0.293882
+anchor_right = 0.92
+anchor_bottom = 0.662118
+offset_top = 0.0159988
+offset_bottom = -0.0240021
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_rlo7v")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="TopIconTexture" type="TextureRect" parent="."]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.313
+anchor_top = -0.529
+anchor_right = 0.687
+anchor_bottom = 0.059
+offset_left = 0.0499954
+offset_top = -0.0279961
+offset_right = -0.0500031
+offset_bottom = 0.988
+grow_horizontal = 2
+texture = SubResource("AtlasTexture_pvhv8")
+expand_mode = 1

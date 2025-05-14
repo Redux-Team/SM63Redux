@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://bfchlb1yvu2ch"
+path="res://.godot/imported/pipescript_red.fnt-8ee81acb6f159ad9c7c46b669657a88b.fontdata"
+
+[deps]
+
+source_file="res://core/theme/fonts/pipescript/pipescript_red.fnt"
+dest_files=["res://.godot/imported/pipescript_red.fnt-8ee81acb6f159ad9c7c46b669657a88b.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2

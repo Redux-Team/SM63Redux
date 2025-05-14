@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://cn7afe8x3nmic"
+path="res://.godot/imported/pipescript_pink.fnt-64eded86a112abd737e81530635eb5e1.fontdata"
+
+[deps]
+
+source_file="res://core/theme/fonts/pipescript/pipescript_pink.fnt"
+dest_files=["res://.godot/imported/pipescript_pink.fnt-64eded86a112abd737e81530635eb5e1.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2

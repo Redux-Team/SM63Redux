@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://cabefmqbmvpiw"
+path="res://.godot/imported/pipescript_yellow.fnt-b58a93fbc8b93f94c3a768aa9fb92735.fontdata"
+
+[deps]
+
+source_file="res://core/theme/fonts/pipescript/pipescript_yellow.fnt"
+dest_files=["res://.godot/imported/pipescript_yellow.fnt-b58a93fbc8b93f94c3a768aa9fb92735.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2

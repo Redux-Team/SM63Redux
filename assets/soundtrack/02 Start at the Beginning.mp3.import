@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dmjltgy8g1jqg"
+path="res://.godot/imported/02 Start at the Beginning.mp3-bb3f473c8e104e0f57386df06ca437a9.mp3str"
+
+[deps]
+
+source_file="res://assets/soundtrack/02 Start at the Beginning.mp3"
+dest_files=["res://.godot/imported/02 Start at the Beginning.mp3-bb3f473c8e104e0f57386df06ca437a9.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=4.364
+bpm=0.0
+beat_count=0
+bar_beats=4

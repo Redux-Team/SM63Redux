@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://bbihoovi82c3j"
+path="res://.godot/imported/pipescript_blue.fnt-7b800b5f1445d9ac6598e6ba62c16567.fontdata"
+
+[deps]
+
+source_file="res://core/theme/fonts/pipescript/pipescript_blue.fnt"
+dest_files=["res://.godot/imported/pipescript_blue.fnt-7b800b5f1445d9ac6598e6ba62c16567.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2
