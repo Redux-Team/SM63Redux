@@ -7,10 +7,11 @@ extends Control
 @export var right_button_container: AspectRatioContainer
 @export var extra_button_container: AspectRatioContainer
 @export var menu_buttons_holder: Control
+@export var description_label: Label
 @export var sfx_next: AudioStreamPlayer
 
+
 var current_index: int = 0
-var is_cycling: bool = false
 
 func _ready() -> void:
 	assign_buttons_to_containers()
@@ -23,6 +24,8 @@ func _input(event: InputEvent) -> void:
 		cycle(-1, &"cycle_left")
 
 
+## Reparenting logic for the main menu buttons so that the AnimationPlayer can reuse the same
+## containers every cycle.
 func assign_buttons_to_containers() -> void:
 	for button in menu_buttons:
 		if button.get_parent() != menu_buttons_holder:
@@ -49,11 +52,11 @@ func assign_buttons_to_containers() -> void:
 		button.show()
 
 
+## The logic which combines the animation with the reparenting, ensuring that no reparenting
+## happens if the next animation is not ready. 
 func cycle(direction: int, animation_name: StringName) -> void:
-	if is_cycling or animation_player.is_playing() or not is_visible_in_tree():
+	if animation_player.is_playing() or not is_visible_in_tree():
 		return
-	
-	is_cycling = true
 	
 	current_index = (current_index + direction + menu_buttons.size()) % menu_buttons.size()
 	animation_player.play(animation_name)
@@ -67,10 +70,16 @@ func cycle(direction: int, animation_name: StringName) -> void:
 	animation_player.play(&"RESET")
 	await get_tree().process_frame
 	assign_buttons_to_containers()
-	
-	is_cycling = false
 
 
+## Handles cycling when the side regions are clicked or touched
 func _input_cycle_region(event: InputEvent, direction: int, animation: StringName) -> void:
 	if event is InputEventScreenTouch or event is InputEventMouseButton and event.is_pressed():
 		cycle(direction, animation)
+
+
+## Called via animation, this is what grabs the description from the current button and updates
+## the label when it is invisible.
+func update_description() -> void:
+	var button: MainMenuButton = menu_buttons[current_index]
+	description_label.text = button.description

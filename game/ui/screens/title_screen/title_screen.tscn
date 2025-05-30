@@ -209,14 +209,26 @@ tracks/15/keys = {
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("MenuScreen/MenuCycle/ExtraButtonContainer:visible")
+tracks/16/path = NodePath("MenuScreen/MenuCycle/DescriptionLabel:self_modulate")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("MenuScreen/MenuCycle/DescriptionLabel:offset_top")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_1sg8f"]
@@ -432,14 +444,40 @@ tracks/16/use_blend = true
 tracks/17/type = "value"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("MenuScreen/MenuCycle/ExtraButtonContainer:visible")
+tracks/17/path = NodePath("MenuScreen/MenuCycle/DescriptionLabel:offset_top")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
-"times": PackedFloat32Array(0.0333333),
+"times": PackedFloat32Array(0, 0.0313959, 0.0949365, 0.1, 0.135139),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -20.0, -20.0, 20.0, 0.0]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("MenuScreen/MenuCycle/DescriptionLabel:self_modulate")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.1, 0.133333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/19/type = "method"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("MenuScreen/MenuCycle")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0.0666667),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"values": [{
+"args": [],
+"method": &"update_description"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_mu8aq"]
@@ -655,14 +693,40 @@ tracks/16/use_blend = true
 tracks/17/type = "value"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("MenuScreen/MenuCycle/ExtraButtonContainer:visible")
+tracks/17/path = NodePath("MenuScreen/MenuCycle/DescriptionLabel:offset_top")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0, 0.0313959, 0.0949365, 0.1, 0.135139),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -20.0, -20.0, 20.0, 0.0]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("MenuScreen/MenuCycle/DescriptionLabel:self_modulate")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.1, 0.133333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/19/type = "method"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("MenuScreen/MenuCycle")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0.0666667),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"values": [{
+"args": [],
+"method": &"update_description"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1sg8f"]
@@ -924,7 +988,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0.1, 0.333333),
 "transitions": PackedFloat32Array(0.4, 1),
 "update": 0,
-"values": [Vector2(0, 30), Vector2(0, 0)]
+"values": [Vector2(0, 60), Vector2(0, 30)]
 }
 tracks/6/type = "audio"
 tracks/6/imported = false
@@ -1019,7 +1083,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.233333),
 "transitions": PackedFloat32Array(0.4, 1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(0, -30)]
+"values": [Vector2(0, 30), Vector2(0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1293,8 +1357,8 @@ menu_loop = NodePath("MenuLoop")
 sfx_confirm = NodePath("SFXConfirm")
 sfx_back = NodePath("SFXBack")
 splash_fade = NodePath("SplashScreen/SplashFade")
-version_text = NodePath("VersionText")
-team_text = NodePath("TeamText")
+version_text = NodePath("VersionLabel")
+team_text = NodePath("TeamLabel")
 splash_screen = NodePath("SplashScreen")
 menu_screen = NodePath("MenuScreen")
 metadata/_edit_vertical_guides_ = [320.0]
@@ -1342,14 +1406,14 @@ offset_bottom = 0.119995
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 36
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
 text = "Press 'Z' to play!"
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("3_65llw")
-font_size = 36
-outline_size = 10
+font_size = 22
+outline_size = 8
 metadata/_custom_type_script = "uid://dn7i0x4jjj4ry"
 metadata/_edit_use_anchors_ = true
 
@@ -1368,7 +1432,6 @@ metadata/_edit_lock_ = true
 
 [node name="MenuScreen" type="Control" parent="."]
 visible = false
-modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchor_top = 0.0833333
 anchor_right = 1.0
@@ -1378,9 +1441,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
-metadata/_edit_lock_ = true
 
-[node name="MenuCycle" type="Control" parent="MenuScreen" node_paths=PackedStringArray("menu_buttons", "animation_player", "left_button_container", "center_button_container", "right_button_container", "extra_button_container", "menu_buttons_holder", "sfx_next")]
+[node name="MenuCycle" type="Control" parent="MenuScreen" node_paths=PackedStringArray("menu_buttons", "animation_player", "left_button_container", "center_button_container", "right_button_container", "extra_button_container", "menu_buttons_holder", "description_label", "sfx_next")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1390,14 +1452,37 @@ offset_bottom = 21.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_db5fu")
-menu_buttons = [NodePath("MenuButtonsHolder/StoryMode"), NodePath("MenuButtonsHolder/LevelDesigner"), NodePath("MenuButtonsHolder/Extras"), NodePath("MenuButtonsHolder/idk"), NodePath("MenuButtonsHolder/Settings")]
+menu_buttons = [NodePath("CenterButtonContainer/StoryMode"), NodePath("RightButtonContainer/LevelDesigner"), NodePath("LeftButtonContainer/Settings"), NodePath("ExtraButtonContainer/Extras"), NodePath("MenuButtonsHolder/Secret")]
 animation_player = NodePath("AnimationPlayer")
 left_button_container = NodePath("LeftButtonContainer")
 center_button_container = NodePath("CenterButtonContainer")
 right_button_container = NodePath("RightButtonContainer")
 extra_button_container = NodePath("ExtraButtonContainer")
 menu_buttons_holder = NodePath("MenuButtonsHolder")
+description_label = NodePath("DescriptionLabel")
 sfx_next = NodePath("../../SFXNext")
+
+[node name="DescriptionLabel" type="Label" parent="MenuScreen/MenuCycle"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0655
+anchor_right = 0.9345
+anchor_bottom = 0.078
+offset_left = 0.0799866
+offset_right = -0.0800171
+offset_bottom = -0.0799084
+grow_horizontal = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18
+text = "Play the story of Super Mario 63 Redux!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+script = ExtResource("3_65llw")
+font_size = 18
+outline_size = 6
+metadata/_custom_type_script = "uid://dn7i0x4jjj4ry"
+metadata/_edit_use_anchors_ = true
 
 [node name="LeftButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle"]
 layout_mode = 1
@@ -1415,6 +1500,13 @@ grow_vertical = 2
 ratio = 2.5
 metadata/_edit_use_anchors_ = true
 
+[node name="Settings" parent="MenuScreen/MenuCycle/LeftButtonContainer" instance=ExtResource("5_mu8aq")]
+layout_mode = 2
+top_icon = 3
+content = 3
+title = 3
+description = "Configure the game to your liking!"
+
 [node name="CenterButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle"]
 layout_mode = 1
 anchors_preset = -1
@@ -1430,6 +1522,12 @@ grow_horizontal = 2
 grow_vertical = 2
 ratio = 2.5
 metadata/_edit_use_anchors_ = true
+
+[node name="StoryMode" parent="MenuScreen/MenuCycle/CenterButtonContainer" instance=ExtResource("5_mu8aq")]
+layout_mode = 2
+top_icon = 4
+disabled = true
+description = "Coming Soon..."
 
 [node name="RightButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle"]
 layout_mode = 1
@@ -1447,8 +1545,14 @@ grow_vertical = 2
 ratio = 2.5
 metadata/_edit_use_anchors_ = true
 
+[node name="LevelDesigner" parent="MenuScreen/MenuCycle/RightButtonContainer" instance=ExtResource("5_mu8aq")]
+layout_mode = 2
+top_icon = 1
+content = 1
+title = 1
+description = "Create your own story in this advanced Level Designer!"
+
 [node name="ExtraButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.383
@@ -1464,75 +1568,19 @@ grow_vertical = 2
 ratio = 2.5
 metadata/_edit_use_anchors_ = true
 
-[node name="MenuButtonsHolder" type="Control" parent="MenuScreen/MenuCycle"]
-visible = false
-anchors_preset = 0
-
-[node name="Settings" parent="MenuScreen/MenuCycle/MenuButtonsHolder" instance=ExtResource("5_mu8aq")]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -75.0
-offset_top = -30.0
-offset_right = 75.0
-offset_bottom = 30.0
-top_icon = 3
-content = 3
-title = 3
-
-[node name="StoryMode" parent="MenuScreen/MenuCycle/MenuButtonsHolder" instance=ExtResource("5_mu8aq")]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -63.3217
-offset_top = -25.3287
-offset_right = 63.3217
-offset_bottom = 25.3287
-top_icon = 4
-disabled = true
-
-[node name="LevelDesigner" parent="MenuScreen/MenuCycle/MenuButtonsHolder" instance=ExtResource("5_mu8aq")]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -74.6799
-offset_top = -29.872
-offset_right = 74.6799
-offset_bottom = 29.872
-top_icon = 1
-content = 1
-title = 1
-
-[node name="Extras" parent="MenuScreen/MenuCycle/MenuButtonsHolder" instance=ExtResource("5_mu8aq")]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -75.0
-offset_top = -30.0
-offset_right = 75.0
-offset_bottom = 30.0
+[node name="Extras" parent="MenuScreen/MenuCycle/ExtraButtonContainer" instance=ExtResource("5_mu8aq")]
+layout_mode = 2
 top_icon = 4
 content = 2
 title = 2
 disabled = true
+description = "Coming soon..."
 
-[node name="idk" parent="MenuScreen/MenuCycle/MenuButtonsHolder" instance=ExtResource("5_mu8aq")]
+[node name="MenuButtonsHolder" type="Control" parent="MenuScreen/MenuCycle"]
+visible = false
+anchors_preset = 0
+
+[node name="Secret" parent="MenuScreen/MenuCycle/MenuButtonsHolder" instance=ExtResource("5_mu8aq")]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -1548,6 +1596,7 @@ top_icon = 4
 content = 4
 title = 4
 disabled = true
+description = "I wonder what this might be..?"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MenuScreen/MenuCycle"]
 root_node = NodePath("../../..")
@@ -1581,7 +1630,7 @@ grow_vertical = 2
 color = Color(0.149814, 0.567634, 0.821031, 0.309804)
 metadata/_edit_use_anchors_ = true
 
-[node name="VersionText" type="Label" parent="."]
+[node name="VersionLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.131
@@ -1590,17 +1639,17 @@ anchor_bottom = 1.2
 offset_top = -0.159973
 offset_right = -0.0800018
 grow_vertical = 0
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 20
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxEmpty_65llw")
 text = "v0.2.0"
 vertical_alignment = 2
 script = ExtResource("4_jb1no")
-font_size = 20
-outline_size = 8
+font_size = 15
+outline_size = 6
 metadata/_custom_type_script = "uid://dn7i0x4jjj4ry"
 
-[node name="TeamText" type="Label" parent="."]
+[node name="TeamLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.828
@@ -1611,15 +1660,15 @@ offset_left = 0.0800171
 offset_top = -0.159973
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 20
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxEmpty_jb1no")
 text = "Redux Team"
 horizontal_alignment = 2
 vertical_alignment = 2
 script = ExtResource("3_65llw")
-font_size = 20
-outline_size = 8
+font_size = 15
+outline_size = 6
 metadata/_custom_type_script = "uid://dn7i0x4jjj4ry"
 
 [node name="TitleLoop" type="AudioStreamPlayer" parent="."]

@@ -35,6 +35,7 @@ offset_bottom = 5.96
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6rm1l")
+description = "Look how cool!"
 metadata/_edit_use_anchors_ = true
 
 [node name="FrameTexture" type="TextureRect" parent="."]

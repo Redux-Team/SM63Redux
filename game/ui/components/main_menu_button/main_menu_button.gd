@@ -13,6 +13,7 @@ enum ButtonDesign {
 @export var content: ButtonDesign
 @export var title: ButtonDesign
 @export var disabled: bool = false
+@export_multiline var description: String = ""
 
 @onready var content_texture: TextureRect = $ContentTexture
 @onready var title_texture: TextureRect = $TitleTexture
