@@ -15,6 +15,7 @@ var current_index: int = 0
 
 func _ready() -> void:
 	assign_buttons_to_containers()
+	update_description()
 
 
 func _input(event: InputEvent) -> void:
