@@ -13,7 +13,6 @@ extends Control
 @export var menu_screen: Control
 
 @export var input_locked: bool = false
-var splash_fade_tween: Tween
 var on_splash_screen: bool = true
 
 

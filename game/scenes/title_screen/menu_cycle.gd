@@ -10,6 +10,8 @@ extends Control
 @export var description_label: Label
 @export var sfx_next: AudioStreamPlayer
 
+@export var scene_transition: Control
+
 
 var current_index: int = 0
 
@@ -19,10 +21,16 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if owner.input_locked:
+		return
+	
 	if event.is_action_pressed(&"ui_right"):
 		cycle(1, &"cycle_right")
 	elif event.is_action_pressed(&"ui_left"):
 		cycle(-1, &"cycle_left")
+	
+	if event.is_action_pressed(&"ui_accept") and not animation_player.is_playing() and is_visible_in_tree():
+		scene_transition.transition(menu_buttons[current_index].content)
 
 
 ## Reparenting logic for the main menu buttons so that the AnimationPlayer can reuse the same
