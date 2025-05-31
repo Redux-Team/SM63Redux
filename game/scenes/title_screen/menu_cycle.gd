@@ -8,10 +8,7 @@ extends Control
 @export var extra_button_container: AspectRatioContainer
 @export var menu_buttons_holder: Control
 @export var description_label: Label
-@export var sfx_next: AudioStreamPlayer
-
 @export var scene_transition: Control
-
 
 var current_index: int = 0
 
@@ -66,6 +63,8 @@ func assign_buttons_to_containers() -> void:
 func cycle(direction: int, animation_name: StringName) -> void:
 	if animation_player.is_playing() or not is_visible_in_tree():
 		return
+	
+	Singleton.play_sfx(SFX.UI_NEXT)
 	
 	current_index = (current_index + direction + menu_buttons.size()) % menu_buttons.size()
 	animation_player.play(animation_name)

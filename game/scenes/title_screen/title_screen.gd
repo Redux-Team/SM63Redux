@@ -3,8 +3,6 @@ extends Control
 @export var animation_player: AnimationPlayer
 @export var title_loop: AudioStreamPlayer
 @export var menu_loop: AudioStreamPlayer
-@export var sfx_confirm: AudioStreamPlayer
-@export var sfx_back: AudioStreamPlayer
 @export var splash_fade: ColorRect
 
 @export var version_text: Label
@@ -55,10 +53,12 @@ func _switch_to_splash_screen() -> void:
 	animation_player.play(&"switch_to_splash_screen")
 	menu_loop.play()
 	on_splash_screen = true
+	Singleton.play_sfx(SFX.UI_BACK)
 	
 func _switch_to_menu_screen() -> void:
 	if not on_splash_screen:
 		return
 	
+	Singleton.play_sfx(SFX.UI_CONFIRM)
 	on_splash_screen = false
 	animation_player.play(&"switch_to_menu_screen")

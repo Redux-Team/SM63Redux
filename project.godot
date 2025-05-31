@@ -20,7 +20,7 @@ config/windows_native_icon="res://meta/icon.ico"
 
 [autoload]
 
-Singleton="*res://global/singleton.gd"
+Singleton="*res://global/singleton.tscn"
 
 [display]
 

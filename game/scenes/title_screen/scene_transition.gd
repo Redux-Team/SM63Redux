@@ -1,8 +1,9 @@
 extends Control
 
 @export var mask: ColorRect
-@export var sfx_begin: AudioStreamPlayer
 @export var menu_loop: AudioStreamPlayer
+@export var start_sfx: AudioStream
+
 
 var tween: Tween
 
@@ -10,12 +11,16 @@ func transition(type: MainMenuButton.ButtonDesign) -> void:
 	match type:
 		MainMenuButton.ButtonDesign.STORY:
 			owner.input_locked = true
-			sfx_begin.play()
+			
+			Singleton.play_sfx(SFX.UI_START)
 			menu_loop.stop()
-			show()
+			
 			tween = get_tree().create_tween().bind_node(mask)
 			tween.set_ease(Tween.EASE_OUT)
 			tween.tween_property(mask, ^"material:shader_parameter/scale", 0.0, 0.5)
+			
+			show()
+			
 			tween.finished.connect(switch_to_story)
 
 

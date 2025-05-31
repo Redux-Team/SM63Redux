@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://brlqbi6c7ea8x"]
+
+[ext_resource type="Script" uid="uid://d3u2r7day6e33" path="res://global/singleton.gd" id="1_287bc"]
+
+[node name="Singleton" type="Node" node_paths=PackedStringArray("sfx_container")]
+script = ExtResource("1_287bc")
+sfx_container = NodePath("Audio/SFX")
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="SFX" type="Node" parent="Audio"]
+
+[node name="ScreenTransitions" type="CanvasLayer" parent="."]
