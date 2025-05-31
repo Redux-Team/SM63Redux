@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://dmop45sygbxda"
-path="res://.godot/imported/start.wav-44f305726fa3c9c72e7d4a31163e8ea0.sample"
+path="res://.godot/imported/start.wav-28ede8ff0591bc15de7bb7a339e80bc4.sample"
 
 [deps]
 
-source_file="res://game/ui/sfx/start.wav"
-dest_files=["res://.godot/imported/start.wav-44f305726fa3c9c72e7d4a31163e8ea0.sample"]
+source_file="res://assets/sfx/gui/start.wav"
+dest_files=["res://.godot/imported/start.wav-28ede8ff0591bc15de7bb7a339e80bc4.sample"]
 
 [params]
 

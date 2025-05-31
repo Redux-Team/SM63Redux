@@ -26,14 +26,15 @@ Singleton="*res://global/singleton.gd"
 
 window/size/viewport_width=640
 window/size/viewport_height=360
+display_server/driver.linuxbsd="wayland"
 
 [file_customization]
 
 folder_colors={
-"res://assets/": "gray",
-"res://assets/gui/": "teal",
-"res://assets/soundtrack/": "blue",
+"res://assets/": "teal",
+"res://assets/textures/gui/": "teal",
 "res://core/": "red",
+"res://game/": "blue",
 "res://global/": "orange",
 "res://meta/": "yellow",
 "res://util/": "purple"

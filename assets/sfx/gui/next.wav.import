@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://c457x4e2iw7b"
-path="res://.godot/imported/next.wav-5bc1ef434ec0081fbbaa7423b1140db2.sample"
+path="res://.godot/imported/next.wav-3a45c4a35d4c4786f4873e9074610c65.sample"
 
 [deps]
 
-source_file="res://game/ui/sfx/next.wav"
-dest_files=["res://.godot/imported/next.wav-5bc1ef434ec0081fbbaa7423b1140db2.sample"]
+source_file="res://assets/sfx/gui/next.wav"
+dest_files=["res://.godot/imported/next.wav-3a45c4a35d4c4786f4873e9074610c65.sample"]
 
 [params]
 
