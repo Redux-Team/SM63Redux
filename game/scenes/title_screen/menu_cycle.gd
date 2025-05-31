@@ -8,7 +8,7 @@ extends Control
 @export var extra_button_container: AspectRatioContainer
 @export var menu_buttons_holder: Control
 @export var description_label: Label
-@export var scene_transition: Control
+@export var scene_transition: Node
 
 var current_index: int = 0
 

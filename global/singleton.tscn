@@ -1,13 +1,29 @@
-[gd_scene load_steps=2 format=3 uid="uid://brlqbi6c7ea8x"]
+[gd_scene load_steps=4 format=3 uid="uid://brlqbi6c7ea8x"]
 
 [ext_resource type="Script" uid="uid://d3u2r7day6e33" path="res://global/singleton.gd" id="1_287bc"]
+[ext_resource type="Shader" uid="uid://dig60ar7inm7i" path="res://core/shader/inverse_clip.gdshader" id="2_rkguw"]
 
-[node name="Singleton" type="Node" node_paths=PackedStringArray("sfx_container")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wd1pp"]
+shader = ExtResource("2_rkguw")
+shader_parameter/scale = 1.0
+
+[node name="Singleton" type="Node" node_paths=PackedStringArray("sfx_container", "transition_overlay")]
 script = ExtResource("1_287bc")
 sfx_container = NodePath("Audio/SFX")
+transition_overlay = NodePath("ScreenTransitions/Overlay")
 
 [node name="Audio" type="Node" parent="."]
 
 [node name="SFX" type="Node" parent="Audio"]
 
 [node name="ScreenTransitions" type="CanvasLayer" parent="."]
+
+[node name="Overlay" type="ColorRect" parent="ScreenTransitions"]
+visible = false
+material = SubResource("ShaderMaterial_wd1pp")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
