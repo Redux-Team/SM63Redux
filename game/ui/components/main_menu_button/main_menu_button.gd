@@ -50,7 +50,7 @@ func _ready() -> void:
 		modulate.v = 0.4
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	frame_texture.material.set_shader_parameter(&"modulate_color", modulate)
 
 
