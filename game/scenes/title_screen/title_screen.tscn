@@ -1310,6 +1310,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -30.0
+offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
@@ -1346,14 +1348,14 @@ offset_bottom = 0.119995
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
+theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 22
 text = "Press 'Z' to play!"
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("3_65llw")
 font_size = 22
-outline_size = 8
+outline_size = 6
 metadata/_custom_type_script = "uid://dn7i0x4jjj4ry"
 metadata/_edit_use_anchors_ = true
 
@@ -1377,6 +1379,7 @@ anchor_top = 0.0833333
 anchor_right = 1.0
 anchor_bottom = 1.08333
 offset_top = 1.33514e-05
+offset_bottom = 3.05176e-05
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -1443,6 +1446,9 @@ top_icon = 3
 content = 3
 title = 3
 description = "Configure the game to your liking!"
+hue = -0.542
+saturation = 0.126
+value = 0.661
 
 [node name="CenterButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle"]
 layout_mode = 1
@@ -1461,10 +1467,13 @@ ratio = 2.5
 metadata/_edit_use_anchors_ = true
 
 [node name="StoryMode" parent="MenuScreen/MenuCycle/CenterButtonContainer" instance=ExtResource("5_mu8aq")]
+modulate = Color(0.4, 0.4, 0.4, 1)
 layout_mode = 2
 top_icon = 4
 disabled = true
 description = "Coming soon..."
+hue = -0.02
+saturation = 0.8
 
 [node name="RightButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle"]
 layout_mode = 1
@@ -1488,6 +1497,9 @@ top_icon = 1
 content = 1
 title = 1
 description = "Create your own story in this advanced Level Designer!"
+hue = 0.22
+saturation = 0.65
+value = 0.643
 
 [node name="ExtraButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle"]
 layout_mode = 1
@@ -1506,12 +1518,16 @@ ratio = 2.5
 metadata/_edit_use_anchors_ = true
 
 [node name="Extras" parent="MenuScreen/MenuCycle/ExtraButtonContainer" instance=ExtResource("5_mu8aq")]
+modulate = Color(0.4, 0.4, 0.4, 1)
 layout_mode = 2
 top_icon = 4
 content = 2
 title = 2
 disabled = true
 description = "Coming soon..."
+hue = 0.542
+saturation = 0.958
+value = 1.2
 
 [node name="MenuButtonsHolder" type="Control" parent="MenuScreen/MenuCycle"]
 visible = false
@@ -1519,6 +1535,7 @@ anchors_preset = 0
 
 [node name="Secret" parent="MenuScreen/MenuCycle/MenuButtonsHolder" instance=ExtResource("5_mu8aq")]
 visible = false
+modulate = Color(0.4, 0.4, 0.4, 1)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1534,6 +1551,7 @@ content = 4
 title = 4
 disabled = true
 description = "I wonder what this might be..?"
+hue = 0.671
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MenuScreen/MenuCycle"]
 root_node = NodePath("../../..")
@@ -1576,14 +1594,14 @@ anchor_bottom = 1.2
 offset_top = -0.159973
 offset_right = -0.0800018
 grow_vertical = 0
-theme_override_constants/outline_size = 6
+theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxEmpty_65llw")
 text = "v0.2.0"
 vertical_alignment = 2
 script = ExtResource("4_jb1no")
 font_size = 15
-outline_size = 6
+outline_size = 5
 metadata/_custom_type_script = "uid://dn7i0x4jjj4ry"
 
 [node name="TeamLabel" type="Label" parent="."]
@@ -1597,7 +1615,7 @@ offset_left = 0.0800171
 offset_top = -0.159973
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_constants/outline_size = 6
+theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxEmpty_jb1no")
 text = "Redux Team"
@@ -1605,7 +1623,7 @@ horizontal_alignment = 2
 vertical_alignment = 2
 script = ExtResource("3_65llw")
 font_size = 15
-outline_size = 6
+outline_size = 5
 metadata/_custom_type_script = "uid://dn7i0x4jjj4ry"
 
 [node name="TitleLoop" type="AudioStreamPlayer" parent="."]

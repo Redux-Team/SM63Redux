@@ -46,6 +46,10 @@ func transition_to_scene_file(scene_file: String, transition: ScreenTransitionTy
 			tween.finished.connect(func() -> void:
 				get_tree().change_scene_to_file(scene_file)
 				
+				# Holding the transition before switching to next scene
+				# so that it's not as abrupt.
+				await get_tree().create_timer(0.15).timeout
+				
 				var second_tween: Tween = get_tree().create_tween()
 				second_tween.bind_node(transition_overlay)
 				second_tween.set_ease(Tween.EASE_OUT)

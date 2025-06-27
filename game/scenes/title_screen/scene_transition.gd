@@ -5,15 +5,15 @@ extends Node
 
 func transition(type: MainMenuButton.ButtonDesign) -> void:
 	match type:
-		MainMenuButton.ButtonDesign.STORY:
+		MainMenuButton.ButtonDesign.LEVEL_DESIGNER:
 			owner.input_locked = true
 			
 			Singleton.transition_to_scene_file(
-				"uid://cfrexipnk4yq8",
+				"uid://c732aftmb2bcv",
 				Singleton.ScreenTransitionType.TEXTURE_ZOOM,
 				load("uid://b127vhuh31i8r"),
 				0.5,
 			)
 			
-			Singleton.play_sfx(SFX.UI_START)
+			SFX.play(SFX.UI_START)
 			menu_loop.stop()
