@@ -15,15 +15,15 @@ shader_parameter/saturation_scale = 1.0
 shader_parameter/value_scale = 1.0
 shader_parameter/modulate_color = Color(1, 1, 1, 1)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_rlo7v"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5g1s"]
 atlas = ExtResource("4_fawul")
 region = Rect2(0, 0, 126, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fawul"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_6laix"]
 atlas = ExtResource("5_u5g1s")
 region = Rect2(0, 0, 126, 24)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ekkyd"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_167dx"]
 atlas = ExtResource("5_ekkyd")
 region = Rect2(0, 0, 56, 32)
 
@@ -63,7 +63,7 @@ offset_right = 1.0
 offset_bottom = 1.02
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_rlo7v")
+texture = SubResource("AtlasTexture_u5g1s")
 expand_mode = 1
 
 [node name="TitleTexture" type="TextureRect" parent="."]
@@ -77,7 +77,7 @@ offset_top = 0.0159988
 offset_bottom = -0.0240021
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_fawul")
+texture = SubResource("AtlasTexture_6laix")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
@@ -94,5 +94,5 @@ offset_top = -0.0279961
 offset_right = -0.0500031
 offset_bottom = 0.988
 grow_horizontal = 2
-texture = SubResource("AtlasTexture_ekkyd")
+texture = SubResource("AtlasTexture_167dx")
 expand_mode = 1

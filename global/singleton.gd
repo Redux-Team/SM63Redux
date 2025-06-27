@@ -6,6 +6,8 @@ enum ScreenTransitionType {
 
 const VERSION: StringName = &"0.2.0"
 
+const _INVERSE_CLIP_SHADER: Shader = preload("res://core/shader/inverse_clip.gdshader")
+
 @export var sfx_container: Node
 @export var transition_overlay: ColorRect
 
@@ -32,7 +34,7 @@ func transition_to_scene_file(scene_file: String, transition: ScreenTransitionTy
 			tween.set_ease(Tween.EASE_OUT)
 			
 			var mat = ShaderMaterial.new()
-			mat.shader = load("uid://dig60ar7inm7i")
+			mat.shader = _INVERSE_CLIP_SHADER
 			mat.set_shader_parameter(&"texture_albedo", texture)
 			transition_overlay.material = mat
 			transition_overlay.show()

@@ -2,6 +2,8 @@ extends Node
 
 @export var menu_loop: AudioStreamPlayer
 
+const LEVEL_DESIGNER_SCENE: String = "uid://c732aftmb2bcv"
+const TRANSITION_MASK: CompressedTexture2D = preload("uid://b127vhuh31i8r")
 
 func transition(type: MainMenuButton.ButtonDesign) -> void:
 	match type:
@@ -9,9 +11,9 @@ func transition(type: MainMenuButton.ButtonDesign) -> void:
 			owner.input_locked = true
 			
 			Singleton.transition_to_scene_file(
-				"uid://c732aftmb2bcv",
+				LEVEL_DESIGNER_SCENE,
 				Singleton.ScreenTransitionType.TEXTURE_ZOOM,
-				load("uid://b127vhuh31i8r"),
+				TRANSITION_MASK,
 				0.5,
 			)
 			
