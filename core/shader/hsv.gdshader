@@ -48,6 +48,7 @@ vec3 hsv_to_rgb(vec3 hsv) {
 }
 
 void fragment() {
+	float a = COLOR.a;
 	vec4 src_color = texture(TEXTURE, UV);
 	vec3 hsv = rgb_to_hsv(src_color.rgb);
 
@@ -57,4 +58,5 @@ void fragment() {
 
 	vec3 final_color = hsv_to_rgb(hsv);
 	COLOR = vec4(final_color, src_color.a) * modulate_color;
+	COLOR.a = a;
 }

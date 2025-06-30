@@ -1,6 +1,7 @@
 extends Node
 
 @export var menu_loop: AudioStreamPlayer
+@export var screen_animations: AnimationPlayer
 
 const LEVEL_DESIGNER_SCENE: String = "uid://c732aftmb2bcv"
 const TRANSITION_MASK: CompressedTexture2D = preload("uid://b127vhuh31i8r")
@@ -19,3 +20,7 @@ func transition(type: MainMenuButton.ButtonDesign) -> void:
 			
 			SFX.play(SFX.UI_START)
 			menu_loop.stop()
+		MainMenuButton.ButtonDesign.SETTINGS:
+			SFX.play(SFX.UI_CONFIRM)
+			owner.on_settings_screen = true
+			screen_animations.play(&"switch_to_settings_screen", -1, 1.7)

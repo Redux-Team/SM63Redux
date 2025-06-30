@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://c6dic42vckv0e"]
 
-[ext_resource type="Script" uid="uid://bc4sevdr53dpi" path="res://game/ui/components/main_menu_button/main_menu_button.gd" id="1_6rm1l"]
+[ext_resource type="Script" uid="uid://bc4sevdr53dpi" path="res://game/components/ui/main_menu_button/main_menu_button.gd" id="1_6rm1l"]
 [ext_resource type="Texture2D" uid="uid://bted1168b62fs" path="res://assets/textures/gui/title_screen/select_mode_button/select_mode_button_frame.png" id="2_pvhv8"]
 [ext_resource type="Shader" uid="uid://g3ewropiv6mx" path="res://core/shader/hsv.gdshader" id="2_rlo7v"]
 [ext_resource type="Texture2D" uid="uid://d2w47ijjty7co" path="res://assets/textures/gui/title_screen/select_mode_button/select_mode_button_content.png" id="4_fawul"]
@@ -15,15 +15,15 @@ shader_parameter/saturation_scale = 1.0
 shader_parameter/value_scale = 1.0
 shader_parameter/modulate_color = Color(1, 1, 1, 1)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_u5g1s"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_hdrc7"]
 atlas = ExtResource("4_fawul")
 region = Rect2(0, 0, 126, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_6laix"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_wkrwc"]
 atlas = ExtResource("5_u5g1s")
 region = Rect2(0, 0, 126, 24)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_167dx"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_i7pdl"]
 atlas = ExtResource("5_ekkyd")
 region = Rect2(0, 0, 56, 32)
 
@@ -63,23 +63,24 @@ offset_right = 1.0
 offset_bottom = 1.02
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_u5g1s")
+texture = SubResource("AtlasTexture_hdrc7")
 expand_mode = 1
 
 [node name="TitleTexture" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.08
-anchor_top = 0.293882
-anchor_right = 0.92
-anchor_bottom = 0.662118
-offset_top = 0.0159988
-offset_bottom = -0.0240021
+anchor_left = 0.5
+anchor_top = 0.471
+anchor_right = 0.5
+anchor_bottom = 0.471
+offset_left = -63.0
+offset_top = -11.0279
+offset_right = 63.0
+offset_bottom = 10.9721
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_6laix")
+texture = SubResource("AtlasTexture_wkrwc")
 expand_mode = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="TopIconTexture" type="TextureRect" parent="."]
 show_behind_parent = true
@@ -94,5 +95,5 @@ offset_top = -0.0279961
 offset_right = -0.0500031
 offset_bottom = 0.988
 grow_horizontal = 2
-texture = SubResource("AtlasTexture_167dx")
+texture = SubResource("AtlasTexture_i7pdl")
 expand_mode = 1

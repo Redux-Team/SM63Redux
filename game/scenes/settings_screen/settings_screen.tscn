@@ -1,0 +1,163 @@
+[gd_scene load_steps=5 format=3 uid="uid://edq4g4hx0dyb"]
+
+[ext_resource type="Script" uid="uid://cio5shadjfgu3" path="res://game/scenes/settings_screen/settings_screen.gd" id="1_e3g34"]
+[ext_resource type="StyleBox" uid="uid://dwl13fn11lby6" path="res://core/theme/styleboxes/menu_box_frame.stylebox" id="2_1ckwk"]
+[ext_resource type="PackedScene" uid="uid://ty4b33ef6rwr" path="res://game/components/ui/cycle_button/cycle_button.tscn" id="2_h0dip"]
+[ext_resource type="PackedScene" uid="uid://jo21vp3yb41b" path="res://game/components/ui/setting_entry/setting_entry.tscn" id="4_qltlq"]
+
+[node name="SettingsScreen" type="Control" node_paths=PackedStringArray("settings_container")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e3g34")
+settings_container = NodePath("SettingsContainer")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.392157)
+
+[node name="Border" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("2_1ckwk")
+metadata/_edit_use_anchors_ = true
+
+[node name="SettingCycleButton" parent="." instance=ExtResource("2_h0dip")]
+layout_mode = 1
+anchor_bottom = 0.0778889
+offset_bottom = -0.0400009
+mouse_default_cursor_shape = 2
+cycle_strings = Array[String](["Display", "Controls", "Audio", "Miscellaneous"])
+font_size = 14
+outline_size = 4
+
+[node name="SettingsContainer" type="Control" parent="."]
+layout_mode = 1
+anchor_top = 0.078
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -0.0799999
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="Display" type="Control" parent="SettingsContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Controls" type="Control" parent="SettingsContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Audio" type="Control" parent="SettingsContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Miscellaneous" type="Control" parent="SettingsContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SettingsContainer/Miscellaneous"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsContainer/Miscellaneous/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+metadata/_edit_lock_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="OtherLabel" type="Label" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Other Features"
+horizontal_alignment = 1
+
+[node name="ShowTimer" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
+layout_mode = 2
+setting_group = &"Misc"
+setting_name = &"Show Timer"
+
+[node name="EnforceTouch" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
+layout_mode = 2
+setting_group = &"Misc"
+setting_name = &"Enforce Touch Controls"
+
+[node name="CameraLimit" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
+layout_mode = 2
+setting_group = &"Misc"
+setting_name = &"Disable Camera Limiting"
+
+[node name="LocalizationLabel" type="Label" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Localization"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Language"
+
+[node name="Control" type="Control" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="OptionButton" type="OptionButton" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+fit_to_longest_item = false
+
+[connection signal="cycle" from="SettingCycleButton" to="." method="_on_cycle"]
