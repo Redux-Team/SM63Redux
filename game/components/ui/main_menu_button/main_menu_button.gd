@@ -35,7 +35,7 @@ enum ButtonDesign {
 
 @onready var frame_texture: TextureRect = $FrameTexture
 @onready var content_texture: TextureRect = $ContentTexture
-@onready var title_texture: TextureRect = $TitleTexture
+@onready var title_texture: TextureRect = $ContentTexture/TitleTexture
 @onready var top_icon_texture: TextureRect = $TopIconTexture
 
 

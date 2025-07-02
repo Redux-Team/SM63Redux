@@ -30,9 +30,9 @@ region = Rect2(0, 0, 56, 32)
 [node name="MainMenuButton" type="Control"]
 layout_mode = 3
 anchor_right = 0.234
-anchor_bottom = 0.172333
-offset_right = 0.23999
-offset_bottom = 5.96
+anchor_bottom = 0.189
+offset_right = 0.239975
+offset_bottom = -0.040123
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6rm1l")
@@ -66,17 +66,17 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_hdrc7")
 expand_mode = 1
 
-[node name="TitleTexture" type="TextureRect" parent="."]
+[node name="TitleTexture" type="TextureRect" parent="ContentTexture"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.471
-anchor_right = 0.5
-anchor_bottom = 0.471
-offset_left = -63.0
-offset_top = -11.0279
-offset_right = 63.0
-offset_bottom = 10.9721
+anchor_left = 0.008
+anchor_top = 0.211
+anchor_right = 0.992
+anchor_bottom = 0.789
+offset_left = -0.0240114
+offset_top = -0.0180178
+offset_right = 0.0240097
+offset_bottom = 0.0180168
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("AtlasTexture_wkrwc")
