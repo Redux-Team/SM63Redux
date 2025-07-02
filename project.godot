@@ -12,6 +12,8 @@ config_version=5
 
 config/name="SM63Redux"
 run/main_scene="uid://b0wp6l07i5ime"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="SM63Redux"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
