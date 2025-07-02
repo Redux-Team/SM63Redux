@@ -26,12 +26,14 @@ fps_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginC
 win_mode_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinModeContainer/WinModeOptionButton")
 vsync_entry = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/VSync")
 
-[node name="AudioHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("music_toggle", "music_slider", "sfx_toggle", "sfx_slider")]
+[node name="AudioHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("music_toggle", "music_slider", "music_percent_label", "sfx_toggle", "sfx_slider", "sfx_percent_label")]
 script = ExtResource("2_v82bw")
 music_toggle = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/Music/MusicToggle")
 music_slider = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/Music/MusicSlider")
+music_percent_label = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/Music/MusicPercent")
 sfx_toggle = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX/SFXToggle")
 sfx_slider = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX/SFXSlider")
+sfx_percent_label = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX/SFXPercent")
 
 [node name="MiscHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("show_timer_toggle", "enforce_touch_toggle", "camera_limit_toggle")]
 script = ExtResource("4_7dnsy")
@@ -225,9 +227,18 @@ layout_mode = 2
 setting_group = &"Audio"
 setting_name = &"Music"
 
+[node name="MusicPercent" type="Label" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+text = "0%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="MusicSlider" type="HSlider" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 value = 75.0
 
 [node name="SFX" type="HBoxContainer" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer"]
@@ -239,9 +250,18 @@ layout_mode = 2
 setting_group = &"Audio"
 setting_name = &"SFX"
 
+[node name="SFXPercent" type="Label" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+text = "0%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="SFXSlider" type="HSlider" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 value = 75.0
 
 [node name="Miscellaneous" type="Control" parent="SettingsContainer"]
