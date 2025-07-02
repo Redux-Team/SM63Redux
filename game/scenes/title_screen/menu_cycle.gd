@@ -64,7 +64,7 @@ func cycle(direction: int, animation_name: StringName) -> void:
 	if animation_player.is_playing() or not is_visible_in_tree():
 		return
 	
-	Singleton.play_sfx(SFX.UI_NEXT)
+	SFX.play(SFX.UI_NEXT)
 	
 	current_index = (current_index + direction + menu_buttons.size()) % menu_buttons.size()
 	animation_player.play(animation_name)
