@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dthv1grpws52a"
-path="res://.godot/imported/radio_on.png-d1039e187292c93af03fffcf6a1f4b30.ctex"
+uid="uid://cr5nl74vxqesx"
+path="res://.godot/imported/slider.png-f717db43e6595250a683d1e8e42daf16.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/gui/menu/radio_on.png"
-dest_files=["res://.godot/imported/radio_on.png-d1039e187292c93af03fffcf6a1f4b30.ctex"]
+source_file="res://assets/textures/gui/menu/slider.png"
+dest_files=["res://.godot/imported/slider.png-f717db43e6595250a683d1e8e42daf16.ctex"]
 
 [params]
 
