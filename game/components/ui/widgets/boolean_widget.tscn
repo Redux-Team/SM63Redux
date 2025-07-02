@@ -12,7 +12,6 @@ offset_bottom = 0.0399952
 script = ExtResource("1_b2u5g")
 check_button = NodePath("CheckBox")
 check_texture = NodePath("CheckBox/CheckTexture")
-metadata/_edit_use_anchors_ = true
 
 [node name="CheckBox" type="CheckBox" parent="."]
 custom_minimum_size = Vector2(12, 12)

@@ -1,17 +1,17 @@
 [gd_scene load_steps=3 format=3 uid="uid://jo21vp3yb41b"]
 
-[ext_resource type="Script" uid="uid://30cdly0xd5h4" path="res://game/components/ui/setting_entry/setting_entry.gd" id="1_ojupr"]
-[ext_resource type="PackedScene" uid="uid://d4d7kvijajiy7" path="res://game/components/ui/widgets/boolean_widget.tscn" id="2_fx7rm"]
+[ext_resource type="Script" uid="uid://30cdly0xd5h4" path="res://game/components/ui/setting_entry/boolean/boolean_setting_entry.gd" id="1_u2xj2"]
+[ext_resource type="PackedScene" uid="uid://d4d7kvijajiy7" path="res://game/components/ui/widgets/boolean_widget.tscn" id="2_5ujlt"]
 
-[node name="SettingEntry" type="Control" node_paths=PackedStringArray("boolean_widget_container", "setting_label", "interaction")]
+[node name="BooleanSettingEntry" type="Control" node_paths=PackedStringArray("boolean_widget", "setting_label", "interaction")]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 3
 anchor_right = 1.0
 anchor_bottom = 0.069
 offset_bottom = -24.84
 grow_horizontal = 2
-script = ExtResource("1_ojupr")
-boolean_widget_container = NodePath("Interaction/HBoxContainer/BooleanWidget")
+script = ExtResource("1_u2xj2")
+boolean_widget = NodePath("Interaction/HBoxContainer/BooleanWidget")
 setting_label = NodePath("Interaction/HBoxContainer/SettingLabel")
 interaction = NodePath("Interaction")
 metadata/_edit_use_anchors_ = true
@@ -37,7 +37,7 @@ grow_vertical = 2
 mouse_default_cursor_shape = 2
 theme_override_constants/separation = 6
 
-[node name="BooleanWidget" parent="Interaction/HBoxContainer" instance=ExtResource("2_fx7rm")]
+[node name="BooleanWidget" parent="Interaction/HBoxContainer" instance=ExtResource("2_5ujlt")]
 layout_mode = 2
 mouse_filter = 2
 mouse_default_cursor_shape = 2
@@ -45,7 +45,7 @@ mouse_default_cursor_shape = 2
 [node name="SettingLabel" type="Label" parent="Interaction/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 15
 
 [connection signal="button_down" from="Interaction" to="." method="_on_interaction_button_down"]
 [connection signal="button_up" from="Interaction" to="." method="_on_interaction_button_up"]

@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://edq4g4hx0dyb"]
+[gd_scene load_steps=6 format=3 uid="uid://edq4g4hx0dyb"]
 
 [ext_resource type="Script" uid="uid://cio5shadjfgu3" path="res://game/scenes/settings_screen/settings_screen.gd" id="1_e3g34"]
-[ext_resource type="StyleBox" uid="uid://dwl13fn11lby6" path="res://core/theme/styleboxes/menu_box_frame.stylebox" id="2_1ckwk"]
+[ext_resource type="StyleBox" uid="uid://dwl13fn11lby6" path="res://core/theme/styleboxes/menu_box/menu_box_frame.stylebox" id="2_1ckwk"]
 [ext_resource type="PackedScene" uid="uid://ty4b33ef6rwr" path="res://game/components/ui/cycle_button/cycle_button.tscn" id="2_h0dip"]
-[ext_resource type="PackedScene" uid="uid://jo21vp3yb41b" path="res://game/components/ui/setting_entry/setting_entry.tscn" id="4_qltlq"]
+[ext_resource type="Script" uid="uid://0ah5qoffil1a" path="res://game/scenes/settings_screen/audio_handler.gd" id="2_v82bw"]
+[ext_resource type="PackedScene" uid="uid://jo21vp3yb41b" path="res://game/components/ui/setting_entry/boolean/boolean_setting_entry.tscn" id="4_qltlq"]
 
 [node name="SettingsScreen" type="Control" node_paths=PackedStringArray("settings_container")]
 layout_mode = 3
@@ -14,6 +15,13 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_e3g34")
 settings_container = NodePath("SettingsContainer")
+
+[node name="Handlers" type="Node" parent="."]
+
+[node name="AudioHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("music_slider", "sfx_slider")]
+script = ExtResource("2_v82bw")
+music_slider = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/Music/MusicSlider")
+sfx_slider = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX/SFXSlider")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -61,6 +69,66 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="ScrollContainer" type="ScrollContainer" parent="SettingsContainer/Display"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsContainer/Display/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+metadata/_edit_lock_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsContainer/Display/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="GraphicsLabel" type="Label" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Graphics"
+horizontal_alignment = 1
+
+[node name="Music" type="HBoxContainer" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/Music"]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 15
+text = "FPS Limit"
+
+[node name="Control" type="Control" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/Music"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="OptionButton" type="OptionButton" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/Music"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+selected = 1
+item_count = 5
+popup/item_0/text = "30 FPS"
+popup/item_0/id = 0
+popup/item_1/text = "60 FPS"
+popup/item_1/id = 1
+popup/item_2/text = "120 FPS"
+popup/item_2/id = 2
+popup/item_3/text = "240 FPS"
+popup/item_3/id = 3
+popup/item_4/text = "Unlimited"
+popup/item_4/id = 4
+
 [node name="Controls" type="Control" parent="SettingsContainer"]
 visible = false
 layout_mode = 1
@@ -78,6 +146,61 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsContainer/Audio"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+metadata/_edit_lock_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsContainer/Audio/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="OtherLabel" type="Label" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Volume Settings"
+horizontal_alignment = 1
+
+[node name="Music" type="HBoxContainer" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MusicToggle" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music" instance=ExtResource("4_qltlq")]
+custom_minimum_size = Vector2(300, 25)
+layout_mode = 2
+setting_group = &"Audio"
+setting_name = &"Music"
+
+[node name="MusicSlider" type="HSlider" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music"]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 75.0
+
+[node name="SFX" type="HBoxContainer" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SFXToggle" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX" instance=ExtResource("4_qltlq")]
+custom_minimum_size = Vector2(300, 25)
+layout_mode = 2
+setting_group = &"Audio"
+setting_name = &"SFX"
+
+[node name="SFXSlider" type="HSlider" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX"]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 75.0
 
 [node name="Miscellaneous" type="Control" parent="SettingsContainer"]
 visible = false
@@ -161,3 +284,8 @@ layout_mode = 2
 fit_to_longest_item = false
 
 [connection signal="cycle" from="SettingCycleButton" to="." method="_on_cycle"]
+[connection signal="value_changed" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music/MusicToggle" to="Handlers/AudioHandler" method="_on_music_toggle_value_changed"]
+[connection signal="value_changed" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music/MusicSlider" to="Handlers/AudioHandler" method="_on_music_slider_value_changed"]
+[connection signal="value_changed" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX/SFXToggle" to="Handlers/AudioHandler" method="_on_sfx_toggle_value_changed"]
+[connection signal="drag_ended" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX/SFXSlider" to="Handlers/AudioHandler" method="_on_sfx_slider_drag_ended"]
+[connection signal="value_changed" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX/SFXSlider" to="Handlers/AudioHandler" method="_on_sfx_slider_value_changed"]

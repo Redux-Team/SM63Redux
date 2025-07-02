@@ -1,8 +1,6 @@
 @tool
 extends Control
 
-signal exit_request
-
 @export var settings_container: Control
 
 
