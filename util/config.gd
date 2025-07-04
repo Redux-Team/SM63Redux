@@ -77,14 +77,18 @@ class display:
 		Engine.max_fps = max_fps
 		
 		# window_mode
-		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED, false)
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN, false)
-		
 		match window_mode:
+			"Windowed":
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED, false)
+				DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED, true)
 			"Fullscreen":
+				DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN, false)
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN, true)
 			"Fullscreen Borderless":
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED, false)
+				DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED, true)
 				DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
 		
