@@ -38,7 +38,7 @@ func _update_font_size_aspect() -> void:
 	var font_scale: float = min(scale_x, scale_y) # Maintain aspect ratio
 	
 	# Resize threshold (to prevent resizing having a seizure w/ really small changes)
-	if abs((font_size * font_scale) - get_theme_font_size(&"font_size")) < 0.5:
+	if abs((font_size * font_scale) - get_theme_font_size(&"font_size")) < 0.9:
 		return
 	
 	var new_font_size = int(font_size * font_scale)
