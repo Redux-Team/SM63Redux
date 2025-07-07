@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://btef0ag6vl4ms"]
+
+[ext_resource type="Script" uid="uid://1hhodjgvlx3i" path="res://game/components/ui/setting_entry/dropdown/dropdown_setting_entry.gd" id="1_r5srv"]
+
+[node name="DropdownSettingEntry" type="Control" node_paths=PackedStringArray("label", "dropdown")]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 0.083
+offset_bottom = -29.88
+grow_horizontal = 2
+script = ExtResource("1_r5srv")
+label = NodePath("HBoxContainer/Label")
+dropdown = NodePath("HBoxContainer/Dropdown")
+metadata/_edit_use_anchors_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/outline_size = 4
+text = "Setting Name"
+
+[node name="Dropdown" type="OptionButton" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="item_selected" from="HBoxContainer/Dropdown" to="." method="_on_dropdown_item_selected"]

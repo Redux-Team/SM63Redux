@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://edq4g4hx0dyb"]
+[gd_scene load_steps=11 format=3 uid="uid://edq4g4hx0dyb"]
 
 [ext_resource type="Script" uid="uid://cio5shadjfgu3" path="res://game/scenes/settings_screen/settings_screen.gd" id="1_e3g34"]
 [ext_resource type="StyleBox" uid="uid://dwl13fn11lby6" path="res://core/theme/styleboxes/menu_box/menu_box_frame.stylebox" id="2_1ckwk"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://c6m4w74d7rbnw" path="res://game/scenes/settings_screen/input_handler.gd" id="3_oqnvq"]
 [ext_resource type="Script" uid="uid://ju1cdhwpo8ek" path="res://game/scenes/settings_screen/misc_handler.gd" id="4_7dnsy"]
 [ext_resource type="PackedScene" uid="uid://jo21vp3yb41b" path="res://game/components/ui/setting_entry/boolean/boolean_setting_entry.tscn" id="4_qltlq"]
+[ext_resource type="PackedScene" uid="uid://btef0ag6vl4ms" path="res://game/components/ui/setting_entry/dropdown/dropdown_setting_entry.tscn" id="8_tja7e"]
 [ext_resource type="PackedScene" uid="uid://cq2kyv8h4ftb7" path="res://game/components/ui/setting_entry/slider/slider_setting_entry.tscn" id="9_jeqcw"]
 
 [node name="SettingsScreen" type="Control" node_paths=PackedStringArray("settings_container")]
@@ -24,8 +25,8 @@ settings_container = NodePath("SettingsContainer")
 
 [node name="DisplayHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("fps_dropdown", "win_mode_dropdown", "vsync_entry")]
 script = ExtResource("2_rugj6")
-fps_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/FPSContainer/FPSOptionButton")
-win_mode_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinModeContainer/WinModeOptionButton")
+fps_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/FPSLimit")
+win_mode_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinMode")
 vsync_entry = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/VSync")
 
 [node name="InputHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("input_vbox")]
@@ -68,7 +69,6 @@ anchor_bottom = 0.0778889
 offset_bottom = -0.0400009
 mouse_default_cursor_shape = 2
 cycle_strings = Array[String](["Display", "Input", "Audio", "Miscellaneous"])
-current_iter = 2
 font_size = 14
 outline_size = 4
 
@@ -83,7 +83,6 @@ grow_vertical = 2
 metadata/_edit_lock_ = true
 
 [node name="Display" type="Control" parent="SettingsContainer"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -121,61 +120,22 @@ theme_override_font_sizes/font_size = 14
 text = "Window"
 horizontal_alignment = 1
 
-[node name="FPSContainer" type="HBoxContainer" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="FPSLimit" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("8_tja7e")]
 layout_mode = 2
+options = Array[String](["30 FPS", "60 FPS", "120 FPS", "240 FPS", "Unlimited"])
+selected_index = 1
+setting_name = &"FPS Limit"
 
-[node name="FPSLabel" type="Label" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/FPSContainer"]
+[node name="WinMode" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("8_tja7e")]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 15
-text = "FPS Limit"
-
-[node name="FPSOptionButton" type="OptionButton" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/FPSContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 14
-selected = 1
-item_count = 5
-popup/item_0/text = "30 FPS"
-popup/item_0/id = 0
-popup/item_1/text = "60 FPS"
-popup/item_1/id = 1
-popup/item_2/text = "120 FPS"
-popup/item_2/id = 2
-popup/item_3/text = "240 FPS"
-popup/item_3/id = 3
-popup/item_4/text = "Unlimited"
-popup/item_4/id = 4
-
-[node name="WinModeContainer" type="HBoxContainer" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="WinModeLabel" type="Label" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinModeContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 15
-text = "Window Mode"
-
-[node name="WinModeOptionButton" type="OptionButton" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinModeContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 14
-selected = 0
-item_count = 3
-popup/item_0/text = "Windowed"
-popup/item_0/id = 0
-popup/item_1/text = "Fullscreen"
-popup/item_1/id = 1
-popup/item_2/text = "Fullscreen Borderless"
-popup/item_2/id = 2
+options = Array[String](["Windowed", "Fullscreen", "Fullscreen Borderless"])
+selected_index = 1
+setting_name = &"Window Mode"
 
 [node name="VSync" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
 layout_mode = 2
 value = false
 setting_name = &"V-Sync"
-setting_group = &"Display"
 
 [node name="Input" type="Control" parent="SettingsContainer"]
 visible = false
@@ -207,6 +167,7 @@ metadata/_edit_lock_ = true
 layout_mode = 2
 
 [node name="Audio" type="Control" parent="SettingsContainer"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -245,13 +206,11 @@ horizontal_alignment = 1
 layout_mode = 2
 _toggle = 1
 setting_name = &"Music"
-setting_group = &"Audio"
 
 [node name="SFX" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer" instance=ExtResource("9_jeqcw")]
 layout_mode = 2
 _toggle = 1
 setting_name = &"SFX"
-setting_group = &"Audio"
 
 [node name="Miscellaneous" type="Control" parent="SettingsContainer"]
 visible = false
@@ -296,17 +255,14 @@ horizontal_alignment = 1
 [node name="ShowTimer" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
 layout_mode = 2
 setting_name = &"Show Timer"
-setting_group = &"Misc"
 
 [node name="EnforceTouch" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
 layout_mode = 2
 setting_name = &"Enforce Touch Controls"
-setting_group = &"Misc"
 
 [node name="CameraLimit" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
 layout_mode = 2
 setting_name = &"Disable Camera Limiting"
-setting_group = &"Misc"
 
 [node name="LocalizationLabel" type="Label" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
@@ -339,8 +295,8 @@ popup/item_0/text = "English [en]"
 popup/item_0/id = 0
 
 [connection signal="cycle" from="SettingCycleButton" to="." method="_on_cycle"]
-[connection signal="item_selected" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/FPSContainer/FPSOptionButton" to="Handlers/DisplayHandler" method="_on_fps_option_button_item_selected"]
-[connection signal="item_selected" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinModeContainer/WinModeOptionButton" to="Handlers/DisplayHandler" method="_on_win_mode_option_button_item_selected"]
+[connection signal="option_selected" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/FPSLimit" to="Handlers/DisplayHandler" method="_on_fps_limit_option_selected"]
+[connection signal="option_selected" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinMode" to="Handlers/DisplayHandler" method="_on_win_mode_option_selected"]
 [connection signal="value_changed" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/VSync" to="Handlers/DisplayHandler" method="_on_v_sync_value_changed"]
 [connection signal="toggled" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music" to="Handlers/AudioHandler" method="_on_music_toggled"]
 [connection signal="value_changed" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music" to="Handlers/AudioHandler" method="_on_music_value_changed"]
