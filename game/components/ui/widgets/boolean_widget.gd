@@ -2,10 +2,16 @@
 class_name BooleanWidget
 extends AspectRatioContainer
 
+signal value_changed(value: bool)
+
 const CHECKMARK: Texture2D = preload("res://assets/textures/gui/widgets/boolean/checkmark.png")
 const CHECKMARK_PRESSED: Texture2D = preload("res://assets/textures/gui/widgets/boolean/checkmark_pressed.png")
 const CHECK_COOLDOWN: float = 0.1
 
+@export var manual: bool = false:
+	set(m):
+		check_button.mouse_filter = Control.MOUSE_FILTER_IGNORE if m else Control.MOUSE_FILTER_PASS
+		manual = m
 @export var check_button: CheckBox
 @export var check_texture: TextureRect
 
@@ -28,10 +34,13 @@ func set_toggled(new_value: bool, play_sfx: bool = true) -> void:
 	if play_sfx:
 		_play_sfx()
 	_redraw()
+	
+	value_changed.emit(toggled)
 
 
 
 func _on_toggled(toggled_on: bool) -> void:
+	value_changed.emit(toggled_on)
 	set_toggled(toggled_on, true)
 
 

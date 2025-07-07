@@ -1,12 +1,10 @@
 @tool
 class_name BooleanSettingEntry
-extends Control
+extends SettingEntry
 
 signal value_changed(value: bool)
 
 
-@export var setting_group: StringName = "General"
-@export var setting_name: StringName = ""
 @export var value: bool = true:
 	set(v):
 		_value = v

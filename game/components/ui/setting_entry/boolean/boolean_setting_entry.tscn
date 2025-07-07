@@ -14,6 +14,7 @@ script = ExtResource("1_u2xj2")
 boolean_widget = NodePath("Interaction/HBoxContainer/BooleanWidget")
 setting_label = NodePath("Interaction/HBoxContainer/SettingLabel")
 interaction = NodePath("Interaction")
+setting_group = &"General"
 metadata/_edit_use_anchors_ = true
 
 [node name="Interaction" type="Button" parent="."]

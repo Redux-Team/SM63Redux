@@ -1,0 +1,51 @@
+[gd_scene load_steps=2 format=3 uid="uid://b4oq1mqltbkso"]
+
+[ext_resource type="Script" uid="uid://du311c6w7gg8l" path="res://game/components/ui/setting_entry/input/input_setting_entry.gd" id="1_gb3mm"]
+
+[node name="InputSettingEntry" type="Control" node_paths=PackedStringArray("input_name_label", "input_events_label")]
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 0.119444
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gb3mm")
+input_name_label = NodePath("Interaction/InputName")
+input_events_label = NodePath("Interaction/InputEvents")
+setting_name = null
+setting_group = null
+metadata/_edit_use_anchors_ = true
+
+[node name="Interaction" type="Button" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+
+[node name="InputName" type="Label" parent="Interaction"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -7.14583
+offset_right = 40.0
+offset_bottom = 7.14583
+grow_vertical = 2
+
+[node name="InputEvents" type="Label" parent="Interaction"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -7.14583
+offset_bottom = 7.14583
+grow_horizontal = 0
+grow_vertical = 2
+horizontal_alignment = 2
