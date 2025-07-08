@@ -8,7 +8,9 @@ signal option_selected(index: int)
 @export var selected_index: int:
 	set(si):
 		selected_index = wrapi(si, -1, options.size())
-		dropdown.select(selected_index)
+		
+		if selected_index > -1:
+			dropdown.select(selected_index)
 @export var silent: bool = false
 
 @export_group("Internal")
