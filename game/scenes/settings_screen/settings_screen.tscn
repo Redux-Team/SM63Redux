@@ -33,10 +33,11 @@ vsync_entry = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginCo
 script = ExtResource("3_oqnvq")
 input_vbox = NodePath("../../SettingsContainer/Input/ScrollContainer/MarginContainer/VBoxContainer")
 
-[node name="AudioHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("music_slider", "sfx_slider")]
+[node name="AudioHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("music_slider", "sfx_slider", "output_device_dropdown")]
 script = ExtResource("2_v82bw")
 music_slider = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/Music")
 sfx_slider = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX")
+output_device_dropdown = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/OutputDevice")
 
 [node name="MiscHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("show_timer_toggle", "enforce_touch_toggle", "camera_limit_toggle")]
 script = ExtResource("4_7dnsy")
@@ -69,6 +70,7 @@ anchor_bottom = 0.0778889
 offset_bottom = -0.0400009
 mouse_default_cursor_shape = 2
 cycle_strings = Array[String](["Display", "Input", "Audio", "Miscellaneous"])
+current_iter = 2
 font_size = 14
 outline_size = 4
 
@@ -83,6 +85,7 @@ grow_vertical = 2
 metadata/_edit_lock_ = true
 
 [node name="Display" type="Control" parent="SettingsContainer"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -124,12 +127,14 @@ horizontal_alignment = 1
 layout_mode = 2
 options = Array[String](["30 FPS", "60 FPS", "120 FPS", "240 FPS", "Unlimited"])
 selected_index = 1
+silent = false
 setting_name = &"FPS Limit"
 
 [node name="WinMode" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("8_tja7e")]
 layout_mode = 2
 options = Array[String](["Windowed", "Fullscreen", "Fullscreen Borderless"])
 selected_index = 1
+silent = false
 setting_name = &"Window Mode"
 
 [node name="VSync" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
@@ -167,7 +172,6 @@ metadata/_edit_lock_ = true
 layout_mode = 2
 
 [node name="Audio" type="Control" parent="SettingsContainer"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -194,13 +198,33 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
+[node name="OutputLabel" type="Label" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Devices"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OutputDevice" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer" instance=ExtResource("8_tja7e")]
+layout_mode = 2
+selected_index = -1
+silent = false
+setting_name = &"Output"
+
+[node name="Control" type="Control" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
 [node name="VolumeLabel" type="Label" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 14
 text = "Volume"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Music" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer" instance=ExtResource("9_jeqcw")]
 layout_mode = 2
@@ -210,6 +234,7 @@ setting_name = &"Music"
 [node name="SFX" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer" instance=ExtResource("9_jeqcw")]
 layout_mode = 2
 _toggle = 1
+silent = false
 setting_name = &"SFX"
 
 [node name="Miscellaneous" type="Control" parent="SettingsContainer"]
@@ -298,6 +323,7 @@ popup/item_0/id = 0
 [connection signal="option_selected" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/FPSLimit" to="Handlers/DisplayHandler" method="_on_fps_limit_option_selected"]
 [connection signal="option_selected" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinMode" to="Handlers/DisplayHandler" method="_on_win_mode_option_selected"]
 [connection signal="value_changed" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/VSync" to="Handlers/DisplayHandler" method="_on_v_sync_value_changed"]
+[connection signal="option_selected" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/OutputDevice" to="Handlers/AudioHandler" method="_on_output_device_option_selected"]
 [connection signal="toggled" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music" to="Handlers/AudioHandler" method="_on_music_toggled"]
 [connection signal="value_changed" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music" to="Handlers/AudioHandler" method="_on_music_value_changed"]
 [connection signal="toggled" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX" to="Handlers/AudioHandler" method="_on_sfx_toggled"]

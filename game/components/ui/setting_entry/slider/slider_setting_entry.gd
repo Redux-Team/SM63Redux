@@ -19,6 +19,7 @@ enum ValueType {
 
 @export var _toggle: ToggleValue
 @export var value_type: ValueType
+@export var silent: bool = true
 
 @export_group("Slider")
 @export var slider_min: float = 0.0
@@ -159,3 +160,8 @@ func _on_slider_value_changed(value: float) -> void:
 
 func _on_setting_name_changed(value: StringName) -> void:
 	setting_name_label.text = value
+
+
+func _on_slider_drag_ended(_value_changed: bool) -> void:
+	if not silent:
+		SFX.play(SFX.UI_NEXT)

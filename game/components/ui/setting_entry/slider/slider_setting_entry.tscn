@@ -72,4 +72,5 @@ value = 75.0
 [connection signal="mouse_exited" from="HBoxContainer/Interaction" to="." method="_on_interaction_mouse_exited"]
 [connection signal="pressed" from="HBoxContainer/Interaction" to="." method="_on_interaction_pressed"]
 [connection signal="value_changed" from="HBoxContainer/Interaction/InteractionHBox/BooleanWidget" to="." method="_on_boolean_widget_value_changed"]
+[connection signal="drag_ended" from="HBoxContainer/Slider" to="." method="_on_slider_drag_ended"]
 [connection signal="value_changed" from="HBoxContainer/Slider" to="." method="_on_slider_value_changed"]

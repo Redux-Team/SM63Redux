@@ -1,5 +1,5 @@
 class_name SettingEntry
-extends Node
+extends Control
 
 signal setting_name_changed(value: StringName)
 

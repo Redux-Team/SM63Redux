@@ -9,6 +9,7 @@ signal option_selected(index: int)
 	set(si):
 		selected_index = wrapi(si, -1, options.size())
 		dropdown.select(selected_index)
+@export var silent: bool = false
 
 @export_group("Internal")
 @export var label: Label
@@ -18,7 +19,10 @@ signal option_selected(index: int)
 func _ready() -> void:
 	label.text = setting_name
 	setting_name_changed.connect(_on_setting_name_changed)
-	
+	populate_dropdown()
+
+
+func populate_dropdown() -> void:
 	dropdown.clear()
 	for option: String in options:
 		dropdown.add_item(option)
@@ -30,4 +34,13 @@ func _on_setting_name_changed(value: StringName) -> void:
 
 func _on_dropdown_item_selected(index: int) -> void:
 	selected_index = index
+	
+	if not silent:
+		SFX.play(SFX.UI_CONFIRM)
+	
 	option_selected.emit(index)
+
+
+# HACK this should fix invalid assignments on initialization
+func _on_visibility_changed() -> void:
+	selected_index = selected_index

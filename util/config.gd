@@ -5,8 +5,6 @@ static var folder_path: String = OS.get_user_data_dir()
 static var settings_file_path: String = folder_path.path_join("settings.json")
 
 
-# This is what actually *holds* the config data, the classes below are just
-# an abstract way to access/read/modify them.
 static var _conf_dict_default: Dictionary = {
 	"Display": {
 		&"max_fps": 60,
@@ -18,6 +16,7 @@ static var _conf_dict_default: Dictionary = {
 		&"music_volume": 75.0,
 		&"sfx_on": true,
 		&"sfx_volume": 75.0,
+		&"output_device": "Default",
 	},
 	"Input": {},
 	"Misc": {
@@ -28,6 +27,8 @@ static var _conf_dict_default: Dictionary = {
 	},
 }
 
+# This is what actually *holds* the config data, the classes below are just
+# an abstract way to access/read/modify them.
 static var _conf_dict: Dictionary = _conf_dict_default.duplicate(true)
 
 
@@ -52,7 +53,7 @@ static func load() -> void:
 	var config_file: FileAccess = FileAccess.open(settings_file_path, FileAccess.READ)
 	var data: Dictionary = JSON.parse_string(config_file.get_as_text())
 	
-	_conf_dict.merge(data, true)
+	_conf_dict = Packer.merge_deep(_conf_dict_default, data)
 
 
 static func apply() -> void:
@@ -112,6 +113,9 @@ class audio:
 	static var sfx_volume: float:
 		get(): return Config._conf_dict.Audio.get(&"sfx_volume")
 		set(sfx_v): Config._conf_dict.Audio.set(&"sfx_volume", sfx_v)
+	static var output_device: String:
+		get(): return Config._conf_dict.Audio.get(&"output_device")
+		set(od): Config._conf_dict.Audio.set(&"output_device", od)
 	
 	static func apply() -> void:
 		# music
@@ -121,6 +125,8 @@ class audio:
 		# sfx
 		AudioServer.set_bus_volume_db(1, remap(music_volume, 0, 100, -60, 20))
 		AudioServer.set_bus_volume_db(2, remap(sfx_volume, 0, 100, -60, 20))
+		
+		AudioServer.output_device = output_device
 
 
 class input:
