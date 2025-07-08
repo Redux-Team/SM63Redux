@@ -199,13 +199,12 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
 [node name="OutputLabel" type="Label" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 14
 text = "Devices"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="OutputDevice" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer" instance=ExtResource("8_tja7e")]
 layout_mode = 2
