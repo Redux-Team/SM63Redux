@@ -9,5 +9,5 @@ signal setting_name_changed(value: StringName)
 		setting_name_changed.emit(sn)
 
 
-func _on_setting_name_changed(value: StringName) -> void:
+func _on_setting_name_changed(_value: StringName) -> void:
 	pass

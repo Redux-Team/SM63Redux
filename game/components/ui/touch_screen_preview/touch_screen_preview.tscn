@@ -1,0 +1,195 @@
+[gd_scene load_steps=3 format=3 uid="uid://l87i6yic73um"]
+
+[ext_resource type="Script" uid="uid://dxqln3mb45twv" path="res://game/components/ui/touch_screen_preview/touch_screen_preview.gd" id="1_4n3w4"]
+[ext_resource type="Script" uid="uid://cqna8qujhye5l" path="res://util/ui/draggable_item.gd" id="1_kc4bt"]
+
+[node name="TouchScreenPreview" type="Control" node_paths=PackedStringArray("buttons")]
+clip_children = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4n3w4")
+buttons = [NodePath("LeftButton"), NodePath("RightButton"), NodePath("UpButton"), NodePath("DownButton"), NodePath("SpinButton"), NodePath("FluddUseButton"), NodePath("FluddSwapButton"), NodePath("GPoundButton"), NodePath("PauseButton")]
+metadata/_edit_lock_ = true
+
+[node name="BG" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.215686)
+metadata/_edit_lock_ = true
+
+[node name="DeviceLabel" type="Label" parent="."]
+self_modulate = Color(1, 1, 1, 0.313726)
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -308.0
+offset_top = -10.0
+offset_right = 308.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Preview"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeftButton" type="Button" parent="."]
+layout_mode = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 26.0
+offset_top = -59.0
+offset_right = 66.0
+offset_bottom = -19.0
+grow_vertical = 0
+pivot_offset = Vector2(20, 20)
+mouse_filter = 1
+theme_type_variation = &"TouchLeft"
+script = ExtResource("1_kc4bt")
+
+[node name="RightButton" type="Button" parent="."]
+layout_mode = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 66.0
+offset_top = -59.0
+offset_right = 106.0
+offset_bottom = -19.0
+grow_vertical = 0
+pivot_offset = Vector2(20, 20)
+mouse_filter = 1
+theme_type_variation = &"TouchRight"
+script = ExtResource("1_kc4bt")
+
+[node name="UpButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -65.0
+offset_top = -100.0
+offset_right = -25.0
+offset_bottom = -60.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(20, 20)
+mouse_filter = 1
+theme_type_variation = &"TouchUp"
+script = ExtResource("1_kc4bt")
+
+[node name="DownButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -65.0
+offset_top = -62.0
+offset_right = -25.0
+offset_bottom = -22.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(20, 20)
+mouse_filter = 1
+theme_type_variation = &"TouchDown"
+script = ExtResource("1_kc4bt")
+
+[node name="SpinButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -122.0
+offset_top = -103.0
+offset_right = -82.0
+offset_bottom = -63.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(20, 20)
+mouse_filter = 1
+theme_type_variation = &"TouchSpin"
+script = ExtResource("1_kc4bt")
+
+[node name="FluddUseButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -122.0
+offset_top = -59.0
+offset_right = -82.0
+offset_bottom = -19.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(20, 20)
+mouse_filter = 1
+theme_type_variation = &"TouchFluddUse"
+script = ExtResource("1_kc4bt")
+
+[node name="FluddSwapButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -167.0
+offset_top = -81.0
+offset_right = -127.0
+offset_bottom = -41.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(20, 20)
+mouse_filter = 1
+theme_type_variation = &"TouchFluddSwap"
+script = ExtResource("1_kc4bt")
+
+[node name="GPoundButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 46.0
+offset_top = -106.0
+offset_right = 86.0
+offset_bottom = -66.0
+grow_vertical = 0
+pivot_offset = Vector2(20, 20)
+mouse_filter = 1
+theme_type_variation = &"TouchGPound"
+script = ExtResource("1_kc4bt")
+
+[node name="PauseButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -41.0
+offset_top = 9.0
+offset_right = -11.0
+offset_bottom = 39.0
+grow_horizontal = 0
+pivot_offset = Vector2(15, 15)
+mouse_filter = 1
+theme_type_variation = &"TouchPause"
+script = ExtResource("1_kc4bt")

@@ -18,12 +18,15 @@ static var _conf_dict_default: Dictionary = {
 		&"sfx_volume": 75.0,
 		&"output_device": "Default",
 	},
-	"Input": {},
+	"Input": {
+		&"touch_button_opacity": 50.0,
+		&"touch_button_scale": 1.0,
+	},
 	"Misc": {
 		&"show_timer": false,
 		&"enforce_touch_controls": false,
 		&"disable_camera_limiting": false,
-		&"language": "en"
+		&"language": "en",
 	},
 }
 
@@ -130,7 +133,12 @@ class audio:
 
 
 class input:
-	pass
+	static var touch_button_opacity: float:
+		get(): return Config._conf_dict.Input.get(&"touch_button_opacity")
+		set(tbo): Config._conf_dict.Input.set(&"touch_button_opacity", tbo)
+	static var touch_button_scale: float:
+		get(): return Config._conf_dict.Input.get(&"touch_button_scale")
+		set(tbs): Config._conf_dict.Input.set(&"touch_button_scale", tbs)
 
 
 class misc:

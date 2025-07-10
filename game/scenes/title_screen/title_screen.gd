@@ -27,13 +27,12 @@ func _input(event: InputEvent) -> void:
 	if input_locked:
 		return
 	
-	if event.is_action_pressed(&"start_game") and on_splash_screen:
+	if event.is_action_pressed(&"UI-Confirm") and on_splash_screen:
 		_switch_to_menu_screen()
 	
-	elif event is InputEventKey and event.keycode == KEY_ESCAPE and event.is_pressed():
+	elif event.is_action(&"UI-Back"):
 		if on_settings_screen:
-			_switch_from_settings_screen()
-			Config.save()
+			_on_settings_screen_exit_request()
 		elif not on_splash_screen:
 			_switch_to_splash_screen()
 			# skip to the looping segment if the song was cut off before the beat drop
@@ -77,3 +76,8 @@ func _switch_from_settings_screen() -> void:
 	animation_player.play(&"switch_from_settings_screen", -1, 1.7)
 	on_settings_screen = false
 	SFX.play(SFX.UI_BACK)
+
+
+func _on_settings_screen_exit_request() -> void:
+	_switch_from_settings_screen()
+	Config.save()

@@ -22,13 +22,23 @@ enum ValueType {
 @export var silent: bool = true
 
 @export_group("Slider")
-@export var slider_min: float = 0.0
-@export var slider_max: float = 100.0
+@export var slider_min: float = 0.0:
+	set(sm):
+		slider.min_value = sm
+		slider_min = sm
+@export var slider_max: float = 100.0:
+	set(sm):
+		slider.max_value = sm
+		slider_max = sm
 @export var slider_value: float = 75.0:
 	set(sv):
 		slider.value = sv
 		slider_value = sv
 		_update_value_text()
+@export var slider_step: float = 1.0:
+	set(ss):
+		slider.step = ss
+		slider_step = ss
 
 @export_group("Internal")
 @export var boolean_widget: BooleanWidget

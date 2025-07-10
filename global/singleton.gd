@@ -1,29 +1,33 @@
 extends Node
 
+signal input_type_changed(device: InputType)
+
 enum ScreenTransitionType {
 	TEXTURE_ZOOM
 } 
 
-const VERSION: StringName = &"0.2.0"
+enum InputType {
+	KEYBOARD,
+	CONTROLLER,
+	TOUCHSCREEN,
+	UNKNOWN
+}
 
-const _INVERSE_CLIP_SHADER: Shader = preload("res://core/shader/inverse_clip.gdshader")
+const VERSION: StringName = &"0.2.0"
 
 @export var sfx_container: Node
 @export var transition_overlay: ColorRect
 
+var current_input_device: InputType = InputType.KEYBOARD
+var _last_device_type: InputType
 
-func play_sfx(stream: AudioStream) -> void:
-	var audio_stream_player: AudioStreamPlayer = AudioStreamPlayer.new()
-	audio_stream_player.bus = &"SFX"
-	audio_stream_player.stream = stream
-	
-	sfx_container.add_child(audio_stream_player)
-	
-	audio_stream_player.finished.connect(func() -> void:
-		audio_stream_player.queue_free()
-	)
-	
-	audio_stream_player.play()
+
+func _process(_delta: float) -> void:
+	_check_touch_display(current_input_device)
+
+
+func _input(event: InputEvent) -> void:
+	_check_input_device(event)
 
 
 func transition_to_scene_file(scene_file: String, transition: ScreenTransitionType, texture: Texture2D = Texture2D.new(), time: float = 1.0) -> void:
@@ -34,7 +38,7 @@ func transition_to_scene_file(scene_file: String, transition: ScreenTransitionTy
 			tween.set_ease(Tween.EASE_OUT)
 			
 			var mat = ShaderMaterial.new()
-			mat.shader = _INVERSE_CLIP_SHADER
+			mat.shader = Shaders.INVERSE_CLIP
 			mat.set_shader_parameter(&"texture_albedo", texture)
 			transition_overlay.material = mat
 			transition_overlay.show()
@@ -65,6 +69,54 @@ func transition_to_scene_file(scene_file: String, transition: ScreenTransitionTy
 			, CONNECT_ONE_SHOT)
 
 
+func get_active_input_device() -> String:
+	return InputType.keys()[current_input_device].to_pascal_case()
 
-func _screen_transition_texture_zoom() -> void:
-	pass
+
+func _check_input_device(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		return
+	
+	if event is InputEventKey:
+		current_input_device = InputType.KEYBOARD
+	
+	elif event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		if event is InputEventJoypadMotion and abs(event.axis_value) < 0.5:
+				return
+		current_input_device = InputType.CONTROLLER
+	
+	elif event is InputEventScreenTouch or event is InputEventScreenDrag or event is InputEventMouseButton:
+		current_input_device = InputType.TOUCHSCREEN
+	
+	else:
+		current_input_device = InputType.UNKNOWN
+	
+	
+	if current_input_device == _last_device_type:
+		return
+	
+	_last_device_type = current_input_device
+	input_type_changed.emit(current_input_device)
+
+
+func _check_touch_display(device: InputType) -> void:
+	if device == InputType.TOUCHSCREEN:
+		for control: Control in get_tree().get_nodes_in_group(&"gui_touch"):
+			control.show()
+	else:
+		for control: Control in get_tree().get_nodes_in_group(&"gui_touch"):
+			control.hide()
+
+
+func _play_sfx(stream: AudioStream) -> void:
+	var audio_stream_player: AudioStreamPlayer = AudioStreamPlayer.new()
+	audio_stream_player.bus = &"SFX"
+	audio_stream_player.stream = stream
+	
+	sfx_container.add_child(audio_stream_player)
+	
+	audio_stream_player.finished.connect(func() -> void:
+		audio_stream_player.queue_free()
+	)
+	
+	audio_stream_player.play()

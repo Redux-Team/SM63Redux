@@ -31,6 +31,7 @@ theme_override_constants/outline_size = 4
 [node name="Dropdown" type="OptionButton" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+fit_to_longest_item = false
 
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
 [connection signal="item_selected" from="HBoxContainer/Dropdown" to="." method="_on_dropdown_item_selected"]

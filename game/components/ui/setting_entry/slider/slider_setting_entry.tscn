@@ -12,6 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mbkwd")
 value_type = 2
+slider_step = null
 boolean_widget = NodePath("HBoxContainer/Interaction/InteractionHBox/BooleanWidget")
 slider = NodePath("HBoxContainer/Slider")
 interaction = NodePath("HBoxContainer/Interaction")

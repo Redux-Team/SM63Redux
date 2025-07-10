@@ -1987,3 +1987,4 @@ libraries = {
 
 [connection signal="gui_input" from="MenuScreen/LeftTouchRegion" to="MenuScreen/MenuCycle" method="_input_cycle_region" binds= [-1, &"cycle_left"]]
 [connection signal="gui_input" from="MenuScreen/RightTouchRegion" to="MenuScreen/MenuCycle" method="_input_cycle_region" binds= [1, &"cycle_right"]]
+[connection signal="exit_request" from="SettingsScreen" to="." method="_on_settings_screen_exit_request"]

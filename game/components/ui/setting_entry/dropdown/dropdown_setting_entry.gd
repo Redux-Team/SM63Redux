@@ -8,7 +8,7 @@ signal option_selected(index: int)
 @export var selected_index: int:
 	set(si):
 		selected_index = wrapi(si, -1, options.size())
-		if selected_index > -1 and options.size() > 0:
+		if selected_index > 0 and selected_index < dropdown.get_popup().item_count:
 			dropdown.select(selected_index)
 @export var silent: bool = false
 
