@@ -1,9 +1,10 @@
-[gd_scene load_steps=24 format=3 uid="uid://b0wp6l07i5ime"]
+[gd_scene load_steps=25 format=3 uid="uid://b0wp6l07i5ime"]
 
 [ext_resource type="Script" uid="uid://b2figxll0bk25" path="res://game/scenes/title_screen/title_screen.gd" id="1_6esl3"]
 [ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/soundtrack/01 Welcome to Super Mario 63 Redux!.mp3" id="1_bfr6l"]
 [ext_resource type="Texture2D" uid="uid://dcg8iv2uajlwf" path="res://meta/logo.png" id="1_exexd"]
 [ext_resource type="Script" uid="uid://dn7i0x4jjj4ry" path="res://util/ui/resizable_label.gd" id="3_65llw"]
+[ext_resource type="Texture2D" uid="uid://e7xc4bwdokpj" path="res://assets/textures/world/background/title/title_bg.png" id="3_y7kqt"]
 [ext_resource type="Script" uid="uid://chkv0bbgtj7gh" path="res://game/scenes/title_screen/menu_cycle.gd" id="4_db5fu"]
 [ext_resource type="Script" uid="uid://xa8tx6uta26v" path="res://game/scenes/title_screen/version_text.gd" id="4_jb1no"]
 [ext_resource type="PackedScene" uid="uid://c6dic42vckv0e" path="res://game/components/ui/main_menu_button/main_menu_button.tscn" id="5_mu8aq"]
@@ -895,6 +896,18 @@ tracks/14/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("(Placeholder):self_modulate")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_y7kqt"]
 resource_name = "switch_from_settings_screen"
@@ -1194,6 +1207,18 @@ tracks/10/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("(Placeholder):self_modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.4, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.6, 0.6, 0.6, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_1evyh"]
@@ -1527,6 +1552,18 @@ tracks/13/keys = {
 "update": 1,
 "values": [true, false]
 }
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("(Placeholder):self_modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.433333),
+"transitions": PackedFloat32Array(0.4, 0.4),
+"update": 0,
+"values": [Color(0.6, 0.6, 0.6, 1), Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_bfr6l"]
 resource_name = "title_in"
@@ -1648,12 +1685,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("3_y7kqt")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="SplashScreen" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 15.0
+offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
@@ -1716,13 +1758,12 @@ metadata/_edit_lock_ = true
 
 [node name="MenuScreen" type="Control" parent="."]
 visible = false
-modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchor_top = 0.0833333
 anchor_right = 1.0
 anchor_bottom = 1.08333
-offset_top = 30.0
-offset_bottom = 30.0
+offset_top = -15.0
+offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -1842,7 +1883,7 @@ title = 1
 description = "Create your own story in this advanced Level Designer!"
 hue = 0.22
 saturation = 0.65
-value = 0.643
+value = 0.75
 
 [node name="ExtraButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle"]
 layout_mode = 1

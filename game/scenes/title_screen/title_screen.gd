@@ -30,7 +30,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"UI-Confirm") and on_splash_screen:
 		_switch_to_menu_screen()
 	
-	elif event.is_action(&"UI-Back"):
+	elif event.is_action(&"UI-Back") and event.is_pressed():
 		if on_settings_screen:
 			_on_settings_screen_exit_request()
 		elif not on_splash_screen:

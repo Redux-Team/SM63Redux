@@ -1,0 +1,158 @@
+[gd_resource type="Resource" script_class="ControlScheme" load_steps=32 format=3 uid="uid://wymwegktk0cr"]
+
+[ext_resource type="Script" uid="uid://d3irhgxu3cjae" path="res://util/control_scheme/control_scheme.gd" id="1_4mdci"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_4pj0n"]
+device = -1
+pressed = true
+keycode = 4194322
+
+[sub_resource type="InputEventKey" id="InputEventKey_p7aod"]
+device = -1
+pressed = true
+keycode = 83
+unicode = 115
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_sojn1"]
+device = -1
+button_index = 12
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_8lqvo"]
+device = -1
+axis = 1
+axis_value = 1.0
+
+[sub_resource type="InputEventKey" id="InputEventKey_4mdci"]
+device = -1
+keycode = 90
+unicode = 122
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_csq0s"]
+axis = 5
+axis_value = 1.0
+
+[sub_resource type="InputEventKey" id="InputEventKey_csq0s"]
+device = -1
+keycode = 90
+unicode = 122
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_jeadu"]
+button_index = 1
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_3uxjw"]
+device = -1
+pressed = true
+keycode = 32
+unicode = 32
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_2acyr"]
+device = -1
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_1btyf"]
+device = -1
+keycode = 4194320
+
+[sub_resource type="InputEventKey" id="InputEventKey_sojn1"]
+device = -1
+pressed = true
+keycode = 4194319
+
+[sub_resource type="InputEventKey" id="InputEventKey_8lqvo"]
+device = -1
+pressed = true
+keycode = 65
+unicode = 97
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_oyo3k"]
+device = -1
+button_index = 13
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_ow6f8"]
+device = -1
+axis_value = -1.0
+
+[sub_resource type="InputEventKey" id="InputEventKey_oyo3k"]
+device = -1
+pressed = true
+keycode = 4194321
+
+[sub_resource type="InputEventKey" id="InputEventKey_ow6f8"]
+device = -1
+pressed = true
+keycode = 68
+unicode = 100
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_3uxjw"]
+device = -1
+button_index = 14
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_4pj0n"]
+device = -1
+axis_value = 1.0
+
+[sub_resource type="InputEventKey" id="InputEventKey_jeadu"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="InputEventKey" id="InputEventKey_noeec"]
+device = -1
+keycode = 80
+unicode = 112
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_eea84"]
+button_index = 6
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_ed3r0"]
+device = -1
+keycode = 88
+unicode = 120
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_noeec"]
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_eea84"]
+device = -1
+keycode = 88
+unicode = 120
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_k8an3"]
+button_index = 10
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_xcaby"]
+device = -1
+keycode = 4194325
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_cdqsb"]
+button_index = 9
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_ksmes"]
+device = -1
+keycode = 67
+unicode = 99
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_vsqlf"]
+button_index = 2
+pressed = true
+
+[resource]
+script = ExtResource("1_4mdci")
+move_left = Array[InputEvent]([SubResource("InputEventKey_sojn1"), SubResource("InputEventKey_8lqvo"), SubResource("InputEventJoypadButton_oyo3k"), SubResource("InputEventJoypadMotion_ow6f8")])
+move_right = Array[InputEvent]([SubResource("InputEventKey_oyo3k"), SubResource("InputEventKey_ow6f8"), SubResource("InputEventJoypadButton_3uxjw"), SubResource("InputEventJoypadMotion_4pj0n")])
+jump = Array[InputEvent]([SubResource("InputEventKey_3uxjw"), SubResource("InputEventJoypadButton_2acyr"), SubResource("InputEventKey_1btyf")])
+crouch = Array[InputEvent]([SubResource("InputEventKey_4pj0n"), SubResource("InputEventKey_p7aod"), SubResource("InputEventJoypadButton_sojn1"), SubResource("InputEventJoypadMotion_8lqvo")])
+ground_pound = Array[InputEvent]([SubResource("InputEventKey_4mdci"), SubResource("InputEventJoypadMotion_csq0s")])
+spin = Array[InputEvent]([SubResource("InputEventKey_eea84"), SubResource("InputEventJoypadButton_k8an3")])
+use_fludd = Array[InputEvent]([SubResource("InputEventKey_ksmes"), SubResource("InputEventJoypadButton_vsqlf")])
+swich_nozzle = Array[InputEvent]([SubResource("InputEventKey_xcaby"), SubResource("InputEventJoypadButton_cdqsb")])
+interact = Array[InputEvent]([SubResource("InputEventKey_csq0s"), SubResource("InputEventJoypadButton_jeadu")])
+pause = Array[InputEvent]([SubResource("InputEventKey_jeadu"), SubResource("InputEventKey_noeec"), SubResource("InputEventJoypadButton_eea84")])
+skip_dialogue = Array[InputEvent]([SubResource("InputEventKey_ed3r0"), SubResource("InputEventJoypadButton_noeec")])
+metadata/_custom_type_script = "uid://d3irhgxu3cjae"

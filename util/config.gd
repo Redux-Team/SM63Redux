@@ -19,6 +19,7 @@ static var _conf_dict_default: Dictionary = {
 		&"output_device": "Default",
 	},
 	"Input": {
+		&"move_left": ["left arrow key", "left joypad stick", "left dpad", "A"],
 		&"touch_button_opacity": 50.0,
 		&"touch_button_scale": 1.0,
 	},

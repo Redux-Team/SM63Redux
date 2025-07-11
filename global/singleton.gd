@@ -74,7 +74,7 @@ func get_active_input_device() -> String:
 
 
 func _check_input_device(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
+	if event is InputEventMouse:
 		return
 	
 	if event is InputEventKey:
@@ -85,7 +85,7 @@ func _check_input_device(event: InputEvent) -> void:
 				return
 		current_input_device = InputType.CONTROLLER
 	
-	elif event is InputEventScreenTouch or event is InputEventScreenDrag or event is InputEventMouseButton:
+	elif event is InputEventScreenTouch or event is InputEventScreenDrag:
 		current_input_device = InputType.TOUCHSCREEN
 	
 	else:
