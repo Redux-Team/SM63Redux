@@ -1,6 +1,63 @@
-[gd_resource type="Resource" script_class="ControlScheme" load_steps=32 format=3 uid="uid://wymwegktk0cr"]
+[gd_resource type="Resource" script_class="ControlScheme" load_steps=45 format=3 uid="uid://wymwegktk0cr"]
 
 [ext_resource type="Script" uid="uid://d3irhgxu3cjae" path="res://util/control_scheme/control_scheme.gd" id="1_4mdci"]
+
+[sub_resource type="InputEventMouseButton" id="InputEventMouseButton_4mdci"]
+button_index = 2
+pressed = true
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_csq0s"]
+device = -1
+button_index = 8
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_k8an3"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_xcaby"]
+device = -1
+button_index = 1
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_vsqlf"]
+device = -1
+keycode = 90
+unicode = 122
+
+[sub_resource type="InputEventKey" id="InputEventKey_cdqsb"]
+device = -1
+keycode = 4194309
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_ksmes"]
+device = -1
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_fmlry"]
+device = -1
+keycode = 4194319
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_evr1d"]
+device = -1
+button_index = 13
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_sy3a0"]
+device = -1
+axis_value = -1.0
+
+[sub_resource type="InputEventKey" id="InputEventKey_r0tsm"]
+device = -1
+keycode = 4194321
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_ea4ag"]
+device = -1
+button_index = 14
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_hasbk"]
+device = -1
+axis_value = 1.0
 
 [sub_resource type="InputEventKey" id="InputEventKey_4pj0n"]
 device = -1
@@ -29,6 +86,7 @@ keycode = 90
 unicode = 122
 
 [sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_csq0s"]
+device = -1
 axis = 5
 axis_value = 1.0
 
@@ -38,7 +96,7 @@ keycode = 90
 unicode = 122
 
 [sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_jeadu"]
-button_index = 1
+device = -1
 pressed = true
 
 [sub_resource type="InputEventKey" id="InputEventKey_3uxjw"]
@@ -105,6 +163,7 @@ keycode = 80
 unicode = 112
 
 [sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_eea84"]
+device = -1
 button_index = 6
 pressed = true
 
@@ -114,6 +173,8 @@ keycode = 88
 unicode = 120
 
 [sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_noeec"]
+device = -1
+button_index = 1
 pressed = true
 
 [sub_resource type="InputEventKey" id="InputEventKey_eea84"]
@@ -122,6 +183,7 @@ keycode = 88
 unicode = 120
 
 [sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_k8an3"]
+device = -1
 button_index = 10
 pressed = true
 
@@ -130,6 +192,7 @@ device = -1
 keycode = 4194325
 
 [sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_cdqsb"]
+device = -1
 button_index = 9
 pressed = true
 
@@ -139,6 +202,7 @@ keycode = 67
 unicode = 99
 
 [sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_vsqlf"]
+device = -1
 button_index = 2
 pressed = true
 
@@ -155,4 +219,9 @@ swich_nozzle = Array[InputEvent]([SubResource("InputEventKey_xcaby"), SubResourc
 interact = Array[InputEvent]([SubResource("InputEventKey_csq0s"), SubResource("InputEventJoypadButton_jeadu")])
 pause = Array[InputEvent]([SubResource("InputEventKey_jeadu"), SubResource("InputEventKey_noeec"), SubResource("InputEventJoypadButton_eea84")])
 skip_dialogue = Array[InputEvent]([SubResource("InputEventKey_ed3r0"), SubResource("InputEventJoypadButton_noeec")])
+_ui_back = Array[InputEvent]([SubResource("InputEventKey_k8an3"), SubResource("InputEventJoypadButton_xcaby")])
+_ui_interact = Array[InputEvent]([SubResource("InputEventKey_vsqlf"), SubResource("InputEventKey_cdqsb"), SubResource("InputEventJoypadButton_ksmes")])
+_ui_left = Array[InputEvent]([SubResource("InputEventKey_fmlry"), SubResource("InputEventJoypadButton_evr1d"), SubResource("InputEventJoypadMotion_sy3a0")])
+_ui_right = Array[InputEvent]([SubResource("InputEventKey_r0tsm"), SubResource("InputEventJoypadButton_ea4ag"), SubResource("InputEventJoypadMotion_hasbk")])
+_clear_setting = Array[InputEvent]([SubResource("InputEventMouseButton_4mdci"), SubResource("InputEventJoypadButton_csq0s")])
 metadata/_custom_type_script = "uid://d3irhgxu3cjae"

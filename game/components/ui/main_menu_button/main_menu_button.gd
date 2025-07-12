@@ -2,6 +2,8 @@
 class_name MainMenuButton
 extends Control
 
+signal interaction
+
 enum ButtonDesign {
 	STORY,
 	LEVEL_DESIGNER,
@@ -66,3 +68,7 @@ func _assign_atlas_textures() -> void:
 	var top_icon_texture_atlas: AtlasTexture = top_icon_texture.texture.duplicate()
 	top_icon_texture_atlas.region.position.y = top_icon_texture_atlas.region.size.y * top_icon
 	top_icon_texture.texture = top_icon_texture_atlas
+
+
+func _on_interaction_pressed() -> void:
+	interaction.emit()

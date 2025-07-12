@@ -15,11 +15,20 @@ enum InputType {
 
 const VERSION: StringName = &"0.2.0"
 
+const CONTROLLER_ICONS = preload("uid://b5k5j0heehdeo")
+const DEFAULT_CONTROL_SCHEME = preload("uid://wymwegktk0cr")
+
 @export var sfx_container: Node
 @export var transition_overlay: ColorRect
 
+var current_control_scheme: ControlScheme
 var current_input_device: InputType = InputType.KEYBOARD
 var _last_device_type: InputType
+
+
+func _ready() -> void:
+	current_control_scheme = DEFAULT_CONTROL_SCHEME
+	current_control_scheme.assign_to_map()
 
 
 func _process(_delta: float) -> void:

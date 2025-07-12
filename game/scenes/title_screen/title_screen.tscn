@@ -1653,7 +1653,7 @@ _data = {
 &"title_in": SubResource("Animation_bfr6l")
 }
 
-[node name="TitleScreen" type="Control" node_paths=PackedStringArray("animation_player", "title_loop", "menu_loop", "splash_fade", "version_text", "team_text", "splash_screen", "menu_screen")]
+[node name="TitleScreen" type="Control" node_paths=PackedStringArray("animation_player", "title_loop", "menu_loop", "splash_fade", "version_text", "team_text", "splash_screen", "menu_screen", "start_text")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1669,6 +1669,7 @@ version_text = NodePath("VersionLabel")
 team_text = NodePath("TeamLabel")
 splash_screen = NodePath("SplashScreen")
 menu_screen = NodePath("MenuScreen")
+start_text = NodePath("SplashScreen/StartText")
 metadata/_edit_vertical_guides_ = [320.0]
 metadata/_edit_horizontal_guides_ = [180.0]
 metadata/_edit_lock_ = true
@@ -1694,8 +1695,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 15.0
-offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
@@ -1718,7 +1717,7 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_use_anchors_ = true
 
-[node name="StartText" type="Label" parent="SplashScreen"]
+[node name="StartText" type="RichTextLabel" parent="SplashScreen"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.246625
@@ -1733,14 +1732,11 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/normal_font_size = 18
+bbcode_enabled = true
 text = "Press 'Z' to play!"
 horizontal_alignment = 1
 vertical_alignment = 1
-script = ExtResource("3_65llw")
-font_size = 22
-outline_size = 6
-metadata/_custom_type_script = "uid://dn7i0x4jjj4ry"
 metadata/_edit_use_anchors_ = true
 
 [node name="SplashFade" type="ColorRect" parent="SplashScreen"]
@@ -1981,14 +1977,13 @@ anchor_bottom = 1.2
 offset_top = -0.159973
 offset_right = -0.0800018
 grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxEmpty_65llw")
 text = "v0.2.0"
 vertical_alignment = 2
 script = ExtResource("4_jb1no")
-font_size = 15
-outline_size = 5
 metadata/_custom_type_script = "uid://dn7i0x4jjj4ry"
 
 [node name="TeamLabel" type="Label" parent="."]
@@ -2008,10 +2003,6 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_jb1no")
 text = "Redux Team"
 horizontal_alignment = 2
 vertical_alignment = 2
-script = ExtResource("3_65llw")
-font_size = 15
-outline_size = 5
-metadata/_custom_type_script = "uid://dn7i0x4jjj4ry"
 
 [node name="TitleLoop" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("1_bfr6l")

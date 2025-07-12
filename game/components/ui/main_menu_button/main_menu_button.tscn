@@ -97,3 +97,15 @@ offset_bottom = 0.988
 grow_horizontal = 2
 texture = SubResource("AtlasTexture_i7pdl")
 expand_mode = 1
+
+[node name="Interaction" type="Button" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+
+[connection signal="pressed" from="Interaction" to="." method="_on_interaction_pressed"]

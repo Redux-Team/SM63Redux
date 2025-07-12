@@ -13,6 +13,11 @@ extends Control
 var current_index: int = 0
 
 func _ready() -> void:
+	for menu_button: MainMenuButton in menu_buttons:
+		menu_button.interaction.connect(func() -> void:
+			scene_transition.transition(menu_buttons[current_index].content)
+		)
+	
 	assign_buttons_to_containers()
 	update_description()
 
@@ -21,12 +26,12 @@ func _input(event: InputEvent) -> void:
 	if owner.input_locked:
 		return
 	
-	if event.is_action_pressed(&"ui_right"):
+	if event.is_action_pressed(&"_ui_right"):
 		cycle(1, &"cycle_right")
-	elif event.is_action_pressed(&"ui_left"):
+	elif event.is_action_pressed(&"_ui_left"):
 		cycle(-1, &"cycle_left")
 	
-	if event.is_action_pressed(&"ui_accept") and not animation_player.is_playing() and is_visible_in_tree():
+	if event.is_action_pressed(&"_ui_interact") and not animation_player.is_playing() and is_visible_in_tree():
 		scene_transition.transition(menu_buttons[current_index].content)
 
 

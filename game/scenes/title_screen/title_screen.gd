@@ -9,6 +9,7 @@ extends Control
 @export var team_text: Label
 @export var splash_screen: Control
 @export var menu_screen: Control
+@export var start_text: RichTextLabel
 
 @export var input_locked: bool = false
 
@@ -21,16 +22,18 @@ func _ready() -> void:
 	title_loop.play()
 	menu_loop.play()
 	menu_loop.stream_paused = true
+	Singleton.input_type_changed.connect(_on_input_type_changed)
+	_on_input_type_changed(Singleton.current_input_device)
 
 
 func _input(event: InputEvent) -> void:
 	if input_locked:
 		return
 	
-	if event.is_action_pressed(&"UI-Confirm") and on_splash_screen:
+	if event.is_action_pressed(&"_ui_interact") and on_splash_screen or event is InputEventScreenTouch:
 		_switch_to_menu_screen()
 	
-	elif event.is_action(&"UI-Back") and event.is_pressed():
+	elif event.is_action(&"_ui_back") and event.is_pressed():
 		if on_settings_screen:
 			_on_settings_screen_exit_request()
 		elif not on_splash_screen:
@@ -81,3 +84,10 @@ func _switch_from_settings_screen() -> void:
 func _on_settings_screen_exit_request() -> void:
 	_switch_from_settings_screen()
 	Config.save()
+
+
+func _on_input_type_changed(type: Singleton.InputType) -> void:
+	if type == Singleton.InputType.TOUCHSCREEN:
+		return
+	
+	start_text.text = "Press %s to begin!" % Singleton.current_control_scheme.get_hint("_ui_interact")

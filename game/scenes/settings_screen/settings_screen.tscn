@@ -33,11 +33,13 @@ fps_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginC
 win_mode_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinMode")
 vsync_entry = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/VSync")
 
-[node name="InputHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("device_label", "controls_vbox", "input_vbox", "touchscreen_vbox")]
+[node name="InputHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("device_label", "bindings_label", "controls_vbox", "input_vbox", "input_scroll_container", "touchscreen_vbox")]
 script = ExtResource("3_oqnvq")
 device_label = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/DeviceLabel")
+bindings_label = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/InputVBox/BindingsLabel")
 controls_vbox = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox")
 input_vbox = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/InputVBox")
+input_scroll_container = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer")
 touchscreen_vbox = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox")
 
 [node name="InputTouchHandler" type="Node" parent="Handlers/InputHandler" node_paths=PackedStringArray("preview", "scale_slider", "opacity_slider")]
@@ -184,7 +186,7 @@ size_flags_vertical = 3
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_bottom = 22
 metadata/_edit_lock_ = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="SettingsContainer/Input/MarginContainer"]
@@ -207,17 +209,18 @@ text = "Detected Device: Keyboard"
 horizontal_alignment = 1
 
 [node name="InputVBox" type="VBoxContainer" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="BindingsLabel" type="Label" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/InputVBox"]
+[node name="BindingsLabel" type="RichTextLabel" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/InputVBox"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
 text = "Bindings"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="TouchVBox" type="VBoxContainer" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox"]
 visible = false

@@ -6,6 +6,7 @@ extends Node
 const LEVEL_DESIGNER_SCENE: String = "uid://c732aftmb2bcv"
 const TRANSITION_MASK: CompressedTexture2D = preload("uid://b127vhuh31i8r")
 
+
 func transition(type: MainMenuButton.ButtonDesign) -> void:
 	match type:
 		MainMenuButton.ButtonDesign.LEVEL_DESIGNER:
@@ -20,6 +21,7 @@ func transition(type: MainMenuButton.ButtonDesign) -> void:
 			
 			SFX.play(SFX.UI_START)
 			menu_loop.stop()
+		
 		MainMenuButton.ButtonDesign.SETTINGS:
 			SFX.play(SFX.UI_CONFIRM)
 			owner.on_settings_screen = true
