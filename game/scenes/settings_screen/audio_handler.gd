@@ -14,9 +14,9 @@ func _ready() -> void:
 	
 	populate_output_devices()
 	
-	output_device_dropdown.selected_index = output_device_dropdown.options.find(Config.audio.output_device)
 	# BUG This has to be selected later because an option cannot be immediately
 	# selected after adding an item to a dropdown. 
+	output_device_dropdown.selected_index = output_device_dropdown.options.find(Config.audio.output_device)
 
 
 func populate_output_devices() -> void:

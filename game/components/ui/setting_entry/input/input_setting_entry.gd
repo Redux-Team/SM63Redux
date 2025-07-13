@@ -3,6 +3,7 @@ class_name InputSettingEntry
 extends SettingEntry
 
 @export var input_events: Array[InputEvent]
+@export var max_size: int = 5
 
 @export_group("Internal")
 @export var input_name_label: Label
@@ -19,6 +20,10 @@ func _ready() -> void:
 	input_name_label.text = setting_name.capitalize()
 	if not Engine.is_editor_hint():
 		Singleton.input_type_changed.connect(_update_inputs)
+		Singleton.control_scheme_changed.connect(func() -> void:
+			input_events = ControlScheme.get_events(setting_name)
+			_update_inputs()
+		)
 	_update_inputs()
 
 
@@ -36,7 +41,12 @@ func _input(event: InputEvent) -> void:
 		_handle_input_listening(event)
 
 
-func _update_inputs(type: Singleton.InputType = Singleton.current_input_device) -> void:
+func _update_inputs() -> void:
+	if Engine.is_editor_hint():
+		return
+	
+	var type: Singleton.InputType = Singleton.current_input_device
+	
 	input_events_label.text = ""
 	
 	var events: PackedStringArray = []
@@ -59,10 +69,13 @@ func _update_text_color() -> void:
 		color = Color.YELLOW
 	
 	input_name_label.add_theme_color_override(&"font_color", color)
+	input_events_label.add_theme_color_override(&"default_color", color)
 
 
 func _clear_inputs() -> void:
 	input_events = input_events.filter(_should_keep_input_event)
+	ControlScheme.set_events(setting_name, input_events)
+	ControlScheme.update_input_map()
 	_update_inputs()
 
 
@@ -100,6 +113,10 @@ func _on_interaction_mouse_exited() -> void:
 
 
 func _on_interaction_pressed() -> void:
+	if ControlScheme.get_active_events(setting_name).size() >= max_size:
+		_cancel_event()
+		return
+	
 	if not listening_for_input:
 		SFX.play(SFX.UI_NEXT)
 		listening_for_input = true
@@ -127,24 +144,26 @@ func _handle_clear_input_shortcut(event: InputEvent) -> bool:
 		if joypad_event.button_index == 8 and joypad_event.pressed and interaction_focused and not listening_for_input:
 			SFX.play(SFX.UI_BACK)
 			_clear_inputs()
+			Singleton.input_type_changed.emit()
 			return true
 	return false
 
 
 func _handle_input_listening(event: InputEvent) -> void:
 	for input_event: InputEvent in input_events:
-		if event.is_match(input_event, false):
-			listening_for_input = false
-			SFX.play(SFX.UI_BACK)
-			accept_event()
-			_update_inputs()
+		if event.is_match(input_event, true):
+			_cancel_event()
 			return
+	
+	if ControlScheme.get_active_events(setting_name, event).size() >= max_size:
+		_cancel_event()
+		return
 	
 	input_events.append(event)
 	
-	Singleton.current_control_scheme.set(setting_name, input_events)
-	Singleton.current_control_scheme.assign_to_map()
-	Singleton.input_type_changed.emit(Singleton.current_input_device)
+	ControlScheme.set_events(setting_name, input_events)
+	ControlScheme.update_input_map()
+	Singleton.input_type_changed.emit()
 	
 	_update_inputs()
 	accept_event()
@@ -184,3 +203,10 @@ func _is_right_mouse_release(event: InputEvent) -> bool:
 		var mouse_event: InputEventMouseButton = event as InputEventMouseButton
 		return mouse_event.button_index == 2 and not mouse_event.pressed
 	return false
+
+
+func _cancel_event() -> void:
+	listening_for_input = false
+	SFX.play(SFX.UI_BACK)
+	accept_event()
+	_update_inputs()

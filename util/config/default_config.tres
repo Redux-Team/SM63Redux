@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="Config" load_steps=13 format=3 uid="uid://do0n8w5nirmwk"]
+
+[ext_resource type="Script" uid="uid://b3oiv1p8em3lj" path="res://util/config/subconfig/subconfig.gd" id="1_lntyh"]
+[ext_resource type="Script" uid="uid://f17uc223v1ar" path="res://util/config/subconfig/audio.gd" id="1_uxl5x"]
+[ext_resource type="Script" uid="uid://qfl8n0nausrq" path="res://util/config/subconfig/display.gd" id="2_lntyh"]
+[ext_resource type="Script" uid="uid://d3irhgxu3cjae" path="res://util/config/control_scheme/control_scheme.gd" id="3_4t6fh"]
+[ext_resource type="Resource" uid="uid://wymwegktk0cr" path="res://util/config/control_scheme/default.tres" id="4_edyoc"]
+[ext_resource type="Script" uid="uid://uq1ejudjw7jh" path="res://util/config/subconfig/input.gd" id="5_jrqk4"]
+[ext_resource type="Script" uid="uid://dokvqknhuqe46" path="res://util/config/subconfig/misc.gd" id="6_f5osh"]
+[ext_resource type="Script" uid="uid://c6e8bs0qgcr28" path="res://util/config/config.gd" id="7_lay5o"]
+
+[sub_resource type="Resource" id="Resource_xqd10"]
+script = ExtResource("1_uxl5x")
+output_device = &"Default"
+music_on = true
+sfx_on = true
+music_volume = 75.0
+sfx_volume = 75.0
+id = &""
+metadata/_custom_type_script = "uid://f17uc223v1ar"
+
+[sub_resource type="Resource" id="Resource_635vj"]
+script = ExtResource("2_lntyh")
+max_fps = 60
+window_mode = 0
+vsync = false
+id = &""
+metadata/_custom_type_script = "uid://qfl8n0nausrq"
+
+[sub_resource type="Resource" id="Resource_j2jn6"]
+script = ExtResource("5_jrqk4")
+button_opacity = 70.0
+button_scale = 1.0
+default_control_scheme = ExtResource("4_edyoc")
+control_schemes = Array[ExtResource("3_4t6fh")]([])
+control_scheme_index = -1
+id = &""
+metadata/_custom_type_script = "uid://uq1ejudjw7jh"
+
+[sub_resource type="Resource" id="Resource_qf1b7"]
+script = ExtResource("6_f5osh")
+show_timer = false
+enforce_touch_controls = false
+disable_camera_limiting = false
+language = &"English [en]"
+id = &""
+metadata/_custom_type_script = "uid://dokvqknhuqe46"
+
+[resource]
+script = ExtResource("7_lay5o")
+display_config = SubResource("Resource_635vj")
+input_config = SubResource("Resource_j2jn6")
+audio_config = SubResource("Resource_xqd10")
+misc_config = SubResource("Resource_qf1b7")
+configurations = Array[ExtResource("1_lntyh")]([])
+metadata/_custom_type_script = "uid://c6e8bs0qgcr28"

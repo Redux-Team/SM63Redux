@@ -34,6 +34,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Control" type="Control" parent="Interaction/HBoxContainer"]
+layout_mode = 2
+
 [node name="InputName" type="Label" parent="Interaction/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/outline_size = 4

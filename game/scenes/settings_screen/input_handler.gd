@@ -1,8 +1,6 @@
 extends Node
 
 const INPUT_SETTING_ENTRY = preload("uid://b4oq1mqltbkso")
-const DEFAULT_CONTROLSCHEME = preload("uid://wymwegktk0cr")
-
 
 @export var device_label: Label
 @export var bindings_label: RichTextLabel
@@ -14,14 +12,14 @@ const DEFAULT_CONTROLSCHEME = preload("uid://wymwegktk0cr")
 
 func _ready() -> void:
 	Singleton.input_type_changed.connect(_update_input_menu)
-	_update_input_menu(Singleton.current_input_device)
+	_update_input_menu()
 	
 	var first_entry: bool = true
 	
-	for input: String in DEFAULT_CONTROLSCHEME.get_inputs_string():
+	for input: String in Config.get_control_scheme().get_inputs_string():
 		var entry: InputSettingEntry = INPUT_SETTING_ENTRY.instantiate()
 		entry.setting_name = input
-		entry.input_events = DEFAULT_CONTROLSCHEME.get(input)
+		entry.input_events = ControlScheme.get_events(input)
 		input_vbox.add_child(entry)
 		
 		if first_entry:
@@ -36,7 +34,9 @@ func _ready() -> void:
 			first_entry = false
 
 
-func _update_input_menu(device_type: Singleton.InputType) -> void:
+func _update_input_menu() -> void:
+	var device_type: Singleton.InputType = Singleton.current_input_device
+	
 	device_label.text = "Device Detected: %s" % Singleton.get_active_input_device()
 	
 	
@@ -44,6 +44,11 @@ func _update_input_menu(device_type: Singleton.InputType) -> void:
 		input_vbox.hide()
 		touchscreen_vbox.show()
 	else:
-		bindings_label.text = "Press %s to clear!" % Singleton.current_control_scheme.get_hint("_clear_setting")
+		bindings_label.text = "Press %s to clear!" % ControlScheme.get_hint("_clear_setting")
 		touchscreen_vbox.hide()
 		input_vbox.show()
+
+
+func _on_restore_defaults_pressed() -> void:
+	Config.reset_control_scheme()
+	SFX.play(SFX.UI_CONFIRM)

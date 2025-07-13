@@ -23,7 +23,7 @@ func _ready() -> void:
 	menu_loop.play()
 	menu_loop.stream_paused = true
 	Singleton.input_type_changed.connect(_on_input_type_changed)
-	_on_input_type_changed(Singleton.current_input_device)
+	_on_input_type_changed()
 
 
 func _input(event: InputEvent) -> void:
@@ -86,8 +86,10 @@ func _on_settings_screen_exit_request() -> void:
 	Config.save()
 
 
-func _on_input_type_changed(type: Singleton.InputType) -> void:
+func _on_input_type_changed() -> void:
+	var type: Singleton.InputType = Singleton.current_input_device
+	
 	if type == Singleton.InputType.TOUCHSCREEN:
 		return
 	
-	start_text.text = "Press %s to begin!" % Singleton.current_control_scheme.get_hint("_ui_interact")
+	start_text.text = "Press %s to begin!" % ControlScheme.get_hint("_ui_interact")

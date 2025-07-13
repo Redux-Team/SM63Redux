@@ -1,6 +1,7 @@
 extends Node
 
-signal input_type_changed(device: InputType)
+signal input_type_changed
+@warning_ignore("unused_signal") signal control_scheme_changed
 
 enum ScreenTransitionType {
 	TEXTURE_ZOOM
@@ -16,19 +17,12 @@ enum InputType {
 const VERSION: StringName = &"0.2.0"
 
 const CONTROLLER_ICONS = preload("uid://b5k5j0heehdeo")
-const DEFAULT_CONTROL_SCHEME = preload("uid://wymwegktk0cr")
 
 @export var sfx_container: Node
 @export var transition_overlay: ColorRect
 
-var current_control_scheme: ControlScheme
 var current_input_device: InputType = InputType.KEYBOARD
 var _last_device_type: InputType
-
-
-func _ready() -> void:
-	current_control_scheme = DEFAULT_CONTROL_SCHEME
-	current_control_scheme.assign_to_map()
 
 
 func _process(_delta: float) -> void:
@@ -105,7 +99,7 @@ func _check_input_device(event: InputEvent) -> void:
 		return
 	
 	_last_device_type = current_input_device
-	input_type_changed.emit(current_input_device)
+	input_type_changed.emit()
 
 
 func _check_touch_display(device: InputType) -> void:

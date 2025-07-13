@@ -1,6 +1,6 @@
-## Helper class to easily pack/unpack data.
 class_name Packer
-extends Node
+extends Resource
+## Helper class to easily pack/unpack data.
 
 
 static func merge_deep(base: Dictionary, override: Dictionary) -> Dictionary:

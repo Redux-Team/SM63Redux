@@ -20,6 +20,8 @@ signal option_selected(index: int)
 func _ready() -> void:
 	label.text = setting_name
 	setting_name_changed.connect(_on_setting_name_changed)
+	dropdown.gui_input.connect(func(_e: InputEvent) -> void:
+		dropdown.get_popup().max_size = Vector2i(int(dropdown.get_rect().size.x), int(dropdown.get_popup().max_size.y)))
 	populate_dropdown()
 
 
