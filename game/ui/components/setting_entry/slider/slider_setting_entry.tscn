@@ -1,0 +1,77 @@
+[gd_scene load_steps=3 format=3 uid="uid://cq2kyv8h4ftb7"]
+
+[ext_resource type="Script" uid="uid://shjrf4lwikrr" path="res://game/ui/components/setting_entry/slider/slider_setting_entry.gd" id="1_mbkwd"]
+[ext_resource type="PackedScene" uid="uid://d4d7kvijajiy7" path="res://game/ui/components/widgets/boolean_widget.tscn" id="2_w2bka"]
+
+[node name="SliderSettingEntry" type="Control" node_paths=PackedStringArray("boolean_widget", "slider", "interaction", "setting_name_label", "value_label")]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 0.0833333
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mbkwd")
+value_type = 2
+boolean_widget = NodePath("HBoxContainer/Interaction/InteractionHBox/BooleanWidget")
+slider = NodePath("HBoxContainer/Slider")
+interaction = NodePath("HBoxContainer/Interaction")
+setting_name_label = NodePath("HBoxContainer/Interaction/InteractionHBox/SettingName")
+value_label = NodePath("HBoxContainer/Interaction/InteractionHBox/ValueLabel")
+metadata/_edit_use_anchors_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Interaction" type="Button" parent="HBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+mouse_filter = 2
+
+[node name="InteractionHBox" type="HBoxContainer" parent="HBoxContainer/Interaction"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BooleanWidget" parent="HBoxContainer/Interaction/InteractionHBox" instance=ExtResource("2_w2bka")]
+visible = false
+layout_mode = 2
+manual = true
+
+[node name="SettingName" type="Label" parent="HBoxContainer/Interaction/InteractionHBox"]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+
+[node name="ValueLabel" type="Label" parent="HBoxContainer/Interaction/InteractionHBox"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/outline_size = 4
+text = "75%"
+horizontal_alignment = 2
+
+[node name="Slider" type="HSlider" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+value = 75.0
+
+[connection signal="button_down" from="HBoxContainer/Interaction" to="." method="_on_interaction_button_down"]
+[connection signal="button_up" from="HBoxContainer/Interaction" to="." method="_on_interaction_button_up"]
+[connection signal="focus_entered" from="HBoxContainer/Interaction" to="." method="_on_interaction_focus_entered"]
+[connection signal="focus_exited" from="HBoxContainer/Interaction" to="." method="_on_interaction_focus_exited"]
+[connection signal="mouse_entered" from="HBoxContainer/Interaction" to="." method="_on_interaction_mouse_entered"]
+[connection signal="mouse_exited" from="HBoxContainer/Interaction" to="." method="_on_interaction_mouse_exited"]
+[connection signal="pressed" from="HBoxContainer/Interaction" to="." method="_on_interaction_pressed"]
+[connection signal="value_changed" from="HBoxContainer/Interaction/InteractionHBox/BooleanWidget" to="." method="_on_boolean_widget_value_changed"]
+[connection signal="drag_ended" from="HBoxContainer/Slider" to="." method="_on_slider_drag_ended"]
+[connection signal="value_changed" from="HBoxContainer/Slider" to="." method="_on_slider_value_changed"]

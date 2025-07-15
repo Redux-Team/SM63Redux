@@ -7,18 +7,24 @@
 shader = ExtResource("2_rkguw")
 shader_parameter/scale = 1.0
 
-[node name="Singleton" type="Node" node_paths=PackedStringArray("sfx_container", "transition_overlay")]
+[node name="Singleton" type="Node" node_paths=PackedStringArray("sfx_container", "transition_overlay", "touch_screen_layer")]
 script = ExtResource("1_287bc")
 sfx_container = NodePath("Audio/SFX")
-transition_overlay = NodePath("ScreenTransitions/Overlay")
+transition_overlay = NodePath("ScreenLayers/TransitionLayer/Overlay")
+touch_screen_layer = NodePath("ScreenLayers/TouchScreenLayer")
 
 [node name="Audio" type="Node" parent="."]
 
 [node name="SFX" type="Node" parent="Audio"]
 
-[node name="ScreenTransitions" type="CanvasLayer" parent="."]
+[node name="ScreenLayers" type="Node" parent="."]
 
-[node name="Overlay" type="ColorRect" parent="ScreenTransitions"]
+[node name="TouchScreenLayer" type="CanvasLayer" parent="ScreenLayers"]
+visible = false
+
+[node name="TransitionLayer" type="CanvasLayer" parent="ScreenLayers"]
+
+[node name="Overlay" type="ColorRect" parent="ScreenLayers/TransitionLayer"]
 visible = false
 material = SubResource("ShaderMaterial_wd1pp")
 anchors_preset = 15

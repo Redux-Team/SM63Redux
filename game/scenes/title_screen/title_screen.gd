@@ -5,13 +5,14 @@ extends Control
 @export var menu_loop: AudioStreamPlayer
 @export var splash_fade: ColorRect
 
-@export var version_text: Label
+@export var version_label: Label
 @export var team_text: Label
 @export var splash_screen: Control
 @export var menu_screen: Control
 @export var start_text: RichTextLabel
 
 @export var input_locked: bool = false
+
 
 var on_splash_screen: bool = true
 var on_settings_screen: bool = false
@@ -24,6 +25,8 @@ func _ready() -> void:
 	menu_loop.stream_paused = true
 	Singleton.input_type_changed.connect(_on_input_type_changed)
 	_on_input_type_changed()
+	
+	version_label.text = "v" + Singleton.version
 
 
 func _input(event: InputEvent) -> void:
@@ -51,9 +54,9 @@ func _show_bottom_text() -> void:
 	bottom_text_tween.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
 	
 	bottom_text_tween.tween_property(team_text, ^"anchor_top", 0.931, 0.45)
-	bottom_text_tween.tween_property(version_text, ^"anchor_top", 0.931, 0.45)
+	bottom_text_tween.tween_property(version_label, ^"anchor_top", 0.931, 0.45)
 	bottom_text_tween.tween_property(team_text, ^"anchor_bottom", 1.0, 0.45)
-	bottom_text_tween.tween_property(version_text, ^"anchor_bottom", 1.0, 0.45)
+	bottom_text_tween.tween_property(version_label, ^"anchor_bottom", 1.0, 0.45)
 
 
 func _switch_to_splash_screen() -> void:

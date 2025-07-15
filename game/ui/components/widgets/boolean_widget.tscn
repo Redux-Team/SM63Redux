@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3 uid="uid://d4d7kvijajiy7"]
+
+[ext_resource type="Script" uid="uid://dlsvxbdie33p3" path="res://game/ui/components/widgets/boolean_widget.gd" id="1_b2u5g"]
+
+[node name="BooleanWidget" type="AspectRatioContainer" node_paths=PackedStringArray("check_button", "check_texture")]
+custom_minimum_size = Vector2(24, 24)
+anchors_preset = -1
+anchor_right = 0.037
+anchor_bottom = 0.0665556
+offset_right = 0.32
+offset_bottom = 0.0399952
+script = ExtResource("1_b2u5g")
+check_button = NodePath("CheckBox")
+check_texture = NodePath("CheckBox/CheckTexture")
+
+[node name="CheckBox" type="CheckBox" parent="."]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+metadata/_edit_use_anchors_ = true
+
+[node name="CheckTexture" type="TextureRect" parent="CheckBox"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.156
+anchor_top = 0.156
+anchor_right = 0.844
+anchor_bottom = 0.844
+offset_left = 0.0079999
+offset_top = 0.0079999
+offset_right = -0.00800133
+offset_bottom = -0.00800133
+grow_horizontal = 2
+grow_vertical = 2

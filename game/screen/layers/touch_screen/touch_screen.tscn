@@ -1,0 +1,197 @@
+[gd_scene load_steps=3 format=3 uid="uid://l87i6yic73um"]
+
+[ext_resource type="Script" uid="uid://dxqln3mb45twv" path="res://game/screen/layers/touch_screen/touch_screen.gd" id="1_5naqj"]
+[ext_resource type="PackedScene" uid="uid://vde6v2vxwoc6" path="res://game/ui/components/touch_screen/button/touch_screen_button.tscn" id="3_m30wk"]
+
+[node name="TouchScreen" type="Control" node_paths=PackedStringArray("buttons", "preview_bg", "left_rect", "right_rect")]
+clip_children = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5naqj")
+buttons = [NodePath("LeftButton"), NodePath("RightButton"), NodePath("GPButton"), NodePath("JumpButton"), NodePath("DownButton"), NodePath("SpinButton"), NodePath("UseFluddButton"), NodePath("SwitchNozzleButton"), NodePath("PauseButton")]
+preview_bg = NodePath("PreviewBG")
+left_rect = NodePath("PreviewBG/LeftRect")
+right_rect = NodePath("PreviewBG/RightRect")
+metadata/_edit_lock_ = true
+
+[node name="PreviewBG" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.215686)
+metadata/_edit_lock_ = true
+
+[node name="LeftRect" type="ColorRect" parent="PreviewBG"]
+visible = false
+layout_mode = 2
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_right = -2.0
+size_flags_horizontal = 3
+color = Color(0, 0.6, 1, 0.27451)
+
+[node name="RightRect" type="ColorRect" parent="PreviewBG"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+color = Color(0, 0.6, 1, 0.27451)
+
+[node name="PreviewLabel" type="Label" parent="PreviewBG"]
+self_modulate = Color(1, 1, 1, 0.313726)
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.0
+offset_top = -10.0
+offset_right = 31.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Preview"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeftButton" parent="." instance=ExtResource("3_m30wk")]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 37.0
+offset_top = -53.5
+offset_right = 59.0
+offset_bottom = -30.5
+grow_vertical = 0
+input_event = &"move_left"
+
+[node name="RightButton" parent="." instance=ExtResource("3_m30wk")]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 77.0
+offset_top = -53.5
+offset_right = 99.0
+offset_bottom = -30.5
+grow_vertical = 0
+input_event = &"move_right"
+
+[node name="GPButton" parent="." instance=ExtResource("3_m30wk")]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 58.0
+offset_top = -94.0
+offset_right = 80.0
+offset_bottom = -71.0
+grow_vertical = 0
+input_event = &"ground_pound"
+
+[node name="JumpButton" parent="." instance=ExtResource("3_m30wk")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -55.0
+offset_top = -96.5
+offset_right = -33.0
+offset_bottom = -73.5
+grow_horizontal = 0
+grow_vertical = 0
+input_event = &"jump"
+
+[node name="DownButton" parent="." instance=ExtResource("3_m30wk")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -55.0
+offset_top = -54.5
+offset_right = -33.0
+offset_bottom = -31.5
+grow_horizontal = 0
+grow_vertical = 0
+input_event = &"crouch"
+
+[node name="SpinButton" parent="." instance=ExtResource("3_m30wk")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -114.0
+offset_top = -97.5
+offset_right = -92.0
+offset_bottom = -74.5
+grow_horizontal = 0
+grow_vertical = 0
+input_event = &"spin"
+
+[node name="UseFluddButton" parent="." instance=ExtResource("3_m30wk")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -114.0
+offset_top = -54.5
+offset_right = -92.0
+offset_bottom = -31.5
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="SwitchNozzleButton" parent="." instance=ExtResource("3_m30wk")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -159.0
+offset_top = -74.5
+offset_right = -137.0
+offset_bottom = -51.5
+grow_horizontal = 0
+grow_vertical = 0
+input_event = &"switch_nozzle"
+
+[node name="PauseButton" parent="." instance=ExtResource("3_m30wk")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -38.0
+offset_top = 27.0
+offset_right = -16.0
+offset_bottom = 50.0
+grow_horizontal = 0
+base_scale = 0.7
+base_opacity = 0.6
+allow_preview = false
+is_static = true
+input_event = &"pause"

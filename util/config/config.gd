@@ -16,8 +16,10 @@ static var _current_conf: Config
 
 static func _static_init() -> void:
 	_current_conf = ResourceLoader.load("uid://do0n8w5nirmwk")
+	
 	if not _current_conf.configurations:
 		_current_conf.assign_configurations()
+	
 	Config.load()
 	Config.apply()
 
@@ -31,6 +33,7 @@ static func save() -> void:
 static func load() -> void:
 	if ResourceLoader.exists(config_file_path):
 		_current_conf = ResourceLoader.load(config_file_path)
+	
 	get_control_scheme().assign_to_map()
 
 
@@ -59,19 +62,14 @@ class display:
 #region Input
 static func get_control_scheme() -> ControlScheme:
 	var _input_config: InputConfig = Config._current_conf.input_config
-	# ensure at least one scheme exists
-	if _input_config.control_scheme_index == -1:
-		if _input_config.control_schemes.size() == 0:
-			_input_config.control_schemes.append(ControlScheme.copy_from(_input_config.default_control_scheme))
-		_input_config.control_scheme_index = 0
-		return _input_config.control_schemes[0]
-	return _input_config.control_schemes[_input_config.control_scheme_index]
+	return _input_config.get_active_control_scheme()
 
 
 static func reset_control_scheme() -> void:
 	var _input_config: InputConfig = Config._current_conf.input_config
-	_input_config.control_schemes[_input_config.control_scheme_index] = ControlScheme.copy_from(_input_config.default_control_scheme)
+	_input_config.control_schemes[_input_config.selected_control_scheme] = ControlScheme.copy_from(_input_config.default_control_scheme)
 	Singleton.control_scheme_changed.emit()
+
 
 
 class input:
@@ -81,6 +79,28 @@ class input:
 	static var touch_button_opacity: float:
 		get(): return Config._current_conf.input_config.button_opacity
 		set(tbo): Config._current_conf.input_config.button_opacity = tbo
+	static var button_map: Dictionary[StringName, TouchButtonSetting]:
+		get(): return Config._current_conf.input_config.button_map
+		set(bm): Config._current_conf.input_config.button_map = bm
+	static var controller_icon_map: Dictionary[InputEvent, Texture2D]:
+		get(): return Config._current_conf.input_config.controller_icon_map
+		set(cim): Config._current_conf.input_config.controller_icon_map = cim
+	static var touch_screen_scene: PackedScene:
+		get(): 
+			if !Config._current_conf.input_config.touch_scene:
+				Config._current_conf.input_config.touch_scene = default_touch_screen_scene.duplicate(true)
+			return Config._current_conf.input_config.touch_scene
+		set(tss): Config._current_conf.input_config.touch_scene = tss
+	
+	static var default_touch_screen_scene: PackedScene:
+		get(): return Config._current_conf.input_config.default_touch_scene
+		set(dtss): Config._current_conf.input_config.default_touch_scene = dtss
+	
+	static func get_controller_icon(event: InputEvent) -> Texture2D:
+		for input_event: InputEvent in controller_icon_map:
+			if input_event.is_match(event, true):
+				return controller_icon_map.get(input_event)
+		return null
 #endregion
 
 

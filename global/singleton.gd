@@ -14,12 +14,11 @@ enum InputType {
 	UNKNOWN
 }
 
-const VERSION: StringName = &"0.2.0"
-
-const CONTROLLER_ICONS = preload("uid://b5k5j0heehdeo")
+var version: String = ProjectSettings.get("application/config/version")
 
 @export var sfx_container: Node
 @export var transition_overlay: ColorRect
+@export var touch_screen_layer: CanvasLayer
 
 var current_input_device: InputType = InputType.KEYBOARD
 var _last_device_type: InputType
@@ -74,6 +73,24 @@ func transition_to_scene_file(scene_file: String, transition: ScreenTransitionTy
 
 func get_active_input_device() -> String:
 	return InputType.keys()[current_input_device].to_pascal_case()
+
+
+func show_touch_screen_layer() -> void:
+	if Config.input.touch_screen_scene == null:
+		return
+	
+	for child: Node in touch_screen_layer.get_children():
+		child.queue_free()
+
+	var touch_screen: TouchScreen = Config.input.touch_screen_scene.duplicate(true).instantiate()
+	touch_screen.preview = false
+
+	touch_screen_layer.add_child(touch_screen)
+	touch_screen_layer.show()
+
+
+func hide_touch_screen_layer() -> void:
+	touch_screen_layer.hide()
 
 
 func _check_input_device(event: InputEvent) -> void:

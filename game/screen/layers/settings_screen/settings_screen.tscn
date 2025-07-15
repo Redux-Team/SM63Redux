@@ -1,0 +1,479 @@
+[gd_scene load_steps=13 format=3 uid="uid://edq4g4hx0dyb"]
+
+[ext_resource type="Script" uid="uid://cio5shadjfgu3" path="res://game/screen/layers/settings_screen/settings_screen.gd" id="1_e3g34"]
+[ext_resource type="StyleBox" uid="uid://dwl13fn11lby6" path="res://core/theme/styleboxes/menu_box/menu_box_frame.stylebox" id="2_1ckwk"]
+[ext_resource type="PackedScene" uid="uid://ty4b33ef6rwr" path="res://game/ui/components/cycle_button/cycle_button.tscn" id="2_h0dip"]
+[ext_resource type="Script" uid="uid://c4nfcts1h87mk" path="res://game/screen/layers/settings_screen/display_handler.gd" id="2_rugj6"]
+[ext_resource type="Script" uid="uid://0ah5qoffil1a" path="res://game/screen/layers/settings_screen/audio_handler.gd" id="2_v82bw"]
+[ext_resource type="Script" uid="uid://c6m4w74d7rbnw" path="res://game/screen/layers/settings_screen/input_handler.gd" id="3_oqnvq"]
+[ext_resource type="Script" uid="uid://bjnhw8g2bgdwk" path="res://game/screen/layers/settings_screen/input_touch_handler.gd" id="4_2vb20"]
+[ext_resource type="Script" uid="uid://ju1cdhwpo8ek" path="res://game/screen/layers/settings_screen/misc_handler.gd" id="4_7dnsy"]
+[ext_resource type="PackedScene" uid="uid://jo21vp3yb41b" path="res://game/ui/components/setting_entry/boolean/boolean_setting_entry.tscn" id="4_qltlq"]
+[ext_resource type="PackedScene" uid="uid://btef0ag6vl4ms" path="res://game/ui/components/setting_entry/dropdown/dropdown_setting_entry.tscn" id="8_tja7e"]
+[ext_resource type="PackedScene" uid="uid://cq2kyv8h4ftb7" path="res://game/ui/components/setting_entry/slider/slider_setting_entry.tscn" id="9_jeqcw"]
+[ext_resource type="PackedScene" uid="uid://l87i6yic73um" path="res://game/screen/layers/touch_screen/touch_screen.tscn" id="11_o68tt"]
+
+[node name="SettingsScreen" type="Control" node_paths=PackedStringArray("settings_container", "controls_vbox", "setting_cycle_button", "touch_subviewport")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e3g34")
+settings_container = NodePath("SettingsContainer")
+controls_vbox = NodePath("SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox")
+setting_cycle_button = NodePath("SettingCycleButton")
+touch_subviewport = NodePath("SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchScreen/TouchScreenContainer/SubViewport")
+
+[node name="Handlers" type="Node" parent="."]
+
+[node name="DisplayHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("fps_dropdown", "win_mode_dropdown", "vsync_entry")]
+script = ExtResource("2_rugj6")
+fps_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/FPSLimit")
+win_mode_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinMode")
+vsync_entry = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/VSync")
+
+[node name="InputHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("device_label", "bindings_label", "controls_vbox", "input_vbox", "input_scroll_container", "touchscreen_vbox")]
+script = ExtResource("3_oqnvq")
+device_label = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/DeviceLabel")
+bindings_label = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/InputVBox/BindingsLabel")
+controls_vbox = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox")
+input_vbox = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/InputVBox")
+input_scroll_container = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer")
+touchscreen_vbox = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox")
+
+[node name="InputTouchHandler" type="Node" parent="Handlers/InputHandler" node_paths=PackedStringArray("preview", "scale_slider", "opacity_slider", "sub_viewport", "device_label", "expand_preview_button", "expanded_h_box", "restore_defaults")]
+script = ExtResource("4_2vb20")
+preview = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchScreen/TouchScreenContainer/SubViewport/TouchScreen")
+scale_slider = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchScale")
+opacity_slider = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchOpacity")
+sub_viewport = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchScreen/TouchScreenContainer/SubViewport")
+device_label = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/DeviceLabel")
+expand_preview_button = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandPreview")
+expanded_h_box = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandedHBox")
+restore_defaults = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/RestoreDefaults")
+
+[node name="AudioHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("music_slider", "sfx_slider", "output_device_dropdown")]
+script = ExtResource("2_v82bw")
+music_slider = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/Music")
+sfx_slider = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX")
+output_device_dropdown = NodePath("../../SettingsContainer/Audio/MarginContainer/VBoxContainer/OutputDevice")
+
+[node name="MiscHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("show_timer_toggle", "enforce_touch_toggle", "camera_limit_toggle")]
+script = ExtResource("4_7dnsy")
+show_timer_toggle = NodePath("../../SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/ShowTimer")
+enforce_touch_toggle = NodePath("../../SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/EnforceTouch")
+camera_limit_toggle = NodePath("../../SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/CameraLimit")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.392157)
+
+[node name="Border" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("2_1ckwk")
+metadata/_edit_use_anchors_ = true
+
+[node name="SettingCycleButton" parent="." instance=ExtResource("2_h0dip")]
+layout_mode = 1
+anchor_bottom = 0.0778889
+offset_bottom = -0.0400009
+mouse_default_cursor_shape = 2
+cycle_strings = Array[String](["Display", "Input", "Audio", "Miscellaneous"])
+current_iter = 1
+
+[node name="BackButton" type="Button" parent="SettingCycleButton" groups=["gui_touch"]]
+self_modulate = Color(1, 1, 1, 0.784314)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -28.0
+offset_bottom = 28.0
+grow_horizontal = 2
+mouse_default_cursor_shape = 2
+theme_type_variation = &"TouchLeft"
+
+[node name="SettingsContainer" type="Control" parent="."]
+layout_mode = 1
+anchor_top = 0.078
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -0.0799999
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="Display" type="Control" parent="SettingsContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SettingsContainer/Display"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsContainer/Display/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+metadata/_edit_lock_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsContainer/Display/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="WindowLabel" type="Label" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Window"
+horizontal_alignment = 1
+
+[node name="FPSLimit" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("8_tja7e")]
+layout_mode = 2
+options = Array[String](["30 FPS", "60 FPS", "120 FPS", "240 FPS", "Unlimited"])
+selected_index = 1
+setting_name = &"FPS Limit"
+
+[node name="WinMode" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("8_tja7e")]
+layout_mode = 2
+options = Array[String](["Windowed", "Fullscreen", "Fullscreen Borderless"])
+selected_index = 1
+setting_name = &"Window Mode"
+
+[node name="VSync" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
+layout_mode = 2
+value = false
+setting_name = &"V-Sync"
+
+[node name="Input" type="Control" parent="SettingsContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsContainer/Input"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 22
+metadata/_edit_lock_ = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SettingsContainer/Input/MarginContainer"]
+layout_mode = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="ControlsVBox" type="VBoxContainer" parent="SettingsContainer/Input/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DeviceLabel" type="Label" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Detected Device: Keyboard"
+horizontal_alignment = 1
+
+[node name="InputVBox" type="VBoxContainer" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BindingsLabel" type="RichTextLabel" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/InputVBox"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "Bindings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TouchVBox" type="VBoxContainer" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ExpandedHBox" type="HBoxContainer" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox"]
+visible = false
+layout_mode = 2
+alignment = 1
+
+[node name="HTRestoreDefaults" type="Button" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandedHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"GenericText"
+text = "Restore Defaults"
+
+[node name="MinimizePreview" type="Button" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandedHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"GenericText"
+text = "Minimze Preview"
+
+[node name="TouchScale" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox" instance=ExtResource("9_jeqcw")]
+layout_mode = 2
+value_type = 1
+slider_min = 0.25
+slider_max = 3.0
+slider_value = 1.0
+slider_step = 0.05
+setting_name = &"Scale"
+
+[node name="TouchOpacity" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox" instance=ExtResource("9_jeqcw")]
+layout_mode = 2
+slider_value = 50.0
+setting_name = &"Opacity"
+
+[node name="TouchScreen" type="Control" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TouchScreenContainer" type="SubViewportContainer" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchScreen/TouchScreenContainer"]
+transparent_bg = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+sdf_scale = 0
+size = Vector2i(2, 2)
+render_target_update_mode = 4
+
+[node name="TouchScreen" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchScreen/TouchScreenContainer/SubViewport" instance=ExtResource("11_o68tt")]
+preview = true
+metadata/_edit_use_anchors_ = true
+
+[node name="ExpandPreview" type="Button" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox"]
+layout_mode = 2
+theme_type_variation = &"GenericText"
+text = "Expand Preview"
+
+[node name="RestoreDefaults" type="Button" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"GenericText"
+text = "Restore Defaults"
+
+[node name="Test" type="Button" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox"]
+visible = false
+layout_mode = 2
+theme_type_variation = &"GenericText"
+text = "Test"
+
+[node name="Audio" type="Control" parent="SettingsContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsContainer/Audio"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+metadata/_edit_lock_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsContainer/Audio/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="OutputLabel" type="Label" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Devices"
+horizontal_alignment = 1
+
+[node name="OutputDevice" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer" instance=ExtResource("8_tja7e")]
+layout_mode = 2
+setting_name = &"Output"
+
+[node name="Control" type="Control" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="VolumeLabel" type="Label" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Volume"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Music" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer" instance=ExtResource("9_jeqcw")]
+layout_mode = 2
+_toggle = 1
+setting_name = &"Music"
+
+[node name="SFX" parent="SettingsContainer/Audio/MarginContainer/VBoxContainer" instance=ExtResource("9_jeqcw")]
+layout_mode = 2
+_toggle = 1
+silent = false
+setting_name = &"SFX"
+
+[node name="Miscellaneous" type="Control" parent="SettingsContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SettingsContainer/Miscellaneous"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsContainer/Miscellaneous/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+metadata/_edit_lock_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="OtherLabel" type="Label" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Other Features"
+horizontal_alignment = 1
+
+[node name="ShowTimer" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
+layout_mode = 2
+setting_name = &"Show Timer"
+
+[node name="EnforceTouch" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
+layout_mode = 2
+setting_name = &"Enforce Touch Controls"
+
+[node name="CameraLimit" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
+layout_mode = 2
+setting_name = &"Disable Camera Limiting"
+
+[node name="LocalizationLabel" type="Label" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Localization"
+horizontal_alignment = 1
+
+[node name="LanguageContainer" type="HBoxContainer" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LanguageLabel" type="Label" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/LanguageContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Language"
+
+[node name="Control" type="Control" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/LanguageContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LanguageOptionButton" type="OptionButton" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/LanguageContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+selected = 0
+fit_to_longest_item = false
+item_count = 1
+popup/item_0/text = "English [en]"
+popup/item_0/id = 0
+
+[connection signal="exit_request" from="." to="Handlers/InputHandler/InputTouchHandler" method="_on_settings_screen_exit_request"]
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
+[connection signal="cycle" from="SettingCycleButton" to="." method="_on_cycle"]
+[connection signal="pressed" from="SettingCycleButton/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="option_selected" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/FPSLimit" to="Handlers/DisplayHandler" method="_on_fps_limit_option_selected"]
+[connection signal="option_selected" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinMode" to="Handlers/DisplayHandler" method="_on_win_mode_option_selected"]
+[connection signal="value_changed" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/VSync" to="Handlers/DisplayHandler" method="_on_v_sync_value_changed"]
+[connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandedHBox/HTRestoreDefaults" to="Handlers/InputHandler" method="_on_restore_defaults_pressed"]
+[connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandedHBox/HTRestoreDefaults" to="Handlers/InputHandler/InputTouchHandler" method="_on_restore_defaults_pressed"]
+[connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandedHBox/MinimizePreview" to="Handlers/InputHandler/InputTouchHandler" method="_on_minimize_preview_pressed"]
+[connection signal="value_changed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchScale" to="Handlers/InputHandler/InputTouchHandler" method="_on_touch_scale_value_changed"]
+[connection signal="value_changed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchOpacity" to="Handlers/InputHandler/InputTouchHandler" method="_on_touch_opacity_value_changed"]
+[connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandPreview" to="Handlers/InputHandler/InputTouchHandler" method="_on_expand_preview_pressed"]
+[connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/RestoreDefaults" to="Handlers/InputHandler" method="_on_restore_defaults_pressed"]
+[connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/RestoreDefaults" to="Handlers/InputHandler/InputTouchHandler" method="_on_restore_defaults_pressed"]
+[connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/Test" to="." method="_on_test_pressed"]
+[connection signal="option_selected" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/OutputDevice" to="Handlers/AudioHandler" method="_on_output_device_option_selected"]
+[connection signal="toggled" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music" to="Handlers/AudioHandler" method="_on_music_toggled"]
+[connection signal="value_changed" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music" to="Handlers/AudioHandler" method="_on_music_value_changed"]
+[connection signal="toggled" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX" to="Handlers/AudioHandler" method="_on_sfx_toggled"]
+[connection signal="value_changed" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/SFX" to="Handlers/AudioHandler" method="_on_sfx_value_changed"]
+[connection signal="value_changed" from="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/ShowTimer" to="Handlers/MiscHandler" method="_on_show_timer_value_changed"]
+[connection signal="value_changed" from="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/EnforceTouch" to="Handlers/MiscHandler" method="_on_enforce_touch_value_changed"]
+[connection signal="value_changed" from="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/CameraLimit" to="Handlers/MiscHandler" method="_on_camera_limit_value_changed"]
+[connection signal="item_selected" from="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/LanguageContainer/LanguageOptionButton" to="Handlers/MiscHandler" method="_on_language_option_button_item_selected"]

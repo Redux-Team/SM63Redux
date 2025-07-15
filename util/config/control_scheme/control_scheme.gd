@@ -1,9 +1,9 @@
 @tool
-## Class for handling and exposing game control schemes.
-## All exported variables are auto-added to settings menu (except those named with `_`).
-## Use wrappers to work with current control scheme via Config singleton.
 class_name ControlScheme
 extends Resource
+## Class for handling and exposing game control schemes.
+## All exported variables are auto-added to settings menu (except those prefixed with a `_`).
+## Static functions are provided to easily access and modify the current control scheme.
 
 @warning_ignore_start("unused_private_class_variable")
 @export_group("Movement")
@@ -16,7 +16,7 @@ extends Resource
 
 @export_group("FLUDD")
 @export var use_fludd: Array[InputEvent]
-@export var swich_nozzle: Array[InputEvent]
+@export var switch_nozzle: Array[InputEvent]
 
 @export_group("Other")
 @export var interact: Array[InputEvent]
@@ -32,8 +32,14 @@ extends Resource
 @export var _clear_setting: Array[InputEvent]
 
 @export_tool_button("Update InputMap", "Callable") var __assign_to_map: Callable:
-	get():
-		return assign_to_map
+	get(): return assign_to_map
+#
+#@export_category("Other Controls")
+#@export var __controller_icon_map: Dictionary[InputEvent, Texture2D]
+#@export var __touch_controls: Dictionary[StringName, TouchButtonSetting]
+#
+#@export_tool_button("Refresh Touch Controls", "Callable") var __refresh_touch_controls_button: Callable:
+	#get(): return _regenerate_touch_controls
 
 
 ## Returns a deep copy of given control_scheme
@@ -153,13 +159,16 @@ func get_hint_string(input: String, icon_size: int = 0) -> String:
 	var inputs: Dictionary[String, Array] = get_active_inputs()
 	var events: Array = inputs.get(input, [])
 	if events.is_empty():
+		if Singleton.current_input_device == Singleton.InputType.UNKNOWN:
+			return ""
 		push_warning("No inputs found for '%s'." % input)
+		print(Singleton.current_input_device)
 		return ""
 	var event: InputEvent = events[0]
 	if Singleton.current_input_device == Singleton.InputType.CONTROLLER:
 		var size: String = ""
 		if icon_size != 0:
 			size = "=%s" % icon_size
-		return "[img%s]%s[/img]" % [size, Singleton.CONTROLLER_ICONS.from_event(event).resource_path]
+		return "[img%s]%s[/img]" % [size, Config.input.get_controller_icon(event).resource_path]
 	else:
 		return event.as_text()

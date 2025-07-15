@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="SM63Redux"
+config/version="0.2.0"
 run/main_scene="uid://b0wp6l07i5ime"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="SM63Redux"

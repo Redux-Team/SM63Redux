@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://jo21vp3yb41b"]
+
+[ext_resource type="Script" uid="uid://30cdly0xd5h4" path="res://game/ui/components/setting_entry/boolean/boolean_setting_entry.gd" id="1_u2xj2"]
+[ext_resource type="PackedScene" uid="uid://d4d7kvijajiy7" path="res://game/ui/components/widgets/boolean_widget.tscn" id="2_5ujlt"]
+
+[node name="BooleanSettingEntry" type="Control" node_paths=PackedStringArray("boolean_widget", "setting_label", "interaction")]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 0.069
+offset_bottom = -24.84
+grow_horizontal = 2
+script = ExtResource("1_u2xj2")
+boolean_widget = NodePath("Interaction/HBoxContainer/BooleanWidget")
+setting_label = NodePath("Interaction/HBoxContainer/SettingLabel")
+interaction = NodePath("Interaction")
+metadata/_edit_use_anchors_ = true
+
+[node name="Interaction" type="Button" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Interaction"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+theme_override_constants/separation = 6
+
+[node name="BooleanWidget" parent="Interaction/HBoxContainer" instance=ExtResource("2_5ujlt")]
+layout_mode = 2
+mouse_filter = 2
+mouse_default_cursor_shape = 2
+
+[node name="SettingLabel" type="Label" parent="Interaction/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 15
+
+[connection signal="button_down" from="Interaction" to="." method="_on_interaction_button_down"]
+[connection signal="button_up" from="Interaction" to="." method="_on_interaction_button_up"]
+[connection signal="focus_entered" from="Interaction" to="." method="_on_interaction_focus_entered"]
+[connection signal="focus_exited" from="Interaction" to="." method="_on_interaction_focus_exited"]
+[connection signal="mouse_entered" from="Interaction" to="." method="_on_interaction_mouse_entered"]
+[connection signal="mouse_exited" from="Interaction" to="." method="_on_interaction_mouse_exited"]
