@@ -28,11 +28,12 @@ touch_subviewport = NodePath("SettingsContainer/Input/MarginContainer/ScrollCont
 
 [node name="Handlers" type="Node" parent="."]
 
-[node name="DisplayHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("fps_dropdown", "win_mode_dropdown", "vsync_entry")]
+[node name="DisplayHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("fps_dropdown", "win_mode_dropdown", "vsync_entry", "ui_scale_slider")]
 script = ExtResource("2_rugj6")
 fps_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/FPSLimit")
 win_mode_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinMode")
 vsync_entry = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/VSync")
+ui_scale_slider = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/UIScale")
 
 [node name="InputHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("device_label", "bindings_label", "controls_vbox", "input_vbox", "input_scroll_container", "touchscreen_vbox")]
 script = ExtResource("3_oqnvq")
@@ -91,7 +92,6 @@ anchor_bottom = 0.0778889
 offset_bottom = -0.0400009
 mouse_default_cursor_shape = 2
 cycle_strings = Array[String](["Display", "Input", "Audio", "Miscellaneous"])
-current_iter = 1
 
 [node name="BackButton" type="Button" parent="SettingCycleButton" groups=["gui_touch"]]
 self_modulate = Color(1, 1, 1, 0.784314)
@@ -116,7 +116,6 @@ grow_vertical = 2
 metadata/_edit_lock_ = true
 
 [node name="Display" type="Control" parent="SettingsContainer"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -166,12 +165,22 @@ options = Array[String](["Windowed", "Fullscreen", "Fullscreen Borderless"])
 selected_index = 1
 setting_name = &"Window Mode"
 
+[node name="UIScale" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("9_jeqcw")]
+layout_mode = 2
+value_type = 3
+slider_min = 0.5
+slider_max = 3.0
+slider_value = 1.0
+slider_step = 0.5
+setting_name = &"UI Scaling"
+
 [node name="VSync" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
 layout_mode = 2
 value = false
 setting_name = &"V-Sync"
 
 [node name="Input" type="Control" parent="SettingsContainer"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -282,8 +291,8 @@ transparent_bg = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
 sdf_scale = 0
-size = Vector2i(616, 148)
-render_target_update_mode = 4
+size = Vector2i(2, 2)
+render_target_update_mode = 0
 
 [node name="TouchScreen" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchScreen/TouchScreenContainer/SubViewport" instance=ExtResource("11_o68tt")]
 preview = true
@@ -458,6 +467,7 @@ popup/item_0/id = 0
 [connection signal="pressed" from="SettingCycleButton/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="option_selected" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/FPSLimit" to="Handlers/DisplayHandler" method="_on_fps_limit_option_selected"]
 [connection signal="option_selected" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinMode" to="Handlers/DisplayHandler" method="_on_win_mode_option_selected"]
+[connection signal="drag_ended" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/UIScale" to="Handlers/DisplayHandler" method="_on_ui_scale_drag_ended"]
 [connection signal="value_changed" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/VSync" to="Handlers/DisplayHandler" method="_on_v_sync_value_changed"]
 [connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandedHBox/HTRestoreDefaults" to="Handlers/InputHandler" method="_on_restore_defaults_pressed"]
 [connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandedHBox/HTRestoreDefaults" to="Handlers/InputHandler/InputTouchHandler" method="_on_restore_defaults_pressed"]

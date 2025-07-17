@@ -20,7 +20,12 @@ var version: String = ProjectSettings.get("application/config/version")
 @export var transition_overlay: ColorRect
 @export var touch_screen_layer: CanvasLayer
 
-var current_input_device: InputType = InputType.KEYBOARD
+var current_input_device: InputType = InputType.KEYBOARD:
+	get():
+		if Config.misc.enforce_touch_controls:
+			return InputType.TOUCHSCREEN
+		else:
+			return current_input_device
 var _last_device_type: InputType
 
 

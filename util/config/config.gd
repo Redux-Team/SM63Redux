@@ -55,6 +55,9 @@ class display:
 	static var vsync: bool:
 		get(): return Config._current_conf.display_config.vsync
 		set(vs): Config._current_conf.display_config.vsync = vs
+	static var ui_scale: float:
+		get(): return Config._current_conf.display_config.ui_scale
+		set(uis): Config._current_conf.display_config.ui_scale = uis
 #endregion
 
 

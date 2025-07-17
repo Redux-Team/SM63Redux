@@ -22,6 +22,7 @@ func _on_show_timer_value_changed(value: bool) -> void:
 
 func _on_enforce_touch_value_changed(value: bool) -> void:
 	Config.misc.enforce_touch_controls = value
+	Config.apply()
 
 
 func _on_camera_limit_value_changed(value: bool) -> void:

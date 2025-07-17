@@ -4,6 +4,7 @@ extends SettingEntry
 
 signal toggled(value: bool)
 signal value_changed(value: float)
+signal drag_ended
 
 enum ToggleValue {
 	NO_TOGGLE,
@@ -15,6 +16,7 @@ enum ValueType {
 	NONE,
 	VALUE,
 	PERCENT,
+	MULTIPLIER,
 }
 
 @export var _toggle: ToggleValue
@@ -104,6 +106,8 @@ func _update_value_text() -> void:
 			value_text = "%.2f" % slider_value
 		ValueType.PERCENT:
 			value_text = "%s%%" % int(slider_value)
+		ValueType.MULTIPLIER:
+			value_text = "%.2fx" % slider_value
 	
 	value_label.text = value_text
 
@@ -175,3 +179,4 @@ func _on_setting_name_changed(value: StringName) -> void:
 func _on_slider_drag_ended(_value_changed: bool) -> void:
 	if not silent:
 		SFX.play(SFX.UI_NEXT)
+	drag_ended.emit()

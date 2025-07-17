@@ -6,3 +6,8 @@ extends Subconfig
 @export var enforce_touch_controls: bool = false
 @export var disable_camera_limiting: bool = false
 @export var language: StringName = &"English [en]"
+
+
+func apply() -> void:
+	if Singleton:
+		Singleton.input_type_changed.emit()

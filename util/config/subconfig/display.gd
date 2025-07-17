@@ -11,6 +11,7 @@ enum WindowMode {
 @export_range(0, 240) var max_fps: int = 60
 @export var window_mode: WindowMode = WindowMode.WINDOWED
 @export var vsync: bool = false
+@export var ui_scale: float = 1.0
 
 
 func apply() -> void:
@@ -35,3 +36,6 @@ func apply() -> void:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
 	else:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	
+	if Singleton and Singleton.get_window():
+		Singleton.get_window().content_scale_factor = ui_scale

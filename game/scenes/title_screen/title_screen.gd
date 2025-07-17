@@ -96,3 +96,10 @@ func _on_input_type_changed() -> void:
 		return
 	
 	start_text.text = "Press %s to begin!" % ControlScheme.get_hint("_ui_interact")
+	
+	if Device.is_mobile():
+		start_text.text = "Touch the screen to begin!"
+
+
+func _on_menu_back_button_pressed() -> void:
+	_switch_to_splash_screen()

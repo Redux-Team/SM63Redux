@@ -2024,6 +2024,20 @@ grow_vertical = 2
 color = Color(0.149814, 0.567634, 0.821031, 0.309804)
 metadata/_edit_use_anchors_ = true
 
+[node name="MenuBackButton" type="Button" parent="MenuScreen" groups=["gui_touch"]]
+self_modulate = Color(1, 1, 1, 0.627451)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -37.0
+offset_top = 1.33514e-05
+offset_right = -9.0
+offset_bottom = 28.0
+grow_horizontal = 2
+mouse_default_cursor_shape = 2
+theme_type_variation = &"TouchLeft"
+
 [node name="SettingsScreen" parent="." instance=ExtResource("7_1evyh")]
 visible = false
 layout_mode = 1
@@ -2077,4 +2091,5 @@ libraries = {
 
 [connection signal="gui_input" from="MenuScreen/LeftTouchRegion" to="MenuScreen/MenuCycle" method="_input_cycle_region" binds= [-1, &"cycle_left"]]
 [connection signal="gui_input" from="MenuScreen/RightTouchRegion" to="MenuScreen/MenuCycle" method="_input_cycle_region" binds= [1, &"cycle_right"]]
+[connection signal="pressed" from="MenuScreen/MenuBackButton" to="." method="_on_menu_back_button_pressed"]
 [connection signal="exit_request" from="SettingsScreen" to="." method="_on_settings_screen_exit_request"]
