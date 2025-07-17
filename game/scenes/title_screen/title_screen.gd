@@ -93,12 +93,10 @@ func _on_input_type_changed() -> void:
 	var type: Singleton.InputType = Singleton.current_input_device
 	
 	if type == Singleton.InputType.TOUCHSCREEN:
+		start_text.text = "Touch the screen to begin!"
 		return
 	
 	start_text.text = "Press %s to begin!" % ControlScheme.get_hint("_ui_interact")
-	
-	if Device.is_mobile():
-		start_text.text = "Touch the screen to begin!"
 
 
 func _on_menu_back_button_pressed() -> void:
