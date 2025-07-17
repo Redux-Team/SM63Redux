@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dxqln3mb45twv" path="res://game/screen/layers/touch_screen/touch_screen.gd" id="1_5naqj"]
 [ext_resource type="PackedScene" uid="uid://vde6v2vxwoc6" path="res://game/ui/components/touch_screen/button/touch_screen_button.tscn" id="3_m30wk"]
 
-[node name="TouchScreen" type="Control" node_paths=PackedStringArray("buttons", "preview_bg", "left_rect", "right_rect")]
+[node name="TouchScreen" type="Control" node_paths=PackedStringArray("buttons", "preview_bg", "left_rect", "right_rect") groups=["gui_touch"]]
 clip_children = 2
 layout_mode = 3
 anchors_preset = 15

@@ -86,10 +86,10 @@ func show_touch_screen_layer() -> void:
 	
 	for child: Node in touch_screen_layer.get_children():
 		child.queue_free()
-
+	
 	var touch_screen: TouchScreen = Config.input.touch_screen_scene.duplicate(true).instantiate()
 	touch_screen.preview = false
-
+	
 	touch_screen_layer.add_child(touch_screen)
 	touch_screen_layer.show()
 
@@ -122,6 +122,8 @@ func _check_input_device(event: InputEvent) -> void:
 	
 	_last_device_type = current_input_device
 	input_type_changed.emit()
+	
+	_check_touch_display(current_input_device)
 
 
 func _check_touch_display(device: InputType) -> void:
