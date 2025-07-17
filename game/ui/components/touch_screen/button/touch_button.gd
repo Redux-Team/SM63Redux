@@ -14,11 +14,11 @@ signal drag_ended
 @export_storage var preview_mode: bool = true
 @export var preview_parent_size: Vector2 = Vector2.ONE
 
-
 @export_group("Internal")
 @export var button_node: TouchScreenButton
 @export var drag_capture: Control
 @export var input_config: InputConfig
+
 
 var input_event: StringName:
 	set(ie):
@@ -77,14 +77,7 @@ func _ready() -> void:
 	else:
 		button_node.passby_press = true
 	
-	if not Engine.is_editor_hint():
-		var parent: Control = get_parent_control()
-		if parent.resized.is_connected(_clamp_bounds):
-			parent.resized.disconnect(_clamp_bounds)
-		parent.resized.connect(_clamp_bounds)
-	
 	update_visual()
-
 
 
 func update_visual() -> void:
@@ -125,14 +118,20 @@ func _on_drag_capture_input(event: InputEvent) -> void:
 
 
 func _clamp_bounds() -> void:
-	if get_parent_control():
-		var parent = get_parent_control()
-		var parent_size = parent.size
-		
-		var effective_size = size * scale
-		
-		var max_pos = parent_size - effective_size
-		
-		# Clamp position to valid bounds
-		position.x = clamp(position.x, 0, max(0, max_pos.x))
-		position.y = clamp(position.y, 0, max(0, max_pos.y))
+	var parent: Control = get_parent_control()
+	
+	if not parent:
+		return
+	
+
+	var parent_size = parent.size
+	var effective_size = size * scale
+	
+	var min_pos = effective_size * 0.5
+	var max_pos = parent_size - (effective_size * 0.5)
+
+	if parent_size == Vector2.ZERO:
+		return
+	
+	position.x = clamp(position.x, min_pos.x, max_pos.x)
+	position.y = clamp(position.y, min_pos.y, max_pos.y)

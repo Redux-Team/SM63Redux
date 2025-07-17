@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c6dic42vckv0e"]
+[gd_scene load_steps=11 format=3 uid="uid://c6dic42vckv0e"]
 
 [ext_resource type="Script" uid="uid://bc4sevdr53dpi" path="res://game/ui/components/main_menu_button/main_menu_button.gd" id="1_6rm1l"]
 [ext_resource type="Texture2D" uid="uid://bted1168b62fs" path="res://assets/textures/gui/title_screen/select_mode_button/select_mode_button_frame.png" id="2_pvhv8"]
@@ -26,9 +26,6 @@ region = Rect2(0, 0, 126, 24)
 [sub_resource type="AtlasTexture" id="AtlasTexture_167dx"]
 atlas = ExtResource("5_ekkyd")
 region = Rect2(0, 0, 56, 32)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hip38"]
-size = Vector2(150, 50)
 
 [node name="MainMenuButton" type="Control"]
 layout_mode = 3
@@ -111,11 +108,4 @@ grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
 
-[node name="TouchScreenButton" type="TouchScreenButton" parent="."]
-position = Vector2(77, 31)
-shape = SubResource("RectangleShape2D_hip38")
-shape_visible = false
-visibility_mode = 1
-
 [connection signal="pressed" from="Interaction" to="." method="_on_interaction_pressed"]
-[connection signal="released" from="TouchScreenButton" to="." method="_on_touch_screen_button_released"]

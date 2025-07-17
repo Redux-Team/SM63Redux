@@ -3,14 +3,17 @@ extends Control
 
 const TOUCH_SCREEN_INSTANCE = preload("uid://l87i6yic73um")
 
-@export var preview: bool = false
+@export var preview: bool = false:
+	set(p):
+		for button: TouchButton in buttons:
+			button.preview_mode = p
+		
+		preview = p
 @export var buttons: Array[TouchButton]
 
 @export var preview_bg: ColorRect
 @export var left_rect: ColorRect 
 @export var right_rect: ColorRect
-
-var positions: Dictionary[TouchButton, Vector2]
 
 
 static func new_instance() -> TouchScreen:
@@ -35,8 +38,6 @@ func _ready() -> void:
 			button.drag_started.connect(func() -> void:
 				button.move_to_front()
 			)
-			
-			positions.set(button, button.position)
 	else:
 		for button: TouchButton in buttons:
 			button.show()
@@ -45,6 +46,7 @@ func _ready() -> void:
 
 func get_packed_scene() -> PackedScene:
 	var packed_scene: PackedScene = PackedScene.new()
+	
 	packed_scene.pack(self)
 	
 	return packed_scene
@@ -72,8 +74,6 @@ func _on_button_move(button: TouchButton):
 	if (button.position.x + (button.size.x * button.scale.x / 2)) < size.x / 2.0:
 		left_rect.show()
 		right_rect.hide()
-		button.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 	else:
 		left_rect.hide()
 		right_rect.show()
-		button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)

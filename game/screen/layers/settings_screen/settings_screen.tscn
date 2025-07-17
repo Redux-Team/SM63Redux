@@ -282,7 +282,7 @@ transparent_bg = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
 sdf_scale = 0
-size = Vector2i(2, 2)
+size = Vector2i(616, 148)
 render_target_update_mode = 4
 
 [node name="TouchScreen" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchScreen/TouchScreenContainer/SubViewport" instance=ExtResource("11_o68tt")]
