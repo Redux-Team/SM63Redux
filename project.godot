@@ -204,12 +204,9 @@ _clear_setting=Array[InputEvent]([Object(InputEventMouseButton,"resource_local_t
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":8,"pressure":0.0,"pressed":true,"script":null)
 ])
 
-[input_devices]
-
-pointing/emulate_mouse_from_touch=false
-
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

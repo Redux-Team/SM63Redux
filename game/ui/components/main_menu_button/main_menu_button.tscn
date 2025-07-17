@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c6dic42vckv0e"]
+[gd_scene load_steps=12 format=3 uid="uid://c6dic42vckv0e"]
 
 [ext_resource type="Script" uid="uid://bc4sevdr53dpi" path="res://game/ui/components/main_menu_button/main_menu_button.gd" id="1_6rm1l"]
 [ext_resource type="Texture2D" uid="uid://bted1168b62fs" path="res://assets/textures/gui/title_screen/select_mode_button/select_mode_button_frame.png" id="2_pvhv8"]
@@ -15,17 +15,20 @@ shader_parameter/saturation_scale = 1.0
 shader_parameter/value_scale = 1.0
 shader_parameter/modulate_color = Color(1, 1, 1, 1)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hdrc7"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5g1s"]
 atlas = ExtResource("4_fawul")
 region = Rect2(0, 0, 126, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_wkrwc"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_6laix"]
 atlas = ExtResource("5_u5g1s")
 region = Rect2(0, 0, 126, 24)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_i7pdl"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_167dx"]
 atlas = ExtResource("5_ekkyd")
 region = Rect2(0, 0, 56, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hip38"]
+size = Vector2(150, 50)
 
 [node name="MainMenuButton" type="Control"]
 layout_mode = 3
@@ -63,7 +66,7 @@ offset_right = 1.0
 offset_bottom = 1.02
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_hdrc7")
+texture = SubResource("AtlasTexture_u5g1s")
 expand_mode = 1
 
 [node name="TitleTexture" type="TextureRect" parent="ContentTexture"]
@@ -79,7 +82,7 @@ offset_right = 0.0240097
 offset_bottom = 0.0180168
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_wkrwc")
+texture = SubResource("AtlasTexture_6laix")
 expand_mode = 1
 
 [node name="TopIconTexture" type="TextureRect" parent="."]
@@ -95,7 +98,7 @@ offset_top = -0.0279961
 offset_right = -0.0500031
 offset_bottom = 0.988
 grow_horizontal = 2
-texture = SubResource("AtlasTexture_i7pdl")
+texture = SubResource("AtlasTexture_167dx")
 expand_mode = 1
 
 [node name="Interaction" type="Button" parent="."]
@@ -108,4 +111,11 @@ grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
 
+[node name="TouchScreenButton" type="TouchScreenButton" parent="."]
+position = Vector2(77, 31)
+shape = SubResource("RectangleShape2D_hip38")
+shape_visible = false
+visibility_mode = 1
+
 [connection signal="pressed" from="Interaction" to="." method="_on_interaction_pressed"]
+[connection signal="released" from="TouchScreenButton" to="." method="_on_touch_screen_button_released"]

@@ -72,3 +72,7 @@ func _assign_atlas_textures() -> void:
 
 func _on_interaction_pressed() -> void:
 	interaction.emit()
+
+
+func _on_touch_screen_button_released() -> void:
+	interaction.emit()
