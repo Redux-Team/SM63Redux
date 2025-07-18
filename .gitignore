@@ -5,3 +5,4 @@
 export.cfg
 export_credentials.cfg
 *.tmp
+**/.DS_Store
