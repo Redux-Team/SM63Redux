@@ -5,7 +5,7 @@ func _ready() -> void:
 	Config.load()
 	Config.apply()
 	
-	if true:
+	if Device.is_mobile():
 		Singleton.current_input_device = Singleton.InputType.TOUCHSCREEN
 	
 	call_deferred(&"change_to_title_screen")

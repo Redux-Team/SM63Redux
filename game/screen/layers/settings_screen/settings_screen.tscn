@@ -439,27 +439,11 @@ theme_override_font_sizes/font_size = 14
 text = "Localization"
 horizontal_alignment = 1
 
-[node name="LanguageContainer" type="HBoxContainer" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Language" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("8_tja7e")]
 layout_mode = 2
-
-[node name="LanguageLabel" type="Label" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/LanguageContainer"]
-layout_mode = 2
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 14
-text = "Language"
-
-[node name="Control" type="Control" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/LanguageContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="LanguageOptionButton" type="OptionButton" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/LanguageContainer"]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-selected = 0
-fit_to_longest_item = false
-item_count = 1
-popup/item_0/text = "English [en]"
-popup/item_0/id = 0
+options = Array[String](["English [en]"])
+selected_index = 0
+setting_name = &"Language"
 
 [connection signal="exit_request" from="." to="Handlers/InputHandler/InputTouchHandler" method="_on_settings_screen_exit_request"]
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
@@ -486,4 +470,4 @@ popup/item_0/id = 0
 [connection signal="value_changed" from="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/ShowTimer" to="Handlers/MiscHandler" method="_on_show_timer_value_changed"]
 [connection signal="value_changed" from="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/EnforceTouch" to="Handlers/MiscHandler" method="_on_enforce_touch_value_changed"]
 [connection signal="value_changed" from="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/CameraLimit" to="Handlers/MiscHandler" method="_on_camera_limit_value_changed"]
-[connection signal="item_selected" from="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/LanguageContainer/LanguageOptionButton" to="Handlers/MiscHandler" method="_on_language_option_button_item_selected"]
+[connection signal="option_selected" from="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer/Language" to="Handlers/MiscHandler" method="_on_language_option_selected"]

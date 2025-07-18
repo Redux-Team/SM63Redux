@@ -33,7 +33,7 @@ func _input(event: InputEvent) -> void:
 	if input_locked:
 		return
 	
-	if event.is_action_pressed(&"_ui_interact") and on_splash_screen or event is InputEventScreenTouch:
+	if (event.is_action_pressed(&"_ui_interact") or event is InputEventScreenTouch) and on_splash_screen:
 		_switch_to_menu_screen()
 	
 	elif event.is_action(&"_ui_back") and event.is_pressed():
@@ -63,10 +63,16 @@ func _switch_to_splash_screen() -> void:
 	if on_splash_screen:
 		return
 	
+	input_locked = true
+	
 	animation_player.play(&"switch_to_splash_screen")
 	menu_loop.play()
 	on_splash_screen = true
 	SFX.play(SFX.UI_BACK)
+
+	await get_tree().process_frame
+	input_locked = false
+
 
 
 func _switch_to_menu_screen() -> void:
@@ -91,6 +97,8 @@ func _on_settings_screen_exit_request() -> void:
 
 func _on_input_type_changed() -> void:
 	var type: Singleton.InputType = Singleton.current_input_device
+	
+	print(type)
 	
 	if type == Singleton.InputType.TOUCHSCREEN:
 		start_text.text = "Touch the screen to begin!"

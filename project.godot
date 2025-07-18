@@ -12,7 +12,7 @@ config_version=5
 
 config/name="SM63 Redux"
 config/version="0.2.0"
-run/main_scene="uid://b0wp6l07i5ime"
+run/main_scene="uid://bkqukgs0ivej"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="SM63Redux"
 config/features=PackedStringArray("4.4", "GL Compatibility")

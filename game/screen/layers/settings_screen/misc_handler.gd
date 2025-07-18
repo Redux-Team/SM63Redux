@@ -29,5 +29,5 @@ func _on_camera_limit_value_changed(value: bool) -> void:
 	Config.misc.disable_camera_limiting = value
 
 
-func _on_language_option_button_item_selected(index: int) -> void:
+func _on_language_option_selected(index: int) -> void:
 	Config.misc.language = LANGUAGE_OPTIONS[index]
