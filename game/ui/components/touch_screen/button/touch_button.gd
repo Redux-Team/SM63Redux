@@ -123,13 +123,12 @@ func _clamp_bounds() -> void:
 	if not parent:
 		return
 	
-
 	var parent_size = parent.size
 	var effective_size = size * scale
 	
 	var min_pos = effective_size * 0.5
 	var max_pos = parent_size - (effective_size * 0.5)
-
+	
 	if parent_size == Vector2.ZERO:
 		return
 	

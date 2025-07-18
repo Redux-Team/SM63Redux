@@ -134,9 +134,9 @@ class misc:
 	static var show_timer: bool:
 		get(): return Config._current_conf.misc_config.show_timer
 		set(st): Config._current_conf.misc_config.show_timer = st
-	static var enforce_touch_controls: bool:
-		get(): return Config._current_conf.misc_config.enforce_touch_controls
-		set(eft): Config._current_conf.misc_config.enforce_touch_controls = eft
+	static var enforce_touch_display: bool:
+		get(): return Config._current_conf.misc_config.enforce_touch_display
+		set(efd): Config._current_conf.misc_config.enforce_touch_display = efd
 	static var disable_camera_limiting: bool:
 		get(): return Config._current_conf.misc_config.disable_camera_limiting
 		set(dcl): Config._current_conf.misc_config.disable_camera_limiting = dcl

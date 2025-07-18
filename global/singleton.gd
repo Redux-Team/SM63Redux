@@ -20,12 +20,7 @@ var version: String = ProjectSettings.get("application/config/version")
 @export var transition_overlay: ColorRect
 @export var touch_screen_layer: CanvasLayer
 
-var current_input_device: InputType = InputType.KEYBOARD:
-	get():
-		if Config.misc.enforce_touch_controls:
-			return InputType.TOUCHSCREEN
-		else:
-			return current_input_device
+var current_input_device: InputType = InputType.KEYBOARD
 var _last_device_type: InputType
 
 
@@ -122,12 +117,10 @@ func _check_input_device(event: InputEvent) -> void:
 	
 	_last_device_type = current_input_device
 	input_type_changed.emit()
-	
-	_check_touch_display(current_input_device)
 
 
 func _check_touch_display(device: InputType) -> void:
-	if device == InputType.TOUCHSCREEN:
+	if device == InputType.TOUCHSCREEN or Config.misc.enforce_touch_display:
 		for control: Control in get_tree().get_nodes_in_group(&"gui_touch"):
 			control.show()
 	else:

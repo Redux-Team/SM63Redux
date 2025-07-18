@@ -12,7 +12,7 @@ const LANGUAGE_OPTIONS: Array[String] = [
 
 func _ready() -> void:
 	show_timer_toggle.value = Config.misc.show_timer
-	enforce_touch_toggle.value = Config.misc.enforce_touch_controls
+	enforce_touch_toggle.value = Config.misc.enforce_touch_display
 	camera_limit_toggle.value = Config.misc.disable_camera_limiting
 
 
@@ -21,7 +21,7 @@ func _on_show_timer_value_changed(value: bool) -> void:
 
 
 func _on_enforce_touch_value_changed(value: bool) -> void:
-	Config.misc.enforce_touch_controls = value
+	Config.misc.enforce_touch_display = value
 	Config.apply()
 
 

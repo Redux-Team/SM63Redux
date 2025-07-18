@@ -425,7 +425,7 @@ setting_name = &"Show Timer"
 
 [node name="EnforceTouch" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
 layout_mode = 2
-setting_name = &"Enforce Touch Controls"
+setting_name = &"Enforce Touch Display"
 
 [node name="CameraLimit" parent="SettingsContainer/Miscellaneous/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_qltlq")]
 layout_mode = 2
