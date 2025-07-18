@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://bkqukgs0ivej"]
+
+[ext_resource type="Script" uid="uid://8a6t3e7rqfh8" path="res://game/scenes/init/init.gd" id="1_hbutn"]
+
+[node name="Init" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hbutn")
+
+[node name="BG" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
