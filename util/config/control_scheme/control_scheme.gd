@@ -159,10 +159,7 @@ func get_hint_string(input: String, icon_size: int = 0) -> String:
 	var inputs: Dictionary[String, Array] = get_active_inputs()
 	var events: Array = inputs.get(input, [])
 	if events.is_empty():
-		if Singleton.current_input_device == Singleton.InputType.UNKNOWN:
-			return ""
 		push_warning("No inputs found for '%s'." % input)
-		print(Singleton.current_input_device)
 		return ""
 	var event: InputEvent = events[0]
 	if Singleton.current_input_device == Singleton.InputType.CONTROLLER:

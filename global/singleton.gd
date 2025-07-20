@@ -11,7 +11,6 @@ enum InputType {
 	KEYBOARD,
 	CONTROLLER,
 	TOUCHSCREEN,
-	UNKNOWN
 }
 
 var version: String = ProjectSettings.get("application/config/version")
@@ -94,9 +93,6 @@ func hide_touch_screen_layer() -> void:
 
 
 func _check_input_device(event: InputEvent) -> void:
-	if event is InputEventMouse:
-		return
-	
 	if event is InputEventKey:
 		current_input_device = InputType.KEYBOARD
 	
@@ -109,8 +105,7 @@ func _check_input_device(event: InputEvent) -> void:
 		current_input_device = InputType.TOUCHSCREEN
 	
 	else:
-		current_input_device = InputType.UNKNOWN
-	
+		return
 	
 	if current_input_device == _last_device_type:
 		return
