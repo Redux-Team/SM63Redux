@@ -41,9 +41,6 @@ func _input(event: InputEvent) -> void:
 			_on_settings_screen_exit_request()
 		elif not on_splash_screen:
 			_switch_to_splash_screen()
-			# skip to the looping segment if the song was cut off before the beat drop
-			if title_loop.get_playback_position() < 4.250:
-				title_loop.play(4.250)
 
 
 # this is handled manually in case the splash screen
@@ -64,6 +61,10 @@ func _switch_to_splash_screen() -> void:
 		return
 	
 	input_locked = true
+	
+	# skip to the looping segment if the song was cut off before the beat drop
+	if title_loop.get_playback_position() < 4.250:
+		title_loop.play(4.250)
 	
 	animation_player.play(&"switch_to_splash_screen")
 	menu_loop.play()
