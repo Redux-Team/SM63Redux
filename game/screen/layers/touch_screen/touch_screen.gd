@@ -57,10 +57,7 @@ func apply_scale(amount: float) -> void:
 		if button.is_static:
 			return
 		
-		button.scale = Vector2(amount, amount)
-		
-		if preview:
-			button.scale *= 1.25
+		button.scale = Vector2(amount, amount) * 2
 
 
 func apply_opacity(amount: float) -> void:
@@ -84,7 +81,6 @@ func get_positions() -> Dictionary[StringName, Dictionary]:
 			"offset_bottom": button.offset_bottom
 		})
 	return positions
-
 
 
 func assign_positions(positions: Dictionary[StringName, Dictionary]) -> void:
