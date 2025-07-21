@@ -21,12 +21,3 @@ func _on_visibility_changed() -> void:
 
 func _on_back_button_pressed() -> void:
 	exit_request.emit()
-
-
-func _on_test_pressed() -> void:
-	Singleton.transition_to_scene_file(
-		"uid://c732aftmb2bcv", 
-		Singleton.ScreenTransitionType.TEXTURE_ZOOM,
-		load("uid://cmi62wluqexo7"),
-		0.5
-	)

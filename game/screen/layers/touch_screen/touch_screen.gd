@@ -85,7 +85,7 @@ func get_positions() -> Dictionary[StringName, Dictionary]:
 
 func assign_positions(positions: Dictionary[StringName, Dictionary]) -> void:
 	for button in buttons:
-		var data: Dictionary = positions.get(button.input_event)
+		var data: Dictionary = positions.get(button.input_event, {})
 		if data:
 			button.anchor_left = data.anchor_left
 			button.anchor_top = data.anchor_top
@@ -96,8 +96,6 @@ func assign_positions(positions: Dictionary[StringName, Dictionary]) -> void:
 			button.offset_top = data.offset_top
 			button.offset_right = data.offset_right
 			button.offset_bottom = data.offset_bottom
-
-
 
 
 func _on_button_move(button: TouchButton):

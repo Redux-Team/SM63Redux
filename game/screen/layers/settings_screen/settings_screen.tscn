@@ -44,7 +44,7 @@ input_vbox = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollConta
 input_scroll_container = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer")
 touchscreen_vbox = NodePath("../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox")
 
-[node name="InputTouchHandler" type="Node" parent="Handlers/InputHandler" node_paths=PackedStringArray("preview", "scale_slider", "opacity_slider", "sub_viewport", "device_label", "expand_preview_button", "expanded_h_box", "restore_defaults")]
+[node name="InputTouchHandler" type="Node" parent="Handlers/InputHandler" node_paths=PackedStringArray("preview", "scale_slider", "opacity_slider", "sub_viewport", "device_label", "expand_preview_button", "expanded_h_box", "restore_defaults_button")]
 script = ExtResource("4_2vb20")
 preview = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchScreen/TouchScreenContainer/SubViewport/TouchScreen")
 scale_slider = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/TouchScale")
@@ -53,7 +53,7 @@ sub_viewport = NodePath("../../../SettingsContainer/Input/MarginContainer/Scroll
 device_label = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/DeviceLabel")
 expand_preview_button = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandPreview")
 expanded_h_box = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandedHBox")
-restore_defaults = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/RestoreDefaults")
+restore_defaults_button = NodePath("../../../SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/RestoreDefaults")
 
 [node name="AudioHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("music_slider", "sfx_slider", "output_device_dropdown")]
 script = ExtResource("2_v82bw")
@@ -309,12 +309,6 @@ size_flags_horizontal = 3
 theme_type_variation = &"GenericText"
 text = "Restore Defaults"
 
-[node name="Test" type="Button" parent="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox"]
-visible = false
-layout_mode = 2
-theme_type_variation = &"GenericText"
-text = "Test"
-
 [node name="Audio" type="Control" parent="SettingsContainer"]
 visible = false
 layout_mode = 1
@@ -461,7 +455,6 @@ setting_name = &"Language"
 [connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandPreview" to="Handlers/InputHandler/InputTouchHandler" method="_on_expand_preview_pressed"]
 [connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/RestoreDefaults" to="Handlers/InputHandler" method="_on_restore_defaults_pressed"]
 [connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/RestoreDefaults" to="Handlers/InputHandler/InputTouchHandler" method="_on_restore_defaults_pressed"]
-[connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/Test" to="." method="_on_test_pressed"]
 [connection signal="option_selected" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/OutputDevice" to="Handlers/AudioHandler" method="_on_output_device_option_selected"]
 [connection signal="toggled" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music" to="Handlers/AudioHandler" method="_on_music_toggled"]
 [connection signal="value_changed" from="SettingsContainer/Audio/MarginContainer/VBoxContainer/Music" to="Handlers/AudioHandler" method="_on_music_value_changed"]
