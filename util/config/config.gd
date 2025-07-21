@@ -158,7 +158,7 @@ class input:
 	static var touch_button_opacity: float:
 		get(): return Config._current_conf.input_config.button_opacity
 		set(tbo): Config._current_conf.input_config.button_opacity = tbo
-	static var touch_button_positions: Dictionary[StringName, Dictionary]:
+	static var touch_button_positions: Dictionary[StringName, Vector2]:
 		get(): return Config._current_conf.input_config.button_positions
 		set(tbp): Config._current_conf.input_config.button_positions = tbp
 	static var button_map: Dictionary[StringName, TouchButtonSetting]:

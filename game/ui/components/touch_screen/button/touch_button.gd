@@ -68,6 +68,10 @@ func _get_property_list() -> Array[Dictionary]:
 
 
 func _ready() -> void:
+	setup()
+
+
+func setup() -> void:
 	if drag_capture.gui_input.is_connected(_on_drag_capture_input):
 		drag_capture.gui_input.disconnect(_on_drag_capture_input)
 	drag_capture.gui_input.connect(_on_drag_capture_input)
