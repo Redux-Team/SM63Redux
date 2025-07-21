@@ -11,8 +11,7 @@ extends Subconfig
 @export var button_map: Dictionary[StringName, TouchButtonSetting]
 @export_range(0, 100) var button_opacity: float = 70.0
 @export_range(0.25, 3.0) var button_scale: float = 1.0
-@export var touch_scene: PackedScene
-@export var default_touch_scene: PackedScene
+@export var button_positions: Dictionary[StringName, Dictionary]
 
 @export_group("Controller", "controller_")
 @export var controller_icon_map: Dictionary[InputEvent, Texture2D]

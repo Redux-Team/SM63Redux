@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Config" load_steps=155 format=3 uid="uid://do0n8w5nirmwk"]
+[gd_resource type="Resource" script_class="Config" load_steps=154 format=3 uid="uid://do0n8w5nirmwk"]
 
 [ext_resource type="Script" uid="uid://f17uc223v1ar" path="res://util/config/subconfig/audio.gd" id="1_uxl5x"]
 [ext_resource type="Script" uid="uid://b3oiv1p8em3lj" path="res://util/config/subconfig/_subconfig.gd" id="2_bcoqb"]
@@ -30,7 +30,6 @@
 [ext_resource type="Texture2D" uid="uid://44vtqdhf404y" path="res://assets/textures/gui/button/touch_icons/button_fludd_use.png" id="23_sntij"]
 [ext_resource type="Texture2D" uid="uid://ces67jr5tm6wd" path="res://assets/textures/gui/button/touch_icons/button_fludd_swap.png" id="24_lijkq"]
 [ext_resource type="Texture2D" uid="uid://b4pomduaipcbr" path="res://assets/textures/gui/button/touch_icons/button_pause.png" id="25_bcoqb"]
-[ext_resource type="PackedScene" uid="uid://l87i6yic73um" path="res://game/screen/layers/touch_screen/touch_screen.tscn" id="29_kuwoh"]
 
 [sub_resource type="Resource" id="Resource_xqd10"]
 script = ExtResource("1_uxl5x")
@@ -46,6 +45,7 @@ script = ExtResource("2_lntyh")
 max_fps = 60
 window_mode = 0
 vsync = false
+ui_scale = 1.0
 metadata/_custom_type_script = "uid://qfl8n0nausrq"
 
 [sub_resource type="Resource" id="Resource_h6qih"]
@@ -570,7 +570,7 @@ _ui_right = Array[InputEvent]([SubResource("InputEventKey_r0tsm"), SubResource("
 _clear_setting = Array[InputEvent]([SubResource("InputEventMouseButton_4mdci"), SubResource("InputEventJoypadButton_csq0s")])
 metadata/_custom_type_script = "uid://d3irhgxu3cjae"
 
-[sub_resource type="Resource" id="Resource_j2jn6"]
+[sub_resource type="Resource" id="Resource_kuwoh"]
 script = ExtResource("5_jrqk4")
 default_control_scheme = SubResource("Resource_bcoqb")
 control_schemes = Array[ExtResource("3_4t6fh")]([])
@@ -595,7 +595,7 @@ button_map = Dictionary[StringName, ExtResource("3_edyoc")]({
 })
 button_opacity = 70.0
 button_scale = 1.0
-default_touch_scene = ExtResource("29_kuwoh")
+button_positions = Dictionary[StringName, Dictionary]({})
 controller_icon_map = Dictionary[InputEvent, Texture2D]({
 SubResource("InputEventJoypadButton_kutoy"): ExtResource("15_h1mcp"),
 SubResource("InputEventJoypadButton_3hdss"): ExtResource("14_gqodu"),
@@ -628,7 +628,7 @@ metadata/_custom_type_script = "uid://uq1ejudjw7jh"
 [sub_resource type="Resource" id="Resource_qf1b7"]
 script = ExtResource("6_f5osh")
 show_timer = false
-enforce_touch_controls = false
+enforce_touch_display = false
 disable_camera_limiting = false
 language = &"English [en]"
 metadata/_custom_type_script = "uid://dokvqknhuqe46"
@@ -636,7 +636,7 @@ metadata/_custom_type_script = "uid://dokvqknhuqe46"
 [resource]
 script = ExtResource("7_lay5o")
 display_config = SubResource("Resource_635vj")
-input_config = SubResource("Resource_j2jn6")
+input_config = SubResource("Resource_kuwoh")
 audio_config = SubResource("Resource_xqd10")
 misc_config = SubResource("Resource_qf1b7")
 configurations = Array[ExtResource("2_bcoqb")]([])

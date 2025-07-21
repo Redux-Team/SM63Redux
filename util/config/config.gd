@@ -82,22 +82,15 @@ class input:
 	static var touch_button_opacity: float:
 		get(): return Config._current_conf.input_config.button_opacity
 		set(tbo): Config._current_conf.input_config.button_opacity = tbo
+	static var touch_button_positions: Dictionary[StringName, Dictionary]:
+		get(): return Config._current_conf.input_config.button_positions
+		set(tbp): Config._current_conf.input_config.button_positions = tbp
 	static var button_map: Dictionary[StringName, TouchButtonSetting]:
 		get(): return Config._current_conf.input_config.button_map
 		set(bm): Config._current_conf.input_config.button_map = bm
 	static var controller_icon_map: Dictionary[InputEvent, Texture2D]:
 		get(): return Config._current_conf.input_config.controller_icon_map
 		set(cim): Config._current_conf.input_config.controller_icon_map = cim
-	static var touch_screen_scene: PackedScene:
-		get(): 
-			if !Config._current_conf.input_config.touch_scene:
-				Config._current_conf.input_config.touch_scene = default_touch_screen_scene.duplicate(true)
-			return Config._current_conf.input_config.touch_scene
-		set(tss): Config._current_conf.input_config.touch_scene = tss
-	
-	static var default_touch_screen_scene: PackedScene:
-		get(): return Config._current_conf.input_config.default_touch_scene
-		set(dtss): Config._current_conf.input_config.default_touch_scene = dtss
 	
 	static func get_controller_icon(event: InputEvent) -> Texture2D:
 		for input_event: InputEvent in controller_icon_map:
@@ -146,6 +139,5 @@ class misc:
 #endregion
 
 
-## Create the configurations array from each Subconfig export
 func assign_configurations() -> void:
 	configurations = [display_config, input_config, audio_config, misc_config]

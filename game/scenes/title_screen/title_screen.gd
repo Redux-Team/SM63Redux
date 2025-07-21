@@ -99,8 +99,6 @@ func _on_settings_screen_exit_request() -> void:
 func _on_input_type_changed() -> void:
 	var type: Singleton.InputType = Singleton.current_input_device
 	
-	print(type)
-	
 	if type == Singleton.InputType.TOUCHSCREEN:
 		start_text.text = "Touch the screen to begin!"
 		return

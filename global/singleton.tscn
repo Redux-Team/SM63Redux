@@ -1,17 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://brlqbi6c7ea8x"]
+[gd_scene load_steps=5 format=3 uid="uid://brlqbi6c7ea8x"]
 
 [ext_resource type="Script" uid="uid://d3u2r7day6e33" path="res://global/singleton.gd" id="1_287bc"]
 [ext_resource type="Shader" uid="uid://dig60ar7inm7i" path="res://core/shader/inverse_clip.gdshader" id="2_rkguw"]
+[ext_resource type="PackedScene" uid="uid://l87i6yic73um" path="res://game/screen/layers/touch_screen/touch_screen.tscn" id="2_wd1pp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wd1pp"]
 shader = ExtResource("2_rkguw")
 shader_parameter/scale = 1.0
 
-[node name="Singleton" type="Node" node_paths=PackedStringArray("sfx_container", "transition_overlay", "touch_screen_layer")]
+[node name="Singleton" type="Node" node_paths=PackedStringArray("sfx_container", "transition_overlay", "touch_screen_layer", "touch_screen")]
 script = ExtResource("1_287bc")
 sfx_container = NodePath("Audio/SFX")
 transition_overlay = NodePath("ScreenLayers/TransitionLayer/Overlay")
 touch_screen_layer = NodePath("ScreenLayers/TouchScreenLayer")
+touch_screen = NodePath("ScreenLayers/TouchScreenLayer/TouchScreen")
 
 [node name="Audio" type="Node" parent="."]
 
@@ -21,6 +23,8 @@ touch_screen_layer = NodePath("ScreenLayers/TouchScreenLayer")
 
 [node name="TouchScreenLayer" type="CanvasLayer" parent="ScreenLayers"]
 visible = false
+
+[node name="TouchScreen" parent="ScreenLayers/TouchScreenLayer" instance=ExtResource("2_wd1pp")]
 
 [node name="TransitionLayer" type="CanvasLayer" parent="ScreenLayers"]
 

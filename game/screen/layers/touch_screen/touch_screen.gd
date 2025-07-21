@@ -70,6 +70,40 @@ func apply_opacity(amount: float) -> void:
 		button.modulate.a = amount / 100
 
 
+func get_positions() -> Dictionary[StringName, Dictionary]:
+	var positions: Dictionary[StringName, Dictionary] = {}
+	for button in buttons:
+		positions.set(button.input_event, {
+			"anchor_left": button.anchor_left,
+			"anchor_top": button.anchor_top,
+			"anchor_right": button.anchor_right,
+			"anchor_bottom": button.anchor_bottom,
+			"offset_left": button.offset_left,
+			"offset_top": button.offset_top,
+			"offset_right": button.offset_right,
+			"offset_bottom": button.offset_bottom
+		})
+	return positions
+
+
+
+func assign_positions(positions: Dictionary[StringName, Dictionary]) -> void:
+	for button in buttons:
+		var data: Dictionary = positions.get(button.input_event)
+		if data:
+			button.anchor_left = data.anchor_left
+			button.anchor_top = data.anchor_top
+			button.anchor_right = data.anchor_right
+			button.anchor_bottom = data.anchor_bottom
+
+			button.offset_left = data.offset_left
+			button.offset_top = data.offset_top
+			button.offset_right = data.offset_right
+			button.offset_bottom = data.offset_bottom
+
+
+
+
 func _on_button_move(button: TouchButton):
 	if (button.position.x + (button.size.x * button.scale.x / 2)) < size.x / 2.0:
 		left_rect.show()

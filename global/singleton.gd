@@ -18,6 +18,7 @@ var version: String = ProjectSettings.get("application/config/version")
 @export var sfx_container: Node
 @export var transition_overlay: ColorRect
 @export var touch_screen_layer: CanvasLayer
+@export var touch_screen: TouchScreen
 
 var current_input_device: InputType = InputType.KEYBOARD
 var _last_device_type: InputType
@@ -75,16 +76,9 @@ func get_active_input_device() -> String:
 
 
 func show_touch_screen_layer() -> void:
-	if Config.input.touch_screen_scene == null:
-		return
-	
-	for child: Node in touch_screen_layer.get_children():
-		child.queue_free()
-	
-	var touch_screen: TouchScreen = Config.input.touch_screen_scene.duplicate(true).instantiate()
-	touch_screen.preview = false
-	
-	touch_screen_layer.add_child(touch_screen)
+	touch_screen.apply_opacity(Config.input.touch_button_opacity)
+	touch_screen.apply_scale(Config.input.touch_button_scale)
+	touch_screen.assign_positions(Config.input.touch_button_positions)
 	touch_screen_layer.show()
 
 

@@ -1,5 +1,7 @@
 extends Node
 
+const TOUCH_SCREEN: PackedScene = preload("uid://l87i6yic73um")
+
 
 @export var preview: TouchScreen
 @export var scale_slider: SliderSettingEntry
@@ -15,11 +17,10 @@ func _ready() -> void:
 	scale_slider.slider_value = Config.input.touch_button_scale
 	opacity_slider.slider_value = Config.input.touch_button_opacity
 	
-	if Config.input.touch_screen_scene:
-		preview.free()
-		preview = Config.input.touch_screen_scene.instantiate()
-		preview.preview = true
-		sub_viewport.add_child(preview)
+	if not Config.input.touch_button_positions:
+		Config.input.touch_button_positions = TOUCH_SCREEN.instantiate().get_positions()
+	
+	preview.assign_positions(Config.input.touch_button_positions)
 	
 	apply_modifiers()
 
@@ -40,25 +41,14 @@ func _on_touch_opacity_value_changed(value: float) -> void:
 
 
 func _on_restore_defaults_pressed() -> void:
-	preview.free()
-	Config.input.touch_screen_scene = null
-	
-	preview = TouchScreen.new_instance()
-	preview.apply_scale(1.2)
-	preview.apply_opacity(0.6)
-	
+	preview.assign_positions(TOUCH_SCREEN.instantiate().get_positions())
 	scale_slider.slider_value = 1.2
 	opacity_slider.slider_value = 60
-	
-	preview.preview = true
-	
-	sub_viewport.add_child(preview)
-	
 	apply_modifiers()
 
 
 func _on_settings_screen_exit_request() -> void:
-	Config.input.touch_screen_scene = preview.get_packed_scene()
+	Config.input.touch_button_positions = preview.get_positions()
 
 
 func _on_expand_preview_pressed() -> void:
