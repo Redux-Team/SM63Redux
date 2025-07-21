@@ -26,7 +26,7 @@ var input_event: StringName:
 		
 		pivot_offset = size / 2
 		
-		if !button_node or !input_config.button_map or !ie:
+		if not button_node or not input_config.button_map or not ie:
 			return
 		
 		button_node.texture_normal = input_config.button_map.get(ie).normal_texture

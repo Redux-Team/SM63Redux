@@ -152,7 +152,7 @@ func _on_interaction_button_up() -> void:
 
 
 func _on_interaction_pressed() -> void:
-	boolean_widget.set_toggled(!boolean_widget._get_checkbox_value(), true)
+	boolean_widget.set_toggled(not boolean_widget._get_checkbox_value(), true)
 
 
 func _on_boolean_widget_value_changed(value: bool) -> void:

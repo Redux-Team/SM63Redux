@@ -27,7 +27,7 @@ func _ready() -> void:
 				input_scroll_container.scroll_vertical = 0
 			)
 			entry.visibility_changed.connect(func() -> void:
-				if entry.visible and !get_viewport().gui_get_focus_owner():
+				if entry.visible and not get_viewport().gui_get_focus_owner():
 					entry.interaction.grab_focus()
 			)
 			

@@ -63,7 +63,7 @@ func play(node: Node, index: int = -1) -> void:
 		await start_timer.timeout
 
 	# Repeat delay
-	if !repeat_timer:
+	if not repeat_timer:
 		repeat_timer = node.get_tree().create_timer(0)
 	if repeat_timer.time_left > 0:
 		return
@@ -87,7 +87,7 @@ func play(node: Node, index: int = -1) -> void:
 			PlayOrder.RANDOM_ONCE:
 				while sfx_pool.size() < tracklist.size():
 					new_pick = tracklist.pick_random().get_instance_id()
-					if !sfx_pool.has(new_pick) and last_pick != new_pick:
+					if not sfx_pool.has(new_pick) and last_pick != new_pick:
 						sfx_pool.append(new_pick)
 						break
 			PlayOrder.SEQUENTIAL:
