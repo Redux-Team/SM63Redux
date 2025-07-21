@@ -31,6 +31,7 @@ xcodebuild -project "$PROJECT_NAME.xcodeproj" \
   CODE_SIGN_IDENTITY="" \
   CODE_SIGNING_REQUIRED=NO \
   CODE_SIGNING_ALLOWED=NO \
+  PRODUCT_BUNDLE_IDENTIFIER=com.reduxteam.sm63redux \
   BUILD_DIR=./build > /dev/null
 
 header "Packaging .app into .ipa"
