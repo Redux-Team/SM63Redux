@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://l87i6yic73um"]
+[gd_scene load_steps=4 format=3 uid="uid://l87i6yic73um"]
 
 [ext_resource type="Script" uid="uid://dxqln3mb45twv" path="res://game/screen/layers/touch_screen/touch_screen.gd" id="1_5naqj"]
+[ext_resource type="Script" uid="uid://2vtwdkwx3vfm" path="res://game/screen/layers/touch_screen/snap_lines_display.gd" id="3_5naqj"]
 [ext_resource type="PackedScene" uid="uid://vde6v2vxwoc6" path="res://game/ui/components/touch_screen/button/touch_screen_button.tscn" id="3_m30wk"]
 
-[node name="TouchScreen" type="Control" node_paths=PackedStringArray("buttons", "preview_bg") groups=["gui_touch"]]
+[node name="TouchScreen" type="Control" node_paths=PackedStringArray("buttons", "preview_bg", "snap_lines_display") groups=["gui_touch"]]
 clip_children = 2
 layout_mode = 3
 anchors_preset = 15
@@ -14,6 +15,7 @@ grow_vertical = 2
 script = ExtResource("1_5naqj")
 buttons = [NodePath("BottomLeft/LeftButton"), NodePath("BottomLeft/RightButton"), NodePath("BottomLeft/GPButton"), NodePath("BottomRight/JumpButton"), NodePath("BottomRight/DownButton"), NodePath("BottomRight/SpinButton"), NodePath("BottomRight/UseFluddButton"), NodePath("BottomRight/SwitchNozzleButton"), NodePath("PauseButton")]
 preview_bg = NodePath("PreviewBG")
+snap_lines_display = NodePath("SnapLinesDisplay")
 metadata/_edit_lock_ = true
 
 [node name="PreviewBG" type="ColorRect" parent="."]
@@ -189,3 +191,9 @@ offset_bottom = -51.0
 grow_horizontal = 0
 grow_vertical = 0
 input_event = &"switch_nozzle"
+
+[node name="SnapLinesDisplay" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_5naqj")
