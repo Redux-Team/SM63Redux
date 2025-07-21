@@ -596,6 +596,7 @@ button_map = Dictionary[StringName, ExtResource("3_edyoc")]({
 button_opacity = 70.0
 button_scale = 1.0
 button_positions = Dictionary[StringName, Dictionary]({})
+button_snapping = true
 controller_icon_map = Dictionary[InputEvent, Texture2D]({
 SubResource("InputEventJoypadButton_kutoy"): ExtResource("15_h1mcp"),
 SubResource("InputEventJoypadButton_3hdss"): ExtResource("14_gqodu"),

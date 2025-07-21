@@ -12,6 +12,7 @@ extends Subconfig
 @export_range(0, 100) var button_opacity: float = 70.0
 @export_range(0.25, 3.0) var button_scale: float = 1.0
 @export var button_positions: Dictionary[StringName, Vector2]
+@export var button_snapping: bool = true
 
 @export_group("Controller", "controller_")
 @export var controller_icon_map: Dictionary[InputEvent, Texture2D]

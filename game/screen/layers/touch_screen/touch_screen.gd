@@ -1,7 +1,7 @@
 class_name TouchScreen
 extends Control
 
-const SNAP_THRESHOLD: float = 0.5
+const SNAP_THRESHOLD: float = 1.0
 
 @export var preview: bool = false:
 	set(p):
@@ -66,7 +66,7 @@ func _on_button_moved(button: TouchButton) -> void:
 		return
 	
 	var snap_lines: Array[Vector2] = []
-	var snapped: bool = false
+	var is_snapped: bool = false
 	var current_rect: Rect2 = button.get_global_rect()
 	var current_center: Vector2 = current_rect.get_center()
 	var snap_position: Vector2 = button.global_position
@@ -86,14 +86,14 @@ func _on_button_moved(button: TouchButton) -> void:
 			var snap_x: float = other_center.x
 			snap_lines.append(Vector2(snap_x, current_center.y))
 			snap_lines.append(Vector2(snap_x, other_center.y))
-			snapped = true
+			is_snapped = true
 		
 		if center_dy <= SNAP_THRESHOLD:
 			snap_position.y = other_button.global_position.y
 			var snap_y: float = other_center.y
 			snap_lines.append(Vector2(current_center.x, snap_y))
 			snap_lines.append(Vector2(other_center.x, snap_y))
-			snapped = true
+			is_snapped = true
 		
 		var left_edge_distance: float = abs(current_rect.position.x - other_rect.end.x)
 		var right_edge_distance: float = abs(current_rect.end.x - other_rect.position.x)
@@ -107,28 +107,29 @@ func _on_button_moved(button: TouchButton) -> void:
 			snap_position.x = other_rect.end.x
 			snap_lines.append(Vector2(other_rect.end.x, max(current_rect.position.y, other_rect.position.y)))
 			snap_lines.append(Vector2(other_rect.end.x, min(current_rect.end.y, other_rect.end.y)))
-			snapped = true
+			is_snapped = true
 		
 		if vertical_overlap and right_edge_distance <= SNAP_THRESHOLD:
 			snap_position.x = other_rect.position.x - current_rect.size.x
 			snap_lines.append(Vector2(other_rect.position.x, max(current_rect.position.y, other_rect.position.y)))
 			snap_lines.append(Vector2(other_rect.position.x, min(current_rect.end.y, other_rect.end.y)))
-			snapped = true
+			is_snapped = true
 		
 		if horizontal_overlap and top_edge_distance <= SNAP_THRESHOLD:
 			snap_position.y = other_rect.end.y
 			snap_lines.append(Vector2(max(current_rect.position.x, other_rect.position.x), other_rect.end.y))
 			snap_lines.append(Vector2(min(current_rect.end.x, other_rect.end.x), other_rect.end.y))
-			snapped = true
+			is_snapped = true
 		
 		if horizontal_overlap and bottom_edge_distance <= SNAP_THRESHOLD:
 			snap_position.y = other_rect.position.y - current_rect.size.y
 			snap_lines.append(Vector2(max(current_rect.position.x, other_rect.position.x), other_rect.position.y))
 			snap_lines.append(Vector2(min(current_rect.end.x, other_rect.end.x), other_rect.position.y))
-			snapped = true
+			is_snapped = true
 	
-	if snapped:
-		button.global_position = snap_position
-	
-	if snap_lines_display and snap_lines_display.has_method("set_snap_lines"):
-		snap_lines_display.set_snap_lines(snap_lines)
+	if Config.input.touch_button_snapping:
+		if is_snapped:
+			button.global_position = snap_position
+		
+		if snap_lines_display and snap_lines_display.has_method("set_snap_lines"):
+			snap_lines_display.set_snap_lines(snap_lines)

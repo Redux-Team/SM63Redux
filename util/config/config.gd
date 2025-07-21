@@ -161,6 +161,9 @@ class input:
 	static var touch_button_positions: Dictionary[StringName, Vector2]:
 		get(): return Config._current_conf.input_config.button_positions
 		set(tbp): Config._current_conf.input_config.button_positions = tbp
+	static var touch_button_snapping: bool:
+		get(): return Config._current_conf.input_config.button_snapping
+		set(tbs): Config._current_conf.input_config.button_snapping = tbs
 	static var button_map: Dictionary[StringName, TouchButtonSetting]:
 		get(): return Config._current_conf.input_config.button_map
 		set(bm): Config._current_conf.input_config.button_map = bm
