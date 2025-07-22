@@ -1,8 +1,11 @@
-[gd_scene load_steps=29 format=3 uid="uid://b0wp6l07i5ime"]
+[gd_scene load_steps=35 format=3 uid="uid://b0wp6l07i5ime"]
 
 [ext_resource type="Script" uid="uid://b2figxll0bk25" path="res://game/scenes/title_screen/title_screen.gd" id="1_6esl3"]
 [ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/soundtrack/01 Welcome to Super Mario 63 Redux!.mp3" id="1_bfr6l"]
-[ext_resource type="Texture2D" uid="uid://e7xc4bwdokpj" path="res://assets/textures/world/background/title/title_bg.png" id="3_y7kqt"]
+[ext_resource type="Texture2D" uid="uid://tb4ypkcr623h" path="res://assets/textures/world/background/title_screen/title_bg_0.png" id="3_7cnuw"]
+[ext_resource type="Texture2D" uid="uid://bk6onkjxyktpy" path="res://assets/textures/world/background/title_screen/title_bg_3.png" id="3_8cpbr"]
+[ext_resource type="Texture2D" uid="uid://dgjgka3dk4jgx" path="res://assets/textures/world/background/title_screen/title_bg_2.png" id="3_eyv0a"]
+[ext_resource type="Texture2D" uid="uid://dm3nvb5v30ypf" path="res://assets/textures/world/background/title_screen/title_bg_1.png" id="3_fq6c4"]
 [ext_resource type="Texture2D" uid="uid://d3vht0k7j5d21" path="res://assets/textures/gui/title_screen/splash_logo/logo_base.png" id="4_2273m"]
 [ext_resource type="Script" uid="uid://chkv0bbgtj7gh" path="res://game/scenes/title_screen/menu_cycle.gd" id="4_db5fu"]
 [ext_resource type="Texture2D" uid="uid://bvbd4a1850645" path="res://assets/textures/gui/title_screen/splash_logo/logo_sheen_63.png" id="5_1evyh"]
@@ -13,11 +16,16 @@
 [ext_resource type="Texture2D" uid="uid://dk6fm6tm4hpjp" path="res://assets/textures/gui/title_screen/splash_logo/sheen.png" id="7_xjhxk"]
 [ext_resource type="Texture2D" uid="uid://dnprx1u7tco41" path="res://assets/textures/gui/title_screen/splash_logo/logo_sheen_redux.png" id="8_7cnuw"]
 [ext_resource type="Script" uid="uid://c24ib1e8u5ify" path="res://game/scenes/title_screen/scene_transition.gd" id="8_fq6c4"]
+[ext_resource type="Texture2D" uid="uid://c0ti7gjvja8p1" path="res://assets/textures/gui/title_screen/splash_logo/logo_glow_63.png" id="11_5n2bh"]
+[ext_resource type="Texture2D" uid="uid://dis2snmj3sc3n" path="res://assets/textures/gui/title_screen/splash_logo/logo_glow_redux.png" id="13_baphx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7cnuw"]
 shader = ExtResource("5_y7kqt")
 shader_parameter/color_texture = ExtResource("7_xjhxk")
 shader_parameter/mask_texture = ExtResource("5_1evyh")
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8cpbr"]
+blend_mode = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xjhxk"]
 shader = ExtResource("5_y7kqt")
@@ -899,14 +907,86 @@ tracks/14/keys = {
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("(Placeholder):self_modulate")
+tracks/15/path = NodePath("BG/BGWorld/BG:autoscroll")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
+"values": [Vector2(-4, 0)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("BG/BGWorld/BG2:autoscroll")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-10, 0)]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("BG/BGWorld/FG2:autoscroll")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-16, 0)]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("BG/BGWorld/FG:autoscroll")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-22, 0)]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("BG:modulate")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
 "values": [Color(1, 1, 1, 1)]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("SplashScreen/LogoContainer/63Glow:self_modulate")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("SplashScreen/LogoContainer/ReduxGlow:self_modulate")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_y7kqt"]
@@ -1211,14 +1291,62 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("(Placeholder):self_modulate")
+tracks/11/path = NodePath("BG/BGWorld/BG:autoscroll")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(0.4, 1),
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(0.6, 0.6, 0.6, 1)]
+"values": [Vector2(-4, 0), Vector2(-2, 0)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("BG/BGWorld/BG2:autoscroll")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-10, 0), Vector2(-5, 0)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("BG/BGWorld/FG2:autoscroll")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-16, 0), Vector2(-8, 0)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("BG/BGWorld/FG:autoscroll")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-22, 0), Vector2(-11, 0)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("BG:modulate")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.354989),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.568973, 0.568973, 0.568973, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_1evyh"]
@@ -1514,7 +1642,7 @@ tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.125]
+"values": [0.175]
 }
 tracks/11/type = "value"
 tracks/11/imported = false
@@ -1526,7 +1654,7 @@ tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.525]
+"values": [0.6]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
@@ -1555,14 +1683,62 @@ tracks/13/keys = {
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("(Placeholder):self_modulate")
+tracks/14/path = NodePath("BG/BGWorld/BG:autoscroll")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
-"times": PackedFloat32Array(0, 0.433333),
-"transitions": PackedFloat32Array(0.4, 0.4),
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Color(0.6, 0.6, 0.6, 1), Color(1, 1, 1, 1)]
+"values": [Vector2(-2, 0), Vector2(-4, 0)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("BG/BGWorld/BG2:autoscroll")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-5, 0), Vector2(-10, 0)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("BG/BGWorld/FG2:autoscroll")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-8, 0), Vector2(-16, 0)]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("BG/BGWorld/FG:autoscroll")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-11, 0), Vector2(-22, 0)]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("BG:modulate")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.568973, 0.568973, 0.568973, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_bfr6l"]
@@ -1578,7 +1754,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 1.56667, 4.03333, 4.33333),
 "transitions": PackedFloat32Array(0.2, 1, 0.5, 1),
 "update": 0,
-"values": [-0.675, 0.25, 0.25, 0.125]
+"values": [-0.675, 0.25, 0.25, 0.175]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1590,7 +1766,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 1.56667, 4.03333, 4.4),
 "transitions": PackedFloat32Array(0.2, 1, 0.3, 1),
 "update": 0,
-"values": [-0.1, 0.75, 0.75, 0.525]
+"values": [-0.1, 0.75, 0.75, 0.6]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -1654,6 +1830,30 @@ tracks/6/keys = {
 "update": 0,
 "values": [Vector2(0, 0)]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SplashScreen/LogoContainer/63Glow:self_modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(1.69272, 1.76667, 2.03333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SplashScreen/LogoContainer/ReduxGlow:self_modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(2.19274, 2.26667, 2.7),
+"transitions": PackedFloat32Array(1, 0.6, 1.2),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_exexd"]
 _data = {
@@ -1688,21 +1888,67 @@ metadata/_edit_vertical_guides_ = [320.0]
 metadata/_edit_horizontal_guides_ = [180.0]
 metadata/_edit_lock_ = true
 
-[node name="SceneTransition" type="Node" parent="." node_paths=PackedStringArray("menu_loop", "screen_animations")]
-script = ExtResource("8_fq6c4")
-menu_loop = NodePath("../MenuLoop")
-screen_animations = NodePath("../ScreenAnimations")
-
-[node name="(Placeholder)" type="TextureRect" parent="."]
+[node name="BG" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_y7kqt")
-expand_mode = 1
-stretch_mode = 6
+
+[node name="BGWorld" type="Node2D" parent="BG"]
+
+[node name="BG" type="Parallax2D" parent="BG/BGWorld"]
+scroll_scale = Vector2(0.5, 0)
+scroll_offset = Vector2(-749, 152)
+repeat_size = Vector2(750, 0)
+autoscroll = Vector2(-4, 0)
+repeat_times = 7
+follow_viewport = false
+
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGWorld/BG"]
+texture = ExtResource("3_8cpbr")
+
+[node name="BG2" type="Parallax2D" parent="BG/BGWorld"]
+scroll_scale = Vector2(0.5, 0)
+scroll_offset = Vector2(-2, 196)
+repeat_size = Vector2(750, 0)
+autoscroll = Vector2(-10, 0)
+repeat_times = 7
+follow_viewport = false
+
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGWorld/BG2"]
+texture = ExtResource("3_eyv0a")
+
+[node name="FG2" type="Parallax2D" parent="BG/BGWorld"]
+scroll_scale = Vector2(0.5, 0)
+scroll_offset = Vector2(-2, 253)
+repeat_size = Vector2(750, 0)
+autoscroll = Vector2(-16, 0)
+repeat_times = 7
+follow_viewport = false
+
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGWorld/FG2"]
+texture = ExtResource("3_fq6c4")
+
+[node name="FG" type="Parallax2D" parent="BG/BGWorld"]
+scroll_scale = Vector2(0.5, 0)
+scroll_offset = Vector2(-2, 253)
+repeat_size = Vector2(750, 0)
+autoscroll = Vector2(-22, 0)
+repeat_times = 7
+follow_viewport = false
+
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGWorld/FG"]
+texture = ExtResource("3_7cnuw")
+
+[node name="Camera2D" type="Camera2D" parent="BG/BGWorld"]
+anchor_mode = 0
+
+[node name="SceneTransition" type="Node" parent="." node_paths=PackedStringArray("menu_loop", "screen_animations")]
+script = ExtResource("8_fq6c4")
+menu_loop = NodePath("../MenuLoop")
+screen_animations = NodePath("../ScreenAnimations")
 
 [node name="SplashScreen" type="Control" parent="."]
 layout_mode = 1
@@ -1754,6 +2000,20 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_lock_ = true
 
+[node name="63Glow" type="TextureRect" parent="SplashScreen/LogoContainer"]
+self_modulate = Color(1, 1, 1, 0)
+material = SubResource("CanvasItemMaterial_8cpbr")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_5n2bh")
+expand_mode = 1
+stretch_mode = 5
+metadata/_edit_lock_ = true
+
 [node name="ReduxSheen" type="TextureRect" parent="SplashScreen/LogoContainer"]
 material = SubResource("ShaderMaterial_xjhxk")
 instance_shader_parameters/color_offset = Vector2(0.275, 0)
@@ -1767,6 +2027,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("8_7cnuw")
+expand_mode = 1
+stretch_mode = 5
+metadata/_edit_lock_ = true
+
+[node name="ReduxGlow" type="TextureRect" parent="SplashScreen/LogoContainer"]
+self_modulate = Color(1, 1, 1, 0)
+material = SubResource("CanvasItemMaterial_8cpbr")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_baphx")
 expand_mode = 1
 stretch_mode = 5
 metadata/_edit_lock_ = true
@@ -2034,7 +2308,10 @@ theme_type_variation = &"TouchLeft"
 
 [node name="SettingsScreen" parent="." instance=ExtResource("7_1evyh")]
 visible = false
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
+offset_top = 15.0
+offset_bottom = 15.0
 
 [node name="VersionLabel" type="Label" parent="."]
 layout_mode = 1
