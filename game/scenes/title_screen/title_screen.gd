@@ -5,6 +5,9 @@ extends Control
 @export var menu_loop: AudioStreamPlayer
 @export var splash_fade: ColorRect
 
+@export var sheen_63_rect: TextureRect
+@export var sheen_redux_rect: TextureRect
+
 @export var version_label: Label
 @export var team_text: Label
 @export var splash_screen: Control
@@ -25,8 +28,10 @@ func _ready() -> void:
 	menu_loop.stream_paused = true
 	Singleton.input_type_changed.connect(_on_input_type_changed)
 	_on_input_type_changed()
-	
 	version_label.text = "v" + Singleton.version
+	
+	sheen_63()
+	sheen_redux()
 
 
 func _input(event: InputEvent) -> void:
@@ -108,3 +113,41 @@ func _on_input_type_changed() -> void:
 
 func _on_menu_back_button_pressed() -> void:
 	_switch_to_splash_screen()
+
+
+func sheen_63() -> void:
+	sheen_63_rect.set_instance_shader_parameter(&"color_offset", Vector2(0.0, 0.0))
+
+	var tween: Tween = get_tree().create_tween()
+	
+	tween.tween_method(
+		func(y_value: float) -> void:
+			var current = sheen_63_rect.get_instance_shader_parameter(&"color_offset")
+			current.y = y_value
+			sheen_63_rect.set_instance_shader_parameter(&"color_offset", current),
+		0.0, 1.0, 1.0
+	)
+
+	tween.finished.connect(func() -> void:
+		await get_tree().create_timer(randf_range(3.0, 6.0)).timeout
+		sheen_63()
+	)
+
+
+func sheen_redux() -> void:
+	sheen_redux_rect.set_instance_shader_parameter(&"color_offset", Vector2(0.275, 0.0))
+
+	var tween: Tween = get_tree().create_tween()
+	
+	tween.tween_method(
+		func(y_value: float) -> void:
+			var current = sheen_redux_rect.get_instance_shader_parameter(&"color_offset")
+			current.y = y_value
+			sheen_redux_rect.set_instance_shader_parameter(&"color_offset", current),
+		0.275, 1.0, 0.75 
+	)
+
+	tween.finished.connect(func() -> void:
+		await get_tree().create_timer(randf_range(3.0, 6.0)).timeout
+		sheen_redux()
+	)

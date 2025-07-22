@@ -1,65 +1,28 @@
-[gd_scene load_steps=24 format=3 uid="uid://b0wp6l07i5ime"]
+[gd_scene load_steps=29 format=3 uid="uid://b0wp6l07i5ime"]
 
 [ext_resource type="Script" uid="uid://b2figxll0bk25" path="res://game/scenes/title_screen/title_screen.gd" id="1_6esl3"]
 [ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/soundtrack/01 Welcome to Super Mario 63 Redux!.mp3" id="1_bfr6l"]
-[ext_resource type="Texture2D" uid="uid://dcg8iv2uajlwf" path="res://meta/logo.png" id="1_exexd"]
 [ext_resource type="Texture2D" uid="uid://e7xc4bwdokpj" path="res://assets/textures/world/background/title/title_bg.png" id="3_y7kqt"]
+[ext_resource type="Texture2D" uid="uid://d3vht0k7j5d21" path="res://assets/textures/gui/title_screen/splash_logo/logo_base.png" id="4_2273m"]
 [ext_resource type="Script" uid="uid://chkv0bbgtj7gh" path="res://game/scenes/title_screen/menu_cycle.gd" id="4_db5fu"]
+[ext_resource type="Texture2D" uid="uid://bvbd4a1850645" path="res://assets/textures/gui/title_screen/splash_logo/logo_sheen_63.png" id="5_1evyh"]
 [ext_resource type="PackedScene" uid="uid://c6dic42vckv0e" path="res://game/ui/components/main_menu_button/main_menu_button.tscn" id="5_mu8aq"]
+[ext_resource type="Shader" uid="uid://cgek5pfxthubq" path="res://core/shader/texture_mask.gdshader" id="5_y7kqt"]
 [ext_resource type="AudioStream" uid="uid://dmjltgy8g1jqg" path="res://assets/soundtrack/02 Start at the Beginning.mp3" id="6_lyjqf"]
 [ext_resource type="PackedScene" uid="uid://edq4g4hx0dyb" path="res://game/screen/layers/settings_screen/settings_screen.tscn" id="7_1evyh"]
+[ext_resource type="Texture2D" uid="uid://dk6fm6tm4hpjp" path="res://assets/textures/gui/title_screen/splash_logo/sheen.png" id="7_xjhxk"]
+[ext_resource type="Texture2D" uid="uid://dnprx1u7tco41" path="res://assets/textures/gui/title_screen/splash_logo/logo_sheen_redux.png" id="8_7cnuw"]
 [ext_resource type="Script" uid="uid://c24ib1e8u5ify" path="res://game/scenes/title_screen/scene_transition.gd" id="8_fq6c4"]
 
-[sub_resource type="GDScript" id="GDScript_2273m"]
-script/source = "@tool
-class_name ResizableLabel extends Label
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7cnuw"]
+shader = ExtResource("5_y7kqt")
+shader_parameter/color_texture = ExtResource("7_xjhxk")
+shader_parameter/mask_texture = ExtResource("5_1evyh")
 
-enum ResizeMode {
-	STATIC,
-	ASPECT,
-}
-
-@export var font_size: int = 16:
-	set(fs):
-		add_theme_font_size_override(&\"font_size\", fs)
-		font_size = fs
-
-@export var outline_size: int = 0:
-	set(os):
-		add_theme_constant_override(&\"outline_size\", os)
-		outline_size = os
-
-@export var outline_color: Color = Color.BLACK:
-	set(oc):
-		add_theme_color_override(&\"font_outline_color\", oc)
-		outline_color = oc
-
-@onready var original_size: Vector2 = size
-
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_RESIZED and not Engine.is_editor_hint():
-		_update_font_size_aspect()
-
-func _update_font_size_aspect() -> void:
-	if original_size.x <= 0.1 or original_size.y <= 0.1:
-		return
-	
-	var current_size = size
-	
-	var scale_x: float = current_size.x / original_size.x
-	var scale_y: float = current_size.y / original_size.y
-	var font_scale: float = min(scale_x, scale_y) # Maintain aspect ratio
-	
-	# Resize threshold (to prevent resizing having a seizure w/ really small changes)
-	if abs((font_size * font_scale) - get_theme_font_size(&\"font_size\")) < 0.9:
-		return
-	
-	var new_font_size = int(font_size * font_scale)
-	var new_outline_size = int(outline_size * font_scale)
-	
-	add_theme_font_size_override(&\"font_size\", new_font_size)
-	add_theme_constant_override(&\"outline_size\", new_outline_size)
-"
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xjhxk"]
+shader = ExtResource("5_y7kqt")
+shader_parameter/color_texture = ExtResource("7_xjhxk")
+shader_parameter/mask_texture = ExtResource("8_7cnuw")
 
 [sub_resource type="Animation" id="Animation_vp7mh"]
 length = 0.001
@@ -266,18 +229,6 @@ tracks/16/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
-}
-tracks/17/type = "value"
-tracks/17/imported = false
-tracks/17/enabled = true
-tracks/17/path = NodePath("MenuScreen/DescriptionLabel:position")
-tracks/17/interp = 1
-tracks/17/loop_wrap = true
-tracks/17/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_1sg8f"]
@@ -876,7 +827,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("SplashScreen/Logo:anchor_left")
+tracks/9/path = NodePath("SplashScreen/LogoContainer:anchor_left")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -888,7 +839,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("SplashScreen/Logo:anchor_top")
+tracks/10/path = NodePath("SplashScreen/LogoContainer:anchor_top")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -900,7 +851,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("SplashScreen/Logo:anchor_right")
+tracks/11/path = NodePath("SplashScreen/LogoContainer:anchor_right")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -912,7 +863,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("SplashScreen/Logo:anchor_bottom")
+tracks/12/path = NodePath("SplashScreen/LogoContainer:anchor_bottom")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -1060,7 +1011,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("SplashScreen/Logo:anchor_top")
+tracks/8/path = NodePath("SplashScreen/LogoContainer:anchor_top")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -1072,7 +1023,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("SplashScreen/Logo:anchor_bottom")
+tracks/9/path = NodePath("SplashScreen/LogoContainer:anchor_bottom")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -1372,7 +1323,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("SplashScreen/Logo:anchor_top")
+tracks/8/path = NodePath("SplashScreen/LogoContainer:anchor_top")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -1384,7 +1335,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("SplashScreen/Logo:anchor_bottom")
+tracks/9/path = NodePath("SplashScreen/LogoContainer:anchor_bottom")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -1556,7 +1507,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("SplashScreen/Logo:anchor_top")
+tracks/10/path = NodePath("SplashScreen/LogoContainer:anchor_top")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -1568,7 +1519,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("SplashScreen/Logo:anchor_bottom")
+tracks/11/path = NodePath("SplashScreen/LogoContainer:anchor_bottom")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -1620,7 +1571,7 @@ length = 5.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SplashScreen/Logo:anchor_top")
+tracks/0/path = NodePath("SplashScreen/LogoContainer:anchor_top")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1632,7 +1583,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SplashScreen/Logo:anchor_bottom")
+tracks/1/path = NodePath("SplashScreen/LogoContainer:anchor_bottom")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -1714,7 +1665,7 @@ _data = {
 &"title_in": SubResource("Animation_bfr6l")
 }
 
-[node name="TitleScreen" type="Control" node_paths=PackedStringArray("animation_player", "title_loop", "menu_loop", "splash_fade", "version_label", "team_text", "splash_screen", "menu_screen", "start_text")]
+[node name="TitleScreen" type="Control" node_paths=PackedStringArray("animation_player", "title_loop", "menu_loop", "splash_fade", "sheen_63_rect", "sheen_redux_rect", "version_label", "team_text", "splash_screen", "menu_screen", "start_text")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1726,6 +1677,8 @@ animation_player = NodePath("ScreenAnimations")
 title_loop = NodePath("TitleLoop")
 menu_loop = NodePath("MenuLoop")
 splash_fade = NodePath("SplashScreen/SplashFade")
+sheen_63_rect = NodePath("SplashScreen/LogoContainer/63Sheen")
+sheen_redux_rect = NodePath("SplashScreen/LogoContainer/ReduxSheen")
 version_label = NodePath("VersionLabel")
 team_text = NodePath("TeamLabel")
 splash_screen = NodePath("SplashScreen")
@@ -1760,23 +1713,63 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
 
-[node name="Logo" type="TextureRect" parent="SplashScreen"]
+[node name="LogoContainer" type="Control" parent="SplashScreen"]
 layout_mode = 1
-anchors_preset = -1
 anchor_left = 0.217125
 anchor_top = 0.125
 anchor_right = 0.788875
 anchor_bottom = 0.525
 offset_left = 0.0399933
 offset_top = -0.160004
-offset_right = 0.119965
-offset_bottom = -0.160004
+offset_right = 0.119995
+offset_bottom = -0.159424
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_exexd")
+metadata/_edit_use_anchors_ = true
+
+[node name="LogoBase" type="TextureRect" parent="SplashScreen/LogoContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_2273m")
 expand_mode = 1
 stretch_mode = 5
-metadata/_edit_use_anchors_ = true
+
+[node name="63Sheen" type="TextureRect" parent="SplashScreen/LogoContainer"]
+material = SubResource("ShaderMaterial_7cnuw")
+instance_shader_parameters/color_offset = Vector2(0, 0)
+instance_shader_parameters/color_scale = Vector2(0.5, 0.5)
+instance_shader_parameters/mask_scale = Vector2(1, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_1evyh")
+expand_mode = 1
+stretch_mode = 5
+metadata/_edit_lock_ = true
+
+[node name="ReduxSheen" type="TextureRect" parent="SplashScreen/LogoContainer"]
+material = SubResource("ShaderMaterial_xjhxk")
+instance_shader_parameters/color_offset = Vector2(0.275, 0)
+instance_shader_parameters/color_scale = Vector2(0.69, 0.5)
+instance_shader_parameters/mask_offset = Vector2(0, 0)
+instance_shader_parameters/mask_scale = Vector2(1, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_7cnuw")
+expand_mode = 1
+stretch_mode = 5
+metadata/_edit_lock_ = true
 
 [node name="StartText" type="RichTextLabel" parent="SplashScreen"]
 layout_mode = 1
@@ -1836,15 +1829,13 @@ anchor_right = 1.0
 anchor_bottom = 0.0974446
 offset_bottom = -0.0799408
 grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 18
 text = "Play the story of Super Mario 63 Redux!"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
-script = SubResource("GDScript_2273m")
-font_size = 18
-outline_size = 6
 metadata/_edit_use_anchors_ = true
 
 [node name="MenuCycle" type="Control" parent="MenuScreen" node_paths=PackedStringArray("menu_buttons", "animation_player", "left_button_container", "center_button_container", "right_button_container", "extra_button_container", "menu_buttons_holder", "description_label", "scene_transition")]

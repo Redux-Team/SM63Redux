@@ -32,43 +32,54 @@ func _input(event: InputEvent) -> void:
 	_check_input_device(event)
 
 
-func transition_to_scene_file(scene_file: String, transition: ScreenTransitionType, texture: Texture2D = Texture2D.new(), time: float = 1.0) -> void:
+func transition_to_scene_file(scene_file: String, transition: ScreenTransitionType, texture: Texture2D = Texture2D.new(), time: float = 1.0, to: bool = true, from: bool = true) -> void:
 	match transition:
 		ScreenTransitionType.TEXTURE_ZOOM when time and texture:
-			var tween: Tween = get_tree().create_tween()
-			tween.bind_node(transition_overlay)
-			tween.set_ease(Tween.EASE_OUT)
+			if not to and not from:
+				get_tree().change_scene_to_file(scene_file)
+				return
 			
-			var mat = ShaderMaterial.new()
+			var mat: ShaderMaterial = ShaderMaterial.new()
 			mat.shader = Shaders.INVERSE_CLIP
 			mat.set_shader_parameter(&"texture_albedo", texture)
 			transition_overlay.material = mat
-			transition_overlay.show()
 			
-			tween.tween_method(
-				func(value):
-					mat.set_shader_parameter(&"scale", value),
-				3.0, 0.0, time
-			)
-			
-			tween.finished.connect(func() -> void:
-				get_tree().change_scene_to_file(scene_file)
+			if to:
+				transition_overlay.show()
+				var tween: Tween = get_tree().create_tween()
+				tween.bind_node(transition_overlay)
+				tween.set_ease(Tween.EASE_OUT)
 				
-				# Holding the transition before switching to next scene
-				# so that it's not as abrupt.
+				tween.tween_method(
+					func(value: float) -> void:
+						mat.set_shader_parameter(&"scale", value),
+					3.0, 0.0, time
+				)
+				
+				await tween.finished
+			
+			get_tree().change_scene_to_file(scene_file)
+			
+			if from:
+				if not to:
+					transition_overlay.show()
+					mat.set_shader_parameter(&"scale", 0.0)
+				
 				await get_tree().create_timer(0.15).timeout
 				
 				var second_tween: Tween = get_tree().create_tween()
 				second_tween.bind_node(transition_overlay)
 				second_tween.set_ease(Tween.EASE_OUT)
 				second_tween.tween_method(
-					func(value):
+					func(value: float) -> void:
 						mat.set_shader_parameter(&"scale", value),
 					0.0, 3.0, time
 				)
 				
-				second_tween.finished.connect(func() -> void: transition_overlay.hide(), CONNECT_ONE_SHOT)
-			, CONNECT_ONE_SHOT)
+				await second_tween.finished
+				transition_overlay.hide()
+			else:
+				transition_overlay.hide()
 
 
 func get_active_input_device() -> String:
