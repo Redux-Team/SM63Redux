@@ -1,7 +1,7 @@
 class_name TouchScreen
 extends Control
 
-const SNAP_THRESHOLD: float = 0.5
+const SNAP_THRESHOLD: float = 1.0
 
 @export var preview: bool = false:
 	set(p):
@@ -127,8 +127,9 @@ func _on_button_moved(button: TouchButton) -> void:
 			snap_lines.append(Vector2(min(current_rect.end.x, other_rect.end.x), other_rect.position.y))
 			is_snapped = true
 	
-	if is_snapped:
-		button.global_position = snap_position
-	
-	if snap_lines_display and snap_lines_display.has_method("set_snap_lines"):
-		snap_lines_display.set_snap_lines(snap_lines)
+	if Config.input.touch_button_snapping:
+		if is_snapped:
+			button.global_position = snap_position
+		
+		if snap_lines_display and snap_lines_display.has_method("set_snap_lines"):
+			snap_lines_display.set_snap_lines(snap_lines)
