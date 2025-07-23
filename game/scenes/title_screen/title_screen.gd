@@ -125,7 +125,7 @@ func sheen_63() -> void:
 			var current = sheen_63_rect.get_instance_shader_parameter(&"color_offset")
 			current.y = y_value
 			sheen_63_rect.set_instance_shader_parameter(&"color_offset", current),
-		0.0, 1.0, 1.0
+		0.0, 1.0, 0.85
 	)
 
 	tween.finished.connect(func() -> void:
@@ -144,7 +144,7 @@ func sheen_redux() -> void:
 			var current = sheen_redux_rect.get_instance_shader_parameter(&"color_offset")
 			current.y = y_value
 			sheen_redux_rect.set_instance_shader_parameter(&"color_offset", current),
-		0.275, 1.0, 0.75 
+		0.275, 1.0, 0.65
 	)
 
 	tween.finished.connect(func() -> void:
