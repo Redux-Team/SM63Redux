@@ -16,6 +16,6 @@ func change_to_title_screen() -> void:
 		"uid://b0wp6l07i5ime",
 		Singleton.ScreenTransitionType.TEXTURE_ZOOM,
 		load("uid://b127vhuh31i8r"),
-		0.5,
+		0.65,
 		false
 	)
