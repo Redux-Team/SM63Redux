@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://b0wp6l07i5ime"]
+[gd_scene load_steps=38 format=3 uid="uid://b0wp6l07i5ime"]
 
 [ext_resource type="Script" uid="uid://b2figxll0bk25" path="res://game/scenes/title_screen/title_screen.gd" id="1_6esl3"]
 [ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/soundtrack/01 Welcome to Super Mario 63 Redux!.mp3" id="1_bfr6l"]
@@ -15,9 +15,11 @@
 [ext_resource type="PackedScene" uid="uid://edq4g4hx0dyb" path="res://game/screen/layers/settings_screen/settings_screen.tscn" id="7_1evyh"]
 [ext_resource type="Texture2D" uid="uid://dk6fm6tm4hpjp" path="res://assets/textures/gui/title_screen/splash_logo/sheen.png" id="7_xjhxk"]
 [ext_resource type="Texture2D" uid="uid://dnprx1u7tco41" path="res://assets/textures/gui/title_screen/splash_logo/logo_sheen_redux.png" id="8_7cnuw"]
+[ext_resource type="Texture2D" uid="uid://dy01v0dgkooap" path="res://assets/textures/gui/title_screen/splash_logo/logo_base_63.png" id="8_es2f3"]
 [ext_resource type="Script" uid="uid://c24ib1e8u5ify" path="res://game/scenes/title_screen/scene_transition.gd" id="8_fq6c4"]
 [ext_resource type="Texture2D" uid="uid://c0ti7gjvja8p1" path="res://assets/textures/gui/title_screen/splash_logo/logo_glow_63.png" id="11_5n2bh"]
 [ext_resource type="Texture2D" uid="uid://dis2snmj3sc3n" path="res://assets/textures/gui/title_screen/splash_logo/logo_glow_redux.png" id="13_baphx"]
+[ext_resource type="Texture2D" uid="uid://rcxm23syw3ph" path="res://assets/textures/gui/title_screen/splash_logo/logo_base_redux.png" id="13_gpgra"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7cnuw"]
 shader = ExtResource("5_y7kqt")
@@ -938,7 +940,7 @@ tracks/17/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-16, 0)]
+"values": [Vector2(8, 0)]
 }
 tracks/18/type = "value"
 tracks/18/imported = false
@@ -967,7 +969,7 @@ tracks/19/keys = {
 tracks/20/type = "value"
 tracks/20/imported = false
 tracks/20/enabled = true
-tracks/20/path = NodePath("SplashScreen/LogoContainer/63Glow:self_modulate")
+tracks/20/path = NodePath("SplashScreen/LogoContainer/63/63Glow:self_modulate")
 tracks/20/interp = 1
 tracks/20/loop_wrap = true
 tracks/20/keys = {
@@ -979,10 +981,82 @@ tracks/20/keys = {
 tracks/21/type = "value"
 tracks/21/imported = false
 tracks/21/enabled = true
-tracks/21/path = NodePath("SplashScreen/LogoContainer/ReduxGlow:self_modulate")
+tracks/21/path = NodePath("SplashScreen/LogoContainer/Redux/ReduxGlow:self_modulate")
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("SplashScreen/LogoContainer/63/63Sheen:visible")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("SplashScreen/LogoContainer/Redux/ReduxSheen:visible")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/24/type = "value"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("SplashScreen/LogoContainer/63:scale")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/25/type = "value"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("SplashScreen/LogoContainer/Redux:scale")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/26/type = "value"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("SplashScreen/LogoContainer/63:self_modulate")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("SplashScreen/LogoContainer/Redux:self_modulate")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -1322,7 +1396,7 @@ tracks/13/keys = {
 "times": PackedFloat32Array(0, 0.366667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(-16, 0), Vector2(-8, 0)]
+"values": [Vector2(8, 0), Vector2(4, 0)]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
@@ -1714,7 +1788,7 @@ tracks/16/keys = {
 "times": PackedFloat32Array(0, 0.366667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(-8, 0), Vector2(-16, 0)]
+"values": [Vector2(4, 0), Vector2(8, 0)]
 }
 tracks/17/type = "value"
 tracks/17/imported = false
@@ -1739,6 +1813,116 @@ tracks/18/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(0.568973, 0.568973, 0.568973, 1), Color(1, 1, 1, 1)]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("SplashScreen/LogoContainer/63/63Glow:self_modulate")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0.0333334),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("SplashScreen/LogoContainer/Redux/ReduxGlow:self_modulate")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/21/type = "method"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath(".")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0.433333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"start_splash_loop"
+}]
+}
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("SplashScreen/LogoContainer/63:self_modulate")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("SplashScreen/LogoContainer/Redux:self_modulate")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/24/type = "value"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("SplashScreen/LogoContainer/Redux:scale")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/25/type = "value"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("SplashScreen/LogoContainer/63:scale")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/26/type = "value"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("SplashScreen/LogoContainer/63/63Sheen:visible")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("SplashScreen/LogoContainer/Redux/ReduxSheen:visible")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_bfr6l"]
@@ -1811,11 +1995,14 @@ tracks/5/path = NodePath(".")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(4),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(4, 4.63333),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
 "method": &"_show_bottom_text"
+}, {
+"args": [],
+"method": &"start_splash_loop"
 }]
 }
 tracks/6/type = "value"
@@ -1833,11 +2020,11 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("SplashScreen/LogoContainer/63Glow:self_modulate")
+tracks/7/path = NodePath("SplashScreen/LogoContainer/63/63Glow:self_modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(1.69272, 1.76667, 2.03333),
+"times": PackedFloat32Array(1.6, 1.73333, 2.26667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -1845,19 +2032,97 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("SplashScreen/LogoContainer/ReduxGlow:self_modulate")
+tracks/8/path = NodePath("SplashScreen/LogoContainer/Redux/ReduxGlow:self_modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(2.19274, 2.26667, 2.7),
+"times": PackedFloat32Array(2.06667, 2.2, 2.96667),
 "transitions": PackedFloat32Array(1, 0.6, 1.2),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SplashScreen/LogoContainer/63:self_modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(1.53333, 1.66667),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SplashScreen/LogoContainer/Redux:self_modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(2.06667, 2.2),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SplashScreen/LogoContainer/63/63Sheen:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.0666667, 2.43333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SplashScreen/LogoContainer/Redux/ReduxSheen:visible")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0.0666667, 2.43333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SplashScreen/LogoContainer/63:scale")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(1.5, 1.63333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("SplashScreen/LogoContainer/Redux:scale")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(2, 2.13211),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.9, 0.9), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_baphx"]
+resource_name = "splash_screen_loop"
+length = 4.0
+loop_mode = 1
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_exexd"]
 _data = {
 &"RESET": SubResource("Animation_exexd"),
+&"splash_screen_loop": SubResource("Animation_baphx"),
 &"switch_from_settings_screen": SubResource("Animation_y7kqt"),
 &"switch_to_menu_screen": SubResource("Animation_qyaew"),
 &"switch_to_settings_screen": SubResource("Animation_1evyh"),
@@ -1877,8 +2142,8 @@ animation_player = NodePath("ScreenAnimations")
 title_loop = NodePath("TitleLoop")
 menu_loop = NodePath("MenuLoop")
 splash_fade = NodePath("SplashScreen/SplashFade")
-sheen_63_rect = NodePath("SplashScreen/LogoContainer/63Sheen")
-sheen_redux_rect = NodePath("SplashScreen/LogoContainer/ReduxSheen")
+sheen_63_rect = NodePath("SplashScreen/LogoContainer/63/63Sheen")
+sheen_redux_rect = NodePath("SplashScreen/LogoContainer/Redux/ReduxSheen")
 version_label = NodePath("VersionLabel")
 team_text = NodePath("TeamLabel")
 splash_screen = NodePath("SplashScreen")
@@ -1911,7 +2176,7 @@ texture = ExtResource("3_8cpbr")
 
 [node name="BG2" type="Parallax2D" parent="BG/BGWorld"]
 scroll_scale = Vector2(0.5, 0)
-scroll_offset = Vector2(-2, 196)
+scroll_offset = Vector2(7, 187)
 repeat_size = Vector2(750, 0)
 autoscroll = Vector2(-10, 0)
 repeat_times = 7
@@ -1922,9 +2187,9 @@ texture = ExtResource("3_eyv0a")
 
 [node name="FG2" type="Parallax2D" parent="BG/BGWorld"]
 scroll_scale = Vector2(0.5, 0)
-scroll_offset = Vector2(-2, 253)
+scroll_offset = Vector2(-9, 207)
 repeat_size = Vector2(750, 0)
-autoscroll = Vector2(-16, 0)
+autoscroll = Vector2(8, 0)
 repeat_times = 7
 follow_viewport = false
 
@@ -1933,7 +2198,7 @@ texture = ExtResource("3_fq6c4")
 
 [node name="FG" type="Parallax2D" parent="BG/BGWorld"]
 scroll_scale = Vector2(0.5, 0)
-scroll_offset = Vector2(-2, 253)
+scroll_offset = Vector2(0, 217)
 repeat_size = Vector2(750, 0)
 autoscroll = Vector2(-22, 0)
 repeat_times = 7
@@ -1984,7 +2249,19 @@ texture = ExtResource("4_2273m")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="63Sheen" type="TextureRect" parent="SplashScreen/LogoContainer"]
+[node name="63" type="TextureRect" parent="SplashScreen/LogoContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_es2f3")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="63Sheen" type="TextureRect" parent="SplashScreen/LogoContainer/63"]
 material = SubResource("ShaderMaterial_7cnuw")
 instance_shader_parameters/color_offset = Vector2(0, 0)
 instance_shader_parameters/color_scale = Vector2(0.5, 0.5)
@@ -2000,7 +2277,7 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_lock_ = true
 
-[node name="63Glow" type="TextureRect" parent="SplashScreen/LogoContainer"]
+[node name="63Glow" type="TextureRect" parent="SplashScreen/LogoContainer/63"]
 self_modulate = Color(1, 1, 1, 0)
 material = SubResource("CanvasItemMaterial_8cpbr")
 layout_mode = 1
@@ -2014,7 +2291,19 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_lock_ = true
 
-[node name="ReduxSheen" type="TextureRect" parent="SplashScreen/LogoContainer"]
+[node name="Redux" type="TextureRect" parent="SplashScreen/LogoContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_gpgra")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ReduxSheen" type="TextureRect" parent="SplashScreen/LogoContainer/Redux"]
 material = SubResource("ShaderMaterial_xjhxk")
 instance_shader_parameters/color_offset = Vector2(0.275, 0)
 instance_shader_parameters/color_scale = Vector2(0.69, 0.5)
@@ -2031,7 +2320,7 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_lock_ = true
 
-[node name="ReduxGlow" type="TextureRect" parent="SplashScreen/LogoContainer"]
+[node name="ReduxGlow" type="TextureRect" parent="SplashScreen/LogoContainer/Redux"]
 self_modulate = Color(1, 1, 1, 0)
 material = SubResource("CanvasItemMaterial_8cpbr")
 layout_mode = 1

@@ -151,3 +151,7 @@ func sheen_redux() -> void:
 		await get_tree().create_timer(randf_range(3.0, 6.0)).timeout
 		sheen_redux()
 	)
+
+
+func start_splash_loop() -> void:
+	animation_player.play(&"splash_screen_loop")
