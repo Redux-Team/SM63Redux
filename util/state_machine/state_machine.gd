@@ -1,4 +1,8 @@
 class_name StateMachine extends AnimationTree
+
+signal node_changed(last_node: StringName, new_node: StringName)
+signal machine_ended
+
 ## The [CharacterBody2D] node for the actor
 @export var entity_body: Entity
 ## The [AnimatedSprite2D] node for the actor's animations
@@ -18,12 +22,15 @@ class_name StateMachine extends AnimationTree
 var current_state: State:
 	set(new_state):
 		if current_state:
-			current_state._on_exit()
+			current_state._on_exit(new_state.state_name if new_state else &"")
 			current_state.process_mode = Node.PROCESS_MODE_DISABLED
 		
 		if new_state:
 			new_state.process_mode = Node.PROCESS_MODE_INHERIT
-			new_state._on_enter()
+			new_state._on_enter(current_state.state_name if current_state else &"")
+			
+			if new_state.use_parent_process:
+				new_state.parent.process_mode = Node.PROCESS_MODE_INHERIT
 		else:
 			new_state = null
 		current_state = new_state
@@ -32,8 +39,7 @@ var animation_player : AnimationPlayer
 var playback: AnimationNodeStateMachinePlayback
 var last_node: StringName
 
-signal node_changed(last_node: StringName, new_node: StringName)
-signal machine_ended
+
 
 func _ready() -> void:
 	playback = get(&"parameters/playback")
@@ -42,11 +48,14 @@ func _ready() -> void:
 	for state in states: 
 		states[state].state_name = state
 		states[state].state_machine = self
+		states[state].entity = entity_body
+		states[state].sprite = entity_sprite
 		if states[state] != current_state:
 			states[state].process_mode = Node.PROCESS_MODE_DISABLED
 	
 	for process in processes:
 		process.state_machine = self
+
 
 func _process(_delta: float) -> void:
 	var current_node: StringName = playback.get_current_node()
@@ -54,16 +63,20 @@ func _process(_delta: float) -> void:
 		node_changed.emit(last_node, current_node)
 		last_node = current_node
 
+
 func set_condition(condition: StringName, value: bool):
 	set("parameters/conditions/" + condition, value)
+
 
 func set_state(state: StringName):
 	playback.start(state)
 	current_state = states.get(state)
 
+
 func on_anim_change(_old_anim: StringName, new_anim: StringName):
 	set_state(new_anim)
 	if entity_sprite.sprite_frames.has_animation(new_anim):
 		entity_sprite.animation = new_anim
+		entity_sprite.play(new_anim)
 	elif new_anim == &"End":
 		machine_ended.emit()

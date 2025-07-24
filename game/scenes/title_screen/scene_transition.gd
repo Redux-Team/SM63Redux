@@ -5,7 +5,7 @@ extends Node
 
 const LEVEL_DESIGNER_SCENE: String = "uid://c732aftmb2bcv"
 const TRANSITION_MASK: CompressedTexture2D = preload("uid://b127vhuh31i8r")
-
+const PLAYTEST_SCENE = "uid://cfrexipnk4yq8"
 
 func transition(type: MainMenuButton.ButtonDesign) -> void:
 	match type:
@@ -13,7 +13,7 @@ func transition(type: MainMenuButton.ButtonDesign) -> void:
 			owner.input_locked = true
 			
 			Singleton.transition_to_scene_file(
-				LEVEL_DESIGNER_SCENE,
+				PLAYTEST_SCENE,
 				Singleton.ScreenTransitionType.TEXTURE_ZOOM,
 				TRANSITION_MASK,
 				0.5,

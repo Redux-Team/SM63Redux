@@ -1099,6 +1099,11 @@ tracks/27/keys = {
 "values": [Color(1, 1, 1, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_baphx"]
+resource_name = "splash_screen_loop"
+length = 4.0
+loop_mode = 1
+
 [sub_resource type="Animation" id="Animation_y7kqt"]
 resource_name = "switch_from_settings_screen"
 length = 0.5
@@ -2150,11 +2155,6 @@ tracks/14/keys = {
 "values": [Vector2(0.9, 0.9), Vector2(1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_baphx"]
-resource_name = "splash_screen_loop"
-length = 4.0
-loop_mode = 1
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_exexd"]
 _data = {
 &"RESET": SubResource("Animation_exexd"),
@@ -2423,6 +2423,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="DescriptionContainer" type="Control" parent="MenuScreen"]
 layout_mode = 1
+anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -214.0

@@ -16,3 +16,7 @@ var entity: Entity:
 var player: Player:
 	get():
 		return state_machine.entity_body
+
+var sprite: AnimatedSprite2D:
+	get():
+		return state_machine.entity_sprite

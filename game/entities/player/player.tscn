@@ -1,11 +1,32 @@
-[gd_scene load_steps=40 format=3 uid="uid://b4nw5k2oa3ro0"]
+[gd_scene load_steps=51 format=3 uid="uid://b4nw5k2oa3ro0"]
 
 [ext_resource type="Texture2D" uid="uid://bc6xgigmim8tv" path="res://assets/textures/spritesheets/entity/player/mario/mario_idle.png" id="1_1a4jd"]
 [ext_resource type="Script" uid="uid://c7gtlwcfr4qrc" path="res://game/entities/player/player.gd" id="1_oic1i"]
 [ext_resource type="Texture2D" uid="uid://bt7q6lin1tj6b" path="res://assets/textures/spritesheets/entity/player/mario/mario_run_start.png" id="2_gqtae"]
 [ext_resource type="Texture2D" uid="uid://bggqny6vhljcf" path="res://assets/textures/spritesheets/entity/player/mario/mario_run_loop.png" id="2_x4rrl"]
 [ext_resource type="Script" uid="uid://be2xsj74ekqmn" path="res://util/state_machine/state_machine.gd" id="5_v0nmi"]
-[ext_resource type="Script" uid="uid://dhbqcivqle5ss" path="res://game/entities/player/states/falling.gd" id="6_v0nmi"]
+[ext_resource type="Script" uid="uid://b41vchvbrfysw" path="res://game/entities/player/state_machine/states/run/run_start.gd" id="6_kn1iv"]
+[ext_resource type="Script" uid="uid://dgk40u56eq4h6" path="res://game/entities/player/run.gd" id="7_dhej3"]
+[ext_resource type="Script" uid="uid://dniq36pci1gmv" path="res://game/entities/player/state_machine/processes/gravity.gd" id="7_kn1iv"]
+[ext_resource type="Script" uid="uid://ra55p55nrtg4" path="res://util/state_machine/state.gd" id="8_p5qu6"]
+[ext_resource type="Script" uid="uid://dq31ruid21xll" path="res://game/entities/player/jump.gd" id="9_heu0c"]
+[ext_resource type="Script" uid="uid://34vwsbjkfape" path="res://game/entities/player/player_look_dir.gd" id="10_igs2l"]
+[ext_resource type="Script" uid="uid://ca22hbbtsi1aw" path="res://game/entities/player/jump_listener.gd" id="11_p5qu6"]
+
+[sub_resource type="Curve" id="Curve_heu0c"]
+_limits = [0.0, 200.0, 0.0, 1.0]
+_data = [Vector2(0, 200), 0.0, -0.0907378, 0, 0, Vector2(0.220126, 0), -2.07844, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_5wwt0"]
+_limits = [0.0, 1.0, 0.0, 1.17131]
+_data = [Vector2(0, 0.17652), 0.0, -0.238165, 0, 0, Vector2(0.297279, 1), 0.0574147, 1.20214, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_kn1iv"]
+_limits = [0.0, 1.0, 0.0, 0.5]
+_data = [Vector2(0, 1), 0.0, -0.451789, 0, 0, Vector2(0.296813, 0), -4.93641, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gqtae"]
 atlas = ExtResource("1_1a4jd")
@@ -128,7 +149,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"run_loop",
-"speed": 23.0
+"speed": 26.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -157,6 +178,9 @@ size = Vector2(10, 27)
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_oic1i"]
 animation = &"idle"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_p5qu6"]
+animation = &"jump"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_v0nmi"]
 animation = &"run_loop"
 
@@ -168,7 +192,7 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kn1iv"]
 advance_mode = 2
-advance_expression = "Input.is_action_pressed(\"ui_right\") || Input.is_action_pressed(\"ui_left\")"
+advance_expression = "abs(move_dir) > 0.1"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5wwt0"]
 switch_mode = 2
@@ -176,18 +200,21 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dhej3"]
 advance_mode = 2
-advance_expression = "!(Input.is_action_pressed(\"ui_right\") || Input.is_action_pressed(\"ui_left\"))"
+advance_expression = "!running"
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_oic1i"]
+states/End/position = Vector2(902, 100)
 states/Start/position = Vector2(353, 100)
 states/idle/node = SubResource("AnimationNodeAnimation_oic1i")
 states/idle/position = Vector2(518, 100)
+states/jump/node = SubResource("AnimationNodeAnimation_p5qu6")
+states/jump/position = Vector2(518, -27)
 states/run_loop/node = SubResource("AnimationNodeAnimation_v0nmi")
 states/run_loop/position = Vector2(693, 224)
 states/run_start/node = SubResource("AnimationNodeAnimation_dhej3")
 states/run_start/position = Vector2(518, 224)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_v0nmi"), "idle", "run_start", SubResource("AnimationNodeStateMachineTransition_kn1iv"), "run_start", "run_loop", SubResource("AnimationNodeStateMachineTransition_5wwt0"), "run_loop", "idle", SubResource("AnimationNodeStateMachineTransition_dhej3")]
-graph_offset = Vector2(-36, 24)
+graph_offset = Vector2(203, -119)
 
 [sub_resource type="Animation" id="Animation_v0nmi"]
 resource_name = "falling"
@@ -196,55 +223,91 @@ resource_name = "falling"
 resource_name = "idle"
 loop_mode = 1
 
+[sub_resource type="Animation" id="Animation_heu0c"]
+resource_name = "jump"
+
 [sub_resource type="Animation" id="Animation_p5qu6"]
 resource_name = "run_loop"
 loop_mode = 1
 
 [sub_resource type="Animation" id="Animation_igs2l"]
 resource_name = "run_start"
-length = 0.3
+length = 0.22
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v0nmi"]
 _data = {
 &"falling": SubResource("Animation_v0nmi"),
 &"idle": SubResource("Animation_oic1i"),
+&"jump": SubResource("Animation_heu0c"),
 &"run_loop": SubResource("Animation_p5qu6"),
 &"run_start": SubResource("Animation_igs2l")
 }
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("state_machine")]
 script = ExtResource("1_oic1i")
+turn_speed = 2.5
+jump_curve = SubResource("Curve_heu0c")
 gravity = 20.0
-terminal_velocity_x = 500.0
-terminal_velocity_y = 725.0
+run_speedup = SubResource("Curve_5wwt0")
+run_slowdown = SubResource("Curve_kn1iv")
+run_max_speed = 220.0
 state_machine = NodePath("StateMachine")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_sgt08")
 animation = &"run_loop"
 frame = 11
-frame_progress = 0.0595561
+frame_progress = 0.71303
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2(0, 3.5)
 shape = SubResource("RectangleShape2D_x4rrl")
 
-[node name="StateMachine" type="AnimationTree" parent="." node_paths=PackedStringArray("entity_body", "entity_sprite", "processes")]
+[node name="StateMachine" type="AnimationTree" parent="." node_paths=PackedStringArray("entity_body", "entity_sprite", "states", "processes")]
 root_node = NodePath(".")
 tree_root = SubResource("AnimationNodeStateMachine_oic1i")
+advance_expression_base_node = NodePath("..")
 anim_player = NodePath("AnimationPlayer")
 script = ExtResource("5_v0nmi")
 entity_body = NodePath("..")
 entity_sprite = NodePath("../Sprite")
-processes = [NodePath("States/Falling")]
+states = {
+&"_run": NodePath("States/Run"),
+&"jump": NodePath("States/Jump"),
+&"run_loop": NodePath("States/Run/RunLoop"),
+&"run_start": NodePath("States/Run/RunStart")
+}
+processes = [NodePath("Processes/Gravity"), NodePath("Processes/PlayerLookDir"), NodePath("Processes/JumpListener")]
 metadata/_custom_type_script = "uid://be2xsj74ekqmn"
 
 [node name="States" type="Node" parent="StateMachine"]
 
-[node name="Falling" type="Node" parent="StateMachine/States"]
-script = ExtResource("6_v0nmi")
-metadata/_custom_type_script = "uid://btbvvqx7hybu5"
+[node name="Run" type="Node" parent="StateMachine/States"]
+script = ExtResource("7_dhej3")
+
+[node name="RunStart" type="Node" parent="StateMachine/States/Run"]
+script = ExtResource("6_kn1iv")
+use_parent_process = true
+
+[node name="RunLoop" type="Node" parent="StateMachine/States/Run"]
+script = ExtResource("8_p5qu6")
+use_parent_process = true
+metadata/_custom_type_script = "uid://ra55p55nrtg4"
+
+[node name="Jump" type="Node" parent="StateMachine/States"]
+script = ExtResource("9_heu0c")
+
+[node name="Processes" type="Node" parent="StateMachine"]
+
+[node name="Gravity" type="Node" parent="StateMachine/Processes"]
+script = ExtResource("7_kn1iv")
+
+[node name="PlayerLookDir" type="Node" parent="StateMachine/Processes"]
+script = ExtResource("10_igs2l")
+
+[node name="JumpListener" type="Node" parent="StateMachine/Processes"]
+script = ExtResource("11_p5qu6")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="StateMachine"]
 libraries = {

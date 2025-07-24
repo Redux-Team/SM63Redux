@@ -1,19 +1,44 @@
-[gd_scene load_steps=3 format=3 uid="uid://cfrexipnk4yq8"]
+[gd_scene load_steps=5 format=3 uid="uid://cfrexipnk4yq8"]
 
+[ext_resource type="Script" uid="uid://cf8ceg662lr75" path="res://game/scenes/level/playtest.gd" id="1_adaxd"]
 [ext_resource type="PackedScene" uid="uid://b4nw5k2oa3ro0" path="res://game/entities/player/player.tscn" id="1_o2uqb"]
+[ext_resource type="Texture2D" uid="uid://b127vhuh31i8r" path="res://meta/icon.png" id="3_mxoeq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o2uqb"]
-size = Vector2(764, 20)
+size = Vector2(11764, 20)
 
 [node name="Playtest" type="Node2D"]
+script = ExtResource("1_adaxd")
 
 [node name="Player" parent="." instance=ExtResource("1_o2uqb")]
+min_jump_time = 0.1
+max_jump_time = 0.3
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(3, 3)
+zoom = Vector2(1.475, 1.475)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2(0, 364)
 shape = SubResource("RectangleShape2D_o2uqb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(82, 322)
+texture = ExtResource("3_mxoeq")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(631, 329)
+texture = ExtResource("3_mxoeq")
+
+[node name="Sprite2D3" type="Sprite2D" parent="."]
+position = Vector2(1221, 322)
+texture = ExtResource("3_mxoeq")
+
+[node name="Sprite2D4" type="Sprite2D" parent="."]
+position = Vector2(1911, 319)
+texture = ExtResource("3_mxoeq")
+
+[node name="Sprite2D5" type="Sprite2D" parent="."]
+position = Vector2(1911, 319)
+texture = ExtResource("3_mxoeq")
