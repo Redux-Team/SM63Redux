@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://b0wp6l07i5ime"]
+[gd_scene load_steps=54 format=3 uid="uid://b0wp6l07i5ime"]
 
 [ext_resource type="Script" uid="uid://b2figxll0bk25" path="res://game/scenes/title_screen/title_screen.gd" id="1_6esl3"]
 [ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/soundtrack/01 Welcome to Super Mario 63 Redux!.mp3" id="1_bfr6l"]
@@ -23,8 +23,15 @@
 [ext_resource type="Script" uid="uid://c24ib1e8u5ify" path="res://game/scenes/title_screen/scene_transition.gd" id="8_fq6c4"]
 [ext_resource type="Texture2D" uid="uid://db7beoyymfa6u" path="res://assets/textures/gui/title_screen/splash_logo/logo_glow_base.png" id="8_gpgra"]
 [ext_resource type="Texture2D" uid="uid://c0ti7gjvja8p1" path="res://assets/textures/gui/title_screen/splash_logo/logo_glow_63.png" id="11_5n2bh"]
+[ext_resource type="Texture2D" uid="uid://p2xc3r3v5rg4" path="res://assets/textures/particle/title_screen/logo_star_big.png" id="13_1s087"]
 [ext_resource type="Texture2D" uid="uid://dis2snmj3sc3n" path="res://assets/textures/gui/title_screen/splash_logo/logo_glow_redux.png" id="13_baphx"]
 [ext_resource type="Texture2D" uid="uid://rcxm23syw3ph" path="res://assets/textures/gui/title_screen/splash_logo/logo_base_redux.png" id="13_gpgra"]
+[ext_resource type="Texture2D" uid="uid://dnbulyxy16v5d" path="res://assets/textures/gui/title_screen/splash_logo/logo_text.png" id="13_ltfsy"]
+[ext_resource type="Texture2D" uid="uid://cq3hqlg1vo4bf" path="res://assets/textures/particle/title_screen/logo_star_medium.png" id="14_e35sv"]
+[ext_resource type="Texture2D" uid="uid://dwln8e2fw0ps4" path="res://assets/textures/particle/title_screen/logo_star_small.png" id="15_fuqb4"]
+[ext_resource type="Texture2D" uid="uid://dippg3dive7p6" path="res://assets/textures/gui/title_screen/splash_logo/logo_super_particle_mask.png" id="17_lwt8s"]
+[ext_resource type="Texture2D" uid="uid://bnrtx06fhpytq" path="res://assets/textures/particle/title_screen/super_text_snow_medium.png" id="18_j4cpk"]
+[ext_resource type="Texture2D" uid="uid://dois038y355wf" path="res://assets/textures/particle/title_screen/super_text_snow_small.png" id="19_hua3r"]
 
 [sub_resource type="Curve" id="Curve_5m44c"]
 _data = [Vector2(0.0574018, 0), 0.0, 0.0, 0, 0, Vector2(0.250755, 0.515625), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -35,6 +42,9 @@ offsets = PackedFloat32Array(0, 0.396721, 0.665574, 1)
 colors = PackedColorArray(0.529412, 0.870588, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0.529412, 0.870588, 1, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_q30y7"]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_j4cpk"]
 blend_mode = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7cnuw"]
@@ -889,7 +899,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("SplashScreen/LogoContainer:anchor_left")
+tracks/9/path = NodePath("SplashScreen/Logo:anchor_left")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -901,7 +911,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("SplashScreen/LogoContainer:anchor_top")
+tracks/10/path = NodePath("SplashScreen/Logo:anchor_top")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -913,7 +923,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("SplashScreen/LogoContainer:anchor_right")
+tracks/11/path = NodePath("SplashScreen/Logo:anchor_right")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -925,7 +935,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("SplashScreen/LogoContainer:anchor_bottom")
+tracks/12/path = NodePath("SplashScreen/Logo:anchor_bottom")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -961,7 +971,7 @@ tracks/14/keys = {
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("BG/BGWorld/BG:autoscroll")
+tracks/15/path = NodePath("BG/BGLayers/BG:autoscroll")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
@@ -973,7 +983,7 @@ tracks/15/keys = {
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("BG/BGWorld/BG2:autoscroll")
+tracks/16/path = NodePath("BG/BGLayers/BG2:autoscroll")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
@@ -985,7 +995,7 @@ tracks/16/keys = {
 tracks/17/type = "value"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("BG/BGWorld/FG2:autoscroll")
+tracks/17/path = NodePath("BG/BGLayers/FG2:autoscroll")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
@@ -997,7 +1007,7 @@ tracks/17/keys = {
 tracks/18/type = "value"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("BG/BGWorld/FG:autoscroll")
+tracks/18/path = NodePath("BG/BGLayers/FG:autoscroll")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
@@ -1021,7 +1031,7 @@ tracks/19/keys = {
 tracks/20/type = "value"
 tracks/20/imported = false
 tracks/20/enabled = true
-tracks/20/path = NodePath("SplashScreen/LogoContainer/63/63Glow:self_modulate")
+tracks/20/path = NodePath("SplashScreen/Logo/63/63Glow:self_modulate")
 tracks/20/interp = 1
 tracks/20/loop_wrap = true
 tracks/20/keys = {
@@ -1033,7 +1043,7 @@ tracks/20/keys = {
 tracks/21/type = "value"
 tracks/21/imported = false
 tracks/21/enabled = true
-tracks/21/path = NodePath("SplashScreen/LogoContainer/Redux/ReduxGlow:self_modulate")
+tracks/21/path = NodePath("SplashScreen/Logo/Redux/ReduxGlow:self_modulate")
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
@@ -1045,7 +1055,7 @@ tracks/21/keys = {
 tracks/22/type = "value"
 tracks/22/imported = false
 tracks/22/enabled = true
-tracks/22/path = NodePath("SplashScreen/LogoContainer/63/63Sheen:visible")
+tracks/22/path = NodePath("SplashScreen/Logo/63/63Sheen:visible")
 tracks/22/interp = 1
 tracks/22/loop_wrap = true
 tracks/22/keys = {
@@ -1057,7 +1067,7 @@ tracks/22/keys = {
 tracks/23/type = "value"
 tracks/23/imported = false
 tracks/23/enabled = true
-tracks/23/path = NodePath("SplashScreen/LogoContainer/Redux/ReduxSheen:visible")
+tracks/23/path = NodePath("SplashScreen/Logo/Redux/ReduxSheen:visible")
 tracks/23/interp = 1
 tracks/23/loop_wrap = true
 tracks/23/keys = {
@@ -1069,7 +1079,7 @@ tracks/23/keys = {
 tracks/24/type = "value"
 tracks/24/imported = false
 tracks/24/enabled = true
-tracks/24/path = NodePath("SplashScreen/LogoContainer/63:scale")
+tracks/24/path = NodePath("SplashScreen/Logo/63:scale")
 tracks/24/interp = 1
 tracks/24/loop_wrap = true
 tracks/24/keys = {
@@ -1081,7 +1091,7 @@ tracks/24/keys = {
 tracks/25/type = "value"
 tracks/25/imported = false
 tracks/25/enabled = true
-tracks/25/path = NodePath("SplashScreen/LogoContainer/Redux:scale")
+tracks/25/path = NodePath("SplashScreen/Logo/Redux:scale")
 tracks/25/interp = 1
 tracks/25/loop_wrap = true
 tracks/25/keys = {
@@ -1093,7 +1103,7 @@ tracks/25/keys = {
 tracks/26/type = "value"
 tracks/26/imported = false
 tracks/26/enabled = true
-tracks/26/path = NodePath("SplashScreen/LogoContainer/63:self_modulate")
+tracks/26/path = NodePath("SplashScreen/Logo/63:self_modulate")
 tracks/26/interp = 1
 tracks/26/loop_wrap = true
 tracks/26/keys = {
@@ -1105,7 +1115,7 @@ tracks/26/keys = {
 tracks/27/type = "value"
 tracks/27/imported = false
 tracks/27/enabled = true
-tracks/27/path = NodePath("SplashScreen/LogoContainer/Redux:self_modulate")
+tracks/27/path = NodePath("SplashScreen/Logo/Redux:self_modulate")
 tracks/27/interp = 1
 tracks/27/loop_wrap = true
 tracks/27/keys = {
@@ -1129,7 +1139,7 @@ tracks/28/keys = {
 tracks/29/type = "value"
 tracks/29/imported = false
 tracks/29/enabled = true
-tracks/29/path = NodePath("SplashScreen/LogoContainer/LogoBase/LogoGlow:self_modulate")
+tracks/29/path = NodePath("SplashScreen/Logo/LogoGlow:self_modulate")
 tracks/29/interp = 1
 tracks/29/loop_wrap = true
 tracks/29/keys = {
@@ -1141,7 +1151,7 @@ tracks/29/keys = {
 tracks/30/type = "value"
 tracks/30/imported = false
 tracks/30/enabled = true
-tracks/30/path = NodePath("BG/BGWorld/Particles/ShootingStars:speed_scale")
+tracks/30/path = NodePath("BG/BGLayers/Particles/ShootingStars:speed_scale")
 tracks/30/interp = 1
 tracks/30/loop_wrap = true
 tracks/30/keys = {
@@ -1153,7 +1163,7 @@ tracks/30/keys = {
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("SplashScreen/LogoContainer:visible")
+tracks/31/path = NodePath("SplashScreen/Logo:visible")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
@@ -1182,7 +1192,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SplashScreen/LogoContainer/LogoBase/LogoGlow:self_modulate")
+tracks/0/path = NodePath("SplashScreen/Logo/LogoGlow:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1294,7 +1304,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("SplashScreen/LogoContainer:anchor_top")
+tracks/8/path = NodePath("SplashScreen/Logo:anchor_top")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -1306,7 +1316,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("SplashScreen/LogoContainer:anchor_bottom")
+tracks/9/path = NodePath("SplashScreen/Logo:anchor_bottom")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -1494,7 +1504,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("BG/BGWorld/BG:autoscroll")
+tracks/11/path = NodePath("BG/BGLayers/BG:autoscroll")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -1506,7 +1516,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("BG/BGWorld/BG2:autoscroll")
+tracks/12/path = NodePath("BG/BGLayers/BG2:autoscroll")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -1518,7 +1528,7 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("BG/BGWorld/FG2:autoscroll")
+tracks/13/path = NodePath("BG/BGLayers/FG2:autoscroll")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -1530,7 +1540,7 @@ tracks/13/keys = {
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("BG/BGWorld/FG:autoscroll")
+tracks/14/path = NodePath("BG/BGLayers/FG:autoscroll")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
@@ -1554,7 +1564,7 @@ tracks/15/keys = {
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("BG/BGWorld/Particles/ShootingStars:speed_scale")
+tracks/16/path = NodePath("BG/BGLayers/Particles/ShootingStars:speed_scale")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
@@ -1666,7 +1676,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("SplashScreen/LogoContainer:anchor_top")
+tracks/8/path = NodePath("SplashScreen/Logo:anchor_top")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -1678,7 +1688,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("SplashScreen/LogoContainer:anchor_bottom")
+tracks/9/path = NodePath("SplashScreen/Logo:anchor_bottom")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -1850,7 +1860,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("SplashScreen/LogoContainer:anchor_top")
+tracks/10/path = NodePath("SplashScreen/Logo:anchor_top")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -1862,7 +1872,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("SplashScreen/LogoContainer:anchor_bottom")
+tracks/11/path = NodePath("SplashScreen/Logo:anchor_bottom")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -1898,7 +1908,7 @@ tracks/13/keys = {
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("BG/BGWorld/BG:autoscroll")
+tracks/14/path = NodePath("BG/BGLayers/BG:autoscroll")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
@@ -1910,7 +1920,7 @@ tracks/14/keys = {
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("BG/BGWorld/BG2:autoscroll")
+tracks/15/path = NodePath("BG/BGLayers/BG2:autoscroll")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
@@ -1922,7 +1932,7 @@ tracks/15/keys = {
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("BG/BGWorld/FG2:autoscroll")
+tracks/16/path = NodePath("BG/BGLayers/FG2:autoscroll")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
@@ -1934,7 +1944,7 @@ tracks/16/keys = {
 tracks/17/type = "value"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("BG/BGWorld/FG:autoscroll")
+tracks/17/path = NodePath("BG/BGLayers/FG:autoscroll")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
@@ -1958,7 +1968,7 @@ tracks/18/keys = {
 tracks/19/type = "value"
 tracks/19/imported = false
 tracks/19/enabled = true
-tracks/19/path = NodePath("SplashScreen/LogoContainer/63/63Glow:self_modulate")
+tracks/19/path = NodePath("SplashScreen/Logo/63/63Glow:self_modulate")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
@@ -1970,7 +1980,7 @@ tracks/19/keys = {
 tracks/20/type = "value"
 tracks/20/imported = false
 tracks/20/enabled = true
-tracks/20/path = NodePath("SplashScreen/LogoContainer/Redux/ReduxGlow:self_modulate")
+tracks/20/path = NodePath("SplashScreen/Logo/Redux/ReduxGlow:self_modulate")
 tracks/20/interp = 1
 tracks/20/loop_wrap = true
 tracks/20/keys = {
@@ -1996,7 +2006,7 @@ tracks/21/keys = {
 tracks/22/type = "value"
 tracks/22/imported = false
 tracks/22/enabled = true
-tracks/22/path = NodePath("SplashScreen/LogoContainer/63:self_modulate")
+tracks/22/path = NodePath("SplashScreen/Logo/63:self_modulate")
 tracks/22/interp = 1
 tracks/22/loop_wrap = true
 tracks/22/keys = {
@@ -2008,7 +2018,7 @@ tracks/22/keys = {
 tracks/23/type = "value"
 tracks/23/imported = false
 tracks/23/enabled = true
-tracks/23/path = NodePath("SplashScreen/LogoContainer/Redux:self_modulate")
+tracks/23/path = NodePath("SplashScreen/Logo/Redux:self_modulate")
 tracks/23/interp = 1
 tracks/23/loop_wrap = true
 tracks/23/keys = {
@@ -2020,7 +2030,7 @@ tracks/23/keys = {
 tracks/24/type = "value"
 tracks/24/imported = false
 tracks/24/enabled = true
-tracks/24/path = NodePath("SplashScreen/LogoContainer/Redux:scale")
+tracks/24/path = NodePath("SplashScreen/Logo/Redux:scale")
 tracks/24/interp = 1
 tracks/24/loop_wrap = true
 tracks/24/keys = {
@@ -2032,7 +2042,7 @@ tracks/24/keys = {
 tracks/25/type = "value"
 tracks/25/imported = false
 tracks/25/enabled = true
-tracks/25/path = NodePath("SplashScreen/LogoContainer/63:scale")
+tracks/25/path = NodePath("SplashScreen/Logo/63:scale")
 tracks/25/interp = 1
 tracks/25/loop_wrap = true
 tracks/25/keys = {
@@ -2044,7 +2054,7 @@ tracks/25/keys = {
 tracks/26/type = "value"
 tracks/26/imported = false
 tracks/26/enabled = true
-tracks/26/path = NodePath("SplashScreen/LogoContainer/63/63Sheen:visible")
+tracks/26/path = NodePath("SplashScreen/Logo/63/63Sheen:visible")
 tracks/26/interp = 1
 tracks/26/loop_wrap = true
 tracks/26/keys = {
@@ -2056,7 +2066,7 @@ tracks/26/keys = {
 tracks/27/type = "value"
 tracks/27/imported = false
 tracks/27/enabled = true
-tracks/27/path = NodePath("SplashScreen/LogoContainer/Redux/ReduxSheen:visible")
+tracks/27/path = NodePath("SplashScreen/Logo/Redux/ReduxSheen:visible")
 tracks/27/interp = 1
 tracks/27/loop_wrap = true
 tracks/27/keys = {
@@ -2068,7 +2078,7 @@ tracks/27/keys = {
 tracks/28/type = "value"
 tracks/28/imported = false
 tracks/28/enabled = true
-tracks/28/path = NodePath("SplashScreen/LogoContainer/LogoBase/LogoGlow:self_modulate")
+tracks/28/path = NodePath("SplashScreen/Logo/LogoGlow:self_modulate")
 tracks/28/interp = 1
 tracks/28/loop_wrap = true
 tracks/28/keys = {
@@ -2080,7 +2090,7 @@ tracks/28/keys = {
 tracks/29/type = "value"
 tracks/29/imported = false
 tracks/29/enabled = true
-tracks/29/path = NodePath("BG/BGWorld/Particles/ShootingStars:speed_scale")
+tracks/29/path = NodePath("BG/BGLayers/Particles/ShootingStars:speed_scale")
 tracks/29/interp = 1
 tracks/29/loop_wrap = true
 tracks/29/keys = {
@@ -2096,7 +2106,7 @@ length = 5.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SplashScreen/LogoContainer:anchor_top")
+tracks/0/path = NodePath("SplashScreen/Logo:anchor_top")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -2108,7 +2118,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SplashScreen/LogoContainer:anchor_bottom")
+tracks/1/path = NodePath("SplashScreen/Logo:anchor_bottom")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -2185,7 +2195,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("SplashScreen/LogoContainer/63/63Glow:self_modulate")
+tracks/7/path = NodePath("SplashScreen/Logo/63/63Glow:self_modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -2197,7 +2207,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("SplashScreen/LogoContainer/Redux/ReduxGlow:self_modulate")
+tracks/8/path = NodePath("SplashScreen/Logo/Redux/ReduxGlow:self_modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -2209,7 +2219,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("SplashScreen/LogoContainer/63:self_modulate")
+tracks/9/path = NodePath("SplashScreen/Logo/63:self_modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -2221,7 +2231,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("SplashScreen/LogoContainer/Redux:self_modulate")
+tracks/10/path = NodePath("SplashScreen/Logo/Redux:self_modulate")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -2233,7 +2243,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("SplashScreen/LogoContainer/63/63Sheen:visible")
+tracks/11/path = NodePath("SplashScreen/Logo/63/63Sheen:visible")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -2245,7 +2255,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("SplashScreen/LogoContainer/Redux/ReduxSheen:visible")
+tracks/12/path = NodePath("SplashScreen/Logo/Redux/ReduxSheen:visible")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -2257,7 +2267,7 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("SplashScreen/LogoContainer/63:scale")
+tracks/13/path = NodePath("SplashScreen/Logo/63:scale")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -2269,7 +2279,7 @@ tracks/13/keys = {
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("SplashScreen/LogoContainer/Redux:scale")
+tracks/14/path = NodePath("SplashScreen/Logo/Redux:scale")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
@@ -2285,15 +2295,15 @@ tracks/15/path = NodePath("SplashScreen/SplashFade:color")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
-"times": PackedFloat32Array(0, 2.06667, 2.16667, 3.13333),
-"transitions": PackedFloat32Array(1, 1, 1.5, 1),
+"times": PackedFloat32Array(0, 0.8, 2.1, 2.26667, 3.13333),
+"transitions": PackedFloat32Array(1, 1, 1, 1.5, 1),
 "update": 0,
-"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(1, 1, 1, 0.647059), Color(1, 1, 1, 0)]
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0.882353), Color(0, 0, 0, 0.882353), Color(1, 1, 1, 0.415686), Color(1, 1, 1, 0)]
 }
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("SplashScreen/LogoContainer/LogoBase/LogoGlow:self_modulate")
+tracks/16/path = NodePath("SplashScreen/Logo/LogoGlow:self_modulate")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
@@ -2305,7 +2315,7 @@ tracks/16/keys = {
 tracks/17/type = "value"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("SplashScreen/LogoContainer:visible")
+tracks/17/path = NodePath("SplashScreen/Logo:visible")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
@@ -2362,8 +2372,8 @@ animation_player = NodePath("ScreenAnimations")
 title_loop = NodePath("TitleLoop")
 menu_loop = NodePath("MenuLoop")
 splash_fade = NodePath("SplashScreen/SplashFade")
-sheen_63_rect = NodePath("SplashScreen/LogoContainer/63/63Sheen")
-sheen_redux_rect = NodePath("SplashScreen/LogoContainer/Redux/ReduxSheen")
+sheen_63_rect = NodePath("SplashScreen/Logo/63/63Sheen")
+sheen_redux_rect = NodePath("SplashScreen/Logo/Redux/ReduxSheen")
 version_label = NodePath("VersionLabel")
 team_text = NodePath("TeamLabel")
 splash_screen = NodePath("SplashScreen")
@@ -2382,9 +2392,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BGWorld" type="Node2D" parent="BG"]
+[node name="BGLayers" type="Node2D" parent="BG"]
 
-[node name="BG" type="Parallax2D" parent="BG/BGWorld"]
+[node name="BG" type="Parallax2D" parent="BG/BGLayers"]
 scroll_scale = Vector2(0.5, 0)
 scroll_offset = Vector2(-749, 152)
 repeat_size = Vector2(750, 0)
@@ -2392,12 +2402,12 @@ autoscroll = Vector2(-4, 0)
 repeat_times = 7
 follow_viewport = false
 
-[node name="Sprite2D" type="Sprite2D" parent="BG/BGWorld/BG"]
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/BG"]
 texture = ExtResource("3_8cpbr")
 
-[node name="Particles" type="Node2D" parent="BG/BGWorld"]
+[node name="Particles" type="Node2D" parent="BG/BGLayers"]
 
-[node name="BigStars" type="CPUParticles2D" parent="BG/BGWorld/Particles"]
+[node name="BigStars" type="CPUParticles2D" parent="BG/BGLayers/Particles"]
 position = Vector2(320, 180)
 amount = 120
 texture = ExtResource("3_5m44c")
@@ -2412,7 +2422,7 @@ scale_amount_max = 2.0
 scale_amount_curve = SubResource("Curve_5m44c")
 color_ramp = SubResource("Gradient_5m44c")
 
-[node name="MediumStars" type="CPUParticles2D" parent="BG/BGWorld/Particles"]
+[node name="MediumStars" type="CPUParticles2D" parent="BG/BGLayers/Particles"]
 position = Vector2(320, 180)
 amount = 240
 texture = ExtResource("4_ltfsy")
@@ -2427,7 +2437,7 @@ scale_amount_max = 3.0
 scale_amount_curve = SubResource("Curve_5m44c")
 color_ramp = SubResource("Gradient_5m44c")
 
-[node name="SmallStars" type="CPUParticles2D" parent="BG/BGWorld/Particles"]
+[node name="SmallStars" type="CPUParticles2D" parent="BG/BGLayers/Particles"]
 position = Vector2(320, 180)
 amount = 300
 texture = ExtResource("3_vrmbe")
@@ -2440,7 +2450,7 @@ scale_amount_max = 3.0
 scale_amount_curve = SubResource("Curve_5m44c")
 color_ramp = SubResource("Gradient_5m44c")
 
-[node name="ShootingStars" type="CPUParticles2D" parent="BG/BGWorld/Particles"]
+[node name="ShootingStars" type="CPUParticles2D" parent="BG/BGLayers/Particles"]
 position = Vector2(322, 10)
 amount = 1
 texture = ExtResource("3_q30y7")
@@ -2453,7 +2463,7 @@ linear_accel_max = 200.0
 angle_min = 40.0
 angle_max = 40.0
 
-[node name="BG2" type="Parallax2D" parent="BG/BGWorld"]
+[node name="BG2" type="Parallax2D" parent="BG/BGLayers"]
 scroll_scale = Vector2(0.5, 0)
 scroll_offset = Vector2(7, 187)
 repeat_size = Vector2(750, 0)
@@ -2461,10 +2471,10 @@ autoscroll = Vector2(-10, 0)
 repeat_times = 7
 follow_viewport = false
 
-[node name="Sprite2D" type="Sprite2D" parent="BG/BGWorld/BG2"]
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/BG2"]
 texture = ExtResource("3_eyv0a")
 
-[node name="FG2" type="Parallax2D" parent="BG/BGWorld"]
+[node name="FG2" type="Parallax2D" parent="BG/BGLayers"]
 scroll_scale = Vector2(0.5, 0)
 scroll_offset = Vector2(-9, 207)
 repeat_size = Vector2(750, 0)
@@ -2472,10 +2482,10 @@ autoscroll = Vector2(8, 0)
 repeat_times = 7
 follow_viewport = false
 
-[node name="Sprite2D" type="Sprite2D" parent="BG/BGWorld/FG2"]
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/FG2"]
 texture = ExtResource("3_fq6c4")
 
-[node name="FG" type="Parallax2D" parent="BG/BGWorld"]
+[node name="FG" type="Parallax2D" parent="BG/BGLayers"]
 scroll_scale = Vector2(0.5, 0)
 scroll_offset = Vector2(0, 217)
 repeat_size = Vector2(750, 0)
@@ -2483,10 +2493,10 @@ autoscroll = Vector2(-22, 0)
 repeat_times = 7
 follow_viewport = false
 
-[node name="Sprite2D" type="Sprite2D" parent="BG/BGWorld/FG"]
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/FG"]
 texture = ExtResource("3_7cnuw")
 
-[node name="Camera2D" type="Camera2D" parent="BG/BGWorld"]
+[node name="Camera2D" type="Camera2D" parent="BG/BGLayers"]
 anchor_mode = 0
 
 [node name="SceneTransition" type="Node" parent="." node_paths=PackedStringArray("menu_loop", "screen_animations")]
@@ -2516,7 +2526,7 @@ mouse_filter = 2
 color = Color(0, 0, 0, 1)
 metadata/_edit_lock_ = true
 
-[node name="LogoContainer" type="Control" parent="SplashScreen"]
+[node name="Logo" type="Control" parent="SplashScreen"]
 visible = false
 layout_mode = 1
 anchor_left = 0.217125
@@ -2531,19 +2541,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="LogoBase" type="TextureRect" parent="SplashScreen/LogoContainer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_2273m")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="LogoGlow" type="TextureRect" parent="SplashScreen/LogoContainer/LogoBase"]
-show_behind_parent = true
+[node name="LogoGlow" type="TextureRect" parent="SplashScreen/Logo"]
 material = SubResource("CanvasItemMaterial_q30y7")
 layout_mode = 1
 anchors_preset = -1
@@ -2558,7 +2556,135 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_use_anchors_ = true
 
-[node name="63" type="TextureRect" parent="SplashScreen/LogoContainer"]
+[node name="LogoBase" type="TextureRect" parent="SplashScreen/Logo"]
+clip_children = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_2273m")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BigStars" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase"]
+show_behind_parent = true
+position = Vector2(180, 81.16)
+amount = 1200
+texture = ExtResource("13_1s087")
+lifetime = 5.0
+preprocess = 2.0
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(300, 300)
+spread = 180.0
+gravity = Vector2(0, 0)
+scale_amount_curve = SubResource("Curve_5m44c")
+color_ramp = SubResource("Gradient_5m44c")
+
+[node name="MediumStars" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase"]
+show_behind_parent = true
+position = Vector2(180, 81.16)
+amount = 1800
+texture = ExtResource("14_e35sv")
+lifetime = 5.0
+preprocess = 2.0
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(300, 300)
+spread = 180.0
+gravity = Vector2(0, 0)
+scale_amount_curve = SubResource("Curve_5m44c")
+color_ramp = SubResource("Gradient_5m44c")
+
+[node name="SmallStars" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase"]
+show_behind_parent = true
+position = Vector2(180, 81.16)
+amount = 2400
+texture = ExtResource("15_fuqb4")
+lifetime = 5.0
+preprocess = 2.0
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(300, 300)
+spread = 180.0
+gravity = Vector2(0, 0)
+scale_amount_max = 1.25
+scale_amount_curve = SubResource("Curve_5m44c")
+color_ramp = SubResource("Gradient_5m44c")
+
+[node name="LogoText" type="TextureRect" parent="SplashScreen/Logo/LogoBase"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_ltfsy")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SuperSnowParticles" type="Control" parent="SplashScreen/Logo/LogoBase"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SuperParticleMask" type="TextureRect" parent="SplashScreen/Logo/LogoBase/SuperSnowParticles"]
+clip_children = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("17_lwt8s")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MediumSnow" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase/SuperSnowParticles/SuperParticleMask"]
+show_behind_parent = true
+material = SubResource("CanvasItemMaterial_j4cpk")
+position = Vector2(167, 21.16)
+amount = 400
+texture = ExtResource("18_j4cpk")
+lifetime = 5.0
+preprocess = 2.0
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(100, 60)
+spread = 180.0
+gravity = Vector2(0, 1)
+scale_amount_min = 1.25
+scale_amount_max = 1.75
+scale_amount_curve = SubResource("Curve_5m44c")
+color_ramp = SubResource("Gradient_5m44c")
+
+[node name="SmallSnow" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase/SuperSnowParticles/SuperParticleMask"]
+show_behind_parent = true
+material = SubResource("CanvasItemMaterial_j4cpk")
+position = Vector2(167, 23.16)
+amount = 400
+texture = ExtResource("19_hua3r")
+lifetime = 5.0
+preprocess = 2.0
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(100, 60)
+direction = Vector2(0, 1)
+gravity = Vector2(0, 0)
+initial_velocity_min = 3.0
+initial_velocity_max = 6.0
+scale_amount_min = 1.25
+scale_amount_max = 1.75
+scale_amount_curve = SubResource("Curve_5m44c")
+color_ramp = SubResource("Gradient_5m44c")
+
+[node name="63" type="TextureRect" parent="SplashScreen/Logo"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -2570,7 +2696,7 @@ texture = ExtResource("8_es2f3")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="63Sheen" type="TextureRect" parent="SplashScreen/LogoContainer/63"]
+[node name="63Sheen" type="TextureRect" parent="SplashScreen/Logo/63"]
 material = SubResource("ShaderMaterial_7cnuw")
 instance_shader_parameters/color_offset = Vector2(0, 0)
 instance_shader_parameters/color_scale = Vector2(0.5, 0.5)
@@ -2586,7 +2712,7 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_lock_ = true
 
-[node name="63Glow" type="TextureRect" parent="SplashScreen/LogoContainer/63"]
+[node name="63Glow" type="TextureRect" parent="SplashScreen/Logo/63"]
 self_modulate = Color(1, 1, 1, 0)
 material = SubResource("CanvasItemMaterial_8cpbr")
 layout_mode = 1
@@ -2600,7 +2726,7 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_lock_ = true
 
-[node name="Redux" type="TextureRect" parent="SplashScreen/LogoContainer"]
+[node name="Redux" type="TextureRect" parent="SplashScreen/Logo"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -2612,7 +2738,7 @@ texture = ExtResource("13_gpgra")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ReduxSheen" type="TextureRect" parent="SplashScreen/LogoContainer/Redux"]
+[node name="ReduxSheen" type="TextureRect" parent="SplashScreen/Logo/Redux"]
 material = SubResource("ShaderMaterial_xjhxk")
 instance_shader_parameters/color_offset = Vector2(0.275, 0)
 instance_shader_parameters/color_scale = Vector2(0.69, 0.5)
@@ -2629,7 +2755,7 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_lock_ = true
 
-[node name="ReduxGlow" type="TextureRect" parent="SplashScreen/LogoContainer/Redux"]
+[node name="ReduxGlow" type="TextureRect" parent="SplashScreen/Logo/Redux"]
 self_modulate = Color(1, 1, 1, 0)
 material = SubResource("CanvasItemMaterial_8cpbr")
 layout_mode = 1
