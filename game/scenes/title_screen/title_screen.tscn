@@ -1,13 +1,17 @@
-[gd_scene load_steps=38 format=3 uid="uid://b0wp6l07i5ime"]
+[gd_scene load_steps=46 format=3 uid="uid://b0wp6l07i5ime"]
 
 [ext_resource type="Script" uid="uid://b2figxll0bk25" path="res://game/scenes/title_screen/title_screen.gd" id="1_6esl3"]
 [ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/soundtrack/01 Welcome to Super Mario 63 Redux!.mp3" id="1_bfr6l"]
+[ext_resource type="Texture2D" uid="uid://ckk002i8mqpyb" path="res://assets/textures/particle/title_screen/star_big.png" id="3_5m44c"]
 [ext_resource type="Texture2D" uid="uid://tb4ypkcr623h" path="res://assets/textures/world/background/title_screen/title_bg_0.png" id="3_7cnuw"]
 [ext_resource type="Texture2D" uid="uid://bk6onkjxyktpy" path="res://assets/textures/world/background/title_screen/title_bg_3.png" id="3_8cpbr"]
 [ext_resource type="Texture2D" uid="uid://dgjgka3dk4jgx" path="res://assets/textures/world/background/title_screen/title_bg_2.png" id="3_eyv0a"]
 [ext_resource type="Texture2D" uid="uid://dm3nvb5v30ypf" path="res://assets/textures/world/background/title_screen/title_bg_1.png" id="3_fq6c4"]
+[ext_resource type="Texture2D" uid="uid://d1xvycbgjpowc" path="res://assets/textures/particle/title_screen/shooting_star.png" id="3_q30y7"]
+[ext_resource type="Texture2D" uid="uid://d1w2qtyr1pctd" path="res://assets/textures/particle/title_screen/star_small.png" id="3_vrmbe"]
 [ext_resource type="Texture2D" uid="uid://d3vht0k7j5d21" path="res://assets/textures/gui/title_screen/splash_logo/logo_base.png" id="4_2273m"]
 [ext_resource type="Script" uid="uid://chkv0bbgtj7gh" path="res://game/scenes/title_screen/menu_cycle.gd" id="4_db5fu"]
+[ext_resource type="Texture2D" uid="uid://c6husbfjatg23" path="res://assets/textures/particle/title_screen/star_medium.png" id="4_ltfsy"]
 [ext_resource type="Texture2D" uid="uid://bvbd4a1850645" path="res://assets/textures/gui/title_screen/splash_logo/logo_sheen_63.png" id="5_1evyh"]
 [ext_resource type="PackedScene" uid="uid://c6dic42vckv0e" path="res://game/ui/components/main_menu_button/main_menu_button.tscn" id="5_mu8aq"]
 [ext_resource type="Shader" uid="uid://cgek5pfxthubq" path="res://core/shader/texture_mask.gdshader" id="5_y7kqt"]
@@ -17,9 +21,21 @@
 [ext_resource type="Texture2D" uid="uid://dnprx1u7tco41" path="res://assets/textures/gui/title_screen/splash_logo/logo_sheen_redux.png" id="8_7cnuw"]
 [ext_resource type="Texture2D" uid="uid://dy01v0dgkooap" path="res://assets/textures/gui/title_screen/splash_logo/logo_base_63.png" id="8_es2f3"]
 [ext_resource type="Script" uid="uid://c24ib1e8u5ify" path="res://game/scenes/title_screen/scene_transition.gd" id="8_fq6c4"]
+[ext_resource type="Texture2D" uid="uid://db7beoyymfa6u" path="res://assets/textures/gui/title_screen/splash_logo/logo_glow_base.png" id="8_gpgra"]
 [ext_resource type="Texture2D" uid="uid://c0ti7gjvja8p1" path="res://assets/textures/gui/title_screen/splash_logo/logo_glow_63.png" id="11_5n2bh"]
 [ext_resource type="Texture2D" uid="uid://dis2snmj3sc3n" path="res://assets/textures/gui/title_screen/splash_logo/logo_glow_redux.png" id="13_baphx"]
 [ext_resource type="Texture2D" uid="uid://rcxm23syw3ph" path="res://assets/textures/gui/title_screen/splash_logo/logo_base_redux.png" id="13_gpgra"]
+
+[sub_resource type="Curve" id="Curve_5m44c"]
+_data = [Vector2(0.0574018, 0), 0.0, 0.0, 0, 0, Vector2(0.250755, 0.515625), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_5m44c"]
+offsets = PackedFloat32Array(0, 0.396721, 0.665574, 1)
+colors = PackedColorArray(0.529412, 0.870588, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0.529412, 0.870588, 1, 0)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_q30y7"]
+blend_mode = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7cnuw"]
 shader = ExtResource("5_y7kqt")
@@ -928,7 +944,7 @@ tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
@@ -1098,11 +1114,83 @@ tracks/27/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
+tracks/28/type = "value"
+tracks/28/imported = false
+tracks/28/enabled = true
+tracks/28/path = NodePath("SplashScreen/SplashFade:color")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("SplashScreen/LogoContainer/LogoBase/LogoGlow:self_modulate")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("BG/BGWorld/Particles/ShootingStars:speed_scale")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("SplashScreen/LogoContainer:visible")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("SplashScreen/StartText:visible")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_baphx"]
 resource_name = "splash_screen_loop"
 length = 4.0
 loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SplashScreen/LogoContainer/LogoBase/LogoGlow:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.28333, 1.88656, 2.06667, 3.4),
+"transitions": PackedFloat32Array(2, 0.5, 1.4, 1.4, 2),
+"update": 0,
+"values": [Color(1, 1, 1, 0.219608), Color(1, 1, 1, 0.521569), Color(1, 1, 1, 0.745098), Color(1, 1, 1, 0.745098), Color(1, 1, 1, 0.219608)]
+}
 
 [sub_resource type="Animation" id="Animation_y7kqt"]
 resource_name = "switch_from_settings_screen"
@@ -1462,6 +1550,18 @@ tracks/15/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(0.568973, 0.568973, 0.568973, 1)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("BG/BGWorld/Particles/ShootingStars:speed_scale")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.7]
 }
 
 [sub_resource type="Animation" id="Animation_1evyh"]
@@ -1965,6 +2065,30 @@ tracks/27/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/28/type = "value"
+tracks/28/imported = false
+tracks/28/enabled = true
+tracks/28/path = NodePath("SplashScreen/LogoContainer/LogoBase/LogoGlow:self_modulate")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(2),
+"update": 0,
+"values": [Color(1, 1, 1, 0.219608)]
+}
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("BG/BGWorld/Particles/ShootingStars:speed_scale")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.7, 1.0]
+}
 
 [sub_resource type="Animation" id="Animation_bfr6l"]
 resource_name = "title_in"
@@ -2024,10 +2148,10 @@ tracks/4/path = NodePath("SplashScreen/SplashFade:self_modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.936451),
-"transitions": PackedFloat32Array(0.3, 1),
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": []
 }
 tracks/5/type = "method"
 tracks/5/imported = false
@@ -2154,6 +2278,66 @@ tracks/14/keys = {
 "update": 0,
 "values": [Vector2(0.9, 0.9), Vector2(1, 1)]
 }
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("SplashScreen/SplashFade:color")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 2.06667, 2.16667, 3.13333),
+"transitions": PackedFloat32Array(1, 1, 1.5, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(1, 1, 1, 0.647059), Color(1, 1, 1, 0)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("SplashScreen/LogoContainer/LogoBase/LogoGlow:self_modulate")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0.0333333, 2.06667, 2.3, 4.66667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0.219608)]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("SplashScreen/LogoContainer:visible")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("SplashScreen/StartText:visible")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath(".:input_locked")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0.0333333, 1.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_exexd"]
 _data = {
@@ -2185,6 +2369,7 @@ team_text = NodePath("TeamLabel")
 splash_screen = NodePath("SplashScreen")
 menu_screen = NodePath("MenuScreen")
 start_text = NodePath("SplashScreen/StartText")
+input_locked = true
 metadata/_edit_vertical_guides_ = [320.0]
 metadata/_edit_horizontal_guides_ = [180.0]
 metadata/_edit_lock_ = true
@@ -2209,6 +2394,64 @@ follow_viewport = false
 
 [node name="Sprite2D" type="Sprite2D" parent="BG/BGWorld/BG"]
 texture = ExtResource("3_8cpbr")
+
+[node name="Particles" type="Node2D" parent="BG/BGWorld"]
+
+[node name="BigStars" type="CPUParticles2D" parent="BG/BGWorld/Particles"]
+position = Vector2(320, 180)
+amount = 120
+texture = ExtResource("3_5m44c")
+lifetime = 5.0
+emission_shape = 3
+emission_rect_extents = Vector2(700, 100)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 8.0
+initial_velocity_max = 14.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_5m44c")
+color_ramp = SubResource("Gradient_5m44c")
+
+[node name="MediumStars" type="CPUParticles2D" parent="BG/BGWorld/Particles"]
+position = Vector2(320, 180)
+amount = 240
+texture = ExtResource("4_ltfsy")
+lifetime = 5.0
+emission_shape = 3
+emission_rect_extents = Vector2(700, 100)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 4.0
+initial_velocity_max = 7.0
+scale_amount_max = 3.0
+scale_amount_curve = SubResource("Curve_5m44c")
+color_ramp = SubResource("Gradient_5m44c")
+
+[node name="SmallStars" type="CPUParticles2D" parent="BG/BGWorld/Particles"]
+position = Vector2(320, 180)
+amount = 300
+texture = ExtResource("3_vrmbe")
+lifetime = 5.0
+emission_shape = 3
+emission_rect_extents = Vector2(700, 100)
+spread = 180.0
+gravity = Vector2(0, 0)
+scale_amount_max = 3.0
+scale_amount_curve = SubResource("Curve_5m44c")
+color_ramp = SubResource("Gradient_5m44c")
+
+[node name="ShootingStars" type="CPUParticles2D" parent="BG/BGWorld/Particles"]
+position = Vector2(322, 10)
+amount = 1
+texture = ExtResource("3_q30y7")
+lifetime = 3.0
+emission_shape = 3
+emission_rect_extents = Vector2(1000, 1)
+gravity = Vector2(83, 70)
+linear_accel_min = 200.0
+linear_accel_max = 200.0
+angle_min = 40.0
+angle_max = 40.0
 
 [node name="BG2" type="Parallax2D" parent="BG/BGWorld"]
 scroll_scale = Vector2(0.5, 0)
@@ -2260,7 +2503,21 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
 
+[node name="SplashFade" type="ColorRect" parent="SplashScreen"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.096875
+anchor_top = -0.0833333
+anchor_right = 1.09687
+anchor_bottom = 1.08333
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+metadata/_edit_lock_ = true
+
 [node name="LogoContainer" type="Control" parent="SplashScreen"]
+visible = false
 layout_mode = 1
 anchor_left = 0.217125
 anchor_top = 0.125
@@ -2284,6 +2541,22 @@ grow_vertical = 2
 texture = ExtResource("4_2273m")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="LogoGlow" type="TextureRect" parent="SplashScreen/LogoContainer/LogoBase"]
+show_behind_parent = true
+material = SubResource("CanvasItemMaterial_q30y7")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.00546448
+anchor_top = -0.0944441
+anchor_right = 1.00546
+anchor_bottom = 1.09444
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_gpgra")
+expand_mode = 1
+stretch_mode = 5
+metadata/_edit_use_anchors_ = true
 
 [node name="63" type="TextureRect" parent="SplashScreen/LogoContainer"]
 self_modulate = Color(1, 1, 1, 0)
@@ -2371,6 +2644,7 @@ stretch_mode = 5
 metadata/_edit_lock_ = true
 
 [node name="StartText" type="RichTextLabel" parent="SplashScreen"]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.246625
@@ -2395,27 +2669,15 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="SplashFade" type="ColorRect" parent="SplashScreen"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = -0.096875
-anchor_top = -0.0833333
-anchor_right = 1.09687
-anchor_bottom = 1.08333
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 1)
-metadata/_edit_lock_ = true
-
 [node name="MenuScreen" type="Control" parent="."]
 visible = false
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchor_top = 0.0833333
 anchor_right = 1.0
 anchor_bottom = 1.08333
-offset_top = -15.0
-offset_bottom = -15.0
+offset_top = 30.0
+offset_bottom = 30.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
