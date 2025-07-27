@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://b0wp6l07i5ime"]
+[gd_scene load_steps=56 format=3 uid="uid://b0wp6l07i5ime"]
 
 [ext_resource type="Script" uid="uid://b2figxll0bk25" path="res://game/scenes/title_screen/title_screen.gd" id="1_6esl3"]
 [ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/soundtrack/01 Welcome to Super Mario 63 Redux!.mp3" id="1_bfr6l"]
@@ -41,6 +41,10 @@ point_count = 3
 [sub_resource type="Gradient" id="Gradient_5m44c"]
 offsets = PackedFloat32Array(0, 0.396721, 0.665574, 1)
 colors = PackedColorArray(0.529412, 0.870588, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0.529412, 0.870588, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_th72m"]
+offsets = PackedFloat32Array(0, 0.147208, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_q30y7"]
 blend_mode = 1
@@ -2428,7 +2432,7 @@ tracks/19/path = NodePath(".:input_locked")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
-"times": PackedFloat32Array(0.0333333, 1.2),
+"times": PackedFloat32Array(0, 0.0666667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -2498,6 +2502,7 @@ amount = 120
 texture = ExtResource("3_5m44c")
 lifetime = 5.0
 preprocess = 3.0
+speed_scale = 0.35
 emission_shape = 3
 emission_rect_extents = Vector2(700, 100)
 spread = 180.0
@@ -2519,6 +2524,7 @@ amount = 240
 texture = ExtResource("4_ltfsy")
 lifetime = 5.0
 preprocess = 3.0
+speed_scale = 0.35
 emission_shape = 3
 emission_rect_extents = Vector2(700, 100)
 spread = 180.0
@@ -2566,6 +2572,7 @@ linear_accel_min = 200.0
 linear_accel_max = 200.0
 angle_min = 40.0
 angle_max = 40.0
+color_ramp = SubResource("Gradient_th72m")
 script = ExtResource("4_th72m")
 high_particle_amount = 1
 medium_particle_amount = 1
@@ -2931,13 +2938,11 @@ metadata/_edit_use_anchors_ = true
 
 [node name="MenuScreen" type="Control" parent="."]
 visible = false
-modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-anchor_top = 0.0833333
 anchor_right = 1.0
-anchor_bottom = 1.08333
-offset_top = 30.0
-offset_bottom = 30.0
+anchor_bottom = 1.0
+offset_top = 15.0
+offset_bottom = 14.9988
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
