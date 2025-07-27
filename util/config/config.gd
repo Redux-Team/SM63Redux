@@ -120,6 +120,9 @@ static func _handle_broken_config() -> void:
 static func apply() -> void:
 	for conf: Subconfig in _current_conf.configurations:
 		conf.apply()
+	
+	if Singleton:
+		Singleton.config_changed.emit()
 
 
 #region Display
@@ -136,6 +139,9 @@ class display:
 	static var ui_scale: float:
 		get(): return Config._current_conf.display_config.ui_scale
 		set(uis): Config._current_conf.display_config.ui_scale = uis
+	static var particle_amount: String:
+		get(): return Config._current_conf.display_config.particle_amount
+		set(pa): Config._current_conf.display_config.particle_amount = pa
 #endregion
 
 

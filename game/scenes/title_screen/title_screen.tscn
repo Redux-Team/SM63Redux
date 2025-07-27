@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://b0wp6l07i5ime"]
+[gd_scene load_steps=55 format=3 uid="uid://b0wp6l07i5ime"]
 
 [ext_resource type="Script" uid="uid://b2figxll0bk25" path="res://game/scenes/title_screen/title_screen.gd" id="1_6esl3"]
 [ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/soundtrack/01 Welcome to Super Mario 63 Redux!.mp3" id="1_bfr6l"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://d3vht0k7j5d21" path="res://assets/textures/gui/title_screen/splash_logo/logo_base.png" id="4_2273m"]
 [ext_resource type="Script" uid="uid://chkv0bbgtj7gh" path="res://game/scenes/title_screen/menu_cycle.gd" id="4_db5fu"]
 [ext_resource type="Texture2D" uid="uid://c6husbfjatg23" path="res://assets/textures/particle/title_screen/star_medium.png" id="4_ltfsy"]
+[ext_resource type="Script" uid="uid://dv6rnq4xj13hy" path="res://core/custom_nodes/2d/particle_emitter/particle_emitter.gd" id="4_th72m"]
 [ext_resource type="Texture2D" uid="uid://bvbd4a1850645" path="res://assets/textures/gui/title_screen/splash_logo/logo_sheen_63.png" id="5_1evyh"]
 [ext_resource type="PackedScene" uid="uid://c6dic42vckv0e" path="res://game/ui/components/main_menu_button/main_menu_button.tscn" id="5_mu8aq"]
 [ext_resource type="Shader" uid="uid://cgek5pfxthubq" path="res://core/shader/texture_mask.gdshader" id="5_y7kqt"]
@@ -1184,6 +1185,18 @@ tracks/32/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/33/type = "value"
+tracks/33/imported = false
+tracks/33/enabled = true
+tracks/33/path = NodePath("BG/BGLayers/Particles/SmallStars:speed_scale")
+tracks/33/interp = 1
+tracks/33/loop_wrap = true
+tracks/33/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
 
 [sub_resource type="Animation" id="Animation_baphx"]
 resource_name = "splash_screen_loop"
@@ -1572,6 +1585,42 @@ tracks/16/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [1.0, 0.7]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("BG/BGLayers/Particles/SmallStars:speed_scale")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.35]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("BG/BGLayers/Particles/MediumStars:speed_scale")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.35]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("BG/BGLayers/Particles/BigStars:speed_scale")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.35]
 }
 
 [sub_resource type="Animation" id="Animation_1evyh"]
@@ -2099,6 +2148,42 @@ tracks/29/keys = {
 "update": 0,
 "values": [0.7, 1.0]
 }
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("BG/BGLayers/Particles/SmallStars:speed_scale")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.35, 1.0]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("BG/BGLayers/Particles/MediumStars:speed_scale")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.35, 1.0]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("BG/BGLayers/Particles/BigStars:speed_scale")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.35, 1.0]
+}
 
 [sub_resource type="Animation" id="Animation_bfr6l"]
 resource_name = "title_in"
@@ -2412,6 +2497,7 @@ position = Vector2(320, 180)
 amount = 120
 texture = ExtResource("3_5m44c")
 lifetime = 5.0
+preprocess = 3.0
 emission_shape = 3
 emission_rect_extents = Vector2(700, 100)
 spread = 180.0
@@ -2421,12 +2507,18 @@ initial_velocity_max = 14.0
 scale_amount_max = 2.0
 scale_amount_curve = SubResource("Curve_5m44c")
 color_ramp = SubResource("Gradient_5m44c")
+script = ExtResource("4_th72m")
+high_particle_amount = 175
+medium_particle_amount = 125
+low_particle_amount = 60
+metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
 [node name="MediumStars" type="CPUParticles2D" parent="BG/BGLayers/Particles"]
 position = Vector2(320, 180)
 amount = 240
 texture = ExtResource("4_ltfsy")
 lifetime = 5.0
+preprocess = 3.0
 emission_shape = 3
 emission_rect_extents = Vector2(700, 100)
 spread = 180.0
@@ -2436,12 +2528,18 @@ initial_velocity_max = 7.0
 scale_amount_max = 3.0
 scale_amount_curve = SubResource("Curve_5m44c")
 color_ramp = SubResource("Gradient_5m44c")
+script = ExtResource("4_th72m")
+high_particle_amount = 300
+medium_particle_amount = 250
+low_particle_amount = 100
+metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
 [node name="SmallStars" type="CPUParticles2D" parent="BG/BGLayers/Particles"]
 position = Vector2(320, 180)
 amount = 300
 texture = ExtResource("3_vrmbe")
 lifetime = 5.0
+preprocess = 3.0
 emission_shape = 3
 emission_rect_extents = Vector2(700, 100)
 spread = 180.0
@@ -2449,19 +2547,30 @@ gravity = Vector2(0, 0)
 scale_amount_max = 3.0
 scale_amount_curve = SubResource("Curve_5m44c")
 color_ramp = SubResource("Gradient_5m44c")
+script = ExtResource("4_th72m")
+high_particle_amount = 450
+medium_particle_amount = 300
+low_particle_amount = 125
+metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
 [node name="ShootingStars" type="CPUParticles2D" parent="BG/BGLayers/Particles"]
 position = Vector2(322, 10)
 amount = 1
 texture = ExtResource("3_q30y7")
 lifetime = 3.0
+preprocess = 3.0
 emission_shape = 3
 emission_rect_extents = Vector2(1000, 1)
-gravity = Vector2(83, 70)
+gravity = Vector2(83, 78)
 linear_accel_min = 200.0
 linear_accel_max = 200.0
 angle_min = 40.0
 angle_max = 40.0
+script = ExtResource("4_th72m")
+high_particle_amount = 1
+medium_particle_amount = 1
+low_particle_amount = 1
+metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
 [node name="BG2" type="Parallax2D" parent="BG/BGLayers"]
 scroll_scale = Vector2(0.5, 0)
@@ -2582,6 +2691,11 @@ spread = 180.0
 gravity = Vector2(0, 0)
 scale_amount_curve = SubResource("Curve_5m44c")
 color_ramp = SubResource("Gradient_5m44c")
+script = ExtResource("4_th72m")
+high_particle_amount = 1250
+medium_particle_amount = 650
+low_particle_amount = 200
+metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
 [node name="MediumStars" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase"]
 show_behind_parent = true
@@ -2597,6 +2711,11 @@ spread = 180.0
 gravity = Vector2(0, 0)
 scale_amount_curve = SubResource("Curve_5m44c")
 color_ramp = SubResource("Gradient_5m44c")
+script = ExtResource("4_th72m")
+high_particle_amount = 1800
+medium_particle_amount = 1200
+low_particle_amount = 600
+metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
 [node name="SmallStars" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase"]
 show_behind_parent = true
@@ -2613,6 +2732,11 @@ gravity = Vector2(0, 0)
 scale_amount_max = 1.25
 scale_amount_curve = SubResource("Curve_5m44c")
 color_ramp = SubResource("Gradient_5m44c")
+script = ExtResource("4_th72m")
+high_particle_amount = 2400
+medium_particle_amount = 1200
+low_particle_amount = 550
+metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
 [node name="LogoText" type="TextureRect" parent="SplashScreen/Logo/LogoBase"]
 layout_mode = 1
@@ -2663,6 +2787,11 @@ scale_amount_min = 1.25
 scale_amount_max = 1.75
 scale_amount_curve = SubResource("Curve_5m44c")
 color_ramp = SubResource("Gradient_5m44c")
+script = ExtResource("4_th72m")
+high_particle_amount = 500
+medium_particle_amount = 350
+low_particle_amount = 125
+metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
 [node name="SmallSnow" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase/SuperSnowParticles/SuperParticleMask"]
 show_behind_parent = true
@@ -2683,6 +2812,11 @@ scale_amount_min = 1.25
 scale_amount_max = 1.75
 scale_amount_curve = SubResource("Curve_5m44c")
 color_ramp = SubResource("Gradient_5m44c")
+script = ExtResource("4_th72m")
+high_particle_amount = 500
+medium_particle_amount = 350
+low_particle_amount = 125
+metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
 [node name="63" type="TextureRect" parent="SplashScreen/Logo"]
 self_modulate = Color(1, 1, 1, 0)

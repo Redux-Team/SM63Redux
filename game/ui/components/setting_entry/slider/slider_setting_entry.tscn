@@ -64,6 +64,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 value = 75.0
+ticks_on_borders = true
 
 [connection signal="button_down" from="HBoxContainer/Interaction" to="." method="_on_interaction_button_down"]
 [connection signal="button_up" from="HBoxContainer/Interaction" to="." method="_on_interaction_button_up"]

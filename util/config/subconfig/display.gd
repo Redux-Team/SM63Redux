@@ -12,6 +12,7 @@ enum WindowMode {
 @export var window_mode: WindowMode = WindowMode.WINDOWED
 @export var vsync: bool = false
 @export var ui_scale: float = 1.0
+@export var particle_amount: String = "Medium"
 
 
 func apply() -> void:

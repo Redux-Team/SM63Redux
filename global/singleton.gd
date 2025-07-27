@@ -1,7 +1,9 @@
 extends Node
 
+@warning_ignore_start("unused_signal") 
 signal input_type_changed
-@warning_ignore("unused_signal") signal control_scheme_changed
+signal config_changed
+signal control_scheme_changed
 
 enum ScreenTransitionType {
 	TEXTURE_ZOOM

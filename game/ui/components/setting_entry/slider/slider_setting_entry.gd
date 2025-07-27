@@ -17,11 +17,18 @@ enum ValueType {
 	VALUE,
 	PERCENT,
 	MULTIPLIER,
+	CUSTOM,
 }
 
 @export var _toggle: ToggleValue
 @export var value_type: ValueType
 @export var silent: bool = true
+@export var ticks: int = 0:
+	set(t):
+		slider.tick_count = t
+		ticks = t
+
+var value_slider_callable: Callable
 
 @export_group("Slider")
 @export var slider_min: float = 0.0:
@@ -108,6 +115,8 @@ func _update_value_text() -> void:
 			value_text = "%s%%" % int(slider_value)
 		ValueType.MULTIPLIER:
 			value_text = "%.2fx" % slider_value
+		ValueType.CUSTOM:
+			value_text = value_slider_callable.call(slider_value)
 	
 	value_label.text = value_text
 
