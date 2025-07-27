@@ -19,6 +19,8 @@ static func _static_init() -> void:
 	if not _current_conf.configurations:
 		_current_conf.assign_configurations()
 	
+	_first_time_overrides()
+	
 	Config.load()
 	Config.apply()
 
@@ -37,6 +39,11 @@ static func load() -> void:
 			_handle_broken_config()
 	
 	get_control_scheme().assign_to_map()
+
+
+static func _first_time_overrides() -> void:
+	if Device.is_mobile():
+		display.particle_amount = "Low"
 
 
 static func _is_config_valid(config: Config) -> bool:
@@ -115,6 +122,7 @@ static func _handle_broken_config() -> void:
 	_current_conf = ResourceLoader.load("uid://do0n8w5nirmwk")
 	if not _current_conf.configurations:
 		_current_conf.assign_configurations()
+
 
 
 static func apply() -> void:

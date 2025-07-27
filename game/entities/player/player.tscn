@@ -200,7 +200,7 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dhej3"]
 advance_mode = 2
-advance_expression = "!running"
+advance_expression = "!is_running"
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_oic1i"]
 states/End/position = Vector2(902, 100)
@@ -214,7 +214,7 @@ states/run_loop/position = Vector2(693, 224)
 states/run_start/node = SubResource("AnimationNodeAnimation_dhej3")
 states/run_start/position = Vector2(518, 224)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_v0nmi"), "idle", "run_start", SubResource("AnimationNodeStateMachineTransition_kn1iv"), "run_start", "run_loop", SubResource("AnimationNodeStateMachineTransition_5wwt0"), "run_loop", "idle", SubResource("AnimationNodeStateMachineTransition_dhej3")]
-graph_offset = Vector2(203, -119)
+graph_offset = Vector2(191, 54)
 
 [sub_resource type="Animation" id="Animation_v0nmi"]
 resource_name = "falling"
