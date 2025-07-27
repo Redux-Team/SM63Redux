@@ -256,8 +256,6 @@ state_machine = NodePath("StateMachine")
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_sgt08")
 animation = &"run_loop"
-frame = 11
-frame_progress = 0.71303
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
