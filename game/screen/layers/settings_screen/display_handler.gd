@@ -62,7 +62,7 @@ func assign_particle_slider_value_text(value: float) -> void:
 	particle_slider.value_label.text = PARTICLE_OPTIONS[int(value)]
 
 
-func _on_ui_scale_value_changed(value: float) -> void:
+func _on_ui_scale_value_changed(_value: float) -> void:
 	if not _ui_scale_dragging:
 		Config.display.ui_scale = ui_scale_slider.slider_value
 		Config.apply()
