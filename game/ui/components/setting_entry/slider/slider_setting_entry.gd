@@ -4,6 +4,7 @@ extends SettingEntry
 
 signal toggled(value: bool)
 signal value_changed(value: float)
+signal drag_started
 signal drag_ended
 
 enum ToggleValue {
@@ -189,3 +190,7 @@ func _on_slider_drag_ended(_value_changed: bool) -> void:
 	if not silent:
 		SFX.play(SFX.UI_NEXT)
 	drag_ended.emit()
+
+
+func _on_slider_drag_started() -> void:
+	drag_started.emit()

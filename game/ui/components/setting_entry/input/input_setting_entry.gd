@@ -67,6 +67,8 @@ func _update_text_color() -> void:
 		color = Color.AQUA
 	elif interaction_hovering or interaction_focused:
 		color = Color.YELLOW
+	if listening_for_input:
+		color = Color.GREEN
 	
 	input_name_label.add_theme_color_override(&"font_color", color)
 	input_events_label.add_theme_color_override(&"default_color", color)
@@ -169,6 +171,8 @@ func _handle_input_listening(event: InputEvent) -> void:
 	accept_event()
 	SFX.play(SFX.UI_CONFIRM)
 	listening_for_input = false
+	
+	_update_text_color()
 
 
 func _get_event_display_text(event: InputEvent, type: Singleton.InputType) -> String:
@@ -210,3 +214,4 @@ func _cancel_event() -> void:
 	SFX.play(SFX.UI_BACK)
 	accept_event()
 	_update_inputs()
+	_update_text_color()

@@ -11,6 +11,8 @@ const PARTICLE_OPTIONS: PackedStringArray = ["None", "Low", "Medium", "High"]
 
 @export var particle_slider: SliderSettingEntry
 
+var _ui_scale_dragging: bool = false
+
 
 func _ready() -> void:
 	fps_dropdown.selected_index = FPS_OPTIONS.find(Config.display.max_fps)
@@ -46,6 +48,8 @@ func _on_v_sync_value_changed(value: bool) -> void:
 func _on_ui_scale_drag_ended() -> void:
 	Config.display.ui_scale = ui_scale_slider.slider_value
 	Config.apply()
+	
+	_ui_scale_dragging = false
 
 
 func _on_particles_value_changed(value: float) -> void:
@@ -56,3 +60,13 @@ func _on_particles_value_changed(value: float) -> void:
 
 func assign_particle_slider_value_text(value: float) -> void:
 	particle_slider.value_label.text = PARTICLE_OPTIONS[int(value)]
+
+
+func _on_ui_scale_value_changed(value: float) -> void:
+	if not _ui_scale_dragging:
+		Config.display.ui_scale = ui_scale_slider.slider_value
+		Config.apply()
+
+
+func _on_ui_scale_drag_started() -> void:
+	_ui_scale_dragging = true

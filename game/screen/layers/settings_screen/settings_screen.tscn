@@ -170,6 +170,7 @@ setting_name = &"Window Mode"
 [node name="UIScale" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("9_jeqcw")]
 layout_mode = 2
 value_type = 3
+ticks = 6
 slider_min = 0.5
 slider_max = 3.0
 slider_value = 1.0
@@ -474,6 +475,8 @@ setting_name = &"Language"
 [connection signal="option_selected" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/FPSLimit" to="Handlers/DisplayHandler" method="_on_fps_limit_option_selected"]
 [connection signal="option_selected" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinMode" to="Handlers/DisplayHandler" method="_on_win_mode_option_selected"]
 [connection signal="drag_ended" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/UIScale" to="Handlers/DisplayHandler" method="_on_ui_scale_drag_ended"]
+[connection signal="drag_started" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/UIScale" to="Handlers/DisplayHandler" method="_on_ui_scale_drag_started"]
+[connection signal="value_changed" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/UIScale" to="Handlers/DisplayHandler" method="_on_ui_scale_value_changed"]
 [connection signal="value_changed" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/VSync" to="Handlers/DisplayHandler" method="_on_v_sync_value_changed"]
 [connection signal="value_changed" from="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/Particles" to="Handlers/DisplayHandler" method="_on_particles_value_changed"]
 [connection signal="pressed" from="SettingsContainer/Input/MarginContainer/ScrollContainer/ControlsVBox/TouchVBox/ExpandedHBox/SnappingToggle" to="Handlers/InputHandler/InputTouchHandler" method="_on_snaping_toggle_pressed"]
