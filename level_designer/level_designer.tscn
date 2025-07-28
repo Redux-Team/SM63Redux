@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://c732aftmb2bcv"]
+[gd_scene load_steps=3 format=3 uid="uid://c732aftmb2bcv"]
 
 [ext_resource type="Script" uid="uid://dtg8pnstjxjen" path="res://level_designer/level_designer.gd" id="1_n6dip"]
+[ext_resource type="StyleBox" uid="uid://c73bhp4kkjcmo" path="res://core/theme/styleboxes/menu_box/menu_box_normal.stylebox" id="2_1dicv"]
 
-[node name="LevelDesigner" type="Control"]
+[node name="LevelDesigner" type="Control" node_paths=PackedStringArray("ld_music")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,3 +11,52 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_n6dip")
+ld_music = NodePath("LDMusic")
+
+[node name="Panel" type="Panel" parent="."]
+modulate = Color(0.44, 0.44, 0.44, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("2_1dicv")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -7.14583
+offset_right = 20.0
+offset_bottom = 7.14583
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "There's nothing to see just yet..."
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.245
+anchor_top = 0.5
+anchor_right = 0.755
+anchor_bottom = 0.5
+offset_left = 0.199997
+offset_top = 21.0
+offset_right = -0.200043
+offset_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"GenericText"
+text = "Return"
+
+[node name="LDMusic" type="AudioStreamPlayer" parent="."]
+bus = &"Music"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
