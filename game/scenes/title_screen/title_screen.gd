@@ -19,6 +19,8 @@ extends Control
 
 var on_splash_screen: bool = true
 var on_settings_screen: bool = false
+var sheened_63: bool = false
+var sheened_redux: bool = false
 
 
 func _ready() -> void:
@@ -29,9 +31,6 @@ func _ready() -> void:
 	Singleton.input_type_changed.connect(_on_input_type_changed)
 	_on_input_type_changed()
 	version_label.text = "v" + Singleton.version
-	
-	sheen_63()
-	sheen_redux()
 
 
 func _input(event: InputEvent) -> void:
@@ -85,6 +84,12 @@ func _switch_to_menu_screen() -> void:
 	if not on_splash_screen:
 		return
 	
+	if not sheened_63:
+		sheen_63()
+	
+	if not sheened_redux:
+		sheen_redux()
+	
 	SFX.play(SFX.UI_CONFIRM)
 	on_splash_screen = false
 	animation_player.play(&"switch_to_menu_screen")
@@ -132,6 +137,8 @@ func sheen_63() -> void:
 		await get_tree().create_timer(randf_range(3.0, 6.0)).timeout
 		sheen_63()
 	)
+	
+	sheened_63 = true
 
 
 func sheen_redux() -> void:
@@ -146,11 +153,13 @@ func sheen_redux() -> void:
 			sheen_redux_rect.set_instance_shader_parameter(&"color_offset", current),
 		0.275, 1.0, 0.65
 	)
-
+	
 	tween.finished.connect(func() -> void:
 		await get_tree().create_timer(randf_range(3.0, 6.0)).timeout
 		sheen_redux()
 	)
+	
+	sheened_redux = true
 
 
 func start_splash_loop() -> void:

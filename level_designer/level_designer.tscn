@@ -38,7 +38,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 20
-text = "There's nothing to see just yet..."
+text = "Under construction!"
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 1
