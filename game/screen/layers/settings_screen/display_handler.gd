@@ -10,6 +10,7 @@ const PARTICLE_OPTIONS: PackedStringArray = ["None", "Low", "Medium", "High"]
 @export var ui_scale_slider: SliderSettingEntry
 
 @export var particle_slider: SliderSettingEntry
+@export var window_label: Label
 
 var _ui_scale_dragging: bool = false
 
@@ -27,6 +28,7 @@ func _ready() -> void:
 	if Device.is_mobile():
 		win_mode_dropdown.hide()
 		vsync_entry.hide()
+		window_label.text = "Screen"
 	
 
 

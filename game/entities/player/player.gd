@@ -25,7 +25,6 @@ extends Entity
 @export_group("State Machine")
 @export var state_machine: StateMachine
 
-
 var move_dir: float = 0.0
 
 var is_running: bool = false

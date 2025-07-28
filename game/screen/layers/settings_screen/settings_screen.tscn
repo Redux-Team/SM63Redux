@@ -28,13 +28,14 @@ touch_subviewport = NodePath("SettingsContainer/Input/MarginContainer/ScrollCont
 
 [node name="Handlers" type="Node" parent="."]
 
-[node name="DisplayHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("fps_dropdown", "win_mode_dropdown", "vsync_entry", "ui_scale_slider", "particle_slider")]
+[node name="DisplayHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("fps_dropdown", "win_mode_dropdown", "vsync_entry", "ui_scale_slider", "particle_slider", "window_label")]
 script = ExtResource("2_rugj6")
 fps_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/FPSLimit")
 win_mode_dropdown = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WinMode")
 vsync_entry = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/VSync")
 ui_scale_slider = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/UIScale")
 particle_slider = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/Particles")
+window_label = NodePath("../../SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer/WindowLabel")
 
 [node name="InputHandler" type="Node" parent="Handlers" node_paths=PackedStringArray("device_label", "bindings_label", "controls_vbox", "input_vbox", "input_scroll_container", "touchscreen_vbox")]
 script = ExtResource("3_oqnvq")
@@ -132,6 +133,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="SettingsContainer/Display/ScrollContainer"]
 layout_mode = 2
@@ -183,12 +186,13 @@ value = false
 setting_name = &"V-Sync"
 
 [node name="GraphicsLabel" type="Label" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 14
 text = "Graphics"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Particles" parent="SettingsContainer/Display/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("9_jeqcw")]
 layout_mode = 2
@@ -419,6 +423,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="SettingsContainer/Miscellaneous/ScrollContainer"]
 layout_mode = 2

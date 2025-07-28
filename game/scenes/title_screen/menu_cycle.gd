@@ -6,6 +6,7 @@ extends Control
 @export var center_button_container: AspectRatioContainer
 @export var right_button_container: AspectRatioContainer
 @export var extra_button_container: AspectRatioContainer
+@export var selector_arrow: TextureRect
 @export var menu_buttons_holder: Control
 @export var description_label: Label
 @export var scene_transition: Node
@@ -20,6 +21,7 @@ func _ready() -> void:
 	
 	assign_buttons_to_containers()
 	update_description()
+	animate_selector()
 
 
 func _input(event: InputEvent) -> void:
@@ -96,3 +98,32 @@ func _input_cycle_region(event: InputEvent, direction: int, animation: StringNam
 func update_description() -> void:
 	var button: MainMenuButton = menu_buttons[current_index]
 	description_label.text = button.description
+
+
+func animate_selector() -> void:
+	var tween: Tween = get_tree().create_tween()
+	
+	var mat: Material = selector_arrow.material
+	var target: MainMenuButton = menu_buttons[current_index]
+	
+	tween.tween_property(mat, ^"shader_parameter/saturation_scale", target.saturation, 0.08)
+	
+	var start_hue: float = mat.get_shader_parameter(&"hue_shift")
+	var end_hue: float = target.hue
+	var shortest_hue: float = shortest_hue_target(start_hue, end_hue)
+	
+	tween.tween_method(_set_hue_shift, start_hue, shortest_hue, 0.02)
+	
+	if target.disabled:
+		tween.tween_property(mat, ^"shader_parameter/value_scale", target.value - 0.75, 0.05)
+	else:
+		tween.tween_property(mat, ^"shader_parameter/value_scale", target.value, 0.08)
+
+
+func shortest_hue_target(start: float, target: float) -> float:
+	var delta: float = fmod(target - start + 1.5, 1.0) - 0.5
+	return start + delta
+
+
+func _set_hue_shift(value: float) -> void:
+	selector_arrow.material.set_shader_parameter("hue_shift", fmod(value, 1.0))

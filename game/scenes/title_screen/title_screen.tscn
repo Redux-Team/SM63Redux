@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://b0wp6l07i5ime"]
+[gd_scene load_steps=59 format=3 uid="uid://b0wp6l07i5ime"]
 
 [ext_resource type="Script" uid="uid://b2figxll0bk25" path="res://game/scenes/title_screen/title_screen.gd" id="1_6esl3"]
 [ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/soundtrack/01 Welcome to Super Mario 63 Redux!.mp3" id="1_bfr6l"]
@@ -33,6 +33,8 @@
 [ext_resource type="Texture2D" uid="uid://dippg3dive7p6" path="res://assets/textures/gui/title_screen/splash_logo/logo_super_particle_mask.png" id="17_lwt8s"]
 [ext_resource type="Texture2D" uid="uid://bnrtx06fhpytq" path="res://assets/textures/particle/title_screen/super_text_snow_medium.png" id="18_j4cpk"]
 [ext_resource type="Texture2D" uid="uid://dois038y355wf" path="res://assets/textures/particle/title_screen/super_text_snow_small.png" id="19_hua3r"]
+[ext_resource type="Shader" uid="uid://g3ewropiv6mx" path="res://core/shader/hsv.gdshader" id="31_5p2hb"]
+[ext_resource type="Texture2D" uid="uid://3bawiafh4l8h" path="res://assets/textures/gui/title_screen/select_mode_button/selector.png" id="31_m4day"]
 
 [sub_resource type="Curve" id="Curve_5m44c"]
 _data = [Vector2(0.0574018, 0), 0.0, 0.0, 0, 0, Vector2(0.250755, 0.515625), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -283,6 +285,30 @@ tracks/17/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("MenuScreen/SelectorArrow:anchor_top")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.412]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("MenuScreen/SelectorArrow:anchor_bottom")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.412]
+}
 
 [sub_resource type="Animation" id="Animation_1sg8f"]
 resource_name = "cycle_left"
@@ -486,9 +512,12 @@ tracks/16/path = NodePath("MenuScreen/MenuCycle")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
-"times": PackedFloat32Array(0.0778973),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.0778973),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
+"args": [],
+"method": &"animate_selector"
+}, {
 "args": [],
 "method": &"update_description"
 }]
@@ -528,6 +557,30 @@ tracks/19/keys = {
 "transitions": PackedFloat32Array(0.5, 1, 0.5, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("MenuScreen/SelectorArrow:anchor_top")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.2),
+"transitions": PackedFloat32Array(0.4, 1.4, 1),
+"update": 0,
+"values": [0.412, 0.435, 0.412]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("MenuScreen/SelectorArrow:anchor_bottom")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.2),
+"transitions": PackedFloat32Array(0.4, 1.4, 1),
+"update": 0,
+"values": [0.412, 0.435, 0.412]
 }
 
 [sub_resource type="Animation" id="Animation_mu8aq"]
@@ -732,9 +785,12 @@ tracks/16/path = NodePath("MenuScreen/MenuCycle")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
-"times": PackedFloat32Array(0.0782556),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.0782556),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
+"args": [],
+"method": &"animate_selector"
+}, {
 "args": [],
 "method": &"update_description"
 }]
@@ -775,6 +831,30 @@ tracks/19/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("MenuScreen/SelectorArrow:anchor_top")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.2),
+"transitions": PackedFloat32Array(0.4, 1.4, 1),
+"update": 0,
+"values": [0.412, 0.435, 0.412]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("MenuScreen/SelectorArrow:anchor_bottom")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.2),
+"transitions": PackedFloat32Array(0.4, 1.4, 1),
+"update": 0,
+"values": [0.412, 0.435, 0.412]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1sg8f"]
 _data = {
@@ -782,6 +862,13 @@ _data = {
 &"cycle_left": SubResource("Animation_1sg8f"),
 &"cycle_right": SubResource("Animation_mu8aq")
 }
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tcw2j"]
+shader = ExtResource("31_5p2hb")
+shader_parameter/hue_shift = 0.0
+shader_parameter/saturation_scale = 1.0
+shader_parameter/value_scale = 1.0
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_65llw"]
 content_margin_left = 12.0
@@ -2480,6 +2567,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/_edit_lock_ = true
 
 [node name="BGLayers" type="Node2D" parent="BG"]
 
@@ -2939,6 +3027,7 @@ metadata/_edit_use_anchors_ = true
 [node name="MenuScreen" type="Control" parent="."]
 visible = false
 layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 15.0
@@ -2947,6 +3036,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
 
 [node name="DescriptionContainer" type="Control" parent="MenuScreen"]
 layout_mode = 1
@@ -2980,7 +3070,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="MenuCycle" type="Control" parent="MenuScreen" node_paths=PackedStringArray("menu_buttons", "animation_player", "left_button_container", "center_button_container", "right_button_container", "extra_button_container", "menu_buttons_holder", "description_label", "scene_transition")]
+[node name="MenuCycle" type="Control" parent="MenuScreen" node_paths=PackedStringArray("menu_buttons", "animation_player", "left_button_container", "center_button_container", "right_button_container", "extra_button_container", "selector_arrow", "menu_buttons_holder", "description_label", "scene_transition")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2996,9 +3086,11 @@ left_button_container = NodePath("LeftButtonContainer")
 center_button_container = NodePath("CenterButtonContainer")
 right_button_container = NodePath("RightButtonContainer")
 extra_button_container = NodePath("ExtraButtonContainer")
+selector_arrow = NodePath("../SelectorArrow")
 menu_buttons_holder = NodePath("MenuButtonsHolder")
 description_label = NodePath("../DescriptionContainer/DescriptionLabel")
 scene_transition = NodePath("../../SceneTransition")
+metadata/_edit_lock_ = true
 
 [node name="LeftButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle"]
 layout_mode = 1
@@ -3159,6 +3251,24 @@ grow_horizontal = 0
 grow_vertical = 2
 color = Color(0.149814, 0.567634, 0.821031, 0.309804)
 metadata/_edit_use_anchors_ = true
+
+[node name="SelectorArrow" type="TextureRect" parent="MenuScreen"]
+material = SubResource("ShaderMaterial_tcw2j")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.412
+anchor_right = 0.5
+anchor_bottom = 0.412
+offset_left = -29.0
+offset_top = 31.6805
+offset_right = 29.0
+offset_bottom = 60.6805
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("31_m4day")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="MenuBackButton" type="Button" parent="MenuScreen" groups=["gui_touch"]]
 self_modulate = Color(1, 1, 1, 0.627451)

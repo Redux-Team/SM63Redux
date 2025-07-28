@@ -45,7 +45,7 @@ mouse_default_cursor_shape = 2
 [node name="SettingLabel" type="Label" parent="Interaction/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 14
 
 [connection signal="button_down" from="Interaction" to="." method="_on_interaction_button_down"]
 [connection signal="button_up" from="Interaction" to="." method="_on_interaction_button_up"]
