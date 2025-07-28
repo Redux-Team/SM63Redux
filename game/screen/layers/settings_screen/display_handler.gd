@@ -30,6 +30,9 @@ func _ready() -> void:
 		vsync_entry.hide()
 		window_label.text = "Screen"
 	
+	if DisplayServer.get_name() == "Wayland":
+		win_mode_dropdown.hide()
+	
 
 
 func _on_fps_limit_option_selected(index: int) -> void:
