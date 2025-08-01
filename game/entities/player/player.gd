@@ -4,11 +4,12 @@ extends Entity
 
 @export_group("Movement Variables")
 @export_subgroup("Horizontal Movement")
+@export var walk_acceleration: float = 1.5
 @export var turn_speed: float = 1.5
 @export_subgroup("Vertical Movement")
-@export var jump_curve: Curve
-@export var double_jump_curve: Curve
-@export var triple_jump_curve: Curve
+@export var jump_strength: float = 320.0
+@export var double_jump_strength: float = 400.0
+@export var triple_jump_strength: float = 480.0
 @export var min_jump_time: float = 0.3
 @export var max_jump_time: float = 0.7
 @export var gravity: float = 10.0
@@ -26,9 +27,12 @@ extends Entity
 @export var state_machine: StateMachine
 
 var move_dir: float = 0.0
+var run_speed_percent: float = 0.0
 
 var is_running: bool = false
 var is_jumping: bool = false
+
+var current_jump: int = 0
 
 var disable_gravity: bool = false
 

@@ -1,6 +1,5 @@
-[gd_scene load_steps=53 format=3 uid="uid://b4nw5k2oa3ro0"]
+[gd_scene load_steps=90 format=3 uid="uid://b4nw5k2oa3ro0"]
 
-[ext_resource type="Texture2D" uid="uid://bc6xgigmim8tv" path="res://assets/textures/spritesheets/entity/player/mario/mario_idle.png" id="1_1a4jd"]
 [ext_resource type="Script" uid="uid://c7gtlwcfr4qrc" path="res://game/entities/player/player.gd" id="1_oic1i"]
 [ext_resource type="Texture2D" uid="uid://bt7q6lin1tj6b" path="res://assets/textures/spritesheets/entity/player/mario/mario_run_start.png" id="2_gqtae"]
 [ext_resource type="Texture2D" uid="uid://bggqny6vhljcf" path="res://assets/textures/spritesheets/entity/player/mario/mario_run_loop.png" id="2_x4rrl"]
@@ -14,11 +13,6 @@
 [ext_resource type="Script" uid="uid://34vwsbjkfape" path="res://game/entities/player/player_look_dir.gd" id="10_igs2l"]
 [ext_resource type="Script" uid="uid://ca22hbbtsi1aw" path="res://game/entities/player/jump_listener.gd" id="11_p5qu6"]
 
-[sub_resource type="Curve" id="Curve_heu0c"]
-_limits = [0.0, 425.0, 0.0, 1.0]
-_data = [Vector2(0, 425), 0.0, -0.0907378, 0, 0, Vector2(0.0628571, 425), -2.07844, 0.0, 0, 0, Vector2(0.274368, 0), 0.0, 0.0, 0, 0]
-point_count = 3
-
 [sub_resource type="Curve" id="Curve_5wwt0"]
 _limits = [0.0, 1.0, 0.0, 1.17131]
 _data = [Vector2(0, 0.17652), 0.0, -0.238165, 0, 0, Vector2(0.297279, 1), 0.0574147, 1.20214, 0, 0]
@@ -29,8 +23,8 @@ _limits = [0.0, 1.0, 0.0, 0.5]
 _data = [Vector2(0, 1), 0.0, -0.451789, 0, 0, Vector2(0.296813, 0), -4.93641, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gqtae"]
-atlas = ExtResource("1_1a4jd")
+[sub_resource type="AtlasTexture" id="AtlasTexture_fq5t3"]
+atlas = ExtResource("2_gqtae")
 region = Rect2(0, 0, 26, 35)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kn1iv"]
@@ -105,7 +99,7 @@ region = Rect2(104, 0, 26, 35)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_gqtae")
+"texture": SubResource("AtlasTexture_fq5t3")
 }],
 "loop": true,
 "name": &"idle",
@@ -176,6 +170,39 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x4rrl"]
 size = Vector2(10, 27)
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4neg5"]
+animation = &"backflip"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hnip2"]
+animation = &"bonk"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_conr4"]
+animation = &"crouch"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_e8mlx"]
+animation = &"dive"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cq8ym"]
+animation = &"dive_out_b"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1s5sw"]
+animation = &"dive_out_f"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6pmmc"]
+animation = &"double_jump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xt77v"]
+animation = &"fall"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8pcyd"]
+animation = &"ground_pound_fall"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fq5t3"]
+animation = &"ground_pound_slam"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0f2w8"]
+animation = &"ground_pound_start"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_oic1i"]
 animation = &"idle"
 
@@ -188,41 +215,114 @@ animation = &"run_loop"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dhej3"]
 animation = &"run_start"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_588tj"]
+animation = &"spin"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0rdsw"]
+animation = &"triple_jump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_heu0c"]
+animation = &"walk_loop"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_t56eh"]
+animation = &"walk_start"
+
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_v0nmi"]
 advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kn1iv"]
-advance_mode = 2
-advance_expression = "abs(move_dir) > 0.1"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5wwt0"]
 switch_mode = 2
 advance_mode = 2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dhej3"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6pmmc"]
 advance_mode = 2
-advance_expression = "!is_running"
+advance_expression = "abs(move_dir) > 0.01"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0rdsw"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xt77v"]
+advance_mode = 2
+advance_expression = "run_speed_percent > 60.0"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_conr4"]
+advance_mode = 2
+advance_expression = "current_jump >= 2"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4neg5"]
+advance_mode = 2
+advance_expression = "current_jump >= 3"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_t56eh"]
+advance_mode = 2
+advance_expression = "run_speed_percent <= 60.0"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_heu0c"]
 advance_mode = 2
-advance_expression = "!is_jumping"
+advance_expression = "abs(move_dir) > 0.6"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8pcyd"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fq5t3"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_e8mlx"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_588tj"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1s5sw"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6strl"]
+advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_oic1i"]
-states/End/position = Vector2(902, 100)
-states/Start/position = Vector2(353, 100)
+states/End/position = Vector2(1410.5, 259.083)
+states/Start/position = Vector2(173.211, 96.9926)
+states/backflip/node = SubResource("AnimationNodeAnimation_4neg5")
+states/backflip/position = Vector2(561.738, 95.2661)
+states/bonk/node = SubResource("AnimationNodeAnimation_hnip2")
+states/bonk/position = Vector2(1223.94, 259.269)
+states/crouch/node = SubResource("AnimationNodeAnimation_conr4")
+states/crouch/position = Vector2(562.1, 259.686)
+states/dive/node = SubResource("AnimationNodeAnimation_e8mlx")
+states/dive/position = Vector2(759.9, 259.222)
+states/dive_out_b/node = SubResource("AnimationNodeAnimation_cq8ym")
+states/dive_out_b/position = Vector2(761.754, 93.0931)
+states/dive_out_f/node = SubResource("AnimationNodeAnimation_1s5sw")
+states/dive_out_f/position = Vector2(759.608, 414.674)
+states/double_jump/node = SubResource("AnimationNodeAnimation_6pmmc")
+states/double_jump/position = Vector2(173.2, 414.052)
+states/fall/node = SubResource("AnimationNodeAnimation_xt77v")
+states/fall/position = Vector2(18.6078, 258.99)
+states/ground_pound_fall/node = SubResource("AnimationNodeAnimation_8pcyd")
+states/ground_pound_fall/position = Vector2(998.018, 414.985)
+states/ground_pound_slam/node = SubResource("AnimationNodeAnimation_fq5t3")
+states/ground_pound_slam/position = Vector2(998.716, 544.256)
+states/ground_pound_start/node = SubResource("AnimationNodeAnimation_0f2w8")
+states/ground_pound_start/position = Vector2(997.622, 258.709)
 states/idle/node = SubResource("AnimationNodeAnimation_oic1i")
-states/idle/position = Vector2(518, 100)
+states/idle/position = Vector2(364.574, 259.686)
 states/jump/node = SubResource("AnimationNodeAnimation_p5qu6")
-states/jump/position = Vector2(518, -27)
+states/jump/position = Vector2(174.974, 259.686)
 states/run_loop/node = SubResource("AnimationNodeAnimation_v0nmi")
-states/run_loop/position = Vector2(693, 224)
+states/run_loop/position = Vector2(561.586, 540.811)
 states/run_start/node = SubResource("AnimationNodeAnimation_dhej3")
-states/run_start/position = Vector2(518, 224)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_v0nmi"), "idle", "run_start", SubResource("AnimationNodeStateMachineTransition_kn1iv"), "run_start", "run_loop", SubResource("AnimationNodeStateMachineTransition_5wwt0"), "run_loop", "idle", SubResource("AnimationNodeStateMachineTransition_dhej3"), "jump", "idle", SubResource("AnimationNodeStateMachineTransition_heu0c")]
-graph_offset = Vector2(126, -33)
-
-[sub_resource type="Animation" id="Animation_v0nmi"]
-resource_name = "falling"
+states/run_start/position = Vector2(560.961, 413.811)
+states/spin/node = SubResource("AnimationNodeAnimation_588tj")
+states/spin/position = Vector2(-130.711, 258.896)
+states/triple_jump/node = SubResource("AnimationNodeAnimation_0rdsw")
+states/triple_jump/position = Vector2(173.222, 541.3)
+states/walk_loop/node = SubResource("AnimationNodeAnimation_heu0c")
+states/walk_loop/position = Vector2(364.58, 542.289)
+states/walk_start/node = SubResource("AnimationNodeAnimation_t56eh")
+states/walk_start/position = Vector2(364.093, 415.296)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_v0nmi"), "run_start", "run_loop", SubResource("AnimationNodeStateMachineTransition_5wwt0"), "idle", "walk_start", SubResource("AnimationNodeStateMachineTransition_6pmmc"), "walk_start", "walk_loop", SubResource("AnimationNodeStateMachineTransition_0rdsw"), "walk_loop", "run_loop", SubResource("AnimationNodeStateMachineTransition_xt77v"), "jump", "double_jump", SubResource("AnimationNodeStateMachineTransition_conr4"), "double_jump", "triple_jump", SubResource("AnimationNodeStateMachineTransition_4neg5"), "run_loop", "walk_loop", SubResource("AnimationNodeStateMachineTransition_t56eh"), "walk_start", "run_start", SubResource("AnimationNodeStateMachineTransition_heu0c"), "idle", "crouch", SubResource("AnimationNodeStateMachineTransition_8pcyd"), "crouch", "backflip", SubResource("AnimationNodeStateMachineTransition_fq5t3"), "ground_pound_fall", "ground_pound_slam", SubResource("AnimationNodeStateMachineTransition_e8mlx"), "dive", "dive_out_f", SubResource("AnimationNodeStateMachineTransition_588tj"), "dive", "dive_out_b", SubResource("AnimationNodeStateMachineTransition_1s5sw"), "ground_pound_start", "ground_pound_fall", SubResource("AnimationNodeStateMachineTransition_6strl")]
+graph_offset = Vector2(-260.196, 32.3397)
 
 [sub_resource type="Animation" id="Animation_oic1i"]
 resource_name = "idle"
@@ -239,19 +339,77 @@ loop_mode = 1
 resource_name = "run_start"
 length = 0.22
 
+[sub_resource type="Animation" id="Animation_t56eh"]
+resource_name = "walk_start"
+
+[sub_resource type="Animation" id="Animation_6pmmc"]
+resource_name = "walk_loop"
+
+[sub_resource type="Animation" id="Animation_8pcyd"]
+resource_name = "double_jump"
+
+[sub_resource type="Animation" id="Animation_fq5t3"]
+resource_name = "triple_jump"
+
+[sub_resource type="Animation" id="Animation_0rdsw"]
+resource_name = "crouch"
+
+[sub_resource type="Animation" id="Animation_xt77v"]
+resource_name = "backflip"
+
+[sub_resource type="Animation" id="Animation_cq8ym"]
+resource_name = "ground_pound_slam"
+
+[sub_resource type="Animation" id="Animation_1s5sw"]
+resource_name = "dive"
+
+[sub_resource type="Animation" id="Animation_0f2w8"]
+resource_name = "dive_out_f"
+
+[sub_resource type="Animation" id="Animation_6strl"]
+resource_name = "dive_out_b"
+
+[sub_resource type="Animation" id="Animation_conr4"]
+resource_name = "spin"
+
+[sub_resource type="Animation" id="Animation_tv6ny"]
+resource_name = "bonk"
+
+[sub_resource type="Animation" id="Animation_e8mlx"]
+resource_name = "ground_pound"
+
+[sub_resource type="Animation" id="Animation_4neg5"]
+resource_name = "ground_pound_fall"
+
+[sub_resource type="Animation" id="Animation_v0nmi"]
+resource_name = "fall"
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v0nmi"]
 _data = {
-&"falling": SubResource("Animation_v0nmi"),
+&"backflip": SubResource("Animation_xt77v"),
+&"bonk": SubResource("Animation_tv6ny"),
+&"crouch": SubResource("Animation_0rdsw"),
+&"dive": SubResource("Animation_1s5sw"),
+&"dive_out_b": SubResource("Animation_6strl"),
+&"dive_out_f": SubResource("Animation_0f2w8"),
+&"double_jump": SubResource("Animation_8pcyd"),
+&"fall": SubResource("Animation_v0nmi"),
+&"ground_pound_fall": SubResource("Animation_4neg5"),
+&"ground_pound_slam": SubResource("Animation_cq8ym"),
+&"ground_pound_start": SubResource("Animation_e8mlx"),
 &"idle": SubResource("Animation_oic1i"),
 &"jump": SubResource("Animation_heu0c"),
 &"run_loop": SubResource("Animation_p5qu6"),
-&"run_start": SubResource("Animation_igs2l")
+&"run_start": SubResource("Animation_igs2l"),
+&"spin": SubResource("Animation_conr4"),
+&"triple_jump": SubResource("Animation_fq5t3"),
+&"walk_loop": SubResource("Animation_6pmmc"),
+&"walk_start": SubResource("Animation_t56eh")
 }
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("state_machine")]
 script = ExtResource("1_oic1i")
 turn_speed = 2.5
-jump_curve = SubResource("Curve_heu0c")
 gravity = 13.5
 run_speedup = SubResource("Curve_5wwt0")
 run_slowdown = SubResource("Curve_kn1iv")
@@ -260,7 +418,7 @@ state_machine = NodePath("StateMachine")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_sgt08")
-animation = &"run_loop"
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -276,6 +434,7 @@ metadata/_custom_type_script = "uid://ckdxcirx7no42"
 
 [node name="GravityComponent" type="Node" parent="Components"]
 script = ExtResource("5_t56eh")
+gravity_strength = 13.0
 metadata/_custom_type_script = "uid://3mlrklnmakpk"
 
 [node name="StateMachine" type="AnimationTree" parent="." node_paths=PackedStringArray("entity_body", "entity_sprite", "states", "processes")]
