@@ -1070,7 +1070,7 @@ tracks/15/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-4, 0)]
+"values": [Vector2(-8, 0)]
 }
 tracks/16/type = "value"
 tracks/16/imported = false
@@ -1082,7 +1082,7 @@ tracks/16/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-10, 0)]
+"values": [Vector2(-20, 0)]
 }
 tracks/17/type = "value"
 tracks/17/imported = false
@@ -1094,7 +1094,7 @@ tracks/17/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(8, 0)]
+"values": [Vector2(16, 0)]
 }
 tracks/18/type = "value"
 tracks/18/imported = false
@@ -1106,7 +1106,7 @@ tracks/18/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-22, 0)]
+"values": [Vector2(-32, 0)]
 }
 tracks/19/type = "value"
 tracks/19/imported = false
@@ -1615,7 +1615,7 @@ tracks/11/keys = {
 "times": PackedFloat32Array(0, 0.366667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(-4, 0), Vector2(-2, 0)]
+"values": [Vector2(-8, 0), Vector2(-2, 0)]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
@@ -1627,7 +1627,7 @@ tracks/12/keys = {
 "times": PackedFloat32Array(0, 0.366667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(-10, 0), Vector2(-5, 0)]
+"values": [Vector2(-20, 0), Vector2(-5, 0)]
 }
 tracks/13/type = "value"
 tracks/13/imported = false
@@ -1639,7 +1639,7 @@ tracks/13/keys = {
 "times": PackedFloat32Array(0, 0.366667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(8, 0), Vector2(4, 0)]
+"values": [Vector2(16, 0), Vector2(4, 0)]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
@@ -1651,7 +1651,7 @@ tracks/14/keys = {
 "times": PackedFloat32Array(0, 0.366667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(-22, 0), Vector2(-11, 0)]
+"values": [Vector2(-32, 0), Vector2(-11, 0)]
 }
 tracks/15/type = "value"
 tracks/15/imported = false
@@ -2055,7 +2055,7 @@ tracks/14/keys = {
 "times": PackedFloat32Array(0, 0.366667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(-2, 0), Vector2(-4, 0)]
+"values": [Vector2(-2, 0), Vector2(-8, 0)]
 }
 tracks/15/type = "value"
 tracks/15/imported = false
@@ -2067,7 +2067,7 @@ tracks/15/keys = {
 "times": PackedFloat32Array(0, 0.366667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(-5, 0), Vector2(-10, 0)]
+"values": [Vector2(-5, 0), Vector2(-20, 0)]
 }
 tracks/16/type = "value"
 tracks/16/imported = false
@@ -2079,7 +2079,7 @@ tracks/16/keys = {
 "times": PackedFloat32Array(0, 0.366667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(4, 0), Vector2(8, 0)]
+"values": [Vector2(4, 0), Vector2(16, 0)]
 }
 tracks/17/type = "value"
 tracks/17/imported = false
@@ -2091,7 +2091,7 @@ tracks/17/keys = {
 "times": PackedFloat32Array(0, 0.366667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(-11, 0), Vector2(-22, 0)]
+"values": [Vector2(-11, 0), Vector2(-32, 0)]
 }
 tracks/18/type = "value"
 tracks/18/imported = false
@@ -2579,9 +2579,9 @@ metadata/_edit_lock_ = true
 
 [node name="BG" type="Parallax2D" parent="BG/BGLayers"]
 scroll_scale = Vector2(0.5, 0)
-scroll_offset = Vector2(-749, 152)
+scroll_offset = Vector2(-551, 180)
 repeat_size = Vector2(750, 0)
-autoscroll = Vector2(-4, 0)
+autoscroll = Vector2(-8, 0)
 repeat_times = 7
 follow_viewport = false
 
@@ -2596,7 +2596,6 @@ amount = 120
 texture = ExtResource("3_5m44c")
 lifetime = 5.0
 preprocess = 3.0
-speed_scale = 0.35
 emission_shape = 3
 emission_rect_extents = Vector2(700, 100)
 spread = 180.0
@@ -2618,7 +2617,6 @@ amount = 240
 texture = ExtResource("4_ltfsy")
 lifetime = 5.0
 preprocess = 3.0
-speed_scale = 0.35
 emission_shape = 3
 emission_rect_extents = Vector2(700, 100)
 spread = 180.0
@@ -2675,9 +2673,9 @@ metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
 [node name="BG2" type="Parallax2D" parent="BG/BGLayers"]
 scroll_scale = Vector2(0.5, 0)
-scroll_offset = Vector2(7, 187)
+scroll_offset = Vector2(-448, 197)
 repeat_size = Vector2(750, 0)
-autoscroll = Vector2(-10, 0)
+autoscroll = Vector2(-20, 0)
 repeat_times = 7
 follow_viewport = false
 
@@ -2686,9 +2684,9 @@ texture = ExtResource("3_eyv0a")
 
 [node name="FG2" type="Parallax2D" parent="BG/BGLayers"]
 scroll_scale = Vector2(0.5, 0)
-scroll_offset = Vector2(-9, 207)
+scroll_offset = Vector2(-739, 188)
 repeat_size = Vector2(750, 0)
-autoscroll = Vector2(8, 0)
+autoscroll = Vector2(16, 0)
 repeat_times = 7
 follow_viewport = false
 
@@ -2697,9 +2695,9 @@ texture = ExtResource("3_fq6c4")
 
 [node name="FG" type="Parallax2D" parent="BG/BGLayers"]
 scroll_scale = Vector2(0.5, 0)
-scroll_offset = Vector2(0, 217)
+scroll_offset = Vector2(-44, 219)
 repeat_size = Vector2(750, 0)
-autoscroll = Vector2(-22, 0)
+autoscroll = Vector2(-32, 0)
 repeat_times = 7
 follow_viewport = false
 
@@ -3032,12 +3030,13 @@ metadata/_edit_use_anchors_ = true
 
 [node name="MenuScreen" type="Control" parent="."]
 visible = false
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 15.0
-offset_bottom = 14.9988
+offset_top = 60.0
+offset_bottom = 59.9988
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
