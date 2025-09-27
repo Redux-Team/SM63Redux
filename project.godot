@@ -15,7 +15,7 @@ config/version="0.2.0"
 run/main_scene="uid://bkqukgs0ivej"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="SM63Redux"
-config/features=PackedStringArray("4.4", "GL Compatibility")
+config/features=PackedStringArray("4.5", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 config/icon="uid://b7hhchui2qslg"
@@ -55,8 +55,8 @@ gui_touch=""
 
 [gui]
 
-theme/custom="uid://jwr7shpg3llo"
 theme/default_font_antialiasing=0
+theme/custom="uid://jwr7shpg3llo"
 
 [input]
 
