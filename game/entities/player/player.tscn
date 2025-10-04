@@ -322,7 +322,40 @@ states/walk_loop/position = Vector2(364.58, 542.289)
 states/walk_start/node = SubResource("AnimationNodeAnimation_t56eh")
 states/walk_start/position = Vector2(364.093, 415.296)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_v0nmi"), "run_start", "run_loop", SubResource("AnimationNodeStateMachineTransition_5wwt0"), "idle", "walk_start", SubResource("AnimationNodeStateMachineTransition_6pmmc"), "walk_start", "walk_loop", SubResource("AnimationNodeStateMachineTransition_0rdsw"), "walk_loop", "run_loop", SubResource("AnimationNodeStateMachineTransition_xt77v"), "jump", "double_jump", SubResource("AnimationNodeStateMachineTransition_conr4"), "double_jump", "triple_jump", SubResource("AnimationNodeStateMachineTransition_4neg5"), "run_loop", "walk_loop", SubResource("AnimationNodeStateMachineTransition_t56eh"), "walk_start", "run_start", SubResource("AnimationNodeStateMachineTransition_heu0c"), "idle", "crouch", SubResource("AnimationNodeStateMachineTransition_8pcyd"), "crouch", "backflip", SubResource("AnimationNodeStateMachineTransition_fq5t3"), "ground_pound_fall", "ground_pound_slam", SubResource("AnimationNodeStateMachineTransition_e8mlx"), "dive", "dive_out_f", SubResource("AnimationNodeStateMachineTransition_588tj"), "dive", "dive_out_b", SubResource("AnimationNodeStateMachineTransition_1s5sw"), "ground_pound_start", "ground_pound_fall", SubResource("AnimationNodeStateMachineTransition_6strl")]
-graph_offset = Vector2(-260.196, 32.3397)
+graph_offset = Vector2(-345.196, 161.33969)
+
+[sub_resource type="Animation" id="Animation_xt77v"]
+resource_name = "backflip"
+
+[sub_resource type="Animation" id="Animation_tv6ny"]
+resource_name = "bonk"
+
+[sub_resource type="Animation" id="Animation_0rdsw"]
+resource_name = "crouch"
+
+[sub_resource type="Animation" id="Animation_1s5sw"]
+resource_name = "dive"
+
+[sub_resource type="Animation" id="Animation_6strl"]
+resource_name = "dive_out_b"
+
+[sub_resource type="Animation" id="Animation_0f2w8"]
+resource_name = "dive_out_f"
+
+[sub_resource type="Animation" id="Animation_8pcyd"]
+resource_name = "double_jump"
+
+[sub_resource type="Animation" id="Animation_v0nmi"]
+resource_name = "fall"
+
+[sub_resource type="Animation" id="Animation_4neg5"]
+resource_name = "ground_pound_fall"
+
+[sub_resource type="Animation" id="Animation_cq8ym"]
+resource_name = "ground_pound_slam"
+
+[sub_resource type="Animation" id="Animation_e8mlx"]
+resource_name = "ground_pound"
 
 [sub_resource type="Animation" id="Animation_oic1i"]
 resource_name = "idle"
@@ -339,50 +372,17 @@ loop_mode = 1
 resource_name = "run_start"
 length = 0.22
 
-[sub_resource type="Animation" id="Animation_t56eh"]
-resource_name = "walk_start"
-
-[sub_resource type="Animation" id="Animation_6pmmc"]
-resource_name = "walk_loop"
-
-[sub_resource type="Animation" id="Animation_8pcyd"]
-resource_name = "double_jump"
+[sub_resource type="Animation" id="Animation_conr4"]
+resource_name = "spin"
 
 [sub_resource type="Animation" id="Animation_fq5t3"]
 resource_name = "triple_jump"
 
-[sub_resource type="Animation" id="Animation_0rdsw"]
-resource_name = "crouch"
+[sub_resource type="Animation" id="Animation_6pmmc"]
+resource_name = "walk_loop"
 
-[sub_resource type="Animation" id="Animation_xt77v"]
-resource_name = "backflip"
-
-[sub_resource type="Animation" id="Animation_cq8ym"]
-resource_name = "ground_pound_slam"
-
-[sub_resource type="Animation" id="Animation_1s5sw"]
-resource_name = "dive"
-
-[sub_resource type="Animation" id="Animation_0f2w8"]
-resource_name = "dive_out_f"
-
-[sub_resource type="Animation" id="Animation_6strl"]
-resource_name = "dive_out_b"
-
-[sub_resource type="Animation" id="Animation_conr4"]
-resource_name = "spin"
-
-[sub_resource type="Animation" id="Animation_tv6ny"]
-resource_name = "bonk"
-
-[sub_resource type="Animation" id="Animation_e8mlx"]
-resource_name = "ground_pound"
-
-[sub_resource type="Animation" id="Animation_4neg5"]
-resource_name = "ground_pound_fall"
-
-[sub_resource type="Animation" id="Animation_v0nmi"]
-resource_name = "fall"
+[sub_resource type="Animation" id="Animation_t56eh"]
+resource_name = "walk_start"
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v0nmi"]
 _data = {
@@ -418,7 +418,8 @@ state_machine = NodePath("StateMachine")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_sgt08")
-animation = &"idle"
+animation = &"run_loop"
+frame_progress = 0.24712297
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
