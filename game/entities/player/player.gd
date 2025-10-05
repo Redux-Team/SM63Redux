@@ -31,6 +31,7 @@ var run_speed_percent: float = 0.0
 
 var is_running: bool = false
 var is_jumping: bool = false
+var is_spinning: bool = false
 
 var current_jump: int = 0
 
