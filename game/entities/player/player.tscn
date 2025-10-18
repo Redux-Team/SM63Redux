@@ -1,4 +1,4 @@
-[gd_scene load_steps=130 format=3 uid="uid://b4nw5k2oa3ro0"]
+[gd_scene load_steps=128 format=3 uid="uid://b4nw5k2oa3ro0"]
 
 [ext_resource type="Script" uid="uid://c7gtlwcfr4qrc" path="res://game/entities/player/player.gd" id="1_oic1i"]
 [ext_resource type="Texture2D" uid="uid://0xo2j11rc7vp" path="res://assets/textures/spritesheets/entity/player/mario/mario_fall_loop.png" id="2_4neg5"]
@@ -9,8 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://bggqny6vhljcf" path="res://assets/textures/spritesheets/entity/player/mario/mario_run_loop.png" id="2_x4rrl"]
 [ext_resource type="Texture2D" uid="uid://gu8c05mr1tnv" path="res://assets/textures/spritesheets/entity/player/mario/mario_jump_l.png" id="3_t56eh"]
 [ext_resource type="Texture2D" uid="uid://c2y02sscoddc1" path="res://assets/textures/spritesheets/entity/player/mario/mario_jump_r.png" id="4_6pmmc"]
-[ext_resource type="Script" uid="uid://ckdxcirx7no42" path="res://core/components/entity/health_component.gd" id="5_6pmmc"]
-[ext_resource type="Script" uid="uid://3mlrklnmakpk" path="res://core/components/entity/gravity_component.gd" id="5_t56eh"]
 [ext_resource type="Script" uid="uid://be2xsj74ekqmn" path="res://util/state_machine/state_machine.gd" id="5_v0nmi"]
 [ext_resource type="Script" uid="uid://b41vchvbrfysw" path="res://game/entities/player/state_machine/states/run/run_start.gd" id="6_kn1iv"]
 [ext_resource type="Script" uid="uid://dgk40u56eq4h6" path="res://game/entities/player/run.gd" id="7_dhej3"]
@@ -18,13 +16,13 @@
 [ext_resource type="Script" uid="uid://dq31ruid21xll" path="res://game/entities/player/jump.gd" id="9_heu0c"]
 [ext_resource type="Script" uid="uid://34vwsbjkfape" path="res://game/entities/player/player_look_dir.gd" id="10_igs2l"]
 [ext_resource type="Script" uid="uid://ca22hbbtsi1aw" path="res://game/entities/player/jump_listener.gd" id="11_p5qu6"]
-[ext_resource type="Script" uid="uid://dcm7svui7rle1" path="res://game/entities/player/fall.gd" id="13_xt77v"]
-[ext_resource type="Script" uid="uid://bf0sps1jmykdv" path="res://game/entities/player/grounded_movement.gd" id="15_0rdsw"]
-[ext_resource type="Script" uid="uid://djtxt523dd7gu" path="res://game/entities/player/fall_loop.gd" id="16_8pcyd"]
+[ext_resource type="Script" path="res://game/entities/player/fall.gd" id="13_xt77v"]
+[ext_resource type="Script" path="res://game/entities/player/grounded_movement.gd" id="15_0rdsw"]
+[ext_resource type="Script" path="res://game/entities/player/fall_loop.gd" id="16_8pcyd"]
 
 [sub_resource type="Curve" id="Curve_5wwt0"]
 _limits = [0.0, 1.0, 0.0, 1.17131]
-_data = [Vector2(0, 0.17652), 0.0, -0.238165, 0, 0, Vector2(0.297279, 1), 0.0574147, 1.20214, 0, 0]
+_data = [Vector2(0, 0.17652), 0.0, 2.0744267, 0, 0, Vector2(1.17131, 1), 0.0, 1.20214, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_kn1iv"]
@@ -566,7 +564,7 @@ states/walk_loop/position = Vector2(364.58, 542.289)
 states/walk_start/node = SubResource("AnimationNodeAnimation_t56eh")
 states/walk_start/position = Vector2(364.093, 415.296)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_v0nmi"), "run_start", "run_loop", SubResource("AnimationNodeStateMachineTransition_5wwt0"), "idle", "walk_start", SubResource("AnimationNodeStateMachineTransition_6pmmc"), "walk_start", "walk_loop", SubResource("AnimationNodeStateMachineTransition_0rdsw"), "walk_loop", "run_loop", SubResource("AnimationNodeStateMachineTransition_xt77v"), "jump", "double_jump", SubResource("AnimationNodeStateMachineTransition_conr4"), "double_jump", "triple_jump", SubResource("AnimationNodeStateMachineTransition_4neg5"), "run_loop", "walk_loop", SubResource("AnimationNodeStateMachineTransition_t56eh"), "walk_start", "run_start", SubResource("AnimationNodeStateMachineTransition_heu0c"), "idle", "crouch", SubResource("AnimationNodeStateMachineTransition_8pcyd"), "crouch", "backflip", SubResource("AnimationNodeStateMachineTransition_fq5t3"), "ground_pound_fall", "ground_pound_slam", SubResource("AnimationNodeStateMachineTransition_e8mlx"), "dive", "dive_out_f", SubResource("AnimationNodeStateMachineTransition_588tj"), "dive", "dive_out_b", SubResource("AnimationNodeStateMachineTransition_1s5sw"), "ground_pound_start", "ground_pound_fall", SubResource("AnimationNodeStateMachineTransition_6strl"), "fall_start", "fall_loop", SubResource("AnimationNodeStateMachineTransition_tv6ny")]
-graph_offset = Vector2(-434.196, 456.3397)
+graph_offset = Vector2(20.803986, 262.3397)
 
 [sub_resource type="Animation" id="Animation_xt77v"]
 resource_name = "backflip"
@@ -656,15 +654,14 @@ _data = {
 &"walk_start": SubResource("Animation_t56eh")
 }
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("state_machine", "components")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("state_machine")]
 script = ExtResource("1_oic1i")
 turn_speed = 2.5
-gravity = 13.5
 run_speedup = SubResource("Curve_5wwt0")
 run_slowdown = SubResource("Curve_kn1iv")
 run_max_speed = 220.0
 state_machine = NodePath("StateMachine")
-components = [NodePath("Components/HealthComponent"), NodePath("Components/GravityComponent")]
+hp = 8.0
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_sgt08")
@@ -675,18 +672,6 @@ frame_progress = 0.017575774
 visible = false
 position = Vector2(0, 3.5)
 shape = SubResource("RectangleShape2D_x4rrl")
-
-[node name="Components" type="Node" parent="."]
-
-[node name="HealthComponent" type="Node" parent="Components"]
-script = ExtResource("5_6pmmc")
-health = 8
-metadata/_custom_type_script = "uid://ckdxcirx7no42"
-
-[node name="GravityComponent" type="Node" parent="Components"]
-script = ExtResource("5_t56eh")
-gravity_strength = 13.0
-metadata/_custom_type_script = "uid://3mlrklnmakpk"
 
 [node name="StateMachine" type="AnimationTree" parent="." node_paths=PackedStringArray("entity_body", "entity_sprite", "states", "processes")]
 root_node = NodePath(".")

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://colnhc53qkwfr"
-path="res://.godot/imported/slider_tick.png-6f83a86d57066038a20351c7de4bf46f.ctex"
+uid="uid://u3dq7skyifad"
+path="res://.godot/imported/mario_uncrouch.png-60aa43622d725c88c9798dad6b05fb38.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/gui/menu/slider_tick.png"
-dest_files=["res://.godot/imported/slider_tick.png-6f83a86d57066038a20351c7de4bf46f.ctex"]
+source_file="res://assets/textures/spritesheets/entity/player/mario/mario_uncrouch.png"
+dest_files=["res://.godot/imported/mario_uncrouch.png-60aa43622d725c88c9798dad6b05fb38.ctex"]
 
 [params]
 
