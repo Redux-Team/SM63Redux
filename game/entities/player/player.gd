@@ -55,6 +55,6 @@ func _input(_event: InputEvent) -> void:
 	move_dir = Input.get_axis(&"move_left", &"move_right")
 	is_jumping = Input.is_action_just_pressed("jump") and is_on_floor()
 	is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
-	is_diving = Input.is_action_just_pressed("crouch") and not is_on_floor()
+	is_diving = Input.is_action_just_pressed("dive") and not is_on_floor()
 	
 	if is_crouching: move_dir = 0

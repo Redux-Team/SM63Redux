@@ -161,7 +161,7 @@ static func get_control_scheme() -> ControlScheme:
 
 static func reset_control_scheme() -> void:
 	var _input_config: InputConfig = Config._current_conf.input_config
-	_input_config.control_schemes[_input_config.selected_control_scheme] = ControlScheme.copy_from(_input_config.default_control_scheme)
+	_input_config.control_schemes[_input_config.selected_control_scheme] = ControlScheme.copy_from(load("uid://dbwchs6hs285b"))
 	Singleton.control_scheme_changed.emit()
 
 
