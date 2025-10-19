@@ -4,6 +4,7 @@ extends Node
 signal input_type_changed
 signal config_changed
 signal control_scheme_changed
+signal debug_mode_toggled
 
 enum ScreenTransitionType {
 	TEXTURE_ZOOM
@@ -16,6 +17,10 @@ enum InputType {
 }
 
 var version: String = ProjectSettings.get("application/config/version")
+var debug_mode: bool = false:
+	set(dm):
+		debug_mode = dm
+		debug_mode_toggled.emit()
 
 @export var sfx_container: Node
 @export var transition_overlay: ColorRect

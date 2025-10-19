@@ -11,12 +11,9 @@ size = Vector2(11764, 20)
 script = ExtResource("1_adaxd")
 
 [node name="Player" parent="." instance=ExtResource("1_o2uqb")]
-min_jump_time = 0.1
-max_jump_time = 0.3
-is_invulnerable = true
+position = Vector2(0, 114)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(1.475, 1.475)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 

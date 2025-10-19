@@ -8,6 +8,7 @@ enum DamageType {
 	STRIKE
 }
 
+@export var sprite: AnimatedSprite2D
 
 @export_group("Components")
 
@@ -28,6 +29,22 @@ enum DamageType {
 ## or areas where gravity must be changed whilst preserving the original gravity strength.
 @export var gravity_scale_factor: float = 1.0
 
+
+@export_subgroup("Friction", "")
+## Whether the entity is affected by friction or not. 
+## [br][br]
+## [b]Note:[/b] disabling this component does [b]not[/b] disable friction, 
+## rather just makes entities immediately [u]stop[/u] as opposed to slowing down. 
+## To "disable" friction for endless sliding, set [member base_friction] or
+## [member friction_multiplier] to [code]0.0[/code].
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var has_friction: bool = true
+## The base amount of friction. This would normally not be modified mid-game, as
+## this is more of a base character attribute.
+@export var base_friction: float = 1.0
+## A multiplier for [member base_friction]
+@export var friction_multiplier: float = 1.0
+
+
 @export_subgroup("Invulnerable")
 ## Determines whether the entity is able to receive damage from the [method damage] method.
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var is_invulnerable: bool = false
@@ -35,7 +52,10 @@ enum DamageType {
 @export var invulnerability_exceptions: Array[DamageType]
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	_on_tick(delta)
+	if Engine.is_editor_hint():
+		return
 	if has_gravity: _gravity_handler()
 	move_and_slide()
 
@@ -57,6 +77,26 @@ func kill() -> void:
 	if has_heath:
 		hp = 0
 		_on_death(DamageType.GENERIC)
+
+## Uses the [b]friction component[/b]. Returns the effective friction multiplier.
+func get_effective_friction() -> float:
+	return base_friction * friction_multiplier
+
+## Uses the [b]friction component[/b]. Helper function to automatically apply
+## friction.
+func apply_friction() -> void:
+	if is_on_floor():
+		var friction: float = get_effective_friction()
+		
+		if abs(velocity.x) <= friction or not has_friction:
+			velocity.x = 0
+		else:
+			velocity.x = lerpf(velocity.x, 0, friction * 0.25)
+
+
+## Called every tick of the physics process, does not override any internal processing.
+func _on_tick(delta: float) -> void:
+	pass
 
 ## Called when the entity's HP becomes 0.
 func _on_death(type: DamageType, source: Node2D = null) -> void:
