@@ -21,6 +21,12 @@ position = Vector2(0, 114)
 position = Vector2(0, 364)
 shape = SubResource("RectangleShape2D_o2uqb")
 
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D2"]
+position = Vector2(175, 366)
+polygon = PackedVector2Array(0, 1, 223, -145, 377, -149, 459, -110, 543, -65, 563, 0)
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(82, 322)
 texture = ExtResource("3_mxoeq")

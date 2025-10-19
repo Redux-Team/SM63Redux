@@ -2,7 +2,7 @@ extends State
 
 
 func _physics_process(delta: float) -> void:
-	if abs(player.move_dir) == 0 or (player.is_diving and player.is_on_floor()):
+	if abs(player.move_dir) == 0:
 		player.apply_friction()
 	
 	player.is_falling = player.velocity.y > 0

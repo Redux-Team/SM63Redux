@@ -2,9 +2,14 @@ extends State
 
 
 func _on_enter(_from: StringName) -> void:
-	if player.sprite.flip_h:
-		player.velocity.x = -700
-	else:
-		player.velocity.x = 700
+	player.is_diving = true
 	
-	player.velocity.y = -5
+	if player.sprite.flip_h:
+		player.velocity.x = -500
+	else:
+		player.velocity.x = 500
+	player.velocity.y *= 0.5
+
+
+func _on_exit(_to: StringName) -> void:
+	player.is_diving = false
