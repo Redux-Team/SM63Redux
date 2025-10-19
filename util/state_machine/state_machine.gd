@@ -12,6 +12,9 @@ signal machine_ended
 @export var processes: Array[StateProcess]
 
 
+var animation_player: AnimationPlayer:
+	get():
+		return get_node(anim_player)
 var current_state: State
 var playback: AnimationNodeStateMachinePlayback
 var last_animation_node: StringName
@@ -48,6 +51,7 @@ func change_state(state_name: StringName) -> void:
 		current_state._on_exit(state_name)
 		current_state.disable_processing()
 	
+	animation_player.play(&"RESET")
 	current_state = new_state
 	current_state.enable_processing()
 	current_state._on_enter(old_state.state_name if old_state else &"")

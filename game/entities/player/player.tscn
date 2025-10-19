@@ -526,7 +526,7 @@ _data = {
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("state_machine", "debug_container", "sprite")]
 script = ExtResource("1_oic1i")
-midair_turn_speed = 1.5
+midair_turn_speed = 2.5
 state_machine = NodePath("StateMachine")
 debug_container = NodePath("DebugContainer")
 sprite = NodePath("AnimatedSprite2D")
@@ -600,13 +600,6 @@ script = ExtResource("11_heu0c")
 superstate = NodePath("..")
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
-[node name="Fall" type="Node" parent="StateMachine/States/Dry/Grounded" node_paths=PackedStringArray("superstate")]
-script = ExtResource("8_p5qu6")
-superstate = NodePath("..")
-has_default_animations = true
-animations = Array[StringName]([&"fall_start", &"fall_loop"])
-metadata/_custom_type_script = "uid://ra55p55nrtg4"
-
 [node name="Crouch" type="Node" parent="StateMachine/States/Dry/Grounded" node_paths=PackedStringArray("superstate")]
 script = ExtResource("8_p5qu6")
 superstate = NodePath("../..")
@@ -653,6 +646,13 @@ script = ExtResource("20_e8mlx")
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"dive"])
+metadata/_custom_type_script = "uid://ra55p55nrtg4"
+
+[node name="Fall" type="Node" parent="StateMachine/States/Dry/Airborne" node_paths=PackedStringArray("superstate")]
+script = ExtResource("8_p5qu6")
+superstate = NodePath("..")
+has_default_animations = true
+animations = Array[StringName]([&"fall_start", &"fall_loop"])
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="Processes" type="Node" parent="StateMachine"]

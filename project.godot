@@ -25,6 +25,10 @@ config/windows_native_icon="res://meta/icon.ico"
 
 Singleton="*res://global/singleton.tscn"
 
+[debug]
+
+gdscript/warnings/inferred_declaration=2
+
 [display]
 
 window/size/viewport_width=640

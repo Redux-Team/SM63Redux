@@ -6,6 +6,7 @@ extends Entity
 @export var walk_acceleration: float = 20.0
 @export var turn_speed: float = 2.5
 @export var midair_turn_speed: float = 1.0
+@export var air_resistance: float = 1.0
 @export_subgroup("Vertical Movement")
 @export var jump_strength: float = 340.0
 @export var double_jump_strength: float = 440.0

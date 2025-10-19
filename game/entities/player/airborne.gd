@@ -1,18 +1,17 @@
+## airborne.gd
 extends State
-
 
 func _physics_process(delta: float) -> void:
 	if abs(player.move_dir) > 0 and not player.is_diving:
-		speed_up(player.move_dir)
+		air_move(player.move_dir)
 
 
-func speed_up(move_dir: float) -> void:
-	var target_speed = player.run_max_speed * move_dir * 0.75
-	var accel = player.walk_acceleration
-	var friction = player.get_effective_friction()
-
+func air_move(move_dir: float) -> void:
+	var accel: float = player.walk_acceleration
+	var target_speed: float = player.run_max_speed * move_dir
+	var accel_mult: float = 0.85
+	
 	if sign(player.velocity.x) != sign(move_dir) and abs(player.velocity.x) > 10.0:
-		var turn_factor = lerpf(1.0, player.midair_turn_speed, clamp(friction, 0.0, 1.0))
-		accel *= turn_factor
-
-	player.velocity.x = move_toward(player.velocity.x, target_speed, accel)
+		accel_mult = 1.2
+	
+	player.velocity.x = move_toward(player.velocity.x, target_speed, accel * accel_mult)
