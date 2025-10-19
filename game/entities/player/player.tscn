@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=3 uid="uid://b4nw5k2oa3ro0"]
+[gd_scene load_steps=104 format=3 uid="uid://b4nw5k2oa3ro0"]
 
 [ext_resource type="Script" uid="uid://c7gtlwcfr4qrc" path="res://game/entities/player/player.gd" id="1_oic1i"]
 [ext_resource type="Texture2D" uid="uid://bjysolnwpkvk2" path="res://assets/textures/spritesheets/entity/player/mario/crouch.png" id="2_conr4"]
@@ -426,6 +426,10 @@ advance_expression = "is_diving"
 advance_mode = 2
 advance_expression = "is_on_floor()"
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_j8m7m"]
+advance_mode = 2
+advance_expression = "!is_on_floor()"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_oic1i"]
 states/Crouch/node = SubResource("AnimationNodeAnimation_conr4")
 states/Crouch/position = Vector2(551.936, 73.686005)
@@ -435,7 +439,7 @@ states/DoubleJump/node = SubResource("AnimationNodeAnimation_6pmmc")
 states/DoubleJump/position = Vector2(173.426, 559.052)
 states/End/position = Vector2(1410.5, 259.083)
 states/Fall/node = SubResource("AnimationNodeAnimation_xt77v")
-states/Fall/position = Vector2(547.706, 416.674)
+states/Fall/position = Vector2(536.706, 416.686)
 states/Floorslide/node = SubResource("AnimationNodeAnimation_tv6ny")
 states/Floorslide/position = Vector2(165.80396, 267.686)
 states/Idle/node = SubResource("AnimationNodeAnimation_oic1i")
@@ -465,8 +469,8 @@ states/ground_pound_start/node = SubResource("AnimationNodeAnimation_0f2w8")
 states/ground_pound_start/position = Vector2(997.622, 258.709)
 states/spin/node = SubResource("AnimationNodeAnimation_588tj")
 states/spin/position = Vector2(-130.711, 258.896)
-transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_v0nmi"), "Jump", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_conr4"), "DoubleJump", "TripleJump", SubResource("AnimationNodeStateMachineTransition_4neg5"), "Crouch", "backflip", SubResource("AnimationNodeStateMachineTransition_fq5t3"), "ground_pound_fall", "ground_pound_slam", SubResource("AnimationNodeStateMachineTransition_e8mlx"), "Dive", "dive_out_f", SubResource("AnimationNodeStateMachineTransition_588tj"), "Dive", "dive_out_b", SubResource("AnimationNodeStateMachineTransition_1s5sw"), "ground_pound_start", "ground_pound_fall", SubResource("AnimationNodeStateMachineTransition_6strl"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_dhej3"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_5wwt0"), "Idle", "Jump", SubResource("AnimationNodeStateMachineTransition_igs2l"), "Walk", "Jump", SubResource("AnimationNodeStateMachineTransition_p5qu6"), "Idle", "Fall", SubResource("AnimationNodeStateMachineTransition_heu0c"), "Jump", "Idle", SubResource("AnimationNodeStateMachineTransition_t56eh"), "DoubleJump", "Jump", SubResource("AnimationNodeStateMachineTransition_6pmmc"), "TripleJump", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_xt77v"), "Fall", "Landed", SubResource("AnimationNodeStateMachineTransition_tv6ny"), "Landed", "Idle", SubResource("AnimationNodeStateMachineTransition_2vc1s"), "Idle", "Crouch", SubResource("AnimationNodeStateMachineTransition_0rdsw"), "Crouch", "Idle", SubResource("AnimationNodeStateMachineTransition_8pcyd"), "Walk", "Floorslide", SubResource("AnimationNodeStateMachineTransition_k6116"), "Floorslide", "Idle", SubResource("AnimationNodeStateMachineTransition_so4hh"), "Idle", "Floorslide", SubResource("AnimationNodeStateMachineTransition_cq8ym"), "Fall", "Dive", SubResource("AnimationNodeStateMachineTransition_hnip2"), "Jump", "Dive", SubResource("AnimationNodeStateMachineTransition_0f2w8"), "DoubleJump", "Dive", SubResource("AnimationNodeStateMachineTransition_aidgt"), "TripleJump", "Dive", SubResource("AnimationNodeStateMachineTransition_i5qpf"), "Dive", "Floorslide", SubResource("AnimationNodeStateMachineTransition_2jquf")]
-graph_offset = Vector2(-198.5307, 274.33972)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_v0nmi"), "Jump", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_conr4"), "DoubleJump", "TripleJump", SubResource("AnimationNodeStateMachineTransition_4neg5"), "Crouch", "backflip", SubResource("AnimationNodeStateMachineTransition_fq5t3"), "ground_pound_fall", "ground_pound_slam", SubResource("AnimationNodeStateMachineTransition_e8mlx"), "Dive", "dive_out_f", SubResource("AnimationNodeStateMachineTransition_588tj"), "Dive", "dive_out_b", SubResource("AnimationNodeStateMachineTransition_1s5sw"), "ground_pound_start", "ground_pound_fall", SubResource("AnimationNodeStateMachineTransition_6strl"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_dhej3"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_5wwt0"), "Idle", "Jump", SubResource("AnimationNodeStateMachineTransition_igs2l"), "Walk", "Jump", SubResource("AnimationNodeStateMachineTransition_p5qu6"), "Idle", "Fall", SubResource("AnimationNodeStateMachineTransition_heu0c"), "Jump", "Idle", SubResource("AnimationNodeStateMachineTransition_t56eh"), "DoubleJump", "Jump", SubResource("AnimationNodeStateMachineTransition_6pmmc"), "TripleJump", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_xt77v"), "Fall", "Landed", SubResource("AnimationNodeStateMachineTransition_tv6ny"), "Landed", "Idle", SubResource("AnimationNodeStateMachineTransition_2vc1s"), "Idle", "Crouch", SubResource("AnimationNodeStateMachineTransition_0rdsw"), "Crouch", "Idle", SubResource("AnimationNodeStateMachineTransition_8pcyd"), "Walk", "Floorslide", SubResource("AnimationNodeStateMachineTransition_k6116"), "Floorslide", "Idle", SubResource("AnimationNodeStateMachineTransition_so4hh"), "Idle", "Floorslide", SubResource("AnimationNodeStateMachineTransition_cq8ym"), "Fall", "Dive", SubResource("AnimationNodeStateMachineTransition_hnip2"), "Jump", "Dive", SubResource("AnimationNodeStateMachineTransition_0f2w8"), "DoubleJump", "Dive", SubResource("AnimationNodeStateMachineTransition_aidgt"), "TripleJump", "Dive", SubResource("AnimationNodeStateMachineTransition_i5qpf"), "Dive", "Floorslide", SubResource("AnimationNodeStateMachineTransition_2jquf"), "Walk", "Fall", SubResource("AnimationNodeStateMachineTransition_j8m7m")]
+graph_offset = Vector2(56.4693, 331.33972)
 
 [sub_resource type="Animation" id="Animation_2vc1s"]
 length = 0.001
@@ -593,6 +597,8 @@ script = ExtResource("8_p5qu6")
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"walk_start", &"walk_loop"])
+assertions = "is_on_floor()"
+assertions_run_on_process = true
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="Landed" type="Node" parent="StateMachine/States/Dry/Grounded" node_paths=PackedStringArray("superstate")]
@@ -605,6 +611,7 @@ script = ExtResource("8_p5qu6")
 superstate = NodePath("../..")
 has_default_animations = true
 animations = Array[StringName]([&"crouch"])
+assertions = "is_on_floor()"
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="Floorslide" type="Node" parent="StateMachine/States/Dry/Grounded" node_paths=PackedStringArray("superstate")]
@@ -612,6 +619,7 @@ script = ExtResource("16_cq8ym")
 superstate = NodePath("../..")
 has_default_animations = true
 animations = Array[StringName]([&"floor_slide"])
+assertions = "is_on_floor()"
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="Airborne" type="Node" parent="StateMachine/States/Dry" node_paths=PackedStringArray("superstate")]
@@ -653,6 +661,8 @@ script = ExtResource("8_p5qu6")
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"fall_start", &"fall_loop"])
+assertions_enabled = true
+assertions = "velocity.y >= 0"
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="Processes" type="Node" parent="StateMachine"]

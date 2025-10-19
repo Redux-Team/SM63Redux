@@ -7,8 +7,20 @@ extends Node
 ## Plays sprite animations in sequential order, can be done manually by overriding
 ## [method _animation_handler] 
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var has_default_animations: bool = false
-## The types of damage that the invulnerability does not apply to.
 @export var animations: Array[StringName]
+
+@export_group("Assertions", "assertions")
+## Whether assertions are enabled, useful when tracking down incorrect behavior during a state.
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var assertions_enabled: bool = false
+@export_custom(PROPERTY_HINT_EXPRESSION, "") var assertions: String
+## Perform an assertion check on enter.
+@export var assertions_run_on_enter: bool = true
+## Perform an assertion check each physics frame.
+@export var assertions_run_on_process: bool = false
+## Perform an assertion check on exit.
+@export var assertions_run_on_exit: bool = false
+## Perform an assertion check for the superstate.
+@export var assertions_run_for_superstate: bool = false
 
 var entity: Entity
 var player: Player:
@@ -59,6 +71,35 @@ func _animation_handler() -> void:
 		var chain: StateMachine.AnimationChain = state_machine.play_animation(animations.get(0))
 		for i: int in range(animations.size() - 1):
 			chain.then(animations.get(i + 1))
+
+
+func _assertions_check(from: String = "") -> void:
+	if not assertions_enabled or assertions.is_empty():
+		return
+		
+	var assertions_list: PackedStringArray = assertions.split("\n", false)
+		
+	for line: String in assertions_list:
+		line = line.strip_edges()
+		if line.is_empty():
+			continue
+			
+		var expr: Expression = Expression.new()
+		var parse_err: Error = expr.parse(line, [])
+		if parse_err != OK:
+			push_warning("Failed to parse assertion: '%s'" % line)
+			continue
+			
+		var result: Variant = expr.execute([], entity)
+		if expr.has_execute_failed():
+			push_error("Error executing assertion: '%s'" % line)
+			continue
+			
+		if not bool(result):
+			assert(false, "State: '%s' | Condition: '%s' | From: '%s'" % [self, line, from if from else "unknown"])
+	
+	if assertions_run_for_superstate:
+		superstate._assertions_check("Substate '%s' > '%s'" % [self, from])
 
 
 func _enter_tree() -> void:

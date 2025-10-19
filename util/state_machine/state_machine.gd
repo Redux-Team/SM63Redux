@@ -35,6 +35,14 @@ func _process(_delta: float) -> void:
 	_check_animation_transition()
 
 
+func _physics_process(_delta: float) -> void:
+	# this prevents false positives when switching states
+	await get_tree().physics_frame
+	if current_state and current_state.assertions_enabled and current_state.assertions_run_on_process:
+		current_state._assertions_check.call_deferred("physics_process")
+
+
+
 func change_state(state_name: StringName) -> void:
 	var new_state: State = states.get(state_name)
 	if not new_state:
@@ -49,12 +57,16 @@ func change_state(state_name: StringName) -> void:
 	
 	if current_state:
 		current_state._on_exit(state_name)
+		if current_state.assertions_enabled and current_state.assertions_run_on_exit:
+			current_state._assertions_check("exit")
 		current_state.disable_processing()
 	
 	animation_player.play(&"RESET")
 	current_state = new_state
 	current_state.enable_processing()
 	current_state._on_enter(old_state.state_name if old_state else &"")
+	if current_state.assertions_enabled and current_state.assertions_run_on_enter:
+		current_state._assertions_check("enter")
 	current_state._animation_handler()
 	playback.start(state_name)
 	state_changed.emit(old_state.state_name if old_state else &"", state_name)
