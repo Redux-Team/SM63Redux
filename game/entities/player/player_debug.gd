@@ -18,6 +18,7 @@ func _process(delta: float) -> void:
 	debug_text += "move_dir: %s\n" % player.move_dir 
 	debug_text += "current_jump: %s\n" % player.current_jump 
 	debug_text += "jump_chain_timer: %s\n" % player.jump_chain_timer
+	debug_text += "is_on_floor: %s\n" % player.is_on_floor()
 	debug_text += "Velocity: %s\n" % player.velocity 
 	
 	

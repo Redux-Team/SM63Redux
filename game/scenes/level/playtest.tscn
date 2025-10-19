@@ -12,6 +12,8 @@ script = ExtResource("1_adaxd")
 
 [node name="Player" parent="." instance=ExtResource("1_o2uqb")]
 position = Vector2(0, 114)
+floor_max_angle = 0.80285144
+floor_snap_length = 16.0
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 

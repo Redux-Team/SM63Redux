@@ -368,15 +368,15 @@ advance_expression = "velocity.y > 0 && !is_on_floor()"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_t56eh"]
 advance_mode = 2
-advance_expression = "velocity.y > 0 && !is_on_floor()"
+advance_expression = "(velocity.y > 0 && !is_on_floor()) || (is_on_floor() && !is_jumping)"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6pmmc"]
 advance_mode = 2
-advance_expression = "velocity.y > 0 && !is_on_floor()"
+advance_expression = "(velocity.y > 0 && !is_on_floor()) || (is_on_floor() && !is_jumping)"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xt77v"]
 advance_mode = 2
-advance_expression = "velocity.y > 0 && !is_on_floor()"
+advance_expression = "(velocity.y > 0 && !is_on_floor()) || (is_on_floor() && !is_jumping)"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_tv6ny"]
 advance_mode = 2
@@ -466,7 +466,7 @@ states/ground_pound_start/position = Vector2(997.622, 258.709)
 states/spin/node = SubResource("AnimationNodeAnimation_588tj")
 states/spin/position = Vector2(-130.711, 258.896)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_v0nmi"), "Jump", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_conr4"), "DoubleJump", "TripleJump", SubResource("AnimationNodeStateMachineTransition_4neg5"), "Crouch", "backflip", SubResource("AnimationNodeStateMachineTransition_fq5t3"), "ground_pound_fall", "ground_pound_slam", SubResource("AnimationNodeStateMachineTransition_e8mlx"), "Dive", "dive_out_f", SubResource("AnimationNodeStateMachineTransition_588tj"), "Dive", "dive_out_b", SubResource("AnimationNodeStateMachineTransition_1s5sw"), "ground_pound_start", "ground_pound_fall", SubResource("AnimationNodeStateMachineTransition_6strl"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_dhej3"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_5wwt0"), "Idle", "Jump", SubResource("AnimationNodeStateMachineTransition_igs2l"), "Walk", "Jump", SubResource("AnimationNodeStateMachineTransition_p5qu6"), "Idle", "Fall", SubResource("AnimationNodeStateMachineTransition_heu0c"), "Jump", "Idle", SubResource("AnimationNodeStateMachineTransition_t56eh"), "DoubleJump", "Jump", SubResource("AnimationNodeStateMachineTransition_6pmmc"), "TripleJump", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_xt77v"), "Fall", "Landed", SubResource("AnimationNodeStateMachineTransition_tv6ny"), "Landed", "Idle", SubResource("AnimationNodeStateMachineTransition_2vc1s"), "Idle", "Crouch", SubResource("AnimationNodeStateMachineTransition_0rdsw"), "Crouch", "Idle", SubResource("AnimationNodeStateMachineTransition_8pcyd"), "Walk", "Floorslide", SubResource("AnimationNodeStateMachineTransition_k6116"), "Floorslide", "Idle", SubResource("AnimationNodeStateMachineTransition_so4hh"), "Idle", "Floorslide", SubResource("AnimationNodeStateMachineTransition_cq8ym"), "Fall", "Dive", SubResource("AnimationNodeStateMachineTransition_hnip2"), "Jump", "Dive", SubResource("AnimationNodeStateMachineTransition_0f2w8"), "DoubleJump", "Dive", SubResource("AnimationNodeStateMachineTransition_aidgt"), "TripleJump", "Dive", SubResource("AnimationNodeStateMachineTransition_i5qpf"), "Dive", "Floorslide", SubResource("AnimationNodeStateMachineTransition_2jquf")]
-graph_offset = Vector2(-97.196045, 98.33972)
+graph_offset = Vector2(-198.5307, 274.33972)
 
 [sub_resource type="Animation" id="Animation_2vc1s"]
 length = 0.001
