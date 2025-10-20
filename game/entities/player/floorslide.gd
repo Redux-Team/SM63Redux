@@ -9,7 +9,7 @@ var entered_from_dive: bool = false
 
 func _on_enter(from: StringName) -> void:
 	player.lock_flipping = true
-	player._internal_friction_multiplier = 0.5
+	player._internal_friction_multiplier = 0.4
 	entered_from_dive = from == "Dive"
 	
 	if entered_from_dive:

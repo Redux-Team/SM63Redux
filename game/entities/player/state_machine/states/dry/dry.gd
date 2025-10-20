@@ -13,6 +13,7 @@ func _handle_triple_jump(delta: float) -> void:
 	if player.jump_buffer_timer > 0.0:
 		player.jump_buffer_timer = max(0, player.jump_buffer_timer - delta)
 	
+	
 	if not player.is_on_floor():
 		return
 	

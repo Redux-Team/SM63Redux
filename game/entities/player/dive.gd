@@ -146,9 +146,18 @@ func apply_air_dive_physics(delta: float) -> void:
 
 func apply_dive_air_control(delta: float) -> void:
 	var accel: float = player.walk_acceleration
-	var target_speed: float = player.run_max_speed * player.move_dir
+	var max_speed: float = player.run_max_speed
 	var dive_accel: float = accel * dive_air_control_mult
-	player.velocity.x = move_toward(player.velocity.x, target_speed, dive_accel * delta * 60.0)
+	var vx: float = player.velocity.x
+	var dir: float = player.move_dir
+	
+	if abs(vx) < max_speed or sign(vx) != sign(dir):
+		vx = move_toward(vx, max_speed * dir, dive_accel * delta * 60.0)
+	else:
+		vx = move_toward(vx, max_speed * sign(vx), dive_accel * delta * 3.0)
+	
+	player.velocity.x = vx
+
 
 
 func update_dive_rotation(delta: float) -> void:
