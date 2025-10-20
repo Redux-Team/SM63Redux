@@ -20,26 +20,35 @@ extends Entity
 @export_group("Internal")
 @export var state_machine: StateMachine
 @export var debug_container: Control
+@export var floor_slope_raycast: RayCast2D
 
 
 var move_dir: float = 0.0
 var run_speed_percent: float = 0.0
 var current_jump: int = 0
+var slide_friction: float = 1.0
+var jump_buffer_time: float = 0.15
+var jump_buffer_timer: float = 0.0
 
 var is_dry: bool = true
 var is_running: bool = false
-var is_jumping: bool = false
 var is_spinning: bool = false
 var is_crouching: bool = false
 var is_diving: bool = false
 var is_falling: bool = false
+
+var is_input_jump: bool = false:
+	get:
+		return jump_buffer_timer > 0.0
+var is_input_dive: bool = false
 
 var can_jump: bool = false
 var can_spin: bool = false
 var can_walk: bool = true
 
 var jump_chain_timer: float = 0.0
-var lock_flipping: bool = false
+## lock the sprite flipping
+@export var lock_flipping: bool = false
 
 
 func _ready() -> void:
@@ -52,9 +61,13 @@ func _on_debug_toggle() -> void:
 
 
 func _input(_event: InputEvent) -> void:
-	move_dir = Input.get_axis(&"move_left", &"move_right")
-	is_jumping = Input.is_action_just_pressed("jump") and is_on_floor()
+	move_dir = Input.get_axis("move_left", "move_right")
 	is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
-	is_diving = Input.is_action_just_pressed("dive") and not is_on_floor()
+	is_input_dive = Input.is_action_just_pressed("dive") and not is_on_floor()
 	
-	if is_crouching: move_dir = 0
+	if Input.is_action_just_pressed("jump"):
+		jump_buffer_timer = jump_buffer_time
+
+
+func reset_jump_timer() -> void:
+	jump_buffer_timer = 0

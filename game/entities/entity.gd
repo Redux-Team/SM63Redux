@@ -43,6 +43,7 @@ enum DamageType {
 @export var base_friction: float = 1.0
 ## A multiplier for [member base_friction]
 @export var friction_multiplier: float = 1.0
+var _internal_friction_multiplier: float = 1.0
 
 
 @export_subgroup("Invulnerable")
@@ -80,7 +81,7 @@ func kill() -> void:
 
 ## Uses the [b]friction component[/b]. Returns the effective friction multiplier.
 func get_effective_friction() -> float:
-	return base_friction * friction_multiplier
+	return base_friction * friction_multiplier * _internal_friction_multiplier
 
 ## Uses the [b]friction component[/b]. Helper function to automatically apply
 ## friction.

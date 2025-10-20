@@ -2,8 +2,8 @@
 extends State
 
 
-func _physics_process(delta: float) -> void:
-	if abs(player.move_dir) > 0:
+func _physics_process(_delta: float) -> void:
+	if abs(player.move_dir) > 0 and not player.is_crouching:
 		speed_up(player.move_dir)
 
 
@@ -22,5 +22,3 @@ func speed_up(move_dir: float) -> void:
 		var floor_normal: Vector2 = player.get_floor_normal()
 		if floor_normal.y < 0.999 and player.velocity.y >= 0: # on slope, not moving up
 			player.velocity.y = max(player.velocity.y, 5.0)
-	#else:
-		#player.velocity.x = move_toward(player.velocity.x, target_speed, accel * 0.2)

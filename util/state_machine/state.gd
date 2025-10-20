@@ -3,6 +3,7 @@ extends Node
 
 ## State to inherit processing/behavior from.
 @export var superstate: State
+@export var lock_sprite_flipping: bool = false
 @export_group("Default Sprite Animations")
 ## Plays sprite animations in sequential order, can be done manually by overriding
 ## [method _animation_handler] 
@@ -21,6 +22,7 @@ extends Node
 @export var assertions_run_on_exit: bool = false
 ## Perform an assertion check for the superstate.
 @export var assertions_run_for_superstate: bool = false
+
 
 var entity: Entity
 var player: Player:

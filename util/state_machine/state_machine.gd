@@ -57,6 +57,9 @@ func change_state(state_name: StringName) -> void:
 	
 	if current_state:
 		current_state._on_exit(state_name)
+		if current_state.lock_sprite_flipping:
+			if entity is Player:
+				entity.lock_flipping = false
 		if current_state.assertions_enabled and current_state.assertions_run_on_exit:
 			current_state._assertions_check("exit")
 		current_state.disable_processing()
@@ -65,6 +68,9 @@ func change_state(state_name: StringName) -> void:
 	current_state = new_state
 	current_state.enable_processing()
 	current_state._on_enter(old_state.state_name if old_state else &"")
+	if current_state.lock_sprite_flipping:
+		if entity is Player:
+			entity.lock_flipping = true
 	if current_state.assertions_enabled and current_state.assertions_run_on_enter:
 		current_state._assertions_check("enter")
 	current_state._animation_handler()

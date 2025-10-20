@@ -15,7 +15,12 @@ var entity: Entity:
 
 var player: Player:
 	get():
-		return state_machine.entity as Player
+		if state_machine:
+			return state_machine.entity as Player
+		elif owner is Player:
+			return owner
+		else:
+			return null
 
 var sprite: AnimatedSprite2D:
 	get():

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Config" load_steps=111 format=3 uid="uid://do0n8w5nirmwk"]
+[gd_resource type="Resource" script_class="Config" load_steps=156 format=3 uid="uid://do0n8w5nirmwk"]
 
 [ext_resource type="Script" uid="uid://f17uc223v1ar" path="res://util/config/subconfig/audio.gd" id="1_uxl5x"]
 [ext_resource type="Script" uid="uid://b3oiv1p8em3lj" path="res://util/config/subconfig/_subconfig.gd" id="2_bcoqb"]
@@ -30,7 +30,6 @@
 [ext_resource type="Texture2D" uid="uid://44vtqdhf404y" path="res://assets/textures/gui/button/touch_icons/button_fludd_use.png" id="23_sntij"]
 [ext_resource type="Texture2D" uid="uid://ces67jr5tm6wd" path="res://assets/textures/gui/button/touch_icons/button_fludd_swap.png" id="24_lijkq"]
 [ext_resource type="Texture2D" uid="uid://b4pomduaipcbr" path="res://assets/textures/gui/button/touch_icons/button_pause.png" id="25_bcoqb"]
-[ext_resource type="Resource" uid="uid://dbwchs6hs285b" path="res://util/config/control_scheme/default_controlscheme.tres" id="28_kuwoh"]
 
 [sub_resource type="Resource" id="Resource_xqd10"]
 script = ExtResource("1_uxl5x")
@@ -339,9 +338,245 @@ pressed = true
 atlas = ExtResource("3_eftlo")
 region = Rect2(0, 0, 20, 20)
 
+[sub_resource type="InputEventMouseButton" id="InputEventMouseButton_4mdci"]
+button_index = 2
+pressed = true
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_csq0s"]
+device = -1
+button_index = 8
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_k8an3"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_xcaby"]
+device = -1
+button_index = 1
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_vsqlf"]
+device = -1
+keycode = 90
+unicode = 122
+
+[sub_resource type="InputEventKey" id="InputEventKey_cdqsb"]
+device = -1
+keycode = 4194309
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_ksmes"]
+device = -1
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_fmlry"]
+device = -1
+keycode = 4194319
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_evr1d"]
+device = -1
+button_index = 13
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_sy3a0"]
+device = -1
+axis_value = -1.0
+
+[sub_resource type="InputEventKey" id="InputEventKey_r0tsm"]
+device = -1
+keycode = 4194321
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_ea4ag"]
+device = -1
+button_index = 14
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_hasbk"]
+device = -1
+axis_value = 1.0
+
+[sub_resource type="InputEventKey" id="InputEventKey_4pj0n"]
+device = -1
+pressed = true
+keycode = 4194322
+
+[sub_resource type="InputEventKey" id="InputEventKey_p7aod"]
+device = -1
+pressed = true
+keycode = 83
+unicode = 115
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_sojn1"]
+device = -1
+button_index = 12
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_8lqvo"]
+device = -1
+axis = 1
+axis_value = 1.0
+
+[sub_resource type="InputEventKey" id="InputEventKey_bcoqb"]
+device = -1
+pressed = true
+keycode = 4194322
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_kuwoh"]
+device = -1
+button_index = 1
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_4mdci"]
+device = -1
+keycode = 90
+unicode = 122
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_csq0s"]
+device = -1
+axis = 5
+axis_value = 1.0
+
+[sub_resource type="InputEventKey" id="InputEventKey_csq0s"]
+device = -1
+keycode = 90
+unicode = 122
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_jeadu"]
+device = -1
+button_index = 2
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_3uxjw"]
+device = -1
+pressed = true
+keycode = 32
+unicode = 32
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_2acyr"]
+device = -1
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_1btyf"]
+device = -1
+keycode = 4194320
+
+[sub_resource type="InputEventKey" id="InputEventKey_sojn1"]
+device = -1
+pressed = true
+keycode = 4194319
+
+[sub_resource type="InputEventKey" id="InputEventKey_8lqvo"]
+device = -1
+pressed = true
+keycode = 65
+unicode = 97
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_oyo3k"]
+device = -1
+button_index = 13
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_ow6f8"]
+device = -1
+axis_value = -1.0
+
+[sub_resource type="InputEventKey" id="InputEventKey_oyo3k"]
+device = -1
+pressed = true
+keycode = 4194321
+
+[sub_resource type="InputEventKey" id="InputEventKey_ow6f8"]
+device = -1
+pressed = true
+keycode = 68
+unicode = 100
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_3uxjw"]
+device = -1
+button_index = 14
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_4pj0n"]
+device = -1
+axis_value = 1.0
+
+[sub_resource type="InputEventKey" id="InputEventKey_jeadu"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="InputEventKey" id="InputEventKey_noeec"]
+device = -1
+keycode = 80
+unicode = 112
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_eea84"]
+device = -1
+button_index = 6
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_ed3r0"]
+device = -1
+keycode = 88
+unicode = 120
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_noeec"]
+device = -1
+button_index = 3
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_eea84"]
+device = -1
+keycode = 88
+unicode = 120
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_k8an3"]
+device = -1
+button_index = 10
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_t5g3o"]
+device = -1
+keycode = 4194325
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_j211s"]
+device = -1
+button_index = 9
+pressed = true
+
+[sub_resource type="InputEventKey" id="InputEventKey_ksmes"]
+device = -1
+keycode = 67
+unicode = 99
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_t5g3o"]
+device = -1
+axis = 4
+axis_value = 1.0
+
+[sub_resource type="Resource" id="Resource_bcoqb"]
+script = ExtResource("3_4t6fh")
+move_left = Array[InputEvent]([SubResource("InputEventKey_sojn1"), SubResource("InputEventKey_8lqvo"), SubResource("InputEventJoypadButton_oyo3k"), SubResource("InputEventJoypadMotion_ow6f8")])
+move_right = Array[InputEvent]([SubResource("InputEventKey_oyo3k"), SubResource("InputEventKey_ow6f8"), SubResource("InputEventJoypadButton_3uxjw"), SubResource("InputEventJoypadMotion_4pj0n")])
+jump = Array[InputEvent]([SubResource("InputEventKey_3uxjw"), SubResource("InputEventJoypadButton_2acyr"), SubResource("InputEventKey_1btyf")])
+crouch = Array[InputEvent]([SubResource("InputEventKey_4pj0n"), SubResource("InputEventKey_p7aod"), SubResource("InputEventJoypadButton_sojn1"), SubResource("InputEventJoypadMotion_8lqvo")])
+dive = Array[InputEvent]([SubResource("InputEventKey_bcoqb"), SubResource("InputEventJoypadButton_kuwoh")])
+ground_pound = Array[InputEvent]([SubResource("InputEventKey_4mdci"), SubResource("InputEventJoypadMotion_csq0s")])
+spin = Array[InputEvent]([SubResource("InputEventKey_eea84"), SubResource("InputEventJoypadButton_k8an3")])
+use_fludd = Array[InputEvent]([SubResource("InputEventKey_ksmes"), SubResource("InputEventJoypadMotion_t5g3o")])
+switch_nozzle = Array[InputEvent]([SubResource("InputEventKey_t5g3o"), SubResource("InputEventJoypadButton_j211s")])
+interact = Array[InputEvent]([SubResource("InputEventKey_csq0s"), SubResource("InputEventJoypadButton_jeadu")])
+pause = Array[InputEvent]([SubResource("InputEventKey_jeadu"), SubResource("InputEventKey_noeec"), SubResource("InputEventJoypadButton_eea84")])
+skip_dialogue = Array[InputEvent]([SubResource("InputEventKey_ed3r0"), SubResource("InputEventJoypadButton_noeec")])
+_ui_back = Array[InputEvent]([SubResource("InputEventKey_k8an3"), SubResource("InputEventJoypadButton_xcaby")])
+_ui_interact = Array[InputEvent]([SubResource("InputEventKey_vsqlf"), SubResource("InputEventKey_cdqsb"), SubResource("InputEventJoypadButton_ksmes")])
+_ui_left = Array[InputEvent]([SubResource("InputEventKey_fmlry"), SubResource("InputEventJoypadButton_evr1d"), SubResource("InputEventJoypadMotion_sy3a0")])
+_ui_right = Array[InputEvent]([SubResource("InputEventKey_r0tsm"), SubResource("InputEventJoypadButton_ea4ag"), SubResource("InputEventJoypadMotion_hasbk")])
+_clear_setting = Array[InputEvent]([SubResource("InputEventMouseButton_4mdci"), SubResource("InputEventJoypadButton_csq0s")])
+metadata/_custom_type_script = "uid://d3irhgxu3cjae"
+
 [sub_resource type="Resource" id="Resource_kuwoh"]
 script = ExtResource("5_jrqk4")
-default_control_scheme = ExtResource("28_kuwoh")
+default_control_scheme = SubResource("Resource_bcoqb")
 button_map = Dictionary[StringName, ExtResource("3_edyoc")]({
 &"_clear_setting": SubResource("Resource_h6qih"),
 &"_ui_back": SubResource("Resource_ky2go"),
