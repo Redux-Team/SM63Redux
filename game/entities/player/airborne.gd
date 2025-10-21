@@ -12,7 +12,7 @@ func air_move(move_dir: float) -> void:
 	var accel_mult: float = 0.85
 	
 	if sign(player.velocity.x) != sign(move_dir) and abs(player.velocity.x) > 10.0:
-		accel_mult = 1.2
+		accel_mult = 2.8
 	
 	var vx: float = player.velocity.x
 	
