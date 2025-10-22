@@ -39,6 +39,9 @@ var is_falling: bool = false
 
 var is_input_jump: bool = false:
 	get:
+		if not can_jump: 
+			jump_buffer_timer = 0
+			return false
 		return jump_buffer_timer > 0.0
 var is_input_dive: bool = false
 var is_input_ground_pound: bool = false
@@ -69,7 +72,7 @@ func _input(_event: InputEvent) -> void:
 	is_input_ground_pound = Input.is_action_just_pressed("ground_pound")
 	
 	if Input.is_action_just_pressed("jump"):
-		jump_buffer_timer = jump_buffer_time
+		jump_buffer_timer = jump_buffer_time if can_jump else 0.0
 
 
 func reset_jump_timer() -> void:
