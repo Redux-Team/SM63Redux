@@ -8,9 +8,9 @@ extends Entity
 @export var midair_turn_speed: float = 1.0
 @export var air_resistance: float = 1.0
 @export_subgroup("Vertical Movement")
-@export var jump_strength: float = 340.0
-@export var double_jump_strength: float = 440.0
-@export var triple_jump_strength: float = 510.0
+@export var jump_strength: float = 360.0
+@export var double_jump_strength: float = 460.0
+@export var triple_jump_strength: float = 530.0
 @export var jump_chain_time: float = 0.3
 
 @export_group("Speed Limits")
@@ -41,6 +41,7 @@ var is_input_jump: bool = false:
 	get:
 		return jump_buffer_timer > 0.0 
 var is_input_dive: bool = false
+var is_input_ground_pound: bool = false
 
 var can_jump: bool = true
 var can_spin: bool = false
@@ -64,6 +65,7 @@ func _input(_event: InputEvent) -> void:
 	move_dir = Input.get_axis("move_left", "move_right")
 	is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
 	is_input_dive = Input.is_action_just_pressed("dive") and not is_on_floor()
+	is_input_ground_pound = Input.is_action_just_pressed("ground_pound")
 	
 	if Input.is_action_just_pressed("jump"):
 		jump_buffer_timer = jump_buffer_time
