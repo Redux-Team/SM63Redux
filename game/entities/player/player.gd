@@ -39,7 +39,7 @@ var is_falling: bool = false
 
 var is_input_jump: bool = false:
 	get:
-		return jump_buffer_timer > 0.0 
+		return jump_buffer_timer > 0.0
 var is_input_dive: bool = false
 var is_input_ground_pound: bool = false
 

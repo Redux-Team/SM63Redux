@@ -373,7 +373,7 @@ advance_expression = "current_jump >= 2 && is_input_jump && abs(velocity.x) > 20
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fq5t3"]
 advance_mode = 2
-advance_expression = "is_input_jump && ((sign(move_dir) == 1 && sprite.flip_h) || (sign(move_dir) == -1 && !sprite.flip_h))"
+advance_expression = "is_input_jump && ((sign(move_dir) == 1 && sprite.flip_h) || (sign(move_dir) == -1 && !sprite.flip_h)) && state_machine.store_state_buffer()"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_e8mlx"]
 advance_mode = 2
@@ -391,7 +391,7 @@ advance_expression = "abs(move_dir) < 0.1 && abs(velocity.x) < 0.5"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_igs2l"]
 advance_mode = 2
-advance_expression = "is_on_floor() && is_input_jump"
+advance_expression = "is_on_floor() && is_input_jump && can_jump"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_heu0c"]
 advance_mode = 2
@@ -459,11 +459,15 @@ advance_expression = "!is_on_floor() && (velocity.y > 0)"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1s5sw"]
 advance_mode = 2
-advance_expression = " is_input_jump"
+advance_expression = " is_input_jump
+
+&& state_machine.store_state_buffer()"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_588tj"]
 advance_mode = 2
-advance_expression = "is_on_floor() && !is_input_jump"
+advance_expression = "is_on_floor()
+
+&& state_machine.consume_state_buffer()"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ijn2u"]
 advance_mode = 2
@@ -484,19 +488,27 @@ advance_expression = "is_on_floor() && !is_input_jump"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yragl"]
 advance_mode = 2
-advance_expression = "is_input_jump && ((sign(move_dir) == 1 && sprite.flip_h) || (sign(move_dir) == -1 && !sprite.flip_h))"
+advance_expression = "is_input_jump && ((sign(move_dir) == 1 && sprite.flip_h) || (sign(move_dir) == -1 && !sprite.flip_h)) 
+
+&& state_machine.store_state_buffer()"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bcb3w"]
 advance_mode = 2
-advance_expression = "is_on_floor() && !is_input_jump"
+advance_expression = "is_on_floor() 
+
+&& state_machine.consume_state_buffer()"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_uea50"]
 advance_mode = 2
-advance_expression = "is_input_jump && velocity.x == 0 && move_dir == 0"
+advance_expression = "is_input_jump && velocity.x == 0 && move_dir == 0
+
+&& state_machine.store_state_buffer()"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0a2fl"]
 advance_mode = 2
-advance_expression = "is_on_floor() && !is_input_jump"
+advance_expression = "is_on_floor()
+
+&& state_machine.consume_state_buffer()"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_mp3y6"]
 advance_mode = 2
@@ -520,7 +532,7 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_oic1i"]
 states/Backflip/node = SubResource("AnimationNodeAnimation_4neg5")
-states/Backflip/position = Vector2(335.706, 108.2661)
+states/Backflip/position = Vector2(334.706, 99.2661)
 states/BackflipUp/node = SubResource("AnimationNodeAnimation_2vc1s")
 states/BackflipUp/position = Vector2(490.46924, 108.2661)
 states/Crouch/node = SubResource("AnimationNodeAnimation_conr4")
@@ -533,13 +545,13 @@ states/End/position = Vector2(1410.5, 259.083)
 states/Fall/node = SubResource("AnimationNodeAnimation_xt77v")
 states/Fall/position = Vector2(525.936, 517.3)
 states/Floorslide/node = SubResource("AnimationNodeAnimation_tv6ny")
-states/Floorslide/position = Vector2(135.426, 225.686)
+states/Floorslide/position = Vector2(127.425995, 225.686)
 states/GroundPoundFall/node = SubResource("AnimationNodeAnimation_k6116")
-states/GroundPoundFall/position = Vector2(-198.711, 202.686)
+states/GroundPoundFall/position = Vector2(-65.711, 178.686)
 states/GroundPoundSlam/node = SubResource("AnimationNodeAnimation_so4hh")
-states/GroundPoundSlam/position = Vector2(-198.711, 349.68604)
+states/GroundPoundSlam/position = Vector2(-65.711, 325.68604)
 states/GroundPoundStart/node = SubResource("AnimationNodeAnimation_588tj")
-states/GroundPoundStart/position = Vector2(-198.711, 61.33127)
+states/GroundPoundStart/position = Vector2(-65.711, 37.33127)
 states/Idle/node = SubResource("AnimationNodeAnimation_oic1i")
 states/Idle/position = Vector2(338.574, 225.686)
 states/Jump/node = SubResource("AnimationNodeAnimation_p5qu6")
@@ -547,8 +559,8 @@ states/Jump/position = Vector2(127.425995, 337.985)
 states/Landed/node = SubResource("AnimationNodeAnimation_6strl")
 states/Landed/position = Vector2(525.936, 337.985)
 states/RollOutF/node = SubResource("AnimationNodeAnimation_cq8ym")
-states/RollOutF/position = Vector2(6.425995, 135.2661)
-states/Start/position = Vector2(180.574, 108.2661)
+states/RollOutF/position = Vector2(127.425995, 108.2661)
+states/Start/position = Vector2(127.425995, -17.733902)
 states/TripleJump/node = SubResource("AnimationNodeAnimation_0rdsw")
 states/TripleJump/position = Vector2(127.425995, 517.3)
 states/Walk/node = SubResource("AnimationNodeAnimation_t56eh")
@@ -562,7 +574,7 @@ states/ground_pound_slam/position = Vector2(998.716, 544.256)
 states/ground_pound_start/node = SubResource("AnimationNodeAnimation_0f2w8")
 states/ground_pound_start/position = Vector2(997.622, 258.709)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_v0nmi"), "Jump", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_conr4"), "DoubleJump", "TripleJump", SubResource("AnimationNodeStateMachineTransition_4neg5"), "Crouch", "Backflip", SubResource("AnimationNodeStateMachineTransition_fq5t3"), "ground_pound_fall", "ground_pound_slam", SubResource("AnimationNodeStateMachineTransition_e8mlx"), "ground_pound_start", "ground_pound_fall", SubResource("AnimationNodeStateMachineTransition_6strl"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_dhej3"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_5wwt0"), "Idle", "Jump", SubResource("AnimationNodeStateMachineTransition_igs2l"), "Idle", "Fall", SubResource("AnimationNodeStateMachineTransition_heu0c"), "DoubleJump", "Jump", SubResource("AnimationNodeStateMachineTransition_6pmmc"), "TripleJump", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_xt77v"), "Fall", "Landed", SubResource("AnimationNodeStateMachineTransition_tv6ny"), "Landed", "Idle", SubResource("AnimationNodeStateMachineTransition_2vc1s"), "Idle", "Crouch", SubResource("AnimationNodeStateMachineTransition_0rdsw"), "Crouch", "Idle", SubResource("AnimationNodeStateMachineTransition_8pcyd"), "Walk", "Floorslide", SubResource("AnimationNodeStateMachineTransition_k6116"), "Floorslide", "Idle", SubResource("AnimationNodeStateMachineTransition_so4hh"), "Idle", "Floorslide", SubResource("AnimationNodeStateMachineTransition_cq8ym"), "Fall", "Dive", SubResource("AnimationNodeStateMachineTransition_hnip2"), "Jump", "Dive", SubResource("AnimationNodeStateMachineTransition_0f2w8"), "DoubleJump", "Dive", SubResource("AnimationNodeStateMachineTransition_aidgt"), "TripleJump", "Dive", SubResource("AnimationNodeStateMachineTransition_i5qpf"), "Dive", "Floorslide", SubResource("AnimationNodeStateMachineTransition_2jquf"), "Walk", "Fall", SubResource("AnimationNodeStateMachineTransition_j8m7m"), "Floorslide", "RollOutF", SubResource("AnimationNodeStateMachineTransition_1s5sw"), "RollOutF", "Idle", SubResource("AnimationNodeStateMachineTransition_588tj"), "RollOutF", "Dive", SubResource("AnimationNodeStateMachineTransition_ijn2u"), "Walk", "Jump", SubResource("AnimationNodeStateMachineTransition_p5qu6"), "Jump", "Fall", SubResource("AnimationNodeStateMachineTransition_or46b"), "Jump", "Idle", SubResource("AnimationNodeStateMachineTransition_hy8ba"), "Floorslide", "Backflip", SubResource("AnimationNodeStateMachineTransition_yragl"), "Backflip", "Idle", SubResource("AnimationNodeStateMachineTransition_bcb3w"), "Crouch", "BackflipUp", SubResource("AnimationNodeStateMachineTransition_uea50"), "BackflipUp", "Idle", SubResource("AnimationNodeStateMachineTransition_0a2fl"), "BackflipUp", "Dive", SubResource("AnimationNodeStateMachineTransition_mp3y6"), "Backflip", "Dive", SubResource("AnimationNodeStateMachineTransition_wx3fv"), "GroundPoundStart", "GroundPoundFall", SubResource("AnimationNodeStateMachineTransition_g1vkd"), "GroundPoundFall", "GroundPoundSlam", SubResource("AnimationNodeStateMachineTransition_xfb3v"), "GroundPoundSlam", "Idle", SubResource("AnimationNodeStateMachineTransition_2mee4")]
-graph_offset = Vector2(-478.53076, 13.339722)
+graph_offset = Vector2(-199.53076, 87.33972)
 
 [sub_resource type="Animation" id="Animation_2vc1s"]
 length = 0.001
@@ -855,6 +867,7 @@ metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="GroundPoundSlam" type="Node" parent="StateMachine/States/Dry/Airborne/GroundPoundStart"]
 script = ExtResource("28_2vc1s")
+lock_sprite_flipping = true
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="Processes" type="Node" parent="StateMachine"]

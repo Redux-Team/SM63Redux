@@ -19,7 +19,8 @@ var current_state: State
 var playback: AnimationNodeStateMachinePlayback
 var last_animation_node: StringName
 var active_animations: Array[AnimationChain] = []
-
+var state_buffer: float = 0.0
+var can_consume_buffer: bool = false
 
 func _ready() -> void:
 	playback = get(&"parameters/playback")
@@ -35,12 +36,26 @@ func _process(_delta: float) -> void:
 	_check_animation_transition()
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	# this prevents false positives when switching states
 	await get_tree().physics_frame
 	if current_state and current_state.assertions_enabled and current_state.assertions_run_on_process:
 		current_state._assertions_check.call_deferred("physics_process")
+	
+	if state_buffer > 0:
+		state_buffer = max(state_buffer - delta, 0)
+	else:
+		can_consume_buffer = false
 
+
+func store_state_buffer(amount: float = 0.1) -> bool:
+	state_buffer = amount
+	return true
+
+
+func consume_state_buffer() -> bool:
+	can_consume_buffer = true
+	return state_buffer == 0
 
 
 func change_state(state_name: StringName) -> void:

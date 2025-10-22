@@ -93,16 +93,26 @@ func _process(delta: float) -> void:
 
 
 func apply_dive_impulse() -> void:
+	var facing: int = -1 if player.sprite.flip_h else 1
+	
 	var current_speed: float = abs(player.velocity.x)
-	var speed_difference: float = dive_target_speed - current_speed
-	var acceleration: float = speed_difference / (dive_accel_time * 60.0)
+	var base_speed: float = dive_target_speed
 	var accel_multiplier: float = 1.0
 	
 	if from_state == &"Backflip":
 		accel_multiplier = backflip_accel_mult
 	
-	var facing: int = -1 if player.sprite.flip_h else 1
-	player.velocity.x += acceleration * accel_multiplier * facing
+	var effective_dir: int
+	
+	if sign(player.velocity.x) != facing:
+		player.velocity.x = 0.0
+		effective_dir = facing
+	else:
+		effective_dir = facing
+	
+	var speed_difference: float = base_speed - current_speed
+	var acceleration: float = speed_difference / (dive_accel_time * 60.0)
+	player.velocity.x += acceleration * accel_multiplier * effective_dir
 	
 	if from_state == &"Neutral" or from_state == &"Idle":
 		player.velocity.y = max(dive_y_cap_neutral, player.velocity.y + dive_y_boost)
@@ -111,6 +121,7 @@ func apply_dive_impulse() -> void:
 	
 	if player.is_on_floor() and player.floor_slope_raycast and player.floor_slope_raycast.is_colliding():
 		body_rotation = get_slope_angle()
+
 
 
 func apply_ground_dive_physics(delta: float) -> void:
