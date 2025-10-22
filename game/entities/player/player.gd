@@ -46,6 +46,7 @@ var is_input_ground_pound: bool = false
 var can_jump: bool = true
 var can_spin: bool = false
 var can_walk: bool = true
+var can_dive: bool = true
 
 var jump_chain_timer: float = 0.0
 ## lock the sprite flipping
