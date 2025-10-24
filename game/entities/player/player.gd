@@ -36,6 +36,7 @@ var is_spinning: bool = false
 var is_crouching: bool = false
 var is_diving: bool = false
 var is_falling: bool = false
+var is_swimming: bool = false
 
 var is_input_jump: bool = false:
 	get:
@@ -45,6 +46,7 @@ var is_input_jump: bool = false:
 		return jump_buffer_timer > 0.0
 var is_input_dive: bool = false
 var is_input_ground_pound: bool = false
+var is_input_spin: bool = false
 
 var can_jump: bool = true
 var can_spin: bool = false
@@ -70,6 +72,7 @@ func _input(_event: InputEvent) -> void:
 	is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
 	is_input_dive = Input.is_action_just_pressed("dive") and not is_on_floor()
 	is_input_ground_pound = Input.is_action_just_pressed("ground_pound")
+	is_input_spin = Input.is_action_pressed("spin")
 	
 	if Input.is_action_just_pressed("jump"):
 		jump_buffer_timer = jump_buffer_time if can_jump else 0.0

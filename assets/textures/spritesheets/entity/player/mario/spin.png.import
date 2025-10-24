@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d4d5m1kytjdid"
-path="res://.godot/imported/spin_attack.png-59b45908a691cc070bfd2bbe52bd9d4e.ctex"
+uid="uid://u4yvxq51cr5f"
+path="res://.godot/imported/spin.png-6cd083c58aa182097d923bc85060e55a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/spritesheets/entity/player/mario/spin_attack.png"
-dest_files=["res://.godot/imported/spin_attack.png-59b45908a691cc070bfd2bbe52bd9d4e.ctex"]
+source_file="res://assets/textures/spritesheets/entity/player/mario/spin.png"
+dest_files=["res://.godot/imported/spin.png-6cd083c58aa182097d923bc85060e55a.ctex"]
 
 [params]
 

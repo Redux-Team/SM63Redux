@@ -4,6 +4,8 @@ extends State
 func _physics_process(delta: float) -> void:
 	if abs(player.move_dir) > 0 and not player.is_diving:
 		air_move(player.move_dir)
+	
+	player.velocity.y = min(player.velocity.y, player.terminal_velocity_y)
 
 
 func air_move(move_dir: float) -> void:
