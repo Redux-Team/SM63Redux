@@ -1,11 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cfrexipnk4yq8"]
+[gd_scene load_steps=4 format=3 uid="uid://cfrexipnk4yq8"]
 
 [ext_resource type="Script" uid="uid://cf8ceg662lr75" path="res://game/scenes/level/playtest.gd" id="1_adaxd"]
 [ext_resource type="PackedScene" uid="uid://b4nw5k2oa3ro0" path="res://game/entities/player/player.tscn" id="1_o2uqb"]
 [ext_resource type="Texture2D" uid="uid://b127vhuh31i8r" path="res://meta/icon.png" id="3_mxoeq"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_o2uqb"]
-size = Vector2(11764, 20)
 
 [node name="Playtest" type="Node2D"]
 script = ExtResource("1_adaxd")
@@ -17,17 +14,15 @@ floor_snap_length = 16.0
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(0, 364)
-shape = SubResource("RectangleShape2D_o2uqb")
-
 [node name="StaticBody2D2" type="StaticBody2D" parent="."]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D2"]
 position = Vector2(175, 366)
-polygon = PackedVector2Array(0, 1, 223, -145, 377, -149, 459, -110, 543, -65, 563, 0)
+polygon = PackedVector2Array(-614, 126, -552, -147, -245, -147, 102, 7, 566, -9, 621, 149)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="StaticBody2D2"]
+position = Vector2(1210, 366)
+polygon = PackedVector2Array(-345, -34, 68, -60, 162, -199, 563, -147, 794, -159, 839, 221, -166, 188)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(82, 322)
