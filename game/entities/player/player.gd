@@ -11,7 +11,7 @@ extends Entity
 @export var jump_strength: float = 360.0
 @export var double_jump_strength: float = 460.0
 @export var triple_jump_strength: float = 530.0
-@export var jump_chain_time: float = 0.3
+@export var jump_chain_time: float = 0.2
 
 @export_group("Speed Limits")
 @export var run_max_speed: float = 250.0
