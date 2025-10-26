@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ControlScheme" load_steps=47 format=3 uid="uid://dbwchs6hs285b"]
+[gd_resource type="Resource" script_class="ControlScheme" load_steps=50 format=3 uid="uid://dbwchs6hs285b"]
 
 [ext_resource type="Script" uid="uid://d3irhgxu3cjae" path="res://util/config/control_scheme/control_scheme.gd" id="1_ejgti"]
 
@@ -198,6 +198,20 @@ device = -1
 button_index = 10
 pressed = true
 
+[sub_resource type="InputEventKey" id="InputEventKey_ejgti"]
+device = -1
+keycode = 4194322
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_dg1r1"]
+device = -1
+button_index = 12
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_nec46"]
+device = -1
+axis = 1
+axis_value = 1.0
+
 [sub_resource type="InputEventKey" id="InputEventKey_t5g3o"]
 device = -1
 keycode = 4194325
@@ -226,6 +240,7 @@ crouch = Array[InputEvent]([SubResource("InputEventKey_4pj0n"), SubResource("Inp
 dive = Array[InputEvent]([SubResource("InputEventKey_bcoqb"), SubResource("InputEventJoypadButton_kuwoh")])
 ground_pound = Array[InputEvent]([SubResource("InputEventKey_4mdci"), SubResource("InputEventJoypadMotion_csq0s")])
 spin = Array[InputEvent]([SubResource("InputEventKey_eea84"), SubResource("InputEventJoypadButton_k8an3")])
+swim_down = Array[InputEvent]([SubResource("InputEventKey_ejgti"), SubResource("InputEventJoypadButton_dg1r1"), SubResource("InputEventJoypadMotion_nec46")])
 use_fludd = Array[InputEvent]([SubResource("InputEventKey_ksmes"), SubResource("InputEventJoypadMotion_t5g3o")])
 switch_nozzle = Array[InputEvent]([SubResource("InputEventKey_t5g3o"), SubResource("InputEventJoypadButton_j211s")])
 interact = Array[InputEvent]([SubResource("InputEventKey_csq0s"), SubResource("InputEventJoypadButton_jeadu")])

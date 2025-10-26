@@ -3,7 +3,7 @@ extends State
 
 
 func _physics_process(_delta: float) -> void:
-	if abs(player.move_dir) > 0 and not player.is_crouching:
+	if abs(player.move_dir) > 0 and not (player.is_crouching and player.velocity.x == 0):
 		speed_up(player.move_dir)
 
 

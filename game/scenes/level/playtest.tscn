@@ -1,14 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://cfrexipnk4yq8"]
+[gd_scene load_steps=5 format=3 uid="uid://cfrexipnk4yq8"]
 
 [ext_resource type="Script" uid="uid://cf8ceg662lr75" path="res://game/scenes/level/playtest.gd" id="1_adaxd"]
 [ext_resource type="PackedScene" uid="uid://b4nw5k2oa3ro0" path="res://game/entities/player/player.tscn" id="1_o2uqb"]
 [ext_resource type="Texture2D" uid="uid://b127vhuh31i8r" path="res://meta/icon.png" id="3_mxoeq"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mxoeq"]
+size = Vector2(504, 555)
+
 [node name="Playtest" type="Node2D"]
 script = ExtResource("1_adaxd")
 
 [node name="Player" parent="." instance=ExtResource("1_o2uqb")]
-position = Vector2(0, 114)
+position = Vector2(661, 286)
 floor_max_angle = 0.80285144
 floor_snap_length = 16.0
 
@@ -18,11 +21,15 @@ floor_snap_length = 16.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D2"]
 position = Vector2(175, 366)
-polygon = PackedVector2Array(-614, 126, -552, -147, -245, -147, 102, 7, 566, -9, 621, 149)
+polygon = PackedVector2Array(-613, 286, -552, -147, -245, -147, 102, 7, 566, -9, 634, 309)
 
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="StaticBody2D2"]
 position = Vector2(1210, 366)
-polygon = PackedVector2Array(-345, -34, 68, -60, 162, -199, 563, -147, 794, -159, 839, 221, -166, 188)
+polygon = PackedVector2Array(-345, -34, 68, -60, 162, -199, 563, -147, 794, -159, 839, 221, -164, 300, -13, 152, -107, 72)
+
+[node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="StaticBody2D2"]
+position = Vector2(1073, 965)
+polygon = PackedVector2Array(-345, -34, 68, -60, 192, -85, 563, -147, 794, -159, 839, 221, -164, 300, -616, 278, -793, -39)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(82, 322)
@@ -43,3 +50,13 @@ texture = ExtResource("3_mxoeq")
 [node name="Sprite2D5" type="Sprite2D" parent="."]
 position = Vector2(1911, 319)
 texture = ExtResource("3_mxoeq")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(920, 500)
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(21, 179.5)
+shape = SubResource("RectangleShape2D_mxoeq")
+
+[connection signal="area_exited" from="Area2D" to="." method="_on_area_2d_area_exited"]

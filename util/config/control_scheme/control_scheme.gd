@@ -14,6 +14,7 @@ extends Resource
 @export var dive: Array[InputEvent]
 @export var ground_pound: Array[InputEvent]
 @export var spin: Array[InputEvent]
+@export var swim_down: Array[InputEvent]
 
 @export_group("FLUDD")
 @export var use_fludd: Array[InputEvent]

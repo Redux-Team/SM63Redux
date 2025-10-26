@@ -21,6 +21,8 @@ func _process(_delta: float) -> void:
 	debug_text += "jump_chain_timer: %s\n" % player.jump_chain_timer
 	debug_text += "is_on_floor: %s\n" % player.is_on_floor()
 	debug_text += "Velocity: %s\n" % player.velocity 
+	debug_text += "is_input_swim: %s\n" % player.is_input_swim
+	debug_text += "gravity_scale_factor: %s\n" % player.gravity_scale_factor
 	
 	
 	debug_label.text = debug_text

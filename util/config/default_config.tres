@@ -177,143 +177,20 @@ script = ExtResource("3_edyoc")
 normal_texture = SubResource("AtlasTexture_gqodu")
 pressed_texture = SubResource("AtlasTexture_h1mcp")
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_kutoy"]
-button_index = 8
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_v45yw"]
+button_index = 3
 pressed = true
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_3hdss"]
-button_index = 7
-pressed = true
-
-[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_bh7dl"]
-axis = 2
-axis_value = 1.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_b1g3j"]
-atlas = ExtResource("13_tbjov")
-region = Rect2(60, 0, 20, 20)
-
-[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_qcam7"]
-axis = 2
-axis_value = -1.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_y2pkn"]
-atlas = ExtResource("13_tbjov")
-region = Rect2(40, 0, 20, 20)
-
-[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_c7esy"]
-axis = 3
-axis_value = 1.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qpfaa"]
-atlas = ExtResource("13_tbjov")
-region = Rect2(20, 0, 20, 20)
-
-[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_ynxmk"]
-axis = 3
-axis_value = -1.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rxxwl"]
-atlas = ExtResource("13_tbjov")
-region = Rect2(0, 0, 20, 20)
-
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_ij4b1"]
-button_index = 5
-pressed = true
-
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_n7lmm"]
-button_index = 4
-pressed = true
-
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_arypp"]
-button_index = 6
-pressed = true
-
-[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_xkrk1"]
-axis = 5
-axis_value = 1.0
-
-[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_n7lmm"]
-axis = 4
-axis_value = 1.0
-
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_4hjw6"]
-button_index = 10
-pressed = true
-
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_itol2"]
-button_index = 9
-pressed = true
-
-[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_ij4b1"]
-axis_value = 1.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xkrk1"]
-atlas = ExtResource("5_jwg40")
-region = Rect2(60, 0, 20, 20)
-
-[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_arypp"]
-axis_value = -1.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_n7lmm"]
-atlas = ExtResource("5_jwg40")
-region = Rect2(40, 0, 20, 20)
-
-[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_itol2"]
-axis = 1
-axis_value = 1.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4hjw6"]
-atlas = ExtResource("5_jwg40")
-region = Rect2(20, 0, 20, 20)
-
-[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_2okmy"]
-axis = 1
-axis_value = -1.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_yf0j6"]
-atlas = ExtResource("5_jwg40")
-region = Rect2(0, 0, 20, 20)
-
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_snmo7"]
-button_index = 14
-pressed = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_v00i1"]
-atlas = ExtResource("4_ey8mv")
-region = Rect2(60, 0, 20, 20)
-
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_k0tdo"]
-button_index = 13
-pressed = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_avdin"]
-atlas = ExtResource("4_ey8mv")
-region = Rect2(40, 0, 20, 20)
-
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_t6v31"]
-button_index = 12
-pressed = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nse4c"]
-atlas = ExtResource("4_ey8mv")
-region = Rect2(20, 0, 20, 20)
-
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_1vagc"]
-button_index = 11
-pressed = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2okmy"]
-atlas = ExtResource("4_ey8mv")
-region = Rect2(0, 0, 20, 20)
-
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_avdin"]
-button_index = 1
-pressed = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_snmo7"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_1vagc"]
 atlas = ExtResource("3_eftlo")
-region = Rect2(60, 0, 20, 20)
+region = Rect2(0, 0, 20, 20)
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_2okmy"]
+pressed = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t6v31"]
+atlas = ExtResource("3_eftlo")
+region = Rect2(20, 0, 20, 20)
 
 [sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_nse4c"]
 button_index = 2
@@ -323,20 +200,143 @@ pressed = true
 atlas = ExtResource("3_eftlo")
 region = Rect2(40, 0, 20, 20)
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_2okmy"]
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_avdin"]
+button_index = 1
 pressed = true
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_t6v31"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_snmo7"]
 atlas = ExtResource("3_eftlo")
+region = Rect2(60, 0, 20, 20)
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_1vagc"]
+button_index = 11
+pressed = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2okmy"]
+atlas = ExtResource("4_ey8mv")
+region = Rect2(0, 0, 20, 20)
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_t6v31"]
+button_index = 12
+pressed = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nse4c"]
+atlas = ExtResource("4_ey8mv")
 region = Rect2(20, 0, 20, 20)
 
-[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_v45yw"]
-button_index = 3
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_k0tdo"]
+button_index = 13
 pressed = true
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1vagc"]
-atlas = ExtResource("3_eftlo")
+[sub_resource type="AtlasTexture" id="AtlasTexture_avdin"]
+atlas = ExtResource("4_ey8mv")
+region = Rect2(40, 0, 20, 20)
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_snmo7"]
+button_index = 14
+pressed = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v00i1"]
+atlas = ExtResource("4_ey8mv")
+region = Rect2(60, 0, 20, 20)
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_2okmy"]
+axis = 1
+axis_value = -1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yf0j6"]
+atlas = ExtResource("5_jwg40")
 region = Rect2(0, 0, 20, 20)
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_itol2"]
+axis = 1
+axis_value = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4hjw6"]
+atlas = ExtResource("5_jwg40")
+region = Rect2(20, 0, 20, 20)
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_arypp"]
+axis_value = -1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n7lmm"]
+atlas = ExtResource("5_jwg40")
+region = Rect2(40, 0, 20, 20)
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_ij4b1"]
+axis_value = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xkrk1"]
+atlas = ExtResource("5_jwg40")
+region = Rect2(60, 0, 20, 20)
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_itol2"]
+button_index = 9
+pressed = true
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_4hjw6"]
+button_index = 10
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_n7lmm"]
+axis = 4
+axis_value = 1.0
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_xkrk1"]
+axis = 5
+axis_value = 1.0
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_arypp"]
+button_index = 6
+pressed = true
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_n7lmm"]
+button_index = 4
+pressed = true
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_ij4b1"]
+button_index = 5
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_ynxmk"]
+axis = 3
+axis_value = -1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rxxwl"]
+atlas = ExtResource("13_tbjov")
+region = Rect2(0, 0, 20, 20)
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_c7esy"]
+axis = 3
+axis_value = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qpfaa"]
+atlas = ExtResource("13_tbjov")
+region = Rect2(20, 0, 20, 20)
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_qcam7"]
+axis = 2
+axis_value = -1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y2pkn"]
+atlas = ExtResource("13_tbjov")
+region = Rect2(40, 0, 20, 20)
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_bh7dl"]
+axis = 2
+axis_value = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b1g3j"]
+atlas = ExtResource("13_tbjov")
+region = Rect2(60, 0, 20, 20)
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_3hdss"]
+button_index = 7
+pressed = true
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_kutoy"]
+button_index = 8
+pressed = true
 
 [sub_resource type="InputEventMouseButton" id="InputEventMouseButton_4mdci"]
 button_index = 2
@@ -562,6 +562,7 @@ crouch = Array[InputEvent]([SubResource("InputEventKey_4pj0n"), SubResource("Inp
 dive = Array[InputEvent]([SubResource("InputEventKey_bcoqb"), SubResource("InputEventJoypadButton_kuwoh")])
 ground_pound = Array[InputEvent]([SubResource("InputEventKey_4mdci"), SubResource("InputEventJoypadMotion_csq0s")])
 spin = Array[InputEvent]([SubResource("InputEventKey_eea84"), SubResource("InputEventJoypadButton_k8an3")])
+sink_down = Array[InputEvent]([])
 use_fludd = Array[InputEvent]([SubResource("InputEventKey_ksmes"), SubResource("InputEventJoypadMotion_t5g3o")])
 switch_nozzle = Array[InputEvent]([SubResource("InputEventKey_t5g3o"), SubResource("InputEventJoypadButton_j211s")])
 interact = Array[InputEvent]([SubResource("InputEventKey_csq0s"), SubResource("InputEventJoypadButton_jeadu")])
@@ -596,31 +597,31 @@ button_map = Dictionary[StringName, ExtResource("3_edyoc")]({
 &"use_fludd": SubResource("Resource_bm73o")
 })
 controller_icon_map = Dictionary[InputEvent, Texture2D]({
-SubResource("InputEventJoypadButton_v45yw"): SubResource("AtlasTexture_1vagc"),
-SubResource("InputEventJoypadButton_2okmy"): SubResource("AtlasTexture_t6v31"),
-SubResource("InputEventJoypadButton_nse4c"): SubResource("AtlasTexture_k0tdo"),
-SubResource("InputEventJoypadButton_avdin"): SubResource("AtlasTexture_snmo7"),
-SubResource("InputEventJoypadButton_1vagc"): SubResource("AtlasTexture_2okmy"),
-SubResource("InputEventJoypadButton_t6v31"): SubResource("AtlasTexture_nse4c"),
-SubResource("InputEventJoypadButton_k0tdo"): SubResource("AtlasTexture_avdin"),
-SubResource("InputEventJoypadButton_snmo7"): SubResource("AtlasTexture_v00i1"),
-SubResource("InputEventJoypadMotion_2okmy"): SubResource("AtlasTexture_yf0j6"),
-SubResource("InputEventJoypadMotion_itol2"): SubResource("AtlasTexture_4hjw6"),
-SubResource("InputEventJoypadMotion_arypp"): SubResource("AtlasTexture_n7lmm"),
-SubResource("InputEventJoypadMotion_ij4b1"): SubResource("AtlasTexture_xkrk1"),
-SubResource("InputEventJoypadButton_itol2"): ExtResource("6_otl4t"),
-SubResource("InputEventJoypadButton_4hjw6"): ExtResource("7_hd4gb"),
-SubResource("InputEventJoypadMotion_n7lmm"): ExtResource("8_p4ylr"),
-SubResource("InputEventJoypadMotion_xkrk1"): ExtResource("9_sntij"),
-SubResource("InputEventJoypadButton_arypp"): ExtResource("10_lijkq"),
-SubResource("InputEventJoypadButton_n7lmm"): ExtResource("11_bcoqb"),
-SubResource("InputEventJoypadButton_ij4b1"): ExtResource("12_kuwoh"),
-SubResource("InputEventJoypadMotion_ynxmk"): SubResource("AtlasTexture_rxxwl"),
-SubResource("InputEventJoypadMotion_c7esy"): SubResource("AtlasTexture_qpfaa"),
-SubResource("InputEventJoypadMotion_qcam7"): SubResource("AtlasTexture_y2pkn"),
-SubResource("InputEventJoypadMotion_bh7dl"): SubResource("AtlasTexture_b1g3j"),
+SubResource("InputEventJoypadButton_kutoy"): ExtResource("15_h1mcp"),
 SubResource("InputEventJoypadButton_3hdss"): ExtResource("14_gqodu"),
-SubResource("InputEventJoypadButton_kutoy"): ExtResource("15_h1mcp")
+SubResource("InputEventJoypadMotion_bh7dl"): SubResource("AtlasTexture_b1g3j"),
+SubResource("InputEventJoypadMotion_qcam7"): SubResource("AtlasTexture_y2pkn"),
+SubResource("InputEventJoypadMotion_c7esy"): SubResource("AtlasTexture_qpfaa"),
+SubResource("InputEventJoypadMotion_ynxmk"): SubResource("AtlasTexture_rxxwl"),
+SubResource("InputEventJoypadButton_ij4b1"): ExtResource("12_kuwoh"),
+SubResource("InputEventJoypadButton_n7lmm"): ExtResource("11_bcoqb"),
+SubResource("InputEventJoypadButton_arypp"): ExtResource("10_lijkq"),
+SubResource("InputEventJoypadMotion_xkrk1"): ExtResource("9_sntij"),
+SubResource("InputEventJoypadMotion_n7lmm"): ExtResource("8_p4ylr"),
+SubResource("InputEventJoypadButton_4hjw6"): ExtResource("7_hd4gb"),
+SubResource("InputEventJoypadButton_itol2"): ExtResource("6_otl4t"),
+SubResource("InputEventJoypadMotion_ij4b1"): SubResource("AtlasTexture_xkrk1"),
+SubResource("InputEventJoypadMotion_arypp"): SubResource("AtlasTexture_n7lmm"),
+SubResource("InputEventJoypadMotion_itol2"): SubResource("AtlasTexture_4hjw6"),
+SubResource("InputEventJoypadMotion_2okmy"): SubResource("AtlasTexture_yf0j6"),
+SubResource("InputEventJoypadButton_snmo7"): SubResource("AtlasTexture_v00i1"),
+SubResource("InputEventJoypadButton_k0tdo"): SubResource("AtlasTexture_avdin"),
+SubResource("InputEventJoypadButton_t6v31"): SubResource("AtlasTexture_nse4c"),
+SubResource("InputEventJoypadButton_1vagc"): SubResource("AtlasTexture_2okmy"),
+SubResource("InputEventJoypadButton_avdin"): SubResource("AtlasTexture_snmo7"),
+SubResource("InputEventJoypadButton_nse4c"): SubResource("AtlasTexture_k0tdo"),
+SubResource("InputEventJoypadButton_2okmy"): SubResource("AtlasTexture_t6v31"),
+SubResource("InputEventJoypadButton_v45yw"): SubResource("AtlasTexture_1vagc")
 })
 metadata/_custom_type_script = "uid://uq1ejudjw7jh"
 

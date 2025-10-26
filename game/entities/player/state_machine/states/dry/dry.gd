@@ -8,13 +8,11 @@ func _physics_process(delta: float) -> void:
 	player.is_falling = player.velocity.y > 0
 	_handle_triple_jump(delta)
 	_handle_ground_pound()
-	_handle_spin()
 
 
 func _handle_triple_jump(delta: float) -> void:
 	if player.jump_buffer_timer > 0.0:
 		player.jump_buffer_timer = max(0, player.jump_buffer_timer - delta)
-	
 	
 	if not player.is_on_floor():
 		return
@@ -28,10 +26,3 @@ func _handle_triple_jump(delta: float) -> void:
 func _handle_ground_pound() -> void:
 	if not player.is_on_floor() and player.is_input_ground_pound:
 		state_machine.change_state(&"GroundPoundStart")
-
-
-func _handle_spin() -> void:
-	pass
-	#if state_machine.current_state.name not in [
-		#&"Dive, Floorslide, Jump, DoubleJump, TripleJump, RollOut"]:
-		#pass

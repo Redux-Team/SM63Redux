@@ -85,14 +85,14 @@ func get_effective_friction() -> float:
 
 ## Uses the [b]friction component[/b]. Helper function to automatically apply
 ## friction.
-func apply_friction() -> void:
-	if is_on_floor():
+func apply_friction(factor: float = 1.0, enforce: bool = false) -> void:
+	if is_on_floor() or enforce:
 		var friction: float = get_effective_friction()
 		
 		if abs(velocity.x) <= friction or not has_friction:
 			velocity.x = 0
 		else:
-			velocity.x = lerpf(velocity.x, 0, friction * 0.25)
+			velocity.x = lerpf(velocity.x, 0, friction * 0.25 * factor)
 
 
 ## Called every tick of the physics process, does not override any internal processing.
