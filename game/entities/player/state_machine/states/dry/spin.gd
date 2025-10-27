@@ -30,4 +30,5 @@ func _physics_process(_delta: float) -> void:
 
 
 func _on_exit(_to: StringName) -> void:
+	player.has_gravity = true
 	player.gravity_scale_factor = 1.0
