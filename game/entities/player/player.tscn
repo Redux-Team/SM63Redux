@@ -1,4 +1,4 @@
-[gd_scene load_steps=170 format=3 uid="uid://b4nw5k2oa3ro0"]
+[gd_scene load_steps=225 format=3 uid="uid://b4nw5k2oa3ro0"]
 
 [ext_resource type="Script" uid="uid://c7gtlwcfr4qrc" path="res://game/entities/player/player.gd" id="1_oic1i"]
 [ext_resource type="Texture2D" uid="uid://bjysolnwpkvk2" path="res://assets/textures/spritesheets/entity/player/mario/crouch.png" id="2_conr4"]
@@ -24,18 +24,61 @@
 [ext_resource type="Script" uid="uid://u0hawbkwgxxm" path="res://game/entities/player/state_machine/states/dry/airborne/triple_jump.gd" id="12_6pmmc"]
 [ext_resource type="Script" uid="uid://takeq0g2apa4" path="res://game/entities/player/state_machine/states/dry/grounded/floorslide.gd" id="16_cq8ym"]
 [ext_resource type="Script" uid="uid://dduwb3q2yj8ge" path="res://game/entities/player/state_machine/states/dry/airborne/airborne.gd" id="16_fq5t3"]
+[ext_resource type="AudioStream" uid="uid://7bo2dwx3h262" path="res://assets/sfx/player/mario/step/step_generic_0.wav" id="20_bhtqs"]
 [ext_resource type="Script" uid="uid://cv5xsm5s80v7c" path="res://game/entities/player/state_machine/states/dry/airborne/dive.gd" id="20_e8mlx"]
+[ext_resource type="AudioStream" uid="uid://mmeee623jjf5" path="res://assets/sfx/player/mario/step/step_generic_1.wav" id="21_ik38a"]
 [ext_resource type="Script" uid="uid://mjpq5va018id" path="res://game/entities/player/state_machine/states/dry/airborne/dive_out_f.gd" id="22_1s5sw"]
+[ext_resource type="AudioStream" uid="uid://cihror0vafpcs" path="res://assets/sfx/player/mario/step/step_generic_2.wav" id="22_7fbrh"]
 [ext_resource type="Script" uid="uid://bruoja542ilug" path="res://game/entities/player/state_machine/states/dry/airborne/backflip.gd" id="23_588tj"]
+[ext_resource type="AudioStream" uid="uid://c7dq8utg2pwku" path="res://assets/sfx/player/mario/step/step_generic_3.wav" id="23_d1sri"]
+[ext_resource type="AudioStream" uid="uid://bcy4wwvxfd7km" path="res://assets/sfx/player/mario/jump/jump_0.wav" id="23_yragl"]
+[ext_resource type="AudioStream" uid="uid://sskhnc1p4cbo" path="res://assets/sfx/player/mario/jump/jump_1.wav" id="24_bcb3w"]
 [ext_resource type="Script" uid="uid://dp6u6k8h3q8bb" path="res://game/entities/player/state_machine/states/dry/airborne/backflip_up.gd" id="24_hnip2"]
+[ext_resource type="AudioStream" uid="uid://cfbctyhlwbvs2" path="res://assets/sfx/player/mario/step/step_generic_4.wav" id="24_tqh1p"]
+[ext_resource type="AudioStream" uid="uid://b64tgaqkx06dn" path="res://assets/sfx/player/mario/step/step_generic_5.wav" id="25_fckvs"]
+[ext_resource type="AudioStream" uid="uid://cacxhcwvqwe3l" path="res://assets/sfx/player/mario/double_jump/double_jump_0.wav" id="26_0a2fl"]
 [ext_resource type="Script" uid="uid://di2m7fomegl2c" path="res://game/entities/player/state_machine/states/dry/airborne/ground_pound_start.gd" id="26_6strl"]
+[ext_resource type="AudioStream" uid="uid://docp74l4dcgux" path="res://assets/sfx/player/mario/step/step_generic_6.wav" id="26_30eym"]
+[ext_resource type="AudioStream" uid="uid://vsklw2q0em6j" path="res://assets/sfx/player/mario/step/step_generic_7.wav" id="27_mitd3"]
+[ext_resource type="AudioStream" uid="uid://bb3kctktrncwe" path="res://assets/sfx/player/mario/double_jump/double_jump_1.wav" id="27_mp3y6"]
 [ext_resource type="Script" uid="uid://b1yqttw88qhpc" path="res://game/entities/player/state_machine/states/dry/airborne/ground_pound_fall.gd" id="27_tv6ny"]
 [ext_resource type="Script" uid="uid://cxl256qav85ok" path="res://game/entities/player/state_machine/states/dry/airborne/ground_pound_slam.gd" id="28_2vc1s"]
-[ext_resource type="Script" uid="uid://bu1c6nhyuwjr8" path="res://game/entities/player/spin.gd" id="30_so4hh"]
-[ext_resource type="Script" uid="uid://i24avlvcu566" path="res://game/entities/player/submerged.gd" id="31_aidgt"]
-[ext_resource type="Script" uid="uid://bbeq7ts1ntkyf" path="res://game/entities/player/swim_up.gd" id="32_2jquf"]
-[ext_resource type="Script" uid="uid://dyntgyu14wdqb" path="res://game/entities/player/water_handler.gd" id="33_i5qpf"]
-[ext_resource type="Script" uid="uid://2tj555qr5tol" path="res://game/entities/player/swim_spin.gd" id="33_ijn2u"]
+[ext_resource type="AudioStream" uid="uid://bkchpuxm4m78e" path="res://assets/sfx/player/mario/step/step_generic_8.wav" id="28_r7to5"]
+[ext_resource type="AudioStream" uid="uid://6ngvah4nyray" path="res://assets/sfx/player/mario/double_jump/double_jump_2.wav" id="28_wx3fv"]
+[ext_resource type="AudioStream" uid="uid://dsdjwghexhrb0" path="res://assets/sfx/player/mario/step/step_generic_9.wav" id="29_uuaq0"]
+[ext_resource type="AudioStream" uid="uid://by2w07yywwldf" path="res://assets/sfx/player/mario/step/step_generic_10.wav" id="30_1gfjr"]
+[ext_resource type="AudioStream" uid="uid://cl10c505sc7jn" path="res://assets/sfx/player/mario/triple_jump/triple_jump_0.wav" id="30_mambc"]
+[ext_resource type="Script" uid="uid://bu1c6nhyuwjr8" path="res://game/entities/player/state_machine/states/dry/spin.gd" id="30_so4hh"]
+[ext_resource type="Script" uid="uid://i24avlvcu566" path="res://game/entities/player/state_machine/states/submerged/submerged.gd" id="31_aidgt"]
+[ext_resource type="AudioStream" uid="uid://b833lacl5wgoo" path="res://assets/sfx/player/mario/step/step_generic_11.wav" id="31_uuiqd"]
+[ext_resource type="AudioStream" uid="uid://d2u8p1w08sc8t" path="res://assets/sfx/player/mario/triple_jump/triple_jump_1.wav" id="31_vi7al"]
+[ext_resource type="Script" uid="uid://bbeq7ts1ntkyf" path="res://game/entities/player/state_machine/states/submerged/swim_up.gd" id="32_2jquf"]
+[ext_resource type="AudioStream" uid="uid://q3643u4b4my6" path="res://assets/sfx/player/mario/step/step_generic_12.wav" id="32_66tqw"]
+[ext_resource type="AudioStream" uid="uid://b25chylcy5cvx" path="res://assets/sfx/player/mario/triple_jump/triple_jump_2.wav" id="32_bhtqs"]
+[ext_resource type="Script" uid="uid://dyntgyu14wdqb" path="res://game/entities/player/state_machine/processes/water_handler.gd" id="33_i5qpf"]
+[ext_resource type="Script" uid="uid://2tj555qr5tol" path="res://game/entities/player/state_machine/states/submerged/swim_spin.gd" id="33_ijn2u"]
+[ext_resource type="AudioStream" uid="uid://podpwijvoa8s" path="res://assets/sfx/player/mario/triple_jump/triple_jump_3.wav" id="33_ik38a"]
+[ext_resource type="AudioStream" uid="uid://d2cl8eaf3dcbj" path="res://assets/sfx/player/mario/step/step_generic_13.wav" id="33_n4muq"]
+[ext_resource type="Script" uid="uid://bn6i8m2caq1iq" path="res://util/audio/sfx_bank.gd" id="33_or46b"]
+[ext_resource type="AudioStream" uid="uid://d8y8hq35tc28" path="res://assets/sfx/player/mario/triple_jump/triple_jump_4.wav" id="34_7fbrh"]
+[ext_resource type="AudioStream" uid="uid://c6fqas8c4pqox" path="res://assets/sfx/player/mario/triple_jump/triple_jump_5.wav" id="35_d1sri"]
+[ext_resource type="AudioStream" uid="uid://bme1kk82dbdvc" path="res://assets/sfx/player/mario/triple_jump/triple_jump_6.wav" id="36_tqh1p"]
+[ext_resource type="AudioStream" uid="uid://buooavrsh260y" path="res://assets/sfx/player/mario/triple_jump/triple_jump_7.wav" id="37_fckvs"]
+[ext_resource type="AudioStream" uid="uid://dfoi0m0cw6fww" path="res://assets/sfx/player/mario/spin/spin_water_end.wav" id="39_0a2fl"]
+[ext_resource type="AudioStream" uid="uid://ddyxdiykdet7b" path="res://assets/sfx/player/mario/dive/dive_0.wav" id="39_7fbrh"]
+[ext_resource type="AudioStream" uid="uid://vvilx4sjryos" path="res://assets/sfx/player/mario/dive/dive_1.wav" id="40_d1sri"]
+[ext_resource type="AudioStream" uid="uid://cv0wy731vhj3o" path="res://assets/sfx/player/mario/dive/dive_2.wav" id="41_tqh1p"]
+[ext_resource type="AudioStream" uid="uid://cjcl5pn71sgyv" path="res://assets/sfx/player/mario/dive/dive_3.wav" id="42_fckvs"]
+[ext_resource type="AudioStream" uid="uid://cfcnya3ow457f" path="res://assets/sfx/player/mario/ground_pound/ground_pound_start.wav" id="47_d1sri"]
+[ext_resource type="AudioStream" uid="uid://dly1p4x8t0r70" path="res://assets/sfx/player/mario/ground_pound/ground_pound_generic.wav" id="50_tqh1p"]
+[ext_resource type="AudioStream" uid="uid://bxthrj2cgps5d" path="res://assets/sfx/player/mario/spin/spin_air_1.wav" id="52_mitd3"]
+[ext_resource type="AudioStream" uid="uid://e0gve7kc1mk1" path="res://assets/sfx/player/mario/spin/spin_air_2.wav" id="53_r7to5"]
+[ext_resource type="AudioStream" uid="uid://csmh3s1xsm72b" path="res://assets/sfx/player/mario/spin/spin_air_3.wav" id="54_uuaq0"]
+[ext_resource type="AudioStream" uid="uid://bfd6xls4jjoac" path="res://assets/sfx/player/mario/spin/spin_water_1.wav" id="57_r7to5"]
+[ext_resource type="AudioStream" uid="uid://bk01cygcl3fi5" path="res://assets/sfx/player/mario/ground_pound/ground_pound_cloud.wav" id="64_0gfqy"]
+[ext_resource type="AudioStream" uid="uid://cq81bua8fjxv7" path="res://assets/sfx/player/mario/ground_pound/ground_pound_grass.wav" id="65_bqv8h"]
+[ext_resource type="AudioStream" uid="uid://bpig1nynumifi" path="res://assets/sfx/player/mario/ground_pound/ground_pound_sand.wav" id="66_7123u"]
+[ext_resource type="AudioStream" uid="uid://bbscycsfnsu3l" path="res://assets/sfx/player/mario/ground_pound/ground_pound_snow.wav" id="67_iy1it"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
 atlas = ExtResource("2_conr4")
@@ -799,6 +842,88 @@ states/Walk/position = Vector2(338.574, 337.985)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_v0nmi"), "Jump", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_conr4"), "DoubleJump", "TripleJump", SubResource("AnimationNodeStateMachineTransition_4neg5"), "Crouch", "Backflip", SubResource("AnimationNodeStateMachineTransition_fq5t3"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_dhej3"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_5wwt0"), "Idle", "Jump", SubResource("AnimationNodeStateMachineTransition_igs2l"), "Idle", "Fall", SubResource("AnimationNodeStateMachineTransition_heu0c"), "DoubleJump", "Jump", SubResource("AnimationNodeStateMachineTransition_6pmmc"), "TripleJump", "DoubleJump", SubResource("AnimationNodeStateMachineTransition_xt77v"), "Fall", "Landed", SubResource("AnimationNodeStateMachineTransition_tv6ny"), "Landed", "Idle", SubResource("AnimationNodeStateMachineTransition_2vc1s"), "Idle", "Crouch", SubResource("AnimationNodeStateMachineTransition_0rdsw"), "Crouch", "Idle", SubResource("AnimationNodeStateMachineTransition_8pcyd"), "Walk", "Floorslide", SubResource("AnimationNodeStateMachineTransition_k6116"), "Floorslide", "Idle", SubResource("AnimationNodeStateMachineTransition_so4hh"), "Idle", "Floorslide", SubResource("AnimationNodeStateMachineTransition_cq8ym"), "Fall", "Dive", SubResource("AnimationNodeStateMachineTransition_hnip2"), "Jump", "Dive", SubResource("AnimationNodeStateMachineTransition_0f2w8"), "DoubleJump", "Dive", SubResource("AnimationNodeStateMachineTransition_aidgt"), "TripleJump", "Dive", SubResource("AnimationNodeStateMachineTransition_i5qpf"), "Dive", "Floorslide", SubResource("AnimationNodeStateMachineTransition_2jquf"), "Walk", "Fall", SubResource("AnimationNodeStateMachineTransition_j8m7m"), "Floorslide", "RollOutF", SubResource("AnimationNodeStateMachineTransition_1s5sw"), "RollOutF", "Idle", SubResource("AnimationNodeStateMachineTransition_588tj"), "RollOutF", "Dive", SubResource("AnimationNodeStateMachineTransition_ijn2u"), "Walk", "Jump", SubResource("AnimationNodeStateMachineTransition_p5qu6"), "Jump", "Fall", SubResource("AnimationNodeStateMachineTransition_or46b"), "Jump", "Idle", SubResource("AnimationNodeStateMachineTransition_hy8ba"), "Floorslide", "Backflip", SubResource("AnimationNodeStateMachineTransition_yragl"), "Backflip", "Idle", SubResource("AnimationNodeStateMachineTransition_bcb3w"), "Crouch", "BackflipUp", SubResource("AnimationNodeStateMachineTransition_uea50"), "BackflipUp", "Idle", SubResource("AnimationNodeStateMachineTransition_0a2fl"), "BackflipUp", "Dive", SubResource("AnimationNodeStateMachineTransition_mp3y6"), "Backflip", "Dive", SubResource("AnimationNodeStateMachineTransition_wx3fv"), "GroundPoundStart", "GroundPoundFall", SubResource("AnimationNodeStateMachineTransition_g1vkd"), "GroundPoundFall", "GroundPoundSlam", SubResource("AnimationNodeStateMachineTransition_xfb3v"), "GroundPoundSlam", "Idle", SubResource("AnimationNodeStateMachineTransition_2mee4"), "Idle", "Spin", SubResource("AnimationNodeStateMachineTransition_gk7md"), "Walk", "Spin", SubResource("AnimationNodeStateMachineTransition_4xud8"), "Fall", "Spin", SubResource("AnimationNodeStateMachineTransition_mambc"), "Jump", "Spin", SubResource("AnimationNodeStateMachineTransition_vi7al"), "DoubleJump", "Spin", SubResource("AnimationNodeStateMachineTransition_bhtqs"), "BackflipUp", "Spin", SubResource("AnimationNodeStateMachineTransition_7fbrh"), "Backflip", "Spin", SubResource("AnimationNodeStateMachineTransition_d1sri"), "Spin", "Idle", SubResource("AnimationNodeStateMachineTransition_tqh1p"), "Spin", "Dive", SubResource("AnimationNodeStateMachineTransition_ik38a"), "Spin", "Jump", SubResource("AnimationNodeStateMachineTransition_fckvs"), "Start", "SwimIdle", SubResource("AnimationNodeStateMachineTransition_30eym"), "SwimIdle", "SwimWalk", SubResource("AnimationNodeStateMachineTransition_mitd3"), "SwimWalk", "Swim", SubResource("AnimationNodeStateMachineTransition_r7to5"), "SwimIdle", "Swim", SubResource("AnimationNodeStateMachineTransition_uuaq0"), "Swim", "SwimIdle", SubResource("AnimationNodeStateMachineTransition_1gfjr"), "SwimIdle", "SwimSpin", SubResource("AnimationNodeStateMachineTransition_uuiqd"), "SwimWalk", "SwimSpin", SubResource("AnimationNodeStateMachineTransition_66tqw"), "SwimSpin", "SwimIdle", SubResource("AnimationNodeStateMachineTransition_n4muq"), "SwimSpin", "SwimWalk", SubResource("AnimationNodeStateMachineTransition_n4dju")]
 graph_offset = Vector2(-48, -537)
 
+[sub_resource type="Resource" id="Resource_hy8ba"]
+script = ExtResource("33_or46b")
+sound_effects = Array[AudioStream]([ExtResource("20_bhtqs"), ExtResource("21_ik38a"), ExtResource("22_7fbrh"), ExtResource("23_d1sri"), ExtResource("24_tqh1p"), ExtResource("25_fckvs"), ExtResource("26_30eym"), ExtResource("27_mitd3"), ExtResource("28_r7to5"), ExtResource("29_uuaq0"), ExtResource("30_1gfjr"), ExtResource("31_uuiqd"), ExtResource("32_66tqw"), ExtResource("33_n4muq")])
+max_stack = 2
+interval = 0.3
+bank_group = &"Player"
+metadata/_custom_type_script = "uid://bn6i8m2caq1iq"
+
+[sub_resource type="Resource" id="Resource_ik38a"]
+script = ExtResource("33_or46b")
+sound_effects = Array[AudioStream]([ExtResource("23_yragl"), ExtResource("24_bcb3w")])
+bank_group = &"Player"
+metadata/_custom_type_script = "uid://bn6i8m2caq1iq"
+
+[sub_resource type="Resource" id="Resource_tqh1p"]
+script = ExtResource("33_or46b")
+sound_effects = Array[AudioStream]([ExtResource("26_0a2fl"), ExtResource("27_mp3y6"), ExtResource("28_wx3fv")])
+bank_group = &"Player"
+metadata/_custom_type_script = "uid://bn6i8m2caq1iq"
+
+[sub_resource type="Resource" id="Resource_66tqw"]
+script = ExtResource("33_or46b")
+sound_effects = Array[AudioStream]([ExtResource("30_mambc"), ExtResource("31_vi7al"), ExtResource("32_bhtqs"), ExtResource("33_ik38a"), ExtResource("34_7fbrh"), ExtResource("35_d1sri"), ExtResource("36_tqh1p"), ExtResource("37_fckvs")])
+bank_group = &"Player"
+metadata/_custom_type_script = "uid://bn6i8m2caq1iq"
+
+[sub_resource type="Resource" id="Resource_lnp0p"]
+script = ExtResource("33_or46b")
+sound_effects = Array[AudioStream]([ExtResource("39_7fbrh"), ExtResource("40_d1sri"), ExtResource("41_tqh1p"), ExtResource("42_fckvs")])
+overwrite_group = true
+bank_group = &"Player"
+metadata/_custom_type_script = "uid://bn6i8m2caq1iq"
+
+[sub_resource type="Resource" id="Resource_b5b25"]
+script = ExtResource("33_or46b")
+sound_effects = Array[AudioStream]([ExtResource("31_vi7al"), ExtResource("33_ik38a"), ExtResource("35_d1sri"), ExtResource("37_fckvs")])
+bank_group = &"Player"
+metadata/_custom_type_script = "uid://bn6i8m2caq1iq"
+
+[sub_resource type="Resource" id="Resource_d345w"]
+script = ExtResource("33_or46b")
+sound_effects = Array[AudioStream]([ExtResource("30_mambc"), ExtResource("32_bhtqs"), ExtResource("34_7fbrh"), ExtResource("36_tqh1p")])
+bank_group = &"Player"
+metadata/_custom_type_script = "uid://bn6i8m2caq1iq"
+
+[sub_resource type="Resource" id="Resource_edb1s"]
+script = ExtResource("33_or46b")
+sound_effects = Array[AudioStream]([ExtResource("47_d1sri")])
+bank_group = &"Player"
+metadata/_custom_type_script = "uid://bn6i8m2caq1iq"
+
+[sub_resource type="Resource" id="Resource_6bnsh"]
+script = ExtResource("33_or46b")
+sound_effects = Array[AudioStream]([ExtResource("50_tqh1p")])
+bank_group = &"Player"
+terrain_exclusive = true
+grass_sfx = Array[AudioStream]([ExtResource("65_bqv8h")])
+snow_sfx = Array[AudioStream]([ExtResource("67_iy1it")])
+cloud_sfx = Array[AudioStream]([ExtResource("64_0gfqy")])
+sand_sfx = Array[AudioStream]([ExtResource("66_7123u")])
+metadata/_custom_type_script = "uid://bn6i8m2caq1iq"
+
+[sub_resource type="Resource" id="Resource_or46b"]
+script = ExtResource("33_or46b")
+sound_effects = Array[AudioStream]([ExtResource("52_mitd3"), ExtResource("53_r7to5"), ExtResource("54_uuaq0")])
+bank_group = &"Player"
+stop_on_state_exit = true
+metadata/_custom_type_script = "uid://bn6i8m2caq1iq"
+
+[sub_resource type="Resource" id="Resource_mp3y6"]
+script = ExtResource("33_or46b")
+sound_effects = Array[AudioStream]([ExtResource("57_r7to5")])
+bank_group = &"Player"
+stop_on_state_exit = true
+metadata/_custom_type_script = "uid://bn6i8m2caq1iq"
+
+[sub_resource type="Resource" id="Resource_wx3fv"]
+script = ExtResource("33_or46b")
+sound_effects = Array[AudioStream]([ExtResource("39_0a2fl")])
+bank_group = &"Player"
+metadata/_custom_type_script = "uid://bn6i8m2caq1iq"
+
 [sub_resource type="Animation" id="Animation_2vc1s"]
 length = 0.001
 tracks/0/type = "value"
@@ -918,7 +1043,7 @@ sprite = NodePath("AnimatedSprite2D")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, -7)
 sprite_frames = SubResource("SpriteFrames_6pmmc")
-animation = &"swim_walk"
+animation = &"walk_loop"
 offset = Vector2(0, -6)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -988,8 +1113,8 @@ script = ExtResource("8_p5qu6")
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"walk_start", &"walk_loop"])
-assertions_enabled = true
-assertions = "is_on_floor()"
+has_default_sfx = true
+continuous_sfx = SubResource("Resource_hy8ba")
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="Landed" type="Node" parent="StateMachine/States/Dry/Grounded" node_paths=PackedStringArray("superstate")]
@@ -1024,6 +1149,8 @@ script = ExtResource("8_5wwt0")
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"jump"])
+has_default_sfx = true
+enter_sfx = SubResource("Resource_ik38a")
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="DoubleJump" type="Node" parent="StateMachine/States/Dry/Airborne" node_paths=PackedStringArray("superstate")]
@@ -1031,6 +1158,8 @@ script = ExtResource("11_t56eh")
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"double_jump"])
+has_default_sfx = true
+enter_sfx = SubResource("Resource_tqh1p")
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="TripleJump" type="Node" parent="StateMachine/States/Dry/Airborne" node_paths=PackedStringArray("animation_player", "superstate")]
@@ -1039,6 +1168,8 @@ animation_player = NodePath("../../../../AnimationPlayer")
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"triple_jump"])
+has_default_sfx = true
+enter_sfx = SubResource("Resource_66tqw")
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="Dive" type="Node" parent="StateMachine/States/Dry/Airborne" node_paths=PackedStringArray("superstate")]
@@ -1049,6 +1180,8 @@ dive_y_boost = 20.0
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"dive"])
+has_default_sfx = true
+enter_sfx = SubResource("Resource_lnp0p")
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="RollOutF" type="Node" parent="StateMachine/States/Dry/Airborne/Dive" node_paths=PackedStringArray("superstate")]
@@ -1072,6 +1205,8 @@ script = ExtResource("23_588tj")
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"jump"])
+has_default_sfx = true
+enter_sfx = SubResource("Resource_b5b25")
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="BackflipUp" type="Node" parent="StateMachine/States/Dry/Airborne" node_paths=PackedStringArray("superstate")]
@@ -1079,6 +1214,8 @@ script = ExtResource("24_hnip2")
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"jump"])
+has_default_sfx = true
+enter_sfx = SubResource("Resource_d345w")
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="GroundPoundStart" type="Node" parent="StateMachine/States/Dry/Airborne"]
@@ -1086,6 +1223,8 @@ script = ExtResource("26_6strl")
 lock_sprite_flipping = true
 has_default_animations = true
 animations = Array[StringName]([&"ground_pound_start"])
+has_default_sfx = true
+enter_sfx = SubResource("Resource_edb1s")
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="GroundPoundFall" type="Node" parent="StateMachine/States/Dry/Airborne/GroundPoundStart"]
@@ -1098,6 +1237,8 @@ metadata/_custom_type_script = "uid://ra55p55nrtg4"
 [node name="GroundPoundSlam" type="Node" parent="StateMachine/States/Dry/Airborne/GroundPoundStart"]
 script = ExtResource("28_2vc1s")
 lock_sprite_flipping = true
+has_default_sfx = true
+enter_sfx = SubResource("Resource_6bnsh")
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="Spin" type="Node" parent="StateMachine/States/Dry" node_paths=PackedStringArray("superstate")]
@@ -1106,6 +1247,8 @@ superstate = NodePath("../Airborne")
 lock_sprite_flipping = true
 has_default_animations = true
 animations = Array[StringName]([&"spin_start", &"spin_loop"])
+has_default_sfx = true
+enter_sfx = SubResource("Resource_or46b")
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="Submerged" type="Node" parent="StateMachine/States"]
@@ -1117,6 +1260,7 @@ script = ExtResource("8_p5qu6")
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"swim_idle"])
+has_default_sfx = true
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="SwimSpin" type="Node" parent="StateMachine/States/Submerged" node_paths=PackedStringArray("superstate")]
@@ -1124,6 +1268,9 @@ script = ExtResource("33_ijn2u")
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"spin_start", &"spin_loop"])
+has_default_sfx = true
+enter_sfx = SubResource("Resource_mp3y6")
+exit_sfx = SubResource("Resource_wx3fv")
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="SwimGroundPound" type="Node" parent="StateMachine/States/Submerged" node_paths=PackedStringArray("superstate")]

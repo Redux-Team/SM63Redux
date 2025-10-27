@@ -10,6 +10,14 @@ extends Node
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var has_default_animations: bool = false
 @export var animations: Array[StringName]
 
+
+@export_group("Default Sound Effects")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var has_default_sfx: bool = false
+@export var enter_sfx: SFXBank
+@export var exit_sfx: SFXBank
+@export var continuous_sfx: SFXBank
+
+
 @export_group("Assertions", "assertions")
 ## Whether assertions are enabled, useful when tracking down incorrect behavior during a state.
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var assertions_enabled: bool = false

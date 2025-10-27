@@ -20,7 +20,7 @@ func _on_water_check_area_exited(area: Area2D) -> void:
 		if player.is_on_floor():
 			state_machine.change_state(&"Idle")
 		else:
-			state_machine.change_state(&"Jump")
+			state_machine.change_state_silent(&"Jump")
 		player.gravity_scale_factor = 1.0
 	if player.velocity.y < 0:
 		player.velocity.y *= 1.325

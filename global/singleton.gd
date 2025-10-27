@@ -135,9 +135,9 @@ func _check_touch_display(device: InputType) -> void:
 			control.hide()
 
 
-func _play_sfx(stream: AudioStream) -> void:
+func _play_sfx(stream: AudioStream, bus: StringName = &"SFX") -> void:
 	var audio_stream_player: AudioStreamPlayer = AudioStreamPlayer.new()
-	audio_stream_player.bus = &"SFX"
+	audio_stream_player.bus = bus
 	audio_stream_player.stream = stream
 	
 	sfx_container.add_child(audio_stream_player)
