@@ -68,6 +68,10 @@ func enable_processing() -> void:
 		superstate.enable_processing()
 
 
+func is_active() -> bool:
+	return state_machine.current_state == self
+
+
 func _on_enter(_from: StringName) -> void:
 	pass
 
