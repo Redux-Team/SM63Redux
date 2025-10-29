@@ -1,6 +1,10 @@
 class_name Player
 extends Entity
 
+signal entered_water
+signal exited_water
+
+
 @export_group("Movement Variables")
 @export_subgroup("Horizontal Movement")
 @export var walk_acceleration: float = 20.0
@@ -42,7 +46,15 @@ var is_diving: bool = false
 var is_falling: bool = false
 var is_swimming: bool = false
 
-var is_in_water: bool = false
+var is_in_water: bool = false:
+	set(iiw):
+		if iiw == is_in_water:
+			return
+		if iiw:
+			entered_water.emit()
+		else:
+			exited_water.emit()
+		is_in_water = iiw
 
 var is_input_jump: bool = false:
 	get:
