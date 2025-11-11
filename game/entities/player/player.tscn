@@ -1,4 +1,4 @@
-[gd_scene load_steps=225 format=3 uid="uid://b4nw5k2oa3ro0"]
+[gd_scene load_steps=229 format=3 uid="uid://b4nw5k2oa3ro0"]
 
 [ext_resource type="Script" uid="uid://c7gtlwcfr4qrc" path="res://game/entities/player/player.gd" id="1_oic1i"]
 [ext_resource type="Texture2D" uid="uid://bjysolnwpkvk2" path="res://assets/textures/spritesheets/entity/player/mario/crouch.png" id="2_conr4"]
@@ -22,6 +22,7 @@
 [ext_resource type="Script" uid="uid://brspapjb6geve" path="res://game/entities/player/state_machine/states/dry/grounded/landed.gd" id="11_heu0c"]
 [ext_resource type="Script" uid="uid://off2oirnx76k" path="res://game/entities/player/state_machine/states/dry/airborne/double_jump.gd" id="11_t56eh"]
 [ext_resource type="Script" uid="uid://u0hawbkwgxxm" path="res://game/entities/player/state_machine/states/dry/airborne/triple_jump.gd" id="12_6pmmc"]
+[ext_resource type="Texture2D" uid="uid://bjblyiou2qe0f" path="res://assets/textures/spritesheets/entity/player/shared/hover_fludd_r_0.png" id="13_gqe2a"]
 [ext_resource type="Script" uid="uid://takeq0g2apa4" path="res://game/entities/player/state_machine/states/dry/grounded/floorslide.gd" id="16_cq8ym"]
 [ext_resource type="Script" uid="uid://dduwb3q2yj8ge" path="res://game/entities/player/state_machine/states/dry/airborne/airborne.gd" id="16_fq5t3"]
 [ext_resource type="AudioStream" uid="uid://7bo2dwx3h262" path="res://assets/sfx/player/mario/step/step_generic_0.wav" id="20_bhtqs"]
@@ -475,6 +476,28 @@ animations = [{
 "loop": true,
 "name": &"walk_start",
 "speed": 11.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_va0vu"]
+atlas = ExtResource("13_gqe2a")
+region = Rect2(0, 33, 26, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cjmyu"]
+atlas = ExtResource("13_gqe2a")
+region = Rect2(0, 0, 26, 33)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_51d5m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_va0vu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cjmyu")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x4rrl"]
@@ -1038,13 +1061,23 @@ midair_turn_speed = 2.5
 state_machine = NodePath("StateMachine")
 debug_container = NodePath("DebugContainer")
 floor_slope_raycast = NodePath("FloorSlopeRaycast")
-sprite = NodePath("AnimatedSprite2D")
+sprite = NodePath("Doll")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="Doll" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, -7)
 sprite_frames = SubResource("SpriteFrames_6pmmc")
 animation = &"walk_loop"
 offset = Vector2(0, -6)
+
+[node name="FluddB" type="AnimatedSprite2D" parent="Doll"]
+show_behind_parent = true
+position = Vector2(-4, 2.5)
+sprite_frames = SubResource("SpriteFrames_51d5m")
+frame = 1
+
+[node name="FluddF" type="AnimatedSprite2D" parent="Doll"]
+position = Vector2(-2, -0.5)
+sprite_frames = SubResource("SpriteFrames_51d5m")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(2, -3)
@@ -1087,7 +1120,7 @@ anim_player = NodePath("AnimationPlayer")
 parameters/conditions/landed = false
 script = ExtResource("5_v0nmi")
 entity = NodePath("..")
-sprite = NodePath("../AnimatedSprite2D")
+sprite = NodePath("../Doll")
 metadata/_custom_type_script = "uid://be2xsj74ekqmn"
 
 [node name="States" type="Node" parent="StateMachine"]
@@ -1296,9 +1329,11 @@ metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="Processes" type="Node" parent="StateMachine"]
 
-[node name="PlayerSpriteHandler" type="Node" parent="StateMachine/Processes" node_paths=PackedStringArray("player_sprite")]
+[node name="PlayerSpriteHandler" type="Node" parent="StateMachine/Processes" node_paths=PackedStringArray("player_sprite", "fludd_sprite_f", "fludd_sprite_b")]
 script = ExtResource("10_igs2l")
-player_sprite = NodePath("../../../AnimatedSprite2D")
+player_sprite = NodePath("../../../Doll")
+fludd_sprite_f = NodePath("../../../Doll/FluddF")
+fludd_sprite_b = NodePath("../../../Doll/FluddB")
 metadata/_custom_type_script = "uid://btbvvqx7hybu5"
 
 [node name="WaterHandler" type="Node" parent="StateMachine/Processes"]
