@@ -1,4 +1,3 @@
-## Dry
 extends State
 
 

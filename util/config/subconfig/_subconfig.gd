@@ -1,6 +1,5 @@
-class_name Subconfig
+@abstract class_name Subconfig
 extends Resource
-# TODO (4.5) assign abstract
 
 
 func get_settings(internal: bool = false) -> Dictionary[String, Variant]:

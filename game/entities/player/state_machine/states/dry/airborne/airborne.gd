@@ -1,4 +1,3 @@
-## airborne.gd
 extends State
 
 func _physics_process(delta: float) -> void:
