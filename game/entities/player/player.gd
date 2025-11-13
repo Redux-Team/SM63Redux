@@ -46,6 +46,8 @@ var is_diving: bool = false
 var is_falling: bool = false
 var is_swimming: bool = false
 
+var is_using_hover_fludd: bool = false
+
 var is_in_water: bool = false:
 	set(iiw):
 		if iiw == is_in_water:
@@ -71,6 +73,7 @@ var can_jump: bool = true
 var can_spin: bool = false
 var can_walk: bool = true
 var can_dive: bool = true
+var can_use_fludd: bool = true
 
 var jump_chain_timer: float = 0.0
 ## lock the sprite flipping

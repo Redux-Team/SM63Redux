@@ -3,7 +3,7 @@ extends State
 const SLIDE_ANGLE_LERP_SPEED: float = 0.5
 const SLIDE_FLAT_ANGLE: float = 90.0
 const AIRBORNE_NOSEDIVE_SPEED: float = 0.15
-const MAX_NOSEDIVE_ANGLE: float = -45.0
+const MAX_NOSEDIVE_ANGLE: float = 45.0
 const LEDGE_BUFFER_TIME: float = 0.15
 
 var body_rotation: float = 0.0
@@ -42,6 +42,7 @@ func _physics_process(_delta: float) -> void:
 		player.apply_friction()
 		time_since_grounded = 0.0
 	else:
+		player.velocity.y += 1
 		time_since_grounded += _delta
 
 
@@ -60,8 +61,8 @@ func update_slide_rotation() -> void:
 	elif is_in_ledge_buffer:
 		body_rotation = lerp_angle(body_rotation, last_slope_angle, SLIDE_ANGLE_LERP_SPEED)
 	elif not player.is_on_floor():
-		target_angle = deg_to_rad(MAX_NOSEDIVE_ANGLE)
-		body_rotation = lerp_angle(body_rotation, target_angle, AIRBORNE_NOSEDIVE_SPEED)
+		var nosedive_angle: float = deg_to_rad(MAX_NOSEDIVE_ANGLE) * (-1 if player.sprite.flip_h else 1)
+		body_rotation = lerp_angle(body_rotation, nosedive_angle, AIRBORNE_NOSEDIVE_SPEED)
 	else:
 		target_angle = deg_to_rad(SLIDE_FLAT_ANGLE)
 		body_rotation = lerp_angle(body_rotation, target_angle, SLIDE_ANGLE_LERP_SPEED)
