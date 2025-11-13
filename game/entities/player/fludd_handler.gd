@@ -19,6 +19,7 @@ var dive_boost: bool = false
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_pressed("use_fludd") and not state_machine.current_state.name in BANNED_FLUDD_STATES:
+		var max_speed: float = player.run_max_speed / 5.0
 		player.is_using_hover_fludd = true
 		if player.is_in_water:
 			player.velocity.y = lerpf(player.velocity.y, -270, 0.2)
@@ -39,7 +40,8 @@ func _physics_process(delta: float) -> void:
 			player.velocity.x += (horizontal_accel + (30.5 if player.is_on_floor() else 0.0)) * facing
 		else:
 			if player.velocity.y < FLUDD_VELOCITY_THRESHOLD:
-				player.velocity.x = clampf(player.velocity.x, -player.run_max_speed / 1.2, player.run_max_speed / 1.2)
+				if abs(player.velocity.x) > max_speed:
+					player.velocity.x = lerpf(player.velocity.x, max_speed * sign(player.velocity.x), 0.1)
 				return
 			
 			if player.velocity.y > 0.0:
@@ -48,6 +50,8 @@ func _physics_process(delta: float) -> void:
 				player.velocity.y = lerpf(player.velocity.y, FLUDD_SPEED, FLUDD_SMOOTH_UP)
 			
 			player.velocity.y = max(player.velocity.y, FLUDD_BOOST_SPEED)
-			player.velocity.x = clampf(player.velocity.x, -player.run_max_speed / 1.2, player.run_max_speed / 1.2)
+			
+			if abs(player.velocity.x) > max_speed:
+				player.velocity.x = lerpf(player.velocity.x, max_speed * sign(player.velocity.x), 0.1)
 	else:
 		player.is_using_hover_fludd = false
