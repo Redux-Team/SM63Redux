@@ -1,4 +1,4 @@
-[gd_scene load_steps=229 format=3 uid="uid://b4nw5k2oa3ro0"]
+[gd_scene load_steps=232 format=3 uid="uid://b4nw5k2oa3ro0"]
 
 [ext_resource type="Script" uid="uid://c7gtlwcfr4qrc" path="res://game/entities/player/player.gd" id="1_oic1i"]
 [ext_resource type="Texture2D" uid="uid://bjysolnwpkvk2" path="res://assets/textures/spritesheets/entity/player/mario/crouch.png" id="2_conr4"]
@@ -80,6 +80,7 @@
 [ext_resource type="AudioStream" uid="uid://cq81bua8fjxv7" path="res://assets/sfx/player/mario/ground_pound/ground_pound_grass.wav" id="65_bqv8h"]
 [ext_resource type="AudioStream" uid="uid://bpig1nynumifi" path="res://assets/sfx/player/mario/ground_pound/ground_pound_sand.wav" id="66_7123u"]
 [ext_resource type="AudioStream" uid="uid://bbscycsfnsu3l" path="res://assets/sfx/player/mario/ground_pound/ground_pound_snow.wav" id="67_iy1it"]
+[ext_resource type="Script" uid="uid://veukwwx18y5s" path="res://game/entities/player/fludd_handler.gd" id="81_va0vu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
 atlas = ExtResource("2_conr4")
@@ -891,6 +892,16 @@ sound_effects = Array[AudioStream]([ExtResource("30_mambc"), ExtResource("31_vi7
 bank_group = &"Player"
 metadata/_custom_type_script = "uid://bn6i8m2caq1iq"
 
+[sub_resource type="Curve" id="Curve_va0vu"]
+_limits = [-2.0, 0.0, 0.0, 2.0]
+_data = [Vector2(0, -1.2160356), 0.0, 0.8594153, 0, 0, Vector2(0.9688386, -0.4342984), 0.19653107, 0.0, 0, 0, Vector2(2, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_cjmyu"]
+_limits = [0.0, 1.0, -300.0, 500.0]
+_data = [Vector2(-300, 0), 0.0, 0.0012381406, 0, 0, Vector2(500, 1), 0.0032906923, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="Resource" id="Resource_lnp0p"]
 script = ExtResource("33_or46b")
 sound_effects = Array[AudioStream]([ExtResource("39_7fbrh"), ExtResource("40_d1sri"), ExtResource("41_tqh1p"), ExtResource("42_fckvs")])
@@ -1210,6 +1221,8 @@ script = ExtResource("20_e8mlx")
 dive_target_speed = 1250.0
 dive_accel_time = 0.09
 dive_y_boost = 20.0
+dive_rotation_curve = SubResource("Curve_va0vu")
+dive_y_to_time_curve = SubResource("Curve_cjmyu")
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"dive"])
@@ -1338,6 +1351,10 @@ metadata/_custom_type_script = "uid://btbvvqx7hybu5"
 
 [node name="WaterHandler" type="Node" parent="StateMachine/Processes"]
 script = ExtResource("33_i5qpf")
+metadata/_custom_type_script = "uid://btbvvqx7hybu5"
+
+[node name="FluddHandler" type="Node" parent="StateMachine/Processes"]
+script = ExtResource("81_va0vu")
 metadata/_custom_type_script = "uid://btbvvqx7hybu5"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="StateMachine"]
