@@ -11,10 +11,14 @@ const FLUDD_DIVE_HORIZONTAL_ACCEL: float = 1200.0
 const FLUDD_DIVE_DAMPING_X: float = 0.97
 const FLUDD_DIVE_DAMPING_Y: float = 0.98 
 
+const BANNED_FLUDD_STATES: Array[StringName] = [
+	&"Spin", &"GroundPoundStart", &"GroundPoundFall", &"GroundPoundSlam"
+	]
+
 var dive_boost: bool = false
 
 func _physics_process(delta: float) -> void:
-	if Input.is_action_pressed("use_fludd"):
+	if Input.is_action_pressed("use_fludd") and not state_machine.current_state.name in BANNED_FLUDD_STATES:
 		player.is_using_hover_fludd = true
 		if player.is_in_water:
 			player.velocity.y = lerpf(player.velocity.y, -270, 0.2)
