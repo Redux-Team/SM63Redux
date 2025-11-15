@@ -1,44 +1,44 @@
-[gd_scene load_steps=5 format=3 uid="uid://cfrexipnk4yq8"]
+[gd_scene load_steps=3 format=3 uid="uid://cfrexipnk4yq8"]
 
 [ext_resource type="Script" uid="uid://cf8ceg662lr75" path="res://game/scenes/level/playtest.gd" id="1_adaxd"]
 [ext_resource type="PackedScene" uid="uid://b4nw5k2oa3ro0" path="res://game/entities/player/player.tscn" id="1_o2uqb"]
-[ext_resource type="Texture2D" uid="uid://b127vhuh31i8r" path="res://meta/icon.png" id="3_mxoeq"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_o2uqb"]
-size = Vector2(11764, 20)
 
 [node name="Playtest" type="Node2D"]
 script = ExtResource("1_adaxd")
 
 [node name="Player" parent="." instance=ExtResource("1_o2uqb")]
-min_jump_time = 0.1
-max_jump_time = 0.3
+position = Vector2(661, 286)
+floor_max_angle = 0.80285144
+floor_snap_length = 16.0
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(1.475, 1.475)
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(920, 500)
+collision_layer = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(0, 364)
-shape = SubResource("RectangleShape2D_o2uqb")
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="Area2D"]
+visible = false
+position = Vector2(21, 179.5)
+polygon = PackedVector2Array(-149, -80.5, -207, -248.5, 3, -326.5, 221, -254.5, 292, -124.5, 147, -32.5, 1091, -105.5, 1054, -417.5, 1428, -415.5, 1460, 488.5, -52, 569.5, -250, 264.5, -197, -25.5)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(82, 322)
-texture = ExtResource("3_mxoeq")
+[node name="Polygon2D" type="Polygon2D" parent="Area2D"]
+position = Vector2(21, 179.5)
+color = Color(0, 0.6509804, 1, 0.45490196)
+polygon = PackedVector2Array(-149, -80.5, -207, -248.5, 3, -326.5, 221, -254.5, 292, -124.5, 147, -32.5, 1091, -105.5, 1054, -417.5, 1428, -415.5, 1460, 488.5, -52, 569.5, -250, 264.5, -197, -25.5)
 
-[node name="Sprite2D2" type="Sprite2D" parent="."]
-position = Vector2(631, 329)
-texture = ExtResource("3_mxoeq")
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
 
-[node name="Sprite2D3" type="Sprite2D" parent="."]
-position = Vector2(1221, 322)
-texture = ExtResource("3_mxoeq")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D2"]
+position = Vector2(175, 366)
+polygon = PackedVector2Array(-613, 286, -552, -147, -245, -147, 102, 7, 566, -9, 634, 309)
 
-[node name="Sprite2D4" type="Sprite2D" parent="."]
-position = Vector2(1911, 319)
-texture = ExtResource("3_mxoeq")
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="StaticBody2D2"]
+position = Vector2(1210, 366)
+polygon = PackedVector2Array(-345, -34, 68, -60, 162, -199, 563, -147, 794, -159, 839, 221, -164, 300, -13, 152, -107, 72)
 
-[node name="Sprite2D5" type="Sprite2D" parent="."]
-position = Vector2(1911, 319)
-texture = ExtResource("3_mxoeq")
+[node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="StaticBody2D2"]
+position = Vector2(1073, 965)
+polygon = PackedVector2Array(-345, -34, 68, -60, 192, -85, 1216, -144, 1293, -1060, 1732, -763, 1632, 338, -164, 300, -616, 278, -793, -39)
+
+[connection signal="area_exited" from="Area2D" to="." method="_on_area_2d_area_exited"]

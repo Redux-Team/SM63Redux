@@ -11,12 +11,17 @@ var state_machine: StateMachine
 
 var entity: Entity:
 	get():
-		return state_machine.entity_body
+		return state_machine.entity
 
 var player: Player:
 	get():
-		return state_machine.entity_body
+		if state_machine:
+			return state_machine.entity as Player
+		elif owner is Player:
+			return owner
+		else:
+			return null
 
 var sprite: AnimatedSprite2D:
 	get():
-		return state_machine.entity_sprite
+		return state_machine.sprite

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Config" load_steps=154 format=3 uid="uid://do0n8w5nirmwk"]
+[gd_resource type="Resource" script_class="Config" load_steps=156 format=3 uid="uid://do0n8w5nirmwk"]
 
 [ext_resource type="Script" uid="uid://f17uc223v1ar" path="res://util/config/subconfig/audio.gd" id="1_uxl5x"]
 [ext_resource type="Script" uid="uid://b3oiv1p8em3lj" path="res://util/config/subconfig/_subconfig.gd" id="2_bcoqb"]
@@ -33,20 +33,10 @@
 
 [sub_resource type="Resource" id="Resource_xqd10"]
 script = ExtResource("1_uxl5x")
-output_device = &"Default"
-music_on = true
-sfx_on = true
-music_volume = 75.0
-sfx_volume = 75.0
 metadata/_custom_type_script = "uid://f17uc223v1ar"
 
 [sub_resource type="Resource" id="Resource_635vj"]
 script = ExtResource("2_lntyh")
-max_fps = 60
-window_mode = 0
-vsync = false
-ui_scale = 1.0
-particle_amount = "Medium"
 metadata/_custom_type_script = "uid://qfl8n0nausrq"
 
 [sub_resource type="Resource" id="Resource_h6qih"]
@@ -426,6 +416,16 @@ device = -1
 axis = 1
 axis_value = 1.0
 
+[sub_resource type="InputEventKey" id="InputEventKey_bcoqb"]
+device = -1
+pressed = true
+keycode = 4194322
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_kuwoh"]
+device = -1
+button_index = 1
+pressed = true
+
 [sub_resource type="InputEventKey" id="InputEventKey_4mdci"]
 device = -1
 keycode = 90
@@ -539,6 +539,7 @@ device = -1
 keycode = 4194325
 
 [sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_j211s"]
+device = -1
 button_index = 9
 pressed = true
 
@@ -548,6 +549,7 @@ keycode = 67
 unicode = 99
 
 [sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_t5g3o"]
+device = -1
 axis = 4
 axis_value = 1.0
 
@@ -557,8 +559,10 @@ move_left = Array[InputEvent]([SubResource("InputEventKey_sojn1"), SubResource("
 move_right = Array[InputEvent]([SubResource("InputEventKey_oyo3k"), SubResource("InputEventKey_ow6f8"), SubResource("InputEventJoypadButton_3uxjw"), SubResource("InputEventJoypadMotion_4pj0n")])
 jump = Array[InputEvent]([SubResource("InputEventKey_3uxjw"), SubResource("InputEventJoypadButton_2acyr"), SubResource("InputEventKey_1btyf")])
 crouch = Array[InputEvent]([SubResource("InputEventKey_4pj0n"), SubResource("InputEventKey_p7aod"), SubResource("InputEventJoypadButton_sojn1"), SubResource("InputEventJoypadMotion_8lqvo")])
+dive = Array[InputEvent]([SubResource("InputEventKey_bcoqb"), SubResource("InputEventJoypadButton_kuwoh")])
 ground_pound = Array[InputEvent]([SubResource("InputEventKey_4mdci"), SubResource("InputEventJoypadMotion_csq0s")])
 spin = Array[InputEvent]([SubResource("InputEventKey_eea84"), SubResource("InputEventJoypadButton_k8an3")])
+sink_down = Array[InputEvent]([])
 use_fludd = Array[InputEvent]([SubResource("InputEventKey_ksmes"), SubResource("InputEventJoypadMotion_t5g3o")])
 switch_nozzle = Array[InputEvent]([SubResource("InputEventKey_t5g3o"), SubResource("InputEventJoypadButton_j211s")])
 interact = Array[InputEvent]([SubResource("InputEventKey_csq0s"), SubResource("InputEventJoypadButton_jeadu")])
@@ -574,8 +578,6 @@ metadata/_custom_type_script = "uid://d3irhgxu3cjae"
 [sub_resource type="Resource" id="Resource_kuwoh"]
 script = ExtResource("5_jrqk4")
 default_control_scheme = SubResource("Resource_bcoqb")
-control_schemes = Array[ExtResource("3_4t6fh")]([])
-selected_control_scheme = -1
 button_map = Dictionary[StringName, ExtResource("3_edyoc")]({
 &"_clear_setting": SubResource("Resource_h6qih"),
 &"_ui_back": SubResource("Resource_ky2go"),
@@ -594,10 +596,6 @@ button_map = Dictionary[StringName, ExtResource("3_edyoc")]({
 &"switch_nozzle": SubResource("Resource_2141c"),
 &"use_fludd": SubResource("Resource_bm73o")
 })
-button_opacity = 70.0
-button_scale = 1.0
-button_positions = Dictionary[StringName, Vector2]({})
-button_snapping = true
 controller_icon_map = Dictionary[InputEvent, Texture2D]({
 SubResource("InputEventJoypadButton_kutoy"): ExtResource("15_h1mcp"),
 SubResource("InputEventJoypadButton_3hdss"): ExtResource("14_gqodu"),
@@ -629,10 +627,6 @@ metadata/_custom_type_script = "uid://uq1ejudjw7jh"
 
 [sub_resource type="Resource" id="Resource_qf1b7"]
 script = ExtResource("6_f5osh")
-show_timer = false
-enforce_touch_display = false
-disable_camera_limiting = false
-language = &"English [en]"
 metadata/_custom_type_script = "uid://dokvqknhuqe46"
 
 [resource]
@@ -641,5 +635,4 @@ display_config = SubResource("Resource_635vj")
 input_config = SubResource("Resource_kuwoh")
 audio_config = SubResource("Resource_xqd10")
 misc_config = SubResource("Resource_qf1b7")
-configurations = Array[ExtResource("2_bcoqb")]([])
 metadata/_custom_type_script = "uid://c6e8bs0qgcr28"

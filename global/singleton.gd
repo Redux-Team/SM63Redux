@@ -4,6 +4,7 @@ extends Node
 signal input_type_changed
 signal config_changed
 signal control_scheme_changed
+signal debug_mode_toggled
 
 enum ScreenTransitionType {
 	TEXTURE_ZOOM
@@ -16,6 +17,10 @@ enum InputType {
 }
 
 var version: String = ProjectSettings.get("application/config/version")
+var debug_mode: bool = false:
+	set(dm):
+		debug_mode = dm
+		debug_mode_toggled.emit()
 
 @export var sfx_container: Node
 @export var transition_overlay: ColorRect
@@ -130,9 +135,9 @@ func _check_touch_display(device: InputType) -> void:
 			control.hide()
 
 
-func _play_sfx(stream: AudioStream) -> void:
+func _play_sfx(stream: AudioStream, bus: StringName = &"SFX") -> void:
 	var audio_stream_player: AudioStreamPlayer = AudioStreamPlayer.new()
-	audio_stream_player.bus = &"SFX"
+	audio_stream_player.bus = bus
 	audio_stream_player.stream = stream
 	
 	sfx_container.add_child(audio_stream_player)
