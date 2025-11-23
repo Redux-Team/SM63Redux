@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://dxijnlp70244f"]
+
+[ext_resource type="Script" uid="uid://bewylcrohkkg1" path="res://proto/curve_test.gd" id="1_d7874"]
+[ext_resource type="PackedScene" uid="uid://cllw4u30n478l" path="res://proto/point.tscn" id="1_ug045"]
+
+[node name="CurveTest" type="Control" node_paths=PackedStringArray("points")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_d7874")
+points = [NodePath("Point1"), NodePath("Point2"), NodePath("Point3")]
+
+[node name="Point1" parent="." instance=ExtResource("1_ug045")]
+layout_mode = 0
+offset_left = 53.0
+offset_top = 31.0
+offset_right = 53.0
+offset_bottom = 31.0
+
+[node name="Point2" parent="." instance=ExtResource("1_ug045")]
+layout_mode = 0
+offset_left = 152.0
+offset_top = 220.0
+offset_right = 192.0
+offset_bottom = 260.0
+
+[node name="Point3" parent="." instance=ExtResource("1_ug045")]
+layout_mode = 0
+offset_left = 365.0
+offset_top = 116.0
+offset_right = 405.0
+offset_bottom = 156.0

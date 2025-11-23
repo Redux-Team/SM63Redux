@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://cllw4u30n478l"]
+
+[ext_resource type="Script" uid="uid://wppr8ht0wqbj" path="res://proto/point.gd" id="1_pqnta"]
+[ext_resource type="Script" uid="uid://beuj2jnhb44il" path="res://proto/handle.gd" id="1_u5y17"]
+
+[node name="Point" type="Panel" node_paths=PackedStringArray("in_handle", "out_handle")]
+custom_minimum_size = Vector2(40, 40)
+script = ExtResource("1_pqnta")
+in_handle = NodePath("InHandle")
+out_handle = NodePath("OutHandle")
+metadata/_custom_type_script = "uid://beuj2jnhb44il"
+
+[node name="InHandle" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_left = -147.0
+offset_right = -107.0
+offset_bottom = 40.0
+script = ExtResource("1_u5y17")
+
+[node name="Label" type="Label" parent="InHandle"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "I"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OutHandle" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 141.0
+offset_right = 181.0
+offset_bottom = 40.0
+script = ExtResource("1_u5y17")
+
+[node name="Label2" type="Label" parent="OutHandle"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "O"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="gui_input" from="InHandle" to="InHandle" method="_on_gui_input"]
+[connection signal="gui_input" from="OutHandle" to="OutHandle" method="_on_gui_input"]

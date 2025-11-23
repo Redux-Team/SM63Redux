@@ -46,6 +46,7 @@ folder_colors={
 "res://game/": "blue",
 "res://global/": "orange",
 "res://meta/": "yellow",
+"res://proto/": "gray",
 "res://util/": "purple"
 }
 
