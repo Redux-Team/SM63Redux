@@ -24,15 +24,35 @@ func _ready() -> void:
 
 func _on_in_handle_moved() -> void:
 	var angle: float = in_handle.position.angle()
-	var length: float = in_handle.position.length()
-	out_handle.position = Vector2.from_angle(angle + PI) * length
+	var in_len: float = in_handle.position.length()
+	var out_len: float = out_handle.position.length()
+	
+	if Input.is_key_pressed(KEY_ALT):
+		tangent_angle = angle
+		return
+	
+	if Input.is_key_pressed(KEY_SHIFT):
+		out_handle.position = Vector2.from_angle(angle + PI) * out_len
+	else:
+		out_handle.position = Vector2.from_angle(angle + PI) * in_len
+	
 	tangent_angle = angle
 
 
 func _on_out_handle_moved() -> void:
 	var angle: float = out_handle.position.angle()
-	var length: float = out_handle.position.length()
-	in_handle.position = Vector2.from_angle(angle + PI) * length
+	var out_len: float = out_handle.position.length()
+	var in_len: float = in_handle.position.length()
+	
+	if Input.is_key_pressed(KEY_ALT):
+		tangent_angle = angle
+		return
+	
+	if Input.is_key_pressed(KEY_SHIFT):
+		in_handle.position = Vector2.from_angle(angle + PI) * in_len
+	else:
+		in_handle.position = Vector2.from_angle(angle + PI) * out_len
+	
 	tangent_angle = angle
 
 
