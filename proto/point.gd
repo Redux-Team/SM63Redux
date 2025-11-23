@@ -24,13 +24,15 @@ func _ready() -> void:
 
 func _on_in_handle_moved() -> void:
 	var angle: float = in_handle.position.angle()
-	out_handle.position = Vector2.from_angle(angle + PI) * out_handle.position.length()
+	var length: float = in_handle.position.length()
+	out_handle.position = Vector2.from_angle(angle + PI) * length
 	tangent_angle = angle
 
 
 func _on_out_handle_moved() -> void:
 	var angle: float = out_handle.position.angle()
-	in_handle.position = Vector2.from_angle(angle + PI) * in_handle.position.length()
+	var length: float = out_handle.position.length()
+	in_handle.position = Vector2.from_angle(angle + PI) * length
 	tangent_angle = angle
 
 
@@ -50,7 +52,6 @@ func _input(event: InputEvent) -> void:
 			if point_index != -1:
 				var perp_angle: float = parent.calculate_tangent_angle(point_index)
 				prep(perp_angle)
-				print(perp_angle)
 
 
 func _on_mouse_entered() -> void:
