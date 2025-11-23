@@ -11,6 +11,9 @@ var hysteresis_threshold: float = 8.0
 
 func _ready() -> void:
 	get_window().content_scale_factor = 0.6
+	
+	for point: LDCurvePoint in points:
+		point.delete_request.connect(_on_point_delete_request)
 
 
 func _input(event: InputEvent) -> void:
@@ -167,6 +170,7 @@ func add_point_at_closest() -> void:
 	
 	points.insert(i + 1, new_point)
 	add_child(new_point)
+	new_point.delete_request.connect(_on_point_delete_request)
 
 
 func _draw() -> void:
@@ -239,3 +243,10 @@ func _draw() -> void:
 
 func _process(_delta: float) -> void:
 	queue_redraw()
+
+
+func _on_point_delete_request(point: LDCurvePoint) -> void:
+	var index: int = points.find(point)
+	if index != -1:
+		points.pop_at(index)
+		point.queue_free()

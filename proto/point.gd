@@ -1,7 +1,7 @@
 class_name LDCurvePoint
 extends TestDraggable
 
-signal curve_toggle_on(ref: LDCurvePoint)
+signal delete_request(ref: LDCurvePoint)
 
 @export var in_handle: TestDraggable
 @export var out_handle: TestDraggable
@@ -58,6 +58,10 @@ func _on_out_handle_moved() -> void:
 
 func _on_gui_input(event: InputEvent) -> void:
 	super(event)
+	
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			delete_request.emit(self)
 
 
 func _input(event: InputEvent) -> void:
