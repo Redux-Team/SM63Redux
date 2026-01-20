@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5g1nlrq28s2j"]
+
+[ext_resource type="Script" uid="uid://b6vwygexlf4ht" path="res://level_designer/components/viewport.gd" id="1_urtws"]
+
+[node name="LDViewport" type="Control" node_paths=PackedStringArray("anchor")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_urtws")
+anchor = NodePath("Anchor")
+
+[node name="Anchor" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
+
+[node name="ColorRect" type="ColorRect" parent="Anchor"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 55.0
+offset_right = 120.0
+offset_bottom = 95.0
