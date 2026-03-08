@@ -14,11 +14,6 @@ extends Control
 var current_index: int = 0
 
 func _ready() -> void:
-	for menu_button: MainMenuButton in menu_buttons:
-		menu_button.interaction.connect(func() -> void:
-			scene_transition.transition(menu_buttons[current_index].content)
-		)
-	
 	assign_buttons_to_containers()
 	update_description()
 	animate_selector()
@@ -34,7 +29,11 @@ func _input(event: InputEvent) -> void:
 		cycle(-1, &"cycle_left")
 	
 	if event.is_action_pressed(&"_ui_interact") and not animation_player.is_playing() and is_visible_in_tree():
-		scene_transition.transition(menu_buttons[current_index].content)
+		var menu_button: MainMenuButton = menu_buttons[current_index]
+		if menu_button.transition_to:
+			scene_transition.transition_to_packed(menu_button.transition_to)
+		else:
+			scene_transition.handle(menu_button.content)
 
 
 ## Reparenting logic for the main menu buttons so that the AnimationPlayer can reuse the same

@@ -15,7 +15,7 @@ func _on_button_pressed() -> void:
 	if leaving:
 		return
 	
-	.play(SFX.UI_BACK)
+	SFX.play(SFX.UI_BACK)
 	Singleton.transition_to_scene_file(
 		"uid://b0wp6l07i5ime",
 		Singleton.ScreenTransitionType.TEXTURE_ZOOM,

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c6dic42vckv0e"]
+[gd_scene format=3 uid="uid://c6dic42vckv0e"]
 
 [ext_resource type="Script" uid="uid://bc4sevdr53dpi" path="res://game/ui/components/main_menu_button/main_menu_button.gd" id="1_6rm1l"]
 [ext_resource type="Texture2D" uid="uid://bted1168b62fs" path="res://assets/textures/gui/title_screen/select_mode_button/select_mode_button_frame.png" id="2_pvhv8"]
@@ -27,7 +27,7 @@ region = Rect2(0, 0, 126, 24)
 atlas = ExtResource("5_ekkyd")
 region = Rect2(0, 0, 56, 32)
 
-[node name="MainMenuButton" type="Control"]
+[node name="MainMenuButton" type="Control" unique_id=1299197749]
 layout_mode = 3
 anchor_right = 0.234
 anchor_bottom = 0.189
@@ -39,7 +39,7 @@ script = ExtResource("1_6rm1l")
 description = "Look how cool!"
 metadata/_edit_use_anchors_ = true
 
-[node name="FrameTexture" type="TextureRect" parent="."]
+[node name="FrameTexture" type="TextureRect" parent="." unique_id=436445400]
 material = SubResource("ShaderMaterial_fawul")
 layout_mode = 1
 anchors_preset = 15
@@ -50,7 +50,7 @@ grow_vertical = 2
 texture = ExtResource("2_pvhv8")
 expand_mode = 1
 
-[node name="ContentTexture" type="TextureRect" parent="."]
+[node name="ContentTexture" type="TextureRect" parent="." unique_id=986387854]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.08
@@ -66,7 +66,7 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_u5g1s")
 expand_mode = 1
 
-[node name="TitleTexture" type="TextureRect" parent="ContentTexture"]
+[node name="TitleTexture" type="TextureRect" parent="ContentTexture" unique_id=1932324014]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.008
@@ -82,7 +82,7 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_6laix")
 expand_mode = 1
 
-[node name="TopIconTexture" type="TextureRect" parent="."]
+[node name="TopIconTexture" type="TextureRect" parent="." unique_id=306075164]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = -1
@@ -98,7 +98,7 @@ grow_horizontal = 2
 texture = SubResource("AtlasTexture_167dx")
 expand_mode = 1
 
-[node name="Interaction" type="Button" parent="."]
+[node name="Interaction" type="Button" parent="." unique_id=30035119]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15

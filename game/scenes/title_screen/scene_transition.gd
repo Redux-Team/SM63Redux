@@ -7,22 +7,24 @@ const LEVEL_DESIGNER_SCENE: String = "uid://c732aftmb2bcv"
 const TRANSITION_MASK: CompressedTexture2D = preload("uid://b127vhuh31i8r")
 const PLAYTEST_SCENE = "uid://cfrexipnk4yq8"
 
-func transition(type: MainMenuButton.ButtonDesign) -> void:
+
+func handle(type: MainMenuButton.ButtonDesign) -> void:
 	match type:
-		MainMenuButton.ButtonDesign.LEVEL_DESIGNER:
-			owner.input_locked = true
-			
-			Singleton.transition_to_scene_file(
-				PLAYTEST_SCENE,
-				Singleton.ScreenTransitionType.TEXTURE_ZOOM,
-				TRANSITION_MASK,
-				0.5,
-			)
-			
-			SFX.play(SFX.UI_START)
-			menu_loop.stop()
-		
 		MainMenuButton.ButtonDesign.SETTINGS:
 			SFX.play(SFX.UI_CONFIRM)
 			owner.on_settings_screen = true
 			screen_animations.play(&"switch_to_settings_screen", -1, 1.7)
+
+
+func transition_to_packed(scene: PackedScene) -> void:
+	owner.input_locked = true
+	
+	Singleton.transition_to_scene_file(
+		scene.resource_path,
+		Singleton.ScreenTransitionType.TEXTURE_ZOOM,
+		TRANSITION_MASK,
+		0.5,
+	)
+	
+	SFX.play(SFX.UI_START)
+	menu_loop.stop()

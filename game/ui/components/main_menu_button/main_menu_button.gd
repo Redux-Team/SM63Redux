@@ -9,13 +9,15 @@ enum ButtonDesign {
 	LEVEL_DESIGNER,
 	EXTRAS,
 	SETTINGS,
-	LOCK
+	LOCK,
+	PROTOTYPE,
 }
 
 @export var top_icon: ButtonDesign
 @export var content: ButtonDesign
 @export var title: ButtonDesign
 @export var disabled: bool = false
+@export var transition_to: PackedScene
 @export_multiline var description: String = ""
 
 @export_group("Frame")

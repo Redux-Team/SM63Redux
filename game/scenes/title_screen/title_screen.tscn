@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://b0wp6l07i5ime"]
+[gd_scene format=3 uid="uid://b0wp6l07i5ime"]
 
 [ext_resource type="Script" uid="uid://b2figxll0bk25" path="res://game/scenes/title_screen/title_screen.gd" id="1_6esl3"]
 [ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/soundtrack/01 Welcome to Super Mario 63 Redux!.mp3" id="1_bfr6l"]
@@ -33,8 +33,10 @@
 [ext_resource type="Texture2D" uid="uid://dippg3dive7p6" path="res://assets/textures/gui/title_screen/splash_logo/logo_super_particle_mask.png" id="17_lwt8s"]
 [ext_resource type="Texture2D" uid="uid://bnrtx06fhpytq" path="res://assets/textures/particle/title_screen/super_text_snow_medium.png" id="18_j4cpk"]
 [ext_resource type="Texture2D" uid="uid://dois038y355wf" path="res://assets/textures/particle/title_screen/super_text_snow_small.png" id="19_hua3r"]
+[ext_resource type="PackedScene" uid="uid://c732aftmb2bcv" path="res://level_designer/level_designer.tscn" id="31_1rf77"]
 [ext_resource type="Shader" uid="uid://g3ewropiv6mx" path="res://core/shader/hsv.gdshader" id="31_5p2hb"]
 [ext_resource type="Texture2D" uid="uid://3bawiafh4l8h" path="res://assets/textures/gui/title_screen/select_mode_button/selector.png" id="31_m4day"]
+[ext_resource type="PackedScene" uid="uid://cfrexipnk4yq8" path="res://game/scenes/level/playtest.tscn" id="31_tcw2j"]
 
 [sub_resource type="Curve" id="Curve_5m44c"]
 _data = [Vector2(0.0574018, 0), 0.0, 0.0, 0, 0, Vector2(0.250755, 0.515625), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -974,7 +976,7 @@ tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.624778]
+"values": [0.6247779999999999]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -1391,7 +1393,7 @@ tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.624778]
+"values": [0.6247779999999999]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -1799,7 +1801,7 @@ tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.624778]
+"values": [0.6247779999999999]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -1983,7 +1985,7 @@ tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.624778]
+"values": [0.6247779999999999]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -2313,7 +2315,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(4.01401, 4.4),
 "transitions": PackedFloat32Array(0.3, 1),
 "update": 0,
-"values": [1.1, 0.624778]
+"values": [1.1, 0.6247779999999999]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -2542,7 +2544,7 @@ _data = {
 &"title_in": SubResource("Animation_bfr6l")
 }
 
-[node name="TitleScreen" type="Control" node_paths=PackedStringArray("animation_player", "title_loop", "menu_loop", "splash_fade", "sheen_63_rect", "sheen_redux_rect", "version_label", "team_text", "splash_screen", "menu_screen", "start_text")]
+[node name="TitleScreen" type="Control" unique_id=1304744020 node_paths=PackedStringArray("animation_player", "title_loop", "menu_loop", "splash_fade", "sheen_63_rect", "sheen_redux_rect", "version_label", "team_text", "splash_screen", "menu_screen", "start_text")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -2566,7 +2568,7 @@ metadata/_edit_vertical_guides_ = [320.0]
 metadata/_edit_horizontal_guides_ = [180.0]
 metadata/_edit_lock_ = true
 
-[node name="BG" type="ColorRect" parent="."]
+[node name="BG" type="ColorRect" parent="." unique_id=941149327]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2575,9 +2577,9 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
 
-[node name="BGLayers" type="Node2D" parent="BG"]
+[node name="BGLayers" type="Node2D" parent="BG" unique_id=1905819000]
 
-[node name="BG" type="Parallax2D" parent="BG/BGLayers"]
+[node name="BG" type="Parallax2D" parent="BG/BGLayers" unique_id=1931809163]
 scroll_scale = Vector2(0.5, 0)
 scroll_offset = Vector2(-551, 180)
 repeat_size = Vector2(750, 0)
@@ -2585,12 +2587,12 @@ autoscroll = Vector2(-8, 0)
 repeat_times = 7
 follow_viewport = false
 
-[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/BG"]
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/BG" unique_id=836809370]
 texture = ExtResource("3_8cpbr")
 
-[node name="Particles" type="Node2D" parent="BG/BGLayers"]
+[node name="Particles" type="Node2D" parent="BG/BGLayers" unique_id=1082053782]
 
-[node name="BigStars" type="CPUParticles2D" parent="BG/BGLayers/Particles"]
+[node name="BigStars" type="CPUParticles2D" parent="BG/BGLayers/Particles" unique_id=1965477133]
 position = Vector2(320, 180)
 amount = 120
 texture = ExtResource("3_5m44c")
@@ -2611,7 +2613,7 @@ medium_particle_amount = 125
 low_particle_amount = 60
 metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
-[node name="MediumStars" type="CPUParticles2D" parent="BG/BGLayers/Particles"]
+[node name="MediumStars" type="CPUParticles2D" parent="BG/BGLayers/Particles" unique_id=1588215042]
 position = Vector2(320, 180)
 amount = 240
 texture = ExtResource("4_ltfsy")
@@ -2632,7 +2634,7 @@ medium_particle_amount = 250
 low_particle_amount = 100
 metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
-[node name="SmallStars" type="CPUParticles2D" parent="BG/BGLayers/Particles"]
+[node name="SmallStars" type="CPUParticles2D" parent="BG/BGLayers/Particles" unique_id=1450554918]
 position = Vector2(320, 180)
 amount = 300
 texture = ExtResource("3_vrmbe")
@@ -2651,7 +2653,7 @@ medium_particle_amount = 300
 low_particle_amount = 125
 metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
-[node name="ShootingStars" type="CPUParticles2D" parent="BG/BGLayers/Particles"]
+[node name="ShootingStars" type="CPUParticles2D" parent="BG/BGLayers/Particles" unique_id=468268991]
 position = Vector2(322, 10)
 amount = 1
 texture = ExtResource("3_q30y7")
@@ -2671,7 +2673,7 @@ medium_particle_amount = 1
 low_particle_amount = 1
 metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
-[node name="BG2" type="Parallax2D" parent="BG/BGLayers"]
+[node name="BG2" type="Parallax2D" parent="BG/BGLayers" unique_id=2105808544]
 scroll_scale = Vector2(0.5, 0)
 scroll_offset = Vector2(-448, 197)
 repeat_size = Vector2(750, 0)
@@ -2679,10 +2681,10 @@ autoscroll = Vector2(-20, 0)
 repeat_times = 7
 follow_viewport = false
 
-[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/BG2"]
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/BG2" unique_id=67612909]
 texture = ExtResource("3_eyv0a")
 
-[node name="FG2" type="Parallax2D" parent="BG/BGLayers"]
+[node name="FG2" type="Parallax2D" parent="BG/BGLayers" unique_id=1083970208]
 scroll_scale = Vector2(0.5, 0)
 scroll_offset = Vector2(-739, 188)
 repeat_size = Vector2(750, 0)
@@ -2690,10 +2692,10 @@ autoscroll = Vector2(16, 0)
 repeat_times = 7
 follow_viewport = false
 
-[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/FG2"]
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/FG2" unique_id=20922718]
 texture = ExtResource("3_fq6c4")
 
-[node name="FG" type="Parallax2D" parent="BG/BGLayers"]
+[node name="FG" type="Parallax2D" parent="BG/BGLayers" unique_id=719663334]
 scroll_scale = Vector2(0.5, 0)
 scroll_offset = Vector2(-44, 219)
 repeat_size = Vector2(750, 0)
@@ -2701,18 +2703,18 @@ autoscroll = Vector2(-32, 0)
 repeat_times = 7
 follow_viewport = false
 
-[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/FG"]
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/FG" unique_id=1668674696]
 texture = ExtResource("3_7cnuw")
 
-[node name="Camera2D" type="Camera2D" parent="BG/BGLayers"]
+[node name="Camera2D" type="Camera2D" parent="BG/BGLayers" unique_id=917637686]
 anchor_mode = 0
 
-[node name="SceneTransition" type="Node" parent="." node_paths=PackedStringArray("menu_loop", "screen_animations")]
+[node name="SceneTransition" type="Node" parent="." unique_id=62422135 node_paths=PackedStringArray("menu_loop", "screen_animations")]
 script = ExtResource("8_fq6c4")
 menu_loop = NodePath("../MenuLoop")
 screen_animations = NodePath("../ScreenAnimations")
 
-[node name="SplashScreen" type="Control" parent="."]
+[node name="SplashScreen" type="Control" parent="." unique_id=1676761345]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2721,7 +2723,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
 
-[node name="SplashFade" type="ColorRect" parent="SplashScreen"]
+[node name="SplashFade" type="ColorRect" parent="SplashScreen" unique_id=101142999]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = -0.096875
@@ -2734,7 +2736,7 @@ mouse_filter = 2
 color = Color(0, 0, 0, 1)
 metadata/_edit_lock_ = true
 
-[node name="Logo" type="Control" parent="SplashScreen"]
+[node name="Logo" type="Control" parent="SplashScreen" unique_id=538717536]
 visible = false
 layout_mode = 1
 anchor_left = 0.217125
@@ -2749,7 +2751,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="LogoGlow" type="TextureRect" parent="SplashScreen/Logo"]
+[node name="LogoGlow" type="TextureRect" parent="SplashScreen/Logo" unique_id=1650537773]
 material = SubResource("CanvasItemMaterial_q30y7")
 layout_mode = 1
 anchors_preset = -1
@@ -2764,7 +2766,7 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_use_anchors_ = true
 
-[node name="LogoBase" type="TextureRect" parent="SplashScreen/Logo"]
+[node name="LogoBase" type="TextureRect" parent="SplashScreen/Logo" unique_id=556204094]
 clip_children = 2
 layout_mode = 1
 anchors_preset = 15
@@ -2776,7 +2778,7 @@ texture = ExtResource("4_2273m")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BigStars" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase"]
+[node name="BigStars" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase" unique_id=503808749]
 show_behind_parent = true
 position = Vector2(180, 81.16)
 amount = 1200
@@ -2796,7 +2798,7 @@ medium_particle_amount = 650
 low_particle_amount = 200
 metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
-[node name="MediumStars" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase"]
+[node name="MediumStars" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase" unique_id=1520013757]
 show_behind_parent = true
 position = Vector2(180, 81.16)
 amount = 1800
@@ -2816,7 +2818,7 @@ medium_particle_amount = 1200
 low_particle_amount = 600
 metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
-[node name="SmallStars" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase"]
+[node name="SmallStars" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase" unique_id=527235014]
 show_behind_parent = true
 position = Vector2(180, 81.16)
 amount = 2400
@@ -2837,7 +2839,7 @@ medium_particle_amount = 1200
 low_particle_amount = 550
 metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
-[node name="LogoText" type="TextureRect" parent="SplashScreen/Logo/LogoBase"]
+[node name="LogoText" type="TextureRect" parent="SplashScreen/Logo/LogoBase" unique_id=917070810]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2848,7 +2850,7 @@ texture = ExtResource("13_ltfsy")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="SuperSnowParticles" type="Control" parent="SplashScreen/Logo/LogoBase"]
+[node name="SuperSnowParticles" type="Control" parent="SplashScreen/Logo/LogoBase" unique_id=75075612]
 z_index = 1
 layout_mode = 1
 anchors_preset = 15
@@ -2857,7 +2859,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SuperParticleMask" type="TextureRect" parent="SplashScreen/Logo/LogoBase/SuperSnowParticles"]
+[node name="SuperParticleMask" type="TextureRect" parent="SplashScreen/Logo/LogoBase/SuperSnowParticles" unique_id=1222004938]
 clip_children = 1
 layout_mode = 1
 anchors_preset = 15
@@ -2869,7 +2871,7 @@ texture = ExtResource("17_lwt8s")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="MediumSnow" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase/SuperSnowParticles/SuperParticleMask"]
+[node name="MediumSnow" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase/SuperSnowParticles/SuperParticleMask" unique_id=1504563716]
 show_behind_parent = true
 material = SubResource("CanvasItemMaterial_j4cpk")
 position = Vector2(167, 21.16)
@@ -2892,7 +2894,7 @@ medium_particle_amount = 350
 low_particle_amount = 125
 metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
-[node name="SmallSnow" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase/SuperSnowParticles/SuperParticleMask"]
+[node name="SmallSnow" type="CPUParticles2D" parent="SplashScreen/Logo/LogoBase/SuperSnowParticles/SuperParticleMask" unique_id=2096183734]
 show_behind_parent = true
 material = SubResource("CanvasItemMaterial_j4cpk")
 position = Vector2(167, 23.16)
@@ -2917,7 +2919,7 @@ medium_particle_amount = 350
 low_particle_amount = 125
 metadata/_custom_type_script = "uid://dv6rnq4xj13hy"
 
-[node name="63" type="TextureRect" parent="SplashScreen/Logo"]
+[node name="63" type="TextureRect" parent="SplashScreen/Logo" unique_id=1670531134]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -2929,7 +2931,7 @@ texture = ExtResource("8_es2f3")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="63Sheen" type="TextureRect" parent="SplashScreen/Logo/63"]
+[node name="63Sheen" type="TextureRect" parent="SplashScreen/Logo/63" unique_id=216725032]
 material = SubResource("ShaderMaterial_7cnuw")
 instance_shader_parameters/color_offset = Vector2(0, 0)
 instance_shader_parameters/color_scale = Vector2(0.5, 0.5)
@@ -2945,7 +2947,7 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_lock_ = true
 
-[node name="63Glow" type="TextureRect" parent="SplashScreen/Logo/63"]
+[node name="63Glow" type="TextureRect" parent="SplashScreen/Logo/63" unique_id=1238140325]
 self_modulate = Color(1, 1, 1, 0)
 material = SubResource("CanvasItemMaterial_8cpbr")
 layout_mode = 1
@@ -2959,7 +2961,7 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_lock_ = true
 
-[node name="Redux" type="TextureRect" parent="SplashScreen/Logo"]
+[node name="Redux" type="TextureRect" parent="SplashScreen/Logo" unique_id=787993263]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -2971,7 +2973,7 @@ texture = ExtResource("13_gpgra")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ReduxSheen" type="TextureRect" parent="SplashScreen/Logo/Redux"]
+[node name="ReduxSheen" type="TextureRect" parent="SplashScreen/Logo/Redux" unique_id=119565949]
 material = SubResource("ShaderMaterial_xjhxk")
 instance_shader_parameters/color_offset = Vector2(0.275, 0)
 instance_shader_parameters/color_scale = Vector2(0.69, 0.5)
@@ -2988,7 +2990,7 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_lock_ = true
 
-[node name="ReduxGlow" type="TextureRect" parent="SplashScreen/Logo/Redux"]
+[node name="ReduxGlow" type="TextureRect" parent="SplashScreen/Logo/Redux" unique_id=1669511059]
 self_modulate = Color(1, 1, 1, 0)
 material = SubResource("CanvasItemMaterial_8cpbr")
 layout_mode = 1
@@ -3002,7 +3004,7 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_lock_ = true
 
-[node name="StartText" type="RichTextLabel" parent="SplashScreen"]
+[node name="StartText" type="RichTextLabel" parent="SplashScreen" unique_id=1584339350]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -3028,22 +3030,21 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="MenuScreen" type="Control" parent="."]
+[node name="MenuScreen" type="Control" parent="." unique_id=447094032]
 visible = false
-modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 60.0
-offset_bottom = 59.9988
+offset_bottom = 59.99881
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
 metadata/_edit_lock_ = true
 
-[node name="DescriptionContainer" type="Control" parent="MenuScreen"]
+[node name="DescriptionContainer" type="Control" parent="MenuScreen" unique_id=1239185917]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -3053,7 +3054,7 @@ offset_right = 214.0
 offset_bottom = 40.0
 grow_horizontal = 2
 
-[node name="DescriptionLabel" type="Label" parent="MenuScreen/DescriptionContainer"]
+[node name="DescriptionLabel" type="Label" parent="MenuScreen/DescriptionContainer" unique_id=85646894]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -3075,7 +3076,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="MenuCycle" type="Control" parent="MenuScreen" node_paths=PackedStringArray("menu_buttons", "animation_player", "left_button_container", "center_button_container", "right_button_container", "extra_button_container", "selector_arrow", "menu_buttons_holder", "description_label", "scene_transition")]
+[node name="MenuCycle" type="Control" parent="MenuScreen" unique_id=79941469 node_paths=PackedStringArray("menu_buttons", "animation_player", "left_button_container", "center_button_container", "right_button_container", "extra_button_container", "selector_arrow", "menu_buttons_holder", "description_label", "scene_transition")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -3097,7 +3098,7 @@ description_label = NodePath("../DescriptionContainer/DescriptionLabel")
 scene_transition = NodePath("../../SceneTransition")
 metadata/_edit_lock_ = true
 
-[node name="LeftButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle"]
+[node name="LeftButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle" unique_id=1363612347]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = -0.114
@@ -3113,7 +3114,7 @@ grow_vertical = 2
 ratio = 2.5
 metadata/_edit_use_anchors_ = true
 
-[node name="Settings" parent="MenuScreen/MenuCycle/LeftButtonContainer" instance=ExtResource("5_mu8aq")]
+[node name="Settings" parent="MenuScreen/MenuCycle/LeftButtonContainer" unique_id=1295200094 instance=ExtResource("5_mu8aq")]
 layout_mode = 2
 top_icon = 3
 content = 3
@@ -3123,7 +3124,7 @@ hue = -0.542
 saturation = 0.126
 value = 0.661
 
-[node name="CenterButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle"]
+[node name="CenterButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle" unique_id=1140288187]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.383
@@ -3139,7 +3140,7 @@ grow_vertical = 2
 ratio = 2.5
 metadata/_edit_use_anchors_ = true
 
-[node name="StoryMode" parent="MenuScreen/MenuCycle/CenterButtonContainer" instance=ExtResource("5_mu8aq")]
+[node name="StoryMode" parent="MenuScreen/MenuCycle/CenterButtonContainer" unique_id=1306824108 instance=ExtResource("5_mu8aq")]
 modulate = Color(0.4, 0.4, 0.4, 1)
 layout_mode = 2
 top_icon = 4
@@ -3148,7 +3149,7 @@ description = "Coming soon..."
 hue = -0.02
 saturation = 0.8
 
-[node name="RightButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle"]
+[node name="RightButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle" unique_id=2124601739]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.899625
@@ -3164,17 +3165,18 @@ grow_vertical = 2
 ratio = 2.5
 metadata/_edit_use_anchors_ = true
 
-[node name="LevelDesigner" parent="MenuScreen/MenuCycle/RightButtonContainer" instance=ExtResource("5_mu8aq")]
+[node name="LevelDesigner" parent="MenuScreen/MenuCycle/RightButtonContainer" unique_id=1987232040 instance=ExtResource("5_mu8aq")]
 layout_mode = 2
 top_icon = 1
 content = 1
 title = 1
+transition_to = ExtResource("31_1rf77")
 description = "Create your own story in this advanced Level Designer!"
 hue = 0.22
 saturation = 0.65
 value = 0.75
 
-[node name="ExtraButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle"]
+[node name="ExtraButtonContainer" type="AspectRatioContainer" parent="MenuScreen/MenuCycle" unique_id=1559344459]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.383
@@ -3190,7 +3192,7 @@ grow_vertical = 2
 ratio = 2.5
 metadata/_edit_use_anchors_ = true
 
-[node name="Extras" parent="MenuScreen/MenuCycle/ExtraButtonContainer" instance=ExtResource("5_mu8aq")]
+[node name="Extras" parent="MenuScreen/MenuCycle/ExtraButtonContainer" unique_id=70453340 instance=ExtResource("5_mu8aq")]
 modulate = Color(0.4, 0.4, 0.4, 1)
 layout_mode = 2
 top_icon = 4
@@ -3202,11 +3204,11 @@ hue = 0.542
 saturation = 0.958
 value = 1.2
 
-[node name="MenuButtonsHolder" type="Control" parent="MenuScreen/MenuCycle"]
-visible = false
+[node name="MenuButtonsHolder" type="Control" parent="MenuScreen/MenuCycle" unique_id=415915582]
 anchors_preset = 0
 
-[node name="Secret" parent="MenuScreen/MenuCycle/MenuButtonsHolder" instance=ExtResource("5_mu8aq")]
+[node name="Secret" parent="MenuScreen/MenuCycle/MenuButtonsHolder" unique_id=1984777000 instance=ExtResource("5_mu8aq")]
+visible = false
 modulate = Color(0.4, 0.4, 0.4, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -3225,13 +3227,30 @@ disabled = true
 description = "???"
 hue = 0.671
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MenuScreen/MenuCycle"]
-root_node = NodePath("../../..")
-libraries = {
-&"": SubResource("AnimationLibrary_1sg8f")
-}
+[node name="Prototype" parent="MenuScreen/MenuCycle/MenuButtonsHolder" unique_id=1299197749 instance=ExtResource("5_mu8aq")]
+visible = false
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 244.99998
+offset_top = 99.99956
+offset_right = 394.99997
+offset_bottom = 159.99954
+grow_horizontal = 1
+grow_vertical = 1
+top_icon = 5
+content = 5
+title = 5
+transition_to = ExtResource("31_tcw2j")
+description = "Testing, testing!"
+hue = 0.02400000000000002
 
-[node name="LeftTouchRegion" type="ColorRect" parent="MenuScreen"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MenuScreen/MenuCycle" unique_id=975135847]
+root_node = NodePath("../../..")
+libraries/ = SubResource("AnimationLibrary_1sg8f")
+
+[node name="LeftTouchRegion" type="ColorRect" parent="MenuScreen" unique_id=372395419]
 visibility_layer = 0
 layout_mode = 1
 anchors_preset = -1
@@ -3243,7 +3262,7 @@ grow_vertical = 2
 color = Color(0.149814, 0.567634, 0.821031, 0.309804)
 metadata/_edit_use_anchors_ = true
 
-[node name="RightTouchRegion" type="ColorRect" parent="MenuScreen"]
+[node name="RightTouchRegion" type="ColorRect" parent="MenuScreen" unique_id=103996621]
 visibility_layer = 0
 layout_mode = 1
 anchors_preset = -1
@@ -3257,7 +3276,7 @@ grow_vertical = 2
 color = Color(0.149814, 0.567634, 0.821031, 0.309804)
 metadata/_edit_use_anchors_ = true
 
-[node name="SelectorArrow" type="TextureRect" parent="MenuScreen"]
+[node name="SelectorArrow" type="TextureRect" parent="MenuScreen" unique_id=739515814]
 material = SubResource("ShaderMaterial_tcw2j")
 layout_mode = 1
 anchors_preset = -1
@@ -3275,7 +3294,7 @@ texture = ExtResource("31_m4day")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="MenuBackButton" type="Button" parent="MenuScreen" groups=["gui_touch"]]
+[node name="MenuBackButton" type="Button" parent="MenuScreen" unique_id=1491848075 groups=["gui_touch"]]
 self_modulate = Color(1, 1, 1, 0.627451)
 layout_mode = 1
 anchors_preset = -1
@@ -3289,14 +3308,14 @@ grow_horizontal = 2
 mouse_default_cursor_shape = 2
 theme_type_variation = &"TouchLeft"
 
-[node name="SettingsScreen" parent="." instance=ExtResource("7_1evyh")]
+[node name="SettingsScreen" parent="." unique_id=911814784 instance=ExtResource("7_1evyh")]
 visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 offset_top = 15.0
 offset_bottom = 15.0
 
-[node name="VersionLabel" type="Label" parent="."]
+[node name="VersionLabel" type="Label" parent="." unique_id=975132454]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.131
@@ -3312,7 +3331,7 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_65llw")
 text = "v0.2.0"
 vertical_alignment = 2
 
-[node name="TeamLabel" type="Label" parent="."]
+[node name="TeamLabel" type="Label" parent="." unique_id=86956355]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.828
@@ -3330,18 +3349,16 @@ text = "Redux Team"
 horizontal_alignment = 2
 vertical_alignment = 2
 
-[node name="TitleLoop" type="AudioStreamPlayer" parent="."]
+[node name="TitleLoop" type="AudioStreamPlayer" parent="." unique_id=725543924]
 stream = ExtResource("1_bfr6l")
 bus = &"Music"
 
-[node name="MenuLoop" type="AudioStreamPlayer" parent="."]
+[node name="MenuLoop" type="AudioStreamPlayer" parent="." unique_id=350880933]
 stream = ExtResource("6_lyjqf")
 bus = &"Music"
 
-[node name="ScreenAnimations" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_exexd")
-}
+[node name="ScreenAnimations" type="AnimationPlayer" parent="." unique_id=2125021849]
+libraries/ = SubResource("AnimationLibrary_exexd")
 
 [connection signal="gui_input" from="MenuScreen/LeftTouchRegion" to="MenuScreen/MenuCycle" method="_input_cycle_region" binds= [-1, &"cycle_left"]]
 [connection signal="gui_input" from="MenuScreen/RightTouchRegion" to="MenuScreen/MenuCycle" method="_input_cycle_region" binds= [1, &"cycle_right"]]
