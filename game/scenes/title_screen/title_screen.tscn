@@ -3086,7 +3086,7 @@ offset_bottom = 21.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_db5fu")
-menu_buttons = [NodePath("CenterButtonContainer/StoryMode"), NodePath("RightButtonContainer/LevelDesigner"), NodePath("ExtraButtonContainer/Extras"), NodePath("MenuButtonsHolder/Secret"), NodePath("LeftButtonContainer/Settings")]
+menu_buttons = [NodePath("MenuButtonsHolder/Prototype"), NodePath("RightButtonContainer/LevelDesigner"), NodePath("ExtraButtonContainer/Extras"), NodePath("MenuButtonsHolder/Secret"), NodePath("LeftButtonContainer/Settings")]
 animation_player = NodePath("AnimationPlayer")
 left_button_container = NodePath("LeftButtonContainer")
 center_button_container = NodePath("CenterButtonContainer")
@@ -3141,6 +3141,7 @@ ratio = 2.5
 metadata/_edit_use_anchors_ = true
 
 [node name="StoryMode" parent="MenuScreen/MenuCycle/CenterButtonContainer" unique_id=1306824108 instance=ExtResource("5_mu8aq")]
+visible = false
 modulate = Color(0.4, 0.4, 0.4, 1)
 layout_mode = 2
 top_icon = 4
