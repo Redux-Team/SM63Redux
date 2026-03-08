@@ -1,0 +1,153 @@
+[gd_scene format=3 uid="uid://dpxcifie8fnv4"]
+
+[ext_resource type="PackedScene" uid="uid://b4nw5k2oa3ro0" path="res://game/entities/player/player.tscn" id="1_gkrnv"]
+[ext_resource type="Script" uid="uid://b7xevliix28gt" path="res://proto/legacy_tutorial_1/tutorial_1_1.gd" id="1_ryuyw"]
+
+[node name="Tutorial" type="Node2D" unique_id=1867626068]
+script = ExtResource("1_ryuyw")
+
+[node name="Player" parent="." unique_id=1819068929 instance=ExtResource("1_gkrnv")]
+position = Vector2(160, 126)
+floor_max_angle = 0.80285144
+floor_snap_length = 16.0
+
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1678763291]
+zoom = Vector2(0.8, 0.8)
+
+[node name="1" type="Node2D" parent="." unique_id=472796922]
+
+[node name="Water" type="Node2D" parent="1" unique_id=304363696]
+
+[node name="Area2D" type="Area2D" parent="1/Water" unique_id=1740152977]
+position = Vector2(320, 226)
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="1/Water/Area2D" unique_id=155972812]
+visible = false
+polygon = PackedVector2Array(0, 0, 118, 0, 118, 20, 100, 100, 30, 103, 0, 21)
+
+[node name="Polygon2D" type="Polygon2D" parent="1/Water/Area2D" unique_id=1387286482]
+color = Color(0, 0.6509804, 1, 0.45490196)
+polygon = PackedVector2Array(0, 0, 118, 0, 118, 20, 100, 100, 30, 103, 0, 21)
+
+[node name="Area2D2" type="Area2D" parent="1/Water" unique_id=1883061087]
+position = Vector2(606, 226)
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="1/Water/Area2D2" unique_id=1385201633]
+visible = false
+polygon = PackedVector2Array(0, 0, 212, 0, 212, 30, 370, 53, 480, 45, 478.711, 0, 600, 0, 600, 45, 550, 123, 358, 150, 187, 132, 176, 155, 140, 175, 31, 147, 0, 35)
+
+[node name="Polygon2D" type="Polygon2D" parent="1/Water/Area2D2" unique_id=108866180]
+color = Color(0, 0.6509804, 1, 0.45490196)
+polygon = PackedVector2Array(0, 0, 212, 0, 212, 30, 370, 53, 480, 45, 478.711, 0, 600, 0, 600, 45, 550, 123, 358, 150, 187, 132, 176, 155, 140, 175, 31, 147, 0, 35)
+
+[node name="Collision" type="Node2D" parent="1" unique_id=2127973409]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="1/Collision" unique_id=1412797475]
+position = Vector2(18, 159)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="1/Collision/StaticBody2D" unique_id=597798198]
+visible = false
+polygon = PackedVector2Array(-33, -11, 67, 9, 304, 9, 304, 87, 334, 169, 401, 153, 418.545, 86.5817, 422, -1, 449, -14, 496, -18, 527, -31, 590, -31, 590, 101, 621, 213, 730, 241, 766, 221, 775.75, 197.25, 948, 216, 1130, 189, 1178.96, 111.727, 1172, -27, 1244, -34, 1231, -105, 1308, -101, 1313, -64, 1549, -64, 1666, -48, 1787, -62, 1815, -111, 1908, -114, 1908, 451, -673, 442, -673, -549, -33, -549)
+
+[node name="Polygon2D" type="Polygon2D" parent="1/Collision/StaticBody2D" unique_id=1974336813]
+color = Color(0.4604388, 0.73837554, 0.8316159, 0.5882353)
+polygon = PackedVector2Array(-33, -11, 67, 9, 304, 9, 304, 87, 334, 169, 401, 153, 418.545, 86.5817, 422, -1, 449, -14, 496, -18, 527, -31, 590, -31, 590, 101, 621, 213, 730, 241, 766, 221, 775.75, 197.25, 948, 216, 1130, 189, 1178.96, 111.727, 1172, -27, 1244, -34, 1231, -105, 1308, -101, 1313, -64, 1549, -64, 1666, -48, 1787, -62, 1815, -111, 1908, -114, 1908, 451, -673, 442, -673, -549, -33, -549)
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="1/Collision" unique_id=808366144]
+position = Vector2(817, 151)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="1/Collision/StaticBody2D2" unique_id=543592098]
+visible = false
+polygon = PackedVector2Array(1, 0, 118, 0, 144, -70, 252, -52, 252, -23, 277.063, 132.418, 159, 141, 1, 118)
+
+[node name="Polygon2D" type="Polygon2D" parent="1/Collision/StaticBody2D2" unique_id=449122875]
+color = Color(0.4604388, 0.73837554, 0.8316159, 0.5882353)
+polygon = PackedVector2Array(1, 0, 118, 0, 144, -70, 252, -52, 252, -23, 277.063, 132.418, 159, 141, 1, 118)
+
+[node name="2" type="Node2D" parent="." unique_id=594115768]
+position = Vector2(1660, -134)
+
+[node name="Water" type="Node2D" parent="2" unique_id=286495896]
+
+[node name="Area2D" type="Area2D" parent="2/Water" unique_id=1301770325]
+position = Vector2(719, 312)
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="2/Water/Area2D" unique_id=1089540670]
+visible = false
+polygon = PackedVector2Array(0, 0, 480, 0, 480, 192, 0, 192)
+
+[node name="Polygon2D" type="Polygon2D" parent="2/Water/Area2D" unique_id=2060679033]
+color = Color(0, 0.6509804, 1, 0.45490196)
+polygon = PackedVector2Array(0, 0, 480, 0, 480, 192, 0, 192)
+
+[node name="Collision" type="Node2D" parent="2" unique_id=1953529477]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="2/Collision" unique_id=518254481]
+position = Vector2(0, 192)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="2/Collision/StaticBody2D" unique_id=1179023072]
+visible = false
+polygon = PackedVector2Array(266, -13, 304, -16, 323, 0, 384, 0, 400, 10, 447, 10, 464, 0, 522, 9, 531, -32, 602, -32, 615, 32, 728, 36, 728, 160, 738, 192, 840, 216, 940, 255, 961, 268, 1062, 258, 1088, 259, 1107, 253, 1160, 137, 1194, 134, 1198, 79, 1286, 74, 1388, 74, 1487, 57, 1675, 57, 1681, 39, 1686, -51, 1699, -51, 1728, -41, 1770, -40, 1797, 535, 266, 552)
+
+[node name="Polygon2D" type="Polygon2D" parent="2/Collision/StaticBody2D" unique_id=43912585]
+color = Color(0.4604388, 0.73837554, 0.8316159, 0.5882353)
+polygon = PackedVector2Array(266, -13, 304, -16, 323, 0, 384, 0, 400, 10, 447, 10, 464, 0, 522, 9, 531, -32, 602, -32, 615, 32, 728, 36, 728, 160, 738, 192, 840, 216, 940, 255, 961, 268, 1062, 258, 1088, 259, 1107, 253, 1160, 137, 1194, 134, 1198, 79, 1286, 74, 1388, 74, 1487, 57, 1675, 57, 1681, 39, 1686, -51, 1699, -51, 1728, -41, 1770, -40, 1797, 535, 266, 552)
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="2/Collision" unique_id=1667223016]
+position = Vector2(760, 228)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="2/Collision/StaticBody2D2" unique_id=1947166164]
+visible = false
+polygon = PackedVector2Array(0, 0, 37, -28, 80, -38, 72, -163, 57, -211, 55, -237, 124, -224, 211, -226, 238, -160, 235, -52, 246, 5, 298, 31, 298, 100, 192, 125, 125, 103, 35, 92, 0, 64)
+
+[node name="Polygon2D" type="Polygon2D" parent="2/Collision/StaticBody2D2" unique_id=1952800337]
+color = Color(0.4604388, 0.73837554, 0.8316159, 0.5882353)
+polygon = PackedVector2Array(0, 0, 37, -28, 80, -38, 72, -163, 57, -211, 55, -237, 124, -224, 211, -226, 238, -160, 235, -52, 246, 5, 298, 31, 298, 100, 192, 125, 125, 103, 35, 92, 0, 64)
+
+[node name="3" type="Node2D" parent="." unique_id=1574929489]
+position = Vector2(2545, 65)
+
+[node name="Water" type="Node2D" parent="3" unique_id=197763818]
+
+[node name="Area2D" type="Area2D" parent="3/Water" unique_id=738299802]
+position = Vector2(1414, 150)
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="3/Water/Area2D" unique_id=1647798590]
+visible = false
+polygon = PackedVector2Array(0, 0, 346, 0, 346, 58, 309, 97, 119, 81, 57, 90, 0, 60)
+
+[node name="Polygon2D" type="Polygon2D" parent="3/Water/Area2D" unique_id=973445201]
+color = Color(0, 0.6509804, 1, 0.45490196)
+polygon = PackedVector2Array(0, 0, 346, 0, 346, 58, 309, 97, 119, 81, 57, 90, 0, 60)
+
+[node name="Collision" type="Node2D" parent="3" unique_id=1789110342]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="3/Collision" unique_id=82808351]
+position = Vector2(0, 215)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="3/Collision/StaticBody2D" unique_id=1421591759]
+visible = false
+polygon = PackedVector2Array(884, -19, 885, -262, 911, -252, 1008, -252, 1032, -230, 1107, -230, 1196, -195, 1282, -195, 1282, -128, 1325, -128, 1414, -99, 1414, -5, 1471, 25, 1533, 16, 1723, 32, 1760, -7, 1753, -152, 2373, -153, 2381, -727, 2583, -740, 2588, 297, 912, 312)
+
+[node name="Polygon2D" type="Polygon2D" parent="3/Collision/StaticBody2D" unique_id=1345230864]
+color = Color(0.4604388, 0.73837554, 0.8316159, 0.5882353)
+polygon = PackedVector2Array(884, -19, 885, -262, 911, -252, 1008, -252, 1032, -230, 1107, -230, 1196, -195, 1282, -195, 1282, -128, 1325, -128, 1414, -99, 1414, -5, 1471, 25, 1533, 16, 1723, 32, 1760, -7, 1753, -152, 2373, -153, 2381, -727, 2583, -740, 2588, 297, 912, 312)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=575089117]
+
+[node name="TitleButton" type="Button" parent="CanvasLayer" unique_id=1762124938]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -56.0
+offset_top = 6.0
+offset_right = -7.0
+offset_bottom = 21.0
+grow_horizontal = 0
+text = "Back to Title"
+
+[connection signal="pressed" from="CanvasLayer/TitleButton" to="." method="_on_title_button_pressed"]
