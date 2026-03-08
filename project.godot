@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="SM63 Redux"
-config/version="0.2.0"
+config/version="0.2.0-dev"
 run/main_scene="uid://bkqukgs0ivej"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="SM63Redux"
