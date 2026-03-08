@@ -36,7 +36,7 @@
 [ext_resource type="PackedScene" uid="uid://c732aftmb2bcv" path="res://level_designer/level_designer.tscn" id="31_1rf77"]
 [ext_resource type="Shader" uid="uid://g3ewropiv6mx" path="res://core/shader/hsv.gdshader" id="31_5p2hb"]
 [ext_resource type="Texture2D" uid="uid://3bawiafh4l8h" path="res://assets/textures/gui/title_screen/select_mode_button/selector.png" id="31_m4day"]
-[ext_resource type="PackedScene" uid="uid://cfrexipnk4yq8" path="res://game/scenes/level/playtest.tscn" id="31_tcw2j"]
+[ext_resource type="PackedScene" uid="uid://dpxcifie8fnv4" path="res://proto/legacy_tutorial_1/tutorial_1_1.tscn" id="32_1rf77"]
 
 [sub_resource type="Curve" id="Curve_5m44c"]
 _data = [Vector2(0.0574018, 0), 0.0, 0.0, 0, 0, Vector2(0.250755, 0.515625), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -3243,7 +3243,7 @@ grow_vertical = 1
 top_icon = 5
 content = 5
 title = 5
-transition_to = ExtResource("31_tcw2j")
+transition_to = ExtResource("32_1rf77")
 description = "Testing, testing!"
 hue = 0.02400000000000002
 
