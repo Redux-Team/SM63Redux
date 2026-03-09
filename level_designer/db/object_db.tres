@@ -1,13 +1,47 @@
 [gd_resource type="Resource" script_class="GameObjectDB" format=3 uid="uid://860ancqo5p43"]
 
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/components/object.gd" id="1_d7stb"]
-[ext_resource type="Resource" uid="uid://w1ly8lgjddne" path="res://level_designer/db/Entity/Enemy/Goomba.tres" id="2_3k340"]
+[ext_resource type="Resource" uid="uid://w1ly8lgjddne" path="res://level_designer/db/Entity/Enemy/goomba.tres" id="2_ls2ca"]
 [ext_resource type="Script" uid="uid://dc4nc2ctw5fm5" path="res://level_designer/db/object_db.gd" id="2_slhqw"]
+[ext_resource type="Resource" uid="uid://cnpufyaj5itij" path="res://level_designer/db/Props/Platforms/wooden_platform.tres" id="3_1tu0r"]
+[ext_resource type="Resource" uid="uid://v3yk2lwwo751" path="res://level_designer/db/Props/Platforms/cloud.tres" id="4_suoxg"]
+[ext_resource type="Resource" uid="uid://dhyodlkfh60hd" path="res://level_designer/db/Props/Platforms/moving_platform.tres" id="5_s7yr8"]
+[ext_resource type="Resource" uid="uid://bogqpam4pqfgi" path="res://level_designer/db/Props/Platforms/log_falling.tres" id="6_3bhcm"]
+[ext_resource type="Resource" uid="uid://by8vbnkxga54a" path="res://level_designer/db/Props/Platforms/log_static.tres" id="7_q34o8"]
+[ext_resource type="Resource" uid="uid://dkyd466tbfa22" path="res://level_designer/db/Props/Platforms/log_tipping.tres" id="8_2g8kd"]
+[ext_resource type="Resource" uid="uid://dtolfo1xycloe" path="res://level_designer/db/Props/Nature/mushroom_head.tres" id="9_tqdwi"]
+[ext_resource type="Resource" uid="uid://dorouht47oho6" path="res://level_designer/db/Props/Nature/tree_big.tres" id="10_a6jo3"]
+[ext_resource type="Resource" uid="uid://dsj6dbrrkgdee" path="res://level_designer/db/Props/Nature/tree_small.tres" id="11_3c5mt"]
+[ext_resource type="Resource" uid="uid://dyuocyxgl2ceh" path="res://level_designer/db/Props/Nature/mushroom_stem.tres" id="12_uuvj5"]
+[ext_resource type="Resource" uid="uid://cxjkf33colukt" path="res://level_designer/db/Props/Interactable/breakable_box.tres" id="13_mtptv"]
+[ext_resource type="Resource" uid="uid://40e42nc6itr8" path="res://level_designer/db/Item/FLUDD/water_bottle_small.tres" id="14_tocvo"]
+[ext_resource type="Resource" uid="uid://cc85138ec57w4" path="res://level_designer/db/Item/FLUDD/fludd_box_turbo.tres" id="15_ea746"]
+[ext_resource type="Resource" uid="uid://cp7abjc4l1sfn" path="res://level_designer/db/Item/FLUDD/fludd_box_rocket.tres" id="16_5vyyt"]
+[ext_resource type="Resource" uid="uid://kxexxxdwa4sc" path="res://level_designer/db/Item/FLUDD/water_bottle_big.tres" id="17_ngtt5"]
+[ext_resource type="Resource" uid="uid://b6jgiuu3uuh70" path="res://level_designer/db/Item/FLUDD/fludd_box_hover.tres" id="18_2queo"]
+[ext_resource type="Resource" uid="uid://dxc3v4jeaftcd" path="res://level_designer/db/Entity/Enemy/koopa.tres" id="19_1tu0r"]
 
 [resource]
 script = ExtResource("2_slhqw")
 objects = Dictionary[String, ExtResource("1_d7stb")]({
-"Entity/Enemy/Goomba": ExtResource("2_3k340")
+"Entity/Enemy/goomba": ExtResource("2_ls2ca"),
+"Entity/Enemy/koopa": ExtResource("19_1tu0r"),
+"Item/FLUDD/fludd_box_hover": ExtResource("18_2queo"),
+"Item/FLUDD/fludd_box_rocket": ExtResource("16_5vyyt"),
+"Item/FLUDD/fludd_box_turbo": ExtResource("15_ea746"),
+"Item/FLUDD/water_bottle_big": ExtResource("17_ngtt5"),
+"Item/FLUDD/water_bottle_small": ExtResource("14_tocvo"),
+"Props/Interactable/breakable_box": ExtResource("13_mtptv"),
+"Props/Nature/mushroom_head": ExtResource("9_tqdwi"),
+"Props/Nature/mushroom_stem": ExtResource("12_uuvj5"),
+"Props/Nature/tree_big": ExtResource("10_a6jo3"),
+"Props/Nature/tree_small": ExtResource("11_3c5mt"),
+"Props/Platforms/cloud": ExtResource("4_suoxg"),
+"Props/Platforms/log_falling": ExtResource("6_3bhcm"),
+"Props/Platforms/log_static": ExtResource("7_q34o8"),
+"Props/Platforms/log_tipping": ExtResource("8_2g8kd"),
+"Props/Platforms/moving_platform": ExtResource("5_s7yr8"),
+"Props/Platforms/wooden_platform": ExtResource("3_1tu0r")
 })
 database_dir = "res://level_designer/db"
 metadata/_custom_type_script = "uid://dc4nc2ctw5fm5"

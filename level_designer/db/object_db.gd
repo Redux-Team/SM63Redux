@@ -3,6 +3,8 @@
 class_name GameObjectDB
 extends Resource
 
+static var _inst: GameObjectDB
+
 @export var objects: Dictionary[String, GameObject]
 
 @export_category("Debug")
@@ -18,6 +20,25 @@ extends Resource
 		return func() -> void:
 			objects.clear()
 			populate_objects.call(database_dir)
+
+
+static func get_db() -> GameObjectDB:
+	if not _inst:
+		_inst = load("uid://860ancqo5p43")
+	return _inst
+
+
+func get_from_category(cat: GameObject.ObjectCategory) -> Array[GameObject]:
+	var list: Array[GameObject]
+	
+	if cat == GameObject.ObjectCategory.ALL:
+		return objects.values()
+	
+	for object: GameObject in objects.values():
+		if object.category == cat:
+			list.append(object)
+	
+	return list
 
 
 func populate_objects(path: String) -> void:
@@ -38,10 +59,9 @@ func populate_objects(path: String) -> void:
 				var obj_path: String = full_path.trim_prefix(database_dir + "/").get_basename()
 				var category_name: String = obj_path.get_slice("/", 0)
 				var obj: GameObject = res as GameObject
-				obj.name = file_name.get_basename()
+				obj.id = file_name.get_basename()
 				obj.category = GameObject.get_category_value(category_name)
 				obj.ld_object_path = obj_path
 				if obj not in objects.values():
 					objects.set(obj_path, obj)
-				#objects[res.name] = res
 		file_name = dir.get_next()

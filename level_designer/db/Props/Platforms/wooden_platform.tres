@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cnpufyaj5itij"]
+
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/components/object.gd" id="1_btx6h"]
+
+[resource]
+script = ExtResource("1_btx6h")
+id = "wooden_platform"
+category = 5
+category_string = "Props"
+subpath = "Platforms/wooden_platform"
+group_path = "Platforms"
+ld_object_path = "Props/Platforms/wooden_platform"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

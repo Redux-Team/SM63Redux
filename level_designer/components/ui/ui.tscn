@@ -9,7 +9,7 @@ script = ExtResource("1_8w51u")
 ld_window = NodePath("LDWindow")
 
 [node name="LDWindow" parent="." unique_id=1964419486 instance=ExtResource("2_ms7r3")]
-title = "Objects"
+title = "Objects - All"
 content = ExtResource("3_ms7r3")
 window_scale = Vector2(0.9, 0.9)
 pop_in_sfx = true

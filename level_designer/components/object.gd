@@ -8,27 +8,40 @@ enum ObjectCategory {
 	TERRAIN,
 	VOLUME,
 	HARZARD,
-	INTERACTABLE,
+	PROPS,
 	TRIGGER,
-	UNKNOWN,
+	ALL,
 }
 
 
-@export_storage var name: String:
-	set(n):
-		name = n.remove_char(47).strip_edges() # '/'
-		ld_object_path = get_object_path()
+@export_storage var id: String
+@export var name_override: String
 @export_storage var category: ObjectCategory:
 	set(c):
 		category = c
 		category_string = get_category_name(c).to_pascal_case()
+		_update_subpath()
+
+# These are cached to not have to do string manipulation every time we index a bunch of these resources.
 @export_storage var category_string: String
+@export_storage var subpath: String:
+	set(s):
+		subpath = s
+		group_path = s.trim_suffix("/" + s.get_file())
+@export_storage var group_path: String
 
 @export_group("Editor", "ld_")
 @export_storage var ld_object_path: String
 @export var ld_preview_texture: Texture2D
 @export_group("Game", "game_")
 @export var game_instance: PackedScene
+
+
+func get_object_name() -> String:
+	if name_override:
+		return name_override
+	
+	return _snake_to_title(id)
 
 
 func get_object_path() -> String:
@@ -42,7 +55,7 @@ static func get_category_name(cat_value: ObjectCategory) -> String:
 		ObjectCategory.TERRAIN: return "TERRAIN"
 		ObjectCategory.VOLUME: return "VOLUME"
 		ObjectCategory.HARZARD: return "HARZARD"
-		ObjectCategory.INTERACTABLE: return "INTERACTABLE"
+		ObjectCategory.PROPS: return "PROPS"
 		ObjectCategory.TRIGGER: return "TRIGGER"
 	return ""
 
@@ -54,6 +67,20 @@ static func get_category_value(cat_name: String) -> ObjectCategory:
 		"TERRAIN": return ObjectCategory.TERRAIN
 		"VOLUME": return ObjectCategory.VOLUME
 		"HARZARD": return ObjectCategory.HARZARD
-		"INTERACTABLE": return ObjectCategory.INTERACTABLE
+		"PROPS": return ObjectCategory.PROPS
 		"TRIGGER": return ObjectCategory.TRIGGER
-	return ObjectCategory.UNKNOWN
+	return ObjectCategory.ALL
+
+
+func _update_subpath() -> void:
+	if category_string:
+		subpath = get_object_path().trim_prefix(category_string + "/")
+
+
+func _snake_to_title(text: String) -> String:
+	var words: PackedStringArray = text.split("_")
+
+	for i in range(words.size()):
+		words[i] = words[i].capitalize()
+
+	return " ".join(words)

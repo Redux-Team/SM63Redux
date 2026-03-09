@@ -40,6 +40,9 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if LDUI.focus_window_open:
+		return
+	
 	if allow_panning:
 		var pan: Vector2 = Vector2.ZERO
 		pan.x = Input.get_axis(&"editor_pan_left", &"editor_pan_right")
@@ -53,6 +56,9 @@ func _process(_delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if LDUI.focus_window_open:
+		return
+	
 	if event is InputEventMouseButton:
 		match event.button_index:
 			# Mouse pan active/deactivate

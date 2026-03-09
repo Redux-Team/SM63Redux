@@ -2,14 +2,13 @@
 
 [ext_resource type="Script" uid="uid://nouwwkux1yur" path="res://level_designer/components/ui/object_browser/object_group.gd" id="1_w41nc"]
 
-[node name="ObjectGroup" type="PanelContainer" unique_id=380333878 node_paths=PackedStringArray("group_list")]
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 34.0
-grow_horizontal = 2
+[node name="ObjectGroup" type="PanelContainer" unique_id=380333878 node_paths=PackedStringArray("group_list", "toggle_group_button")]
+offset_right = 63.0
+offset_bottom = 45.0
 size_flags_vertical = 0
 script = ExtResource("1_w41nc")
 group_list = NodePath("MarginContainer/VBoxContainer/GroupList")
+toggle_group_button = NodePath("MarginContainer/VBoxContainer/ToggleGroupButton")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=2030229878]
 layout_mode = 2
@@ -39,5 +38,7 @@ icon_alignment = 2
 [node name="GroupList" type="HFlowContainer" parent="MarginContainer/VBoxContainer" unique_id=1278476276]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/h_separation = 22
+theme_override_constants/v_separation = 22
 
 [connection signal="toggled" from="MarginContainer/VBoxContainer/ToggleGroupButton" to="." method="_on_toggle_group_button_toggled"]

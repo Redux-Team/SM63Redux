@@ -1,31 +1,81 @@
 class_name LDObjectBrowser
 extends Control
 
-@export var category_map: Dictionary[Button, GameObject.ObjectCategory]
+signal category_changed(category_name: String)
 
-func _on_all_category_pressed() -> void:
-	pass # Replace with function body.
-
-
-func _on_entities_category_pressed() -> void:
-	pass # Replace with function body.
+@export var groups_v_box: VBoxContainer
+@export var entities_button: Button
+const OBJECT_GROUP_SCENE = preload("uid://d11ohrgxcihxx")
 
 
-func _on_terrain_category_pressed() -> void:
-	pass # Replace with function body.
+func _ready() -> void:
+	populate_list()
 
 
-func _on_volumes_category_pressed() -> void:
-	pass # Replace with function body.
+func populate_list(category: GameObject.ObjectCategory = GameObject.ObjectCategory.ALL) -> void:
+	#aka if none are selected
+	if entities_button.button_group.get_pressed_button() == null and category != GameObject.ObjectCategory.ALL:
+		SFX.play(SFX.UI_BACK)
+		populate_list()
+		return
+	
+	for n: Node in groups_v_box.get_children(): n.queue_free()
+	
+	var objects: Array[GameObject] = GameObjectDB.get_db().get_from_category(category)
+	var groups: Dictionary[String, LDObjectBrowserGroup]
+	
+	for obj: GameObject in objects:
+		var group_name: String = obj.group_path.get_file()
+		var group_node: LDObjectBrowserGroup
+		
+		if not groups.has(group_name):
+			group_node = OBJECT_GROUP_SCENE.instantiate()
+			group_node.set_group_name(group_name)
+			groups.set(group_name, group_node)
+			groups_v_box.add_child(group_node)
+		else:
+			group_node = groups.get(group_name)
+		
+		group_node.add_entry(obj)
+	
+	category_changed.emit(GameObject.get_category_name(category).to_pascal_case())
 
 
-func _on_hazards_category_pressed() -> void:
-	pass # Replace with function body.
+func _on_entities_category_toggled(toggled_on: bool) -> void:
+	populate_list(GameObject.ObjectCategory.ENTITY)
+	_play_sfx(toggled_on)
 
 
-func _on_warps_category_pressed() -> void:
-	pass # Replace with function body.
+func _on_item_category_toggled(toggled_on: bool) -> void:
+	populate_list(GameObject.ObjectCategory.ITEM)
+	_play_sfx(toggled_on)
 
 
-func _on_triggers_category_pressed() -> void:
-	pass # Replace with function body.
+func _on_terrain_category_toggled(toggled_on: bool) -> void:
+	populate_list(GameObject.ObjectCategory.TERRAIN)
+	_play_sfx(toggled_on)
+
+
+func _on_volumes_category_toggled(toggled_on: bool) -> void:
+	populate_list(GameObject.ObjectCategory.VOLUME)
+	_play_sfx(toggled_on)
+
+
+func _on_hazards_category_toggled(toggled_on: bool) -> void:
+	populate_list(GameObject.ObjectCategory.HARZARD)
+	_play_sfx(toggled_on)
+
+
+func _on_props_category_toggled(toggled_on: bool) -> void:
+	populate_list(GameObject.ObjectCategory.PROPS)
+	_play_sfx(toggled_on)
+
+
+func _on_triggers_category_toggled(toggled_on: bool) -> void:
+	populate_list(GameObject.ObjectCategory.TRIGGER)
+	_play_sfx(toggled_on)
+
+
+func _play_sfx(toggled_on: bool) -> void:
+	if toggled_on:
+		SFX.play(SFX.UI_NEXT)

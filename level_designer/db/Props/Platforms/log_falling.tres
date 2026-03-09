@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bogqpam4pqfgi"]
+
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/components/object.gd" id="1_af8b1"]
+
+[resource]
+script = ExtResource("1_af8b1")
+id = "log_falling"
+category = 5
+category_string = "Props"
+subpath = "Platforms/log_falling"
+group_path = "Platforms"
+ld_object_path = "Props/Platforms/log_falling"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

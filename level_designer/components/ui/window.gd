@@ -2,7 +2,11 @@ class_name LDWindow
 extends PanelContainer
 
 
-@export var title: String
+@export var title: String:
+	set(t):
+		if _title_label:
+			_title_label.text = t
+		title = t
 @export var content: PackedScene
 ## Closes when the "back" input event is pressed.
 @export var close_on_back_input: bool = false
@@ -100,6 +104,10 @@ func assign_control(control: Control) -> void:
 		else:
 			_content_container.add_child(control)
 		_content_ref = control
+
+
+func get_content_ref() -> Control:
+	return _content_ref
 
 
 func _on_close_button_pressed() -> void:

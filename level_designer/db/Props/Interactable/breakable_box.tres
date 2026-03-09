@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cxjkf33colukt"]
+
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/components/object.gd" id="1_bb5q1"]
+
+[resource]
+script = ExtResource("1_bb5q1")
+id = "breakable_box"
+category = 5
+category_string = "Props"
+subpath = "Interactable/breakable_box"
+group_path = "Interactable"
+ld_object_path = "Props/Interactable/breakable_box"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"
