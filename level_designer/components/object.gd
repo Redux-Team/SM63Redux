@@ -7,7 +7,7 @@ enum ObjectCategory {
 	ITEM,
 	TERRAIN,
 	VOLUME,
-	HARZARD,
+	HAZARDS,
 	PROPS,
 	TRIGGER,
 	ALL,
@@ -53,10 +53,10 @@ static func get_category_name(cat_value: ObjectCategory) -> String:
 		ObjectCategory.ENTITY: return "ENTITY"
 		ObjectCategory.ITEM: return "ITEM"
 		ObjectCategory.TERRAIN: return "TERRAIN"
-		ObjectCategory.VOLUME: return "VOLUME"
-		ObjectCategory.HARZARD: return "HARZARD"
+		ObjectCategory.VOLUME: return "VOLUMES"
+		ObjectCategory.HAZARDS: return "HAZARDS"
 		ObjectCategory.PROPS: return "PROPS"
-		ObjectCategory.TRIGGER: return "TRIGGER"
+		ObjectCategory.TRIGGER: return "TRIGGERS"
 	return ""
 
 
@@ -65,10 +65,10 @@ static func get_category_value(cat_name: String) -> ObjectCategory:
 		"ENTITY": return ObjectCategory.ENTITY
 		"ITEM": return ObjectCategory.ITEM
 		"TERRAIN": return ObjectCategory.TERRAIN
-		"VOLUME": return ObjectCategory.VOLUME
-		"HARZARD": return ObjectCategory.HARZARD
+		"VOLUMES": return ObjectCategory.VOLUME
+		"HAZARDS": return ObjectCategory.HAZARDS
 		"PROPS": return ObjectCategory.PROPS
-		"TRIGGER": return ObjectCategory.TRIGGER
+		"TRIGGERS": return ObjectCategory.TRIGGER
 	return ObjectCategory.ALL
 
 

@@ -62,7 +62,7 @@ func _on_volumes_category_toggled(toggled_on: bool) -> void:
 
 
 func _on_hazards_category_toggled(toggled_on: bool) -> void:
-	populate_list(GameObject.ObjectCategory.HARZARD)
+	populate_list(GameObject.ObjectCategory.HAZARDS)
 	_play_sfx(toggled_on)
 
 
