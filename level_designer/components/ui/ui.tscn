@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ckkp8b1r2e05r"]
+
+[ext_resource type="Script" uid="uid://dgvhq23sr5a3p" path="res://level_designer/components/ui/ui.gd" id="1_8w51u"]
+
+[node name="LDUI" type="CanvasLayer" unique_id=783443360]
+script = ExtResource("1_8w51u")
