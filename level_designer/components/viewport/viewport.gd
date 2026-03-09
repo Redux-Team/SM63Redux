@@ -1,6 +1,9 @@
 class_name LDViewport
 extends Node2D
 
+const LINEAR_PAN_SPEED: float = 10.0
+const CAMERA_ZOOM_MIN: Vector2 = Vector2(0.2, 0.2)
+const CAMERA_ZOOM_MAX: Vector2 = Vector2(4.0, 4.0)
 
 ## Emits when the viewport is moved and/or zoomed.
 signal viewport_moved(pos: Vector2, zoom: Vector2)
@@ -12,16 +15,41 @@ signal viewport_moved(pos: Vector2, zoom: Vector2)
 @export var _viewport_bg: ColorRect
 
 
-var mouse_panning: bool = false:
+var allow_panning: bool = true
+var allow_zooming: bool = true
+var camera_position: Vector2 = Vector2.ZERO:
+	set(cp):
+		camera_position = cp
+		camera.position = camera_position
+var camera_zoom: Vector2 = Vector2.ONE:
+	set(cz):
+		camera_zoom = clamp(cz, CAMERA_ZOOM_MIN, CAMERA_ZOOM_MAX)
+		camera.zoom = camera_zoom
+
+var is_refocusing: bool = false
+var is_mouse_panning: bool = false:
 	set(mp):
 		Input.set_default_cursor_shape(Input.CURSOR_MOVE if mp else Input.CURSOR_ARROW)
-		mouse_panning = mp
+		is_mouse_panning = mp
 
 
 func _ready() -> void:
 	get_viewport().size_changed.connect(_on_viewport_moved)
 	viewport_moved.connect(_on_viewport_moved)
-	_on_viewport_moved(camera.position, camera.zoom)
+	_on_viewport_moved(camera_position, camera_zoom)
+
+
+func _process(_delta: float) -> void:
+	if allow_panning:
+		var pan: Vector2 = Vector2.ZERO
+		pan.x = Input.get_axis(&"editor_pan_left", &"editor_pan_right")
+		pan.y = Input.get_axis(&"editor_pan_up", &"editor_pan_down")
+		camera_position += (pan * LINEAR_PAN_SPEED) / camera_zoom
+		viewport_moved.emit(camera_position, camera_zoom)
+		if Input.is_action_just_pressed(&"editor_zoom_in"): 
+			refocus_camera(Vector2.INF, camera_zoom * 2, false)
+		if Input.is_action_just_pressed(&"editor_zoom_out"): 
+			refocus_camera(Vector2.INF, camera_zoom * 0.5, false)
 
 
 func _input(event: InputEvent) -> void:
@@ -29,21 +57,36 @@ func _input(event: InputEvent) -> void:
 		match event.button_index:
 			# Mouse pan active/deactivate
 			MOUSE_BUTTON_MIDDLE when event.is_pressed():
-				mouse_panning = true
+				is_mouse_panning = true
 			MOUSE_BUTTON_MIDDLE when event.is_released():
-				mouse_panning = false
+				is_mouse_panning = false
 			
 			# Mouse zooming
-			MOUSE_BUTTON_WHEEL_UP:
+			MOUSE_BUTTON_WHEEL_UP when allow_zooming:
 				_zoom_at(get_global_mouse_position(), 0.1)
-			MOUSE_BUTTON_WHEEL_DOWN:
+			MOUSE_BUTTON_WHEEL_DOWN when allow_zooming:
 				_zoom_at(get_global_mouse_position(), -0.1)
 	
 	# Mouse panning
 	if event is InputEventMouseMotion:
-		if mouse_panning:
-			camera.position -= (event.relative / camera.zoom)
-			viewport_moved.emit(camera.position, camera.zoom)
+		if is_mouse_panning and allow_panning: 
+			camera_position -= (event.relative / camera_zoom)
+			viewport_moved.emit(camera_position, camera_zoom)
+	
+	# Screen panning
+	if event is InputEventPanGesture and allow_panning:
+		camera_position += (event.delta / camera_zoom) * 5
+		viewport_moved.emit(camera_position, camera_zoom)
+	
+	# Magnify Zoom
+	if event is InputEventMagnifyGesture and allow_zooming:
+		_zoom_at(get_global_mouse_position(), (event.factor - 1) * (camera_zoom.x / 4))
+	
+	# Reset to origin
+	if event is InputEventKey:
+		# TODO: Replace with input action
+		if event.keycode == KEY_0 and event.is_pressed():
+			refocus_camera(Vector2(0, 0), Vector2.ONE)
 
 
 func add_object(object: Node2D, pos: Vector2i = Vector2i.ZERO, layer_id: String = "a0r0") -> void:
@@ -72,6 +115,32 @@ func get_or_create_layer(layer_id: String) -> LDLayer:
 	abs_layer.add_child(rel_layer)
 	_sort_rel_layers(abs_layer)
 	return rel_layer
+
+
+func refocus_camera(pos: Vector2 = Vector2.INF, zoom: Vector2 = Vector2.INF, enforce_finish: bool = true) -> void:
+	if is_refocusing and enforce_finish:
+		return
+	
+	is_refocusing = true
+	
+	var tween: Tween = create_tween().set_parallel()
+	tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	if pos != Vector2.INF:
+		allow_panning = false
+		tween.tween_property(self, ^"camera_position", pos, 0.5)
+	if zoom != Vector2.INF:
+		allow_zooming = false
+		tween.tween_property(self, ^"camera_zoom", zoom, 0.5)
+	tween.tween_method(func(_t: float) -> void:
+		_on_viewport_moved(camera_position, camera_zoom)
+		, 0.0, 1.0, 0.5
+	)
+	
+	await tween.finished
+	allow_panning = true
+	allow_zooming = true
+	is_refocusing = false
+	viewport_moved.emit(camera_position, camera_zoom)
 
 
 func _get_or_create_abs_layer(abs_id: String, absolute_index: int) -> LDLayer:
@@ -118,7 +187,7 @@ func _sort_layers() -> void:
 		_layers_root.move_child(layers[i], i)
 
 
-func _on_viewport_moved(pos: Vector2 = camera.position, zoom: Vector2 = camera.zoom) -> void:
+func _on_viewport_moved(pos: Vector2 = camera_position, zoom: Vector2 = camera_zoom) -> void:
 	var mat: ShaderMaterial = _viewport_bg.material as ShaderMaterial
 	if not mat:
 		return
@@ -128,7 +197,7 @@ func _on_viewport_moved(pos: Vector2 = camera.position, zoom: Vector2 = camera.z
 
 
 func _zoom_at(pos: Vector2, zoom_delta: float) -> void:
-	var old_zoom: Vector2 = camera.zoom
-	camera.zoom = (old_zoom + Vector2(zoom_delta, zoom_delta)).clamp(Vector2(0.1, 0.1), Vector2(10.0, 10.0))
-	camera.position += (pos - camera.position) * (1.0 - old_zoom.x / camera.zoom.x)
-	viewport_moved.emit(camera.position, camera.zoom)
+	var old_zoom: Vector2 = camera_zoom
+	camera_zoom = (old_zoom + Vector2(zoom_delta, zoom_delta)).clamp(Vector2(0.1, 0.1), Vector2(10.0, 10.0))
+	camera_position += (pos - camera_position) * (1.0 - old_zoom.x / camera_zoom.x)
+	viewport_moved.emit(camera_position, camera_zoom)

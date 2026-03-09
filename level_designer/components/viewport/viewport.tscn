@@ -36,6 +36,5 @@ mouse_filter = 2
 color = Color(1, 1, 1, 0.14901961)
 
 [node name="LDCamera" type="Camera2D" parent="." unique_id=121042519]
-zoom = Vector2(1.815, 1.815)
 
 [node name="Layers" type="Node2D" parent="." unique_id=993688873]
