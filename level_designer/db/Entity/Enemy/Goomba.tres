@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://w1ly8lgjddne"]
+
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/components/object.gd" id="1_qer7i"]
+
+[resource]
+script = ExtResource("1_qer7i")
+name = "Goomba"
+category_string = "Entity"
+ld_object_path = "Entity/Enemy/Goomba"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

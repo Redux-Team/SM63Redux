@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GameObjectDB" format=3 uid="uid://860ancqo5p43"]
+
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/components/object.gd" id="1_d7stb"]
+[ext_resource type="Resource" uid="uid://w1ly8lgjddne" path="res://level_designer/db/Entity/Enemy/Goomba.tres" id="2_3k340"]
+[ext_resource type="Script" uid="uid://dc4nc2ctw5fm5" path="res://level_designer/db/object_db.gd" id="2_slhqw"]
+
+[resource]
+script = ExtResource("2_slhqw")
+objects = Dictionary[String, ExtResource("1_d7stb")]({
+"Entity/Enemy/Goomba": ExtResource("2_3k340")
+})
+database_dir = "res://level_designer/db"
+metadata/_custom_type_script = "uid://dc4nc2ctw5fm5"
