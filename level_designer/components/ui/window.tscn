@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://xsj22tgidlld" path="res://level_designer/components/ui/window.gd" id="1_pd0vu"]
 
-[node name="LDWindow" type="PanelContainer" unique_id=1964419486 node_paths=PackedStringArray("_content_container")]
+[node name="LDWindow" type="PanelContainer" unique_id=1964419486 node_paths=PackedStringArray("_content_container", "_title_label")]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -15,21 +15,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_pd0vu")
 _content_container = NodePath("VBoxContainer/MarginContainer/VBoxContainer/ContentContainer")
-
-[node name="Control" type="Control" parent="." unique_id=636116786]
-layout_mode = 2
-
-[node name="CloseButton" type="Button" parent="Control" unique_id=1205102099]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -12.5
-offset_top = -12.0
-offset_right = 10.5
-offset_bottom = 13.0
-grow_horizontal = 0
-text = "X"
+_title_label = NodePath("VBoxContainer/MarginContainer/VBoxContainer/TitleLabel")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=551025918]
 clip_contents = true
@@ -45,7 +31,7 @@ theme_override_constants/margin_bottom = 8
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=514969343]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=719007059]
+[node name="TitleLabel" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=719007059]
 layout_mode = 2
 text = "Window Title"
 horizontal_alignment = 1
@@ -53,8 +39,21 @@ horizontal_alignment = 1
 [node name="ContentContainer" type="PanelContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=329307729]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/ContentContainer" unique_id=641955005]
+[node name="Control" type="Control" parent="." unique_id=636116786]
 layout_mode = 2
-text = "Content"
+mouse_filter = 2
+metadata/_edit_lock_ = true
+
+[node name="CloseButton" type="Button" parent="Control" unique_id=1205102099]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -12.5
+offset_top = -12.0
+offset_right = 10.5
+offset_bottom = 13.0
+grow_horizontal = 0
+text = "X"
 
 [connection signal="pressed" from="Control/CloseButton" to="." method="_on_close_button_pressed"]
