@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://vh8cm8aotw1n"]
+
+[ext_resource type="Script" uid="uid://c2sydam8nrrib" path="res://level_designer/components/viewport/layer.gd" id="1_280j3"]
+
+[node name="Layer" type="Node2D" unique_id=86269176]
+script = ExtResource("1_280j3")
