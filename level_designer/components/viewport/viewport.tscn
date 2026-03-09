@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://b6vwygexlf4ht" path="res://level_designer/components/viewport/viewport.gd" id="1_urtws"]
 [ext_resource type="Shader" uid="uid://d4m57jrrlul8l" path="res://core/shader/ld_viewport_bg.gdshader" id="2_vq6wp"]
 [ext_resource type="Texture2D" uid="uid://crqnqwpps0m8c" path="res://assets/textures/level_designer/viewport/bg_texture.png" id="3_nmc72"]
-[ext_resource type="PackedScene" uid="uid://ckkp8b1r2e05r" path="res://level_designer/components/ui/ui.tscn" id="4_itnej"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nmc72"]
 shader = ExtResource("2_vq6wp")
@@ -39,5 +38,3 @@ color = Color(1, 1, 1, 0.14901961)
 [node name="LDCamera" type="Camera2D" parent="." unique_id=121042519]
 
 [node name="Layers" type="Node2D" parent="." unique_id=993688873]
-
-[node name="LDUI" parent="." unique_id=783443360 instance=ExtResource("4_itnej")]
