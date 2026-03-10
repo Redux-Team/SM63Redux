@@ -25,6 +25,9 @@ func populate_list(category: GameObject.ObjectCategory = GameObject.ObjectCatego
 	var groups: Dictionary[String, LDObjectBrowserGroup]
 	
 	for obj: GameObject in objects:
+		if not obj.ld_indexable:
+			continue
+		
 		var group_name: String = obj.group_path.get_file()
 		var group_node: LDObjectBrowserGroup
 		
