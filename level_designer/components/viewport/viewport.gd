@@ -15,6 +15,7 @@ signal viewport_moved(pos: Vector2, zoom: Vector2)
 @export var _viewport_bg: ColorRect
 
 
+var viewport_focused: bool = true
 var allow_panning: bool = true
 var allow_zooming: bool = true
 var camera_position: Vector2 = Vector2.ZERO:
@@ -40,7 +41,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if LDUI.focus_window_open:
+	if not viewport_focused:
 		return
 	
 	if allow_panning:
@@ -56,7 +57,7 @@ func _process(_delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if LDUI.focus_window_open:
+	if not viewport_focused:
 		return
 	
 	if event is InputEventMouseButton:

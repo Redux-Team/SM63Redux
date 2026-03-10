@@ -1,7 +1,10 @@
 class_name LDUI
 extends CanvasLayer
 
-static var focus_window_open: bool
+static var focus_window_open: bool:
+	set(fwo):
+		
+		focus_window_open = fwo
 
 @export var ld_window: LDWindow
 
