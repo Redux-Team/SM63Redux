@@ -4,6 +4,7 @@ extends PanelContainer
 @export var group_list: HFlowContainer
 @export var toggle_group_button: Button
 
+const ITEM_ENTRY = preload("uid://dwtx65wov5nfl")
 
 func clear_entries() -> void:
 	for n: Node in group_list.get_children(): n.queue_free()
@@ -15,17 +16,9 @@ func set_group_name(group_name: String) -> void:
 
 
 func add_entry(obj: GameObject) -> void:
-	var cr: ColorRect = ColorRect.new()
-	cr.color = Color.BLACK
-	cr.custom_minimum_size = Vector2(48, 48)
-	group_list.add_child(cr)
-	
-	var l: Label = Label.new()
-	l.add_theme_font_size_override(&"font_size", 12)
-	l.text = obj.id
-	l.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
-	l.custom_minimum_size = cr.custom_minimum_size
-	cr.add_child(l)
+	var entry: LDObjectItemEntry = ITEM_ENTRY.instantiate()
+	entry.obj_ref = obj
+	group_list.add_child(entry)
 
 
 func _on_toggle_group_button_toggled(toggled_on: bool) -> void:
