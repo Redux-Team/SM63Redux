@@ -10,5 +10,4 @@ category_string = "Props"
 subpath = "Gizmos/spinning_block_medium"
 group_path = "Gizmos"
 ld_object_path = "Props/Gizmos/spinning_block_medium"
-indexable = false
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

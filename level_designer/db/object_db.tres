@@ -37,6 +37,11 @@
 [ext_resource type="Resource" uid="uid://cpwcik2ad65p4" path="res://level_designer/db/Props/Gizmos/spinning_block_small.tres" id="29_okk77"]
 [ext_resource type="Resource" uid="uid://dhyodlkfh60hd" path="res://level_designer/db/Props/Gizmos/moving_platform.tres" id="30_yiiwq"]
 [ext_resource type="Resource" uid="uid://dw6l2d61dkq6p" path="res://level_designer/db/Props/Gizmos/spinning_block_large.tres" id="31_iy44t"]
+[ext_resource type="Resource" uid="uid://clfw632lsiowg" path="res://level_designer/db/Item/Collectible/coin_red.tres" id="37_5mivx"]
+[ext_resource type="Resource" uid="uid://enlwdtgbab6g" path="res://level_designer/db/Item/Collectible/coin.tres" id="38_gumef"]
+[ext_resource type="Resource" uid="uid://ytnyiak6am65" path="res://level_designer/db/Item/Collectible/star_coin.tres" id="39_ntfkj"]
+[ext_resource type="Resource" uid="uid://c58m38fqamx21" path="res://level_designer/db/Item/Collectible/coin_blue.tres" id="40_5fmnd"]
+[ext_resource type="Resource" uid="uid://dp8ylwxcasadn" path="res://level_designer/db/Item/Collectible/shine_sprite.tres" id="41_gumef"]
 
 [resource]
 script = ExtResource("2_slhqw")
@@ -48,6 +53,11 @@ objects = Dictionary[String, ExtResource("1_d7stb")]({
 "Entity/Passive/goonie": ExtResource("6_uuvj5"),
 "Entity/Passive/toad": ExtResource("7_mtptv"),
 "Entity/Player/player_mario": ExtResource("26_a6jo3"),
+"Item/Collectible/coin": ExtResource("38_gumef"),
+"Item/Collectible/coin_blue": ExtResource("40_5fmnd"),
+"Item/Collectible/coin_red": ExtResource("37_5mivx"),
+"Item/Collectible/shine_sprite": ExtResource("41_gumef"),
+"Item/Collectible/star_coin": ExtResource("39_ntfkj"),
 "Item/FLUDD/fludd_box_hover": ExtResource("18_2queo"),
 "Item/FLUDD/fludd_box_rocket": ExtResource("16_5vyyt"),
 "Item/FLUDD/fludd_box_turbo": ExtResource("15_ea746"),
