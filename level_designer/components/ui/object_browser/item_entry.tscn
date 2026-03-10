@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://dwtx65wov5nfl"]
+
+[ext_resource type="Script" uid="uid://dje8oykus5t6o" path="res://level_designer/components/ui/object_browser/item_entry.gd" id="1_kvue1"]
+
+[node name="ItemEntry" type="Button" unique_id=493092085 node_paths=PackedStringArray("preview_texture_rect", "item_id")]
+custom_minimum_size = Vector2(48, 48)
+offset_right = 8.0
+offset_bottom = 8.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_default_cursor_shape = 2
+script = ExtResource("1_kvue1")
+preview_texture_rect = NodePath("PreviewTexture")
+item_id = NodePath("item_id")
+
+[node name="PreviewTexture" type="TextureRect" parent="." unique_id=1698399676]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="item_id" type="Label" parent="." unique_id=1342569207]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 8
+text = "super_duper_duper_long_item_name_that_is_long"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

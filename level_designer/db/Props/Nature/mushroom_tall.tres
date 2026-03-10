@@ -1,13 +1,13 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dtolfo1xycloe"]
 
-[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/components/object.gd" id="1_2shot"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/components/object.gd" id="1_21vci"]
 
 [resource]
-script = ExtResource("1_2shot")
-id = "mushroom_head"
+script = ExtResource("1_21vci")
+id = "mushroom_tall"
 category = 5
 category_string = "Props"
 subpath = "Nature/mushroom_head"
 group_path = "Nature"
-ld_object_path = "Props/Nature/mushroom_head"
+ld_object_path = "Props/Nature/mushroom_tall"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

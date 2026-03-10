@@ -38,7 +38,7 @@ icon_alignment = 2
 [node name="GroupList" type="HFlowContainer" parent="MarginContainer/VBoxContainer" unique_id=1278476276]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/h_separation = 22
-theme_override_constants/v_separation = 22
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
 
 [connection signal="toggled" from="MarginContainer/VBoxContainer/ToggleGroupButton" to="." method="_on_toggle_group_button_toggled"]

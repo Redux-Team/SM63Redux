@@ -6,7 +6,7 @@
 script = ExtResource("1_mei6k")
 id = "koopa"
 category_string = "Entity"
-subpath = "Enemy/goomba"
+subpath = "Enemy/koopa"
 group_path = "Enemy"
 ld_object_path = "Entity/Enemy/koopa"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
