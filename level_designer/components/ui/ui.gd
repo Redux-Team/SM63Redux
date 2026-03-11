@@ -1,27 +1,38 @@
 class_name LDUI
-extends CanvasLayer
+extends LDComponent
 
-static var focus_window_open: bool:
-	set(fwo):
-		
-		focus_window_open = fwo
-
-@export var ld_window: LDWindow
+@export var _obj_browser_window: LDWindow
+@export var _canvas_layer: CanvasLayer
 
 
+func get_canvas_layer() -> CanvasLayer:
+	return _canvas_layer
 
-func _ready() -> void:
-	(ld_window.get_content_ref() as LDObjectBrowser).category_changed.connect(func(n: String) -> void:
-		ld_window.title = "Objects - " + (n if n else "All")
+
+func get_object_browser_window() -> LDWindow:
+	return _obj_browser_window
+
+
+func _on_ready() -> void:
+	(_obj_browser_window.get_content_ref() as LDObjectBrowser).category_changed.connect(func(n: String) -> void:
+		_obj_browser_window.title = "Objects - " + (n if n else "All")
 	)
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _on_input(_event: InputEvent) -> void:
+	pass
+
+
+func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
-		if event.keycode == KEY_SPACE and event.is_pressed():
-			if ld_window.visible:
-				ld_window.popout()
-				focus_window_open = false
-			else:
-				ld_window.popin()
-				focus_window_open = true
+		if event.keycode == KEY_SPACE and event.is_pressed() and not event.is_echo():
+			_toggle_object_browser()
+
+
+func _toggle_object_browser() -> void:
+	if get_object_browser_window().visible:
+		get_object_browser_window().popout()
+		remove_input_priority()
+	else:
+		get_object_browser_window().popin()
+		set_input_priority()

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bbf6gei1bmu46"]
 
-[ext_resource type="Script" uid="uid://xsj22tgidlld" path="res://level_designer/components/ui/window.gd" id="1_pd0vu"]
+[ext_resource type="Script" uid="uid://xsj22tgidlld" path="res://level_designer/components/ui/window/window.gd" id="1_pd0vu"]
 
 [node name="LDWindow" type="PanelContainer" unique_id=1964419486 node_paths=PackedStringArray("_content_container", "_title_label")]
 anchors_preset = 8

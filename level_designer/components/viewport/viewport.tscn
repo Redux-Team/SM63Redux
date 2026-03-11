@@ -16,16 +16,19 @@ shader_parameter/screen_size = Vector2(1152, 648)
 shader_parameter/grid_offset = Vector2(0, 0)
 shader_parameter/grid_fade_threshold = 1.0
 
-[node name="LDViewport" type="Node2D" unique_id=1651412205 node_paths=PackedStringArray("camera", "_layers_root", "_viewport_bg")]
+[node name="LDViewport" type="Node" unique_id=110890990 node_paths=PackedStringArray("camera", "_layers_root", "_viewport_bg", "_root")]
 script = ExtResource("1_urtws")
-camera = NodePath("LDCamera")
-_layers_root = NodePath("Layers")
-_viewport_bg = NodePath("BGCanvasLayer/ViewportBG")
+camera = NodePath("Root/LDCamera")
+_layers_root = NodePath("Root/Layers")
+_viewport_bg = NodePath("Root/BGCanvasLayer/ViewportBG")
+_root = NodePath("Root")
 
-[node name="BGCanvasLayer" type="CanvasLayer" parent="." unique_id=318284600]
+[node name="Root" type="Node2D" parent="." unique_id=959818305]
+
+[node name="BGCanvasLayer" type="CanvasLayer" parent="Root" unique_id=318284600]
 layer = -1
 
-[node name="ViewportBG" type="ColorRect" parent="BGCanvasLayer" unique_id=1665666835]
+[node name="ViewportBG" type="ColorRect" parent="Root/BGCanvasLayer" unique_id=1665666835]
 material = SubResource("ShaderMaterial_nmc72")
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,6 +38,6 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0.14901961)
 
-[node name="LDCamera" type="Camera2D" parent="." unique_id=121042519]
+[node name="LDCamera" type="Camera2D" parent="Root" unique_id=121042519]
 
-[node name="Layers" type="Node2D" parent="." unique_id=993688873]
+[node name="Layers" type="Node2D" parent="Root" unique_id=993688873]

@@ -1,7 +1,6 @@
 class_name LDWindow
 extends PanelContainer
 
-
 @export var title: String:
 	set(t):
 		if _title_label:

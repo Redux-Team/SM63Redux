@@ -1,14 +1,19 @@
 [gd_scene format=3 uid="uid://ckkp8b1r2e05r"]
 
 [ext_resource type="Script" uid="uid://dgvhq23sr5a3p" path="res://level_designer/components/ui/ui.gd" id="1_8w51u"]
-[ext_resource type="PackedScene" uid="uid://bbf6gei1bmu46" path="res://level_designer/components/ui/window.tscn" id="2_ms7r3"]
+[ext_resource type="PackedScene" uid="uid://bbf6gei1bmu46" path="res://level_designer/components/ui/window/window.tscn" id="2_ms7r3"]
+[ext_resource type="Script" uid="uid://xsj22tgidlld" path="res://level_designer/components/ui/window/window.gd" id="3_4nlpt"]
 [ext_resource type="PackedScene" uid="uid://bk2iromqs3siv" path="res://level_designer/components/ui/object_browser/object_browser.tscn" id="3_ms7r3"]
 
-[node name="LDUI" type="CanvasLayer" unique_id=783443360 node_paths=PackedStringArray("ld_window")]
+[node name="LDUI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_obj_browser_window", "_canvas_layer")]
 script = ExtResource("1_8w51u")
-ld_window = NodePath("LDWindow")
+_obj_browser_window = NodePath("CanvasLayer/ObjectBrowserWindow")
+_canvas_layer = NodePath("CanvasLayer")
 
-[node name="LDWindow" parent="." unique_id=1964419486 instance=ExtResource("2_ms7r3")]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=783443360]
+
+[node name="ObjectBrowserWindow" parent="CanvasLayer" unique_id=1964419486 instance=ExtResource("2_ms7r3")]
+script = ExtResource("3_4nlpt")
 title = "Objects - All"
 content = ExtResource("3_ms7r3")
 window_scale = Vector2(0.9, 0.9)

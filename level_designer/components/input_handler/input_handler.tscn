@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dbampqomd8jud"]
+
+[ext_resource type="Script" uid="uid://cpigpsvc707hs" path="res://level_designer/components/input_handler/input_handler.gd" id="1_bgyj5"]
+
+[node name="InputHandler" type="Node" unique_id=1890064972]
+script = ExtResource("1_bgyj5")

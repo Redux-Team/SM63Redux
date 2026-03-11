@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://drwhx30m8d8f7"]
+
+[ext_resource type="Script" uid="uid://ddiwtpjpciapl" path="res://level_designer/components/music_handler/music_handler.gd" id="1_rkng7"]
+
+[node name="LDMusicHandler" type="Node" unique_id=803692291 node_paths=PackedStringArray("audio_stream_player")]
+script = ExtResource("1_rkng7")
+audio_stream_player = NodePath("AudioStreamPlayer")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1360963884]

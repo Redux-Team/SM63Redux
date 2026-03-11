@@ -1,5 +1,5 @@
 class_name LDViewport
-extends Node2D
+extends LDComponent
 
 const LINEAR_PAN_SPEED: float = 10.0
 const CAMERA_ZOOM_MIN: Vector2 = Vector2(0.2, 0.2)
@@ -13,9 +13,9 @@ signal viewport_moved(pos: Vector2, zoom: Vector2)
 @export_group("Internal")
 @export var _layers_root: Node2D
 @export var _viewport_bg: ColorRect
+@export var _root: Node2D
 
 
-var viewport_focused: bool = true
 var allow_panning: bool = true
 var allow_zooming: bool = true
 var camera_position: Vector2 = Vector2.ZERO:
@@ -34,14 +34,14 @@ var is_mouse_panning: bool = false:
 		is_mouse_panning = mp
 
 
-func _ready() -> void:
+func _on_ready() -> void:
 	get_viewport().size_changed.connect(_on_viewport_moved)
 	viewport_moved.connect(_on_viewport_moved)
 	_on_viewport_moved(camera_position, camera_zoom)
 
 
 func _process(_delta: float) -> void:
-	if not viewport_focused:
+	if not has_input_priority():
 		return
 	
 	if allow_panning:
@@ -56,10 +56,7 @@ func _process(_delta: float) -> void:
 			refocus_camera(Vector2.INF, camera_zoom * 0.5, false)
 
 
-func _input(event: InputEvent) -> void:
-	if not viewport_focused:
-		return
-	
+func _on_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		match event.button_index:
 			# Mouse pan active/deactivate
@@ -70,9 +67,9 @@ func _input(event: InputEvent) -> void:
 			
 			# Mouse zooming
 			MOUSE_BUTTON_WHEEL_UP when allow_zooming:
-				_zoom_at(get_global_mouse_position(), 0.1)
+				_zoom_at(get_root().get_global_mouse_position(), 0.1)
 			MOUSE_BUTTON_WHEEL_DOWN when allow_zooming:
-				_zoom_at(get_global_mouse_position(), -0.1)
+				_zoom_at(get_root().get_global_mouse_position(), -0.1)
 	
 	# Mouse panning
 	if event is InputEventMouseMotion:
@@ -87,13 +84,17 @@ func _input(event: InputEvent) -> void:
 	
 	# Magnify Zoom
 	if event is InputEventMagnifyGesture and allow_zooming:
-		_zoom_at(get_global_mouse_position(), (event.factor - 1) * (camera_zoom.x / 4))
+		_zoom_at(_root.get_global_mouse_position(), (event.factor - 1) * (camera_zoom.x / 4))
 	
 	# Reset to origin
 	if event is InputEventKey:
 		# TODO: Replace with input action
 		if event.keycode == KEY_0 and event.is_pressed():
 			refocus_camera(Vector2(0, 0), Vector2.ONE)
+
+
+func get_root() -> Node2D:
+	return _root
 
 
 func add_object(object: Node2D, pos: Vector2i = Vector2i.ZERO, layer_id: String = "a0r0") -> void:
