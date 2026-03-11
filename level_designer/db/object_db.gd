@@ -56,7 +56,7 @@ func populate_objects(path: String) -> void:
 		elif file_name.ends_with(".tres"):
 			var res: Resource = load(full_path)
 			if res is GameObject:
-				var obj_path: String = full_path.trim_prefix(database_dir + "/").get_basename()
+				var obj_path: String = full_path.trim_prefix(database_dir.trim_suffix("/") + "/").trim_suffix(".tres")
 				var category_name: String = obj_path.get_slice("/", 0)
 				var obj: GameObject = res as GameObject
 				obj.id = file_name.get_basename()
