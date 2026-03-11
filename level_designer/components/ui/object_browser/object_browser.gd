@@ -2,6 +2,7 @@ class_name LDObjectBrowser
 extends Control
 
 signal category_changed(category_name: String)
+signal hide_request
 
 @export var groups_v_box: VBoxContainer
 @export var entities_button: Button
@@ -47,6 +48,7 @@ func populate_list(category: GameObject.ObjectCategory = GameObject.ObjectCatego
 
 func _on_entry_selected(obj: GameObject) -> void:
 	LD.get_object_handler().select_object(obj)
+	hide_request.emit()
 
 
 func _on_entities_category_toggled(toggled_on: bool) -> void:

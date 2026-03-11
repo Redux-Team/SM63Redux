@@ -1,6 +1,9 @@
 class_name LDWindow
 extends PanelContainer
 
+signal popped_in
+signal popped_out
+
 @export var title: String:
 	set(t):
 		if _title_label:
@@ -69,6 +72,8 @@ func popin() -> void:
 	
 	if _content_ref.has_method(&"_on_show"):
 		_content_ref.call(&"_on_show")
+	
+	popped_in.emit()
 
 @warning_ignore("native_method_override")
 func popout() -> void:
@@ -85,6 +90,8 @@ func popout() -> void:
 	
 	await tween.finished
 	visible = false
+	
+	popped_out.emit()
 	
 	if pop_out_free:
 		queue_free()
