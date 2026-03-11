@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dhyodlkfh60hd"]
+
+[ext_resource type="Texture2D" uid="uid://dvbkxl53m0k4c" path="res://assets/textures/object/props/ld_moving_platform.png" id="1_cfpvm"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/db/Objects/object.gd" id="2_kqnkv"]
+
+[resource]
+script = ExtResource("2_kqnkv")
+id = "moving_platform"
+category = 5
+category_string = "Props"
+subpath = "Gizmos/moving_platform"
+group_path = "Gizmos"
+ld_object_path = "Props/Gizmos/moving_platform"
+ld_preview_texture = ExtResource("1_cfpvm")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

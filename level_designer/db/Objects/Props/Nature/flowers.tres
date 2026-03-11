@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://oo8tdxwidlkl"]
+
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/db/Objects/object.gd" id="1_dicca"]
+
+[resource]
+script = ExtResource("1_dicca")
+id = "flowers"
+category = 5
+category_string = "Props"
+subpath = "Nature/flowers"
+group_path = "Nature"
+ld_object_path = "Props/Nature/flowers"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

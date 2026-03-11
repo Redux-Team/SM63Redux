@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cc85138ec57w4"]
+
+[ext_resource type="Texture2D" uid="uid://c4xyjodwni5a4" path="res://assets/textures/object/props/ld_fludd_box_turbo.png" id="1_1byij"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/db/Objects/object.gd" id="2_esgcf"]
+
+[resource]
+script = ExtResource("2_esgcf")
+id = "fludd_box_turbo"
+category = 1
+category_string = "Item"
+subpath = "FLUDD/fludd_box_turbo"
+group_path = "FLUDD"
+ld_object_path = "Item/FLUDD/fludd_box_turbo"
+ld_preview_texture = ExtResource("1_1byij")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"
