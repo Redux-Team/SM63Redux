@@ -1,8 +1,9 @@
 class_name LDObjectItemEntry
 extends Button
 
-signal entry_mouse_entered(obj: GameObject)
-signal entry_mouse_exited(obj: GameObject)
+signal entry_mouse_entered(ref: LDObjectItemEntry)
+signal entry_mouse_exited(ref: LDObjectItemEntry)
+signal entry_selected(ref: LDObjectItemEntry)
 
 @export var obj_ref: GameObject
 
@@ -20,9 +21,13 @@ func _ready() -> void:
 		item_id.show()
 
 
+func _pressed() -> void:
+	entry_selected.emit(self)
+
+
 func _on_mouse_entered() -> void:
-	entry_mouse_entered.emit(obj_ref)
+	entry_mouse_entered.emit(self)
 
 
 func _on_mouse_exited() -> void:
-	entry_mouse_exited.emit(obj_ref)
+	entry_mouse_exited.emit(self)

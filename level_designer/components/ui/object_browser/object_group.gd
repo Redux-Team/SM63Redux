@@ -1,6 +1,8 @@
 class_name LDObjectBrowserGroup
 extends PanelContainer
 
+signal entry_selected(obj: GameObject)
+
 @export var group_list: HFlowContainer
 @export var toggle_group_button: Button
 
@@ -18,7 +20,12 @@ func set_group_name(group_name: String) -> void:
 func add_entry(obj: GameObject) -> void:
 	var entry: LDObjectItemEntry = ITEM_ENTRY.instantiate()
 	entry.obj_ref = obj
+	entry.entry_selected.connect(_on_item_entry_selected, CONNECT_REFERENCE_COUNTED)
 	group_list.add_child(entry)
+
+
+func _on_item_entry_selected(ref: LDObjectItemEntry) -> void:
+	entry_selected.emit(ref.obj_ref)
 
 
 func _on_toggle_group_button_toggled(toggled_on: bool) -> void:

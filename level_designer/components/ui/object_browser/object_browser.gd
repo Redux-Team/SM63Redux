@@ -36,12 +36,18 @@ func populate_list(category: GameObject.ObjectCategory = GameObject.ObjectCatego
 			group_node.set_group_name(group_name)
 			groups.set(group_name, group_node)
 			groups_v_box.add_child(group_node)
+			group_node.entry_selected.connect(_on_entry_selected)
 		else:
 			group_node = groups.get(group_name)
 		
 		group_node.add_entry(obj)
 	
 	category_changed.emit(GameObject.get_category_name(category).to_pascal_case())
+
+
+func _on_entry_selected(obj: GameObject) -> void:
+	# TODO: this will not be how objects are added this is just for testing purposes
+	LD.get_editor_viewport().add_object(obj, LD.get_editor_viewport().camera_position)
 
 
 func _on_entities_category_toggled(toggled_on: bool) -> void:

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cyaqi6rgtwlm4"]
+
+[ext_resource type="Script" uid="uid://drrpapnrx5n8l" path="res://level_designer/objects/editor_object.gd" id="1_61u7u"]
+[ext_resource type="Texture2D" uid="uid://b127vhuh31i8r" path="res://meta/icon.png" id="2_tti55"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rdq85"]
+
+[node name="EditorObject" type="Node2D" unique_id=809820939]
+script = ExtResource("1_61u7u")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1413846219]
+texture = ExtResource("2_tti55")
+
+[node name="HoverArea" type="Area2D" parent="." unique_id=1636989140]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HoverArea" unique_id=781493166]
+shape = SubResource("RectangleShape2D_rdq85")
