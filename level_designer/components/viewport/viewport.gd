@@ -1,20 +1,23 @@
 class_name LDViewport
 extends LDComponent
 
+const SNAPPING_SIZE: int = 4
+
+## Emits when the viewport is moved and/or zoomed.
+signal viewport_moved(pos: Vector2, zoom: Vector2)
+signal viewport_input(event: InputEvent)
+
 const LINEAR_PAN_SPEED: float = 10.0
 const CAMERA_ZOOM_MIN: Vector2 = Vector2(0.2, 0.2)
 const CAMERA_ZOOM_MAX: Vector2 = Vector2(4.0, 4.0)
 
-## Emits when the viewport is moved and/or zoomed.
-signal viewport_moved(pos: Vector2, zoom: Vector2)
-
+static var _inst: LDViewport
 
 @export var camera: Camera2D
 @export_group("Internal")
 @export var _layers_root: Node2D
 @export var _viewport_bg: ColorRect
 @export var _root: Node2D
-
 
 var allow_panning: bool = true
 var allow_zooming: bool = true
@@ -35,9 +38,11 @@ var is_mouse_panning: bool = false:
 
 
 func _on_ready() -> void:
+	_inst = self
 	get_viewport().size_changed.connect(_on_viewport_moved)
 	viewport_moved.connect(_on_viewport_moved)
 	_on_viewport_moved(camera_position, camera_zoom)
+	set_input_priority()
 
 
 func _process(_delta: float) -> void:
@@ -57,6 +62,7 @@ func _process(_delta: float) -> void:
 
 
 func _on_input(event: InputEvent) -> void:
+	viewport_input.emit(event)
 	if event is InputEventMouseButton:
 		match event.button_index:
 			# Mouse pan active/deactivate
@@ -152,6 +158,10 @@ func refocus_camera(pos: Vector2 = Vector2.INF, zoom: Vector2 = Vector2.INF, enf
 	allow_zooming = true
 	is_refocusing = false
 	viewport_moved.emit(camera_position, camera_zoom)
+
+
+static func _get_instance() -> LDViewport:
+	return _inst
 
 
 func _get_or_create_abs_layer(abs_id: String, absolute_index: int) -> LDLayer:

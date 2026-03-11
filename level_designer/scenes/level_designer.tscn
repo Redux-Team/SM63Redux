@@ -4,16 +4,24 @@
 [ext_resource type="PackedScene" uid="uid://drwhx30m8d8f7" path="res://level_designer/components/music_handler/music_handler.tscn" id="2_32xam"]
 [ext_resource type="PackedScene" uid="uid://dbampqomd8jud" path="res://level_designer/components/input_handler/input_handler.tscn" id="3_i1rtt"]
 [ext_resource type="PackedScene" uid="uid://ckkp8b1r2e05r" path="res://level_designer/components/ui/ui.tscn" id="3_ihrx4"]
+[ext_resource type="PackedScene" uid="uid://dkxy8l3msp4nq" path="res://level_designer/components/tool_handler/tool_handler.tscn" id="4_gubma"]
 [ext_resource type="PackedScene" uid="uid://b5g1nlrq28s2j" path="res://level_designer/components/viewport/viewport.tscn" id="4_i1rtt"]
+[ext_resource type="PackedScene" uid="uid://bn3grnflnno82" path="res://level_designer/components/object_handler/object_handler.tscn" id="4_whrr0"]
 
-[node name="LevelDesigner" type="Node" unique_id=204056479 node_paths=PackedStringArray("_ld_input_handler", "_ld_music_handler", "_ld_viewport", "_ld_ui")]
+[node name="LevelDesigner" type="Node" unique_id=204056479 node_paths=PackedStringArray("_ld_input_handler", "_ld_object_handler", "_ld_tool_handler", "_ld_music_handler", "_ld_viewport", "_ld_ui")]
 script = ExtResource("1_n6dip")
 _ld_input_handler = NodePath("InputHandler")
+_ld_object_handler = NodePath("ObjectHandler")
+_ld_tool_handler = NodePath("ToolHandler")
 _ld_music_handler = NodePath("MusicHandler")
 _ld_viewport = NodePath("LDViewport")
 _ld_ui = NodePath("LDUI")
 
 [node name="InputHandler" parent="." unique_id=1890064972 instance=ExtResource("3_i1rtt")]
+
+[node name="ObjectHandler" parent="." unique_id=2087002127 instance=ExtResource("4_whrr0")]
+
+[node name="ToolHandler" parent="." unique_id=1124731823 instance=ExtResource("4_gubma")]
 
 [node name="MusicHandler" parent="." unique_id=803692291 instance=ExtResource("2_32xam")]
 

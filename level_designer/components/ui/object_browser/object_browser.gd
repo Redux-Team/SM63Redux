@@ -46,8 +46,7 @@ func populate_list(category: GameObject.ObjectCategory = GameObject.ObjectCatego
 
 
 func _on_entry_selected(obj: GameObject) -> void:
-	# TODO: this will not be how objects are added this is just for testing purposes
-	LD.get_editor_viewport().add_object(obj, LD.get_editor_viewport().camera_position)
+	LD.get_object_handler().select_object(obj)
 
 
 func _on_entities_category_toggled(toggled_on: bool) -> void:

@@ -5,6 +5,8 @@ static var _inst: LD
 
 @export_group("Components", "_ld_")
 @export var _ld_input_handler: LDInputHandler
+@export var _ld_object_handler: LDObjectHandler
+@export var _ld_tool_handler: LDToolHandler
 @export var _ld_music_handler: LDMusicHandler
 @export var _ld_viewport: LDViewport
 @export var _ld_ui: LDUI
@@ -16,6 +18,14 @@ static func get_instance() -> LD:
 
 static func get_input_handler() -> LDInputHandler:
 	return get_instance()._ld_input_handler
+
+
+static func get_object_handler() -> LDObjectHandler:
+	return get_instance()._ld_object_handler
+
+
+static func get_tool_handler() -> LDToolHandler:
+	return get_instance()._ld_tool_handler
 
 
 static func get_music_handler() -> LDMusicHandler:
@@ -30,6 +40,9 @@ static func get_ui() -> LDUI:
 	return get_instance()._ld_ui
 
 
-func _ready() -> void:
+static func is_ready() -> bool:
+	return is_instance_valid(_inst)
+
+
+func _init() -> void:
 	_inst = self
-	get_editor_viewport().set_input_priority()

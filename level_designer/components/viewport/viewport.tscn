@@ -16,12 +16,13 @@ shader_parameter/screen_size = Vector2(1152, 648)
 shader_parameter/grid_offset = Vector2(0, 0)
 shader_parameter/grid_fade_threshold = 1.0
 
-[node name="LDViewport" type="Node" unique_id=110890990 node_paths=PackedStringArray("camera", "_layers_root", "_viewport_bg", "_root")]
+[node name="LDViewport" type="Node" unique_id=110890990 node_paths=PackedStringArray("camera", "_layers_root", "_viewport_bg", "_root", "_tool_handler")]
 script = ExtResource("1_urtws")
 camera = NodePath("Root/LDCamera")
 _layers_root = NodePath("Root/Layers")
 _viewport_bg = NodePath("Root/BGCanvasLayer/ViewportBG")
 _root = NodePath("Root")
+_tool_handler = NodePath("")
 
 [node name="Root" type="Node2D" parent="." unique_id=959818305]
 

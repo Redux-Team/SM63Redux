@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bn3grnflnno82"]
+
+[ext_resource type="Script" uid="uid://bghrv5iepuld4" path="res://level_designer/components/object_handler/object_handler.gd" id="1_m8bd4"]
+
+[node name="ObjectHandler" type="Node" unique_id=2087002127]
+script = ExtResource("1_m8bd4")
+metadata/_custom_type_script = "uid://btbvvqx7hybu5"

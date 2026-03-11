@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dkxy8l3msp4nq"]
+
+[ext_resource type="Script" uid="uid://cy546polhwxwa" path="res://level_designer/components/tool_handler/tool_handler.gd" id="1_0flew"]
+[ext_resource type="Script" uid="uid://b6v5g2fo03urf" path="res://level_designer/components/tool_handler/tools/pencil_tool.gd" id="2_mx2vl"]
+
+[node name="ToolHandler" type="Node" unique_id=1124731823]
+script = ExtResource("1_0flew")
+
+[node name="PencilTool" type="Node" parent="." unique_id=1716187589]
+script = ExtResource("2_mx2vl")
