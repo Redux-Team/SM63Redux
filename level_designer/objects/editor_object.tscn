@@ -5,13 +5,22 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rdq85"]
 
-[node name="EditorObject" type="Node2D" unique_id=809820939]
+[node name="EditorObject" type="Node2D" unique_id=809820939 node_paths=PackedStringArray("object_sprite")]
 script = ExtResource("1_61u7u")
+object_name = null
+placement_rules = null
+is_preview = null
+default_texture = null
+texture_atlas = Dictionary[String, Texture2D]({})
+properties = []
+object_sprite = NodePath("Singular/ObjectSprite")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1413846219]
+[node name="Singular" type="Node2D" parent="." unique_id=1180705154]
+
+[node name="ObjectSprite" type="Sprite2D" parent="Singular" unique_id=1413846219]
 texture = ExtResource("2_tti55")
 
-[node name="HoverArea" type="Area2D" parent="." unique_id=1636989140]
+[node name="ItemArea" type="Area2D" parent="." unique_id=1636989140]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HoverArea" unique_id=781493166]
+[node name="ItemRect" type="CollisionShape2D" parent="ItemArea" unique_id=781493166]
 shape = SubResource("RectangleShape2D_rdq85")
