@@ -103,13 +103,11 @@ func get_root() -> Node2D:
 	return _root
 
 
-func add_object(object: GameObject, pos: Vector2i = Vector2i.ZERO, layer_id: String = "a0r0") -> void:
+func add_object(object: LDObject, pos: Vector2i = Vector2i.ZERO, layer_id: String = "a0r0") -> void:
 	var layer: LDLayer = get_or_create_layer(layer_id)
 	
-	var sprite: Sprite2D = Sprite2D.new()
-	sprite.texture = object.ld_preview_texture
-	layer.add_child(sprite)
-	sprite.position = pos
+	layer.add_child(object)
+	object.position = pos
 
 
 func get_or_create_layer(layer_id: String) -> LDLayer:

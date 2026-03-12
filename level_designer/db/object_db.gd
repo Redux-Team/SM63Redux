@@ -30,7 +30,6 @@ static func get_db() -> GameObjectDB:
 
 func get_from_category(cat: GameObject.ObjectCategory) -> Array[GameObject]:
 	var list: Array[GameObject]
-	
 	if cat == GameObject.ObjectCategory.ALL:
 		return objects.values()
 	

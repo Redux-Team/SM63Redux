@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://ya5iq8bilpi"]
+
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/db/GameObject/game_object.gd" id="1_aommt"]
+
+[resource]
+script = ExtResource("1_aommt")
+id = "goonie"
+category_string = "Entity"
+subpath = "Passive/goonie"
+group_path = "Passive"
+ld_object_path = "Entity/Passive/goonie"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

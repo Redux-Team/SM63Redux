@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://c5svhilmprh7p"]
+
+[ext_resource type="Script" uid="uid://drrpapnrx5n8l" path="res://level_designer/db/LDObject/ld_object.gd" id="1_mbyu4"]
+[ext_resource type="Texture2D" uid="uid://eg3jm1ifajro" path="res://assets/textures/object/props/platform/log_static.png" id="2_mbyu4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ycd4g"]
+size = Vector2(16, 22)
+
+[node name="LogStatic" type="Node2D" unique_id=645113501 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+script = ExtResource("1_mbyu4")
+sprite_ref = NodePath("Sprite")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+metadata/_custom_type_script = "uid://drrpapnrx5n8l"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1626177154]
+texture = ExtResource("2_mbyu4")
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=1099242803]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=763031092]
+shape = SubResource("RectangleShape2D_ycd4g")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=1571920310]

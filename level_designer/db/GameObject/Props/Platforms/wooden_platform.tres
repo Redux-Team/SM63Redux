@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cnpufyaj5itij"]
+
+[ext_resource type="Texture2D" uid="uid://cpce6xc5ll4o8" path="res://assets/textures/object/props/platform/ld_wooden_platform.png" id="1_lkw2d"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/db/GameObject/game_object.gd" id="2_x06bp"]
+
+[resource]
+script = ExtResource("2_x06bp")
+id = "wooden_platform"
+category = 5
+category_string = "Props"
+subpath = "Platforms/wooden_platform"
+group_path = "Platforms"
+ld_object_path = "Props/Platforms/wooden_platform"
+ld_entry_texture = ExtResource("1_lkw2d")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

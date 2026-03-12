@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bywn2c1kw0pxn"]
+
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/db/GameObject/game_object.gd" id="1_ai7vr"]
+
+[resource]
+script = ExtResource("1_ai7vr")
+id = "rock_small"
+category = 5
+category_string = "Props"
+subpath = "Nature/rock_small"
+group_path = "Nature"
+ld_object_path = "Props/Nature/rock_small"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"
