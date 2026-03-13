@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://8h1itr5llov7"]
+
+[ext_resource type="Script" uid="uid://ds5okef4svxb0" path="res://level_designer/components/history_handler/history_handler.gd" id="1_qf6ah"]
+
+[node name="HistoryHandler" type="Node" unique_id=1463716079]
+script = ExtResource("1_qf6ah")

@@ -1,6 +1,7 @@
 class_name LD
 extends Node
 
+
 static var _inst: LD
 
 @export_group("Components", "_ld_")
@@ -8,6 +9,7 @@ static var _inst: LD
 @export var _ld_object_handler: LDObjectHandler
 @export var _ld_tool_handler: LDToolHandler
 @export var _ld_music_handler: LDMusicHandler
+@export var _ld_history_handler: LDHistoryHandler
 @export var _ld_viewport: LDViewport
 @export var _ld_ui: LDUI
 
@@ -38,6 +40,10 @@ static func get_editor_viewport() -> LDViewport:
 
 static func get_ui() -> LDUI:
 	return get_instance()._ld_ui
+
+
+static func get_history_handler() -> LDHistoryHandler:
+	return get_instance()._ld_history_handler
 
 
 static func is_ready() -> bool:

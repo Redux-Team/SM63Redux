@@ -125,8 +125,28 @@ func _add_stroke_preview(pos: Vector2) -> void:
 
 
 func _commit_stroke() -> void:
+	if _stroke.is_empty():
+		return
+	
 	for obj: LDObject in _stroke:
 		obj.place()
+	
+	var placed: Array[LDObject] = _stroke.duplicate()
+	var history: LDHistoryHandler = LD.get_history_handler()
+	
+	history.begin_action("Place Objects")
+	history.add_do(func() -> void:
+		for obj: LDObject in placed:
+			if is_instance_valid(obj):
+				obj.show()
+	)
+	history.add_undo(func() -> void:
+		for obj: LDObject in placed:
+			if is_instance_valid(obj):
+				obj.hide()
+	)
+	history.commit_action()
+	
 	_stroke.clear()
 	_column_objects.clear()
 	_last_cell_y.clear()

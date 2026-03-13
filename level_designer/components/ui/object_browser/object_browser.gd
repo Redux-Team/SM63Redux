@@ -48,6 +48,7 @@ func populate_list(category: GameObject.ObjectCategory = GameObject.ObjectCatego
 
 func _on_entry_selected(obj: GameObject) -> void:
 	LD.get_object_handler().select_object(obj)
+	LD.get_tool_handler().select_tool("Brush")
 	hide_request.emit()
 
 
