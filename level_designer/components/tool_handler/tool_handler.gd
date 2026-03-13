@@ -15,10 +15,16 @@ func get_tool_list() -> Array[LDTool]:
 
 
 func select_tool(tool_name_or_ref: Variant) -> void:
+	if _selected_tool:
+		_selected_tool._on_disable()
+	
 	if tool_name_or_ref is String:
 		_selected_tool = _bound_tools.get(tool_name_or_ref.to_lower())
 	elif tool_name_or_ref is LDTool and tool_name_or_ref in _bound_tools.values():
 		_selected_tool = tool_name_or_ref
+	
+	if _selected_tool:
+		_selected_tool._on_enable()
 
 
 func add_tool(tool: LDTool) -> void:

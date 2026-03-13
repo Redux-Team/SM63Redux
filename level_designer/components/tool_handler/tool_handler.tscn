@@ -1,10 +1,19 @@
 [gd_scene format=3 uid="uid://dkxy8l3msp4nq"]
 
 [ext_resource type="Script" uid="uid://cy546polhwxwa" path="res://level_designer/components/tool_handler/tool_handler.gd" id="1_0flew"]
+[ext_resource type="Script" uid="uid://cwaswaj17eo0e" path="res://level_designer/components/tool_handler/tools/select_tool.gd" id="2_004oe"]
 [ext_resource type="Script" uid="uid://b6v5g2fo03urf" path="res://level_designer/components/tool_handler/tools/brush_tool.gd" id="2_mx2vl"]
+[ext_resource type="Script" uid="uid://dp3swfeh534dw" path="res://level_designer/components/tool_handler/tools/select_shortcut_handler.gd" id="3_004oe"]
 
 [node name="ToolHandler" type="Node" unique_id=1124731823]
 script = ExtResource("1_0flew")
+
+[node name="SelectTool" type="Node" parent="." unique_id=1560435247 node_paths=PackedStringArray("shortcut_handler")]
+script = ExtResource("2_004oe")
+shortcut_handler = NodePath("ShortcutHandler")
+
+[node name="ShortcutHandler" type="Node" parent="SelectTool" unique_id=1656700236]
+script = ExtResource("3_004oe")
 
 [node name="BrushTool" type="Node" parent="." unique_id=1716187589]
 script = ExtResource("2_mx2vl")

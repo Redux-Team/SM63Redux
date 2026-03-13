@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bogqpam4pqfgi"]
 
+[ext_resource type="PackedScene" uid="uid://dau7wqu8mh6uk" path="res://level_designer/db/LDObject/Props/Platforms/log_falling.tscn" id="1_jdj4q"]
 [ext_resource type="Texture2D" uid="uid://daac41f3cff3v" path="res://assets/textures/object/props/platform/ld_log_falling.png" id="1_wgfoq"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/db/GameObject/game_object.gd" id="2_v6mas"]
 
@@ -13,4 +14,5 @@ group_path = "Platforms"
 name_override = "Falling Log"
 ld_object_path = "Props/Platforms/log_falling"
 ld_entry_texture = ExtResource("1_wgfoq")
+ld_editor_instance = ExtResource("1_jdj4q")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

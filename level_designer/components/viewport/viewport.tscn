@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://b5g1nlrq28s2j"]
 
 [ext_resource type="Script" uid="uid://b6vwygexlf4ht" path="res://level_designer/components/viewport/viewport.gd" id="1_urtws"]
+[ext_resource type="Script" uid="uid://bkvfc547p3vis" path="res://level_designer/components/viewport/root/viewport_root.gd" id="2_itnej"]
 [ext_resource type="Shader" uid="uid://d4m57jrrlul8l" path="res://core/shader/ld_viewport_bg.gdshader" id="2_vq6wp"]
 [ext_resource type="Texture2D" uid="uid://crqnqwpps0m8c" path="res://assets/textures/level_designer/viewport/bg_texture.png" id="3_nmc72"]
+[ext_resource type="Script" uid="uid://bemjucm1rn4g1" path="res://level_designer/components/viewport/selection_overlay/selection_overlay.gd" id="5_pf3pc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nmc72"]
 shader = ExtResource("2_vq6wp")
@@ -16,15 +18,16 @@ shader_parameter/screen_size = Vector2(1152, 648)
 shader_parameter/grid_offset = Vector2(0, 0)
 shader_parameter/grid_fade_threshold = 1.0
 
-[node name="LDViewport" type="Node" unique_id=110890990 node_paths=PackedStringArray("camera", "_layers_root", "_viewport_bg", "_root", "_tool_handler")]
+[node name="LDViewport" type="Node" unique_id=110890990 node_paths=PackedStringArray("camera", "_layers_root", "_viewport_bg", "_root", "_selection_overlay")]
 script = ExtResource("1_urtws")
 camera = NodePath("Root/LDCamera")
 _layers_root = NodePath("Root/Layers")
 _viewport_bg = NodePath("Root/BGCanvasLayer/ViewportBG")
 _root = NodePath("Root")
-_tool_handler = NodePath("")
+_selection_overlay = NodePath("CanvasLayer/SelectionOverlay")
 
 [node name="Root" type="Node2D" parent="." unique_id=959818305]
+script = ExtResource("2_itnej")
 
 [node name="BGCanvasLayer" type="CanvasLayer" parent="Root" unique_id=318284600]
 layer = -1
@@ -42,3 +45,13 @@ color = Color(1, 1, 1, 0.14901961)
 [node name="LDCamera" type="Camera2D" parent="Root" unique_id=121042519]
 
 [node name="Layers" type="Node2D" parent="Root" unique_id=993688873]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1127959846]
+
+[node name="SelectionOverlay" type="Control" parent="CanvasLayer" unique_id=237957882]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+script = ExtResource("5_pf3pc")

@@ -1,11 +1,15 @@
+@warning_ignore_start("unused_signal")
 class_name LDViewport
 extends LDComponent
 
+
 const SNAPPING_SIZE: int = 4
 
-## Emits when the viewport is moved and/or zoomed.
 signal viewport_moved(pos: Vector2, zoom: Vector2)
 signal viewport_input(event: InputEvent)
+signal selection_changed(objects: Array[LDObject])
+signal object_hovered(object: LDObject)
+signal object_unhovered(object: LDObject)
 
 const LINEAR_PAN_SPEED: float = 10.0
 const CAMERA_ZOOM_MIN: Vector2 = Vector2(0.2, 0.2)
@@ -17,7 +21,8 @@ static var _inst: LDViewport
 @export_group("Internal")
 @export var _layers_root: Node2D
 @export var _viewport_bg: ColorRect
-@export var _root: Node2D
+@export var _root: LDViewportRoot
+@export var _selection_overlay: Control
 
 var allow_panning: bool = true
 var allow_zooming: bool = true
@@ -35,6 +40,8 @@ var is_mouse_panning: bool = false:
 	set(mp):
 		Input.set_default_cursor_shape(Input.CURSOR_MOVE if mp else Input.CURSOR_ARROW)
 		is_mouse_panning = mp
+
+var _selected_objects: Array[LDObject] = []
 
 
 func _on_ready() -> void:
@@ -55,57 +62,99 @@ func _process(_delta: float) -> void:
 		pan.y = Input.get_axis(&"editor_pan_up", &"editor_pan_down")
 		camera_position += (pan * LINEAR_PAN_SPEED) / camera_zoom
 		viewport_moved.emit(camera_position, camera_zoom)
-		if Input.is_action_just_pressed(&"editor_zoom_in"): 
+		if Input.is_action_just_pressed(&"editor_zoom_in"):
 			refocus_camera(Vector2.INF, camera_zoom * 2, false)
-		if Input.is_action_just_pressed(&"editor_zoom_out"): 
+		if Input.is_action_just_pressed(&"editor_zoom_out"):
 			refocus_camera(Vector2.INF, camera_zoom * 0.5, false)
 
 
 func _on_input(event: InputEvent) -> void:
 	viewport_input.emit(event)
+	
 	if event is InputEventMouseButton:
 		match event.button_index:
-			# Mouse pan active/deactivate
 			MOUSE_BUTTON_MIDDLE when event.is_pressed():
 				is_mouse_panning = true
 			MOUSE_BUTTON_MIDDLE when event.is_released():
 				is_mouse_panning = false
-			
-			# Mouse zooming
 			MOUSE_BUTTON_WHEEL_UP when allow_zooming:
 				_zoom_at(get_root().get_global_mouse_position(), 0.1)
 			MOUSE_BUTTON_WHEEL_DOWN when allow_zooming:
 				_zoom_at(get_root().get_global_mouse_position(), -0.1)
 	
-	# Mouse panning
 	if event is InputEventMouseMotion:
-		if is_mouse_panning and allow_panning: 
+		if is_mouse_panning and allow_panning:
 			camera_position -= (event.relative / camera_zoom)
 			viewport_moved.emit(camera_position, camera_zoom)
 	
-	# Screen panning
 	if event is InputEventPanGesture and allow_panning:
 		camera_position += (event.delta / camera_zoom) * 5
 		viewport_moved.emit(camera_position, camera_zoom)
 	
-	# Magnify Zoom
 	if event is InputEventMagnifyGesture and allow_zooming:
 		_zoom_at(_root.get_global_mouse_position(), (event.factor - 1) * (camera_zoom.x / 4))
 	
-	# Reset to origin
-	if event is InputEventKey:
-		# TODO: Replace with input action
-		if event.keycode == KEY_0 and event.is_pressed():
-			refocus_camera(Vector2(0, 0), Vector2.ONE)
+	if event is InputEventKey and event.is_pressed() and not event.echo:
+		match event.keycode:
+			KEY_0:
+				refocus_camera(Vector2(0, 0), Vector2.ONE)
+			KEY_B:
+				LD.get_tool_handler().select_tool("brush")
+				print("brush")
+			KEY_Q:
+				LD.get_tool_handler().select_tool("select")
+				print("select")
 
 
-func get_root() -> Node2D:
+func get_root() -> LDViewportRoot:
 	return _root
+
+
+func get_selection_overlay() -> Control:
+	return _selection_overlay
+
+
+func get_selected_objects() -> Array[LDObject]:
+	return _selected_objects
+
+
+func set_selected_objects(objects: Array[LDObject]) -> void:
+	for obj: LDObject in _selected_objects:
+		if obj and not obj.is_queued_for_deletion():
+			obj.set_selection_state(LDObject.SelectionState.HIDDEN)
+	
+	_selected_objects = objects
+	
+	for obj: LDObject in _selected_objects:
+		obj.set_selection_state(LDObject.SelectionState.SELECTED)
+	
+	selection_changed.emit(_selected_objects)
+
+
+func clear_selection() -> void:
+	set_selected_objects([])
+
+
+func get_all_objects() -> Array[LDObject]:
+	var result: Array[LDObject] = []
+	for abs_layer: Node in _layers_root.get_children():
+		for rel_layer: Node in abs_layer.get_children():
+			for child: Node in rel_layer.get_children():
+				var obj: LDObject = child as LDObject
+				if obj:
+					result.append(obj)
+	return result
+
+
+func world_rect_to_screen(world_pos: Vector2, world_size: Vector2) -> Rect2:
+	var xform: Transform2D = get_viewport().get_canvas_transform() * _root.get_global_transform()
+	var top_left: Vector2 = xform * world_pos
+	var bottom_right: Vector2 = xform * (world_pos + world_size)
+	return Rect2(top_left, bottom_right - top_left).abs()
 
 
 func add_object(object: LDObject, pos: Vector2i = Vector2i.ZERO, layer_id: String = "a0r0") -> void:
 	var layer: LDLayer = get_or_create_layer(layer_id)
-	
 	layer.add_child(object)
 	object.position = pos
 

@@ -25,7 +25,23 @@ func _on_ready() -> void:
 		_on_object_changed(LD.get_object_handler().get_selected_object())
 
 
+func _on_enable() -> void:
+	var obj: GameObject = LD.get_object_handler().get_selected_object()
+	if obj:
+		_spawn_cursor(obj)
+
+
+func _on_disable() -> void:
+	if _preview_cursor:
+		_preview_cursor.queue_free()
+		_preview_cursor = null
+	_clear_stroke()
+
+
 func _on_viewport_input(event: InputEvent) -> void:
+	if not is_active():
+		return
+	
 	if event is InputEventMouseMotion:
 		var pos: Vector2 = _get_snapped_mouse_pos()
 		if _preview_cursor:
@@ -55,7 +71,10 @@ func _on_viewport_moved(_pos: Vector2, _zoom: Vector2) -> void:
 func _on_object_changed(obj: GameObject) -> void:
 	if _preview_cursor:
 		_preview_cursor.queue_free()
+		_preview_cursor = null
 	_clear_stroke()
+	if not is_active():
+		return
 	_spawn_cursor(obj)
 
 

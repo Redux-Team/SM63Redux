@@ -36,3 +36,7 @@ func get_tool_handler() -> LDToolHandler:
 
 func get_editor_viewport() -> LDViewport:
 	return LDViewport._get_instance()
+
+
+func is_active() -> bool:
+	return get_tool_handler().get_selected_tool() == self

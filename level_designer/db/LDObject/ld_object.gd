@@ -4,14 +4,13 @@ class_name LDObject
 extends Node2D
 
 
-enum PlacementRules {
-	PLACE,
-	EXPAND_CENTER_X,
-	EXPAND_EDGES_X,
+enum SelectionState {
+	HIDDEN,
+	HOVERED,
+	SELECTED,
 }
 
 
-@export var placement_rules: PlacementRules = PlacementRules.PLACE
 @export var is_preview: bool = true:
 	set(v):
 		is_preview = v
@@ -33,6 +32,7 @@ enum PlacementRules {
 			sprite_ref.name = "Sprite"
 			add_child(sprite_ref)
 			sprite_ref.owner = self
+			_setup_sprite_material(sprite_ref)
 		
 		if not editor_shape_area:
 			editor_shape_area = Area2D.new()
@@ -57,17 +57,11 @@ enum PlacementRules {
 
 
 func _on_preview() -> void:
-	modulate = Color(1.0, 1.0, 1.0, 0.6)
+	set_shader_modulate(Color(1.0, 1.0, 1.0, 0.6))
 
 
 func _on_place() -> void:
-	modulate = Color.WHITE
-
-
-## Override to define custom placement behavior [b]before[/b] the object is placed.
-## Return true when finished.
-func _placement_rules() -> bool:
-	return true
+	set_shader_modulate(Color.WHITE)
 
 
 ## Behavior for when the placement is confirmed.
@@ -75,12 +69,30 @@ func place() -> void:
 	is_preview = false
 
 
-## Override to define hover behavior.
-func _hover_rules() -> void:
-	pass
+func set_selection_state(state: SelectionState) -> void:
+	_set_shader_param(&"state", state)
+
+
+func set_shader_modulate(color: Color) -> void:
+	_set_shader_param(&"custom_modulate", color)
 
 
 func get_stamp_size() -> Vector2:
 	if not editor_placement_rect:
 		return Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE)
 	return (editor_placement_rect.shape as RectangleShape2D).get_rect().size
+
+
+func _set_shader_param(param: StringName, value: Variant) -> void:
+	if not sprite_ref:
+		return
+	var mat: ShaderMaterial = sprite_ref.material as ShaderMaterial
+	if not mat:
+		return
+	mat.set_shader_parameter(param, value)
+
+
+func _setup_sprite_material(s: Sprite2D) -> void:
+	var mat: ShaderMaterial = ShaderMaterial.new()
+	mat.shader = load("uid://dxlbj210tsi10")
+	s.material = mat
