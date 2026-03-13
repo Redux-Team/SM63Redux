@@ -95,4 +95,5 @@ func _set_shader_param(param: StringName, value: Variant) -> void:
 func _setup_sprite_material(s: Sprite2D) -> void:
 	var mat: ShaderMaterial = ShaderMaterial.new()
 	mat.shader = load("uid://dxlbj210tsi10")
+	mat.resource_local_to_scene = true
 	s.material = mat
