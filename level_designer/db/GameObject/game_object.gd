@@ -35,6 +35,7 @@ enum ObjectCategory {
 @export_storage var ld_object_path: String
 @export var ld_entry_texture: Texture2D
 @export var ld_editor_instance: PackedScene
+@export var ld_properties: Array[LDProperty]
 @export var ld_indexable: bool = true
 
 @export_group("Game", "game_")

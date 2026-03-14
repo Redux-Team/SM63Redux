@@ -25,6 +25,9 @@ enum SelectionState {
 @export var editor_placement_rect: CollisionShape2D
 @export var origin_marker: Marker2D
 
+var _properties: Array[LDProperty] = []
+var _property_values: Dictionary[StringName, Variant] = {}
+
 @export_tool_button("Create Editor Props") var _create_editor_props: Callable:
 	get: return func() -> void:
 		if not sprite_ref:
@@ -67,6 +70,39 @@ func _on_place() -> void:
 ## Behavior for when the placement is confirmed.
 func place() -> void:
 	is_preview = false
+
+
+
+func init_properties(properties: Array[LDProperty]) -> void:
+	_properties = properties
+	for prop: LDProperty in _properties:
+		_property_values[prop.key] = prop.default_value
+		_apply_property(prop.key, prop.default_value)
+
+
+func set_property(key: StringName, value: Variant) -> void:
+	_property_values[key] = value
+	_apply_property(key, value)
+	_on_property_changed(key, value)
+
+
+func get_property(key: StringName) -> Variant:
+	return _property_values.get(key)
+
+
+func get_property_values() -> Dictionary[StringName, Variant]:
+	return _property_values.duplicate()
+
+@warning_ignore("unused_parameter")
+func _on_property_changed(key: StringName, value: Variant) -> void:
+	pass
+
+
+func _apply_property(key: StringName, value: Variant) -> void:
+	for prop: LDProperty in _properties:
+		if prop.key == key:
+			prop.apply(self, value)
+			return
 
 
 func set_selection_state(state: SelectionState) -> void:

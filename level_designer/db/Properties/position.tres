@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LDPropertyPosition" format=3 uid="uid://eub4j18f30lj"]
+
+[ext_resource type="Script" uid="uid://bbqpe78tlk6yc" path="res://level_designer/db/Properties/position.gd" id="1_rdpnd"]
+
+[resource]
+script = ExtResource("1_rdpnd")
+key = &"position"
+label = "Position"
+type = 4
+default_value = Vector2(0, 0)
+metadata/_custom_type_script = "uid://bbqpe78tlk6yc"
