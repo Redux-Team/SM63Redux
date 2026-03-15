@@ -20,9 +20,11 @@ _title_label = NodePath("VBoxContainer/MarginContainer/VBoxContainer/TitleLabel"
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=551025918]
 clip_contents = true
 layout_mode = 2
+size_flags_vertical = 4
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=47268515]
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 8
@@ -30,6 +32,7 @@ theme_override_constants/margin_bottom = 8
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=514969343]
 layout_mode = 2
+size_flags_vertical = 4
 
 [node name="TitleLabel" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=719007059]
 layout_mode = 2
@@ -38,11 +41,11 @@ horizontal_alignment = 1
 
 [node name="ContentContainer" type="PanelContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=329307729]
 layout_mode = 2
+size_flags_vertical = 0
 
 [node name="Control" type="Control" parent="." unique_id=636116786]
 layout_mode = 2
 mouse_filter = 2
-metadata/_edit_lock_ = true
 
 [node name="CloseButton" type="Button" parent="Control" unique_id=1205102099]
 layout_mode = 1

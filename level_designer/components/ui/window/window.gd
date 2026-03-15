@@ -73,6 +73,10 @@ func popin() -> void:
 	if _content_ref.has_method(&"_on_show"):
 		_content_ref.call(&"_on_show")
 	
+	size = Vector2.ZERO
+	await get_tree().process_frame
+	position = (get_viewport().get_visible_rect().size / 2) - (size / 2)
+	
 	popped_in.emit()
 
 @warning_ignore("native_method_override")
