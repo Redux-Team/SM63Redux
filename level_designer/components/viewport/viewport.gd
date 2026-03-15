@@ -4,12 +4,18 @@ extends LDComponent
 
 
 const SNAPPING_SIZE: int = 4
+const HOLD_THRESHOLD_SEC: float = 0.25
+const MOVE_THRESHOLD: float = 8.0
 
 signal viewport_moved(pos: Vector2, zoom: Vector2)
 signal viewport_input(event: InputEvent)
 signal selection_changed(objects: Array[LDObject])
 signal object_hovered(object: LDObject)
 signal object_unhovered(object: LDObject)
+signal touch_tap(pos: Vector2)
+signal touch_swipe_began(pos: Vector2)
+signal touch_swipe_moved(pos: Vector2)
+signal touch_swipe_ended
 
 const LINEAR_PAN_SPEED: float = 10.0
 const CAMERA_ZOOM_MIN: Vector2 = Vector2(0.2, 0.2)
@@ -22,7 +28,7 @@ static var _inst: LDViewport
 @export var _layers_root: Node2D
 @export var _viewport_bg: ColorRect
 @export var _root: LDViewportRoot
-@export var _selection_overlay: Control
+@export var _selection_overlay: LDSelectionOverlay
 
 var allow_panning: bool = true
 var allow_zooming: bool = true
@@ -43,6 +49,12 @@ var is_mouse_panning: bool = false:
 
 var _selected_objects: Array[LDObject] = []
 
+var _touch_points: Dictionary[int, Vector2] = {}
+var _hold_timer: float = 0.0
+var _touch_start_pos: Vector2
+var _touch_moved: bool = false
+var _touch_mode: int = 0
+
 
 func _on_ready() -> void:
 	_inst = self
@@ -52,7 +64,7 @@ func _on_ready() -> void:
 	set_input_priority()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if not has_input_priority():
 		return
 	
@@ -66,6 +78,12 @@ func _process(_delta: float) -> void:
 			refocus_camera(Vector2.INF, camera_zoom * 2, false)
 		if Input.is_action_just_pressed(&"editor_zoom_out"):
 			refocus_camera(Vector2.INF, camera_zoom * 0.5, false)
+	
+	if _touch_mode == 0 and _touch_points.size() == 1:
+		_hold_timer += delta
+		if _hold_timer >= HOLD_THRESHOLD_SEC and not _touch_moved:
+			_touch_mode = 2
+			touch_swipe_began.emit(_touch_start_pos)
 
 
 func _on_input(event: InputEvent) -> void:
@@ -94,26 +112,63 @@ func _on_input(event: InputEvent) -> void:
 	if event is InputEventMagnifyGesture and allow_zooming:
 		_zoom_at(_root.get_global_mouse_position(), (event.factor - 1) * (camera_zoom.x / 4))
 	
-	if event is InputEventKey and event.is_pressed() and not event.echo:
-		match event.keycode:
-			KEY_0:
-				refocus_camera(Vector2(0, 0), Vector2.ONE)
-			KEY_B:
-				LD.get_tool_handler().select_tool("brush")
-				print("brush")
-			KEY_Q:
-				LD.get_tool_handler().select_tool("select")
-				print("select")
-			KEY_M:
-				LD.get_tool_handler().select_tool("move")
-				print("move")
+	if event is InputEventKey:
+		if event.keycode == KEY_0 and event.is_pressed():
+			refocus_camera(Vector2(0, 0), Vector2.ONE)
+		if event.is_pressed() and not event.echo:
+			match event.keycode:
+				KEY_B:
+					LD.get_tool_handler().select_tool("brush")
+				KEY_Q:
+					LD.get_tool_handler().select_tool("select")
+	
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			_touch_points[event.index] = event.position
+			if _touch_points.size() == 1:
+				_touch_start_pos = event.position
+				_touch_moved = false
+				_hold_timer = 0.0
+				_touch_mode = 0
+		else:
+			if _touch_points.size() == 1:
+				if _touch_mode == 0 and not _touch_moved:
+					touch_tap.emit(event.position)
+				elif _touch_mode == 2:
+					touch_swipe_ended.emit()
+			_touch_points.erase(event.index)
+			if _touch_points.is_empty():
+				_touch_mode = 0
+				_hold_timer = 0.0
+	
+	if event is InputEventScreenDrag:
+		_touch_points[event.index] = event.position
+		
+		if _touch_points.size() == 2:
+			_touch_mode = 1
+			if allow_panning:
+				camera_position -= (event.relative / camera_zoom)
+				viewport_moved.emit(camera_position, camera_zoom)
+			return
+		
+		if _touch_points.size() == 1:
+			var dist: float = event.position.distance_to(_touch_start_pos)
+			if _touch_mode == 0 and dist > MOVE_THRESHOLD:
+				_touch_moved = true
+				_touch_mode = 1
+			
+			if _touch_mode == 1 and allow_panning:
+				camera_position -= (event.relative / camera_zoom)
+				viewport_moved.emit(camera_position, camera_zoom)
+			elif _touch_mode == 2:
+				touch_swipe_moved.emit(event.position)
 
 
 func get_root() -> LDViewportRoot:
 	return _root
 
 
-func get_selection_overlay() -> Control:
+func get_selection_overlay() -> LDSelectionOverlay:
 	return _selection_overlay
 
 
@@ -150,9 +205,7 @@ func get_all_objects() -> Array[LDObject]:
 
 
 func world_rect_to_screen(world_top_left: Vector2, world_size: Vector2) -> Rect2:
-	var canvas_transform: Transform2D = get_viewport().get_canvas_transform()
-	var root_transform: Transform2D = _root.get_global_transform()
-	var full_transform: Transform2D = canvas_transform * root_transform
+	var full_transform: Transform2D = get_viewport().get_canvas_transform() * _root.get_global_transform()
 	var screen_top_left: Vector2 = full_transform * world_top_left
 	var screen_bottom_right: Vector2 = full_transform * (world_top_left + world_size)
 	return Rect2(screen_top_left, screen_bottom_right - screen_top_left).abs()
