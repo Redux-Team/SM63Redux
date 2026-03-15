@@ -14,3 +14,7 @@ func apply(obj: LDObject, value: Variant) -> void:
 	if obj.editor_shape_area:
 		obj.editor_shape_area.monitoring = not value
 		obj.editor_shape_area.monitorable = not value
+	if value == true:
+		obj.set_shader_modulate(Color(0.5, 0.5, 0.5, 0.8))
+	else:
+		obj.reset_shader_modulate()
