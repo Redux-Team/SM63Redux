@@ -6,6 +6,7 @@ extends Node
 var viewport: LDViewport:
 	get:
 		return LD.get_editor_viewport()
+
 var _enabled: bool = false
 
 
@@ -19,14 +20,20 @@ func _ready() -> void:
 
 
 func _on_enable() -> void:
-	pass
-
-## Uses the viewport's input priority via [signal LDViewport.viewport_input]
-func _on_viewport_input(event: InputEvent) -> void:
-	pass
+	Input.set_default_cursor_shape(get_cursor_shape())
 
 
 func _on_disable() -> void:
+	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+
+
+## Override to define the cursor shape for this tool.
+func get_cursor_shape() -> Input.CursorShape:
+	return Input.CURSOR_ARROW
+
+
+## Uses the viewport's input priority via [signal LDViewport.viewport_input]
+func _on_viewport_input(event: InputEvent) -> void:
 	pass
 
 
