@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://dnry2u8uye886"]
+
+[ext_resource type="Script" uid="uid://dy01h8vj6uwm2" path="res://level_designer/components/ui/object_properties/widgets/int_property_widget.gd" id="1_42tfc"]
+
+[node name="IntPropertyWidget" type="PanelContainer" unique_id=581750635 node_paths=PackedStringArray("property_label", "spin_box", "reset_button")]
+offset_right = 168.0
+offset_bottom = 40.0
+script = ExtResource("1_42tfc")
+property_label = NodePath("MarginContainer/HBoxContainer/PropertyLabel")
+spin_box = NodePath("MarginContainer/HBoxContainer/SpinBox")
+reset_button = NodePath("MarginContainer/HBoxContainer/ResetBase/ResetButton")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=567774651]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=40093299]
+layout_mode = 2
+
+[node name="PropertyLabel" type="Label" parent="MarginContainer/HBoxContainer" unique_id=2101677513]
+layout_mode = 2
+text = "Property Name"
+
+[node name="ResetBase" type="Control" parent="MarginContainer/HBoxContainer" unique_id=1755250185]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+
+[node name="ResetButton" type="Button" parent="MarginContainer/HBoxContainer/ResetBase" unique_id=1034920026]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.5
+offset_top = -12.5
+offset_right = 8.5
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+text = "R"
+
+[node name="Control2" type="Control" parent="MarginContainer/HBoxContainer" unique_id=926188989]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SpinBox" type="SpinBox" parent="MarginContainer/HBoxContainer" unique_id=2052083477]
+custom_minimum_size = Vector2(150, 24)
+layout_mode = 2
