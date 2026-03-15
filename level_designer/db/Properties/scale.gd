@@ -12,3 +12,7 @@ func _init() -> void:
 
 func apply(obj: LDObject, value: Variant) -> void:
 	obj.scale = value
+
+
+func clamp_value(value: Variant) -> Variant:
+	return (value as Vector2).clamp(Vector2(0.1, 0.1), Vector2(10.0, 10.0))
