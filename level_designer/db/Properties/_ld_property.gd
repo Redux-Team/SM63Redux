@@ -23,6 +23,8 @@ enum Type {
 @export var visible_in_editor: bool = true
 @export var exclusive: bool = false
 
+@abstract func apply(obj: LDObject, value: Variant) -> void
+
 
 func clamp_value(value: Variant) -> Variant:
 	return value
