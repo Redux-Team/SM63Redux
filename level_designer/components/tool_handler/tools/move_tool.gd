@@ -19,6 +19,9 @@ func get_cursor_shape() -> Input.CursorShape:
 
 func _on_ready() -> void:
 	get_tool_handler().add_tool(self)
+	viewport.touch_swipe_began.connect(_on_touch_swipe_began)
+	viewport.touch_swipe_moved.connect(_on_touch_swipe_moved)
+	viewport.touch_swipe_ended.connect(_on_touch_swipe_ended)
 
 
 func _on_viewport_input(event: InputEvent) -> void:
@@ -166,3 +169,23 @@ func _object_contains_point(obj: LDObject, mouse_pos: Vector2) -> bool:
 
 func _get_mouse_pos() -> Vector2:
 	return viewport.get_selection_overlay().get_local_mouse_position()
+
+
+
+func _on_touch_swipe_began(pos: Vector2) -> void:
+	if not is_active():
+		return
+	try_begin_drag(pos, viewport.get_selected_objects())
+
+
+func _on_touch_swipe_moved(pos: Vector2) -> void:
+	if not is_active():
+		return
+	update_drag(pos)
+
+
+func _on_touch_swipe_ended() -> void:
+	if not is_active():
+		return
+	if _is_dragging:
+		end_drag()
