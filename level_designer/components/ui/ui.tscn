@@ -3,16 +3,27 @@
 [ext_resource type="Script" uid="uid://dgvhq23sr5a3p" path="res://level_designer/components/ui/ui.gd" id="1_8w51u"]
 [ext_resource type="PackedScene" uid="uid://bbf6gei1bmu46" path="res://level_designer/components/ui/window/window.tscn" id="2_ms7r3"]
 [ext_resource type="PackedScene" uid="uid://bk2iromqs3siv" path="res://level_designer/components/ui/object_browser/object_browser.tscn" id="3_ms7r3"]
+[ext_resource type="PackedScene" uid="uid://wfkq6ce52aet" path="res://level_designer/components/ui/object_properties/object_properties.tscn" id="4_4nlpt"]
 
-[node name="LDUI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_obj_browser_window", "_canvas_layer")]
+[node name="LDUI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window")]
 script = ExtResource("1_8w51u")
-_obj_browser_window = NodePath("CanvasLayer/ObjectBrowserWindow")
 _canvas_layer = NodePath("CanvasLayer")
+_obj_browser_window = NodePath("CanvasLayer/ObjectBrowserWindow")
+_object_property_window = NodePath("CanvasLayer/ObjectPropertyWindow")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=783443360]
 
 [node name="ObjectBrowserWindow" parent="CanvasLayer" unique_id=1964419486 instance=ExtResource("2_ms7r3")]
+visible = false
 title = "Objects - All"
 content = ExtResource("3_ms7r3")
+window_scale = Vector2(0.9, 0.9)
+pop_in_sfx = true
+
+[node name="ObjectPropertyWindow" parent="CanvasLayer" unique_id=1576900173 instance=ExtResource("2_ms7r3")]
+visible = false
+title = "Properties - <obj>"
+content = ExtResource("4_4nlpt")
+close_on_back_input = true
 window_scale = Vector2(0.9, 0.9)
 pop_in_sfx = true
