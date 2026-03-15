@@ -104,6 +104,9 @@ func _on_input(event: InputEvent) -> void:
 			KEY_Q:
 				LD.get_tool_handler().select_tool("select")
 				print("select")
+			KEY_M:
+				LD.get_tool_handler().select_tool("move")
+				print("move")
 
 
 func get_root() -> LDViewportRoot:
