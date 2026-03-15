@@ -149,11 +149,13 @@ func get_all_objects() -> Array[LDObject]:
 	return result
 
 
-func world_rect_to_screen(world_pos: Vector2, world_size: Vector2) -> Rect2:
-	var xform: Transform2D = get_viewport().get_canvas_transform() * _root.get_global_transform()
-	var top_left: Vector2 = xform * world_pos
-	var bottom_right: Vector2 = xform * (world_pos + world_size)
-	return Rect2(top_left, bottom_right - top_left).abs()
+func world_rect_to_screen(world_top_left: Vector2, world_size: Vector2) -> Rect2:
+	var canvas_transform: Transform2D = get_viewport().get_canvas_transform()
+	var root_transform: Transform2D = _root.get_global_transform()
+	var full_transform: Transform2D = canvas_transform * root_transform
+	var screen_top_left: Vector2 = full_transform * world_top_left
+	var screen_bottom_right: Vector2 = full_transform * (world_top_left + world_size)
+	return Rect2(screen_top_left, screen_bottom_right - screen_top_left).abs()
 
 
 func add_object(object: LDObject, pos: Vector2i = Vector2i.ZERO, layer_id: String = "a0r0") -> void:
