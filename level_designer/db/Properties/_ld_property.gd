@@ -26,3 +26,19 @@ enum Type {
 
 func clamp_value(value: Variant) -> Variant:
 	return value
+
+
+func get_range() -> Vector2:
+	return Vector2(-INF, INF)
+
+
+func get_step() -> float:
+	return 1.0
+
+
+func get_arrow_step() -> float:
+	return 1.0
+
+
+func is_unbound() -> bool:
+	return get_range() == Vector2(-INF, INF)
