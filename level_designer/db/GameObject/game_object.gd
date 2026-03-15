@@ -92,6 +92,13 @@ static func get_category_value(cat_name: String) -> ObjectCategory:
 	return ObjectCategory.ALL
 
 
+func has_property(key: StringName) -> bool:
+	for prop: LDProperty in ld_properties:
+		if prop.key == key:
+			return true
+	return false
+
+
 func _update_subpath() -> void:
 	if category_string:
 		subpath = get_object_path().trim_prefix(category_string + "/")
