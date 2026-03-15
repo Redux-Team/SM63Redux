@@ -8,6 +8,7 @@
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://level_designer/db/Properties/scale.tres" id="5_7ts0u"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://level_designer/db/Properties/rotation.tres" id="5_c708w"]
 [ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://level_designer/db/Properties/disabled.tres" id="6_7ts0u"]
+[ext_resource type="Resource" uid="uid://bfbxhsv32nu3e" path="res://level_designer/db/Properties/breakable_box/coin_amount.tres" id="8_lsw20"]
 
 [resource]
 script = ExtResource("2_ysnov")
@@ -19,5 +20,5 @@ group_path = "Interactable"
 ld_object_path = "Props/Interactable/breakable_box"
 ld_entry_texture = ExtResource("1_k0ihf")
 ld_editor_instance = ExtResource("1_hntms")
-ld_properties = Array[ExtResource("3_mg75m")]([ExtResource("4_igebl"), ExtResource("5_7ts0u"), ExtResource("5_c708w"), ExtResource("6_7ts0u")])
+ld_properties = Array[ExtResource("3_mg75m")]([ExtResource("4_igebl"), ExtResource("5_7ts0u"), ExtResource("5_c708w"), ExtResource("6_7ts0u"), ExtResource("8_lsw20")])
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
