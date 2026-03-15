@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://cwaswaj17eo0e" path="res://level_designer/components/tool_handler/tools/select_tool.gd" id="2_004oe"]
 [ext_resource type="Script" uid="uid://b6v5g2fo03urf" path="res://level_designer/components/tool_handler/tools/brush_tool.gd" id="2_mx2vl"]
 [ext_resource type="Script" uid="uid://dp3swfeh534dw" path="res://level_designer/components/tool_handler/tools/select_shortcut_handler.gd" id="3_004oe"]
+[ext_resource type="Script" uid="uid://cfrvdq1mkk30r" path="res://level_designer/components/tool_handler/tools/move_tool.gd" id="5_612so"]
 
 [node name="ToolHandler" type="Node" unique_id=1124731823]
 script = ExtResource("1_0flew")
@@ -17,3 +18,6 @@ script = ExtResource("3_004oe")
 
 [node name="BrushTool" type="Node" parent="." unique_id=1716187589]
 script = ExtResource("2_mx2vl")
+
+[node name="MoveTool" type="Node" parent="." unique_id=1885920221]
+script = ExtResource("5_612so")
