@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://b4ll50eo8q6er"]
+
+[ext_resource type="Script" uid="uid://31qkwy0utrqd" path="res://level_designer/components/ui/object_properties/widgets/vector_2_widget.gd" id="1_vhys8"]
+
+[node name="Vector2Widget" type="HBoxContainer" unique_id=1144265964 node_paths=PackedStringArray("property_label", "spin_box_x", "spin_box_y", "x_label", "y_label", "reset_button")]
+script = ExtResource("1_vhys8")
+property_label = NodePath("PropertyLabel")
+spin_box_x = NodePath("VBoxContainer/HBoxContainer/SpinBoxX")
+spin_box_y = NodePath("VBoxContainer/HBoxContainer2/SpinBoxY")
+x_label = NodePath("VBoxContainer/HBoxContainer/XLabel")
+y_label = NodePath("VBoxContainer/HBoxContainer2/YLabel")
+reset_button = NodePath("ResetButton")
+
+[node name="PropertyLabel" type="Label" parent="." unique_id=1402134649]
+layout_mode = 2
+text = "Property Name"
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="." unique_id=934183231]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResetButton" type="Button" parent="." unique_id=1833344936]
+layout_mode = 2
+size_flags_vertical = 4
+text = "R"
+
+[node name="Control2" type="Control" parent="." unique_id=1477224204]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=207272805]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=448492072]
+layout_mode = 2
+
+[node name="XLabel" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=2121853419]
+layout_mode = 2
+text = "X"
+
+[node name="SpinBoxX" type="SpinBox" parent="VBoxContainer/HBoxContainer" unique_id=251595135]
+layout_mode = 2
+min_value = -99999999.0
+max_value = 99999999.0
+step = 0.25
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1630649981]
+layout_mode = 2
+
+[node name="YLabel" type="Label" parent="VBoxContainer/HBoxContainer2" unique_id=1245817017]
+layout_mode = 2
+text = "Y"
+
+[node name="SpinBoxY" type="SpinBox" parent="VBoxContainer/HBoxContainer2" unique_id=1273796619]
+layout_mode = 2
+min_value = -99999999.0
+max_value = 99999999.0
