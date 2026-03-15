@@ -16,3 +16,11 @@ func apply(obj: LDObject, value: Variant) -> void:
 
 func clamp_value(value: Variant) -> Variant:
 	return (value as Vector2).clamp(Vector2(0.1, 0.1), Vector2(10.0, 10.0))
+
+
+func get_step() -> float:
+	return 0.1
+
+
+func get_arrow_step() -> float:
+	return 0.1
