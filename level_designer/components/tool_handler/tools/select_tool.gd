@@ -19,6 +19,10 @@ func _on_ready() -> void:
 	get_tool_handler().add_tool(self)
 	_overlay = viewport.get_selection_overlay() as LDSelectionOverlay
 	LD.get_object_handler().selected_object_changed.connect(_on_selected_object_changed)
+	viewport.touch_tap.connect(_on_touch_tap)
+	viewport.touch_swipe_began.connect(_on_touch_swipe_began)
+	viewport.touch_swipe_moved.connect(_on_touch_swipe_moved)
+	viewport.touch_swipe_ended.connect(_on_touch_swipe_ended)
 
 
 func _on_viewport_input(event: InputEvent) -> void:
@@ -61,8 +65,6 @@ func _on_enable() -> void:
 
 
 func _on_disable() -> void:
-	if not _move_tool:
-		viewport.clear_selection()
 	_overlay.hide_box()
 	_is_box_selecting = false
 
@@ -130,6 +132,28 @@ func _object_intersects_box(obj: LDObject) -> bool:
 	return false
 
 
+func _get_object_at(mouse_pos: Vector2) -> LDObject:
+	for obj: LDObject in viewport.get_all_objects():
+		if obj.is_preview:
+			continue
+		if not obj.editor_shape_area:
+			var half: Vector2 = obj.get_stamp_size() * 0.5
+			var screen_rect: Rect2 = viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size())
+			if screen_rect.has_point(mouse_pos):
+				return obj
+			continue
+		for child: Node in obj.editor_shape_area.get_children():
+			var shape: CollisionShape2D = child as CollisionShape2D
+			if not shape or not shape.shape is RectangleShape2D:
+				continue
+			var rect: Rect2 = (shape.shape as RectangleShape2D).get_rect()
+			var world_top_left: Vector2 = shape.global_position + rect.position * obj.global_scale
+			var screen_rect: Rect2 = viewport.world_rect_to_screen(world_top_left, rect.size * obj.global_scale)
+			if screen_rect.has_point(mouse_pos):
+				return obj
+	return null
+
+
 func _get_move_tool() -> LDToolMove:
 	return get_tool_handler().get_tool_list().filter(func(t: LDTool) -> bool:
 		return t is LDToolMove
@@ -138,3 +162,38 @@ func _get_move_tool() -> LDToolMove:
 
 func _get_mouse_pos() -> Vector2:
 	return _overlay.get_local_mouse_position()
+
+
+func _on_touch_tap(pos: Vector2) -> void:
+	if not is_active():
+		return
+	var obj: LDObject = _get_object_at(pos)
+	if obj:
+		viewport.set_selected_objects([obj])
+	else:
+		viewport.clear_selection()
+
+
+func _on_touch_swipe_began(pos: Vector2) -> void:
+	if not is_active():
+		return
+	_is_box_selecting = true
+	_is_shift_selecting = false
+	_box_select_origin = pos
+	_box_select_rect = Rect2(pos, Vector2.ZERO)
+
+
+func _on_touch_swipe_moved(pos: Vector2) -> void:
+	if not is_active():
+		return
+	_box_select_rect = Rect2(_box_select_origin, pos - _box_select_origin).abs()
+	_overlay.show_box(_box_select_rect)
+	_update_hover_states()
+
+
+func _on_touch_swipe_ended() -> void:
+	if not is_active():
+		return
+	_is_box_selecting = false
+	_commit_box_select()
+	_overlay.hide_box()
