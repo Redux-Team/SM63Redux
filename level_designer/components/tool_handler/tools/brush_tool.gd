@@ -83,8 +83,8 @@ func _spawn_cursor(obj: GameObject) -> void:
 		return
 	_preview_cursor = obj.ld_editor_instance.instantiate() as LDObject
 	_preview_cursor.is_preview = true
-	_preview_cursor.init_properties(obj.ld_properties)
 	LD.get_editor_viewport().add_object(_preview_cursor)
+	_preview_cursor.init_properties(obj.ld_properties)
 
 
 func _stamp_line_to(pos: Vector2) -> void:
@@ -121,8 +121,10 @@ func _add_stroke_preview(pos: Vector2) -> void:
 	
 	var preview: LDObject = obj.ld_editor_instance.instantiate() as LDObject
 	preview.is_preview = true
-	preview.init_properties(obj.ld_properties)
 	LD.get_editor_viewport().add_object(preview, Vector2i(pos))
+	preview.init_properties(obj.ld_properties)
+	if obj.has_property(&"position"):
+		preview.set_property(&"position", pos)
 	_stroke.append(preview)
 
 
