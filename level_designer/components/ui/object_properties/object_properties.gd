@@ -5,6 +5,8 @@ extends MarginContainer
 @export var _container: VBoxContainer
 @export var _bool_widget_scene: PackedScene
 @export var _vector2_widget_scene: PackedScene
+@export var _float_widget_scene: PackedScene
+@export var _int_widget_scene: PackedScene
 
 
 func load_selection(objects: Array[LDObject]) -> void:
@@ -21,8 +23,8 @@ func load_selection(objects: Array[LDObject]) -> void:
 		widget.setup(prop, current_value)
 		widget.value_changed.connect(func(key: StringName, value: Variant) -> void:
 			handler.set_property_on_selection(key, value)
-			var clamped: Variant = handler.get_property_value(handler.get_placed_selection(), key)
-			widget._on_property_applied(clamped)
+			var applied: Variant = handler.get_property_value(handler.get_placed_selection(), key)
+			widget._on_property_applied(applied)
 		)
 		_container.add_child(widget)
 
@@ -40,8 +42,10 @@ func _create_widget(prop: LDProperty) -> LDPropertyWidget:
 	match prop.type:
 		LDProperty.Type.BOOL:
 			return _bool_widget_scene.instantiate() as LDPropertyWidget
-		#LDProperty.Type.FLOAT, LDProperty.Type.INT:
-			#return _float_widget_scene.instantiate() as LDPropertyWidget
+		LDProperty.Type.FLOAT:
+			return _float_widget_scene.instantiate() as LDPropertyWidget
+		LDProperty.Type.INT:
+			return _int_widget_scene.instantiate() as LDPropertyWidget
 		LDProperty.Type.VECTOR2:
 			return _vector2_widget_scene.instantiate() as LDPropertyWidget
 	return null
