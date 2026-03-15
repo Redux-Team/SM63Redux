@@ -77,10 +77,16 @@ func init_properties(properties: Array[LDProperty]) -> void:
 	_properties = properties
 	for prop: LDProperty in _properties:
 		_property_values[prop.key] = prop.default_value
+		if prop.key == &"position":
+			continue
 		_apply_property(prop.key, prop.default_value)
 
 
 func set_property(key: StringName, value: Variant) -> void:
+	for prop: LDProperty in _properties:
+		if prop.key == key:
+			value = prop.clamp_value(value)
+			break
 	_property_values[key] = value
 	_apply_property(key, value)
 	_on_property_changed(key, value)
@@ -113,10 +119,14 @@ func set_shader_modulate(color: Color) -> void:
 	_set_shader_param(&"custom_modulate", color)
 
 
+func reset_shader_modulate() -> void:
+	set_shader_modulate(Color.WHITE if not is_preview else Color(1.0, 1.0, 1.0, 0.6))
+
+
 func get_stamp_size() -> Vector2:
 	if not editor_placement_rect:
 		return Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE)
-	return (editor_placement_rect.shape as RectangleShape2D).get_rect().size
+	return (editor_placement_rect.shape as RectangleShape2D).get_rect().size * global_scale
 
 
 func _set_shader_param(param: StringName, value: Variant) -> void:
