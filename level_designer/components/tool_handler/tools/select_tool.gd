@@ -1,12 +1,14 @@
-# SelectTool
 extends LDTool
 
+
 @export var shortcut_handler: LDSelectionShortcutHandler
+
 var _is_box_selecting: bool = false
 var _is_shift_selecting: bool = false
 var _box_select_origin: Vector2
 var _box_select_rect: Rect2
 var _overlay: LDSelectionOverlay
+var _move_tool: LDToolMove
 
 
 func get_tool_name() -> String:
@@ -32,9 +34,15 @@ func _on_viewport_input(event: InputEvent) -> void:
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
+			var mouse_pos: Vector2 = _get_mouse_pos()
+			var move: LDToolMove = _get_move_tool()
+			if move and move.try_begin_drag(mouse_pos, viewport.get_selected_objects()):
+				_move_tool = move
+				get_tool_handler().select_tool("move")
+				return
 			_is_box_selecting = true
 			_is_shift_selecting = event.shift_pressed
-			_box_select_origin = _get_mouse_pos()
+			_box_select_origin = mouse_pos
 			_box_select_rect = Rect2(_box_select_origin, Vector2.ZERO)
 		else:
 			_is_box_selecting = false
@@ -47,8 +55,14 @@ func _on_viewport_input(event: InputEvent) -> void:
 		_update_hover_states()
 
 
+func _on_enable() -> void:
+	if _move_tool and not _move_tool.is_dragging():
+		_move_tool = null
+
+
 func _on_disable() -> void:
-	viewport.clear_selection()
+	if not _move_tool:
+		viewport.clear_selection()
 	_overlay.hide_box()
 	_is_box_selecting = false
 
@@ -99,7 +113,8 @@ func _delete_selected() -> void:
 
 func _object_intersects_box(obj: LDObject) -> bool:
 	if not obj.editor_shape_area:
-		var screen_rect: Rect2 = viewport.world_rect_to_screen(obj.global_position, obj.get_stamp_size())
+		var half: Vector2 = obj.get_stamp_size() * 0.5
+		var screen_rect: Rect2 = viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size())
 		return _box_select_rect.intersects(screen_rect)
 	
 	for child: Node in obj.editor_shape_area.get_children():
@@ -107,12 +122,18 @@ func _object_intersects_box(obj: LDObject) -> bool:
 		if not shape or not shape.shape is RectangleShape2D:
 			continue
 		var rect: Rect2 = (shape.shape as RectangleShape2D).get_rect()
-		var world_top_left: Vector2 = shape.global_position + rect.position
-		var screen_rect: Rect2 = viewport.world_rect_to_screen(world_top_left, rect.size)
+		var world_top_left: Vector2 = shape.global_position + rect.position * obj.global_scale
+		var screen_rect: Rect2 = viewport.world_rect_to_screen(world_top_left, rect.size * obj.global_scale)
 		if _box_select_rect.intersects(screen_rect):
 			return true
 	
 	return false
+
+
+func _get_move_tool() -> LDToolMove:
+	return get_tool_handler().get_tool_list().filter(func(t: LDTool) -> bool:
+		return t is LDToolMove
+	).front() as LDToolMove
 
 
 func _get_mouse_pos() -> Vector2:
