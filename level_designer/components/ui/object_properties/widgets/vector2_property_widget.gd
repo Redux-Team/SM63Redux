@@ -9,6 +9,8 @@ extends LDPropertyWidget
 @export var y_label: Label
 @export var reset_button: Button
 
+var _is_exclusive: bool = false
+
 
 func _ready() -> void:
 	spin_box_x.value_changed.connect(func(_val: float) -> void:
@@ -36,13 +38,41 @@ func _set_value(value: Variant) -> void:
 	_update_reset_button(v)
 
 
+func _set_step(step: float) -> void:
+	if spin_box_x:
+		spin_box_x.step = step
+	if spin_box_y:
+		spin_box_y.step = step
+
+
+func _set_arrow_step(step: float) -> void:
+	if spin_box_x:
+		spin_box_x.custom_arrow_step = step
+	if spin_box_y:
+		spin_box_y.custom_arrow_step = step
+
+
+func _set_unbound(unbound: bool) -> void:
+	if spin_box_x:
+		spin_box_x.allow_greater = unbound
+		spin_box_x.allow_lesser = unbound
+		spin_box_x.max_value = 9999999
+		spin_box_x.min_value = -9999999
+	if spin_box_y:
+		spin_box_y.allow_greater = unbound
+		spin_box_y.allow_lesser = unbound
+		spin_box_x.max_value = 9999999
+		spin_box_x.min_value = -9999999
+
+
 func _update_reset_button(current_value: Variant) -> void:
-	if not reset_button:
+	if not reset_button or _is_exclusive:
 		return
 	reset_button.visible = current_value != _default_value
 
 
 func _hide_reset() -> void:
+	_is_exclusive = true
 	if reset_button:
 		reset_button.hide()
 
