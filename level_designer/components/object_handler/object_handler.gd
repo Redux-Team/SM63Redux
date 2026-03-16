@@ -21,6 +21,31 @@ func get_placed_selection() -> Array[LDObject]:
 	return LD.get_editor_viewport().get_selected_objects()
 
 
+func delete_placed_selection() -> void:
+	var objects: Array[LDObject] = get_placed_selection()
+	if objects.is_empty():
+		return
+	
+	LD.get_editor_viewport().clear_selection()
+	
+	var history: LDHistoryHandler = LD.get_history_handler()
+	history.begin_action("Delete Objects")
+	history.add_do(func() -> void:
+		for obj: LDObject in objects:
+			if is_instance_valid(obj):
+				obj.hide()
+	)
+	history.add_undo(func() -> void:
+		for obj: LDObject in objects:
+			if is_instance_valid(obj):
+				obj.show()
+	)
+	history.commit_action()
+	
+	for obj: LDObject in objects:
+		obj.hide()
+
+
 func get_shared_properties(objects: Array[LDObject]) -> Array[LDProperty]:
 	if objects.is_empty():
 		return []
