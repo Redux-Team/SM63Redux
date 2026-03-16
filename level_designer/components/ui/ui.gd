@@ -16,17 +16,9 @@ func _on_ready() -> void:
 	browser.hide_request.connect(func() -> void:
 		_obj_browser_window.popout()
 	)
-	_obj_browser_window.popped_in.connect(_on_window_shown)
-	_obj_browser_window.popped_out.connect(_on_window_hidden)
-	
-	_object_property_window.popped_in.connect(_on_window_shown)
-	_object_property_window.popped_out.connect(_on_window_hidden)
 
 
 func _input(event: InputEvent) -> void:
-	if not LD.get_editor_viewport().has_input_priority():
-		return
-	
 	if not event is InputEventKey or not event.is_pressed() or event.is_echo():
 		return
 	
@@ -61,9 +53,29 @@ func _toggle_window(window: LDWindow) -> void:
 		window.popin()
 
 
-func _on_window_shown() -> void:
-	set_input_priority()
+func _on_object_browser_button_pressed() -> void:
+	_toggle_window(_obj_browser_window)
 
 
-func _on_window_hidden() -> void:
-	remove_input_priority()
+func _on_properties_button_pressed() -> void:
+	_toggle_window(_object_property_window)
+
+
+func _on_select_button_pressed() -> void:
+	LD.get_tool_handler().select_tool("select")
+
+
+func _on_brush_button_pressed() -> void:
+	LD.get_tool_handler().select_tool("brush")
+
+
+func _on_move_button_pressed() -> void:
+	LD.get_tool_handler().select_tool("move")
+
+
+func _on_reset_button_pressed() -> void:
+	LD.get_editor_viewport().refocus_camera(Vector2.ZERO, Vector2.ONE)
+
+
+func _on_delete_button_pressed() -> void:
+	LD.get_object_handler().delete_placed_selection()
