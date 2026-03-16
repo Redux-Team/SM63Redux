@@ -39,6 +39,8 @@ enum ButtonDesign {
 @onready var content_texture: TextureRect = $ContentTexture
 @onready var title_texture: TextureRect = $ContentTexture/TitleTexture
 @onready var top_icon_texture: TextureRect = $TopIconTexture
+@export var touch_screen_button: TouchScreenButton
+@export var interaction_button: Button
 
 
 func _ready() -> void:
@@ -47,6 +49,8 @@ func _ready() -> void:
 	frame_texture.material.set_shader_parameter(&"hue_shift", hue)
 	frame_texture.material.set_shader_parameter(&"saturation_scale", saturation)
 	frame_texture.material.set_shader_parameter(&"value_scale", value)
+	
+	(touch_screen_button.shape as RectangleShape2D).size = interaction_button.size
 	
 	if disabled:
 		modulate.v = 0.4
