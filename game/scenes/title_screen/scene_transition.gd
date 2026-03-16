@@ -5,7 +5,7 @@ extends Node
 
 const LEVEL_DESIGNER_SCENE: String = "uid://c732aftmb2bcv"
 const TRANSITION_MASK: CompressedTexture2D = preload("uid://b127vhuh31i8r")
-const PLAYTEST_SCENE = "uid://cfrexipnk4yq8"
+const PLAYTEST_SCENE = "uid://cf4yw3eqr2qo6"
 
 func transition(type: MainMenuButton.ButtonDesign) -> void:
 	match type:
