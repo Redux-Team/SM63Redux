@@ -28,6 +28,8 @@ func _on_ready() -> void:
 func _on_viewport_input(event: InputEvent) -> void:
 	if not is_active():
 		return
+	if Singleton.current_input_device == Singleton.InputType.TOUCHSCREEN:
+		return
 	
 	if shortcut_handler:
 		shortcut_handler.handle_input(event)
