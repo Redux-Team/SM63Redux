@@ -5,6 +5,7 @@
 [ext_resource type="Shader" uid="uid://d4m57jrrlul8l" path="res://core/shader/ld_viewport_bg.gdshader" id="2_vq6wp"]
 [ext_resource type="Texture2D" uid="uid://crqnqwpps0m8c" path="res://assets/textures/level_designer/viewport/bg_texture.png" id="3_nmc72"]
 [ext_resource type="Script" uid="uid://bemjucm1rn4g1" path="res://level_designer/components/viewport/selection_overlay/selection_overlay.gd" id="5_pf3pc"]
+[ext_resource type="Script" uid="uid://ctu3ksd4yarv0" path="res://level_designer/components/viewport/touch_swipe_indicator.gd" id="6_uet0v"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nmc72"]
 shader = ExtResource("2_vq6wp")
@@ -18,13 +19,14 @@ shader_parameter/screen_size = Vector2(1152, 648)
 shader_parameter/grid_offset = Vector2(0, 0)
 shader_parameter/grid_fade_threshold = 1.0
 
-[node name="LDViewport" type="Node" unique_id=110890990 node_paths=PackedStringArray("camera", "_layers_root", "_viewport_bg", "_root", "_selection_overlay")]
+[node name="LDViewport" type="Node" unique_id=110890990 node_paths=PackedStringArray("camera", "_layers_root", "_viewport_bg", "_root", "_selection_overlay", "_touch_indicator")]
 script = ExtResource("1_urtws")
 camera = NodePath("Root/LDCamera")
 _layers_root = NodePath("Root/Layers")
 _viewport_bg = NodePath("Root/BGCanvasLayer/ViewportBG")
 _root = NodePath("Root")
 _selection_overlay = NodePath("CanvasLayer/SelectionOverlay")
+_touch_indicator = NodePath("CanvasLayer/TouchSwipeIndicator")
 
 [node name="Root" type="Node2D" parent="." unique_id=959818305]
 script = ExtResource("2_itnej")
@@ -55,3 +57,17 @@ offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 script = ExtResource("5_pf3pc")
+metadata/_edit_use_anchors_ = true
+
+[node name="TouchSwipeIndicator" type="Node2D" parent="CanvasLayer" unique_id=1521790926]
+script = ExtResource("6_uet0v")
+
+[node name="ViewportInput" type="Control" parent="CanvasLayer" unique_id=383943946]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="gui_input" from="CanvasLayer/ViewportInput" to="." method="_on_viewport_input"]

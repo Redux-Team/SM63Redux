@@ -4,8 +4,10 @@ extends LDComponent
 
 
 const SNAPPING_SIZE: int = 4
-const HOLD_THRESHOLD_SEC: float = 0.25
+const HOLD_THRESHOLD_SEC: float = 0.75
 const MOVE_THRESHOLD: float = 8.0
+const SWIPE_DISMISS_THRESHOLD: float = 6.0
+
 
 signal viewport_moved(pos: Vector2, zoom: Vector2)
 signal viewport_input(event: InputEvent)
@@ -29,6 +31,8 @@ static var _inst: LDViewport
 @export var _viewport_bg: ColorRect
 @export var _root: LDViewportRoot
 @export var _selection_overlay: LDSelectionOverlay
+@export var _touch_indicator: LDTouchSwipeIndicator
+
 
 var allow_panning: bool = true
 var allow_zooming: bool = true
@@ -54,6 +58,7 @@ var _hold_timer: float = 0.0
 var _touch_start_pos: Vector2
 var _touch_moved: bool = false
 var _touch_mode: int = 0
+var _last_pinch_distance: float = 0.0
 
 
 func _on_ready() -> void:
@@ -81,33 +86,42 @@ func _process(delta: float) -> void:
 	
 	if _touch_mode == 0 and _touch_points.size() == 1:
 		_hold_timer += delta
+		if _touch_indicator and not _touch_moved:
+			var progress: float = clampf(_hold_timer / HOLD_THRESHOLD_SEC, 0.0, 1.0)
+			_touch_indicator.set_progress(progress)
 		if _hold_timer >= HOLD_THRESHOLD_SEC and not _touch_moved:
 			_touch_mode = 2
 			touch_swipe_began.emit(_touch_start_pos)
 
 
-func _on_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
+	if event is InputEventMagnifyGesture:
+		LD.get_input_handler().dispatch(event)
+
+
+func _on_viewport_input(event: InputEvent) -> void:
 	viewport_input.emit(event)
 	
-	if event is InputEventMouseButton:
-		match event.button_index:
-			MOUSE_BUTTON_MIDDLE when event.is_pressed():
-				is_mouse_panning = true
-			MOUSE_BUTTON_MIDDLE when event.is_released():
-				is_mouse_panning = false
-			MOUSE_BUTTON_WHEEL_UP when allow_zooming:
-				_zoom_at(get_root().get_global_mouse_position(), 0.1)
-			MOUSE_BUTTON_WHEEL_DOWN when allow_zooming:
-				_zoom_at(get_root().get_global_mouse_position(), -0.1)
-	
-	if event is InputEventMouseMotion:
-		if is_mouse_panning and allow_panning:
-			camera_position -= (event.relative / camera_zoom)
+	if Singleton.current_input_device != Singleton.InputType.TOUCHSCREEN:
+		if event is InputEventMouseButton:
+			match event.button_index:
+				MOUSE_BUTTON_MIDDLE when event.is_pressed():
+					is_mouse_panning = true
+				MOUSE_BUTTON_MIDDLE when event.is_released():
+					is_mouse_panning = false
+				MOUSE_BUTTON_WHEEL_UP when allow_zooming:
+					_zoom_at(get_root().get_global_mouse_position(), 0.1)
+				MOUSE_BUTTON_WHEEL_DOWN when allow_zooming:
+					_zoom_at(get_root().get_global_mouse_position(), -0.1)
+		
+		if event is InputEventMouseMotion:
+			if is_mouse_panning and allow_panning:
+				camera_position -= (event.relative / camera_zoom)
+				viewport_moved.emit(camera_position, camera_zoom)
+		
+		if event is InputEventPanGesture and allow_panning:
+			camera_position += (event.delta / camera_zoom) * 5
 			viewport_moved.emit(camera_position, camera_zoom)
-	
-	if event is InputEventPanGesture and allow_panning:
-		camera_position += (event.delta / camera_zoom) * 5
-		viewport_moved.emit(camera_position, camera_zoom)
 	
 	if event is InputEventMagnifyGesture and allow_zooming:
 		_zoom_at(_root.get_global_mouse_position(), (event.factor - 1) * (camera_zoom.x / 4))
@@ -122,45 +136,76 @@ func _on_input(event: InputEvent) -> void:
 				KEY_Q:
 					LD.get_tool_handler().select_tool("select")
 	
-	if event is InputEventScreenTouch:
-		if event.pressed:
+	if Singleton.current_input_device == Singleton.InputType.TOUCHSCREEN:
+		if event is InputEventScreenTouch:
+			if event.pressed:
+				_touch_points[event.index] = event.position
+				if _touch_points.size() == 1:
+					_touch_start_pos = event.position
+					_touch_moved = false
+					_hold_timer = 0.0
+					_touch_mode = 0
+					if _touch_indicator:
+						_touch_indicator.show_at(event.position)
+			else:
+				if _touch_points.size() == 1:
+					if _touch_mode == 0 and not _touch_moved:
+						touch_tap.emit(event.position)
+						if _touch_indicator:
+							_touch_indicator.dismiss()
+					elif _touch_mode == 2:
+						touch_swipe_ended.emit()
+						if _touch_indicator:
+							_touch_indicator.dismiss()
+				_touch_points.erase(event.index)
+				if _touch_points.is_empty():
+					_touch_mode = 0
+					_hold_timer = 0.0
+					_last_pinch_distance = 0.0
+					if _touch_indicator:
+						_touch_indicator.dismiss()
+
+		if event is InputEventScreenDrag:
 			_touch_points[event.index] = event.position
-			if _touch_points.size() == 1:
-				_touch_start_pos = event.position
-				_touch_moved = false
-				_hold_timer = 0.0
-				_touch_mode = 0
-		else:
-			if _touch_points.size() == 1:
-				if _touch_mode == 0 and not _touch_moved:
-					touch_tap.emit(event.position)
-				elif _touch_mode == 2:
-					touch_swipe_ended.emit()
-			_touch_points.erase(event.index)
-			if _touch_points.is_empty():
-				_touch_mode = 0
-				_hold_timer = 0.0
-	
-	if event is InputEventScreenDrag:
-		_touch_points[event.index] = event.position
-		
-		if _touch_points.size() == 2:
-			_touch_mode = 1
-			if allow_panning:
-				camera_position -= (event.relative / camera_zoom)
-				viewport_moved.emit(camera_position, camera_zoom)
-			return
-		
-		if _touch_points.size() == 1:
-			var dist: float = event.position.distance_to(_touch_start_pos)
-			if _touch_mode == 0 and dist > MOVE_THRESHOLD:
-				_touch_moved = true
+			
+			if _touch_points.size() == 2:
+				if _touch_indicator:
+					_touch_indicator.dismiss()
 				_touch_mode = 1
+				var points: Array = _touch_points.values()
+				var current_distance: float = (points[0] as Vector2).distance_to(points[1] as Vector2)
+				
+				if _last_pinch_distance > 0.0 and allow_zooming:
+					var zoom_delta: float = (current_distance - _last_pinch_distance) * 0.005
+					var center_screen: Vector2 = ((points[0] as Vector2) + (points[1] as Vector2)) * 0.5
+					var full_transform: Transform2D = get_viewport().get_canvas_transform() * _root.get_global_transform()
+					var center_world: Vector2 = full_transform.affine_inverse() * center_screen
+					_zoom_at(center_world, zoom_delta)
+				
+				_last_pinch_distance = current_distance
+				
+				if allow_panning:
+					camera_position -= (event.relative / camera_zoom)
+					viewport_moved.emit(camera_position, camera_zoom)
+				return
+			
+			_last_pinch_distance = 0.0
+			
+			if _touch_mode == 0:
+				if _touch_indicator:
+					_touch_indicator.dismiss()
+				var dist: float = event.position.distance_to(_touch_start_pos)
+				if dist > MOVE_THRESHOLD:
+					_touch_moved = true
+					_touch_mode = 1
 			
 			if _touch_mode == 1 and allow_panning:
 				camera_position -= (event.relative / camera_zoom)
 				viewport_moved.emit(camera_position, camera_zoom)
 			elif _touch_mode == 2:
+				var swipe_dist: float = event.position.distance_to(_touch_start_pos)
+				if _touch_indicator and swipe_dist > SWIPE_DISMISS_THRESHOLD:
+					_touch_indicator.dismiss()
 				touch_swipe_moved.emit(event.position)
 
 
@@ -237,6 +282,10 @@ func get_or_create_layer(layer_id: String) -> LDLayer:
 	abs_layer.add_child(rel_layer)
 	_sort_rel_layers(abs_layer)
 	return rel_layer
+
+
+func is_panning() -> bool:
+	return is_mouse_panning or _touch_mode == 1
 
 
 func refocus_camera(pos: Vector2 = Vector2.INF, zoom: Vector2 = Vector2.INF, enforce_finish: bool = true) -> void:
