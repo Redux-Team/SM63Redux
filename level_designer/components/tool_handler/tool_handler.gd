@@ -29,6 +29,9 @@ func select_tool(tool_name_or_ref: Variant) -> void:
 
 func add_tool(tool: LDTool) -> void:
 	if tool not in get_children():
-		add_child(tool)
+		if tool.get_parent():
+			tool.reparent.call_deferred(self)
+		else:
+			add_child(tool)
 	
 	_bound_tools.set(tool.get_tool_name().to_lower(), tool)
