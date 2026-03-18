@@ -35,8 +35,7 @@ func _on_ready() -> void:
 
 func _on_enable() -> void:
 	var obj: GameObject = LD.get_object_handler().get_selected_object()
-	if obj:
-		_spawn_cursor(obj)
+	_on_object_changed(obj)
 
 
 func _on_disable() -> void:
@@ -90,10 +89,24 @@ func _on_object_changed(obj: GameObject) -> void:
 		_preview_cursor.queue_free()
 		_preview_cursor = null
 	_clear_stroke()
+	
+	if not obj:
+		return
+	
+	if _is_telescoping_object(obj):
+		get_tool_handler().select_tool.call_deferred("telescoping")
+		return
+	
 	if Singleton.current_input_device != Singleton.InputType.TOUCHSCREEN:
 		_spawn_cursor(obj)
 	else:
 		_cache_stamp_size(obj)
+
+
+func _is_telescoping_object(obj: GameObject) -> bool:
+	if not obj:
+		return false
+	return obj.has_property(&"t_size_x") or obj.has_property(&"t_size_y")
 
 
 func _cache_stamp_size(obj: GameObject) -> void:
@@ -124,11 +137,11 @@ func _get_stamp_size() -> Vector2:
 
 func _stamp_line_to(pos: Vector2) -> void:
 	var target_cell_x: int = _pos_to_cell_x(pos)
-	
+	var stamp_size: Vector2 = _get_stamp_size()
+
 	if target_cell_x == _last_cell_x:
 		var stamp_pos: Vector2 = Vector2(_cell_x_to_pos(target_cell_x), pos.y)
 		var last_y: float = _last_cell_y.get(target_cell_x, pos.y - INF)
-		var stamp_size: Vector2 = _preview_cursor.get_stamp_size() if _preview_cursor else Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE)
 		if absf(pos.y - last_y) >= stamp_size.y and not _column_has_overlap(target_cell_x, pos.y):
 			_add_stroke_preview(stamp_pos)
 			if not _column_objects.has(target_cell_x):
@@ -136,7 +149,7 @@ func _stamp_line_to(pos: Vector2) -> void:
 			_column_objects[target_cell_x].append(pos.y)
 			_last_cell_y[target_cell_x] = pos.y
 		return
-	
+
 	for cell_x: int in _columns_between(_last_cell_x, target_cell_x):
 		var stamp_pos: Vector2 = Vector2(_cell_x_to_pos(cell_x), pos.y)
 		if not _column_has_overlap(cell_x, stamp_pos.y):
@@ -145,7 +158,7 @@ func _stamp_line_to(pos: Vector2) -> void:
 				_column_objects[cell_x] = []
 			_column_objects[cell_x].append(stamp_pos.y)
 			_last_cell_y[cell_x] = stamp_pos.y
-	
+
 	_last_cell_x = target_cell_x
 
 
