@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LDPropertyTelescopeX" format=3 uid="uid://d3j4ktfhy214l"]
+
+[ext_resource type="Script" uid="uid://c74p8giulwgqm" path="res://level_designer/db/Properties/t_size_x.gd" id="1_jutf8"]
+
+[resource]
+script = ExtResource("1_jutf8")
+key = &"t_size_x"
+label = "Width"
+type = 1
+default_value = 1
+metadata/_custom_type_script = "uid://c74p8giulwgqm"
