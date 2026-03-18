@@ -96,6 +96,10 @@ func get_property(key: StringName) -> Variant:
 	return _property_values.get(key)
 
 
+func has_property(key: StringName) -> bool:
+	return _property_values.has(key)
+
+
 func get_property_values() -> Dictionary[StringName, Variant]:
 	return _property_values.duplicate()
 
