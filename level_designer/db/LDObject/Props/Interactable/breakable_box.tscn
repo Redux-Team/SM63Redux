@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cstwnaf1t1wra"]
 
-[ext_resource type="Script" uid="uid://drrpapnrx5n8l" path="res://level_designer/db/LDObject/ld_object.gd" id="1_8qgph"]
+[ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://level_designer/db/LDObject/ld_object_sprite.gd" id="1_u6ciu"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_u6ciu"]
 [ext_resource type="Texture2D" uid="uid://bgu3tbp5yyymq" path="res://assets/textures/object/props/interactable/breakable_box.png" id="3_u6ciu"]
 
@@ -21,13 +21,13 @@ shader_parameter/pulse_max = 1.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ry641"]
 size = Vector2(32, 32)
 
-[node name="BreakableBox" type="Node2D" unique_id=883861910 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
-script = ExtResource("1_8qgph")
+[node name="BreakableBox" type="Node2D" unique_id=1539678952 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+script = ExtResource("1_u6ciu")
 sprite_ref = NodePath("Sprite")
 editor_shape_area = NodePath("EditorShapeArea")
 editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
 origin_marker = NodePath("Origin")
-metadata/_custom_type_script = "uid://drrpapnrx5n8l"
+metadata/_custom_type_script = "uid://cfx4civm76jwr"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=689616869]
 material = SubResource("ShaderMaterial_4ik5e")
