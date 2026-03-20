@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dau7wqu8mh6uk" path="res://level_designer/db/LDObject/Props/Platforms/log_falling.tscn" id="1_jdj4q"]
 [ext_resource type="Texture2D" uid="uid://daac41f3cff3v" path="res://assets/textures/object/props/platform/ld_log_falling.png" id="1_wgfoq"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/db/GameObject/game_object.gd" id="2_v6mas"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://level_designer/db/Properties/_ld_property.gd" id="3_36k4b"]
 
 [resource]
 script = ExtResource("2_v6mas")

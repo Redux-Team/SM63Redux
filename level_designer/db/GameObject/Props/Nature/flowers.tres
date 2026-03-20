@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://oo8tdxwidlkl"]
 
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/db/GameObject/game_object.gd" id="1_dicca"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://level_designer/db/Properties/_ld_property.gd" id="1_s51gl"]
 
 [resource]
 script = ExtResource("1_dicca")

@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://3w81wgoh8qj7" path="res://assets/textures/object/props/interactable/ld_sign.png" id="1_ovcp8"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/db/GameObject/game_object.gd" id="2_6ss1s"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://level_designer/db/Properties/_ld_property.gd" id="2_784q2"]
 
 [resource]
 script = ExtResource("2_6ss1s")

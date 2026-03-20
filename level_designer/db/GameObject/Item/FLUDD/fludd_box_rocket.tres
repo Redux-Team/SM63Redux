@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bqrv84mhuhch5" path="res://assets/textures/object/item/fludd/ld_fludd_box_rocket.png" id="1_nid4f"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/db/GameObject/game_object.gd" id="2_0ppvn"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://level_designer/db/Properties/_ld_property.gd" id="2_ycukv"]
 
 [resource]
 script = ExtResource("2_0ppvn")

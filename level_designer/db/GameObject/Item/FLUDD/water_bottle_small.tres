@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bln2r56u5ot8w" path="res://assets/textures/object/item/fludd/ld_water_bottle_small.png" id="1_hoby0"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://level_designer/db/GameObject/game_object.gd" id="2_0432w"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://level_designer/db/Properties/_ld_property.gd" id="2_a76m0"]
 
 [resource]
 script = ExtResource("2_0432w")
