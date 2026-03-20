@@ -1,6 +1,6 @@
 @tool
 class_name LDObjectTelescoping
-extends LDObject
+extends LDObjectSprite
 
 
 ## The minimum number of middle segments allowed.
