@@ -42,6 +42,7 @@
 [ext_resource type="Resource" uid="uid://ytnyiak6am65" path="res://level_designer/db/GameObject/Item/Collectible/star_coin.tres" id="39_ntfkj"]
 [ext_resource type="Resource" uid="uid://c58m38fqamx21" path="res://level_designer/db/GameObject/Item/Collectible/coin_blue.tres" id="40_5fmnd"]
 [ext_resource type="Resource" uid="uid://dp8ylwxcasadn" path="res://level_designer/db/GameObject/Item/Collectible/shine_sprite.tres" id="41_gumef"]
+[ext_resource type="Resource" uid="uid://cfa6sdichbg83" path="res://level_designer/db/GameObject/Terrain/Grass/terrain_grass.tres" id="42_ntfkj"]
 
 [resource]
 script = ExtResource("2_slhqw")
@@ -85,7 +86,8 @@ objects = Dictionary[String, ExtResource("1_gumef")]({
 "Props/Platforms/log_falling": ExtResource("6_3bhcm"),
 "Props/Platforms/log_static": ExtResource("7_q34o8"),
 "Props/Platforms/log_tipping": ExtResource("8_2g8kd"),
-"Props/Platforms/wooden_platform": ExtResource("3_1tu0r")
+"Props/Platforms/wooden_platform": ExtResource("3_1tu0r"),
+"Terrain/Grass/terrain_grass": ExtResource("42_ntfkj")
 })
 database_dir = "res://level_designer/db/GameObject"
 metadata/_custom_type_script = "uid://dc4nc2ctw5fm5"
