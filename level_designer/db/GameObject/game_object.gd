@@ -32,7 +32,10 @@ enum ObjectCategory {
 @export var name_override: String
 
 @export_group("Editor", "ld_")
-@export_storage var ld_object_path: String
+@export_storage var ld_object_path: String:
+	set(p):
+		ld_object_path = p
+		_update_subpath()
 @export var ld_entry_texture: Texture2D
 @export var ld_editor_instance: PackedScene
 @export var ld_properties: Array[LDProperty]
@@ -40,6 +43,12 @@ enum ObjectCategory {
 
 @export_group("Game", "game_")
 @export var game_instance: PackedScene
+
+@warning_ignore("unused_private_class_variable")
+@export_tool_button("Update Internal Info") var _update_internal_info: Callable:
+	get:
+		return func() -> void:
+			_update_subpath()
 
 @warning_ignore("unused_private_class_variable")
 @export_tool_button("Print Internal Info") var _print_internal_info: Callable:
