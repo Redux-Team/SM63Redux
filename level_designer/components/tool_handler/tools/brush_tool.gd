@@ -90,17 +90,27 @@ func _on_object_changed(obj: GameObject) -> void:
 		_preview_cursor = null
 	_clear_stroke()
 	
-	if not obj:
+	if _is_telescoping_object(obj):
+		get_tool_handler().select_tool("telescoping")
 		return
 	
-	if _is_telescoping_object(obj):
-		get_tool_handler().select_tool.call_deferred("telescoping")
+	if _is_polygon_object(obj):
+		get_tool_handler().select_tool("polygon")
 		return
 	
 	if Singleton.current_input_device != Singleton.InputType.TOUCHSCREEN:
 		_spawn_cursor(obj)
 	else:
 		_cache_stamp_size(obj)
+
+
+func _is_polygon_object(obj: GameObject) -> bool:
+	if not obj or not obj.ld_editor_instance:
+		return false
+	var instance: LDObject = obj.ld_editor_instance.instantiate() as LDObject
+	var result: bool = instance is LDObjectPolygon
+	instance.queue_free()
+	return result
 
 
 func _is_telescoping_object(obj: GameObject) -> bool:
@@ -119,6 +129,8 @@ func _cache_stamp_size(obj: GameObject) -> void:
 
 
 func _spawn_cursor(obj: GameObject) -> void:
+	if not obj:
+		return
 	if not obj.ld_editor_instance:
 		return
 	if Singleton.current_input_device == Singleton.InputType.TOUCHSCREEN:
