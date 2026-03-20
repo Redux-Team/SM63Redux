@@ -13,8 +13,12 @@ func clear_entries() -> void:
 
 
 func set_group_name(group_name: String) -> void:
-	name = group_name
-	toggle_group_button.text = group_name
+	if group_name:
+		name = group_name
+		toggle_group_button.text = group_name
+		toggle_group_button.show()
+	else:
+		toggle_group_button.hide()
 
 
 func add_entry(obj: GameObject) -> void:
