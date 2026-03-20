@@ -11,9 +11,9 @@ func _on_ready() -> void:
 		audio_stream_player.stream = tracks.pick_random()
 	
 	# DEBUG
-	if FileAccess.file_exists("uid://du5a7t1kcdnm7"):
-		var debug_track: AudioStream = load("uid://du5a7t1kcdnm7")
-		if debug_track:
-			audio_stream_player.stream = debug_track
+	#if FileAccess.file_exists("uid://du5a7t1kcdnm7"):
+		#var debug_track: AudioStream = load("uid://du5a7t1kcdnm7")
+		#if debug_track:
+			#audio_stream_player.stream = debug_track
 	
 	audio_stream_player.play()
