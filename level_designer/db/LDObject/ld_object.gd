@@ -20,9 +20,8 @@ enum SelectionState {
 			_on_place()
 
 @export_group("Editor Props")
-@export var sprite_ref: Sprite2D
 @export var editor_shape_area: Area2D
-@export var editor_placement_rect: CollisionShape2D
+@export var editor_placement_rect: Node2D
 @export var origin_marker: Marker2D
 
 var _properties: Array[LDProperty] = []
@@ -30,13 +29,6 @@ var _property_values: Dictionary[StringName, Variant] = {}
 
 @export_tool_button("Create Editor Props") var _create_editor_props: Callable:
 	get: return func() -> void:
-		if not sprite_ref:
-			sprite_ref = Sprite2D.new()
-			sprite_ref.name = "Sprite"
-			add_child(sprite_ref)
-			sprite_ref.owner = self
-			_setup_sprite_material(sprite_ref)
-		
 		if not editor_shape_area:
 			editor_shape_area = Area2D.new()
 			editor_shape_area.name = "EditorShapeArea"
@@ -60,17 +52,15 @@ var _property_values: Dictionary[StringName, Variant] = {}
 
 
 func _on_preview() -> void:
-	set_shader_modulate(Color(1.0, 1.0, 1.0, 0.6))
+	pass
 
 
 func _on_place() -> void:
-	set_shader_modulate(Color.WHITE)
+	pass
 
 
-## Behavior for when the placement is confirmed.
 func place() -> void:
 	is_preview = false
-
 
 
 func init_properties(properties: Array[LDProperty]) -> void:
@@ -96,12 +86,31 @@ func get_property(key: StringName) -> Variant:
 	return _property_values.get(key)
 
 
-func has_property(key: StringName) -> bool:
+func get_property_values() -> Dictionary[StringName, Variant]:
+	return _property_values.duplicate()
+
+
+func has_property(key: String) -> bool:
 	return _property_values.has(key)
 
 
-func get_property_values() -> Dictionary[StringName, Variant]:
-	return _property_values.duplicate()
+func is_telescoping_x() -> bool:
+	return _property_values.has(&"t_size_x")
+
+
+func is_telescoping_y() -> bool:
+	return _property_values.has(&"t_size_y")
+
+
+func set_selection_state(state: SelectionState) -> void:
+	pass
+
+
+func get_stamp_size() -> Vector2:
+	if not editor_placement_rect:
+		return Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE)
+	return (editor_placement_rect.shape as RectangleShape2D).get_rect().size * global_scale
+
 
 @warning_ignore("unused_parameter")
 func _on_property_changed(key: StringName, value: Variant) -> void:
@@ -113,37 +122,3 @@ func _apply_property(key: StringName, value: Variant) -> void:
 		if prop.key == key:
 			prop.apply(self, value)
 			return
-
-
-func set_selection_state(state: SelectionState) -> void:
-	_set_shader_param(&"state", state)
-
-
-func set_shader_modulate(color: Color) -> void:
-	_set_shader_param(&"custom_modulate", color)
-
-
-func reset_shader_modulate() -> void:
-	set_shader_modulate(Color.WHITE if not is_preview else Color(1.0, 1.0, 1.0, 0.6))
-
-
-func get_stamp_size() -> Vector2:
-	if not editor_placement_rect:
-		return Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE)
-	return (editor_placement_rect.shape as RectangleShape2D).get_rect().size * global_scale
-
-
-func _set_shader_param(param: StringName, value: Variant) -> void:
-	if not sprite_ref:
-		return
-	var mat: ShaderMaterial = sprite_ref.material as ShaderMaterial
-	if not mat:
-		return
-	mat.set_shader_parameter(param, value)
-
-
-func _setup_sprite_material(s: Sprite2D) -> void:
-	var mat: ShaderMaterial = ShaderMaterial.new()
-	mat.shader = load("uid://dxlbj210tsi10")
-	mat.resource_local_to_scene = true
-	s.material = mat
