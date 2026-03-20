@@ -116,6 +116,15 @@ func _delete_selected() -> void:
 
 
 func _object_intersects_box(obj: LDObject) -> bool:
+	var poly_obj: LDObjectPolygon = obj as LDObjectPolygon
+	if poly_obj and poly_obj.editor_polygon:
+		var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * obj.get_global_transform()
+		for point: Vector2 in poly_obj.editor_polygon.polygon:
+			var screen_point: Vector2 = full_transform * point
+			if _box_select_rect.has_point(screen_point):
+				return true
+		return false
+	
 	if not obj.editor_shape_area:
 		var half: Vector2 = obj.get_stamp_size() * 0.5
 		var screen_rect: Rect2 = viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size())
