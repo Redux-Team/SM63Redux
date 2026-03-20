@@ -32,6 +32,7 @@ static var _inst: LDViewport
 @export var _root: LDViewportRoot
 @export var _selection_overlay: LDSelectionOverlay
 @export var _touch_indicator: LDTouchSwipeIndicator
+@export var _viewport_input: Control
 
 
 var allow_panning: bool = true
@@ -48,7 +49,7 @@ var camera_zoom: Vector2 = Vector2.ONE:
 var is_refocusing: bool = false
 var is_mouse_panning: bool = false:
 	set(mp):
-		Input.set_default_cursor_shape(Input.CURSOR_MOVE if mp else Input.CURSOR_ARROW)
+		_viewport_input.mouse_default_cursor_shape = Control.CURSOR_MOVE if mp else Control.CURSOR_ARROW
 		is_mouse_panning = mp
 
 var _selected_objects: Array[LDObject] = []

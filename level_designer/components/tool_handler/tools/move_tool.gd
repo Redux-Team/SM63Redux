@@ -13,8 +13,8 @@ func get_tool_name() -> String:
 	return "Move"
 
 
-func get_cursor_shape() -> Input.CursorShape:
-	return Input.CURSOR_DRAG
+func get_cursor_shape() -> Control.CursorShape:
+	return Control.CURSOR_DRAG
 
 
 func _on_ready() -> void:
@@ -149,6 +149,12 @@ func _get_object_at(mouse_pos: Vector2) -> LDObject:
 
 
 func _object_contains_point(obj: LDObject, mouse_pos: Vector2) -> bool:
+	var poly_obj: LDObjectPolygon = obj as LDObjectPolygon
+	if poly_obj and poly_obj.editor_polygon:
+		var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * obj.get_global_transform()
+		var local_point: Vector2 = full_transform.affine_inverse() * mouse_pos
+		return Geometry2D.is_point_in_polygon(local_point, poly_obj.editor_polygon.polygon)
+	
 	if not obj.editor_shape_area:
 		var half: Vector2 = obj.get_stamp_size() * 0.5
 		var screen_rect: Rect2 = viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size())

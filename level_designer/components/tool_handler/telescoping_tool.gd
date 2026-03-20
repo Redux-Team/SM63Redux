@@ -13,8 +13,8 @@ func get_tool_name() -> String:
 	return "Telescoping"
 
 
-func get_cursor_shape() -> Input.CursorShape:
-	return Input.CURSOR_HSIZE
+func get_cursor_shape() -> Control.CursorShape:
+	return Control.CURSOR_HSIZE
 
 
 func _on_ready() -> void:
