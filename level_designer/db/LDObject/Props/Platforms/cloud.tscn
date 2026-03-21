@@ -22,7 +22,7 @@ shader_parameter/pulse_max = 1.0
 resource_local_to_scene = true
 size = Vector2(22, 20)
 
-[node name="Cloud" type="Node2D" unique_id=55739035 node_paths=PackedStringArray("nine_patch", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+[node name="Cloud" type="Node2D" unique_id=1824970762 node_paths=PackedStringArray("nine_patch", "editor_shape_area", "editor_placement_rect", "origin_marker")]
 script = ExtResource("1_golwp")
 max_units = -1
 nine_patch = NodePath("NinePatch")

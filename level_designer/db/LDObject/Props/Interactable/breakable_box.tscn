@@ -21,7 +21,7 @@ shader_parameter/pulse_max = 1.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ry641"]
 size = Vector2(32, 32)
 
-[node name="BreakableBox" type="Node2D" unique_id=1539678952 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+[node name="BreakableBox" type="Node2D" unique_id=1824244842 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
 script = ExtResource("1_u6ciu")
 sprite_ref = NodePath("Sprite")
 editor_shape_area = NodePath("EditorShapeArea")
