@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dgqiataa68ctv"]
+
+[ext_resource type="Script" uid="uid://dqodpccy3sg1s" path="res://level_designer/components/save_load_handler/save_load_handler.gd" id="1_oiwfa"]
+
+[node name="SaveLoadHandler" type="Node" unique_id=1300597135]
+script = ExtResource("1_oiwfa")
