@@ -28,22 +28,27 @@ func delete_placed_selection() -> void:
 	
 	LD.get_editor_viewport().clear_selection()
 	
+	var parents: Array[Node] = []
+	for obj: LDObject in objects:
+		parents.append(obj.get_parent())
+	
 	var history: LDHistoryHandler = LD.get_history_handler()
 	history.begin_action("Delete Objects")
 	history.add_do(func() -> void:
 		for obj: LDObject in objects:
-			if is_instance_valid(obj):
-				obj.hide()
+			if is_instance_valid(obj) and obj.get_parent():
+				obj.get_parent().remove_child(obj)
 	)
 	history.add_undo(func() -> void:
-		for obj: LDObject in objects:
-			if is_instance_valid(obj):
-				obj.show()
+		for i: int in objects.size():
+			if is_instance_valid(objects[i]) and is_instance_valid(parents[i]):
+				parents[i].add_child(objects[i])
 	)
 	history.commit_action()
 	
 	for obj: LDObject in objects:
-		obj.hide()
+		if obj.get_parent():
+			obj.get_parent().remove_child(obj)
 
 
 func get_shared_properties(objects: Array[LDObject]) -> Array[LDProperty]:
