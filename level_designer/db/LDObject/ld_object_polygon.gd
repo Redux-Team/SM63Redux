@@ -27,12 +27,12 @@ extends LDObject
 		_update_visuals()
 ## Minimum dot product with Vector2.UP for an edge to be considered a topline edge.
 ## 0.0 = any upward-facing edge, 1.0 = only perfectly flat edges.
-@export_range(-1.0, 1.0, 0.01) var topline_angle_threshold: float = 0.0:
+@export_range(-1.0, 1.0, 0.01) var topline_angle_threshold: float = 0.55:
 	set(v):
 		topline_angle_threshold = v
 		_update_visuals()
 
-@export_range(0.1, 128.0, 0.1) var topline_width: float = 32.0:
+@export_range(0.1, 128.0, 0.1) var topline_width: float = 26.0:
 	set(v):
 		topline_width = v
 		_update_visuals()
@@ -42,7 +42,7 @@ extends LDObject
 	set(t):
 		outline_texture = t
 		_update_visuals()
-@export var outline_width: float = 1.0:
+@export var outline_width: float = 10.0:
 	set(v):
 		outline_width = v
 		_update_visuals()
@@ -55,8 +55,8 @@ extends LDObject
 
 @export_group("Internal")
 @export var _polygon: Polygon2D
-@export var _topline: Line2D
-@export var _topline_shadow: Line2D
+@export var _topline_container: Node2D
+@export var _topline_shadow_container: Node2D
 @export var _outline: Line2D
 
 @export_group("Editor Props")
@@ -68,25 +68,22 @@ extends LDObject
 			_polygon = Polygon2D.new()
 			_polygon.name = "Polygon"
 			_polygon.color = Color.TRANSPARENT
+			_polygon.clip_children = CanvasItem.CLIP_CHILDREN_AND_DRAW
 			add_child(_polygon)
 			_polygon.owner = self
 		
-		if not _topline:
-			_topline = Line2D.new()
-			_topline.name = "Topline"
-			_topline.width = 4.0
-			add_child(_topline)
-			_topline.owner = self
-			_setup_line2d(_topline)
-
-		if not _topline_shadow:
-			_topline_shadow = Line2D.new()
-			_topline_shadow.name = "ToplineShadow"
-			_topline_shadow.width = _topline.width + (topline_width / 3)
-			add_child(_topline_shadow)
-			_topline_shadow.owner = self
-			_setup_line2d(_topline_shadow)
-
+		if not _topline_container:
+			_topline_container = Node2D.new()
+			_topline_container.name = "ToplineContainer"
+			add_child(_topline_container)
+			_topline_container.owner = self
+		
+		if not _topline_shadow_container:
+			_topline_shadow_container = Node2D.new()
+			_topline_shadow_container.name = "ToplineShadowContainer"
+			_polygon.add_child(_topline_shadow_container)
+			_topline_shadow_container.owner = self
+		
 		if not _outline:
 			_outline = Line2D.new()
 			_outline.name = "Outline"
@@ -155,44 +152,69 @@ func _update_visuals() -> void:
 		_polygon.color = Color.WHITE if base_texture else Color.TRANSPARENT
 	
 	if not _polygon or _polygon.polygon.size() < 3:
-		if _topline:
-			_topline.points = PackedVector2Array()
-		if _topline_shadow:
-			_topline_shadow.points = PackedVector2Array()
+		if _topline_container:
+			for child: Node in _topline_container.get_children():
+				child.queue_free()
+		if _topline_shadow_container:
+			for child: Node in _topline_shadow_container.get_children():
+				child.queue_free()
 		if _outline:
 			_outline.points = PackedVector2Array()
 		return
 	
-	var points: PackedVector2Array = _polygon.polygon
+	var points: PackedVector2Array = _ensure_clockwise(_polygon.polygon)
 	var closed_points: PackedVector2Array = _get_closed_points(points)
+	var top_segments: Array[PackedVector2Array] = _get_topline_segments(points)
 	
-	if _topline:
-		_setup_line2d(_topline)
-		_topline.width = topline_width
-		_topline.texture = topline_texture
-		_topline.points = _subdivide_for_line2d(closed_points, topline_texture)
+	if _topline_container:
+		for child: Node in _topline_container.get_children():
+			child.queue_free()
+		for segment: PackedVector2Array in top_segments:
+			var line: Line2D = Line2D.new()
+			_setup_line2d(line)
+			line.width = topline_width
+			line.texture = topline_texture
+			line.points = _subdivide_for_line2d(segment, topline_texture)
+			_topline_container.add_child(line)
 	
-	if _topline_shadow:
-		_setup_line2d(_topline_shadow)
-		_topline_shadow.width = topline_width + (topline_width / 3)
-		_topline_shadow.texture = topline_shadow_texture
-		_topline_shadow.points = _topline.points
-		_topline_shadow.default_color = Color(1.0, 1.0, 1.0, 0.6)
+	if _topline_shadow_container:
+		for child: Node in _topline_shadow_container.get_children():
+			child.queue_free()
+		for segment: PackedVector2Array in top_segments:
+			var line: Line2D = Line2D.new()
+			_setup_line2d(line)
+			line.width = topline_width + (topline_width / 3.0)
+			line.texture = topline_shadow_texture
+			line.default_color = Color(1.0, 1.0, 1.0, 0.6)
+			line.points = _subdivide_for_line2d(segment, topline_shadow_texture)
+			_topline_shadow_container.add_child(line)
 	
 	if _outline:
 		_setup_line2d(_outline)
 		_outline.width = outline_width
 		_outline.texture = outline_texture
-		_outline.default_color = Color.WHITE if outline_texture else Color.TRANSPARENT
 		_outline.points = _subdivide_for_line2d(closed_points, outline_texture)
 
 
-func _get_topline_points(points: PackedVector2Array) -> PackedVector2Array:
-	if points.is_empty():
-		return PackedVector2Array()
-	
+func _ensure_clockwise(points: PackedVector2Array) -> PackedVector2Array:
+	var area: float = 0.0
 	var count: int = points.size()
-	var result: PackedVector2Array = PackedVector2Array()
+	for i: int in count:
+		var a: Vector2 = points[i]
+		var b: Vector2 = points[(i + 1) % count]
+		area += (b.x - a.x) * (b.y + a.y)
+	if area < 0.0:
+		return points
+	var reversed: PackedVector2Array = PackedVector2Array()
+	for i: int in range(count - 1, -1, -1):
+		reversed.append(points[i])
+	return reversed
+
+
+func _get_topline_segments(points: PackedVector2Array) -> Array[PackedVector2Array]:
+	var count: int = points.size()
+	var segments: Array[PackedVector2Array] = []
+	var current: PackedVector2Array = PackedVector2Array()
 	
 	for i: int in count:
 		var a: Vector2 = points[i]
@@ -200,11 +222,18 @@ func _get_topline_points(points: PackedVector2Array) -> PackedVector2Array:
 		var edge: Vector2 = (b - a).normalized()
 		var normal: Vector2 = Vector2(edge.y, -edge.x)
 		if normal.y < -topline_angle_threshold:
-			if result.is_empty() or result[result.size() - 1] != a:
-				result.append(a)
-			result.append(b)
+			if current.is_empty():
+				current.append(a)
+			current.append(b)
+		else:
+			if not current.is_empty():
+				segments.append(current)
+				current = PackedVector2Array()
 	
-	return result
+	if not current.is_empty():
+		segments.append(current)
+	
+	return segments
 
 
 func _ensure_counter_clockwise(points: PackedVector2Array) -> PackedVector2Array:
@@ -250,12 +279,13 @@ func _get_closed_points(points: PackedVector2Array) -> PackedVector2Array:
 	closed.append(points[0])
 	return closed
 
-
+ 
 func _setup_line2d(line: Line2D) -> void:
 	line.joint_mode = Line2D.LINE_JOINT_ROUND
 	line.begin_cap_mode = Line2D.LINE_CAP_ROUND
 	line.end_cap_mode = Line2D.LINE_CAP_ROUND
 	line.texture_mode = Line2D.LINE_TEXTURE_TILE
+	line.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 
 
 func _draw() -> void:

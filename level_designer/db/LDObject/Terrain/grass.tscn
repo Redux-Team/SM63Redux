@@ -6,17 +6,19 @@
 [ext_resource type="Texture2D" uid="uid://dt5o1wfangng7" path="res://assets/textures/object/terrain/grass/terrain_grass_shadow.png" id="4_bk5v6"]
 [ext_resource type="Texture2D" uid="uid://hsblflmkc6wq" path="res://assets/textures/object/terrain/grass/terrain_grass_top_left.png" id="4_qeqwc"]
 [ext_resource type="Texture2D" uid="uid://da4iii6wieke3" path="res://assets/textures/object/terrain/grass/terrain_grass_top_right.png" id="5_bk5v6"]
+[ext_resource type="Texture2D" uid="uid://bn3f02uv8d5sr" path="res://assets/textures/object/terrain/grass/ld_terrain_grass_outline.png" id="7_bk5v6"]
 
-[node name="Grass" type="Node2D" unique_id=642150737 node_paths=PackedStringArray("_polygon", "_topline", "_topline_shadow", "_outline", "editor_polygon", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+[node name="Grass" type="Node2D" unique_id=642150737 node_paths=PackedStringArray("_polygon", "_topline_container", "_topline_shadow_container", "_outline", "editor_polygon", "editor_shape_area", "editor_placement_rect", "origin_marker")]
 script = ExtResource("1_ck8s1")
 base_texture = ExtResource("2_ocuy7")
 topline_texture = ExtResource("3_1u0xm")
 topline_shadow_texture = ExtResource("4_bk5v6")
 topline_left_end = ExtResource("4_qeqwc")
 topline_right_end = ExtResource("5_bk5v6")
+outline_texture = ExtResource("7_bk5v6")
 _polygon = NodePath("Polygon")
-_topline = NodePath("Topline")
-_topline_shadow = NodePath("Polygon/ToplineShadow")
+_topline_container = NodePath("ToplineContainer")
+_topline_shadow_container = NodePath("Polygon/ToplineShadowContainer")
 _outline = NodePath("Outline")
 editor_polygon = NodePath("EditorShapeArea/EditorShape")
 editor_shape_area = NodePath("EditorShapeArea")
@@ -35,17 +37,12 @@ clip_children = 2
 texture_repeat = 2
 texture = ExtResource("2_ocuy7")
 
-[node name="ToplineShadow" type="Line2D" parent="Polygon" unique_id=1411192929]
-texture_repeat = 2
-texture_mode = 1
+[node name="ToplineShadowContainer" type="Node2D" parent="Polygon" unique_id=503219557]
 
 [node name="Outline" type="Line2D" parent="." unique_id=1712055771]
 texture_repeat = 2
-width = 1.0
-default_color = Color(0, 0, 0, 1)
+width = 2.0
+texture = ExtResource("7_bk5v6")
 texture_mode = 1
 
-[node name="Topline" type="Line2D" parent="." unique_id=432451448]
-texture_repeat = 2
-texture = ExtResource("3_1u0xm")
-texture_mode = 1
+[node name="ToplineContainer" type="Node2D" parent="." unique_id=341742083]
