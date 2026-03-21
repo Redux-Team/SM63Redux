@@ -6,6 +6,9 @@ extends LDComponent
 @export_group("Windows")
 @export var _obj_browser_window: LDWindow
 @export var _object_property_window: LDWindow
+@export_group("File Dialogs")
+@export var _save_file_dialog: FileDialog
+@export var _load_file_dialog: FileDialog
 
 
 func _on_ready() -> void:
@@ -16,6 +19,15 @@ func _on_ready() -> void:
 	browser.hide_request.connect(func() -> void:
 		_obj_browser_window.popout()
 	)
+	
+	_save_file_dialog.filters = PackedStringArray([
+		"*.63r.lvl;63 Redux Level",
+		"*.json;JSON Level"
+	])
+	_load_file_dialog.filters = PackedStringArray([
+		"*.63r.lvl;63 Redux Level",
+		"*.json;JSON Level"
+	])
 
 
 func _input(event: InputEvent) -> void:
@@ -53,6 +65,28 @@ func _toggle_window(window: LDWindow) -> void:
 		window.popin()
 
 
+func _on_save_file_selected(path: String) -> void:
+	var handler: LDSaveLoadHandler = LD.get_save_load_handler()
+	var err: Error
+	if path.get_extension() == "json":
+		err = handler.save_json(path)
+	else:
+		err = handler.save_binary(path)
+	if err != OK:
+		push_error("Failed to save level: " + error_string(err))
+
+
+func _on_load_file_selected(path: String) -> void:
+	var handler: LDSaveLoadHandler = LD.get_save_load_handler()
+	var err: Error
+	if path.ends_with(".json"):
+		err = handler.load_json(path)
+	else:
+		err = handler.load_binary(path)
+	if err != OK:
+		push_error("Failed to load level: " + error_string(err))
+
+
 func _on_object_browser_button_pressed() -> void:
 	_toggle_window(_obj_browser_window)
 
@@ -79,3 +113,15 @@ func _on_reset_button_pressed() -> void:
 
 func _on_delete_button_pressed() -> void:
 	LD.get_object_handler().delete_placed_selection()
+
+
+func _on_save_button_pressed() -> void:
+	_save_file_dialog.popup_centered()
+
+
+func _on_load_button_pressed() -> void:
+	_load_file_dialog.popup_centered()
+
+
+func _on_rotate_button_pressed() -> void:
+	LD.get_tool_handler().select_tool("rotate")

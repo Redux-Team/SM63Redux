@@ -5,11 +5,13 @@
 [ext_resource type="PackedScene" uid="uid://bk2iromqs3siv" path="res://level_designer/components/ui/object_browser/object_browser.tscn" id="3_ms7r3"]
 [ext_resource type="PackedScene" uid="uid://wfkq6ce52aet" path="res://level_designer/components/ui/object_properties/object_properties.tscn" id="4_4nlpt"]
 
-[node name="LDUI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window")]
+[node name="LDUI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window", "_save_file_dialog", "_load_file_dialog")]
 script = ExtResource("1_8w51u")
 _canvas_layer = NodePath("WindowLayer")
 _obj_browser_window = NodePath("WindowLayer/ObjectBrowserWindow")
 _object_property_window = NodePath("WindowLayer/ObjectPropertyWindow")
+_save_file_dialog = NodePath("WindowLayer/SaveFileDialog")
+_load_file_dialog = NodePath("WindowLayer/LoadFileDialog")
 
 [node name="ViewportUI" type="CanvasLayer" parent="." unique_id=1904926983]
 layer = 2
@@ -53,9 +55,9 @@ text = "Brush"
 layout_mode = 2
 text = "Move"
 
-[node name="ResetButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1951778345]
+[node name="RotateButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1358070352]
 layout_mode = 2
-text = "Reset"
+text = "Rotate"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="ViewportUI/VBoxContainer2" unique_id=227411509]
 layout_mode = 2
@@ -64,6 +66,22 @@ alignment = 2
 [node name="DeleteButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1153339096]
 layout_mode = 2
 text = "Delete"
+
+[node name="ResetButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1951778345]
+layout_mode = 2
+text = "Reset Cam"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="ViewportUI/VBoxContainer2" unique_id=1216125888]
+layout_mode = 2
+alignment = 2
+
+[node name="SaveButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer3" unique_id=244361035]
+layout_mode = 2
+text = "Save"
+
+[node name="LoadButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer3" unique_id=1138989682]
+layout_mode = 2
+text = "Load"
 
 [node name="WindowLayer" type="CanvasLayer" parent="." unique_id=783443360]
 layer = 3
@@ -83,10 +101,31 @@ close_on_back_input = true
 window_scale = Vector2(0.9, 0.9)
 pop_in_sfx = true
 
+[node name="SaveFileDialog" type="FileDialog" parent="WindowLayer" unique_id=1751840764]
+oversampling_override = 1.0
+position = Vector2i(0, 36)
+size = Vector2i(669, 360)
+access = 2
+use_native_dialog = true
+
+[node name="LoadFileDialog" type="FileDialog" parent="WindowLayer" unique_id=454435546]
+oversampling_override = 1.0
+title = "Open a File"
+position = Vector2i(0, 36)
+size = Vector2i(669, 360)
+file_mode = 0
+access = 2
+use_native_dialog = true
+
 [connection signal="pressed" from="ViewportUI/VBoxContainer/ObjectBrowserButton" to="." method="_on_object_browser_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer/PropertiesButton" to="." method="_on_properties_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/SelectButton" to="." method="_on_select_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/BrushButton" to="." method="_on_brush_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/MoveButton" to="." method="_on_move_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/RotateButton" to="." method="_on_rotate_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeleteButton" to="." method="_on_delete_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="file_selected" from="WindowLayer/SaveFileDialog" to="." method="_on_save_file_selected"]
+[connection signal="file_selected" from="WindowLayer/LoadFileDialog" to="." method="_on_load_file_selected"]
