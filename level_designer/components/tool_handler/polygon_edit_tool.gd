@@ -54,7 +54,6 @@ func _on_viewport_input(event: InputEvent) -> void:
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
-			var world_pos: Vector2 = _get_world_mouse_pos()
 			if _hovered_point_index >= 0:
 				_begin_drag_point(_hovered_point_index)
 			elif _hovered_edge_index >= 0:
@@ -78,7 +77,7 @@ func _on_selection_changed(objects: Array[LDObject]) -> void:
 		get_tool_handler().select_tool("select")
 
 
-func _update_hover(world_pos: Vector2) -> void:
+func _update_hover(_world_pos: Vector2) -> void:
 	if not _editing_object or not _editing_object.editor_polygon:
 		return
 	
