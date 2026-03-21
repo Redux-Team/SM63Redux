@@ -3,6 +3,16 @@ class_name LDObjectPolygon
 extends LDObject
 
 
+const PREVIEW_VALID_FILL: Color = Color(0.2, 0.5, 1.0, 0.25)
+const PREVIEW_VALID_BORDER: Color = Color(0.0, 0.433, 1.0, 1.0)
+const PREVIEW_INVALID_FILL: Color = Color(1.0, 0.2, 0.2, 0.25)
+const PREVIEW_INVALID_BORDER: Color = Color(1.0, 0.0, 0.0, 0.8)
+const FALLBACK_FILL: Color = Color(0.2, 0.5, 1.0, 0.25)
+const FALLBACK_BORDER: Color = Color(0.4, 0.7, 1.0, 0.8)
+const PREVIEW_BORDER_WIDTH: float = 1.0
+const SELECTION_BORDER_WIDTH: float = 1.5
+
+
 @export var base_texture: Texture2D:
 	set(t):
 		base_texture = t
@@ -112,6 +122,7 @@ extends LDObject
 
 
 var _selection_state: LDObject.SelectionState = LDObject.SelectionState.HIDDEN
+var _preview_valid: bool = true
 
 
 func _on_preview() -> void:
@@ -124,6 +135,25 @@ func _on_place() -> void:
 
 func set_selection_state(state: LDObject.SelectionState) -> void:
 	_selection_state = state
+	var tint: Color = Color.WHITE
+	match state:
+		LDObject.SelectionState.HOVERED:
+			tint = Color(1.0, 1.0, 1.0, 0.7)
+		LDObject.SelectionState.SELECTED:
+			tint = Color(1.2, 1.2, 1.2, 1.0)
+	if _topline_container:
+		_topline_container.modulate = tint
+	if _topline_shadow_container:
+		_topline_shadow_container.modulate = tint
+	if _outline:
+		_outline.modulate = tint
+	if _polygon:
+		_polygon.modulate = tint
+	queue_redraw()
+
+
+func set_preview_valid(valid: bool) -> void:
+	_preview_valid = valid
 	queue_redraw()
 
 
@@ -137,7 +167,7 @@ func apply_points(points: PackedVector2Array) -> void:
 	if _polygon:
 		_polygon.polygon = points
 		_polygon.color = Color.TRANSPARENT
-	if editor_polygon:
+	if editor_polygon and _preview_valid:
 		editor_polygon.polygon = points
 	_update_visuals()
 	queue_redraw()
@@ -294,28 +324,40 @@ func _draw() -> void:
 	
 	var points: PackedVector2Array = _polygon.polygon
 	
+	if is_preview:
+		var p_fill: Color = PREVIEW_VALID_FILL if _preview_valid else PREVIEW_INVALID_FILL
+		var p_border: Color = PREVIEW_VALID_BORDER if _preview_valid else PREVIEW_INVALID_BORDER
+		if points.size() >= 3:
+			if _preview_valid:
+				draw_colored_polygon(points, p_fill)
+			else:
+				draw_polyline(points, p_fill)
+		if points.size() >= 2:
+			draw_polyline(_get_closed_points(points) if points.size() >= 3 else points, p_border, PREVIEW_BORDER_WIDTH, true)
+		return
+	
 	if not base_texture:
-		draw_colored_polygon(points, Color(0.2, 0.5, 1.0, 0.25))
-		draw_polyline(_get_closed_points(points), Color(0.4, 0.7, 1.0, 0.8), border_width, true)
+		draw_colored_polygon(points, FALLBACK_FILL)
+		draw_polyline(_get_closed_points(points), FALLBACK_BORDER, border_width, true)
 	
 	if _selection_state == LDObject.SelectionState.HIDDEN:
 		return
 	
-	var outline_color: Color
-	var fill_color: Color
+	var s_outline: Color
+	var s_fill: Color
 	
 	match _selection_state:
 		LDObject.SelectionState.HOVERED:
-			outline_color = Color(1.0, 1.0, 1.0, 0.6)
-			fill_color = Color(1.0, 1.0, 1.0, 0.1)
+			s_outline = Color(1.0, 1.0, 1.0, 0.6)
+			s_fill = Color(1.0, 1.0, 1.0, 0.1)
 		LDObject.SelectionState.SELECTED:
 			var pulse: float = sin(Time.get_ticks_msec() * 0.005) * 0.5 + 0.5
 			var alpha: float = lerpf(0.3, 1.0, pulse)
-			outline_color = Color(1.0, 1.0, 1.0, alpha)
-			fill_color = Color(1.0, 1.0, 1.0, alpha * 0.15)
+			s_outline = Color(1.0, 1.0, 1.0, alpha)
+			s_fill = Color(1.0, 1.0, 1.0, alpha * 0.15)
 	
-	draw_colored_polygon(points, fill_color)
-	draw_polyline(_get_closed_points(points), outline_color, 1.5, true)
+	draw_colored_polygon(points, s_fill)
+	draw_polyline(_get_closed_points(points), s_outline, SELECTION_BORDER_WIDTH, true)
 	
 	if _selection_state == LDObject.SelectionState.SELECTED:
 		queue_redraw()
