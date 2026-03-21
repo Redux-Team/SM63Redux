@@ -32,6 +32,10 @@ func get_cursor_shape() -> Control.CursorShape:
 	return Control.CURSOR_ARROW
 
 
+func set_cursor_shape(cursor_shape: Control.CursorShape) -> void:
+	viewport._viewport_input.mouse_default_cursor_shape = cursor_shape
+
+
 ## Uses the viewport's input priority via [signal LDViewport.viewport_input]
 func _on_viewport_input(event: InputEvent) -> void:
 	pass
