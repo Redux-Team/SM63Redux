@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://enlwdtgbab6g"]
+
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_i7jr2"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/GameObject/game_object.gd" id="1_wuh3q"]
+
+[resource]
+script = ExtResource("1_wuh3q")
+id = "coin"
+category = 1
+category_string = "Item"
+subpath = "Collectible/coin"
+group_path = "Collectible"
+ld_object_path = "Item/Collectible/coin"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

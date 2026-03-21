@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="ObjectPropertyDB" format=3 uid="uid://cuf2810a8poqt"]
-
-[ext_resource type="Script" uid="uid://df6wwa1cp1cjn" path="res://level_designer/db/property_db.gd" id="1_ydwwr"]
-
-[resource]
-script = ExtResource("1_ydwwr")
-metadata/_custom_type_script = "uid://df6wwa1cp1cjn"

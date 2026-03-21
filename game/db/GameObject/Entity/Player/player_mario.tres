@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dy8oygc3wj1a5"]
+
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/GameObject/game_object.gd" id="1_5s2g4"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_r1t5l"]
+
+[resource]
+script = ExtResource("1_5s2g4")
+id = "player_mario"
+category_string = "Entity"
+subpath = "Player/player_mario"
+group_path = "Player"
+ld_object_path = "Entity/Player/player_mario"
+ld_indexable = false
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://by8vbnkxga54a"]
+
+[ext_resource type="PackedScene" uid="uid://c5svhilmprh7p" path="res://game/db/LDObject/Props/Platforms/log_static.tscn" id="1_7dr6y"]
+[ext_resource type="Texture2D" uid="uid://c0jk64ukj522s" path="res://assets/textures/object/props/platform/ld_log_static.png" id="1_x5hqj"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/GameObject/game_object.gd" id="2_glv48"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_c6brf"]
+
+[resource]
+script = ExtResource("2_glv48")
+id = "log_static"
+category = 5
+category_string = "Props"
+subpath = "Platforms/log_static"
+group_path = "Platforms"
+name_override = "Static Log"
+ld_object_path = "Props/Platforms/log_static"
+ld_entry_texture = ExtResource("1_x5hqj")
+ld_editor_instance = ExtResource("1_7dr6y")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LDPropertyRotation" format=3 uid="uid://biih4ua68gqhe"]
+
+[ext_resource type="Script" uid="uid://cnfsiqwgu44qm" path="res://game/db/Properties/rotation.gd" id="1_7cc35"]
+
+[resource]
+script = ExtResource("1_7cc35")
+key = &"rotation"
+label = "Rotation"
+type = 2
+default_value = 0.0
+metadata/_custom_type_script = "uid://cnfsiqwgu44qm"

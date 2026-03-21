@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cxjkf33colukt"]
+
+[ext_resource type="PackedScene" uid="uid://cstwnaf1t1wra" path="res://game/db/LDObject/Props/Interactable/breakable_box.tscn" id="1_hntms"]
+[ext_resource type="Texture2D" uid="uid://q3mepjvkvcv8" path="res://assets/textures/object/props/interactable/ld_breakable_box.png" id="1_k0ihf"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/GameObject/game_object.gd" id="2_ysnov"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_mg75m"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_igebl"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_7ts0u"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="5_c708w"]
+[ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="6_7ts0u"]
+[ext_resource type="Resource" uid="uid://bfbxhsv32nu3e" path="res://game/db/Properties/breakable_box/coin_amount.tres" id="8_lsw20"]
+
+[resource]
+script = ExtResource("2_ysnov")
+id = "breakable_box"
+category = 5
+category_string = "Props"
+subpath = "Interactable/breakable_box"
+group_path = "Interactable"
+ld_object_path = "Props/Interactable/breakable_box"
+ld_entry_texture = ExtResource("1_k0ihf")
+ld_editor_instance = ExtResource("1_hntms")
+ld_properties = Array[ExtResource("3_mg75m")]([ExtResource("4_igebl"), ExtResource("5_7ts0u"), ExtResource("5_c708w"), ExtResource("6_7ts0u"), ExtResource("8_lsw20")])
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

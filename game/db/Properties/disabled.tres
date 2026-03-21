@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LDPropertyDisabled" format=3 uid="uid://jcepd4xhp34u"]
+
+[ext_resource type="Script" uid="uid://crrkj8ocrq3rr" path="res://game/db/Properties/disabled.gd" id="1_2b7b3"]
+
+[resource]
+script = ExtResource("1_2b7b3")
+key = &"disabled"
+label = "Disabled"
+default_value = false
+metadata/_custom_type_script = "uid://crrkj8ocrq3rr"

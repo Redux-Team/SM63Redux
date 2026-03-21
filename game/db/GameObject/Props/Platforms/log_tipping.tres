@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dkyd466tbfa22"]
+
+[ext_resource type="Texture2D" uid="uid://bnjhvv0pcctk4" path="res://assets/textures/object/props/platform/ld_log_tipping.png" id="1_nwnai"]
+[ext_resource type="PackedScene" uid="uid://taxkdf07e5q7" path="res://game/db/LDObject/Props/Platforms/tipping_log.tscn" id="1_vmtac"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/GameObject/game_object.gd" id="2_xi7gs"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_jw0bp"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_7frpq"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="5_iqprn"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_jhnyy"]
+[ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="7_1dqkn"]
+
+[resource]
+script = ExtResource("2_xi7gs")
+id = "log_tipping"
+category = 5
+category_string = "Props"
+subpath = "Platforms/log_tipping"
+group_path = "Platforms"
+ld_object_path = "Props/Platforms/log_tipping"
+ld_entry_texture = ExtResource("1_nwnai")
+ld_editor_instance = ExtResource("1_vmtac")
+ld_properties = Array[ExtResource("3_jw0bp")]([ExtResource("4_7frpq"), ExtResource("5_iqprn"), ExtResource("6_jhnyy"), ExtResource("7_1dqkn")])
+metadata/_custom_type_script = "uid://dkabi60x2g40f"
