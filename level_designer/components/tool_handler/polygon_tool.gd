@@ -116,7 +116,7 @@ func _begin_polygon(obj: GameObject) -> void:
 		return
 	_active_object = instance as LDObjectPolygon
 	_active_object.is_preview = true
-	_active_object.init_properties(obj.ld_properties)
+	_active_object.init_properties(obj)
 	viewport.add_object(_active_object)
 	_points = PackedVector2Array()
 	_is_valid = false

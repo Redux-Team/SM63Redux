@@ -84,7 +84,7 @@ func _spawn_cursor(obj: GameObject) -> void:
 		return
 	_preview_cursor = instance as LDObjectTelescoping
 	_preview_cursor.is_preview = true
-	_preview_cursor.init_properties(obj.ld_properties)
+	_preview_cursor.init_properties(obj)
 	viewport.add_object(_preview_cursor)
 
 
@@ -100,7 +100,7 @@ func _begin_sizing(pos: Vector2) -> void:
 	
 	_sizing_object = instance as LDObjectTelescoping
 	_sizing_object.is_preview = true
-	_sizing_object.init_properties(obj.ld_properties)
+	_sizing_object.init_properties(obj)
 	viewport.add_object(_sizing_object, Vector2i(pos))
 	if obj.has_property(&"position"):
 		_sizing_object.set_property(&"position", pos)
