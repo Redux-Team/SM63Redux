@@ -24,6 +24,7 @@ enum SelectionState {
 @export var editor_placement_rect: Node2D
 @export var origin_marker: Marker2D
 
+var source_object_id: String = ""
 var _properties: Array[LDProperty] = []
 var _property_values: Dictionary[StringName, Variant] = {}
 
@@ -61,10 +62,13 @@ func _on_place() -> void:
 
 func place() -> void:
 	is_preview = false
+	for prop: LDProperty in _properties:
+		_apply_property(prop.key, _property_values.get(prop.key, prop.default_value))
 
 
-func init_properties(properties: Array[LDProperty]) -> void:
-	_properties = properties
+func init_properties(obj: GameObject) -> void:
+	source_object_id = obj.id
+	_properties = obj.ld_properties
 	for prop: LDProperty in _properties:
 		_property_values[prop.key] = prop.default_value
 		if prop.key == &"position":
@@ -101,7 +105,7 @@ func is_telescoping_x() -> bool:
 func is_telescoping_y() -> bool:
 	return _property_values.has(&"t_size_y")
 
-
+@warning_ignore("unused_parameter")
 func set_selection_state(state: SelectionState) -> void:
 	pass
 
