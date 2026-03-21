@@ -72,6 +72,7 @@ const SELECTION_BORDER_WIDTH: float = 1.5
 @export_group("Editor Props")
 @export var editor_polygon: CollisionPolygon2D
 
+@warning_ignore("unused_private_class_variable")
 @export_tool_button("Create Polygon Props") var _create_polygon_props: Callable:
 	get: return func() -> void:
 		if not _polygon:
