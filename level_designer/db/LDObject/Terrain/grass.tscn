@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dt5o1wfangng7" path="res://assets/textures/object/terrain/grass/terrain_grass_shadow.png" id="4_bk5v6"]
 [ext_resource type="Texture2D" uid="uid://hsblflmkc6wq" path="res://assets/textures/object/terrain/grass/terrain_grass_top_left.png" id="4_qeqwc"]
 [ext_resource type="Texture2D" uid="uid://da4iii6wieke3" path="res://assets/textures/object/terrain/grass/terrain_grass_top_right.png" id="5_bk5v6"]
-[ext_resource type="Texture2D" uid="uid://bn3f02uv8d5sr" path="res://assets/textures/object/terrain/grass/ld_terrain_grass_outline.png" id="7_bk5v6"]
+[ext_resource type="Texture2D" uid="uid://bn3f02uv8d5sr" path="res://assets/textures/object/terrain/grass/terrain_grass_outline.png" id="7_bk5v6"]
 
 [node name="Grass" type="Node2D" unique_id=642150737 node_paths=PackedStringArray("_polygon", "_topline_container", "_topline_shadow_container", "_outline", "editor_polygon", "editor_shape_area", "editor_placement_rect", "origin_marker")]
 script = ExtResource("1_ck8s1")
