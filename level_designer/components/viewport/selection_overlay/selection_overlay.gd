@@ -18,12 +18,14 @@ func hide_box() -> void:
 
 
 func _draw() -> void:
-	if not _is_drawing:
-		return
+	if _is_drawing:
+		var style: StyleBox = get_theme_stylebox(&"SelectionPanel", &"LD")
+		if style:
+			style.draw(get_canvas_item(), _box_rect)
+		else:
+			draw_rect(_box_rect, Color(0.4, 0.7, 1.0, 0.15), true)
+			draw_rect(_box_rect, Color(0.4, 0.7, 1.0, 0.8), false, 1.0)
 	
-	var style: StyleBox = get_theme_stylebox(&"SelectionPanel", &"LD")
-	if style:
-		style.draw(get_canvas_item(), _box_rect)
-	else:
-		draw_rect(_box_rect, Color(0.4, 0.7, 1.0, 0.15), true)
-		draw_rect(_box_rect, Color(0.4, 0.7, 1.0, 0.8), false, 1.0)
+	var tool: LDTool = LD.get_tool_handler().get_selected_tool()
+	if tool is LDRotateTool:
+		(tool as LDRotateTool).draw_overlay(self)
