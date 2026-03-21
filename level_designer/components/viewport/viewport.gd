@@ -20,7 +20,7 @@ signal touch_swipe_moved(pos: Vector2)
 signal touch_swipe_ended
 
 const LINEAR_PAN_SPEED: float = 10.0
-const CAMERA_ZOOM_MIN: Vector2 = Vector2(0.2, 0.2)
+const CAMERA_ZOOM_MIN: Vector2 = Vector2(0.05, 0.05)
 const CAMERA_ZOOM_MAX: Vector2 = Vector2(4.0, 4.0)
 
 static var _inst: LDViewport
@@ -32,7 +32,7 @@ static var _inst: LDViewport
 @export var _root: LDViewportRoot
 @export var _selection_overlay: LDSelectionOverlay
 @export var _touch_indicator: LDTouchSwipeIndicator
-@export var _viewport_input: Control
+@warning_ignore("unused_private_class_variable") @export var _viewport_input: Control
 
 
 var allow_panning: bool = true
