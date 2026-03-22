@@ -31,6 +31,43 @@ func _compute_preview_results(points: PackedVector2Array) -> Array[PackedVector2
 	return [accumulated]
 
 
+func _compute_preview_holes(target: LDObjectPolygon, preview: PackedVector2Array, piece_index: int) -> Array[PackedVector2Array]:
+	var result: Array[PackedVector2Array] = []
+	
+	for t: LDObjectPolygon in _targets:
+		if not is_instance_valid(t):
+			continue
+		var tw: PackedVector2Array = _polygon_to_world(t)
+		var intersection: Array = Geometry2D.intersect_polygons(tw, preview)
+		if intersection.is_empty():
+			continue
+		var merged: Array = Geometry2D.merge_polygons(tw, preview)
+		for mi: int in range(1, merged.size()):
+			var hole_pts: PackedVector2Array = merged[mi]
+			if hole_pts.size() >= 3:
+				result.append(_world_to_local(target, TerrainPolygon.clean_polygon(hole_pts)))
+	
+	for t: LDObjectPolygon in _targets:
+		if not is_instance_valid(t):
+			continue
+		var tw: PackedVector2Array = _polygon_to_world(t)
+		var intersection: Array = Geometry2D.intersect_polygons(tw, preview)
+		if intersection.is_empty():
+			continue
+		for hole: PackedVector2Array in t.get_holes():
+			var hole_world: PackedVector2Array = _local_to_world(t, hole)
+			var hole_covered: Array = Geometry2D.intersect_polygons(hole_world, preview)
+			if hole_covered.is_empty():
+				result.append(_world_to_local(target, hole_world))
+				continue
+			var hole_remaining: Array = Geometry2D.clip_polygons(hole_world, preview)
+			for piece: Variant in hole_remaining:
+				if piece is PackedVector2Array and (piece as PackedVector2Array).size() >= 3:
+					result.append(_world_to_local(target, piece))
+	
+	return result
+
+
 func _get_results_for_target(results: Array[PackedVector2Array], start_idx: int, target_world: PackedVector2Array) -> Array[PackedVector2Array]:
 	if results.is_empty():
 		return []
@@ -47,6 +84,8 @@ func _commit() -> void:
 	var accumulated: PackedVector2Array = _points
 	var affected_targets: Array[LDObjectPolygon] = []
 	var old_points_map: Dictionary = {}
+	var old_holes_map: Dictionary = {}
+	var new_holes_from_merge: Array[PackedVector2Array] = []
 	
 	for target: LDObjectPolygon in _targets:
 		if not is_instance_valid(target):
@@ -55,11 +94,17 @@ func _commit() -> void:
 		var intersection: Array = Geometry2D.intersect_polygons(target_world, accumulated)
 		if intersection.is_empty():
 			continue
-		old_points_map[target] = target._polygon.polygon.duplicate()
+		old_points_map[target] = target.get_outer_points().duplicate()
+		old_holes_map[target] = target.get_holes().duplicate()
 		var merged: Array = Geometry2D.merge_polygons(target_world, accumulated)
-		if not merged.is_empty():
-			accumulated = merged[0]
-			affected_targets.append(target)
+		if merged.is_empty():
+			continue
+		accumulated = merged[0]
+		affected_targets.append(target)
+		for mi: int in range(1, merged.size()):
+			var hole_pts: PackedVector2Array = merged[mi]
+			if hole_pts.size() >= 3:
+				new_holes_from_merge.append(hole_pts)
 	
 	if affected_targets.is_empty():
 		history.commit_action()
@@ -70,28 +115,71 @@ func _commit() -> void:
 	var primary: LDObjectPolygon = affected_targets[0]
 	var primary_new: PackedVector2Array = _world_to_local(primary, accumulated)
 	var primary_old: PackedVector2Array = old_points_map[primary]
+	var primary_old_holes: Array[PackedVector2Array] = old_holes_map[primary]
 	var primary_obj: LDObjectPolygon = primary
+	
+	var new_holes: Array[PackedVector2Array] = []
+	
+	for hole_world: PackedVector2Array in new_holes_from_merge:
+		var cleaned: PackedVector2Array = TerrainPolygon.clean_polygon(hole_world)
+		if cleaned.size() >= 3:
+			new_holes.append(_world_to_local(primary, cleaned))
+	
+	for hole: PackedVector2Array in primary_old_holes:
+		var hole_world: PackedVector2Array = _local_to_world(primary, hole)
+		var hole_covered: Array = Geometry2D.intersect_polygons(hole_world, _points)
+		if hole_covered.is_empty():
+			new_holes.append(hole)
+			continue
+		var hole_remaining: Array = Geometry2D.clip_polygons(hole_world, _points)
+		for piece: Variant in hole_remaining:
+			if piece is PackedVector2Array and (piece as PackedVector2Array).size() >= 3:
+				new_holes.append(_world_to_local(primary, piece))
+	
+	for i: int in range(1, affected_targets.size()):
+		var redundant: LDObjectPolygon = affected_targets[i]
+		if not is_instance_valid(redundant):
+			continue
+		for hole: PackedVector2Array in (old_holes_map[redundant] as Array[PackedVector2Array]):
+			var hole_world: PackedVector2Array = _local_to_world(redundant, hole)
+			var hole_covered: Array = Geometry2D.intersect_polygons(hole_world, _points)
+			if hole_covered.is_empty():
+				new_holes.append(_world_to_local(primary, hole_world))
+				continue
+			var hole_remaining: Array = Geometry2D.clip_polygons(hole_world, _points)
+			for piece: Variant in hole_remaining:
+				if piece is PackedVector2Array and (piece as PackedVector2Array).size() >= 3:
+					new_holes.append(_world_to_local(primary, piece))
 	
 	history.add_do(func() -> void:
 		if is_instance_valid(primary_obj):
 			primary_obj.modulate.a = 1.0
+			primary_obj.clear_holes()
 			primary_obj.apply_points(primary_new)
+			for h: PackedVector2Array in new_holes:
+				primary_obj.add_hole(h)
 	)
 	history.add_undo(func() -> void:
 		if is_instance_valid(primary_obj):
 			primary_obj.modulate.a = 1.0
+			primary_obj.clear_holes()
 			primary_obj.apply_points(primary_old)
+			for h: PackedVector2Array in primary_old_holes:
+				primary_obj.add_hole(h)
 	)
-	primary.apply_points(primary_new)
+	primary_obj.clear_holes()
+	primary_obj.apply_points(primary_new)
+	for h: PackedVector2Array in new_holes:
+		primary_obj.add_hole(h)
 	
 	for i: int in range(1, affected_targets.size()):
 		var redundant: LDObjectPolygon = affected_targets[i]
 		if not is_instance_valid(redundant):
 			continue
 		var redundant_old: PackedVector2Array = old_points_map[redundant]
+		var redundant_old_holes: Array[PackedVector2Array] = old_holes_map[redundant]
 		var redundant_parent: Node = redundant.get_parent()
 		var redundant_obj: LDObjectPolygon = redundant
-		
 		history.add_do(func() -> void:
 			if is_instance_valid(redundant_obj) and redundant_obj.is_inside_tree():
 				redundant_obj.get_parent().remove_child(redundant_obj)
@@ -100,7 +188,10 @@ func _commit() -> void:
 			if is_instance_valid(redundant_obj) and not redundant_obj.is_inside_tree():
 				redundant_parent.add_child(redundant_obj)
 				redundant_obj.modulate.a = 1.0
+				redundant_obj.clear_holes()
 				redundant_obj.apply_points(redundant_old)
+				for h: PackedVector2Array in redundant_old_holes:
+					redundant_obj.add_hole(h)
 		)
 		redundant.get_parent().remove_child(redundant)
 	
