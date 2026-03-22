@@ -12,56 +12,7 @@ const FALLBACK_BORDER: Color = Color(0.4, 0.7, 1.0, 0.8)
 const PREVIEW_BORDER_WIDTH: float = 1.0
 const SELECTION_BORDER_WIDTH: float = 1.5
 
-
-@export var base_texture: Texture2D:
-	set(t):
-		base_texture = t
-		_update_visuals()
-
-@export_group("Topline", "topline")
-@export var topline_texture: Texture2D:
-	set(t):
-		topline_texture = t
-		_update_visuals()
-@export var topline_shadow_texture: Texture2D:
-	set(t):
-		topline_shadow_texture = t
-		_update_visuals()
-@export var topline_left_end: Texture2D:
-	set(t):
-		topline_left_end = t
-		_update_visuals()
-@export var topline_right_end: Texture2D:
-	set(t):
-		topline_right_end = t
-		_update_visuals()
-## Minimum dot product with Vector2.UP for an edge to be considered a topline edge.
-## 0.0 = any upward-facing edge, 1.0 = only perfectly flat edges.
-@export_range(-1.0, 1.0, 0.01) var topline_angle_threshold: float = 0.55:
-	set(v):
-		topline_angle_threshold = v
-		_update_visuals()
-
-@export_range(0.1, 128.0, 0.1) var topline_width: float = 26.0:
-	set(v):
-		topline_width = v
-		_update_visuals()
-
-@export_group("Outline", "outline")
-@export var outline_texture: Texture2D:
-	set(t):
-		outline_texture = t
-		_update_visuals()
-@export var outline_width: float = 10.0:
-	set(v):
-		outline_width = v
-		_update_visuals()
-
-@export_group("Display")
-@export var border_width: float = 3.0:
-	set(v):
-		border_width = v
-		queue_redraw()
+@export var terrain_data: TerrainData
 
 @export_group("Internal")
 @export var _polygon: Polygon2D
@@ -98,10 +49,10 @@ const SELECTION_BORDER_WIDTH: float = 1.5
 		if not _outline:
 			_outline = Line2D.new()
 			_outline.name = "Outline"
-			_outline.width = outline_width
+			_outline.width = terrain_data.outline_width
 			add_child(_outline)
 			_outline.owner = self
-			_setup_line2d(_outline)
+			TerrainPolygon.setup_line2d(_outline)
 		
 		if not editor_shape_area:
 			editor_shape_area = Area2D.new()
@@ -126,6 +77,15 @@ var _selection_state: LDObject.SelectionState = LDObject.SelectionState.HIDDEN
 var _preview_valid: bool = true
 
 
+func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+	if not terrain_data.update_visuals.is_connected(_update_visuals):
+		terrain_data.update_visuals.connect(_update_visuals)
+	if not terrain_data.redraw.is_connected(queue_redraw):
+		terrain_data.redraw.connect(queue_redraw)
+
+
 func _on_preview() -> void:
 	modulate = Color(1.0, 1.0, 1.0, 0.6)
 
@@ -142,6 +102,7 @@ func set_selection_state(state: LDObject.SelectionState) -> void:
 			tint = Color(1.0, 1.0, 1.0, 0.7)
 		LDObject.SelectionState.SELECTED:
 			tint = Color(1.2, 1.2, 1.2, 1.0)
+	
 	if _topline_container:
 		_topline_container.modulate = tint
 	if _topline_shadow_container:
@@ -179,8 +140,8 @@ func _update_visuals() -> void:
 		return
 	
 	if _polygon:
-		_polygon.texture = base_texture
-		_polygon.color = Color.WHITE if base_texture else Color.TRANSPARENT
+		_polygon.texture = terrain_data.base_texture
+		_polygon.color = Color.WHITE if terrain_data.base_texture else Color.TRANSPARENT
 	
 	if not _polygon or _polygon.polygon.size() < 3:
 		if _topline_container:
@@ -193,19 +154,19 @@ func _update_visuals() -> void:
 			_outline.points = PackedVector2Array()
 		return
 	
-	var points: PackedVector2Array = _ensure_clockwise(_polygon.polygon)
-	var closed_points: PackedVector2Array = _get_closed_points(points)
-	var top_segments: Array[PackedVector2Array] = _get_topline_segments(points)
+	var points: PackedVector2Array = TerrainPolygon.ensure_clockwise(_polygon.polygon)
+	var closed_points: PackedVector2Array = TerrainPolygon.get_closed_points(points)
+	var top_segments: Array[PackedVector2Array] = TerrainPolygon.get_topline_segments(points, terrain_data.topline_angle_threshold)
 	
 	if _topline_container:
 		for child: Node in _topline_container.get_children():
 			child.queue_free()
 		for segment: PackedVector2Array in top_segments:
 			var line: Line2D = Line2D.new()
-			_setup_line2d(line)
-			line.width = topline_width
-			line.texture = topline_texture
-			line.points = _subdivide_for_line2d(segment, topline_texture)
+			TerrainPolygon.setup_line2d(line)
+			line.width = terrain_data.topline_width
+			line.texture = terrain_data.topline_texture
+			line.points = TerrainPolygon.subdivide_for_line2d(segment, terrain_data.topline_texture)
 			_topline_container.add_child(line)
 	
 	if _topline_shadow_container:
@@ -213,110 +174,18 @@ func _update_visuals() -> void:
 			child.queue_free()
 		for segment: PackedVector2Array in top_segments:
 			var line: Line2D = Line2D.new()
-			_setup_line2d(line)
-			line.width = topline_width + (topline_width / 3.0)
-			line.texture = topline_shadow_texture
+			TerrainPolygon.setup_line2d(line)
+			line.width = terrain_data.topline_width + (terrain_data.topline_width / 3.0)
+			line.texture = terrain_data.topline_shadow_texture
 			line.default_color = Color(1.0, 1.0, 1.0, 0.6)
-			line.points = _subdivide_for_line2d(segment, topline_shadow_texture)
+			line.points = TerrainPolygon.subdivide_for_line2d(segment, terrain_data.topline_shadow_texture)
 			_topline_shadow_container.add_child(line)
 	
 	if _outline:
-		_setup_line2d(_outline)
-		_outline.width = outline_width
-		_outline.texture = outline_texture
-		_outline.points = _subdivide_for_line2d(closed_points, outline_texture)
-
-
-func _ensure_clockwise(points: PackedVector2Array) -> PackedVector2Array:
-	var area: float = 0.0
-	var count: int = points.size()
-	for i: int in count:
-		var a: Vector2 = points[i]
-		var b: Vector2 = points[(i + 1) % count]
-		area += (b.x - a.x) * (b.y + a.y)
-	if area < 0.0:
-		return points
-	var reversed: PackedVector2Array = PackedVector2Array()
-	for i: int in range(count - 1, -1, -1):
-		reversed.append(points[i])
-	return reversed
-
-
-func _get_topline_segments(points: PackedVector2Array) -> Array[PackedVector2Array]:
-	var count: int = points.size()
-	var segments: Array[PackedVector2Array] = []
-	var current: PackedVector2Array = PackedVector2Array()
-	
-	for i: int in count:
-		var a: Vector2 = points[i]
-		var b: Vector2 = points[(i + 1) % count]
-		var edge: Vector2 = (b - a).normalized()
-		var normal: Vector2 = Vector2(edge.y, -edge.x)
-		if normal.y < -topline_angle_threshold:
-			if current.is_empty():
-				current.append(a)
-			current.append(b)
-		else:
-			if not current.is_empty():
-				segments.append(current)
-				current = PackedVector2Array()
-	
-	if not current.is_empty():
-		segments.append(current)
-	
-	return segments
-
-
-func _ensure_counter_clockwise(points: PackedVector2Array) -> PackedVector2Array:
-	var area: float = 0.0
-	var count: int = points.size()
-	for i: int in count:
-		var a: Vector2 = points[i]
-		var b: Vector2 = points[(i + 1) % count]
-		area += (b.x - a.x) * (b.y + a.y)
-	if area < 0.0:
-		var reversed: PackedVector2Array = PackedVector2Array()
-		for i: int in range(count - 1, -1, -1):
-			reversed.append(points[i])
-		return reversed
-	return points
-
-
-func _subdivide_for_line2d(points: PackedVector2Array, texture: Texture2D) -> PackedVector2Array:
-	if not texture or points.size() < 2:
-		return points
-	
-	var tex_width: float = float(texture.get_width())
-	var result: PackedVector2Array = PackedVector2Array()
-	
-	for i: int in range(points.size() - 1):
-		var a: Vector2 = points[i]
-		var b: Vector2 = points[i + 1]
-		var segment_length: float = a.distance_to(b)
-		var steps: int = maxi(1, int(ceil(segment_length / tex_width)))
-		
-		result.append(a)
-		for s: int in range(1, steps):
-			result.append(a.lerp(b, float(s) / float(steps)))
-	
-	result.append(points[points.size() - 1])
-	return result
-
-
-func _get_closed_points(points: PackedVector2Array) -> PackedVector2Array:
-	if points.is_empty():
-		return points
-	var closed: PackedVector2Array = points.duplicate()
-	closed.append(points[0])
-	return closed
-
- 
-func _setup_line2d(line: Line2D) -> void:
-	line.joint_mode = Line2D.LINE_JOINT_ROUND
-	line.begin_cap_mode = Line2D.LINE_CAP_ROUND
-	line.end_cap_mode = Line2D.LINE_CAP_ROUND
-	line.texture_mode = Line2D.LINE_TEXTURE_TILE
-	line.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+		TerrainPolygon.setup_line2d(_outline)
+		_outline.width = terrain_data.outline_width
+		_outline.texture = terrain_data.outline_texture
+		_outline.points = TerrainPolygon.subdivide_for_line2d(closed_points, terrain_data.outline_texture)
 
 
 func _draw() -> void:
@@ -334,12 +203,12 @@ func _draw() -> void:
 			else:
 				draw_polyline(points, p_fill)
 		if points.size() >= 2:
-			draw_polyline(_get_closed_points(points) if points.size() >= 3 else points, p_border, PREVIEW_BORDER_WIDTH, true)
+			draw_polyline(TerrainPolygon.get_closed_points(points) if points.size() >= 3 else points, p_border, PREVIEW_BORDER_WIDTH, true)
 		return
 	
-	if not base_texture:
+	if not terrain_data.base_texture:
 		draw_colored_polygon(points, FALLBACK_FILL)
-		draw_polyline(_get_closed_points(points), FALLBACK_BORDER, border_width, true)
+		draw_polyline(TerrainPolygon.get_closed_points(points), FALLBACK_BORDER, terrain_data.border_width, true)
 	
 	if _selection_state == LDObject.SelectionState.HIDDEN:
 		return
@@ -358,7 +227,7 @@ func _draw() -> void:
 			s_fill = Color(1.0, 1.0, 1.0, alpha * 0.15)
 	
 	draw_colored_polygon(points, s_fill)
-	draw_polyline(_get_closed_points(points), s_outline, SELECTION_BORDER_WIDTH, true)
+	draw_polyline(TerrainPolygon.get_closed_points(points), s_outline, SELECTION_BORDER_WIDTH, true)
 	
 	if _selection_state == LDObject.SelectionState.SELECTED:
 		queue_redraw()
