@@ -166,6 +166,16 @@ func get_holes() -> Array[PackedVector2Array]:
 	return _holes
 
 
+func get_hole_count() -> int:
+	return _holes.size()
+
+
+func get_hole(index: int) -> PackedVector2Array:
+	if index < _holes.size():
+		return _holes[index]
+	return PackedVector2Array()
+
+
 func _rebuild_polygon() -> void:
 	if _outer_points.is_empty():
 		if _polygon:
@@ -178,14 +188,20 @@ func _rebuild_polygon() -> void:
 		queue_redraw()
 		return
 	
-	var seam_polygon: PackedVector2Array = _outer_points
+	var seam_polygon: PackedVector2Array = TerrainPolygon.clean_polygon(_outer_points)
 	_seam_indices = PackedInt32Array()
 	
 	for hole: PackedVector2Array in _holes:
 		if hole.size() < 3:
 			continue
-		var seam_result: Dictionary = TerrainPolygon.build_seam_polygon(seam_polygon, hole)
-		seam_polygon = seam_result["polygon"]
+		var cleaned_hole: PackedVector2Array = TerrainPolygon.clean_polygon(hole)
+		if cleaned_hole.size() < 3:
+			continue
+		var seam_result: Dictionary = TerrainPolygon.build_seam_polygon(seam_polygon, cleaned_hole)
+		var built: PackedVector2Array = seam_result["polygon"]
+		if built.size() < 3:
+			continue
+		seam_polygon = built
 		for idx: int in (seam_result["seam_indices"] as PackedInt32Array):
 			_seam_indices.append(idx)
 	
@@ -197,6 +213,15 @@ func _rebuild_polygon() -> void:
 	
 	_update_visuals()
 	queue_redraw()
+
+
+func apply_points_and_holes(points: PackedVector2Array, holes: Array[PackedVector2Array]) -> void:
+	_outer_points = points
+	_holes.clear()
+	for h: PackedVector2Array in holes:
+		if h.size() >= 3:
+			_holes.append(h)
+	_rebuild_polygon()
 
 
 func _update_visuals() -> void:
