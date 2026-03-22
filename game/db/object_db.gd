@@ -6,8 +6,6 @@ extends Resource
 static var _inst: GameObjectDB
 
 @export var objects: Dictionary[String, GameObject]
-
-@export_category("Debug")
 @export_dir var database_dir: String
 
 @export_tool_button("Auto-populate objects") var _populate_objects: Callable:
@@ -20,6 +18,80 @@ static var _inst: GameObjectDB
 		return func() -> void:
 			objects.clear()
 			populate_objects.call(database_dir)
+
+@export_category("Debug")
+@export_dir var ld_object_database_dir: String
+@export_dir var level_object_database_dir: String
+
+
+
+@export_tool_button("Find missing LD objects") var _find_missing_ld: Callable:
+	get:
+		return func() -> void:
+			var game_files: Array[String] = _collect_ld_eligible_basenames()
+			var skipped: int = objects.size() - game_files.size()
+			var ld_files: Array[String] = _collect_basenames(ld_object_database_dir, "tscn")
+			var missing: Array[String] = []
+			for name: String in game_files:
+				if name not in ld_files:
+					missing.append(name)
+			if missing.is_empty():
+				print("No missing LD objects. (skipped %d)" % skipped)
+			else:
+				print("Missing LD objects (%d, skipped %d):" % [missing.size(), skipped])
+				for name: String in missing:
+					print("  - ", name)
+
+
+@export_tool_button("Find missing Level objects") var _find_missing_level: Callable:
+	get:
+		return func() -> void:
+			var game_files: Array[String] = _collect_ld_eligible_basenames()
+			var skipped: int = objects.size() - game_files.size()
+			var level_files: Array[String] = _collect_basenames(level_object_database_dir, "tscn")
+			var missing: Array[String] = []
+			for name: String in game_files:
+				if name not in level_files:
+					missing.append(name)
+			if missing.is_empty():
+				print("No missing Level objects. (skipped %d)" % skipped)
+			else:
+				print("Missing Level objects (%d, skipped %d):" % [missing.size(), skipped])
+				for name: String in missing:
+					print("  - ", name)
+
+
+@export_tool_button("Find objects without texture") var _find_missing_texture: Callable:
+	get:
+		return func() -> void:
+			var missing: Array[String] = []
+			for obj: GameObject in objects.values():
+				if not obj.ld_entry_texture:
+					missing.append(obj.id)
+			if missing.is_empty():
+				print("All objects have a texture.")
+			else:
+				print("Objects without texture (%d):" % missing.size())
+				for name: String in missing:
+					print("  - ", name)
+
+
+@export_tool_button("Find proprety-less GameObjects") var _find_empty_objects: Callable:
+	get:
+		return func() -> void:
+			var empty: Array[String] = []
+			for obj: GameObject in objects.values():
+				if not obj.ld_entry_texture:
+					continue
+				if obj.ld_properties.is_empty():
+					empty.append(obj.id)
+			if empty.is_empty():
+				print("No empty GameObjects.")
+			else:
+				print("Empty GameObjects (%d):" % empty.size())
+				for name: String in empty:
+					print("  - ", name)
+
 
 
 static func get_db() -> GameObjectDB:
@@ -64,3 +136,28 @@ func populate_objects(path: String) -> void:
 				if obj not in objects.values():
 					objects.set(obj_path, obj)
 		file_name = dir.get_next()
+
+
+func _collect_ld_eligible_basenames() -> Array[String]:
+	var result: Array[String] = []
+	for obj: GameObject in objects.values():
+		if obj.ld_entry_texture:
+			result.append(obj.id)
+	return result
+
+
+func _collect_basenames(path: String, extension: String) -> Array[String]:
+	var result: Array[String] = []
+	var dir: DirAccess = DirAccess.open(path)
+	if not dir:
+		return result
+	dir.list_dir_begin()
+	var file_name: String = dir.get_next()
+	while file_name != "":
+		var full_path: String = path.path_join(file_name)
+		if dir.current_is_dir():
+			result.append_array(_collect_basenames(full_path, extension))
+		elif file_name.ends_with("." + extension):
+			result.append(file_name.get_basename())
+		file_name = dir.get_next()
+	return result

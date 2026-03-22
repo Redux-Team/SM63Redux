@@ -19,12 +19,13 @@
 [ext_resource type="Resource" uid="uid://cc85138ec57w4" path="res://game/db/GameObject/Item/FLUDD/fludd_box_turbo.tres" id="15_ea746"]
 [ext_resource type="Resource" uid="uid://bywn2c1kw0pxn" path="res://game/db/GameObject/Props/Nature/rock_small.tres" id="15_jib6t"]
 [ext_resource type="Resource" uid="uid://cp7abjc4l1sfn" path="res://game/db/GameObject/Item/FLUDD/fludd_box_rocket.tres" id="16_5vyyt"]
-[ext_resource type="Resource" uid="uid://oo8tdxwidlkl" path="res://game/db/GameObject/Props/Nature/flowers.tres" id="16_osewg"]
+[ext_resource type="Resource" uid="uid://oo8tdxwidlkl" path="res://game/db/GameObject/Props/Nature/flower_blue.tres" id="16_osewg"]
 [ext_resource type="Resource" uid="uid://kxexxxdwa4sc" path="res://game/db/GameObject/Item/FLUDD/water_bottle_big.tres" id="17_ngtt5"]
 [ext_resource type="Resource" uid="uid://b6jgiuu3uuh70" path="res://game/db/GameObject/Item/FLUDD/fludd_box_hover.tres" id="18_2queo"]
-[ext_resource type="Resource" uid="uid://c8r5muob8ljqs" path="res://game/db/GameObject/Props/Nature/mushroom_small.tres" id="19_1n1t0"]
+[ext_resource type="Resource" uid="uid://c8r5muob8ljqs" path="res://game/db/GameObject/Props/Nature/mushroom_large.tres" id="19_1n1t0"]
 [ext_resource type="Resource" uid="uid://dxc3v4jeaftcd" path="res://game/db/GameObject/Entity/Enemy/koopa.tres" id="19_1tu0r"]
 [ext_resource type="Resource" uid="uid://b0iomyjpgculo" path="res://game/db/GameObject/Props/Nature/rock_medium.tres" id="19_d1daw"]
+[ext_resource type="Resource" uid="uid://7xl4vm48exsa" path="res://game/db/GameObject/Props/Nature/mushroom_pair.tres" id="19_lqqlw"]
 [ext_resource type="Resource" uid="uid://dtolfo1xycloe" path="res://game/db/GameObject/Props/Nature/mushroom_tall.tres" id="20_jib6t"]
 [ext_resource type="Resource" uid="uid://b0vrwrys5wyru" path="res://game/db/GameObject/Props/Interactable/sign_hanging.tres" id="20_s7yr8"]
 [ext_resource type="Resource" uid="uid://cr1p0egoys1tf" path="res://game/db/GameObject/Props/Interactable/sign.tres" id="21_3bhcm"]
@@ -33,10 +34,12 @@
 [ext_resource type="Resource" uid="uid://fa37unypkcqe" path="res://game/db/GameObject/Props/Hints/arrow.tres" id="23_ntfkj"]
 [ext_resource type="Resource" uid="uid://mupwvevffb1p" path="res://game/db/GameObject/Props/Hints/sign_arrow.tres" id="24_5fmnd"]
 [ext_resource type="Resource" uid="uid://dy8oygc3wj1a5" path="res://game/db/GameObject/Entity/Player/player_mario.tres" id="26_a6jo3"]
+[ext_resource type="Resource" uid="uid://c4h3ii5pr18kt" path="res://game/db/GameObject/Props/Nature/flower_pink.tres" id="27_rnyiy"]
 [ext_resource type="Resource" uid="uid://caleu4psn324w" path="res://game/db/GameObject/Props/Gizmos/spinning_block_medium.tres" id="28_rgveb"]
 [ext_resource type="Resource" uid="uid://cpwcik2ad65p4" path="res://game/db/GameObject/Props/Gizmos/spinning_block_small.tres" id="29_okk77"]
 [ext_resource type="Resource" uid="uid://dhyodlkfh60hd" path="res://game/db/GameObject/Props/Gizmos/moving_platform.tres" id="30_yiiwq"]
 [ext_resource type="Resource" uid="uid://dw6l2d61dkq6p" path="res://game/db/GameObject/Props/Gizmos/spinning_block_large.tres" id="31_iy44t"]
+[ext_resource type="Resource" uid="uid://eipogn3jdakv" path="res://game/db/GameObject/Props/Gizmos/pipe.tres" id="35_clg7o"]
 [ext_resource type="Resource" uid="uid://clfw632lsiowg" path="res://game/db/GameObject/Item/Collectible/coin_red.tres" id="37_5mivx"]
 [ext_resource type="Resource" uid="uid://enlwdtgbab6g" path="res://game/db/GameObject/Item/Collectible/coin.tres" id="38_gumef"]
 [ext_resource type="Resource" uid="uid://ytnyiak6am65" path="res://game/db/GameObject/Item/Collectible/star_coin.tres" id="39_ntfkj"]
@@ -65,6 +68,7 @@ objects = Dictionary[String, ExtResource("1_gumef")]({
 "Item/FLUDD/water_bottle_big": ExtResource("17_ngtt5"),
 "Item/FLUDD/water_bottle_small": ExtResource("14_tocvo"),
 "Props/Gizmos/moving_platform": ExtResource("30_yiiwq"),
+"Props/Gizmos/pipe": ExtResource("35_clg7o"),
 "Props/Gizmos/spinning_block_large": ExtResource("31_iy44t"),
 "Props/Gizmos/spinning_block_medium": ExtResource("28_rgveb"),
 "Props/Gizmos/spinning_block_small": ExtResource("29_okk77"),
@@ -73,8 +77,10 @@ objects = Dictionary[String, ExtResource("1_gumef")]({
 "Props/Interactable/breakable_box": ExtResource("13_mtptv"),
 "Props/Interactable/sign": ExtResource("21_3bhcm"),
 "Props/Interactable/sign_hanging": ExtResource("20_s7yr8"),
-"Props/Nature/flowers": ExtResource("16_osewg"),
-"Props/Nature/mushroom_small": ExtResource("19_1n1t0"),
+"Props/Nature/flower_blue": ExtResource("16_osewg"),
+"Props/Nature/flower_pink": ExtResource("27_rnyiy"),
+"Props/Nature/mushroom_large": ExtResource("19_1n1t0"),
+"Props/Nature/mushroom_pair": ExtResource("19_lqqlw"),
 "Props/Nature/mushroom_tall": ExtResource("20_jib6t"),
 "Props/Nature/rock_large": ExtResource("21_5mivx"),
 "Props/Nature/rock_medium": ExtResource("19_d1daw"),
@@ -89,5 +95,7 @@ objects = Dictionary[String, ExtResource("1_gumef")]({
 "Props/Platforms/wooden_platform": ExtResource("3_1tu0r"),
 "Terrain/Grass/terrain_grass": ExtResource("42_ntfkj")
 })
-database_dir = "res://level_designer/db/GameObject"
+database_dir = "res://game/db/GameObject/"
+ld_object_database_dir = "res://game/db/LDObject/"
+level_object_database_dir = "res://game/db/LevelObject/"
 metadata/_custom_type_script = "uid://dc4nc2ctw5fm5"
