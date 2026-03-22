@@ -138,6 +138,13 @@ func populate_objects(path: String) -> void:
 		file_name = dir.get_next()
 
 
+func find_game_object(id: String) -> GameObject:
+	for obj: GameObject in objects.values():
+		if obj.id == id:
+			return obj
+	return null
+
+
 func _collect_ld_eligible_basenames() -> Array[String]:
 	var result: Array[String] = []
 	for obj: GameObject in objects.values():
