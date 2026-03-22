@@ -19,7 +19,6 @@ level_root = NodePath("LevelRoot")
 [node name="Player" parent="LevelRoot" unique_id=492830036 instance=ExtResource("2_x1m06")]
 
 [node name="Camera2D" type="Camera2D" parent="LevelRoot/Player" unique_id=1641531464]
-zoom = Vector2(2, 2)
 position_smoothing_speed = 100.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1346157520]
