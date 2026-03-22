@@ -17,7 +17,7 @@ extends LevelObject
 
 
 func _on_init() -> void:
-	var raw_points = data.get("polygon_points")
+	var raw_points: Variant = data.get("polygon_points")
 	var points: PackedVector2Array = _array_to_packed_vec2(raw_points)
 	
 	if data.has("terrain_data_path"):
@@ -25,10 +25,26 @@ func _on_init() -> void:
 	
 	if _polygon:
 		_polygon.polygon = points
-	
 	if _collision:
 		_collision.polygon = points
-		
+	
+	if data.has("polygon_holes"):
+		var seam_polygon: PackedVector2Array = points
+		for hole_data: Variant in data["polygon_holes"]:
+			if not hole_data is Array:
+				continue
+			var hole_points: PackedVector2Array = PackedVector2Array()
+			for p: Variant in hole_data:
+				hole_points.append(_array_to_vec2(p))
+			if hole_points.size() < 3:
+				continue
+			var seam_result: Dictionary = TerrainPolygon.build_seam_polygon(seam_polygon, hole_points)
+			seam_polygon = seam_result["polygon"]
+		if _polygon:
+			_polygon.polygon = seam_polygon
+		if _collision:
+			_collision.polygon = seam_polygon
+	
 	_update_visuals()
 
 

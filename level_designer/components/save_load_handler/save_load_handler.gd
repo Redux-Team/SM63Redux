@@ -124,11 +124,19 @@ func _serialize_object(obj: LDObject) -> Dictionary:
 	
 	if obj is LDObjectPolygon:
 		var poly_obj: LDObjectPolygon = obj as LDObjectPolygon
-		if poly_obj._polygon and not poly_obj._polygon.polygon.is_empty():
+		if not poly_obj.get_outer_points().is_empty():
 			var poly_points: Array = []
-			for p: Vector2 in poly_obj._polygon.polygon:
+			for p: Vector2 in poly_obj.get_outer_points():
 				poly_points.append(_vec2_to_array(p))
 			data["polygon_points"] = poly_points
+		if not poly_obj.get_holes().is_empty():
+			var holes_data: Array = []
+			for hole: PackedVector2Array in poly_obj.get_holes():
+				var hole_arr: Array = []
+				for p: Vector2 in hole:
+					hole_arr.append(_vec2_to_array(p))
+				holes_data.append(hole_arr)
+			data["polygon_holes"] = holes_data
 	
 	var props: Dictionary = obj.get_property_values()
 	for key: StringName in props:
@@ -197,6 +205,17 @@ func _deserialize_object(data: Dictionary, layer_id: String, db: GameObjectDB) -
 		for p: Variant in data["polygon_points"]:
 			points.append(_array_to_vec2(p))
 		poly_obj.apply_points(points)
+	
+	if instance is LDObjectPolygon and data.has("polygon_holes"):
+		var poly_obj: LDObjectPolygon = instance as LDObjectPolygon
+		for hole_data: Variant in data["polygon_holes"]:
+			if not hole_data is Array:
+				continue
+			var hole_points: PackedVector2Array = PackedVector2Array()
+			for p: Variant in hole_data:
+				hole_points.append(_array_to_vec2(p))
+			if hole_points.size() >= 3:
+				poly_obj.add_hole(hole_points)
 	
 	instance.place()
 

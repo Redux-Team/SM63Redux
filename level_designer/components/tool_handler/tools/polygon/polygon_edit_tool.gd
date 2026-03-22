@@ -148,9 +148,9 @@ func _on_viewport_moved(_pos: Vector2, _zoom: Vector2) -> void:
 
 
 func _get_points() -> PackedVector2Array:
-	if not _editing_object or not _editing_object._polygon:
+	if not _editing_object:
 		return PackedVector2Array()
-	return _editing_object._polygon.polygon
+	return _editing_object.get_outer_points()
 
 
 func _update_hover(_world_pos: Vector2) -> void:
@@ -198,7 +198,8 @@ func _drag_point(pos: Vector2) -> void:
 		return
 	var points: PackedVector2Array = _get_points()
 	points[_dragging_point_index] = _editing_object.to_local(pos)
-	_editing_object.apply_points(points)
+	_editing_object.set_outer_points_only(points)
+
 
 
 func _end_drag_point() -> void:
@@ -213,11 +214,11 @@ func _end_drag_point() -> void:
 	history.begin_action("Move Polygon Point")
 	history.add_do(func() -> void:
 		if is_instance_valid(obj):
-			obj.apply_points(new_points)
+			obj.set_outer_points_only(new_points)
 	)
 	history.add_undo(func() -> void:
 		if is_instance_valid(obj):
-			obj.apply_points(old_points)
+			obj.set_outer_points_only(old_points)
 	)
 	history.commit_action()
 	

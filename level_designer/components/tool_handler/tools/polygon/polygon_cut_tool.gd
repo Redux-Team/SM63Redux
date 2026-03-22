@@ -81,18 +81,24 @@ func _commit() -> void:
 		var parent: Node = target.get_parent()
 		
 		if fully_inside:
-			var cut_local: PackedVector2Array = _world_to_local(target, _points)
+			var hole_local: PackedVector2Array = _world_to_local(target, _points)
+			var pre_hole_pts: PackedVector2Array = target.get_outer_points().duplicate()
+			var pre_hole_holes: Array[PackedVector2Array] = target.get_holes().duplicate()
+			var obj_hole: LDObjectPolygon = target
+			
 			history.add_do(func() -> void:
-				if is_instance_valid(obj):
-					obj.modulate.a = 1.0
-					obj.apply_points(cut_local)
+				if is_instance_valid(obj_hole):
+					obj_hole.modulate.a = 1.0
+					obj_hole.add_hole(hole_local)
 			)
 			history.add_undo(func() -> void:
-				if is_instance_valid(obj):
-					obj.modulate.a = 1.0
-					obj.apply_points(old_pts)
+				if is_instance_valid(obj_hole):
+					obj_hole.modulate.a = 1.0
+					obj_hole.apply_points(pre_hole_pts)
+					for h: PackedVector2Array in pre_hole_holes:
+						obj_hole.add_hole(h)
 			)
-			target.apply_points(cut_local)
+			target.add_hole(hole_local)
 			continue
 		
 		var clipped: Array = Geometry2D.clip_polygons(target_world, _points)
