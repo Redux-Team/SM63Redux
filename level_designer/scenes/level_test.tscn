@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://ctssku6r3gx0a"]
+
+[ext_resource type="Script" uid="uid://7h213kjqdaqn" path="res://level_designer/scenes/level_test.gd" id="1_5nuwi"]
+[ext_resource type="PackedScene" uid="uid://b4nw5k2oa3ro0" path="res://game/entities/player/player.tscn" id="2_x1m06"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_x1m06"]
+device = -1
+keycode = 4194308
+
+[sub_resource type="Shortcut" id="Shortcut_1sbsh"]
+events = [SubResource("InputEventKey_x1m06")]
+
+[node name="LevelTest" type="Node2D" unique_id=1539087846 node_paths=PackedStringArray("level_root")]
+script = ExtResource("1_5nuwi")
+level_root = NodePath("LevelRoot")
+
+[node name="LevelRoot" type="Node2D" parent="." unique_id=526161922]
+
+[node name="Player" parent="LevelRoot" unique_id=492830036 instance=ExtResource("2_x1m06")]
+
+[node name="Camera2D" type="Camera2D" parent="LevelRoot/Player" unique_id=1641531464]
+zoom = Vector2(2, 2)
+position_smoothing_speed = 100.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1346157520]
+
+[node name="BackButton" type="Button" parent="CanvasLayer" unique_id=2011925418]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -14.0
+offset_top = -16.0
+offset_right = -6.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+shortcut = SubResource("Shortcut_1sbsh")
+text = "Back to LD"
+
+[connection signal="pressed" from="CanvasLayer/BackButton" to="." method="_on_back_button_pressed"]
