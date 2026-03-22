@@ -146,6 +146,25 @@ static func subdivide_for_line2d(points: PackedVector2Array, texture: Texture2D)
 	return result
 
 
+static func clean_polygon(points: PackedVector2Array, epsilon: float = 0.5) -> PackedVector2Array:
+	if points.size() < 3:
+		return points
+	var result: PackedVector2Array = PackedVector2Array()
+	var count: int = points.size()
+	for i: int in count:
+		var prev: Vector2 = points[(i - 1 + count) % count]
+		var curr: Vector2 = points[i]
+		var next: Vector2 = points[(i + 1) % count]
+		if curr.distance_to(prev) < epsilon:
+			continue
+		var edge1: Vector2 = (curr - prev).normalized()
+		var edge2: Vector2 = (next - curr).normalized()
+		if edge1.dot(edge2) > 1.0 - epsilon * 0.01:
+			continue
+		result.append(curr)
+	return result
+
+
 static func get_closed_points(points: PackedVector2Array) -> PackedVector2Array:
 	if points.is_empty():
 		return points
