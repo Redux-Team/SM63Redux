@@ -5,6 +5,7 @@ extends LDComponent
 const BINARY_EXTENSION: String = ".63r.lvl"
 const JSON_EXTENSION: String = ".json"
 const FORMAT_VERSION: int = 1
+const CURVE_META_KEY: StringName = &"curve_handles"
 
 
 func _on_ready() -> void:
@@ -124,19 +125,52 @@ func _serialize_object(obj: LDObject) -> Dictionary:
 	
 	if obj is LDObjectPolygon:
 		var poly_obj: LDObjectPolygon = obj as LDObjectPolygon
-		if not poly_obj.get_outer_points().is_empty():
-			var poly_points: Array = []
-			for p: Vector2 in poly_obj.get_outer_points():
-				poly_points.append(_vec2_to_array(p))
-			data["polygon_points"] = poly_points
-		if not poly_obj.get_holes().is_empty():
-			var holes_data: Array = []
-			for hole: PackedVector2Array in poly_obj.get_holes():
-				var hole_arr: Array = []
-				for p: Vector2 in hole:
-					hole_arr.append(_vec2_to_array(p))
-				holes_data.append(hole_arr)
-			data["polygon_holes"] = holes_data
+		var has_curve_meta: bool = poly_obj.has_meta(CURVE_META_KEY)
+		
+		if has_curve_meta:
+			var meta: Dictionary = poly_obj.get_meta(CURVE_META_KEY) as Dictionary
+			var ctrl_outer: PackedVector2Array = PackedVector2Array(meta.get("ctrl_outer", PackedVector2Array()))
+			if ctrl_outer.size() >= 3:
+				var poly_points: Array = []
+				for p: Vector2 in ctrl_outer:
+					poly_points.append(_vec2_to_array(p))
+				data["polygon_points"] = poly_points
+			var hole_count: int = int(meta.get("hole_count", 0))
+			if hole_count > 0:
+				var holes_data: Array = []
+				for hi: int in hole_count:
+					var raw_hole: Variant = meta.get("ctrl_hole_" + str(hi))
+					if raw_hole == null:
+						continue
+					var hole_pts: PackedVector2Array = PackedVector2Array(raw_hole)
+					if hole_pts.size() < 3:
+						continue
+					var hole_arr: Array = []
+					for p: Vector2 in hole_pts:
+						hole_arr.append(_vec2_to_array(p))
+					holes_data.append(hole_arr)
+				if not holes_data.is_empty():
+					data["polygon_holes"] = holes_data
+			var curve_data: Dictionary = {}
+			for key: String in meta.keys():
+				if key.begins_with("hk_"):
+					curve_data[key] = meta[key]
+			if not curve_data.is_empty():
+				data["curve_handles"] = curve_data
+		else:
+			if not poly_obj.get_outer_points().is_empty():
+				var poly_points: Array = []
+				for p: Vector2 in poly_obj.get_outer_points():
+					poly_points.append(_vec2_to_array(p))
+				data["polygon_points"] = poly_points
+			if not poly_obj.get_holes().is_empty():
+				var holes_data: Array = []
+				for hole: PackedVector2Array in poly_obj.get_holes():
+					var hole_arr: Array = []
+					for p: Vector2 in hole:
+						hole_arr.append(_vec2_to_array(p))
+					holes_data.append(hole_arr)
+				data["polygon_holes"] = holes_data
 	
 	var props: Dictionary = obj.get_property_values()
 	for key: StringName in props:
@@ -204,20 +238,57 @@ func _deserialize_object(data: Dictionary, layer_id: String, db: GameObjectDB) -
 		var points: PackedVector2Array = PackedVector2Array()
 		for p: Variant in data["polygon_points"]:
 			points.append(_array_to_vec2(p))
-		poly_obj.apply_points(points)
-	
-	if instance is LDObjectPolygon and data.has("polygon_holes"):
-		var poly_obj: LDObjectPolygon = instance as LDObjectPolygon
-		for hole_data: Variant in data["polygon_holes"]:
-			if not hole_data is Array:
-				continue
-			var hole_points: PackedVector2Array = PackedVector2Array()
-			for p: Variant in hole_data:
-				hole_points.append(_array_to_vec2(p))
-			if hole_points.size() >= 3:
-				poly_obj.add_hole(hole_points)
+		
+		var holes: Array[PackedVector2Array] = []
+		if data.has("polygon_holes"):
+			for hole_data: Variant in data["polygon_holes"]:
+				if not hole_data is Array:
+					continue
+				var hole_points: PackedVector2Array = PackedVector2Array()
+				for p: Variant in hole_data:
+					hole_points.append(_array_to_vec2(p))
+				if hole_points.size() >= 3:
+					holes.append(hole_points)
+		
+		if data.has("curve_handles"):
+			var hole_count: int = holes.size()
+			var meta: Dictionary = {
+				"ctrl_outer": points,
+				"hole_count": hole_count,
+			}
+			for hi: int in hole_count:
+				meta["ctrl_hole_" + str(hi)] = holes[hi]
+			var curve_data: Dictionary = data["curve_handles"] as Dictionary
+			for key: String in curve_data.keys():
+				meta[key] = curve_data[key]
+			poly_obj.set_meta(CURVE_META_KEY, meta)
+			var flat_outer: PackedVector2Array = _flatten_ring_from_meta(points, {}, meta)
+			var flat_holes: Array[PackedVector2Array] = []
+			for hi: int in hole_count:
+				flat_holes.append(_flatten_ring_from_meta(holes[hi], {}, meta, hi))
+			poly_obj.apply_points_raw(flat_outer, flat_holes)
+		else:
+			poly_obj.apply_points(points)
+			for hole: PackedVector2Array in holes:
+				poly_obj.add_hole(hole)
 	
 	instance.place()
+
+
+func _flatten_ring_from_meta(ring: PackedVector2Array, _unused: Dictionary, meta: Dictionary, hole_idx: int = -1) -> PackedVector2Array:
+	var ring_handles: Dictionary = {}
+	var prefix: String = "hk_o:" if hole_idx < 0 else "hk_h:" + str(hole_idx) + ":"
+	for key: String in meta.keys():
+		if not key.begins_with(prefix):
+			continue
+		var idx: int = int(key.substr(prefix.length()))
+		var arr: Array = meta[key] as Array
+		if arr.size() == 4:
+			ring_handles[idx] = LDCurveHandle.new(
+				Vector2(float(arr[0]), float(arr[1])),
+				Vector2(float(arr[2]), float(arr[3]))
+			)
+	return LDCurveUtil.flatten_ring(ring, ring_handles, 12)
 
 
 func find_game_object_for(obj: LDObject) -> GameObject:
