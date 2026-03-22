@@ -224,6 +224,51 @@ func apply_points_and_holes(points: PackedVector2Array, holes: Array[PackedVecto
 	_rebuild_polygon()
 
 
+func apply_points_raw(points: PackedVector2Array, holes: Array[PackedVector2Array]) -> void:
+	_outer_points = points
+	_holes.clear()
+	for h: PackedVector2Array in holes:
+		if h.size() >= 3:
+			_holes.append(h)
+	_rebuild_polygon_raw()
+ 
+ 
+func _rebuild_polygon_raw() -> void:
+	if _outer_points.is_empty():
+		if _polygon:
+			_polygon.polygon = PackedVector2Array()
+			_polygon.color = Color.TRANSPARENT
+		if editor_polygon:
+			editor_polygon.polygon = PackedVector2Array()
+		_seam_indices = PackedInt32Array()
+		_update_visuals()
+		queue_redraw()
+		return
+	
+	var seam_polygon: PackedVector2Array = _outer_points.duplicate()
+	_seam_indices = PackedInt32Array()
+	
+	for hole: PackedVector2Array in _holes:
+		if hole.size() < 3:
+			continue
+		var seam_result: Dictionary = TerrainPolygon.build_seam_polygon(seam_polygon, hole)
+		var built: PackedVector2Array = seam_result["polygon"]
+		if built.size() < 3:
+			continue
+		seam_polygon = built
+		for idx: int in (seam_result["seam_indices"] as PackedInt32Array):
+			_seam_indices.append(idx)
+	
+	if _polygon:
+		_polygon.polygon = seam_polygon
+		_polygon.color = Color.TRANSPARENT
+	if editor_polygon and _preview_valid:
+		editor_polygon.polygon = seam_polygon
+	
+	_update_visuals()
+	queue_redraw()
+
+
 func _update_visuals() -> void:
 	if not is_node_ready():
 		return
