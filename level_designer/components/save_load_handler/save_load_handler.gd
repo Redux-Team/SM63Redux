@@ -112,7 +112,7 @@ func _serialize() -> Dictionary:
 
 
 func _serialize_object(obj: LDObject) -> Dictionary:
-	var game_object: GameObject = _find_game_object_for(obj)
+	var game_object: GameObject = find_game_object_for(obj)
 	if not game_object:
 		return {}
 	
@@ -174,7 +174,7 @@ func _deserialize_object(data: Dictionary, layer_id: String, db: GameObjectDB) -
 	if object_id.is_empty():
 		return
 	
-	var game_object: GameObject = _find_game_object_by_id(object_id, db)
+	var game_object: GameObject = find_game_object_by_id(object_id, db)
 	if not game_object or not game_object.ld_editor_instance:
 		return
 	
@@ -201,13 +201,13 @@ func _deserialize_object(data: Dictionary, layer_id: String, db: GameObjectDB) -
 	instance.place()
 
 
-func _find_game_object_for(obj: LDObject) -> GameObject:
+func find_game_object_for(obj: LDObject) -> GameObject:
 	if obj.source_object_id.is_empty():
 		return null
-	return _find_game_object_by_id(obj.source_object_id, GameObjectDB.get_db())
+	return find_game_object_by_id(obj.source_object_id, GameObjectDB.get_db())
 
 
-func _find_game_object_by_id(id: String, db: GameObjectDB) -> GameObject:
+func find_game_object_by_id(id: String, db: GameObjectDB) -> GameObject:
 	for game_object: GameObject in db.objects.values():
 		if game_object.id == id:
 			return game_object
