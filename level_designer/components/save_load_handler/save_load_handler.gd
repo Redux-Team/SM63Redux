@@ -7,6 +7,12 @@ const JSON_EXTENSION: String = ".json"
 const FORMAT_VERSION: int = 1
 
 
+func _on_ready() -> void:
+	if Singleton.has_meta(&"playtest"):
+		_deserialize(Singleton.get_meta(&"playtest"))
+		Singleton.remove_meta(&"playtest")
+
+
 func save_binary(path: String) -> Error:
 	var data: Dictionary = _serialize()
 	var bytes: PackedByteArray = var_to_bytes(data)
@@ -61,6 +67,10 @@ func load_json(path: String) -> Error:
 	if deserialize_err == OK:
 		LD.get_tool_handler().select_tool("select")
 	return deserialize_err
+
+
+func get_level_data() -> Dictionary:
+	return _serialize()
 
 
 func _serialize() -> Dictionary:

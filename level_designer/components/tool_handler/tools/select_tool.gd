@@ -46,6 +46,11 @@ func _on_viewport_input(event: InputEvent) -> void:
 				_move_tool = move
 				get_tool_handler().select_tool("move")
 				return
+			var clicked: LDObject = _get_object_at(mouse_pos)
+			if clicked is LDObjectPolygon:
+				viewport.set_selected_objects([clicked])
+				get_tool_handler().select_tool("polygon_edit")
+				return
 			_is_box_selecting = true
 			_is_shift_selecting = event.shift_pressed
 			_box_select_origin = mouse_pos
@@ -119,10 +124,38 @@ func _object_intersects_box(obj: LDObject) -> bool:
 	var poly_obj: LDObjectPolygon = obj as LDObjectPolygon
 	if poly_obj and poly_obj.editor_polygon:
 		var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * obj.get_global_transform()
+		var screen_points: PackedVector2Array = PackedVector2Array()
 		for point: Vector2 in poly_obj.editor_polygon.polygon:
-			var screen_point: Vector2 = full_transform * point
-			if _box_select_rect.has_point(screen_point):
+			screen_points.append(full_transform * point)
+		
+		for p: Vector2 in screen_points:
+			if _box_select_rect.has_point(p):
 				return true
+		
+		var box_corners: Array[Vector2] = [
+			_box_select_rect.position,
+			_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0),
+			_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y),
+			_box_select_rect.position + _box_select_rect.size,
+		]
+		for corner: Vector2 in box_corners:
+			if Geometry2D.is_point_in_polygon(corner, screen_points):
+				return true
+		
+		var count: int = screen_points.size()
+		var box_edges: Array[Array] = [
+			[_box_select_rect.position, _box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0)],
+			[_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0), _box_select_rect.position + _box_select_rect.size],
+			[_box_select_rect.position + _box_select_rect.size, _box_select_rect.position + Vector2(0.0, _box_select_rect.size.y)],
+			[_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y), _box_select_rect.position],
+		]
+		for i: int in count:
+			var a1: Vector2 = screen_points[i]
+			var a2: Vector2 = screen_points[(i + 1) % count]
+			for edge: Array in box_edges:
+				if Geometry2D.segment_intersects_segment(a1, a2, edge[0], edge[1]) != null:
+					return true
+		
 		return false
 	
 	if not obj.editor_shape_area:
@@ -146,6 +179,15 @@ func _object_intersects_box(obj: LDObject) -> bool:
 func _get_object_at(mouse_pos: Vector2) -> LDObject:
 	for obj: LDObject in viewport.get_all_objects():
 		if obj.is_preview:
+			continue
+		var poly_obj: LDObjectPolygon = obj as LDObjectPolygon
+		if poly_obj and poly_obj._polygon:
+			var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * obj.get_global_transform()
+			var screen_points: PackedVector2Array = PackedVector2Array()
+			for point: Vector2 in poly_obj._polygon.polygon:
+				screen_points.append(full_transform * point)
+			if Geometry2D.is_point_in_polygon(mouse_pos, screen_points):
+				return obj
 			continue
 		if not obj.editor_shape_area:
 			var half: Vector2 = obj.get_stamp_size() * 0.5
@@ -181,6 +223,8 @@ func _on_touch_tap(pos: Vector2) -> void:
 	var obj: LDObject = _get_object_at(pos)
 	if obj:
 		viewport.set_selected_objects([obj])
+		if obj is LDObjectPolygon:
+			get_tool_handler().select_tool("polygon_edit")
 	else:
 		viewport.clear_selection()
 

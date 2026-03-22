@@ -125,3 +125,12 @@ func _on_load_button_pressed() -> void:
 
 func _on_rotate_button_pressed() -> void:
 	LD.get_tool_handler().select_tool("rotate")
+
+
+func _on_test_button_pressed() -> void:
+	Singleton.set_meta("playtest", LD.get_save_load_handler().get_level_data())
+	get_tree().change_scene_to_file("uid://ctssku6r3gx0a")
+
+
+func _on_poly_edit_pressed() -> void:
+	LD.get_tool_handler().select_tool("polygonedit")

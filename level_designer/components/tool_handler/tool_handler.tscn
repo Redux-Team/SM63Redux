@@ -4,11 +4,11 @@
 [ext_resource type="Script" uid="uid://cwaswaj17eo0e" path="res://level_designer/components/tool_handler/tools/select_tool.gd" id="2_004oe"]
 [ext_resource type="Script" uid="uid://b6v5g2fo03urf" path="res://level_designer/components/tool_handler/tools/brush_tool.gd" id="2_mx2vl"]
 [ext_resource type="Script" uid="uid://dp3swfeh534dw" path="res://level_designer/components/tool_handler/tools/select_shortcut_handler.gd" id="3_004oe"]
-[ext_resource type="Script" uid="uid://b16d1eakb1c7h" path="res://level_designer/components/tool_handler/telescoping_tool.gd" id="5_1k6i0"]
+[ext_resource type="Script" uid="uid://b16d1eakb1c7h" path="res://level_designer/components/tool_handler/tools/telescoping_tool.gd" id="5_1k6i0"]
 [ext_resource type="Script" uid="uid://cfrvdq1mkk30r" path="res://level_designer/components/tool_handler/tools/move_tool.gd" id="5_612so"]
-[ext_resource type="Script" uid="uid://bdcwsyf1jhg0m" path="res://level_designer/components/tool_handler/rotate_tool.gd" id="7_8sa8c"]
-[ext_resource type="Script" uid="uid://sw01i5n1vrbp" path="res://level_designer/components/tool_handler/polygon_tool.gd" id="7_pkfdl"]
-[ext_resource type="Script" uid="uid://cqvblppfibjsb" path="res://level_designer/components/tool_handler/polygon_edit_tool.gd" id="8_c517l"]
+[ext_resource type="Script" uid="uid://bdcwsyf1jhg0m" path="res://level_designer/components/tool_handler/tools/rotate_tool.gd" id="7_8sa8c"]
+[ext_resource type="Script" uid="uid://sw01i5n1vrbp" path="res://level_designer/components/tool_handler/tools/polygon_tool.gd" id="7_pkfdl"]
+[ext_resource type="Script" uid="uid://cqvblppfibjsb" path="res://level_designer/components/tool_handler/tools/polygon_edit_tool.gd" id="8_c517l"]
 
 [node name="ToolHandler" type="Node" unique_id=1124731823]
 script = ExtResource("1_0flew")

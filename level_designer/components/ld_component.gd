@@ -7,6 +7,7 @@ func _on_ready() -> void:
 
 
 func _ready() -> void:
+	await owner.ready
 	_on_ready()
 
 

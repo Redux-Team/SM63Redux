@@ -39,9 +39,11 @@ offset_top = 16.0
 offset_right = -16.0
 offset_bottom = 56.0
 grow_horizontal = 0
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ViewportUI/VBoxContainer2" unique_id=469316941]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="SelectButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1240001976]
 layout_mode = 2
@@ -59,8 +61,13 @@ text = "Move"
 layout_mode = 2
 text = "Rotate"
 
+[node name="PolyEditButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=891112985]
+layout_mode = 2
+text = "Edit (P)"
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="ViewportUI/VBoxContainer2" unique_id=227411509]
 layout_mode = 2
+mouse_filter = 2
 alignment = 2
 
 [node name="DeleteButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1153339096]
@@ -73,6 +80,7 @@ text = "Reset Cam"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="ViewportUI/VBoxContainer2" unique_id=1216125888]
 layout_mode = 2
+mouse_filter = 2
 alignment = 2
 
 [node name="SaveButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer3" unique_id=244361035]
@@ -82,6 +90,29 @@ text = "Save"
 [node name="LoadButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer3" unique_id=1138989682]
 layout_mode = 2
 text = "Load"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="ViewportUI" unique_id=2052051468]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -12.0
+offset_right = -6.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ViewportUI/VBoxContainer3" unique_id=341053402]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TestButton" type="Button" parent="ViewportUI/VBoxContainer3/HBoxContainer" unique_id=700489393]
+layout_mode = 2
+text = "Test"
 
 [node name="WindowLayer" type="CanvasLayer" parent="." unique_id=783443360]
 layer = 3
@@ -123,9 +154,11 @@ use_native_dialog = true
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/BrushButton" to="." method="_on_brush_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/MoveButton" to="." method="_on_move_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/RotateButton" to="." method="_on_rotate_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyEditButton" to="." method="_on_poly_edit_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeleteButton" to="." method="_on_delete_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer3/HBoxContainer/TestButton" to="." method="_on_test_button_pressed"]
 [connection signal="file_selected" from="WindowLayer/SaveFileDialog" to="." method="_on_save_file_selected"]
 [connection signal="file_selected" from="WindowLayer/LoadFileDialog" to="." method="_on_load_file_selected"]

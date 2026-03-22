@@ -1,9 +1,13 @@
 class_name LDToolHandler
-extends Node
+extends LDComponent
 
 
 var _selected_tool: LDTool
 var _bound_tools: Dictionary[String, LDTool]
+
+
+func _on_ready() -> void:
+	select_tool("select")
 
 
 func get_selected_tool() -> LDTool:
@@ -19,7 +23,7 @@ func select_tool(tool_name_or_ref: Variant) -> void:
 		_selected_tool._on_disable()
 	
 	if tool_name_or_ref is String:
-		_selected_tool = _bound_tools.get(tool_name_or_ref.to_lower())
+		_selected_tool = _bound_tools.get(tool_name_or_ref.to_lower().remove_char(95))
 	elif tool_name_or_ref is LDTool and tool_name_or_ref in _bound_tools.values():
 		_selected_tool = tool_name_or_ref
 	

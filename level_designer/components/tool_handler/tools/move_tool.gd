@@ -6,6 +6,7 @@ var _drag_offsets: Array[Vector2] = []
 var _drag_start_positions: Array[Vector2] = []
 var _objects: Array[LDObject] = []
 var _is_dragging: bool = false
+var return_tool: String = "select"
 var _return_to_select: bool = false
 
 
@@ -99,7 +100,8 @@ func end_drag() -> void:
 	
 	if _return_to_select:
 		_return_to_select = false
-		get_tool_handler().select_tool("select")
+		get_tool_handler().select_tool(return_tool)
+		return_tool = "select"
 	else:
 		viewport.clear_selection()
 
