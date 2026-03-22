@@ -51,13 +51,13 @@ var is_mouse_panning: bool = false:
 	set(mp):
 		is_mouse_panning = mp
 		if mp:
-			Input.set_default_cursor_shape(Input.CURSOR_MOVE)
+			_viewport_input.mouse_default_cursor_shape = Control.CURSOR_MOVE
 		else:
 			var tool: LDTool = LD.get_tool_handler().get_selected_tool()
 			if tool:
 				tool.set_cursor_shape(tool.get_cursor_shape())
 			else:
-				Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+				_viewport_input.mouse_default_cursor_shape = Control.CURSOR_ARROW
 
 var _selected_objects: Array[LDObject] = []
 
