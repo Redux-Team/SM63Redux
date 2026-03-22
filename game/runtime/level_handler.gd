@@ -19,8 +19,6 @@ func load_from_dict(data: Dictionary) -> Error:
 	
 	_clear()
 	
-	var db: GameObjectDB = GameObjectDB.get_db()
-	
 	for layer_data: Variant in data["layers"]:
 		if not layer_data is Dictionary:
 			continue
@@ -28,7 +26,7 @@ func load_from_dict(data: Dictionary) -> Error:
 		for obj_data: Variant in layer_data.get("objects", []):
 			if not obj_data is Dictionary:
 				continue
-			_instantiate_object(obj_data, layer_id, db)
+			_instantiate_object(obj_data, layer_id)
 	
 	return OK
 
@@ -93,12 +91,12 @@ func get_objects_by_id(object_id: String) -> Array[LevelObject]:
 	return result
 
 
-func _instantiate_object(data: Dictionary, layer_id: String, db: GameObjectDB) -> void:
+func _instantiate_object(data: Dictionary, layer_id: String) -> void:
 	var object_id: String = data.get("object_id", "")
 	if object_id.is_empty():
 		return
 	
-	var game_object: GameObject = _find_game_object(object_id, db)
+	var game_object: GameObject = GameObjectDB.get_db().find_game_object(object_id)
 	if not game_object or not game_object.game_instance:
 		return
 	
@@ -143,13 +141,6 @@ func _clear() -> void:
 	for child: Node in _layers_root.get_children():
 		_layers_root.remove_child(child)
 		child.free()
-
-
-func _find_game_object(id: String, db: GameObjectDB) -> GameObject:
-	for obj: GameObject in db.objects.values():
-		if obj.id == id:
-			return obj
-	return null
 
 
 func _parse_absolute_index(layer_id: String) -> int:
