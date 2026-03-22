@@ -310,33 +310,38 @@ func _commit() -> void:
 		
 		var old_pts: PackedVector2Array = target.get_outer_points().duplicate()
 		var old_holes: Array[PackedVector2Array] = target.get_holes().duplicate()
+		var old_meta: Dictionary = LDCurveUtil.snapshot_meta(target)
 		var obj: LDObjectPolygon = target
 		var parent: Node = target.get_parent()
+		var xform_inv: Transform2D = target.get_global_transform().affine_inverse()
+		var cut_local: PackedVector2Array = PackedVector2Array()
+		for p: Vector2 in _points:
+			cut_local.append(xform_inv * p)
+		var ctrl_outer: PackedVector2Array = PackedVector2Array(old_meta.get("ctrl_outer", old_pts)) if not old_meta.is_empty() else old_pts
 		
 		match cut_case:
 			CutCase.HOLE:
 				var new_holes: Array[PackedVector2Array] = old_holes.duplicate()
 				new_holes.append(_world_to_local(target, _points))
+				var new_meta: Dictionary = old_meta.duplicate()
+				new_meta["hole_count"] = new_holes.size()
 				history.add_do(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
-						obj.apply_points(old_pts)
-						for h: PackedVector2Array in new_holes:
-							obj.add_hole(h)
+						obj.apply_points_raw(old_pts, new_holes)
+						LDCurveUtil.restore_meta(obj, new_meta)
 				)
 				history.add_undo(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
-						obj.apply_points(old_pts)
-						for h: PackedVector2Array in old_holes:
-							obj.add_hole(h)
+						obj.apply_points_raw(old_pts, old_holes)
+						LDCurveUtil.restore_meta(obj, old_meta)
 				)
 				obj.clear_holes()
-				obj.apply_points(old_pts)
-				for h: PackedVector2Array in new_holes:
-					obj.add_hole(h)
+				obj.apply_points_raw(old_pts, new_holes)
+				LDCurveUtil.restore_meta(obj, new_meta)
 			
 			CutCase.BRIDGE:
 				var holes_world: Array[PackedVector2Array] = _holes_to_world(target)
@@ -353,36 +358,37 @@ func _commit() -> void:
 				var cleaned_merged: PackedVector2Array = TerrainPolygon.clean_polygon(merged_hole)
 				if cleaned_merged.size() >= 3:
 					new_holes.append(_world_to_local(target, cleaned_merged))
+				var new_meta: Dictionary = old_meta.duplicate()
+				new_meta["hole_count"] = new_holes.size()
 				history.add_do(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
-						obj.apply_points(old_pts)
-						for h: PackedVector2Array in new_holes:
-							obj.add_hole(h)
+						obj.apply_points_raw(old_pts, new_holes)
+						LDCurveUtil.restore_meta(obj, new_meta)
 				)
 				history.add_undo(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
-						obj.apply_points(old_pts)
-						for h: PackedVector2Array in old_holes:
-							obj.add_hole(h)
+						obj.apply_points_raw(old_pts, old_holes)
+						LDCurveUtil.restore_meta(obj, old_meta)
 				)
 				obj.clear_holes()
-				obj.apply_points(old_pts)
-				for h: PackedVector2Array in new_holes:
-					obj.add_hole(h)
+				obj.apply_points_raw(old_pts, new_holes)
+				LDCurveUtil.restore_meta(obj, new_meta)
 			
 			CutCase.REMOVE_HOLE:
 				var holes_world: Array[PackedVector2Array] = _holes_to_world(target)
 				var target_world: PackedVector2Array = _polygon_to_world(target)
-				var combined_cut: PackedVector2Array = _points
+				var new_holes: Array[PackedVector2Array] = []
 				var surviving_holes_world: Array[PackedVector2Array] = []
+				var combined_cut: PackedVector2Array = _points
 				
 				for i: int in holes_world.size():
 					var hole_intersection: Array = Geometry2D.intersect_polygons(holes_world[i], _points)
 					if hole_intersection.is_empty():
+						new_holes.append(old_holes[i])
 						surviving_holes_world.append(holes_world[i])
 						continue
 					var merged: Array = Geometry2D.merge_polygons(holes_world[i], combined_cut)
@@ -401,9 +407,8 @@ func _commit() -> void:
 							parent.add_child(obj)
 							obj.modulate.a = 1.0
 							obj.clear_holes()
-							obj.apply_points(old_pts)
-							for h: PackedVector2Array in old_holes:
-								obj.add_hole(h)
+							obj.apply_points_raw(old_pts, old_holes)
+							LDCurveUtil.restore_meta(obj, old_meta)
 					)
 					target.get_parent().remove_child(target)
 					continue
@@ -419,26 +424,25 @@ func _commit() -> void:
 				
 				var new_outer: PackedVector2Array = _world_to_local(target, TerrainPolygon.clean_polygon(clipped[0]))
 				var first_holes: Array[PackedVector2Array] = piece_holes[0]
+				var affected: PackedInt32Array = LDCurveUtil.get_affected_outer_segments(ctrl_outer, old_meta, cut_local)
+				var new_meta: Dictionary = LDCurveUtil.selective_bake_meta(new_outer, old_meta, ctrl_outer, affected, true)
 				history.add_do(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
-						obj.apply_points(new_outer)
-						for h: PackedVector2Array in first_holes:
-							obj.add_hole(h)
+						obj.apply_points_raw(new_outer, first_holes)
+						LDCurveUtil.restore_meta(obj, new_meta)
 				)
 				history.add_undo(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
-						obj.apply_points(old_pts)
-						for h: PackedVector2Array in old_holes:
-							obj.add_hole(h)
+						obj.apply_points_raw(old_pts, old_holes)
+						LDCurveUtil.restore_meta(obj, old_meta)
 				)
 				obj.clear_holes()
-				obj.apply_points(new_outer)
-				for h: PackedVector2Array in first_holes:
-					obj.add_hole(h)
+				obj.apply_points_raw(new_outer, first_holes)
+				LDCurveUtil.restore_meta(obj, new_meta)
 				
 				var game_object: GameObject = GameObjectDB.get_db().find_game_object(target.source_object_id)
 				var layer_id: String = "a0r0"
@@ -472,9 +476,7 @@ func _commit() -> void:
 						adjusted_holes.append(adjusted)
 					viewport.add_object(new_poly, Vector2i(centroid), layer_id)
 					new_poly.init_properties(game_object)
-					new_poly.apply_points(piece_local)
-					for h: PackedVector2Array in adjusted_holes:
-						new_poly.add_hole(h)
+					new_poly.apply_points_raw(piece_local, adjusted_holes)
 					new_poly.place()
 					history.add_do(func() -> void:
 						if is_instance_valid(new_poly) and not new_poly.is_inside_tree():
@@ -484,36 +486,6 @@ func _commit() -> void:
 						if is_instance_valid(new_poly) and new_poly.is_inside_tree():
 							new_poly.get_parent().remove_child(new_poly)
 					)
-			
-			CutCase.EXPAND_HOLE:
-				var new_holes: Array[PackedVector2Array] = []
-				var holes_world: Array[PackedVector2Array] = _holes_to_world(target)
-				for i: int in holes_world.size():
-					var hole_intersection: Array = Geometry2D.intersect_polygons(holes_world[i], _points)
-					if hole_intersection.is_empty():
-						new_holes.append(old_holes[i])
-					else:
-						new_holes.append(_world_to_local(target, _points))
-				history.add_do(func() -> void:
-					if is_instance_valid(obj):
-						obj.modulate.a = 1.0
-						obj.clear_holes()
-						obj.apply_points(old_pts)
-						for h: PackedVector2Array in new_holes:
-							obj.add_hole(h)
-				)
-				history.add_undo(func() -> void:
-					if is_instance_valid(obj):
-						obj.modulate.a = 1.0
-						obj.clear_holes()
-						obj.apply_points(old_pts)
-						for h: PackedVector2Array in old_holes:
-							obj.add_hole(h)
-				)
-				obj.clear_holes()
-				obj.apply_points(old_pts)
-				for h: PackedVector2Array in new_holes:
-					obj.add_hole(h)
 			
 			CutCase.SLICE:
 				var target_world: PackedVector2Array = _polygon_to_world(target)
@@ -529,9 +501,8 @@ func _commit() -> void:
 							parent.add_child(obj)
 							obj.modulate.a = 1.0
 							obj.clear_holes()
-							obj.apply_points(old_pts)
-							for h: PackedVector2Array in old_holes:
-								obj.add_hole(h)
+							obj.apply_points_raw(old_pts, old_holes)
+							LDCurveUtil.restore_meta(obj, old_meta)
 					)
 					target.get_parent().remove_child(target)
 					continue
@@ -560,27 +531,26 @@ func _commit() -> void:
 				
 				var first_local: PackedVector2Array = _world_to_local(target, TerrainPolygon.clean_polygon(clipped[0]))
 				var first_holes: Array[PackedVector2Array] = piece_holes[0]
+				var affected: PackedInt32Array = LDCurveUtil.get_affected_outer_segments(ctrl_outer, old_meta, cut_local)
+				var new_meta: Dictionary = LDCurveUtil.selective_bake_meta(first_local, old_meta, ctrl_outer, affected, true)
 				
 				history.add_do(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
-						obj.apply_points(first_local)
-						for h: PackedVector2Array in first_holes:
-							obj.add_hole(h)
+						obj.apply_points_raw(first_local, first_holes)
+						LDCurveUtil.restore_meta(obj, new_meta)
 				)
 				history.add_undo(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
-						obj.apply_points(old_pts)
-						for h: PackedVector2Array in old_holes:
-							obj.add_hole(h)
+						obj.apply_points_raw(old_pts, old_holes)
+						LDCurveUtil.restore_meta(obj, old_meta)
 				)
 				obj.clear_holes()
-				obj.apply_points(first_local)
-				for h: PackedVector2Array in first_holes:
-					obj.add_hole(h)
+				obj.apply_points_raw(first_local, first_holes)
+				LDCurveUtil.restore_meta(obj, new_meta)
 				
 				var game_object: GameObject = GameObjectDB.get_db().find_game_object(target.source_object_id)
 				var layer_id: String = "a0r0"
@@ -618,9 +588,7 @@ func _commit() -> void:
 						adjusted_holes.append(adjusted)
 					viewport.add_object(new_poly, Vector2i(centroid), layer_id)
 					new_poly.init_properties(game_object)
-					new_poly.apply_points(piece_local)
-					for h: PackedVector2Array in adjusted_holes:
-						new_poly.add_hole(h)
+					new_poly.apply_points_raw(piece_local, adjusted_holes)
 					new_poly.place()
 					history.add_do(func() -> void:
 						if is_instance_valid(new_poly) and not new_poly.is_inside_tree():
@@ -642,3 +610,63 @@ func _is_cut_fully_inside(target: PackedVector2Array, cut: PackedVector2Array) -
 		if not Geometry2D.is_point_in_polygon(p, target):
 			return false
 	return true
+
+
+func _on_bake_overlay_draw() -> void:
+	if not is_active():
+		return
+	var preview: PackedVector2Array = _points.duplicate()
+	if _cursor_pos != Vector2.ZERO and (preview.is_empty() or preview[preview.size() - 1] != _cursor_pos):
+		preview.append(_cursor_pos)
+	if preview.size() < 3:
+		return
+	for target: LDObjectPolygon in _targets:
+		if not is_instance_valid(target):
+			continue
+		var cut_case: CutCase = _classify_cut(target, preview)
+		if cut_case == CutCase.OUTSIDE or cut_case == CutCase.HOLE or cut_case == CutCase.BRIDGE:
+			continue
+		var old_meta: Dictionary = LDCurveUtil.snapshot_meta(target)
+		if old_meta.is_empty():
+			continue
+		var xform: Transform2D = target.get_global_transform()
+		var xform_inv: Transform2D = xform.affine_inverse()
+		var cut_local: PackedVector2Array = PackedVector2Array()
+		for p: Vector2 in preview:
+			cut_local.append(xform_inv * p)
+		var ctrl_outer_raw: Variant = old_meta.get("ctrl_outer")
+		if ctrl_outer_raw == null:
+			continue
+		var ctrl_outer: PackedVector2Array = PackedVector2Array(ctrl_outer_raw)
+		var affected: PackedInt32Array = LDCurveUtil.get_affected_outer_segments(ctrl_outer, old_meta, cut_local)
+		if affected.is_empty():
+			continue
+		var canvas: Transform2D = viewport.get_viewport().get_canvas_transform()
+		var root_xform: Transform2D = viewport.get_root().get_global_transform()
+		var to_screen: Transform2D = canvas * root_xform
+		for seg_idx: int in affected:
+			var ni: int = (seg_idx + 1) % ctrl_outer.size()
+			var key_curr: String = "hk_o:" + str(seg_idx)
+			var key_next: String = "hk_o:" + str(ni)
+			var h_curr_arr: Variant = old_meta.get(key_curr)
+			var h_next_arr: Variant = old_meta.get(key_next)
+			var p0: Vector2 = ctrl_outer[seg_idx]
+			var p3: Vector2 = ctrl_outer[ni]
+			var h_out: Vector2 = Vector2.ZERO
+			var h_in: Vector2 = Vector2.ZERO
+			if h_curr_arr != null:
+				var arr: Array = h_curr_arr as Array
+				if arr.size() == 4:
+					h_out = Vector2(float(arr[2]), float(arr[3]))
+			if h_next_arr != null:
+				var arr: Array = h_next_arr as Array
+				if arr.size() == 4:
+					h_in = Vector2(float(arr[0]), float(arr[1]))
+			var p1: Vector2 = p0 + h_out
+			var p2: Vector2 = p3 + h_in
+			var prev_pt: Vector2 = to_screen * (xform * p0)
+			for s: int in range(1, 13):
+				var t: float = float(s) / 12.0
+				var curr_pt: Vector2 = to_screen * (xform * LDCurveUtil.cubic_bezier(p0, p1, p2, p3, t))
+				_overlay.draw_line(prev_pt, curr_pt, Color(1.0, 0.5, 0.0, 1.0), 2.5)
+				prev_pt = curr_pt

@@ -28,6 +28,7 @@ func _on_enable() -> void:
 	super()
 	set_cursor_shape(Control.CURSOR_CROSS)
 	_overlay = viewport.get_selection_overlay()
+	_overlay.draw.connect(_on_bake_overlay_draw)
 	_snapshot_targets()
 	_draw_node = LDPolygonBooleanDrawNode.new()
 	_setup_draw_node(_draw_node)
@@ -52,7 +53,13 @@ func _on_disable() -> void:
 	if is_instance_valid(_draw_node):
 		_draw_node.queue_free()
 		_draw_node = null
+	if is_instance_valid(_overlay) and _overlay.draw.is_connected(_on_bake_overlay_draw):
+		_overlay.draw.disconnect(_on_bake_overlay_draw)
 	super()
+
+
+func _on_bake_overlay_draw() -> void:
+	pass
 
 
 func _on_viewport_moved(_pos: Vector2, _zoom: Vector2) -> void:
@@ -71,7 +78,7 @@ func _input(event: InputEvent) -> void:
 			var commit_points: PackedVector2Array = _get_commit_points()
 			if commit_points.size() >= 3 and _check_valid(commit_points) and _check_contact(commit_points):
 				_points = commit_points
-				_commit()
+				_do_commit()
 			get_viewport().set_input_as_handled()
 		KEY_ESCAPE:
 			get_tool_handler().select_tool("select")
@@ -108,7 +115,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 			var commit_points: PackedVector2Array = _get_commit_points()
 			if commit_points.size() >= 3 and _check_valid(commit_points) and _check_contact(commit_points):
 				_points = commit_points
-				_commit()
+				_do_commit()
 			else:
 				get_tool_handler().select_tool("select")
 
@@ -344,6 +351,13 @@ func _setup_draw_node(_node: LDPolygonBooleanDrawNode) -> void:
 
 @abstract func _compute_preview_results(points: PackedVector2Array) -> Array[PackedVector2Array]
 @abstract func _commit() -> void
+
+
+func _do_commit() -> void:
+	_commit()
+	for target: LDObjectPolygon in _targets:
+		if is_instance_valid(target):
+			LDCurveUtil.invalidate_curve_meta(target)
 
 
 func _get_snapped_mouse_pos() -> Vector2:
