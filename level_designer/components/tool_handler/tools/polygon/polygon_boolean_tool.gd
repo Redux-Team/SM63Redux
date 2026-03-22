@@ -177,7 +177,7 @@ func _update_preview_instances(results: Array[PackedVector2Array], preview: Pack
 	if results.is_empty():
 		return
 	
-	var result_idx: int = 0
+	var poly_idx: int = 0
 	for i: int in _targets.size():
 		var target: LDObjectPolygon = _targets[i]
 		if not is_instance_valid(target):
@@ -190,11 +190,9 @@ func _update_preview_instances(results: Array[PackedVector2Array], preview: Pack
 		
 		target.modulate.a = 0.0
 		
-		var pieces_for_target: Array[PackedVector2Array] = _get_results_for_target(results, result_idx, target_world)
-		result_idx += pieces_for_target.size()
+		var pieces_for_target: Array[PackedVector2Array] = _get_results_for_target(results, 0, target_world)
 		
 		for j: int in pieces_for_target.size():
-			var poly_idx: int = i + j
 			while poly_idx >= _preview_instances.size():
 				var game_object: GameObject = GameObjectDB.get_db().find_game_object(target.source_object_id)
 				if not game_object or not game_object.ld_editor_instance:
@@ -211,11 +209,26 @@ func _update_preview_instances(results: Array[PackedVector2Array], preview: Pack
 				new_poly.modulate.a = 0.0
 				_preview_instances.append(new_poly)
 			
-			if poly_idx < _preview_instances.size() and is_instance_valid(_preview_instances[poly_idx]):
-				var local_pts: PackedVector2Array = _world_to_local(target, pieces_for_target[j])
-				_preview_instances[poly_idx].position = target.position
-				_preview_instances[poly_idx].apply_points(local_pts)
-				_preview_instances[poly_idx].modulate.a = 1.0
+			if poly_idx >= _preview_instances.size():
+				break
+			if not is_instance_valid(_preview_instances[poly_idx]):
+				poly_idx += 1
+				continue
+			
+			var piece_pts: PackedVector2Array = _world_to_local(target, pieces_for_target[j])
+			var preview_holes: Array[PackedVector2Array] = _compute_preview_holes_for_piece(target, preview, pieces_for_target[j])
+			_preview_instances[poly_idx].position = target.position
+			_preview_instances[poly_idx].apply_points_and_holes(piece_pts, preview_holes)
+			_preview_instances[poly_idx].modulate.a = 1.0
+			poly_idx += 1
+
+
+func _compute_preview_holes(_target: LDObjectPolygon, _preview: PackedVector2Array, _piece_index: int) -> Array[PackedVector2Array]:
+	return []
+
+
+func _compute_preview_holes_for_piece(target: LDObjectPolygon, preview: PackedVector2Array, piece_world: PackedVector2Array) -> Array[PackedVector2Array]:
+	return _compute_preview_holes(target, preview, 0)
 
 
 func _clear_preview_instances() -> void:
@@ -257,6 +270,15 @@ func _check_contact(points: PackedVector2Array) -> bool:
 		var target_world: PackedVector2Array = _polygon_to_world(target)
 		var intersection: Array = Geometry2D.intersect_polygons(points, target_world)
 		if not intersection.is_empty():
+			for hole: PackedVector2Array in target.get_holes():
+				var hole_world: PackedVector2Array = _local_to_world(target, hole)
+				var fully_inside_hole: bool = true
+				for p: Vector2 in points:
+					if not Geometry2D.is_point_in_polygon(p, hole_world):
+						fully_inside_hole = false
+						break
+				if fully_inside_hole:
+					return false
 			return true
 		if Geometry2D.is_point_in_polygon(points[0], target_world):
 			return true
@@ -292,8 +314,19 @@ func _check_min_distance(pos: Vector2) -> bool:
 func _polygon_to_world(poly: LDObjectPolygon) -> PackedVector2Array:
 	var result: PackedVector2Array = PackedVector2Array()
 	var xform: Transform2D = poly.get_global_transform()
-	for p: Vector2 in poly._polygon.polygon:
+	for p: Vector2 in poly.get_outer_points():
 		result.append(xform * p)
+	return result
+
+
+func _holes_to_world(poly: LDObjectPolygon) -> Array[PackedVector2Array]:
+	var result: Array[PackedVector2Array] = []
+	var xform: Transform2D = poly.get_global_transform()
+	for hole: PackedVector2Array in poly.get_holes():
+		var world_hole: PackedVector2Array = PackedVector2Array()
+		for p: Vector2 in hole:
+			world_hole.append(xform * p)
+		result.append(world_hole)
 	return result
 
 
@@ -315,3 +348,11 @@ func _setup_draw_node(_node: LDPolygonBooleanDrawNode) -> void:
 
 func _get_snapped_mouse_pos() -> Vector2:
 	return viewport.get_root().get_local_mouse_position().snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
+
+
+func _local_to_world(poly: LDObjectPolygon, points: PackedVector2Array) -> PackedVector2Array:
+	var result: PackedVector2Array = PackedVector2Array()
+	var xform: Transform2D = poly.get_global_transform()
+	for p: Vector2 in points:
+		result.append(xform * p)
+	return result
