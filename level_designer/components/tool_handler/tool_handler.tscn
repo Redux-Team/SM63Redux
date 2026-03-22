@@ -7,8 +7,10 @@
 [ext_resource type="Script" uid="uid://b16d1eakb1c7h" path="res://level_designer/components/tool_handler/tools/telescoping_tool.gd" id="5_1k6i0"]
 [ext_resource type="Script" uid="uid://cfrvdq1mkk30r" path="res://level_designer/components/tool_handler/tools/move_tool.gd" id="5_612so"]
 [ext_resource type="Script" uid="uid://bdcwsyf1jhg0m" path="res://level_designer/components/tool_handler/tools/rotate_tool.gd" id="7_8sa8c"]
-[ext_resource type="Script" uid="uid://sw01i5n1vrbp" path="res://level_designer/components/tool_handler/tools/polygon_tool.gd" id="7_pkfdl"]
-[ext_resource type="Script" uid="uid://cqvblppfibjsb" path="res://level_designer/components/tool_handler/tools/polygon_edit_tool.gd" id="8_c517l"]
+[ext_resource type="Script" uid="uid://sw01i5n1vrbp" path="res://level_designer/components/tool_handler/tools/polygon/polygon_tool.gd" id="7_pkfdl"]
+[ext_resource type="Script" uid="uid://cqvblppfibjsb" path="res://level_designer/components/tool_handler/tools/polygon/polygon_edit_tool.gd" id="8_c517l"]
+[ext_resource type="Script" uid="uid://s77vtjwxty2o" path="res://level_designer/components/tool_handler/tools/polygon/polygon_add_tool.gd" id="10_u22y6"]
+[ext_resource type="Script" uid="uid://cedokux8eoge8" path="res://level_designer/components/tool_handler/tools/polygon/polygon_cut_tool.gd" id="11_4dp4y"]
 
 [node name="ToolHandler" type="Node" unique_id=1124731823]
 script = ExtResource("1_0flew")
@@ -37,3 +39,9 @@ script = ExtResource("7_pkfdl")
 
 [node name="PolygonEditTool" type="Node" parent="PolygonTool" unique_id=1275946004]
 script = ExtResource("8_c517l")
+
+[node name="PolygonAddTool" type="Node" parent="PolygonTool" unique_id=489637869]
+script = ExtResource("10_u22y6")
+
+[node name="PolygonCutTool" type="Node" parent="PolygonTool" unique_id=1318500431]
+script = ExtResource("11_4dp4y")

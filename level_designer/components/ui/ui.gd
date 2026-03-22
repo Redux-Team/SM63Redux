@@ -133,4 +133,12 @@ func _on_test_button_pressed() -> void:
 
 
 func _on_poly_edit_pressed() -> void:
-	LD.get_tool_handler().select_tool("polygonedit")
+	LD.get_tool_handler().select_tool("polygon_edit")
+
+
+func _on_poly_add_pressed() -> void:
+	LD.get_tool_handler().select_tool("polygon_add")
+
+
+func _on_poly_cut_pressed() -> void:
+	LD.get_tool_handler().select_tool("polygon_cut")

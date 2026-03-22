@@ -65,6 +65,14 @@ text = "Rotate"
 layout_mode = 2
 text = "Edit (P)"
 
+[node name="PolyAddButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=472817273]
+layout_mode = 2
+text = "Add (P)"
+
+[node name="PolyCutButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1121572227]
+layout_mode = 2
+text = "Cut (P)"
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="ViewportUI/VBoxContainer2" unique_id=227411509]
 layout_mode = 2
 mouse_filter = 2
@@ -155,6 +163,8 @@ use_native_dialog = true
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/MoveButton" to="." method="_on_move_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/RotateButton" to="." method="_on_rotate_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyEditButton" to="." method="_on_poly_edit_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyAddButton" to="." method="_on_poly_add_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyCutButton" to="." method="_on_poly_cut_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeleteButton" to="." method="_on_delete_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/SaveButton" to="." method="_on_save_button_pressed"]
