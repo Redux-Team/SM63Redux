@@ -2,12 +2,12 @@ extends LDPolygonBooleanTool
 
 
 enum CutCase {
-	OUTSIDE, # cut doesn't affect the polygon
-	SLICE, # cut removes a chunk from the outer polygon
-	HOLE, # cut creates a new hole inside the polygon
-	BRIDGE, # cut connects/merges two holes together
-	REMOVE_HOLE,  # cut removes an existing hole
-	EXPAND_HOLE # cut fully encapsulates an existing hole, making it bigger
+	OUTSIDE,
+	SLICE,
+	HOLE,
+	BRIDGE,
+	REMOVE_HOLE,
+	EXPAND_HOLE
 }
 
 
@@ -313,24 +313,17 @@ func _commit() -> void:
 		var old_meta: Dictionary = LDCurveUtil.snapshot_meta(target)
 		var obj: LDObjectPolygon = target
 		var parent: Node = target.get_parent()
-		var xform_inv: Transform2D = target.get_global_transform().affine_inverse()
-		var cut_local: PackedVector2Array = PackedVector2Array()
-		for p: Vector2 in _points:
-			cut_local.append(xform_inv * p)
-		var ctrl_outer: PackedVector2Array = PackedVector2Array(old_meta.get("ctrl_outer", old_pts)) if not old_meta.is_empty() else old_pts
 		
 		match cut_case:
 			CutCase.HOLE:
 				var new_holes: Array[PackedVector2Array] = old_holes.duplicate()
 				new_holes.append(_world_to_local(target, _points))
-				var new_meta: Dictionary = old_meta.duplicate()
-				new_meta["hole_count"] = new_holes.size()
 				history.add_do(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
 						obj.apply_points_raw(old_pts, new_holes)
-						LDCurveUtil.restore_meta(obj, new_meta)
+						LDCurveUtil.invalidate_curve_meta(obj)
 				)
 				history.add_undo(func() -> void:
 					if is_instance_valid(obj):
@@ -341,7 +334,7 @@ func _commit() -> void:
 				)
 				obj.clear_holes()
 				obj.apply_points_raw(old_pts, new_holes)
-				LDCurveUtil.restore_meta(obj, new_meta)
+				LDCurveUtil.invalidate_curve_meta(obj)
 			
 			CutCase.BRIDGE:
 				var holes_world: Array[PackedVector2Array] = _holes_to_world(target)
@@ -358,14 +351,12 @@ func _commit() -> void:
 				var cleaned_merged: PackedVector2Array = TerrainPolygon.clean_polygon(merged_hole)
 				if cleaned_merged.size() >= 3:
 					new_holes.append(_world_to_local(target, cleaned_merged))
-				var new_meta: Dictionary = old_meta.duplicate()
-				new_meta["hole_count"] = new_holes.size()
 				history.add_do(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
 						obj.apply_points_raw(old_pts, new_holes)
-						LDCurveUtil.restore_meta(obj, new_meta)
+						LDCurveUtil.invalidate_curve_meta(obj)
 				)
 				history.add_undo(func() -> void:
 					if is_instance_valid(obj):
@@ -376,20 +367,47 @@ func _commit() -> void:
 				)
 				obj.clear_holes()
 				obj.apply_points_raw(old_pts, new_holes)
-				LDCurveUtil.restore_meta(obj, new_meta)
+				LDCurveUtil.invalidate_curve_meta(obj)
+			
+			CutCase.EXPAND_HOLE:
+				var new_holes: Array[PackedVector2Array] = []
+				for i: int in old_holes.size():
+					var hole_world: PackedVector2Array = _local_to_world(target, old_holes[i])
+					var hole_intersection: Array = Geometry2D.intersect_polygons(hole_world, _points)
+					if hole_intersection.is_empty():
+						new_holes.append(old_holes[i])
+					else:
+						new_holes.append(_world_to_local(target, _points))
+				history.add_do(func() -> void:
+					if is_instance_valid(obj):
+						obj.modulate.a = 1.0
+						obj.clear_holes()
+						obj.apply_points_raw(old_pts, new_holes)
+						LDCurveUtil.invalidate_curve_meta(obj)
+				)
+				history.add_undo(func() -> void:
+					if is_instance_valid(obj):
+						obj.modulate.a = 1.0
+						obj.clear_holes()
+						obj.apply_points_raw(old_pts, old_holes)
+						LDCurveUtil.restore_meta(obj, old_meta)
+				)
+				obj.clear_holes()
+				obj.apply_points_raw(old_pts, new_holes)
+				LDCurveUtil.invalidate_curve_meta(obj)
 			
 			CutCase.REMOVE_HOLE:
 				var holes_world: Array[PackedVector2Array] = _holes_to_world(target)
 				var target_world: PackedVector2Array = _polygon_to_world(target)
-				var new_holes: Array[PackedVector2Array] = []
 				var surviving_holes_world: Array[PackedVector2Array] = []
+				var surviving_old_holes: Array[PackedVector2Array] = []
 				var combined_cut: PackedVector2Array = _points
 				
 				for i: int in holes_world.size():
 					var hole_intersection: Array = Geometry2D.intersect_polygons(holes_world[i], _points)
 					if hole_intersection.is_empty():
-						new_holes.append(old_holes[i])
 						surviving_holes_world.append(holes_world[i])
+						surviving_old_holes.append(old_holes[i])
 						continue
 					var merged: Array = Geometry2D.merge_polygons(holes_world[i], combined_cut)
 					if not merged.is_empty():
@@ -424,14 +442,12 @@ func _commit() -> void:
 				
 				var new_outer: PackedVector2Array = _world_to_local(target, TerrainPolygon.clean_polygon(clipped[0]))
 				var first_holes: Array[PackedVector2Array] = piece_holes[0]
-				var affected: PackedInt32Array = LDCurveUtil.get_affected_outer_segments(ctrl_outer, old_meta, cut_local)
-				var new_meta: Dictionary = LDCurveUtil.selective_bake_meta(new_outer, old_meta, ctrl_outer, affected, true)
 				history.add_do(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
 						obj.apply_points_raw(new_outer, first_holes)
-						LDCurveUtil.restore_meta(obj, new_meta)
+						LDCurveUtil.invalidate_curve_meta(obj)
 				)
 				history.add_undo(func() -> void:
 					if is_instance_valid(obj):
@@ -442,7 +458,7 @@ func _commit() -> void:
 				)
 				obj.clear_holes()
 				obj.apply_points_raw(new_outer, first_holes)
-				LDCurveUtil.restore_meta(obj, new_meta)
+				LDCurveUtil.invalidate_curve_meta(obj)
 				
 				var game_object: GameObject = GameObjectDB.get_db().find_game_object(target.source_object_id)
 				var layer_id: String = "a0r0"
@@ -477,10 +493,12 @@ func _commit() -> void:
 					viewport.add_object(new_poly, Vector2i(centroid), layer_id)
 					new_poly.init_properties(game_object)
 					new_poly.apply_points_raw(piece_local, adjusted_holes)
+					LDCurveUtil.invalidate_curve_meta(new_poly)
 					new_poly.place()
 					history.add_do(func() -> void:
 						if is_instance_valid(new_poly) and not new_poly.is_inside_tree():
 							parent.add_child(new_poly)
+							LDCurveUtil.invalidate_curve_meta(new_poly)
 					)
 					history.add_undo(func() -> void:
 						if is_instance_valid(new_poly) and new_poly.is_inside_tree():
@@ -531,15 +549,13 @@ func _commit() -> void:
 				
 				var first_local: PackedVector2Array = _world_to_local(target, TerrainPolygon.clean_polygon(clipped[0]))
 				var first_holes: Array[PackedVector2Array] = piece_holes[0]
-				var affected: PackedInt32Array = LDCurveUtil.get_affected_outer_segments(ctrl_outer, old_meta, cut_local)
-				var new_meta: Dictionary = LDCurveUtil.selective_bake_meta(first_local, old_meta, ctrl_outer, affected, true)
 				
 				history.add_do(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
 						obj.apply_points_raw(first_local, first_holes)
-						LDCurveUtil.restore_meta(obj, new_meta)
+						LDCurveUtil.invalidate_curve_meta(obj)
 				)
 				history.add_undo(func() -> void:
 					if is_instance_valid(obj):
@@ -550,7 +566,7 @@ func _commit() -> void:
 				)
 				obj.clear_holes()
 				obj.apply_points_raw(first_local, first_holes)
-				LDCurveUtil.restore_meta(obj, new_meta)
+				LDCurveUtil.invalidate_curve_meta(obj)
 				
 				var game_object: GameObject = GameObjectDB.get_db().find_game_object(target.source_object_id)
 				var layer_id: String = "a0r0"
@@ -589,10 +605,12 @@ func _commit() -> void:
 					viewport.add_object(new_poly, Vector2i(centroid), layer_id)
 					new_poly.init_properties(game_object)
 					new_poly.apply_points_raw(piece_local, adjusted_holes)
+					LDCurveUtil.invalidate_curve_meta(new_poly)
 					new_poly.place()
 					history.add_do(func() -> void:
 						if is_instance_valid(new_poly) and not new_poly.is_inside_tree():
 							parent.add_child(new_poly)
+							LDCurveUtil.invalidate_curve_meta(new_poly)
 					)
 					history.add_undo(func() -> void:
 						if is_instance_valid(new_poly) and new_poly.is_inside_tree():

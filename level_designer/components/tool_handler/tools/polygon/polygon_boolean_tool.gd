@@ -355,9 +355,6 @@ func _setup_draw_node(_node: LDPolygonBooleanDrawNode) -> void:
 
 func _do_commit() -> void:
 	_commit()
-	for target: LDObjectPolygon in _targets:
-		if is_instance_valid(target):
-			LDCurveUtil.invalidate_curve_meta(target)
 
 
 func _get_snapped_mouse_pos() -> Vector2:

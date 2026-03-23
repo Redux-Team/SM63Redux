@@ -218,37 +218,39 @@ func _load_ctrl_mesh() -> void:
 	_handles.clear()
 	_ctrl_outer = PackedVector2Array()
 	_ctrl_holes.clear()
+	
 	if _editing_object.has_meta(META_KEY):
 		var data: Dictionary = _editing_object.get_meta(META_KEY) as Dictionary
 		var raw_outer: Variant = data.get("ctrl_outer")
 		var saved_outer: PackedVector2Array = PackedVector2Array(raw_outer) if raw_outer != null else PackedVector2Array()
-		var hole_count: int = int(data.get("hole_count", 0))
-		if saved_outer.size() >= 3:
-			_ctrl_outer = saved_outer
+		var saved_hole_count: int = int(data.get("hole_count", 0))
+		
+		if saved_outer.size() >= 3 and saved_hole_count == _editing_object.get_hole_count():
 			var holes_valid: bool = true
-			for hi: int in hole_count:
+			for hi: int in saved_hole_count:
 				var raw_hole: Variant = data.get("ctrl_hole_" + str(hi))
 				var hole_pts: PackedVector2Array = PackedVector2Array(raw_hole) if raw_hole != null else PackedVector2Array()
 				if hole_pts.size() < 3:
 					holes_valid = false
 					break
 				_ctrl_holes.append(hole_pts)
-			if not holes_valid:
-				_ctrl_holes.clear()
-				for hi: int in _editing_object.get_hole_count():
-					_ctrl_holes.append(_editing_object.get_hole(hi).duplicate())
-			for key: String in data.keys():
-				if not key.begins_with("hk_"):
-					continue
-				var handle_key: String = key.substr(3)
-				var arr: Array = data[key] as Array
-				if arr.size() == 4:
-					_handles[handle_key] = LDCurveHandle.new(
-						Vector2(float(arr[0]), float(arr[1])),
-						Vector2(float(arr[2]), float(arr[3]))
-					)
-			_push_flattened()
-			return
+			
+			if holes_valid:
+				_ctrl_outer = saved_outer
+				for key: String in data.keys():
+					if not key.begins_with("hk_"):
+						continue
+					var handle_key: String = key.substr(3)
+					var arr: Array = data[key] as Array
+					if arr.size() == 4:
+						_handles[handle_key] = LDCurveHandle.new(
+							Vector2(float(arr[0]), float(arr[1])),
+							Vector2(float(arr[2]), float(arr[3]))
+						)
+				return
+			
+			_ctrl_holes.clear()
+	
 	_ctrl_outer = _editing_object.get_outer_points().duplicate()
 	for hi: int in _editing_object.get_hole_count():
 		_ctrl_holes.append(_editing_object.get_hole(hi).duplicate())
@@ -262,6 +264,25 @@ func _push_flattened() -> void:
 	var flat_holes: Array[PackedVector2Array] = []
 	for hi: int in _ctrl_holes.size():
 		flat_holes.append(LDCurveUtil.flatten_ring(_ctrl_holes[hi], _hole_handles(hi), BEZIER_STEPS))
+	_editing_object.apply_points_raw(flat_outer, flat_holes)
+
+
+func _push_flattened_safe() -> void:
+	if not is_instance_valid(_editing_object):
+		return
+	var flat_outer: PackedVector2Array = LDCurveUtil.flatten_ring(_ctrl_outer, _outer_handles(), BEZIER_STEPS)
+	var flat_holes: Array[PackedVector2Array] = []
+	for hi: int in _ctrl_holes.size():
+		var flat_hole: PackedVector2Array = LDCurveUtil.flatten_ring(_ctrl_holes[hi], _hole_handles(hi), BEZIER_STEPS)
+		if flat_hole.size() < 3:
+			continue
+		var hole_ok: bool = true
+		for p: Vector2 in flat_hole:
+			if not Geometry2D.is_point_in_polygon(p, flat_outer):
+				hole_ok = false
+				break
+		if hole_ok:
+			flat_holes.append(flat_hole)
 	_editing_object.apply_points_raw(flat_outer, flat_holes)
 
 
@@ -566,7 +587,7 @@ func _drag_point(pos: Vector2) -> void:
 		if not Geometry2D.is_point_in_polygon(local_pos, _ctrl_outer):
 			return
 		_ctrl_holes[hole_idx][_flat_to_local_idx(_dragging_point_index)] = local_pos
-	_push_flattened()
+	_push_flattened_safe()
 	_sync_vertex_buttons()
 	_overlay.queue_redraw()
 

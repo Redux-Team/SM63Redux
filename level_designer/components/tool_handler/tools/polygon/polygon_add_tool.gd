@@ -154,20 +154,12 @@ func _commit() -> void:
 				if piece is PackedVector2Array and (piece as PackedVector2Array).size() >= 3:
 					new_holes.append(_world_to_local(primary, piece))
 	
-	var xform_inv_p: Transform2D = primary.get_global_transform().affine_inverse()
-	var cut_local_p: PackedVector2Array = PackedVector2Array()
-	for p: Vector2 in _points:
-		cut_local_p.append(xform_inv_p * p)
-	var ctrl_outer_p: PackedVector2Array = PackedVector2Array(primary_old_meta.get("ctrl_outer", primary_old)) if not primary_old_meta.is_empty() else primary_old
-	var affected_p: PackedInt32Array = LDCurveUtil.get_affected_outer_segments(ctrl_outer_p, primary_old_meta, cut_local_p)
-	var new_meta: Dictionary = LDCurveUtil.selective_bake_meta(primary_new, primary_old_meta, ctrl_outer_p, affected_p, true)
-	
 	history.add_do(func() -> void:
 		if is_instance_valid(primary_obj):
 			primary_obj.modulate.a = 1.0
 			primary_obj.clear_holes()
 			primary_obj.apply_points_raw(primary_new, new_holes)
-			LDCurveUtil.restore_meta(primary_obj, new_meta)
+			LDCurveUtil.invalidate_curve_meta(primary_obj)
 	)
 	history.add_undo(func() -> void:
 		if is_instance_valid(primary_obj):
@@ -178,7 +170,7 @@ func _commit() -> void:
 	)
 	primary_obj.clear_holes()
 	primary_obj.apply_points_raw(primary_new, new_holes)
-	LDCurveUtil.restore_meta(primary_obj, new_meta)
+	LDCurveUtil.invalidate_curve_meta(primary_obj)
 	
 	for i: int in range(1, affected_targets.size()):
 		var redundant: LDObjectPolygon = affected_targets[i]

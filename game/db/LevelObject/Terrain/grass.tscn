@@ -4,12 +4,11 @@
 [ext_resource type="Resource" uid="uid://dk6i5cghf5cya" path="res://game/db/TerrainData/terrain_data_grass.tres" id="2_guwji"]
 [ext_resource type="Texture2D" uid="uid://lwejtx4lbmrb" path="res://assets/textures/object/terrain/grass/terrain_grass_base.png" id="2_lcvi5"]
 
-[node name="Grass" type="Node2D" unique_id=335077795 node_paths=PackedStringArray("_polygon", "_collision", "_outline", "_topline_container", "_topline_shadow_container")]
+[node name="Grass" type="Node2D" unique_id=335077795 node_paths=PackedStringArray("_polygon", "_collision", "_topline_container", "_topline_shadow_container")]
 script = ExtResource("1_7585l")
 terrain_data = ExtResource("2_guwji")
 _polygon = NodePath("Polygon")
 _collision = NodePath("StaticBody2D/CollisionPolygon2D")
-_outline = NodePath("Outline")
 _topline_container = NodePath("ToplineContainer")
 _topline_shadow_container = NodePath("Polygon/ToplineShadowContainer")
 metadata/_custom_type_script = "uid://vlqjxmxsgk8p"
