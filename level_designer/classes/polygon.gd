@@ -3,6 +3,8 @@ class_name LDPolygon
 
 const BEZIER_STEPS: int = 24
 const SNAP_SQ: float = 100.0
+
+
 var segments: Array[LDSegment] = []
 
 
@@ -42,16 +44,87 @@ func to_flat() -> PackedVector2Array:
 func boolean_result(new_flat: PackedVector2Array) -> LDPolygon:
 	var result: LDPolygon = LDPolygon.new()
 	var flat_size: int = new_flat.size()
-	var count: int = segments.size()
+	var seg_count: int = segments.size()
 	for ni: int in flat_size:
 		var p: Vector2 = new_flat[ni]
+		var original: LDSegment = _find_exact_segment(p, seg_count)
+		if original != null:
+			result.segments.append(original.duplicate())
+			continue
 		var next_p: Vector2 = new_flat[(ni + 1) % flat_size]
-		var src: LDSegment = _find_segment_owning_edge(p, next_p, count)
-		if src != null and src.is_curve:
-			result.segments.append(LDSegment.new(p, true, src.handle_out, src.handle_in))
+		var info: Dictionary = _find_bezier_edge_info(p, next_p, seg_count)
+		if not info.is_empty():
+			var t_start: float = info["t_start"] as float
+			var p0: Vector2 = info["p0"] as Vector2
+			var p1: Vector2 = info["p1"] as Vector2
+			var p2: Vector2 = info["p2"] as Vector2
+			var p3: Vector2 = info["p3"] as Vector2
+			var tangent: Vector2 = _bezier_d1(p0, p1, p2, p3, t_start).normalized()
+			var sub_len: float = p.distance_to(next_p)
+			var new_seg: LDSegment = LDSegment.new(p, true)
+			new_seg.handle_out = tangent * sub_len * 0.333
+			new_seg.handle_in = -tangent * sub_len * 0.333
+			result.segments.append(new_seg)
 		else:
 			result.segments.append(LDSegment.new(p))
+	_fix_handles_for_next(result, new_flat, seg_count)
 	return result
+
+
+func _find_exact_segment(p: Vector2, count: int) -> LDSegment:
+	for seg: LDSegment in segments:
+		if seg.point.distance_squared_to(p) < SNAP_SQ:
+			return seg
+	return null
+
+
+func _find_bezier_edge_info(edge_start: Vector2, edge_end: Vector2, count: int) -> Dictionary:
+	for i: int in count:
+		var seg: LDSegment = segments[i]
+		var next_seg: LDSegment = segments[(i + 1) % count]
+		if not seg.is_curve and not next_seg.is_curve:
+			continue
+		var p0: Vector2 = seg.point
+		var p3: Vector2 = next_seg.point
+		var p1: Vector2 = p0 + seg.handle_out
+		var p2: Vector2 = p3 + next_seg.handle_in
+		var t_a: float = _closest_t(p0, p1, p2, p3, edge_start)
+		var t_b: float = _closest_t(p0, p1, p2, p3, edge_end)
+		if edge_start.distance_squared_to(_cubic_bezier(p0, p1, p2, p3, t_a)) > SNAP_SQ:
+			continue
+		if edge_end.distance_squared_to(_cubic_bezier(p0, p1, p2, p3, t_b)) > SNAP_SQ:
+			continue
+		var wraps: bool = t_a > 0.85 and t_b < 0.15
+		if t_b <= t_a and not wraps:
+			continue
+		return {"t_start": t_a, "t_end": t_b, "p0": p0, "p1": p1, "p2": p2, "p3": p3}
+	return {}
+
+
+func _fix_handles_for_next(result: LDPolygon, new_flat: PackedVector2Array, seg_count: int) -> void:
+	var res_count: int = result.segments.size()
+	for ni: int in res_count:
+		var curr_seg: LDSegment = result.segments[ni]
+		if not curr_seg.is_curve:
+			continue
+		var next_seg: LDSegment = result.segments[(ni + 1) % res_count]
+		if next_seg.is_curve:
+			continue
+		var next_p: Vector2 = new_flat[(ni + 1) % new_flat.size()]
+		var info: Dictionary = _find_bezier_edge_info(curr_seg.point, next_p, seg_count)
+		if info.is_empty():
+			continue
+		var t_end: float = info["t_end"] as float
+		var p0: Vector2 = info["p0"] as Vector2
+		var p1: Vector2 = info["p1"] as Vector2
+		var p2: Vector2 = info["p2"] as Vector2
+		var p3: Vector2 = info["p3"] as Vector2
+		var tangent: Vector2 = _bezier_d1(p0, p1, p2, p3, t_end).normalized()
+		var sub_len: float = curr_seg.point.distance_to(next_p)
+		next_seg.is_curve = true
+		next_seg.handle_in = -tangent * sub_len * 0.333
+		if next_seg.handle_out == Vector2.ZERO:
+			next_seg.handle_out = tangent * sub_len * 0.333
 
 
 func _find_segment_owning_edge(edge_start: Vector2, edge_end: Vector2, count: int) -> LDSegment:
