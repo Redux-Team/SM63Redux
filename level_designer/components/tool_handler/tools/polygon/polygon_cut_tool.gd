@@ -369,6 +369,10 @@ func _spawn_extra_pieces(
 	var layer_id: String = "a0r0"
 	if target.get_parent() is LDLayer:
 		layer_id = (target.get_parent() as LDLayer).layer_id
+	
+	var target_xform: Transform2D = viewport.get_root().get_global_transform().affine_inverse() * target.get_global_transform()
+	var inv_target_xform: Transform2D = target_xform.affine_inverse()
+	
 	for ci: int in range(start_idx, clipped.size()):
 		var piece: Variant = clipped[ci]
 		if not piece is PackedVector2Array or (piece as PackedVector2Array).size() < 3:
@@ -385,23 +389,39 @@ func _spawn_extra_pieces(
 		for p: Vector2 in piece_cleaned:
 			centroid += p
 		centroid = (centroid / piece_cleaned.size()).snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
-		var piece_local: PackedVector2Array = PackedVector2Array()
+		
+		var piece_old_local: PackedVector2Array = PackedVector2Array()
 		for p: Vector2 in piece_cleaned:
-			piece_local.append(p - centroid)
+			piece_old_local.append(inv_target_xform * p)
+		
+		var piece_outer_old_local: LDPolygon = old_outer.boolean_result(piece_old_local)
+		var piece_outer: LDPolygon = LDPolygon.new()
+		for seg: LDSegment in piece_outer_old_local.segments:
+			var seg_world: Vector2 = target_xform * seg.point
+			var new_seg: LDSegment = LDSegment.new(seg_world - centroid, seg.is_curve)
+			new_seg.handle_in = target_xform.basis_xform(seg.handle_in)
+			new_seg.handle_out = target_xform.basis_xform(seg.handle_out)
+			piece_outer.segments.append(new_seg)
+		
 		var piece_holes: Array[LDPolygon] = []
 		for sh: LDPolygon in available_holes:
 			var shw: PackedVector2Array = _local_to_world(target, sh.to_flat())
 			if not Geometry2D.is_point_in_polygon(shw[0], piece_cleaned):
 				continue
-			var adjusted: PackedVector2Array = PackedVector2Array()
-			for p: Vector2 in shw:
-				adjusted.append(p - centroid)
-			piece_holes.append(LDPolygon.from_flat(adjusted))
-		var piece_outer: LDPolygon = old_outer.boolean_result_world(piece_cleaned, centroid)
+			var new_hole: LDPolygon = LDPolygon.new()
+			for seg: LDSegment in sh.segments:
+				var seg_world: Vector2 = target_xform * seg.point
+				var new_seg: LDSegment = LDSegment.new(seg_world - centroid, seg.is_curve)
+				new_seg.handle_in = target_xform.basis_xform(seg.handle_in)
+				new_seg.handle_out = target_xform.basis_xform(seg.handle_out)
+				new_hole.segments.append(new_seg)
+			piece_holes.append(new_hole)
+		
 		viewport.add_object(new_poly, Vector2i(centroid), layer_id)
 		new_poly.init_properties(game_object)
 		new_poly.apply_segments(piece_outer, piece_holes)
 		new_poly.place()
+		
 		history.add_do(func() -> void:
 			if is_instance_valid(new_poly) and not new_poly.is_inside_tree():
 				parent.add_child(new_poly)
