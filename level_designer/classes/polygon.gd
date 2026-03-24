@@ -47,31 +47,38 @@ func boolean_result(new_flat: PackedVector2Array) -> LDPolygon:
 	var seg_count: int = segments.size()
 	for ni: int in flat_size:
 		var p: Vector2 = new_flat[ni]
+		var next_p: Vector2 = new_flat[(ni + 1) % flat_size]
 		var original: LDSegment = _find_exact_segment(p, seg_count)
 		if original != null:
 			result.segments.append(original.duplicate())
 			continue
-		var next_p: Vector2 = new_flat[(ni + 1) % flat_size]
 		var info: Dictionary = _find_bezier_edge_info(p, next_p, seg_count)
 		if not info.is_empty():
-			var t_start: float = info["t_start"] as float
-			var p0: Vector2 = info["p0"] as Vector2
-			var p1: Vector2 = info["p1"] as Vector2
-			var p2: Vector2 = info["p2"] as Vector2
-			var p3: Vector2 = info["p3"] as Vector2
-			var tangent: Vector2 = _bezier_d1(p0, p1, p2, p3, t_start).normalized()
-			var sub_len: float = p.distance_to(next_p)
+			var split: Dictionary = _decasteljau_split_at_t(
+				info["p0"] as Vector2,
+				info["p1"] as Vector2,
+				info["p2"] as Vector2,
+				info["p3"] as Vector2,
+				info["t_start"] as float
+			)
 			var new_seg: LDSegment = LDSegment.new(p, true)
-			new_seg.handle_out = tangent * sub_len * 0.333
-			new_seg.handle_in = -tangent * sub_len * 0.333
+			new_seg.handle_in = (split["left_p2"] as Vector2) - p
+			new_seg.handle_out = (split["right_p1"] as Vector2) - p
 			result.segments.append(new_seg)
 		else:
 			result.segments.append(LDSegment.new(p))
-	_fix_handles_for_next(result, new_flat, seg_count)
+	_fix_next_handles(result, new_flat, seg_count)
 	return result
 
 
-func _find_exact_segment(p: Vector2, count: int) -> LDSegment:
+func boolean_result_world(new_flat_world: PackedVector2Array, local_offset: Vector2) -> LDPolygon:
+	var shifted: PackedVector2Array = PackedVector2Array()
+	for p: Vector2 in new_flat_world:
+		shifted.append(p - local_offset)
+	return boolean_result(shifted)
+
+
+func _find_exact_segment(p: Vector2, _count: int) -> LDSegment:
 	for seg: LDSegment in segments:
 		if seg.point.distance_squared_to(p) < SNAP_SQ:
 			return seg
@@ -101,30 +108,49 @@ func _find_bezier_edge_info(edge_start: Vector2, edge_end: Vector2, count: int) 
 	return {}
 
 
-func _fix_handles_for_next(result: LDPolygon, new_flat: PackedVector2Array, seg_count: int) -> void:
+func _fix_next_handles(result: LDPolygon, new_flat: PackedVector2Array, seg_count: int) -> void:
 	var res_count: int = result.segments.size()
 	for ni: int in res_count:
 		var curr_seg: LDSegment = result.segments[ni]
+		var next_seg: LDSegment = result.segments[(ni + 1) % res_count]
 		if not curr_seg.is_curve:
 			continue
-		var next_seg: LDSegment = result.segments[(ni + 1) % res_count]
 		if next_seg.is_curve:
 			continue
 		var next_p: Vector2 = new_flat[(ni + 1) % new_flat.size()]
 		var info: Dictionary = _find_bezier_edge_info(curr_seg.point, next_p, seg_count)
 		if info.is_empty():
 			continue
-		var t_end: float = info["t_end"] as float
-		var p0: Vector2 = info["p0"] as Vector2
-		var p1: Vector2 = info["p1"] as Vector2
-		var p2: Vector2 = info["p2"] as Vector2
-		var p3: Vector2 = info["p3"] as Vector2
-		var tangent: Vector2 = _bezier_d1(p0, p1, p2, p3, t_end).normalized()
-		var sub_len: float = curr_seg.point.distance_to(next_p)
+		var split: Dictionary = _decasteljau_split_at_t(
+			info["p0"] as Vector2,
+			info["p1"] as Vector2,
+			info["p2"] as Vector2,
+			info["p3"] as Vector2,
+			info["t_end"] as float
+		)
 		next_seg.is_curve = true
-		next_seg.handle_in = -tangent * sub_len * 0.333
+		next_seg.handle_in = (split["left_p2"] as Vector2) - next_p
 		if next_seg.handle_out == Vector2.ZERO:
-			next_seg.handle_out = tangent * sub_len * 0.333
+			next_seg.handle_out = (split["right_p1"] as Vector2) - next_p
+
+
+static func _decasteljau_split_at_t(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, t: float) -> Dictionary:
+	var q0: Vector2 = p0.lerp(p1, t)
+	var q1: Vector2 = p1.lerp(p2, t)
+	var q2: Vector2 = p2.lerp(p3, t)
+	var r0: Vector2 = q0.lerp(q1, t)
+	var r1: Vector2 = q1.lerp(q2, t)
+	var s: Vector2 = r0.lerp(r1, t)
+	return {
+		"left_p0": p0,
+		"left_p1": q0,
+		"left_p2": r0,
+		"left_p3": s,
+		"right_p0": s,
+		"right_p1": r1,
+		"right_p2": q2,
+		"right_p3": p3,
+	}
 
 
 func _find_segment_owning_edge(edge_start: Vector2, edge_end: Vector2, count: int) -> LDSegment:

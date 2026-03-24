@@ -397,7 +397,7 @@ func _spawn_extra_pieces(
 			for p: Vector2 in shw:
 				adjusted.append(p - centroid)
 			piece_holes.append(LDPolygon.from_flat(adjusted))
-		var piece_outer: LDPolygon = old_outer.boolean_result(piece_local)
+		var piece_outer: LDPolygon = old_outer.boolean_result_world(piece_cleaned, centroid)
 		viewport.add_object(new_poly, Vector2i(centroid), layer_id)
 		new_poly.init_properties(game_object)
 		new_poly.apply_segments(piece_outer, piece_holes)
