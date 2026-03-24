@@ -1,11 +1,14 @@
 extends LDTool
 
 const MIN_POINT_DISTANCE: float = 8.0
+const LASSO_MIN_DIST_SQ: float = 400.0
 
 var _active_object: LDObjectPolygon
 var _points: PackedVector2Array
 var _cursor_pos: Vector2
 var _is_valid: bool = false
+var _is_dragging: bool = false
+var _last_drag_pos: Vector2 = Vector2.ZERO
 
 
 func get_tool_name() -> String:
@@ -41,7 +44,6 @@ func _input(event: InputEvent) -> void:
 		return
 	if not event is InputEventKey or not event.is_pressed() or event.echo:
 		return
-	
 	match event.keycode:
 		KEY_ENTER:
 			var commit_points: PackedVector2Array = _points.duplicate()
@@ -69,12 +71,10 @@ func _on_viewport_input(event: InputEvent) -> void:
 		return
 	if Singleton.current_input_device == Singleton.InputType.TOUCHSCREEN:
 		return
-	
 	if event is InputEventMouseMotion:
 		_cursor_pos = _get_snapped_mouse_pos()
 		if _active_object:
 			_update_preview()
-	
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if not viewport.is_panning():
@@ -93,6 +93,13 @@ func _on_viewport_input(event: InputEvent) -> void:
 func _check_min_distance(pos: Vector2) -> bool:
 	for existing: Vector2 in _points:
 		if existing.distance_to(pos) < MIN_POINT_DISTANCE:
+			return false
+	return true
+
+
+func _check_min_distance_from(pos: Vector2, existing: PackedVector2Array) -> bool:
+	for p: Vector2 in existing:
+		if p.distance_to(pos) < MIN_POINT_DISTANCE:
 			return false
 	return true
 
@@ -140,14 +147,12 @@ func _remove_last_point() -> void:
 func _update_preview() -> void:
 	if not _active_object:
 		return
-	
 	var preview_points: PackedVector2Array = _points.duplicate()
 	if _cursor_pos != Vector2.ZERO and (preview_points.is_empty() or preview_points[preview_points.size() - 1] != _cursor_pos):
 		preview_points.append(_cursor_pos)
-	
 	_is_valid = preview_points.size() < 3 or _check_valid(preview_points)
 	_active_object.set_preview_valid(_is_valid)
-	_active_object.apply_points(preview_points)
+	_active_object.apply_segments(LDPolygon.from_flat(preview_points), [])
 
 
 func _commit_polygon() -> void:
@@ -155,14 +160,11 @@ func _commit_polygon() -> void:
 		return
 	if not _check_valid(_points):
 		return
-	
 	var local_points: PackedVector2Array = PackedVector2Array()
 	for p: Vector2 in _points:
 		local_points.append(_active_object.to_local(p))
-	
-	_active_object.apply_points(local_points)
+	_active_object.apply_segments(LDPolygon.from_flat(local_points), [])
 	_active_object.set_preview_valid(true)
-	
 	var placed: LDObjectPolygon = _active_object
 	var parent: Node = placed.get_parent()
 	var history: LDHistoryHandler = LD.get_history_handler()
@@ -177,12 +179,10 @@ func _commit_polygon() -> void:
 			placed.get_parent().remove_child(placed)
 	)
 	history.commit_action()
-	
 	placed.place()
 	_active_object = null
 	_points = PackedVector2Array()
 	_is_valid = false
-	
 	var obj: GameObject = LD.get_object_handler().get_selected_object()
 	if obj:
 		_begin_polygon(obj)
@@ -200,7 +200,6 @@ func _check_valid(points: PackedVector2Array) -> bool:
 	var count: int = points.size()
 	if count < 2:
 		return true
-	
 	for i: int in count:
 		var a1: Vector2 = points[i]
 		var a2: Vector2 = points[(i + 1) % count]
@@ -211,16 +210,7 @@ func _check_valid(points: PackedVector2Array) -> bool:
 			var b2: Vector2 = points[(j + 1) % count]
 			if Geometry2D.segment_intersects_segment(a1, a2, b1, b2) != null:
 				return false
-	
 	return true
-
-
-func _get_closed_points(pts: PackedVector2Array) -> PackedVector2Array:
-	if pts.is_empty():
-		return pts
-	var closed: PackedVector2Array = pts.duplicate()
-	closed.append(pts[0])
-	return closed
 
 
 func _is_polygon_object(obj: GameObject) -> bool:
