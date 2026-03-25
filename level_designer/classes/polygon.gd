@@ -46,7 +46,6 @@ func boolean_result(new_flat: PackedVector2Array) -> LDPolygon:
 	var n: int = new_flat.size()
 	if n < 3:
 		return result
-	
 	var seg_count: int = segments.size()
 	var sources: Array[int] = []
 	sources.resize(n)
@@ -54,97 +53,127 @@ func boolean_result(new_flat: PackedVector2Array) -> LDPolygon:
 		var a: Vector2 = new_flat[i]
 		var b: Vector2 = new_flat[(i + 1) % n]
 		sources[i] = _find_edge_source(a, b, seg_count)
-	
 	var runs: Array[Dictionary] = []
 	var start_idx: int = 0
 	for i: int in n:
 		if sources[i] != sources[(i - 1 + n) % n]:
 			start_idx = i
 			break
-	
 	var curr_source: int = sources[start_idx]
 	var run_start: int = start_idx
-	var count: int = 0
-	
-	while count < n:
-		var idx: int = (start_idx + count) % n
+	var processed: int = 0
+	while processed < n:
+		var idx: int = (start_idx + processed) % n
 		var next_idx: int = (idx + 1) % n
-		if count == n - 1 or sources[next_idx] != curr_source:
-			runs.append({
-				"source": curr_source,
-				"start": run_start,
-				"end": idx
-			})
+		if processed == n - 1 or sources[next_idx] != curr_source:
+			runs.append({"source": curr_source, "start": run_start, "end": idx})
 			run_start = next_idx
 			curr_source = sources[next_idx]
-		count += 1
-	
-	var new_segments: Array[LDSegment] = []
-	var next_handle_ins: Array[Vector2] = []
-	
+		processed += 1
 	for run: Dictionary in runs:
 		var src: int = run["source"] as int
 		var s_idx: int = run["start"] as int
 		var e_idx: int = run["end"] as int
-		
 		if src == -1:
 			var k: int = s_idx
 			while true:
-				var p: Vector2 = new_flat[k]
-				new_segments.append(LDSegment.new(p))
-				next_handle_ins.append(Vector2.ZERO)
+				result.segments.append(LDSegment.new(new_flat[k]))
 				if k == e_idx:
 					break
 				k = (k + 1) % n
+			continue
+		var orig_seg: LDSegment = segments[src]
+		var orig_next: LDSegment = segments[(src + 1) % seg_count]
+		if not orig_seg.is_curve and not orig_next.is_curve:
+			var k: int = s_idx
+			while true:
+				result.segments.append(LDSegment.new(new_flat[k]))
+				if k == e_idx:
+					break
+				k = (k + 1) % n
+			continue
+		var p_start: Vector2 = new_flat[s_idx]
+		var p_end: Vector2 = new_flat[(e_idx + 1) % n]
+		var p0: Vector2 = orig_seg.point
+		var p3: Vector2 = orig_next.point
+		var p1: Vector2 = p0 + orig_seg.handle_out
+		var p2: Vector2 = p3 + orig_next.handle_in
+		var start_is_anchor: bool = _find_exact_segment(p_start) != null
+		var end_is_anchor: bool = _find_exact_segment(p_end) != null
+		if not start_is_anchor and not end_is_anchor:
+			var k: int = s_idx
+			while true:
+				result.segments.append(LDSegment.new(new_flat[k]))
+				if k == e_idx:
+					break
+				k = (k + 1) % n
+			continue
+		var t_start: float = _closest_t(p0, p1, p2, p3, p_start)
+		var t_end: float = _closest_t(p0, p1, p2, p3, p_end)
+		if start_is_anchor and not end_is_anchor:
+			var exact: LDSegment = _find_exact_segment(p_start)
+			result.segments.append(exact.duplicate())
+			var k: int = (s_idx + 1) % n
+			while true:
+				result.segments.append(LDSegment.new(new_flat[k]))
+				if k == e_idx:
+					break
+				k = (k + 1) % n
+			continue
+		if end_is_anchor and not start_is_anchor:
+			var k: int = s_idx
+			while true:
+				result.segments.append(LDSegment.new(new_flat[k]))
+				if k == e_idx:
+					break
+				k = (k + 1) % n
+			continue
+		var exact_start: LDSegment = _find_exact_segment(p_start)
+		if exact_start != null:
+			result.segments.append(exact_start.duplicate())
+			var inner_start: int = (s_idx + 1) % n
+			if inner_start != (e_idx + 1) % n:
+				var k: int = inner_start
+				while k != (e_idx + 1) % n:
+					result.segments.append(LDSegment.new(new_flat[k]))
+					k = (k + 1) % n
+			continue
+		var reverse: bool = t_start > t_end + 0.01
+		var sub: Dictionary
+		if reverse:
+			sub = _extract_subcurve(p0, p1, p2, p3, t_end, t_start)
 		else:
-			var p_start: Vector2 = new_flat[s_idx]
-			var p_end: Vector2 = new_flat[(e_idx + 1) % n]
-			var orig_seg: LDSegment = segments[src]
-			var orig_next: LDSegment = segments[(src + 1) % seg_count]
-			
-			if orig_seg.is_curve or orig_next.is_curve:
-				var p0: Vector2 = orig_seg.point
-				var p3: Vector2 = orig_next.point
-				var p1: Vector2 = p0 + orig_seg.handle_out
-				var p2: Vector2 = p3 + orig_next.handle_in
-				
-				var t_start: float = _closest_t(p0, p1, p2, p3, p_start)
-				var t_end: float = _closest_t(p0, p1, p2, p3, p_end)
-				
-				var reverse: bool = t_start > t_end
-				var sub: Dictionary
-				if reverse:
-					sub = _extract_subcurve(p0, p1, p2, p3, t_end, t_start)
-				else:
-					sub = _extract_subcurve(p0, p1, p2, p3, t_start, t_end)
-				
-				var new_seg: LDSegment = LDSegment.new(p_start, true)
-				if reverse:
-					new_seg.handle_out = (sub["p2"] as Vector2) - p_start
-					new_segments.append(new_seg)
-					next_handle_ins.append((sub["p1"] as Vector2) - p_end)
-				else:
-					new_seg.handle_out = (sub["p1"] as Vector2) - p_start
-					new_segments.append(new_seg)
-					next_handle_ins.append((sub["p2"] as Vector2) - p_end)
+			sub = _extract_subcurve(p0, p1, p2, p3, t_start, t_end)
+		var new_start: LDSegment = LDSegment.new(p_start, true)
+		if reverse:
+			new_start.handle_out = (sub["p2"] as Vector2) - p_start
+		else:
+			new_start.handle_out = (sub["p1"] as Vector2) - p_start
+		result.segments.append(new_start)
+		var inner_idx: int = (s_idx + 1) % n
+		while inner_idx != e_idx:
+			result.segments.append(LDSegment.new(new_flat[inner_idx]))
+			inner_idx = (inner_idx + 1) % n
+		if e_idx != s_idx:
+			var end_seg: LDSegment = LDSegment.new(p_end)
+			var exact_end: LDSegment = _find_exact_segment(p_end)
+			if exact_end != null:
+				end_seg = exact_end.duplicate()
 			else:
-				new_segments.append(LDSegment.new(p_start))
-				next_handle_ins.append(Vector2.ZERO)
-	
-	var final_count: int = new_segments.size()
-	for i: int in final_count:
-		var seg: LDSegment = new_segments[i]
-		var next_idx: int = (i + 1) % final_count
-		var next_seg: LDSegment = new_segments[next_idx]
-		
-		var h_in: Vector2 = next_handle_ins[i]
-		if h_in != Vector2.ZERO:
-			next_seg.handle_in = h_in
-			next_seg.is_curve = true
-		
-		result.segments.append(seg)
-	
+				end_seg.is_curve = true
+				if reverse:
+					end_seg.handle_in = (sub["p1"] as Vector2) - p_end
+				else:
+					end_seg.handle_in = (sub["p2"] as Vector2) - p_end
+			result.segments.append(end_seg)
 	return result
+
+
+func _find_exact_segment(p: Vector2) -> LDSegment:
+	for seg: LDSegment in segments:
+		if seg.point.distance_squared_to(p) < SNAP_SQ:
+			return seg
+	return null
 
 
 func _find_edge_source(a: Vector2, b: Vector2, count: int) -> int:
@@ -153,7 +182,6 @@ func _find_edge_source(a: Vector2, b: Vector2, count: int) -> int:
 		var next_seg: LDSegment = segments[(i + 1) % count]
 		var p0: Vector2 = seg.point
 		var p3: Vector2 = next_seg.point
-		
 		if not seg.is_curve and not next_seg.is_curve:
 			if _point_on_segment(a, p0, p3) and _point_on_segment(b, p0, p3):
 				return i
@@ -191,19 +219,15 @@ func _edge_lies_on_bezier(a: Vector2, b: Vector2, p0: Vector2, p1: Vector2, p2: 
 static func _extract_subcurve(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, t0: float, t1: float) -> Dictionary:
 	if t0 <= 0.001 and t1 >= 0.999:
 		return {"p0": p0, "p1": p1, "p2": p2, "p3": p3}
-	
 	var right_part: Dictionary = _decasteljau_split_at_t(p0, p1, p2, p3, t0)
 	var split_p0: Vector2 = right_part["right_p0"] as Vector2
 	var split_p1: Vector2 = right_part["right_p1"] as Vector2
 	var split_p2: Vector2 = right_part["right_p2"] as Vector2
 	var split_p3: Vector2 = right_part["right_p3"] as Vector2
-	
 	if t1 >= 0.999 or is_equal_approx(t0, 1.0):
 		return {"p0": split_p0, "p1": split_p1, "p2": split_p2, "p3": split_p3}
-	
 	var u1: float = clamp((t1 - t0) / (1.0 - t0), 0.0, 1.0)
 	var final_part: Dictionary = _decasteljau_split_at_t(split_p0, split_p1, split_p2, split_p3, u1)
-	
 	return {
 		"p0": final_part["left_p0"],
 		"p1": final_part["left_p1"],
