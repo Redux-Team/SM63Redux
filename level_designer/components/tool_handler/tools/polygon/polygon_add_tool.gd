@@ -71,8 +71,9 @@ func _commit() -> void:
 	var primary: LDObjectPolygon = affected[0]
 	var primary_old_outer: LDPolygon = old_outers[primary]
 	var primary_old_holes: Array[LDPolygon] = old_holes_map[primary]
+	var local_baked: Array[LDBakedPoint] = _world_baked_to_local(primary, _polygon_to_world_baked(primary))
 	var new_flat_local: PackedVector2Array = _world_to_local(primary, accumulated)
-	var new_outer: LDPolygon = primary_old_outer.boolean_result(new_flat_local)
+	var new_outer: LDPolygon = primary_old_outer.boolean_result_tagged(new_flat_local, local_baked)
 	var new_holes: Array[LDPolygon] = []
 	var full_merged: Array = Geometry2D.merge_polygons(_polygon_to_world(primary), _points)
 	for mi: int in range(1, full_merged.size()):
@@ -93,7 +94,8 @@ func _commit() -> void:
 			var lf: PackedVector2Array = _world_to_local(primary, piece)
 			var matched: LDPolygon = _match_hole(primary_old_holes, lf)
 			if matched != null:
-				new_holes.append(matched.boolean_result(lf))
+				var hole_baked: Array[LDBakedPoint] = _bake_polygon_local(matched)
+				new_holes.append(matched.boolean_result_tagged(lf, hole_baked))
 			else:
 				new_holes.append(LDPolygon.from_flat(lf))
 	for i: int in range(1, affected.size()):

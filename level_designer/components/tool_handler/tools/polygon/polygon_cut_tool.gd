@@ -292,8 +292,9 @@ func _commit_remove_hole(
 		)
 		target.get_parent().remove_child(target)
 		return
+	var local_baked: Array[LDBakedPoint] = _world_baked_to_local(target, _polygon_to_world_baked(target))
 	var new_flat_local: PackedVector2Array = _world_to_local(target, TerrainPolygon.clean_polygon(clipped[0]))
-	var new_outer: LDPolygon = old_outer.boolean_result(new_flat_local)
+	var new_outer: LDPolygon = old_outer.boolean_result_tagged(new_flat_local, local_baked)
 	var first_holes: Array[LDPolygon] = []
 	for sh: LDPolygon in surviving_holes:
 		if Geometry2D.is_point_in_polygon(_local_to_world(target, sh.to_flat())[0], clipped[0]):
@@ -324,8 +325,9 @@ func _commit_slice(
 		)
 		target.get_parent().remove_child(target)
 		return
+	var local_baked: Array[LDBakedPoint] = _world_baked_to_local(target, _polygon_to_world_baked(target))
 	var first_flat: PackedVector2Array = _world_to_local(target, TerrainPolygon.clean_polygon(clipped[0]))
-	var new_outer: LDPolygon = old_outer.boolean_result(first_flat)
+	var new_outer: LDPolygon = old_outer.boolean_result_tagged(first_flat, local_baked)
 	var first_holes: Array[LDPolygon] = _holes_for_piece(clipped[0], old_holes, target)
 	_apply_and_record(history, obj, parent, old_outer, old_holes, new_outer, first_holes)
 	_spawn_extra_pieces(clipped, 1, old_holes, target, parent, old_outer, old_holes, history)
@@ -349,7 +351,8 @@ func _holes_for_piece(piece_world: PackedVector2Array, old_holes: Array[LDPolygo
 			var lf: PackedVector2Array = _world_to_local(target, cleaned)
 			var matched: LDPolygon = _match_hole(old_holes, lf)
 			if matched != null:
-				result.append(matched.boolean_result(lf))
+				var hole_baked: Array[LDBakedPoint] = _bake_polygon_local(matched)
+				result.append(matched.boolean_result_tagged(lf, hole_baked))
 			else:
 				result.append(LDPolygon.from_flat(lf))
 	return result
@@ -369,10 +372,9 @@ func _spawn_extra_pieces(
 	var layer_id: String = "a0r0"
 	if target.get_parent() is LDLayer:
 		layer_id = (target.get_parent() as LDLayer).layer_id
-	
 	var target_xform: Transform2D = viewport.get_root().get_global_transform().affine_inverse() * target.get_global_transform()
 	var inv_target_xform: Transform2D = target_xform.affine_inverse()
-	
+	var local_baked: Array[LDBakedPoint] = _world_baked_to_local(target, _polygon_to_world_baked(target))
 	for ci: int in range(start_idx, clipped.size()):
 		var piece: Variant = clipped[ci]
 		if not piece is PackedVector2Array or (piece as PackedVector2Array).size() < 3:
@@ -389,12 +391,10 @@ func _spawn_extra_pieces(
 		for p: Vector2 in piece_cleaned:
 			centroid += p
 		centroid = (centroid / piece_cleaned.size()).snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
-		
 		var piece_old_local: PackedVector2Array = PackedVector2Array()
 		for p: Vector2 in piece_cleaned:
 			piece_old_local.append(inv_target_xform * p)
-		
-		var piece_outer_old_local: LDPolygon = old_outer.boolean_result(piece_old_local)
+		var piece_outer_old_local: LDPolygon = old_outer.boolean_result_tagged(piece_old_local, local_baked)
 		var piece_outer: LDPolygon = LDPolygon.new()
 		for seg: LDSegment in piece_outer_old_local.segments:
 			var seg_world: Vector2 = target_xform * seg.point
@@ -402,7 +402,6 @@ func _spawn_extra_pieces(
 			new_seg.handle_in = target_xform.basis_xform(seg.handle_in)
 			new_seg.handle_out = target_xform.basis_xform(seg.handle_out)
 			piece_outer.segments.append(new_seg)
-		
 		var piece_holes: Array[LDPolygon] = []
 		for sh: LDPolygon in available_holes:
 			var shw: PackedVector2Array = _local_to_world(target, sh.to_flat())
@@ -416,12 +415,10 @@ func _spawn_extra_pieces(
 				new_seg.handle_out = target_xform.basis_xform(seg.handle_out)
 				new_hole.segments.append(new_seg)
 			piece_holes.append(new_hole)
-		
 		viewport.add_object(new_poly, Vector2i(centroid), layer_id)
 		new_poly.init_properties(game_object)
 		new_poly.apply_segments(piece_outer, piece_holes)
 		new_poly.place()
-		
 		history.add_do(func() -> void:
 			if is_instance_valid(new_poly) and not new_poly.is_inside_tree():
 				parent.add_child(new_poly)

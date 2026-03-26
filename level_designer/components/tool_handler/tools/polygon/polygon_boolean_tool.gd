@@ -182,10 +182,10 @@ func _find_targets_for(pts: PackedVector2Array) -> Array[LDObjectPolygon]:
 		var poly: LDObjectPolygon = obj as LDObjectPolygon
 		if _preview_saved.has(poly):
 			var saved: Dictionary = _preview_saved[poly] as Dictionary
-			var saved_world: PackedVector2Array = PackedVector2Array()
 			var xform: Transform2D = viewport.get_root().get_global_transform().affine_inverse() * poly.get_global_transform()
-			for seg: LDSegment in (saved["outer"] as LDPolygon).segments:
-				saved_world.append(xform * seg.point)
+			var saved_world: PackedVector2Array = PackedVector2Array()
+			for p: Vector2 in (saved["outer"] as LDPolygon).to_flat():
+				saved_world.append(xform * p)
 			if not Geometry2D.intersect_polygons(saved_world, pts).is_empty():
 				result.append(poly)
 		else:
@@ -238,7 +238,10 @@ func _apply_preview_to_targets(best: PackedVector2Array) -> void:
 		var primary_world: PackedVector2Array = _compute_primary_piece(target, best)
 		if primary_world.size() < 3:
 			continue
-		var new_outer: LDPolygon = old_outer.boolean_result(_world_to_local(target, primary_world))
+		var world_baked: Array[LDBakedPoint] = _polygon_to_world_baked(target)
+		var local_flat: PackedVector2Array = _world_to_local(target, primary_world)
+		var local_baked: Array[LDBakedPoint] = _world_baked_to_local(target, world_baked)
+		var new_outer: LDPolygon = old_outer.boolean_result_tagged(local_flat, local_baked)
 		var new_holes: Array[LDPolygon] = _compute_preview_holes(target, best, old_holes)
 		target.apply_segments(new_outer, new_holes)
 		var extra_pieces: Array[PackedVector2Array] = _compute_extra_pieces(target, best)
@@ -285,8 +288,17 @@ func _commit() -> void:
 func _polygon_to_world(poly: LDObjectPolygon) -> PackedVector2Array:
 	var xform: Transform2D = viewport.get_root().get_global_transform().affine_inverse() * poly.get_global_transform()
 	var result: PackedVector2Array = PackedVector2Array()
-	for seg: LDSegment in poly.outer.segments:
-		result.append(xform * seg.point)
+	for p: Vector2 in poly.outer.to_flat():
+		result.append(xform * p)
+	return result
+
+
+func _polygon_to_world_baked(poly: LDObjectPolygon) -> Array[LDBakedPoint]:
+	var xform: Transform2D = viewport.get_root().get_global_transform().affine_inverse() * poly.get_global_transform()
+	var baked: Array[LDBakedPoint] = poly.outer.bake_with_tags()
+	var result: Array[LDBakedPoint] = []
+	for bp: LDBakedPoint in baked:
+		result.append(LDBakedPoint.new(xform * bp.position, bp.segment_index, bp.t, bp.is_anchor))
 	return result
 
 
@@ -295,8 +307,8 @@ func _holes_to_world(poly: LDObjectPolygon) -> Array[PackedVector2Array]:
 	var result: Array[PackedVector2Array] = []
 	for h: LDPolygon in poly.holes:
 		var hw: PackedVector2Array = PackedVector2Array()
-		for seg: LDSegment in h.segments:
-			hw.append(xform * seg.point)
+		for p: Vector2 in h.to_flat():
+			hw.append(xform * p)
 		result.append(hw)
 	return result
 
@@ -318,6 +330,15 @@ func _local_to_world(poly: LDObjectPolygon, local_pts: PackedVector2Array) -> Pa
 	return result
 
 
+func _world_baked_to_local(poly: LDObjectPolygon, world_baked: Array[LDBakedPoint]) -> Array[LDBakedPoint]:
+	var xform: Transform2D = viewport.get_root().get_global_transform().affine_inverse() * poly.get_global_transform()
+	var inv: Transform2D = xform.affine_inverse()
+	var result: Array[LDBakedPoint] = []
+	for bp: LDBakedPoint in world_baked:
+		result.append(LDBakedPoint.new(inv * bp.position, bp.segment_index, bp.t, bp.is_anchor))
+	return result
+
+
 func _match_hole(old_holes: Array[LDPolygon], new_flat: PackedVector2Array) -> LDPolygon:
 	var best: LDPolygon = null
 	var best_ratio: float = 0.4
@@ -334,6 +355,11 @@ func _match_hole(old_holes: Array[LDPolygon], new_flat: PackedVector2Array) -> L
 			best_ratio = ratio
 			best = old_h
 	return best
+
+
+func _bake_polygon_local(source: LDPolygon) -> Array[LDBakedPoint]:
+	var baked: Array[LDBakedPoint] = source.bake_with_tags()
+	return baked
 
 
 func _duplicate_holes(src: Array[LDPolygon]) -> Array[LDPolygon]:

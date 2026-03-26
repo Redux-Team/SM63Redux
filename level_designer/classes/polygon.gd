@@ -3,6 +3,7 @@ class_name LDPolygon
 
 const BEZIER_STEPS: int = 24
 const SNAP_SQ: float = 100.0
+const BAKE_SNAP_SQ: float = 4.0
 
 
 var segments: Array[LDSegment] = []
@@ -167,6 +168,174 @@ func boolean_result(new_flat: PackedVector2Array) -> LDPolygon:
 					end_seg.handle_in = (sub["p2"] as Vector2) - p_end
 			result.segments.append(end_seg)
 	return result
+
+
+
+func bake_with_tags() -> Array[LDBakedPoint]:
+	var result: Array[LDBakedPoint] = []
+	var count: int = segments.size()
+	for i: int in count:
+		var seg: LDSegment = segments[i]
+		var next_seg: LDSegment = segments[(i + 1) % count]
+		if not seg.is_curve and not next_seg.is_curve:
+			result.append(LDBakedPoint.new(seg.point, i, 0.0, true))
+			continue
+		var p0: Vector2 = seg.point
+		var p3: Vector2 = next_seg.point
+		var p1: Vector2 = p0 + seg.handle_out
+		var p2: Vector2 = p3 + next_seg.handle_in
+		for s: int in BEZIER_STEPS:
+			var t: float = float(s) / float(BEZIER_STEPS)
+			result.append(LDBakedPoint.new(
+				_cubic_bezier(p0, p1, p2, p3, t), i, t, s == 0
+			))
+	return result
+
+
+func boolean_result_tagged(new_flat: PackedVector2Array, baked: Array[LDBakedPoint]) -> LDPolygon:
+	var n: int = new_flat.size()
+	if n < 3:
+		return LDPolygon.new()
+	var seg_count: int = segments.size()
+	var tags: Array[LDBakedPoint] = []
+	tags.resize(n)
+	for i: int in n:
+		tags[i] = _find_tag(new_flat[i], baked)
+	var arc_intact: Array[bool] = _find_intact_arcs(tags, n, seg_count)
+	var result: LDPolygon = LDPolygon.new()
+	var i: int = 0
+	while i < n:
+		var tag: LDBakedPoint = tags[i]
+		if tag != null and tag.is_anchor:
+			var arc_idx: int = tag.segment_index
+			if arc_intact[arc_idx]:
+				result.segments.append(segments[arc_idx].duplicate())
+				var steps: int = _arc_baked_count(arc_idx)
+				i += steps
+				continue
+		result.segments.append(LDSegment.new(new_flat[i]))
+		i += 1
+	return result
+
+
+func _find_intact_arcs(tags: Array[LDBakedPoint], n: int, seg_count: int) -> Array[bool]:
+	var arc_intact: Array[bool] = []
+	arc_intact.resize(seg_count)
+	for a: int in seg_count:
+		arc_intact[a] = false
+	var arc_baked_starts: Array[int] = []
+	arc_baked_starts.resize(seg_count)
+	for a: int in seg_count:
+		arc_baked_starts[a] = -1
+	for i: int in n:
+		var tag: LDBakedPoint = tags[i]
+		if tag == null or not tag.is_anchor:
+			continue
+		arc_baked_starts[tag.segment_index] = i
+	for a: int in seg_count:
+		var start_flat: int = arc_baked_starts[a]
+		if start_flat == -1:
+			continue
+		var expected_steps: int = _arc_baked_count(a)
+		var end_anchor_arc: int = (a + 1) % seg_count
+		var end_flat: int = (start_flat + expected_steps) % n
+		var end_tag: LDBakedPoint = tags[end_flat]
+		if end_tag == null:
+			continue
+		if not end_tag.is_anchor or end_tag.segment_index != end_anchor_arc:
+			continue
+		var all_match: bool = true
+		for step: int in expected_steps:
+			var flat_idx: int = (start_flat + step) % n
+			var t: LDBakedPoint = tags[flat_idx]
+			if t == null or t.segment_index != a:
+				all_match = false
+				break
+		if all_match:
+			arc_intact[a] = true
+	return arc_intact
+
+
+func _arc_baked_count(arc_idx: int) -> int:
+	var seg: LDSegment = segments[arc_idx]
+	var next_seg: LDSegment = segments[(arc_idx + 1) % segments.size()]
+	if not seg.is_curve and not next_seg.is_curve:
+		return 1
+	return BEZIER_STEPS
+
+
+func _build_runs(tags: Array[LDBakedPoint], n: int) -> Array[Dictionary]:
+	var runs: Array[Dictionary] = []
+	var search_start: int = 0
+	for i: int in n:
+		var cur: int = -1 if tags[i] == null else tags[i].segment_index
+		var prev: int = -1 if tags[(i - 1 + n) % n] == null else tags[(i - 1 + n) % n].segment_index
+		if cur != prev:
+			search_start = i
+			break
+	var run_src: int = -1 if tags[search_start] == null else tags[search_start].segment_index
+	var run_start: int = search_start
+	for step: int in n:
+		var idx: int = (search_start + step) % n
+		var next_idx: int = (search_start + step + 1) % n
+		var next_src: int = -1 if tags[next_idx] == null else tags[next_idx].segment_index
+		if next_src != run_src or step == n - 1:
+			runs.append({"src": run_src, "start": run_start, "end": idx})
+			run_start = (idx + 1) % n
+			run_src = next_src
+	return runs
+
+
+func _run_len(s_idx: int, e_idx: int, n: int) -> int:
+	if e_idx >= s_idx:
+		return e_idx - s_idx + 1
+	return n - s_idx + e_idx + 1
+
+
+func _assign_handle_ins(result: LDPolygon, new_flat: PackedVector2Array, baked: Array[LDBakedPoint], seg_count: int) -> void:
+	var res_count: int = result.segments.size()
+	var n: int = new_flat.size()
+	for i: int in res_count:
+		var seg: LDSegment = result.segments[i]
+		if not seg.is_curve:
+			continue
+		var next_seg: LDSegment = result.segments[(i + 1) % res_count]
+		if next_seg.handle_in != Vector2.ZERO:
+			continue
+		var next_flat: Vector2 = new_flat[(i + 1) % n]
+		var next_tag: LDBakedPoint = _find_tag(next_flat, baked)
+		if next_tag == null:
+			continue
+		var orig_seg: LDSegment = segments[next_tag.segment_index]
+		var orig_next: LDSegment = segments[(next_tag.segment_index + 1) % seg_count]
+		if not orig_seg.is_curve and not orig_next.is_curve:
+			continue
+		var p0: Vector2 = orig_seg.point
+		var p3: Vector2 = orig_next.point
+		var p1: Vector2 = p0 + orig_seg.handle_out
+		var p2: Vector2 = p3 + orig_next.handle_in
+		var curr_tag: LDBakedPoint = _find_tag(seg.point, baked)
+		var t_start: float = curr_tag.t if curr_tag != null else 0.0
+		var t_end: float = next_tag.t if next_tag != null else 1.0
+		if t_end <= t_start:
+			continue
+		var sub: Dictionary = _extract_subcurve(p0, p1, p2, p3, t_start, t_end)
+		next_seg.handle_in = (sub["p2"] as Vector2) - next_flat
+		if not next_seg.is_curve:
+			next_seg.is_curve = true
+
+
+func _find_tag(p: Vector2, baked: Array[LDBakedPoint]) -> LDBakedPoint:
+	var best: LDBakedPoint = null
+	var best_d: float = INF
+	for bp: LDBakedPoint in baked:
+		var d: float = bp.position.distance_squared_to(p)
+		if d < best_d:
+			best_d = d
+			best = bp
+	if best_d < BAKE_SNAP_SQ * 16.0:
+		return best
+	return null
 
 
 func _find_exact_segment(p: Vector2) -> LDSegment:
