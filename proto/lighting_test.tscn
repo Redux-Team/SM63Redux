@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dqv67bixg12cy"]
+
+[ext_resource type="Texture2D" uid="uid://cn7ug32p0m8ld" path="res://proto/mario.png" id="1_1hcx4"]
+[ext_resource type="Texture2D" uid="uid://cnxwgct60ee0l" path="res://proto/mario_normal.png" id="2_ukghl"]
+
+[sub_resource type="Gradient" id="Gradient_ukghl"]
+offsets = PackedFloat32Array(0, 0.18811882, 0.7260726, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.9479748, 0.9479748, 0.9479748, 1, 0.046204627, 0.046204627, 0.046204627, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qt8di"]
+gradient = SubResource("Gradient_ukghl")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_qt8di"]
+diffuse_texture = ExtResource("1_1hcx4")
+normal_texture = ExtResource("2_ukghl")
+
+[node name="LightingTest" type="Node2D" unique_id=1502080970]
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1937265949]
+position = Vector2(-12, -25)
+scale = Vector2(2.7656248, 2.0937498)
+color = Color(1, 1, 1, 0.09411765)
+energy = 10.0
+texture = SubResource("GradientTexture2D_qt8di")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=906378293]
+position = Vector2(1, -7)
+texture = SubResource("CanvasTexture_qt8di")
