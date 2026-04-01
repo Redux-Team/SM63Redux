@@ -30,7 +30,7 @@ func _ready() -> void:
 	menu_loop.stream_paused = true
 	Singleton.input_type_changed.connect(_on_input_type_changed)
 	_on_input_type_changed()
-	version_label.text = "v" + Singleton.version
+	version_label.text = "v26.99.10924141"
 
 
 func _input(event: InputEvent) -> void:

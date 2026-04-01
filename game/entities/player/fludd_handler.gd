@@ -20,7 +20,7 @@ var dive_boost: bool = false
 func _physics_process(delta: float) -> void:
 	if Input.is_action_pressed("use_fludd") and not state_machine.current_state.name in BANNED_FLUDD_STATES:
 		var max_speed: float = player.run_max_speed / 5.0
-		player.is_using_hover_fludd = true
+		player.is_using_hover_fludd = false
 		if player.is_in_water:
 			player.velocity.y = lerpf(player.velocity.y, -270, 0.2)
 			return

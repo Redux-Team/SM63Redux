@@ -3,7 +3,9 @@ extends Entity
 
 signal entered_water
 signal exited_water
+signal ded
 
+const DEATH = preload("uid://b5ufrtrreux25")
 
 @export_group("Movement Variables")
 @export_subgroup("Horizontal Movement")
@@ -103,3 +105,21 @@ func _process(_delta: float) -> void:
 
 func reset_jump_timer() -> void:
 	jump_buffer_timer = 0
+
+
+func kill() -> void:
+	print("ded")
+	for child: Node in Singleton.get_children():
+		if child is AudioStreamPlayer:
+			child.stop()
+	ded.emit()
+	SFX.play(DEATH)
+	super()
+
+
+func _on_death_check_area_entered(area: Area2D) -> void:
+	if area.has_meta("death"):
+		kill()
+	if area.owner is SuperCoolCheckpoint:
+		area.owner.activate()
+		Singleton.set_meta("checkpoint", area.owner.id)

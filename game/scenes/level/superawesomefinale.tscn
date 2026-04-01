@@ -1,0 +1,175 @@
+[gd_scene format=3 uid="uid://q06gqdjvnutc"]
+
+[ext_resource type="AudioStream" uid="uid://bba1cn72i4374" path="res://assets/soundtrack/Meatball Parade.mp3" id="1_8w36n"]
+[ext_resource type="Texture2D" uid="uid://diaxvqymifkcu" path="res://assets/textures/object/normal.png" id="2_lkmwb"]
+[ext_resource type="Texture2D" uid="uid://blbt0fmkdoghy" path="res://assets/textures/object/associate.png" id="3_0idpy"]
+[ext_resource type="Texture2D" uid="uid://cahx64ik1jjdj" path="res://assets/textures/object/grug.png" id="4_u7e5j"]
+
+[sub_resource type="GDScript" id="GDScript_lkmwb"]
+script/source = "extends Control
+
+
+@export var targets: Array[Control] = []
+@export var min_speed: float = 100.0
+@export var max_speed: float = 300.0
+
+
+var velocities: Dictionary[Control, Vector2] = {}
+
+
+func _ready() -> void:
+	var rect_size: Vector2 = size
+	
+	for node: Control in targets:
+		if node:
+			var node_size: Vector2 = node.size
+			var pos: Vector2 = Vector2(
+				randf_range(0.0, rect_size.x - node_size.x),
+				randf_range(0.0, rect_size.y - node_size.y)
+			)
+			node.position = pos
+			
+			var dir: Vector2 = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)).normalized()
+			var speed: float = randf_range(min_speed, max_speed)
+			velocities[node] = dir * speed
+	
+
+
+func _process(delta: float) -> void:
+	var rect_size: Vector2 = size
+	
+	for node: Control in targets:
+		if not node:
+			continue
+		
+		var vel: Vector2 = velocities.get(node, Vector2.ZERO)
+		var pos: Vector2 = node.position
+		var node_size: Vector2 = node.size
+		
+		pos += vel * delta
+		
+		if pos.x < 0.0:
+			pos.x = 0.0
+			vel.x = abs(vel.x)
+		elif pos.x + node_size.x > rect_size.x:
+			pos.x = rect_size.x - node_size.x
+			vel.x = -abs(vel.x)
+		
+		if pos.y < 0.0:
+			pos.y = 0.0
+			vel.y = abs(vel.y)
+		elif pos.y + node_size.y > rect_size.y:
+			pos.y = rect_size.y - node_size.y
+			vel.y = -abs(vel.y)
+		
+		node.position = pos
+		velocities[node] = vel
+"
+
+[sub_resource type="FontFile" id="FontFile_8w36n"]
+cache/0/variation_coordinates = {}
+cache/0/face_index = 0
+cache/0/embolden = 0.0
+cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
+cache/0/spacing_top = 0
+cache/0/spacing_bottom = 0
+cache/0/spacing_space = 0
+cache/0/spacing_glyph = 0
+cache/0/baseline_offset = 0.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/14/0/ascent = 0.0
+cache/0/14/0/descent = 0.0
+cache/0/14/0/underline_position = 0.0
+cache/0/14/0/underline_thickness = 0.0
+cache/0/14/0/scale = 1.0
+
+[node name="Superawesomefinale" type="Control" unique_id=1987763849 node_paths=PackedStringArray("targets")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_lkmwb")
+targets = [NodePath("rect"), NodePath("rect2"), NodePath("rect3")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2143711939]
+stream = ExtResource("1_8w36n")
+volume_db = -15.313
+pitch_scale = 1.25
+autoplay = true
+
+[node name="rect" type="TextureRect" parent="." unique_id=1174415448]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -59.0
+offset_top = 28.0
+offset_right = 60.0
+offset_bottom = 73.0
+grow_horizontal = 2
+texture = ExtResource("2_lkmwb")
+expand_mode = 1
+
+[node name="rect2" type="TextureRect" parent="." unique_id=2109606867]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 81.0
+offset_top = 77.0
+offset_right = 200.0
+offset_bottom = 188.0
+grow_horizontal = 2
+texture = ExtResource("3_0idpy")
+expand_mode = 1
+
+[node name="rect3" type="TextureRect" parent="." unique_id=646292361]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -53.0
+offset_top = 106.0
+offset_right = 66.0
+offset_bottom = 217.0
+grow_horizontal = 2
+texture = ExtResource("4_u7e5j")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="." unique_id=1273853817]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.5
+offset_top = -148.5
+offset_right = 220.5
+offset_bottom = 148.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("FontFile_8w36n")
+text = "jk lol that was it
+
+I promise we are in fact working hard on the REAL next update
+
+(still in need of programmers/bg artists perchance)
+
+It's coming along rather quickly, 
+maybe it'll be here sooner than you'd think!
+
+happy april fools!
+
+oh yeah and did we mention that the next version
+is coming to iOS? so thats cool too i suppose.
+(no that is not a lie there will actually be a native iOS
+port for the next update)"
+horizontal_alignment = 1
+vertical_alignment = 1

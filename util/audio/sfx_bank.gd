@@ -41,7 +41,7 @@ func _init() -> void:
 		_all_banks.append(self)
 
 
-func play_sfx() -> void:
+func play_sfx(bus: String = "SFX") -> void:
 	var current_time: float = Time.get_ticks_msec() / 1000.0
 	if current_time - _last_play_time < interval:
 		return
@@ -66,6 +66,7 @@ func play_sfx() -> void:
 	
 	player.stream = effects[index]
 	player.play()
+	player.bus = bus
 
 
 func stop_all() -> void:

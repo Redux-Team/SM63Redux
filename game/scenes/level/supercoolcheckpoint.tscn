@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://cr1xgc7edn7r2"]
+
+[ext_resource type="Texture2D" uid="uid://bm301yu6mkknr" path="res://assets/textures/object/superdupercooltileset.png" id="1_1k2sp"]
+[ext_resource type="Script" uid="uid://iaunmvy0mavk" path="res://game/scenes/level/supercoolcheckpoint.gd" id="1_rf812"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rf812"]
+atlas = ExtResource("1_1k2sp")
+region = Rect2(48.519707, 17.369848, 14.58754, 30.46807)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wrb7g"]
+atlas = ExtResource("1_1k2sp")
+region = Rect2(65.4435, 16.93534, 12.859901, 30.27024)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wrb7g"]
+size = Vector2(9, 30)
+
+[node name="Supercoolcheckpoint" type="Node2D" unique_id=27664165]
+scale = Vector2(2, 2)
+script = ExtResource("1_rf812")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=579694462]
+texture = SubResource("AtlasTexture_rf812")
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=360965819]
+visible = false
+texture = SubResource("AtlasTexture_wrb7g")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=577394462]
+collision_mask = 256
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=483106692]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_wrb7g")

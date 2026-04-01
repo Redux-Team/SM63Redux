@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://d3uccjhnjch8j"]
+
+[ext_resource type="Texture2D" uid="uid://bm301yu6mkknr" path="res://assets/textures/object/superdupercooltileset.png" id="1_lrips"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ovma"]
+atlas = ExtResource("1_lrips")
+region = Rect2(32.143616, 31.215378, 15.827389, 16.707699)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v5m3c"]
+size = Vector2(6, 9)
+
+[node name="Superduperscaryspike" type="Node2D" unique_id=1142205679]
+metadata/death = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=49694282]
+texture = SubResource("AtlasTexture_1ovma")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1983326057]
+collision_layer = 257
+metadata/death = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=977536158]
+position = Vector2(0, 3.5)
+shape = SubResource("RectangleShape2D_v5m3c")

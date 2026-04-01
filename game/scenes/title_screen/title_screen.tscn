@@ -16,7 +16,6 @@
 [ext_resource type="Texture2D" uid="uid://bvbd4a1850645" path="res://assets/textures/gui/title_screen/splash_logo/logo_sheen_63.png" id="5_1evyh"]
 [ext_resource type="PackedScene" uid="uid://c6dic42vckv0e" path="res://game/ui/components/main_menu_button/main_menu_button.tscn" id="5_mu8aq"]
 [ext_resource type="Shader" uid="uid://cgek5pfxthubq" path="res://core/shader/texture_mask.gdshader" id="5_y7kqt"]
-[ext_resource type="AudioStream" uid="uid://dmjltgy8g1jqg" path="res://assets/soundtrack/02 Start at the Beginning.mp3" id="6_lyjqf"]
 [ext_resource type="PackedScene" uid="uid://edq4g4hx0dyb" path="res://game/screen/layers/settings_screen/settings_screen.tscn" id="7_1evyh"]
 [ext_resource type="Texture2D" uid="uid://dk6fm6tm4hpjp" path="res://assets/textures/gui/title_screen/splash_logo/sheen.png" id="7_xjhxk"]
 [ext_resource type="Texture2D" uid="uid://dnprx1u7tco41" path="res://assets/textures/gui/title_screen/splash_logo/logo_sheen_redux.png" id="8_7cnuw"]
@@ -33,10 +32,12 @@
 [ext_resource type="Texture2D" uid="uid://dippg3dive7p6" path="res://assets/textures/gui/title_screen/splash_logo/logo_super_particle_mask.png" id="17_lwt8s"]
 [ext_resource type="Texture2D" uid="uid://bnrtx06fhpytq" path="res://assets/textures/particle/title_screen/super_text_snow_medium.png" id="18_j4cpk"]
 [ext_resource type="Texture2D" uid="uid://dois038y355wf" path="res://assets/textures/particle/title_screen/super_text_snow_small.png" id="19_hua3r"]
-[ext_resource type="PackedScene" uid="uid://c732aftmb2bcv" path="res://level_designer/level_designer.tscn" id="31_1rf77"]
 [ext_resource type="Shader" uid="uid://g3ewropiv6mx" path="res://core/shader/hsv.gdshader" id="31_5p2hb"]
+[ext_resource type="PackedScene" uid="uid://dvt3o1b456f47" path="res://game/scenes/level/superduperintenselevel.tscn" id="31_a7m65"]
 [ext_resource type="Texture2D" uid="uid://3bawiafh4l8h" path="res://assets/textures/gui/title_screen/select_mode_button/selector.png" id="31_m4day"]
 [ext_resource type="PackedScene" uid="uid://cfrexipnk4yq8" path="res://game/scenes/level/playtest.tscn" id="31_tcw2j"]
+[ext_resource type="AudioStream" uid="uid://csmeb8b7n1c5r" path="res://assets/sfx/gui/slide_in.mp3" id="37_a7m65"]
+[ext_resource type="AudioStream" uid="uid://bba1cn72i4374" path="res://assets/soundtrack/Meatball Parade.mp3" id="39_dccps"]
 
 [sub_resource type="Curve" id="Curve_5m44c"]
 _data = [Vector2(0.0574018, 0), 0.0, 0.0, 0, 0, Vector2(0.250755, 0.515625), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -68,6 +69,77 @@ blend_mode = 1
 shader = ExtResource("5_y7kqt")
 shader_parameter/color_texture = ExtResource("7_xjhxk")
 shader_parameter/mask_texture = ExtResource("8_7cnuw")
+
+[sub_resource type="FontFile" id="FontFile_a7m65"]
+cache/0/variation_coordinates = {}
+cache/0/face_index = 0
+cache/0/embolden = 0.0
+cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
+cache/0/spacing_top = 0
+cache/0/spacing_bottom = 0
+cache/0/spacing_space = 0
+cache/0/spacing_glyph = 0
+cache/0/baseline_offset = 0.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/14/0/ascent = 0.0
+cache/0/14/0/descent = 0.0
+cache/0/14/0/underline_position = 0.0
+cache/0/14/0/underline_thickness = 0.0
+cache/0/14/0/scale = 1.0
+cache/0/17/0/ascent = 0.0
+cache/0/17/0/descent = 0.0
+cache/0/17/0/underline_position = 0.0
+cache/0/17/0/underline_thickness = 0.0
+cache/0/17/0/scale = 1.0
+cache/0/18/0/ascent = 0.0
+cache/0/18/0/descent = 0.0
+cache/0/18/0/underline_position = 0.0
+cache/0/18/0/underline_thickness = 0.0
+cache/0/18/0/scale = 1.0
+cache/0/19/0/ascent = 0.0
+cache/0/19/0/descent = 0.0
+cache/0/19/0/underline_position = 0.0
+cache/0/19/0/underline_thickness = 0.0
+cache/0/19/0/scale = 1.0
+cache/0/20/0/ascent = 0.0
+cache/0/20/0/descent = 0.0
+cache/0/20/0/underline_position = 0.0
+cache/0/20/0/underline_thickness = 0.0
+cache/0/20/0/scale = 1.0
+cache/0/21/0/ascent = 0.0
+cache/0/21/0/descent = 0.0
+cache/0/21/0/underline_position = 0.0
+cache/0/21/0/underline_thickness = 0.0
+cache/0/21/0/scale = 1.0
+cache/0/22/0/ascent = 0.0
+cache/0/22/0/descent = 0.0
+cache/0/22/0/underline_position = 0.0
+cache/0/22/0/underline_thickness = 0.0
+cache/0/22/0/scale = 1.0
+cache/0/23/0/ascent = 0.0
+cache/0/23/0/descent = 0.0
+cache/0/23/0/underline_position = 0.0
+cache/0/23/0/underline_thickness = 0.0
+cache/0/23/0/scale = 1.0
+cache/0/24/0/ascent = 0.0
+cache/0/24/0/descent = 0.0
+cache/0/24/0/underline_position = 0.0
+cache/0/24/0/underline_thickness = 0.0
+cache/0/24/0/scale = 1.0
+cache/0/25/0/ascent = 0.0
+cache/0/25/0/descent = 0.0
+cache/0/25/0/underline_position = 0.0
+cache/0/25/0/underline_thickness = 0.0
+cache/0/25/0/scale = 1.0
+cache/0/26/0/ascent = 0.0
+cache/0/26/0/descent = 0.0
+cache/0/26/0/underline_position = 0.0
+cache/0/26/0/underline_thickness = 0.0
+cache/0/26/0/scale = 1.0
 
 [sub_resource type="Animation" id="Animation_vp7mh"]
 length = 0.001
@@ -1290,6 +1362,114 @@ tracks/33/keys = {
 "update": 0,
 "values": [1.0]
 }
+tracks/34/type = "value"
+tracks/34/imported = false
+tracks/34/enabled = true
+tracks/34/path = NodePath("TitleLoop:pitch_scale")
+tracks/34/interp = 1
+tracks/34/loop_wrap = true
+tracks/34/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/35/type = "value"
+tracks/35/imported = false
+tracks/35/enabled = true
+tracks/35/path = NodePath("TitleLoop:volume_db")
+tracks/35/interp = 1
+tracks/35/loop_wrap = true
+tracks/35/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/36/type = "value"
+tracks/36/imported = false
+tracks/36/enabled = true
+tracks/36/path = NodePath("AudioStreamPlayer:playing")
+tracks/36/interp = 1
+tracks/36/loop_wrap = true
+tracks/36/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/37/type = "value"
+tracks/37/imported = false
+tracks/37/enabled = true
+tracks/37/path = NodePath("AudioStreamPlayer:volume_db")
+tracks/37/interp = 1
+tracks/37/loop_wrap = true
+tracks/37/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-80.0]
+}
+tracks/38/type = "value"
+tracks/38/imported = false
+tracks/38/enabled = true
+tracks/38/path = NodePath("SplashScreen/AprilFoolsLabel:anchor_top")
+tracks/38/interp = 1
+tracks/38/loop_wrap = true
+tracks/38/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.74300003]
+}
+tracks/39/type = "value"
+tracks/39/imported = false
+tracks/39/enabled = true
+tracks/39/path = NodePath("SplashScreen/AprilFoolsLabel:anchor_bottom")
+tracks/39/interp = 1
+tracks/39/loop_wrap = true
+tracks/39/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.74300003]
+}
+tracks/40/type = "value"
+tracks/40/imported = false
+tracks/40/enabled = true
+tracks/40/path = NodePath("SplashScreen/AprilFoolsLabel:visible")
+tracks/40/interp = 1
+tracks/40/loop_wrap = true
+tracks/40/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/41/type = "value"
+tracks/41/imported = false
+tracks/41/enabled = true
+tracks/41/path = NodePath("AudioStreamPlayer:stream")
+tracks/41/interp = 1
+tracks/41/loop_wrap = true
+tracks/41/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("37_a7m65")]
+}
+tracks/42/type = "value"
+tracks/42/imported = false
+tracks/42/enabled = true
+tracks/42/path = NodePath("AudioStreamPlayer:pitch_scale")
+tracks/42/interp = 1
+tracks/42/loop_wrap = true
+tracks/42/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
 
 [sub_resource type="Animation" id="Animation_baphx"]
 resource_name = "splash_screen_loop"
@@ -1658,31 +1838,31 @@ tracks/14/keys = {
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("BG:modulate")
+tracks/15/path = NodePath("BG/BGLayers/Particles/ShootingStars:speed_scale")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
-"times": PackedFloat32Array(0, 0.354989),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(0.568973, 0.568973, 0.568973, 1)]
-}
-tracks/16/type = "value"
-tracks/16/imported = false
-tracks/16/enabled = true
-tracks/16/path = NodePath("BG/BGLayers/Particles/ShootingStars:speed_scale")
-tracks/16/interp = 1
-tracks/16/loop_wrap = true
-tracks/16/keys = {
 "times": PackedFloat32Array(0, 0.366667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [1.0, 0.7]
 }
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("BG/BGLayers/Particles/SmallStars:speed_scale")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.35]
+}
 tracks/17/type = "value"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("BG/BGLayers/Particles/SmallStars:speed_scale")
+tracks/17/path = NodePath("BG/BGLayers/Particles/MediumStars:speed_scale")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
@@ -1694,22 +1874,10 @@ tracks/17/keys = {
 tracks/18/type = "value"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("BG/BGLayers/Particles/MediumStars:speed_scale")
+tracks/18/path = NodePath("BG/BGLayers/Particles/BigStars:speed_scale")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [1.0, 0.35]
-}
-tracks/19/type = "value"
-tracks/19/imported = false
-tracks/19/enabled = true
-tracks/19/path = NodePath("BG/BGLayers/Particles/BigStars:speed_scale")
-tracks/19/interp = 1
-tracks/19/loop_wrap = true
-tracks/19/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
@@ -2098,46 +2266,34 @@ tracks/17/keys = {
 tracks/18/type = "value"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("BG:modulate")
+tracks/18/path = NodePath("SplashScreen/Logo/63/63Glow:self_modulate")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
-"times": PackedFloat32Array(0, 0.366667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0.568973, 0.568973, 0.568973, 1), Color(1, 1, 1, 1)]
-}
-tracks/19/type = "value"
-tracks/19/imported = false
-tracks/19/enabled = true
-tracks/19/path = NodePath("SplashScreen/Logo/63/63Glow:self_modulate")
-tracks/19/interp = 1
-tracks/19/loop_wrap = true
-tracks/19/keys = {
 "times": PackedFloat32Array(0.0333334),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
-tracks/20/type = "value"
-tracks/20/imported = false
-tracks/20/enabled = true
-tracks/20/path = NodePath("SplashScreen/Logo/Redux/ReduxGlow:self_modulate")
-tracks/20/interp = 1
-tracks/20/loop_wrap = true
-tracks/20/keys = {
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("SplashScreen/Logo/Redux/ReduxGlow:self_modulate")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
 "times": PackedFloat32Array(0.0333333),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
-tracks/21/type = "method"
-tracks/21/imported = false
-tracks/21/enabled = true
-tracks/21/path = NodePath(".")
-tracks/21/interp = 1
-tracks/21/loop_wrap = true
-tracks/21/keys = {
+tracks/20/type = "method"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath(".")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
 "times": PackedFloat32Array(0.433333),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -2145,10 +2301,22 @@ tracks/21/keys = {
 "method": &"start_splash_loop"
 }]
 }
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("SplashScreen/Logo/63:self_modulate")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 tracks/22/type = "value"
 tracks/22/imported = false
 tracks/22/enabled = true
-tracks/22/path = NodePath("SplashScreen/Logo/63:self_modulate")
+tracks/22/path = NodePath("SplashScreen/Logo/Redux:self_modulate")
 tracks/22/interp = 1
 tracks/22/loop_wrap = true
 tracks/22/keys = {
@@ -2160,19 +2328,19 @@ tracks/22/keys = {
 tracks/23/type = "value"
 tracks/23/imported = false
 tracks/23/enabled = true
-tracks/23/path = NodePath("SplashScreen/Logo/Redux:self_modulate")
+tracks/23/path = NodePath("SplashScreen/Logo/Redux:scale")
 tracks/23/interp = 1
 tracks/23/loop_wrap = true
 tracks/23/keys = {
-"times": PackedFloat32Array(0.0333333),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Vector2(1, 1)]
 }
 tracks/24/type = "value"
 tracks/24/imported = false
 tracks/24/enabled = true
-tracks/24/path = NodePath("SplashScreen/Logo/Redux:scale")
+tracks/24/path = NodePath("SplashScreen/Logo/63:scale")
 tracks/24/interp = 1
 tracks/24/loop_wrap = true
 tracks/24/keys = {
@@ -2184,19 +2352,19 @@ tracks/24/keys = {
 tracks/25/type = "value"
 tracks/25/imported = false
 tracks/25/enabled = true
-tracks/25/path = NodePath("SplashScreen/Logo/63:scale")
+tracks/25/path = NodePath("SplashScreen/Logo/63/63Sheen:visible")
 tracks/25/interp = 1
 tracks/25/loop_wrap = true
 tracks/25/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
+"update": 1,
+"values": [true]
 }
 tracks/26/type = "value"
 tracks/26/imported = false
 tracks/26/enabled = true
-tracks/26/path = NodePath("SplashScreen/Logo/63/63Sheen:visible")
+tracks/26/path = NodePath("SplashScreen/Logo/Redux/ReduxSheen:visible")
 tracks/26/interp = 1
 tracks/26/loop_wrap = true
 tracks/26/keys = {
@@ -2208,43 +2376,43 @@ tracks/26/keys = {
 tracks/27/type = "value"
 tracks/27/imported = false
 tracks/27/enabled = true
-tracks/27/path = NodePath("SplashScreen/Logo/Redux/ReduxSheen:visible")
+tracks/27/path = NodePath("SplashScreen/Logo/LogoGlow:self_modulate")
 tracks/27/interp = 1
 tracks/27/loop_wrap = true
 tracks/27/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/28/type = "value"
-tracks/28/imported = false
-tracks/28/enabled = true
-tracks/28/path = NodePath("SplashScreen/Logo/LogoGlow:self_modulate")
-tracks/28/interp = 1
-tracks/28/loop_wrap = true
-tracks/28/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(2),
 "update": 0,
 "values": [Color(1, 1, 1, 0.219608)]
 }
+tracks/28/type = "value"
+tracks/28/imported = false
+tracks/28/enabled = true
+tracks/28/path = NodePath("BG/BGLayers/Particles/ShootingStars:speed_scale")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = {
+"times": PackedFloat32Array(0, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.7, 1.0]
+}
 tracks/29/type = "value"
 tracks/29/imported = false
 tracks/29/enabled = true
-tracks/29/path = NodePath("BG/BGLayers/Particles/ShootingStars:speed_scale")
+tracks/29/path = NodePath("BG/BGLayers/Particles/SmallStars:speed_scale")
 tracks/29/interp = 1
 tracks/29/loop_wrap = true
 tracks/29/keys = {
 "times": PackedFloat32Array(0, 0.266667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [0.7, 1.0]
+"values": [0.35, 1.0]
 }
 tracks/30/type = "value"
 tracks/30/imported = false
 tracks/30/enabled = true
-tracks/30/path = NodePath("BG/BGLayers/Particles/SmallStars:speed_scale")
+tracks/30/path = NodePath("BG/BGLayers/Particles/MediumStars:speed_scale")
 tracks/30/interp = 1
 tracks/30/loop_wrap = true
 tracks/30/keys = {
@@ -2256,7 +2424,7 @@ tracks/30/keys = {
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("BG/BGLayers/Particles/MediumStars:speed_scale")
+tracks/31/path = NodePath("BG/BGLayers/Particles/BigStars:speed_scale")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
@@ -2265,22 +2433,10 @@ tracks/31/keys = {
 "update": 0,
 "values": [0.35, 1.0]
 }
-tracks/32/type = "value"
-tracks/32/imported = false
-tracks/32/enabled = true
-tracks/32/path = NodePath("BG/BGLayers/Particles/BigStars:speed_scale")
-tracks/32/interp = 1
-tracks/32/loop_wrap = true
-tracks/32/keys = {
-"times": PackedFloat32Array(0, 0.266667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.35, 1.0]
-}
 
 [sub_resource type="Animation" id="Animation_bfr6l"]
 resource_name = "title_in"
-length = 5.0
+length = 33.566666
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -2288,7 +2444,7 @@ tracks/0/path = NodePath("SplashScreen/Logo:anchor_top")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.56667, 4.03333, 4.33333),
+"times": PackedFloat32Array(0, 1.56667, 16.866667, 17.166668),
 "transitions": PackedFloat32Array(0.2, 1, 0.5, 1),
 "update": 0,
 "values": [-0.675, 0.25, 0.25, 0.175]
@@ -2300,7 +2456,7 @@ tracks/1/path = NodePath("SplashScreen/Logo:anchor_bottom")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 1.56667, 4.03333, 4.4),
+"times": PackedFloat32Array(0, 1.56667, 16.866667, 17.233337),
 "transitions": PackedFloat32Array(0.2, 1, 0.3, 1),
 "update": 0,
 "values": [-0.1, 0.75, 0.75, 0.6]
@@ -2312,7 +2468,7 @@ tracks/2/path = NodePath("SplashScreen/StartText:anchor_top")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(4.01401, 4.4),
+"times": PackedFloat32Array(16.847347, 17.233337),
 "transitions": PackedFloat32Array(0.3, 1),
 "update": 0,
 "values": [1.1, 0.6247779999999999]
@@ -2324,7 +2480,7 @@ tracks/3/path = NodePath("SplashScreen/StartText:anchor_bottom")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(4.01401, 4.4),
+"times": PackedFloat32Array(16.847347, 17.233337),
 "transitions": PackedFloat32Array(0.3, 1),
 "update": 0,
 "values": [1.23, 0.741333]
@@ -2348,7 +2504,7 @@ tracks/5/path = NodePath(".")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(2.93333, 3.5, 4, 4.63333),
+"times": PackedFloat32Array(2.93333, 16.333336, 16.833336, 17.466667),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "values": [{
 "args": [],
@@ -2479,10 +2635,10 @@ tracks/15/path = NodePath("SplashScreen/SplashFade:color")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
-"times": PackedFloat32Array(0, 0.8, 2.1, 2.26667, 3.13333),
-"transitions": PackedFloat32Array(1, 1, 1, 1.5, 1),
+"times": PackedFloat32Array(0, 0.8, 2.1, 2.26667, 3.13333, 4.233333, 6, 16.680681, 16.847347),
+"transitions": PackedFloat32Array(1, 1, 1, 1.5, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0.882353), Color(0, 0, 0, 0.882353), Color(1, 1, 1, 0.415686), Color(1, 1, 1, 0)]
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0.882353), Color(0, 0, 0, 0.882353), Color(1, 1, 1, 0.415686), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(0, 0, 0, 0.99215686), Color(0, 0, 0, 0.99215686), Color(0, 0, 0, 0)]
 }
 tracks/16/type = "value"
 tracks/16/imported = false
@@ -2491,7 +2647,7 @@ tracks/16/path = NodePath("SplashScreen/Logo/LogoGlow:self_modulate")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
-"times": PackedFloat32Array(0.0333333, 2.06667, 2.3, 4.66667),
+"times": PackedFloat32Array(0.0333333, 2.06667, 2.3, 4.0999994),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0.219608)]
@@ -2527,10 +2683,130 @@ tracks/19/path = NodePath(".:input_locked")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
-"times": PackedFloat32Array(0, 0.0666667),
+"times": PackedFloat32Array(0, 17.233334),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("TitleLoop:pitch_scale")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(-1.0000001, 3.8666666, 9.333333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 1.0, 0.01]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("TitleLoop:volume_db")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(-0.6333333, 7.7999997, 9.366667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, -80.0]
+}
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("AudioStreamPlayer:playing")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(3.6333334, 9.466666, 9.833333, 15.866667, 17.033333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, false, true, false, true]
+}
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("AudioStreamPlayer:volume_db")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(9.433333, 10.3, 13.5, 14.166667, 16.033333, 16.366667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, -10.0, -10.0, -80.0, -80.0, -10.0]
+}
+tracks/24/type = "value"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("SplashScreen/AprilFoolsLabel:anchor_top")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(9.288722, 13.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.2440001, 0.74300003]
+}
+tracks/25/type = "value"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("SplashScreen/AprilFoolsLabel:anchor_bottom")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"times": PackedFloat32Array(9.288722, 13.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.2440001, 0.74300003]
+}
+tracks/26/type = "value"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("SplashScreen/AprilFoolsLabel:visible")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(6.366667, 8.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("BG:modulate")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"times": PackedFloat32Array(16.380682, 16.547348),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0.9166666, 0, 1)]
+}
+tracks/28/type = "value"
+tracks/28/imported = false
+tracks/28/enabled = true
+tracks/28/path = NodePath("AudioStreamPlayer:stream")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = {
+"times": PackedFloat32Array(15.7, 16.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("37_a7m65"), ExtResource("39_dccps")]
+}
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("AudioStreamPlayer:pitch_scale")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(15.666667, 16.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.8]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_exexd"]
@@ -3030,14 +3306,34 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
+[node name="AprilFoolsLabel" type="Label" parent="SplashScreen" unique_id=655369900]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.74300003
+anchor_right = 0.5
+anchor_bottom = 0.74300003
+offset_left = -67.0
+offset_top = -15.840027
+offset_right = 71.0
+offset_bottom = 16.160004
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = SubResource("FontFile_a7m65")
+theme_override_font_sizes/font_size = 26
+text = "april fools!"
+metadata/_edit_use_anchors_ = true
+
 [node name="MenuScreen" type="Control" parent="." unique_id=447094032]
 visible = false
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 60.0
-offset_bottom = 59.99881
+offset_bottom = -0.0011901855
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -3119,7 +3415,7 @@ layout_mode = 2
 top_icon = 3
 content = 3
 title = 3
-description = "Configure the game to your liking!"
+description = "who cares about settings fr"
 hue = -0.542
 saturation = 0.126
 value = 0.661
@@ -3141,11 +3437,9 @@ ratio = 2.5
 metadata/_edit_use_anchors_ = true
 
 [node name="StoryMode" parent="MenuScreen/MenuCycle/CenterButtonContainer" unique_id=1306824108 instance=ExtResource("5_mu8aq")]
-modulate = Color(0.4, 0.4, 0.4, 1)
 layout_mode = 2
-top_icon = 4
-disabled = true
-description = "Coming soon..."
+transition_to = ExtResource("31_a7m65")
+description = "maama mia "
 hue = -0.02
 saturation = 0.8
 
@@ -3167,11 +3461,11 @@ metadata/_edit_use_anchors_ = true
 
 [node name="LevelDesigner" parent="MenuScreen/MenuCycle/RightButtonContainer" unique_id=1987232040 instance=ExtResource("5_mu8aq")]
 layout_mode = 2
-top_icon = 1
-content = 1
-title = 1
-transition_to = ExtResource("31_1rf77")
-description = "Create your own story in this advanced Level Designer!"
+top_icon = 4
+content = 4
+title = 4
+disabled = true
+description = "???"
 hue = 0.22
 saturation = 0.65
 value = 0.75
@@ -3196,10 +3490,10 @@ metadata/_edit_use_anchors_ = true
 modulate = Color(0.4, 0.4, 0.4, 1)
 layout_mode = 2
 top_icon = 4
-content = 2
-title = 2
+content = 4
+title = 4
 disabled = true
-description = "Coming soon..."
+description = "???"
 hue = 0.542
 saturation = 0.958
 value = 1.2
@@ -3310,10 +3604,7 @@ theme_type_variation = &"TouchLeft"
 
 [node name="SettingsScreen" parent="." unique_id=911814784 instance=ExtResource("7_1evyh")]
 visible = false
-modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-offset_top = 15.0
-offset_bottom = 15.0
 
 [node name="VersionLabel" type="Label" parent="." unique_id=975132454]
 layout_mode = 1
@@ -3353,8 +3644,11 @@ vertical_alignment = 2
 stream = ExtResource("1_bfr6l")
 bus = &"Music"
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1176521592]
+stream = ExtResource("37_a7m65")
+volume_db = -80.0
+
 [node name="MenuLoop" type="AudioStreamPlayer" parent="." unique_id=350880933]
-stream = ExtResource("6_lyjqf")
 bus = &"Music"
 
 [node name="ScreenAnimations" type="AnimationPlayer" parent="." unique_id=2125021849]
