@@ -72,6 +72,10 @@ func is_active() -> bool:
 	return state_machine.current_state == self
 
 
+func pause(time: float) -> void:
+	await get_tree().create_timer(time).timeout
+
+
 func _on_enter(_from: StringName) -> void:
 	pass
 

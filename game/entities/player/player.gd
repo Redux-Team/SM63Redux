@@ -4,7 +4,6 @@ extends Entity
 signal entered_water
 signal exited_water
 
-
 @export_group("Movement Variables")
 @export_subgroup("Horizontal Movement")
 @export var walk_acceleration: float = 20.0
@@ -92,13 +91,37 @@ func _on_debug_toggle() -> void:
 func _process(_delta: float) -> void:
 	move_dir = Input.get_axis("move_left", "move_right")
 	is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
-	is_input_dive = Input.is_action_just_pressed("dive") and not is_on_floor()
+	is_input_dive = Input.is_action_pressed("dive") and not is_on_floor()
 	is_input_ground_pound = Input.is_action_pressed("ground_pound")
 	is_input_swim = Input.is_action_just_pressed("jump")
 	is_input_spin = Input.is_action_pressed("spin")
 	
 	if Input.is_action_just_pressed("jump"):
 		jump_buffer_timer = jump_buffer_time if can_jump else 0.0
+
+
+func get_facing_velocity() -> float:
+	return velocity.x * (-1.0 if sprite.flip_h else 1.0)
+
+
+func get_active_state_uptime() -> float:
+	return state_machine.state_timer
+
+
+func is_action_pressed(input: String) -> bool:
+	return Input.is_action_pressed(input)
+
+
+func is_action_just_pressed(input: String) -> bool:
+	return Input.is_action_just_pressed(input)
+
+
+func is_moving_with_facing() -> bool:
+	return (sign(move_dir) == 1 and not sprite.flip_h) or (sign(move_dir) == -1 and sprite.flip_h)
+
+
+func is_moving_against_facing() -> bool:
+	return (sign(move_dir) == 1 && sprite.flip_h) || (sign(move_dir) == -1 && !sprite.flip_h)
 
 
 func reset_jump_timer() -> void:
