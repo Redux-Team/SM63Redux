@@ -7,7 +7,7 @@ signal machine_ended
 
 
 @export var entity: Entity
-@export var sprite: AnimatedSprite2D
+@export var sprite: SmartSprite2D
 @export var states: Dictionary[StringName, State]
 @export var processes: Array[StateProcess]
 
@@ -326,8 +326,8 @@ class AnimationChain:
 		if not state_machine.sprite:
 			return
 		
-		if state_machine.sprite.sprite_frames.has_animation(current_animation):
-			state_machine.sprite.animation = current_animation
+		if state_machine.sprite.diffuse_frames.has_animation(current_animation):
+			state_machine.sprite.current_animation = current_animation
 			state_machine.sprite.play(current_animation)
 
 

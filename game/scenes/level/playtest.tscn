@@ -18,12 +18,12 @@ collision_layer = 4
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="Area2D" unique_id=322169643]
 visible = false
 position = Vector2(21, 179.5)
-polygon = PackedVector2Array(-149, -80.5, -207, -248.5, 3, -326.5, 221, -254.5, 292, -124.5, 147, -32.5, 1091, -105.5, 1054, -417.5, 1428, -415.5, 1460, 488.5, -52, 569.5, -250, 264.5, -197, -25.5)
+polygon = PackedVector2Array(-149, -80.5, -207, -248.5, 3, -326.5, 221, -254.5, 292, -124.5, 147, -32.5, 1091, -105.5, 1054, -417.5, 1428, -415.5, 1460, 488.5, -52, 569.5, -250, 264.5, -433, -18.5)
 
 [node name="Polygon2D" type="Polygon2D" parent="Area2D" unique_id=1465365713]
 position = Vector2(21, 179.5)
 color = Color(0, 0.6509804, 1, 0.45490196)
-polygon = PackedVector2Array(-149, -80.5, -207, -248.5, 3, -326.5, 221, -254.5, 292, -124.5, 147, -32.5, 1091, -105.5, 1054, -417.5, 1428, -415.5, 1460, 488.5, -52, 569.5, -250, 264.5, -197, -25.5)
+polygon = PackedVector2Array(-149, -80.5, -207, -248.5, 3, -326.5, 221, -254.5, 292, -124.5, 147, -32.5, 1091, -105.5, 1054, -417.5, 1428, -415.5, 1460, 488.5, -52, 569.5, -250, 264.5, -433, -18.5)
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=192645803]
 

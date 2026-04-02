@@ -41,7 +41,7 @@ var player: Player:
 			print_stack()
 			push_error("The current entity is not of type \"Player\"")
 			return entity
-var sprite: AnimatedSprite2D
+var sprite: SmartSprite2D
 var state_machine: StateMachine
 var state_name: StringName
 var parent: Node:

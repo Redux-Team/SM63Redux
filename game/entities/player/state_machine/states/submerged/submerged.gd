@@ -2,7 +2,9 @@ extends State
 
 func _physics_process(_delta: float) -> void:
 	if abs(player.move_dir) == 0:
-		player.apply_friction(0.4, true)
+		var friction_component: FrictionComponent = player.get_component(FrictionComponent)
+		if friction_component:
+			friction_component.apply(1.0, true)
 	
 	if abs(player.move_dir) > 0 and not player.is_crouching:
 		speed_up(player.move_dir)

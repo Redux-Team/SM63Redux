@@ -3,7 +3,8 @@ extends State
 
 func _physics_process(delta: float) -> void:
 	if abs(player.move_dir) == 0 and not player.is_diving:
-		player.apply_friction()
+		var friction: FrictionComponent = player.get_component(FrictionComponent)
+		friction.apply(0.4)
 	
 	player.is_falling = player.velocity.y > 0
 	_handle_triple_jump(delta)

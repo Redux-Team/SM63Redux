@@ -14,7 +14,7 @@ var last_slope_angle: float = 0.0
 
 func _on_enter(from: StringName) -> void:
 	player.lock_flipping = true
-	player._internal_friction_multiplier = 0.4
+	player.set_friction_scale_factor(1.6)
 	entered_from_dive = from == "Dive"
 	time_since_grounded = 0.0
 	
@@ -32,14 +32,13 @@ func _on_enter(from: StringName) -> void:
 
 func _on_exit(_to: StringName) -> void:
 	player.lock_flipping = false
-	player._internal_friction_multiplier = 1.0
+	player.set_friction_scale_factor(1.0)
 	body_rotation = 0.0
 	player.sprite.rotation_degrees = 0.0
 
 
 func _physics_process(_delta: float) -> void:
 	if player.is_on_floor():
-		player.apply_friction()
 		time_since_grounded = 0.0
 	else:
 		player.velocity.y += 1

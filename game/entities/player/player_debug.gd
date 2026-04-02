@@ -11,10 +11,10 @@ func _process(_delta: float) -> void:
 	var debug_text: String = ""
 	
 	debug_text += "Current State: %s\n" % player.state_machine.current_state 
-	debug_text += "Current Animation: %s\n" % player.state_machine.sprite.animation 
+	debug_text += "Current Animation: %s\n" % player.state_machine.sprite.current_animation 
 	debug_text += "is_input_jump: %s\n" % player.is_input_jump 
 	debug_text += "is_falling: %s\n" % player.is_falling 
-	debug_text += "is_running: %s\n" % player.is_running 
+	debug_text += "is_crouching: %s\n" % player.is_crouching 
 	debug_text += "is_diving: %s\n" % player.is_diving
 	debug_text += "move_dir: %s\n" % player.move_dir 
 	debug_text += "current_jump: %s\n" % player.current_jump 
@@ -22,7 +22,7 @@ func _process(_delta: float) -> void:
 	debug_text += "is_on_floor: %s\n" % player.is_on_floor()
 	debug_text += "Velocity: %s\n" % player.velocity 
 	debug_text += "can_dive: %s\n" % player.can_dive
-	debug_text += "gravity_scale_factor: %s\n" % player.gravity_scale_factor
+	#debug_text += "gravity_scale_factor: %s\n" % player.gravity_scale_factor
 	
 	
 	debug_label.text = debug_text

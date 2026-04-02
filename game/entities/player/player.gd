@@ -18,6 +18,9 @@ signal exited_water
 @export_subgroup("Underwater Movement")
 @export var water_resistance: float = 0.6
 @export var swim_up_strength: float = 150.0
+@export var water_y_cap: float = 35.0
+@export var water_sink_rate: float = 0.125
+@export var water_drag_x: float = 1.001
 
 @export_group("Speed Limits")
 @export var run_max_speed: float = 250.0
@@ -80,6 +83,7 @@ var jump_chain_timer: float = 0.0
 
 
 func _ready() -> void:
+	super()
 	Singleton.debug_mode_toggled.connect(_on_debug_toggle)
 
 
@@ -108,6 +112,20 @@ func get_active_state_uptime() -> float:
 	return state_machine.state_timer
 
 
+func get_effective_friction() -> float:
+	var friction_component: FrictionComponent = get_component(FrictionComponent)
+	if friction_component:
+		return friction_component.get_effective()
+	return 1.0
+
+
+func get_gravity_scale_factor() -> float:
+	var gravity_component: GravityComponent = get_component(GravityComponent)
+	if gravity_component:
+		return gravity_component.scale_factor
+	return 1.0
+
+
 func is_action_pressed(input: String) -> bool:
 	return Input.is_action_pressed(input)
 
@@ -122,6 +140,38 @@ func is_moving_with_facing() -> bool:
 
 func is_moving_against_facing() -> bool:
 	return (sign(move_dir) == 1 && sprite.flip_h) || (sign(move_dir) == -1 && !sprite.flip_h)
+
+
+func is_gravity_enabled() -> bool:
+	var gravity_component: GravityComponent = get_component(GravityComponent)
+	if gravity_component:
+		return gravity_component.enabled
+	return false
+
+
+func set_gravity_enabled(enabled: bool) -> void:
+	var gravity_component: GravityComponent = get_component(GravityComponent)
+	if gravity_component:
+		gravity_component.enabled = enabled
+
+
+func set_gravity_scale_factor(scale_factor: float) -> void:
+	var gravity_component: GravityComponent = get_component(GravityComponent)
+	if gravity_component:
+		gravity_component.scale_factor = scale_factor
+
+
+func set_friction_scale_factor(scale_factor: float) -> void:
+	var friction_component: FrictionComponent = get_component(FrictionComponent)
+	if friction_component:
+		friction_component.scale_factor = scale_factor
+
+
+func resist(val: float, sub: float, div: float) -> float:
+	var s: float = sign(val)
+	val = max(0.0, abs(val) - sub)
+	val /= div
+	return val * s
 
 
 func reset_jump_timer() -> void:

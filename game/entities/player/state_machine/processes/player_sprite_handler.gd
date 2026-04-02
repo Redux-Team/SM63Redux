@@ -1,7 +1,7 @@
 @tool
 extends StateProcess
 
-@export var player_sprite: AnimatedSprite2D
+@export var player_sprite: SmartSprite2D
 @export var fludd_sprite_f: AnimatedSprite2D
 @export var fludd_sprite_b: AnimatedSprite2D
 
