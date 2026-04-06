@@ -1,6 +1,9 @@
 extends State
 
-func _physics_process(_delta: float) -> void:
+
+func _physics_process(delta: float) -> void:
+	player.swim_buffer_time = max(player.swim_buffer_time - delta, 0.0)
+	
 	if abs(player.move_dir) == 0:
 		var friction_component: FrictionComponent = player.get_component(FrictionComponent)
 		if friction_component:
@@ -9,14 +12,14 @@ func _physics_process(_delta: float) -> void:
 	if abs(player.move_dir) > 0 and not player.is_crouching:
 		speed_up(player.move_dir)
 	
-	
-	if Input.is_action_pressed("swim_down"):
+	if Input.is_action_pressed("swim_down") and player.swim_buffer_time <= 0.0:
 		player.velocity.y = lerpf(player.velocity.y, 140, 0.2)
+	elif player.swim_buffer_time > 0.0:
+		player.velocity.y = lerpf(player.velocity.y, 0.0, 0.08)
 	else:
-		player.velocity.y = min(player.velocity.y, 35)
+		player.velocity.y = lerpf(player.velocity.y, 20.0, 0.1)
 	
 	_handle_ground_pound()
-	_handle_spin()
 
 
 func speed_up(move_dir: float) -> void:
@@ -35,10 +38,6 @@ func speed_up(move_dir: float) -> void:
 	var floor_normal: Vector2 = player.get_floor_normal()
 	if floor_normal.y < 0.999 and player.velocity.y >= 0.0:
 		player.velocity.y = max(player.velocity.y, 5.0 * resistance)
-
-
-func _handle_spin() -> void:
-	pass
 
 
 func _handle_ground_pound() -> void:

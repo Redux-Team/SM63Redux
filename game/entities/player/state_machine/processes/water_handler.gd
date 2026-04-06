@@ -24,4 +24,4 @@ func _on_water_check_area_exited(area: Area2D) -> void:
 			state_machine.change_state_silent(&"Jump")
 		player.set_gravity_scale_factor(1.0)
 	if player.velocity.y < 0:
-		player.velocity.y *= 1.325
+		player.velocity.y = max(player.velocity.y, -300.0) * 1.325

@@ -1128,7 +1128,7 @@ metadata/_custom_type_script = "uid://cb672xli6i2ns"
 
 [node name="FrictionComponent" type="Node" parent="Components" unique_id=281605969]
 script = ExtResource("3_qhcb0")
-base_friction = 0.25
+base_friction = 0.3
 metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
 
 [node name="HealthComponent" type="Node" parent="Components" unique_id=1079797538]
