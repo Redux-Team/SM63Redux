@@ -19,7 +19,5 @@ func air_move(move_dir: float) -> void:
 	
 	if abs(vx) < max_speed or sign(vx) != sign(move_dir):
 		vx = move_toward(vx, max_speed * move_dir, accel * accel_mult)
-	else:
-		pass
 	
 	player.velocity.x = vx

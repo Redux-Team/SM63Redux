@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://d3vht0k7j5d21" path="res://assets/textures/gui/title_screen/splash_logo/logo_base.png" id="4_2273m"]
 [ext_resource type="Script" uid="uid://chkv0bbgtj7gh" path="res://game/scenes/title_screen/menu_cycle.gd" id="4_db5fu"]
 [ext_resource type="Texture2D" uid="uid://c6husbfjatg23" path="res://assets/textures/particle/title_screen/star_medium.png" id="4_ltfsy"]
-[ext_resource type="Script" uid="uid://dv6rnq4xj13hy" path="res://core/custom_nodes/2d/particle_emitter/particle_emitter.gd" id="4_th72m"]
+[ext_resource type="Script" uid="uid://dv6rnq4xj13hy" path="res://core/custom_nodes/2d/particle_emitter.gd" id="4_th72m"]
 [ext_resource type="Texture2D" uid="uid://bvbd4a1850645" path="res://assets/textures/gui/title_screen/splash_logo/logo_sheen_63.png" id="5_1evyh"]
 [ext_resource type="PackedScene" uid="uid://c6dic42vckv0e" path="res://game/ui/components/main_menu_button/main_menu_button.tscn" id="5_mu8aq"]
 [ext_resource type="Shader" uid="uid://cgek5pfxthubq" path="res://core/shader/texture_mask.gdshader" id="5_y7kqt"]

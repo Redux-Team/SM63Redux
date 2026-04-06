@@ -7,7 +7,7 @@ signal machine_ended
 
 
 @export var entity: Entity
-@export var sprite: AnimatedSprite2D
+@export var sprite: SmartSprite2D
 @export var states: Dictionary[StringName, State]
 @export var processes: Array[StateProcess]
 
@@ -20,6 +20,7 @@ var playback: AnimationNodeStateMachinePlayback
 var last_animation_node: StringName
 var active_animations: Array[AnimationChain] = []
 var state_buffer: float = 0.0
+var state_timer: float = 0.0
 var can_consume_buffer: bool = false
 
 
@@ -49,6 +50,8 @@ func _physics_process(delta: float) -> void:
 		state_buffer = max(state_buffer - delta, 0)
 	else:
 		can_consume_buffer = false
+	
+	state_timer += delta
 
 
 func change_state(state_name: StringName) -> void:
@@ -128,6 +131,7 @@ func _exit_current_state(to_state: StringName) -> void:
 
 
 func _enter_new_state(new_state: State, old_state: State, silent: bool) -> void:
+	state_timer = 0.0
 	animation_player.play(&"RESET")
 	current_state = new_state
 	current_state.enable_processing()
@@ -322,8 +326,8 @@ class AnimationChain:
 		if not state_machine.sprite:
 			return
 		
-		if state_machine.sprite.sprite_frames.has_animation(current_animation):
-			state_machine.sprite.animation = current_animation
+		if state_machine.sprite.diffuse_frames.has_animation(current_animation):
+			state_machine.sprite.current_animation = current_animation
 			state_machine.sprite.play(current_animation)
 
 
