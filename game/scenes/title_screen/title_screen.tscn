@@ -1,0 +1,270 @@
+[gd_scene format=3 uid="uid://hvf52d7klltv"]
+
+[ext_resource type="Script" uid="uid://byv55g7ewyyr8" path="res://game/scenes/title_screen/title_screen.gd" id="1_1h7bm"]
+[ext_resource type="Texture2D" uid="uid://bk6onkjxyktpy" path="res://assets/textures/world/background/title_screen/title_bg_3.png" id="1_yp1up"]
+[ext_resource type="Texture2D" uid="uid://dgjgka3dk4jgx" path="res://assets/textures/world/background/title_screen/title_bg_2.png" id="2_pcjvs"]
+[ext_resource type="Texture2D" uid="uid://ckk002i8mqpyb" path="res://assets/textures/particle/title_screen/star_big.png" id="3_2273m"]
+[ext_resource type="Texture2D" uid="uid://dm3nvb5v30ypf" path="res://assets/textures/world/background/title_screen/title_bg_1.png" id="3_lpd54"]
+[ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="4_1evyh"]
+[ext_resource type="Texture2D" uid="uid://tb4ypkcr623h" path="res://assets/textures/world/background/title_screen/title_bg_0.png" id="4_yquba"]
+[ext_resource type="Texture2D" uid="uid://c6husbfjatg23" path="res://assets/textures/particle/title_screen/star_medium.png" id="5_1evyh"]
+[ext_resource type="PackedScene" uid="uid://dq7w1sy7hve2s" path="res://game/scenes/title_screen/components/splash_screen.tscn" id="5_wf0s4"]
+[ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/music/01.mp3" id="6_s848f"]
+[ext_resource type="Texture2D" uid="uid://d1w2qtyr1pctd" path="res://assets/textures/particle/title_screen/star_small.png" id="6_y7kqt"]
+[ext_resource type="Texture2D" uid="uid://d1xvycbgjpowc" path="res://assets/textures/particle/title_screen/shooting_star.png" id="7_xjhxk"]
+[ext_resource type="PackedScene" uid="uid://bx2uj1y5lcukv" path="res://game/scenes/title_screen/components/menu_screen.tscn" id="12_7cnuw"]
+
+[sub_resource type="Curve" id="Curve_y7kqt"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2513089, 0.5050762), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_xjhxk"]
+offsets = PackedFloat32Array(0, 0.18018018, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="TitleScreen" type="Control" unique_id=273957920 node_paths=PackedStringArray("title_loop", "splash_screen", "menu_screen", "version_label", "team_label", "big_stars", "medium_stars", "small_stars", "shooting_stars", "bg", "bg_2", "fg_2", "fg")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1h7bm")
+title_loop = NodePath("TitleLoop")
+splash_screen = NodePath("DisplayContainer/SplashScreen")
+menu_screen = NodePath("HiddenContainer/MenuScreen")
+version_label = NodePath("VersionLabel")
+team_label = NodePath("TeamLabel")
+big_stars = NodePath("BG/BGLayers/Particles/BigStars")
+medium_stars = NodePath("BG/BGLayers/Particles/MediumStars")
+small_stars = NodePath("BG/BGLayers/Particles/SmallStars")
+shooting_stars = NodePath("BG/BGLayers/Particles/ShootingStars")
+bg = NodePath("BG/BGLayers/BG")
+bg_2 = NodePath("BG/BGLayers/BG2")
+fg_2 = NodePath("BG/BGLayers/FG2")
+fg = NodePath("BG/BGLayers/FG")
+
+[node name="BG" type="ColorRect" parent="." unique_id=1137394808]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BGLayers" type="Node2D" parent="BG" unique_id=1249434774]
+metadata/_edit_lock_ = true
+
+[node name="BG" type="Parallax2D" parent="BG/BGLayers" unique_id=160987091]
+scroll_scale = Vector2(0.5, 0)
+scroll_offset = Vector2(-551, 180)
+repeat_size = Vector2(750, 0)
+autoscroll = Vector2(-8, 0)
+repeat_times = 7
+follow_viewport = false
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/BG" unique_id=2038182880]
+texture = ExtResource("1_yp1up")
+metadata/_edit_lock_ = true
+
+[node name="Particles" type="Node2D" parent="BG/BGLayers" unique_id=1254674515]
+metadata/_edit_lock_ = true
+
+[node name="BigStars" type="CPUParticles2D" parent="BG/BGLayers/Particles" unique_id=559378552]
+position = Vector2(320, 180)
+amount = 120
+texture = ExtResource("3_2273m")
+lifetime = 5.0
+preprocess = 3.0
+emission_shape = 3
+emission_rect_extents = Vector2(700, 100)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 8.0
+initial_velocity_max = 14.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_y7kqt")
+color_ramp = SubResource("Gradient_xjhxk")
+script = ExtResource("4_1evyh")
+high_particle_amount = 175
+medium_particle_amount = 125
+low_particle_amount = 60
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="MediumStars" type="CPUParticles2D" parent="BG/BGLayers/Particles" unique_id=433130128]
+position = Vector2(320, 180)
+amount = 240
+texture = ExtResource("5_1evyh")
+lifetime = 5.0
+preprocess = 3.0
+emission_shape = 3
+emission_rect_extents = Vector2(700, 100)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 4.0
+initial_velocity_max = 7.0
+scale_amount_max = 3.0
+scale_amount_curve = SubResource("Curve_y7kqt")
+color_ramp = SubResource("Gradient_xjhxk")
+script = ExtResource("4_1evyh")
+high_particle_amount = 300
+medium_particle_amount = 250
+low_particle_amount = 100
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="SmallStars" type="CPUParticles2D" parent="BG/BGLayers/Particles" unique_id=1836893740]
+position = Vector2(320, 180)
+amount = 300
+texture = ExtResource("6_y7kqt")
+lifetime = 5.0
+preprocess = 3.0
+emission_shape = 3
+emission_rect_extents = Vector2(700, 100)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 4.0
+initial_velocity_max = 7.0
+scale_amount_max = 3.0
+scale_amount_curve = SubResource("Curve_y7kqt")
+color_ramp = SubResource("Gradient_xjhxk")
+script = ExtResource("4_1evyh")
+high_particle_amount = 450
+medium_particle_amount = 300
+low_particle_amount = 125
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="ShootingStars" type="CPUParticles2D" parent="BG/BGLayers/Particles" unique_id=1738924998]
+position = Vector2(320, 180)
+amount = 1
+texture = ExtResource("7_xjhxk")
+lifetime = 3.0
+preprocess = 3.0
+emission_shape = 3
+emission_rect_extents = Vector2(1000, 100)
+gravity = Vector2(75, 83)
+initial_velocity_min = 4.0
+initial_velocity_max = 7.0
+linear_accel_min = 200.0
+linear_accel_max = 200.0
+angle_min = 40.0
+angle_max = 40.0
+scale_amount_max = 3.0
+scale_amount_curve = SubResource("Curve_y7kqt")
+color_ramp = SubResource("Gradient_xjhxk")
+script = ExtResource("4_1evyh")
+high_particle_amount = 1
+medium_particle_amount = 1
+low_particle_amount = 1
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="BG2" type="Parallax2D" parent="BG/BGLayers" unique_id=1166747592]
+scroll_scale = Vector2(0.5, 0)
+scroll_offset = Vector2(-448, 197)
+repeat_size = Vector2(750, 0)
+autoscroll = Vector2(-20, 0)
+repeat_times = 7
+follow_viewport = false
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/BG2" unique_id=1229232271]
+texture = ExtResource("2_pcjvs")
+metadata/_edit_lock_ = true
+
+[node name="FG2" type="Parallax2D" parent="BG/BGLayers" unique_id=157119392]
+scroll_scale = Vector2(0.5, 0)
+scroll_offset = Vector2(-739, 188)
+repeat_size = Vector2(750, 0)
+autoscroll = Vector2(16, 0)
+repeat_times = 7
+follow_viewport = false
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/FG2" unique_id=732118276]
+texture = ExtResource("3_lpd54")
+metadata/_edit_lock_ = true
+
+[node name="FG" type="Parallax2D" parent="BG/BGLayers" unique_id=1168858166]
+scroll_scale = Vector2(0.5, 0)
+scroll_offset = Vector2(-44, 219)
+repeat_size = Vector2(750, 0)
+autoscroll = Vector2(-32, 0)
+repeat_times = 7
+follow_viewport = false
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="BG/BGLayers/FG" unique_id=1499721792]
+texture = ExtResource("4_yquba")
+metadata/_edit_lock_ = true
+
+[node name="DisplayContainer" type="Control" parent="." unique_id=693568379]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="SplashScreen" parent="DisplayContainer" unique_id=1437665498 instance=ExtResource("5_wf0s4")]
+layout_mode = 1
+
+[node name="FadeOutContainer" type="Control" parent="." unique_id=553099411]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_lock_ = true
+
+[node name="HiddenContainer" type="Control" parent="." unique_id=715808695]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="MenuScreen" parent="HiddenContainer" unique_id=1826070129 instance=ExtResource("12_7cnuw")]
+layout_mode = 1
+
+[node name="VersionLabel" type="Label" parent="." unique_id=1314634997]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.9580001
+anchor_right = 0.055
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 16.119965
+offset_right = 2.7999992
+offset_bottom = 16.0
+grow_vertical = 0
+theme_override_constants/outline_size = 5
+text = "v0.2.0"
+vertical_alignment = 2
+
+[node name="TeamLabel" type="Label" parent="." unique_id=911520387]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.892
+anchor_top = 0.95800006
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.8800049
+offset_top = 17.119965
+offset_right = -2.0
+offset_bottom = 17.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/outline_size = 5
+text = "Redux Team"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="TitleLoop" type="AudioStreamPlayer" parent="." unique_id=1331048837]
+stream = ExtResource("6_s848f")
+bus = &"Music"

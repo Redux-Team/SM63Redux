@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bx2uj1y5lcukv"]
+
+[ext_resource type="Script" uid="uid://cr2flgv6udq73" path="res://game/scenes/title_screen/components/menu_screen.gd" id="1_rq8q1"]
+
+[node name="MenuScreen" type="Control" unique_id=1826070129]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rq8q1")
