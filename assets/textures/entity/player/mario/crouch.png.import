@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cj2oiylp0acsj"
-path="res://.godot/imported/dive.png-39bb8fd369bdfa74c6641304e887092e.ctex"
+uid="uid://bjysolnwpkvk2"
+path="res://.godot/imported/crouch.png-64fcc25ddba9a2136b6f05d31dccfa15.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/spritesheets/entity/player/mario/dive.png"
-dest_files=["res://.godot/imported/dive.png-39bb8fd369bdfa74c6641304e887092e.ctex"]
+source_file="res://assets/textures/entity/player/mario/crouch.png"
+dest_files=["res://.godot/imported/crouch.png-64fcc25ddba9a2136b6f05d31dccfa15.ctex"]
 
 [params]
 

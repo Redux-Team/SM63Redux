@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bj5kyipk5eild"
-path="res://.godot/imported/groundpound.png-813dccab8bc5862e7f519e16af00b7b3.ctex"
+uid="uid://bfvi3e017qacq"
+path="res://.godot/imported/idle.png-b77d1b698abeedf081d30104fee3a777.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/spritesheets/entity/player/mario/groundpound.png"
-dest_files=["res://.godot/imported/groundpound.png-813dccab8bc5862e7f519e16af00b7b3.ctex"]
+source_file="res://assets/textures/entity/player/mario/idle.png"
+dest_files=["res://.godot/imported/idle.png-b77d1b698abeedf081d30104fee3a777.ctex"]
 
 [params]
 

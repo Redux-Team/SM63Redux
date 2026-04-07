@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bo87qv73dsfls"
-path="res://.godot/imported/swim_idle.png-9d92043332dffc9a7d0ce51a178c6ddd.ctex"
+uid="uid://bj5kyipk5eild"
+path="res://.godot/imported/groundpound.png-25cfd7a5435605e4ad7203942d06953c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/spritesheets/entity/player/mario/swim_idle.png"
-dest_files=["res://.godot/imported/swim_idle.png-9d92043332dffc9a7d0ce51a178c6ddd.ctex"]
+source_file="res://assets/textures/entity/player/mario/groundpound.png"
+dest_files=["res://.godot/imported/groundpound.png-25cfd7a5435605e4ad7203942d06953c.ctex"]
 
 [params]
 

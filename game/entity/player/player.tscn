@@ -3,30 +3,30 @@
 [ext_resource type="Script" uid="uid://c7gtlwcfr4qrc" path="res://game/entity/player/player.gd" id="1_oic1i"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="2_51d5m"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_cjmyu"]
-[ext_resource type="Texture2D" uid="uid://bjysolnwpkvk2" path="res://assets/textures/spritesheets/entity/player/mario/crouch.png" id="2_conr4"]
-[ext_resource type="Texture2D" uid="uid://bfvi3e017qacq" path="res://assets/textures/spritesheets/entity/player/mario/idle.png" id="2_heu0c"]
-[ext_resource type="Texture2D" uid="uid://bfikgne4dbnoi" path="res://assets/textures/spritesheets/entity/player/mario/fall.png" id="2_p5qu6"]
-[ext_resource type="Texture2D" uid="uid://dip5yvu0ghx5h" path="res://assets/textures/spritesheets/entity/player/mario/double_jump.png" id="2_xt77v"]
-[ext_resource type="Texture2D" uid="uid://cj2oiylp0acsj" path="res://assets/textures/spritesheets/entity/player/mario/dive.png" id="3_4neg5"]
-[ext_resource type="Texture2D" uid="uid://bgjdqabdv1mig" path="res://assets/textures/spritesheets/entity/player/mario/walk.png" id="3_dhej3"]
-[ext_resource type="Texture2D" uid="uid://bbtiri17e7rkq" path="res://assets/textures/spritesheets/entity/player/mario/jump.png" id="3_igs2l"]
+[ext_resource type="Texture2D" uid="uid://bjysolnwpkvk2" path="res://assets/textures/entity/player/mario/crouch.png" id="2_conr4"]
+[ext_resource type="Texture2D" uid="uid://bfvi3e017qacq" path="res://assets/textures/entity/player/mario/idle.png" id="2_heu0c"]
+[ext_resource type="Texture2D" uid="uid://bfikgne4dbnoi" path="res://assets/textures/entity/player/mario/fall.png" id="2_p5qu6"]
+[ext_resource type="Texture2D" uid="uid://dip5yvu0ghx5h" path="res://assets/textures/entity/player/mario/double_jump.png" id="2_xt77v"]
+[ext_resource type="Texture2D" uid="uid://cj2oiylp0acsj" path="res://assets/textures/entity/player/mario/dive.png" id="3_4neg5"]
+[ext_resource type="Texture2D" uid="uid://bgjdqabdv1mig" path="res://assets/textures/entity/player/mario/walk.png" id="3_dhej3"]
+[ext_resource type="Texture2D" uid="uid://bbtiri17e7rkq" path="res://assets/textures/entity/player/mario/jump.png" id="3_igs2l"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="3_qhcb0"]
 [ext_resource type="Script" uid="uid://cr0v7cui52ho8" path="res://game/entity/player/player_debug.gd" id="4_kn1iv"]
 [ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="4_o0v17"]
-[ext_resource type="Texture2D" uid="uid://thf8bfre3p2d" path="res://assets/textures/spritesheets/entity/player/mario/triple_jump.png" id="5_0rdsw"]
+[ext_resource type="Texture2D" uid="uid://thf8bfre3p2d" path="res://assets/textures/entity/player/mario/triple_jump.png" id="5_0rdsw"]
 [ext_resource type="Script" uid="uid://dhh04w2nss13x" path="res://game/entity/player/state_machine/states/dry/dry.gd" id="5_dhej3"]
 [ext_resource type="Script" uid="uid://be2xsj74ekqmn" path="res://util/state_machine/state_machine.gd" id="5_v0nmi"]
-[ext_resource type="Texture2D" uid="uid://bj5kyipk5eild" path="res://assets/textures/spritesheets/entity/player/mario/groundpound.png" id="6_0f2w8"]
+[ext_resource type="Texture2D" uid="uid://bj5kyipk5eild" path="res://assets/textures/entity/player/mario/groundpound.png" id="6_0f2w8"]
 [ext_resource type="Script" uid="uid://beibhvi4313mi" path="res://game/entity/player/state_machine/states/dry/grounded/grounded.gd" id="6_dhej3"]
 [ext_resource type="Script" uid="uid://dukvagr14g5yi" path="res://game/entity/player/state_machine/states/dry/airborne/jump.gd" id="8_5wwt0"]
 [ext_resource type="Script" uid="uid://ra55p55nrtg4" path="res://util/state_machine/state.gd" id="8_p5qu6"]
-[ext_resource type="Texture2D" uid="uid://u4yvxq51cr5f" path="res://assets/textures/spritesheets/entity/player/mario/spin.png" id="9_k6116"]
+[ext_resource type="Texture2D" uid="uid://u4yvxq51cr5f" path="res://assets/textures/entity/player/mario/spin.png" id="9_k6116"]
 [ext_resource type="Script" uid="uid://4h1j2v27b4qb" path="res://game/entity/player/state_machine/processes/player_sprite_handler.gd" id="10_igs2l"]
-[ext_resource type="Texture2D" uid="uid://bo87qv73dsfls" path="res://assets/textures/spritesheets/entity/player/mario/swim_idle.png" id="10_j8m7m"]
+[ext_resource type="Texture2D" uid="uid://bo87qv73dsfls" path="res://assets/textures/entity/player/mario/swim_idle.png" id="10_j8m7m"]
 [ext_resource type="Script" uid="uid://brspapjb6geve" path="res://game/entity/player/state_machine/states/dry/grounded/landed.gd" id="11_heu0c"]
 [ext_resource type="Script" uid="uid://off2oirnx76k" path="res://game/entity/player/state_machine/states/dry/airborne/double_jump.gd" id="11_t56eh"]
 [ext_resource type="Script" uid="uid://u0hawbkwgxxm" path="res://game/entity/player/state_machine/states/dry/airborne/triple_jump.gd" id="12_6pmmc"]
-[ext_resource type="Texture2D" uid="uid://bjblyiou2qe0f" path="res://assets/textures/spritesheets/entity/player/shared/hover_fludd_r_0.png" id="13_gqe2a"]
+[ext_resource type="Texture2D" uid="uid://bjblyiou2qe0f" path="res://assets/textures/entity/player/shared/hover_fludd_r_0.png" id="13_gqe2a"]
 [ext_resource type="Script" uid="uid://takeq0g2apa4" path="res://game/entity/player/state_machine/states/dry/grounded/floorslide.gd" id="16_cq8ym"]
 [ext_resource type="Script" uid="uid://dduwb3q2yj8ge" path="res://game/entity/player/state_machine/states/dry/airborne/airborne.gd" id="16_fq5t3"]
 [ext_resource type="AudioStream" uid="uid://7bo2dwx3h262" path="res://assets/sfx/player/mario/step/step_generic_0.wav" id="20_bhtqs"]
@@ -90,7 +90,7 @@
 atlas = ExtResource("2_heu0c")
 region = Rect2(144, 0, 48, 48)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_qhcb0"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_kyrvb"]
 diffuse_texture = SubResource("AtlasTexture_fq5t3")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
@@ -1137,11 +1137,11 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101]
 position = Vector2(2, -13)
-texture = SubResource("CanvasTexture_qhcb0")
+texture = SubResource("CanvasTexture_kyrvb")
 region_enabled = true
 region_rect = Rect2(144, 0, 48, 48)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_qhcb0")
+canvas_texture = SubResource("CanvasTexture_kyrvb")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
 current_animation = "idle"

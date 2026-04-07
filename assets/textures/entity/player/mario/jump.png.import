@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dip5yvu0ghx5h"
-path="res://.godot/imported/double_jump.png-bb880c47487b1e4a24ac6cb28d32acc9.ctex"
+uid="uid://bbtiri17e7rkq"
+path="res://.godot/imported/jump.png-fbea2fa468c6678fff30a1ed20de5410.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/spritesheets/entity/player/mario/double_jump.png"
-dest_files=["res://.godot/imported/double_jump.png-bb880c47487b1e4a24ac6cb28d32acc9.ctex"]
+source_file="res://assets/textures/entity/player/mario/jump.png"
+dest_files=["res://.godot/imported/jump.png-fbea2fa468c6678fff30a1ed20de5410.ctex"]
 
 [params]
 

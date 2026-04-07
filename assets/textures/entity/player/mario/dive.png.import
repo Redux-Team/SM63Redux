@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b40h642ctik01"
-path="res://.godot/imported/bonk.png-c4e5777f50e800d4615a1be7221af342.ctex"
+uid="uid://cj2oiylp0acsj"
+path="res://.godot/imported/dive.png-80048b59738537a58511acf37fc5021b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/spritesheets/entity/player/mario/bonk.png"
-dest_files=["res://.godot/imported/bonk.png-c4e5777f50e800d4615a1be7221af342.ctex"]
+source_file="res://assets/textures/entity/player/mario/dive.png"
+dest_files=["res://.godot/imported/dive.png-80048b59738537a58511acf37fc5021b.ctex"]
 
 [params]
 

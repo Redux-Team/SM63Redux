@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjysolnwpkvk2"
-path="res://.godot/imported/crouch.png-732b86a14ed2745ddb5421a1f68e8428.ctex"
+uid="uid://bjblyiou2qe0f"
+path="res://.godot/imported/hover_fludd_r_0.png-cbacdc07029fb336e339c805e424a5ec.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/spritesheets/entity/player/mario/crouch.png"
-dest_files=["res://.godot/imported/crouch.png-732b86a14ed2745ddb5421a1f68e8428.ctex"]
+source_file="res://assets/textures/entity/player/shared/hover_fludd_r_0.png"
+dest_files=["res://.godot/imported/hover_fludd_r_0.png-cbacdc07029fb336e339c805e424a5ec.ctex"]
 
 [params]
 

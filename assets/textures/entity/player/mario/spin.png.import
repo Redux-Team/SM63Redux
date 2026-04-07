@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgjdqabdv1mig"
-path="res://.godot/imported/walk.png-ad6dddbb4ddaf39402706c961256e399.ctex"
+uid="uid://u4yvxq51cr5f"
+path="res://.godot/imported/spin.png-0b1f9a70befdee710755149d0df0c9f3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/spritesheets/entity/player/mario/walk.png"
-dest_files=["res://.godot/imported/walk.png-ad6dddbb4ddaf39402706c961256e399.ctex"]
+source_file="res://assets/textures/entity/player/mario/spin.png"
+dest_files=["res://.godot/imported/spin.png-0b1f9a70befdee710755149d0df0c9f3.ctex"]
 
 [params]
 
