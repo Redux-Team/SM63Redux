@@ -22,7 +22,7 @@ point_count = 3
 offsets = PackedFloat32Array(0, 0.18018018, 1)
 colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[node name="TitleScreen" type="Control" unique_id=273957920 node_paths=PackedStringArray("title_loop", "splash_screen", "menu_screen", "version_label", "team_label", "big_stars", "medium_stars", "small_stars", "shooting_stars", "bg", "bg_2", "fg_2", "fg")]
+[node name="TitleScreen" type="Control" unique_id=273957920 node_paths=PackedStringArray("display_container", "fade_out_container", "hidden_container", "title_loop", "splash_screen", "menu_screen", "version_label", "team_label", "big_stars", "medium_stars", "small_stars", "shooting_stars", "bg_dim", "bg", "bg_2", "fg_2", "fg")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,6 +30,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1h7bm")
+display_container = NodePath("DisplayContainer")
+fade_out_container = NodePath("FadeOutContainer")
+hidden_container = NodePath("HiddenContainer")
 title_loop = NodePath("TitleLoop")
 splash_screen = NodePath("DisplayContainer/SplashScreen")
 menu_screen = NodePath("HiddenContainer/MenuScreen")
@@ -39,6 +42,7 @@ big_stars = NodePath("BG/BGLayers/Particles/BigStars")
 medium_stars = NodePath("BG/BGLayers/Particles/MediumStars")
 small_stars = NodePath("BG/BGLayers/Particles/SmallStars")
 shooting_stars = NodePath("BG/BGLayers/Particles/ShootingStars")
+bg_dim = NodePath("BGDim")
 bg = NodePath("BG/BGLayers/BG")
 bg_2 = NodePath("BG/BGLayers/BG2")
 fg_2 = NodePath("BG/BGLayers/FG2")
@@ -197,6 +201,15 @@ metadata/_edit_lock_ = true
 texture = ExtResource("4_yquba")
 metadata/_edit_lock_ = true
 
+[node name="BGDim" type="ColorRect" parent="." unique_id=400879416]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
 [node name="DisplayContainer" type="Control" parent="." unique_id=693568379]
 layout_mode = 1
 anchors_preset = 15
@@ -227,6 +240,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 metadata/_edit_lock_ = true
 
 [node name="MenuScreen" parent="HiddenContainer" unique_id=1826070129 instance=ExtResource("12_7cnuw")]
