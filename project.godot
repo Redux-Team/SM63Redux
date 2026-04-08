@@ -28,6 +28,7 @@ config/windows_native_icon="res://meta/icon.ico"
 [autoload]
 
 Singleton="*res://global/singleton.tscn"
+DebugHandler="*uid://dyw3n7oxqk3vq"
 
 [display]
 
@@ -40,6 +41,10 @@ display_server/driver.linuxbsd="wayland"
 [editor]
 
 export/convert_text_resources_to_binary=false
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/redux_dev/plugin.cfg")
 
 [file_customization]
 

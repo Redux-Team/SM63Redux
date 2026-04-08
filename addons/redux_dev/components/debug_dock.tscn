@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://cgx6mbayfubdw"]
+
+[ext_resource type="Script" uid="uid://b6cvall7q1s0u" path="res://addons/redux_dev/components/debug_dock.gd" id="1_16c0n"]
+
+[node name="Redux Debug" type="MarginContainer" unique_id=598569597 node_paths=PackedStringArray("mute_music", "mute_sfx")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_16c0n")
+mute_music = NodePath("ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer/MuteMusicCheckbox")
+mute_sfx = NodePath("ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer/MuteSFXCheckbox")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=282596334]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=1940865917]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=2104068823]
+layout_mode = 2
+
+[node name="RefreshPluginButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer" unique_id=907218930]
+layout_mode = 2
+text = "Refresh Plugin"
+
+[node name="FoldableContainer" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=257945602]
+layout_mode = 2
+title = "Runtime"
+title_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/FoldableContainer" unique_id=40273883]
+layout_mode = 2
+
+[node name="MuteMusicCheckbox" type="CheckBox" parent="ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer" unique_id=16709318]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FlatButton"
+text = "Mute Music"
+alignment = 1
+
+[node name="MuteSFXCheckbox" type="CheckBox" parent="ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer" unique_id=1668845859]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FlatButton"
+text = "Mute SFX"
+alignment = 1
+
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/HBoxContainer/RefreshPluginButton" to="." method="_on_refresh_plugin_button_pressed"]
