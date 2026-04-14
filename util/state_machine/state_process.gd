@@ -22,6 +22,6 @@ var player: Player:
 		else:
 			return null
 
-var sprite: AnimatedSprite2D:
+var sprite: SmartSprite2D:
 	get():
 		return state_machine.sprite

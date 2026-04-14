@@ -41,7 +41,7 @@ var player: Player:
 			print_stack()
 			push_error("The current entity is not of type \"Player\"")
 			return entity
-var sprite: AnimatedSprite2D
+var sprite: SmartSprite2D
 var state_machine: StateMachine
 var state_name: StringName
 var parent: Node:
@@ -70,6 +70,10 @@ func enable_processing() -> void:
 
 func is_active() -> bool:
 	return state_machine.current_state == self
+
+
+func pause(time: float) -> void:
+	await get_tree().create_timer(time).timeout
 
 
 func _on_enter(_from: StringName) -> void:

@@ -1,0 +1,685 @@
+[gd_scene format=3 uid="uid://dq7w1sy7hve2s"]
+
+[ext_resource type="Script" uid="uid://djd8qh5b55bob" path="res://game/scenes/title_screen/components/splash_screen.gd" id="1_y3frv"]
+[ext_resource type="Texture2D" uid="uid://db7beoyymfa6u" path="res://assets/textures/gui/title_screen/splash_logo/logo_glow_base.png" id="3_ayett"]
+[ext_resource type="Texture2D" uid="uid://d3vht0k7j5d21" path="res://assets/textures/gui/title_screen/splash_logo/logo_base.png" id="4_oikx1"]
+[ext_resource type="Texture2D" uid="uid://p2xc3r3v5rg4" path="res://assets/textures/particle/title_screen/logo_star_big.png" id="5_egnt7"]
+[ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="6_egrar"]
+[ext_resource type="Texture2D" uid="uid://cq3hqlg1vo4bf" path="res://assets/textures/particle/title_screen/logo_star_medium.png" id="7_0sxqt"]
+[ext_resource type="Texture2D" uid="uid://dwln8e2fw0ps4" path="res://assets/textures/particle/title_screen/logo_star_small.png" id="8_2iefg"]
+[ext_resource type="Texture2D" uid="uid://dnbulyxy16v5d" path="res://assets/textures/gui/title_screen/splash_logo/logo_text.png" id="9_6sxg5"]
+[ext_resource type="Texture2D" uid="uid://dy01v0dgkooap" path="res://assets/textures/gui/title_screen/splash_logo/logo_base_63.png" id="10_aab0l"]
+[ext_resource type="Shader" uid="uid://cgek5pfxthubq" path="res://core/shader/texture_mask.gdshader" id="11_kp51e"]
+[ext_resource type="Texture2D" uid="uid://dk6fm6tm4hpjp" path="res://assets/textures/gui/title_screen/splash_logo/sheen.png" id="12_egx3t"]
+[ext_resource type="Texture2D" uid="uid://bvbd4a1850645" path="res://assets/textures/gui/title_screen/splash_logo/logo_sheen_63.png" id="13_ey8k2"]
+[ext_resource type="Texture2D" uid="uid://c0ti7gjvja8p1" path="res://assets/textures/gui/title_screen/splash_logo/logo_glow_63.png" id="14_6h3uu"]
+[ext_resource type="Texture2D" uid="uid://rcxm23syw3ph" path="res://assets/textures/gui/title_screen/splash_logo/logo_base_redux.png" id="15_3h3bx"]
+[ext_resource type="Texture2D" uid="uid://dnprx1u7tco41" path="res://assets/textures/gui/title_screen/splash_logo/logo_sheen_redux.png" id="16_p6rmf"]
+[ext_resource type="Texture2D" uid="uid://dis2snmj3sc3n" path="res://assets/textures/gui/title_screen/splash_logo/logo_glow_redux.png" id="17_c8yx0"]
+[ext_resource type="Texture2D" uid="uid://dippg3dive7p6" path="res://assets/textures/gui/title_screen/splash_logo/logo_super_particle_mask.png" id="18_fqxyd"]
+[ext_resource type="Texture2D" uid="uid://bnrtx06fhpytq" path="res://assets/textures/particle/title_screen/super_text_snow_medium.png" id="19_273ge"]
+[ext_resource type="Texture2D" uid="uid://dois038y355wf" path="res://assets/textures/particle/title_screen/super_text_snow_small.png" id="20_7ls4l"]
+[ext_resource type="Script" uid="uid://g84q3mf1vlkm" path="res://core/text_effects/hint_text_effect.gd" id="20_ubvyd"]
+[ext_resource type="Script" uid="uid://bxgh332e73b58" path="res://core/custom_nodes/control/richer_text_label.gd" id="21_ayett"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_rgem2"]
+blend_mode = 1
+
+[sub_resource type="Curve" id="Curve_cvddv"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2513089, 0.5050762), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_cvddv"]
+offsets = PackedFloat32Array(0, 0.45786518, 0.6292135, 1)
+colors = PackedColorArray(0.5294118, 0.87058824, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0.5294118, 0.87058824, 1, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5rnme"]
+shader = ExtResource("11_kp51e")
+shader_parameter/color_texture = ExtResource("12_egx3t")
+shader_parameter/mask_texture = ExtResource("13_ey8k2")
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4abj2"]
+blend_mode = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yvsj8"]
+shader = ExtResource("11_kp51e")
+shader_parameter/color_texture = ExtResource("12_egx3t")
+shader_parameter/mask_texture = ExtResource("16_p6rmf")
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_vgkn8"]
+blend_mode = 1
+
+[sub_resource type="RichTextEffect" id="RichTextEffect_ayett"]
+script = ExtResource("20_ubvyd")
+metadata/_custom_type_script = "uid://g84q3mf1vlkm"
+
+[sub_resource type="Animation" id="Animation_d1teq"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SplashLogo:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1.2, 1.2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SplashLogo/Glow:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SplashLogo:anchor_top")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-0.5]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SplashLogo:anchor_bottom")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-0.5]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("DimRect:color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("BeginText:anchor_top")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("BeginText:anchor_bottom")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0940001]
+}
+
+[sub_resource type="Animation" id="Animation_ee0di"]
+resource_name = "glow_loop"
+length = 5.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SplashLogo/Glow:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2.5, 5),
+"transitions": PackedFloat32Array(0.9189587, 0.4, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.19215687), Color(1, 1, 1, 0.78431374), Color(1, 1, 1, 0.19215687)]
+}
+
+[sub_resource type="Animation" id="Animation_y3frv"]
+resource_name = "splash_in"
+length = 4.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SplashLogo:anchor_top")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.03333333, 1.4666668, 3.9333334, 4.1666665),
+"transitions": PackedFloat32Array(0.3, 1, 1.5, 1),
+"update": 0,
+"values": [-0.47599187, 0.5, 0.5, 0.37]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SplashLogo:anchor_bottom")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.03333333, 1.4666668, 3.9333334, 4.1666665),
+"transitions": PackedFloat32Array(0.3, 1, 1.5, 1),
+"update": 0,
+"values": [-0.5, 0.5, 0.5, 0.37]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SplashLogo:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(3.9333334, 4.1666665),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.3, 1.3), Vector2(1.2, 1.2)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SplashLogo/Base/63:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.033333335),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SplashLogo/Base/63:self_modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1.6, 1.9666667),
+"transitions": PackedFloat32Array(0.4, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SplashLogo/Base/63:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(1.6, 1.8000001),
+"transitions": PackedFloat32Array(0.4, 1),
+"update": 0,
+"values": [Vector2(1.05, 1.05), Vector2(1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SplashLogo/Base/63/63Glow:self_modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(1.6333333, 1.7333333, 2.1333337),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SplashLogo/Base/Redux:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.033333335),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SplashLogo/Base/Redux:self_modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(2.0666666, 2.4333334),
+"transitions": PackedFloat32Array(0.4, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SplashLogo/Base/Redux:scale")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(2.0666666, 2.2666667),
+"transitions": PackedFloat32Array(0.4, 1),
+"update": 0,
+"values": [Vector2(1.05, 1.05), Vector2(1, 1)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SplashLogo/Base/Redux/ReduxGlow:self_modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(2.1666667, 2.2333336, 2.8666668),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SplashLogo/Glow:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.06666666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [false, true]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SplashLogo/Glow:self_modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 2.1666667, 2.2333333, 3.1999998, 3.9, 4.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 0.19215687)]
+}
+tracks/13/type = "method"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath(".")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(2.9, 3.3666668, 3.9),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [],
+"method": &"sheen_63"
+}, {
+"args": [],
+"method": &"sheen_redux"
+}, {
+"args": [&"intro_sequence_done"],
+"method": &"emit_signal"
+}]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("DimRect:color")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 1.2333333, 2.1333334, 2.2333333, 3.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1.5, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0.88235295), Color(0, 0, 0, 0.88235295), Color(1, 1, 1, 0.41568628), Color(1, 1, 1, 0)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("BeginText:anchor_top")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(3.9666667, 4.2),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [1.0, 0.61388886]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("BeginText:anchor_bottom")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(3.9666667, 4.2),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [1.0940001, 0.70788896]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_d1teq"]
+_data = {
+&"RESET": SubResource("Animation_d1teq"),
+&"glow_loop": SubResource("Animation_ee0di"),
+&"splash_in": SubResource("Animation_y3frv")
+}
+
+[node name="SplashScreen" type="Control" unique_id=1437665498 node_paths=PackedStringArray("animation_player", "_63_sheen", "_redux_sheen")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y3frv")
+animation_player = NodePath("AnimationPlayer")
+_63_sheen = NodePath("SplashLogo/Base/63/63Sheen")
+_redux_sheen = NodePath("SplashLogo/Base/Redux/ReduxSheen")
+
+[node name="DimRect" type="ColorRect" parent="." unique_id=60324548]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="SplashLogo" type="Control" parent="." unique_id=412707453]
+custom_minimum_size = Vector2(450, 150)
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = -0.5
+anchor_right = 0.5
+anchor_bottom = -0.5
+offset_left = -225.0
+offset_top = -75.0
+offset_right = 225.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.2, 1.2)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="Glow" type="TextureRect" parent="SplashLogo" unique_id=1621248811]
+self_modulate = Color(1, 1, 1, 0)
+material = SubResource("CanvasItemMaterial_rgem2")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.04888889
+anchor_top = -0.09333334
+anchor_right = 0.95111114
+anchor_bottom = 1.0933335
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_ayett")
+expand_mode = 1
+stretch_mode = 5
+metadata/_edit_use_anchors_ = true
+
+[node name="Base" type="TextureRect" parent="SplashLogo" unique_id=436607100]
+clip_children = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_oikx1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BigStars" type="CPUParticles2D" parent="SplashLogo/Base" unique_id=926951756]
+position = Vector2(211, 79)
+amount = 1200
+texture = ExtResource("5_egnt7")
+lifetime = 5.0
+preprocess = 2.0
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(300, 300)
+spread = 180.0
+gravity = Vector2(0, 0)
+scale_amount_curve = SubResource("Curve_cvddv")
+color_ramp = SubResource("Gradient_cvddv")
+script = ExtResource("6_egrar")
+high_particle_amount = 1250
+medium_particle_amount = 650
+low_particle_amount = 200
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="MediumStars" type="CPUParticles2D" parent="SplashLogo/Base" unique_id=815351260]
+position = Vector2(211, 79)
+amount = 1800
+texture = ExtResource("7_0sxqt")
+lifetime = 5.0
+preprocess = 2.0
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(300, 300)
+spread = 180.0
+gravity = Vector2(0, 0)
+scale_amount_curve = SubResource("Curve_cvddv")
+color_ramp = SubResource("Gradient_cvddv")
+script = ExtResource("6_egrar")
+high_particle_amount = 1800
+medium_particle_amount = 1200
+low_particle_amount = 600
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="SmallStars" type="CPUParticles2D" parent="SplashLogo/Base" unique_id=321182101]
+position = Vector2(211, 79)
+amount = 2400
+texture = ExtResource("8_2iefg")
+lifetime = 5.0
+preprocess = 2.0
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(300, 300)
+spread = 180.0
+gravity = Vector2(0, 0)
+scale_amount_max = 1.25
+scale_amount_curve = SubResource("Curve_cvddv")
+color_ramp = SubResource("Gradient_cvddv")
+script = ExtResource("6_egrar")
+high_particle_amount = 2400
+medium_particle_amount = 1200
+low_particle_amount = 550
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="SuperMario" type="TextureRect" parent="SplashLogo/Base" unique_id=462756066]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_6sxg5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="63" type="TextureRect" parent="SplashLogo/Base" unique_id=315077057]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_aab0l")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="63Sheen" type="TextureRect" parent="SplashLogo/Base/63" unique_id=830522738]
+material = SubResource("ShaderMaterial_5rnme")
+instance_shader_parameters/color_scale = Vector2(0.5, 0.5)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_ey8k2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="63Glow" type="TextureRect" parent="SplashLogo/Base/63" unique_id=13800263]
+self_modulate = Color(1, 1, 1, 0)
+material = SubResource("CanvasItemMaterial_4abj2")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_6h3uu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Redux" type="TextureRect" parent="SplashLogo/Base" unique_id=1660015950]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_3h3bx")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ReduxSheen" type="TextureRect" parent="SplashLogo/Base/Redux" unique_id=1504932776]
+material = SubResource("ShaderMaterial_yvsj8")
+instance_shader_parameters/color_offset = Vector2(0.275, 0)
+instance_shader_parameters/color_scale = Vector2(0.69, 0.5)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_p6rmf")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ReduxGlow" type="TextureRect" parent="SplashLogo/Base/Redux" unique_id=440952256]
+self_modulate = Color(1, 1, 1, 0)
+material = SubResource("CanvasItemMaterial_4abj2")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("17_c8yx0")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SuperSnowParticles" type="Control" parent="SplashLogo/Base" unique_id=1766690646]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SuperParticleMask" type="TextureRect" parent="SplashLogo/Base/SuperSnowParticles" unique_id=1664740047]
+clip_children = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("18_fqxyd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MediumSnow" type="CPUParticles2D" parent="SplashLogo/Base/SuperSnowParticles/SuperParticleMask" unique_id=1336758905]
+material = SubResource("CanvasItemMaterial_vgkn8")
+position = Vector2(207, 22)
+amount = 400
+texture = ExtResource("19_273ge")
+lifetime = 5.0
+preprocess = 2.0
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(100, 60)
+spread = 180.0
+gravity = Vector2(0, 1)
+scale_amount_max = 1.25
+scale_amount_curve = SubResource("Curve_cvddv")
+color_ramp = SubResource("Gradient_cvddv")
+script = ExtResource("6_egrar")
+high_particle_amount = 500
+medium_particle_amount = 350
+low_particle_amount = 125
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="SmallSnow" type="CPUParticles2D" parent="SplashLogo/Base/SuperSnowParticles/SuperParticleMask" unique_id=702033916]
+material = SubResource("CanvasItemMaterial_vgkn8")
+position = Vector2(207, 22)
+amount = 400
+texture = ExtResource("20_7ls4l")
+lifetime = 5.0
+preprocess = 2.0
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(100, 60)
+spread = 180.0
+gravity = Vector2(0, 1)
+scale_amount_max = 1.25
+scale_amount_curve = SubResource("Curve_cvddv")
+color_ramp = SubResource("Gradient_cvddv")
+script = ExtResource("6_egrar")
+high_particle_amount = 500
+medium_particle_amount = 350
+low_particle_amount = 125
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="BeginText" type="RichTextLabel" parent="." unique_id=657963229]
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.33100003
+anchor_top = 1.0
+anchor_right = 0.669
+anchor_bottom = 1.0940001
+offset_left = 0.15997314
+offset_top = 4.0
+offset_right = -0.16003418
+offset_bottom = 0.15997314
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
+text = "Press [hint _ui_enter] to begin!"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+custom_effects = [SubResource("RichTextEffect_ayett")]
+script = ExtResource("21_ayett")
+metadata/_edit_use_anchors_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2121646935]
+libraries/ = SubResource("AnimationLibrary_d1teq")
