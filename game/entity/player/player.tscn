@@ -86,12 +86,12 @@
 [ext_resource type="AudioStream" uid="uid://bbscycsfnsu3l" path="res://assets/sfx/player/mario/ground_pound/ground_pound_snow.wav" id="67_iy1it"]
 [ext_resource type="Script" uid="uid://veukwwx18y5s" path="res://game/entity/player/fludd_handler.gd" id="81_va0vu"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fq5t3"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_8pcyd"]
 atlas = ExtResource("2_heu0c")
-region = Rect2(144, 0, 48, 48)
+region = Rect2(96, 0, 48, 48)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_kyrvb"]
-diffuse_texture = SubResource("AtlasTexture_fq5t3")
+diffuse_texture = SubResource("AtlasTexture_8pcyd")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
 atlas = ExtResource("2_conr4")
@@ -141,9 +141,9 @@ region = Rect2(0, 0, 48, 48)
 atlas = ExtResource("2_heu0c")
 region = Rect2(48, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8pcyd"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_fq5t3"]
 atlas = ExtResource("2_heu0c")
-region = Rect2(96, 0, 48, 48)
+region = Rect2(144, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e8mlx"]
 atlas = ExtResource("2_heu0c")
@@ -513,13 +513,13 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x4rrl"]
-size = Vector2(10, 26.5)
+size = Vector2(10, 27)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i5qpf"]
 size = Vector2(4, 4)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_kyrvb"]
-size = Vector2(10, 2)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kw6gy"]
+size = Vector2(10, 1)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4neg5"]
 animation = &"backflip"
@@ -1117,6 +1117,7 @@ _data = {
 collision_mask = 3
 floor_snap_length = 16.0
 script = ExtResource("1_oic1i")
+midair_turn_speed = 2.5
 state_machine = NodePath("StateMachine")
 debug_container = NodePath("DebugContainer")
 floor_slope_raycast = NodePath("FloorSlopeRaycast")
@@ -1131,6 +1132,7 @@ metadata/_custom_type_script = "uid://cb672xli6i2ns"
 
 [node name="FrictionComponent" type="Node" parent="Components" unique_id=281605969]
 script = ExtResource("3_qhcb0")
+base_friction = 0.3
 metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
 
 [node name="HealthComponent" type="Node" parent="Components" unique_id=1079797538]
@@ -1141,13 +1143,13 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 position = Vector2(2, -13)
 texture = SubResource("CanvasTexture_kyrvb")
 region_enabled = true
-region_rect = Rect2(144, 0, 48, 48)
+region_rect = Rect2(96, 0, 48, 48)
 script = ExtResource("2_cjmyu")
 canvas_texture = SubResource("CanvasTexture_kyrvb")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
 current_animation = "idle"
-current_frame = 3
+current_frame = 2
 speed_scale = 1.0
 playing = false
 
@@ -1164,7 +1166,7 @@ position = Vector2(-1, -7.5)
 sprite_frames = SubResource("SpriteFrames_51d5m")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=159540419]
-position = Vector2(2, -3.25)
+position = Vector2(2, -3)
 shape = SubResource("RectangleShape2D_x4rrl")
 
 [node name="WaterCheck" type="Area2D" parent="." unique_id=258307688]
@@ -1174,13 +1176,13 @@ collision_mask = 4
 position = Vector2(2, -8)
 shape = SubResource("RectangleShape2D_i5qpf")
 
-[node name="Feet" type="Area2D" parent="." unique_id=109336614]
-collision_layer = 257
+[node name="Feet" type="Area2D" parent="." unique_id=296179064]
+collision_layer = 256
 collision_mask = 8
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Feet" unique_id=1164291329]
-position = Vector2(2, 9)
-shape = SubResource("RectangleShape2D_kyrvb")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Feet" unique_id=624629830]
+position = Vector2(2, 9.5)
+shape = SubResource("RectangleShape2D_kw6gy")
 
 [node name="FloorSlopeRaycast" type="RayCast2D" parent="." unique_id=1059318358]
 position = Vector2(2, 0)
@@ -1442,3 +1444,5 @@ libraries/ = SubResource("AnimationLibrary_heu0c")
 
 [connection signal="area_entered" from="WaterCheck" to="StateMachine/Processes/WaterHandler" method="_on_water_check_area_entered"]
 [connection signal="area_exited" from="WaterCheck" to="StateMachine/Processes/WaterHandler" method="_on_water_check_area_exited"]
+[connection signal="area_entered" from="Feet" to="StateMachine/Processes/WaterHandler" method="_on_water_check_area_entered"]
+[connection signal="area_exited" from="Feet" to="StateMachine/Processes/WaterHandler" method="_on_water_check_area_exited"]
