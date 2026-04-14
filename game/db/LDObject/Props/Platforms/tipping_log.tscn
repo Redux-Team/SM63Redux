@@ -21,11 +21,11 @@ shader_parameter/pulse_max = 1.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mwdyh"]
 resource_local_to_scene = true
-size = Vector2(62, 16)
+size = Vector2(38, 16)
 
 [node name="TippingLog" type="Node2D" unique_id=247389356 node_paths=PackedStringArray("nine_patch", "editor_shape_area", "editor_placement_rect", "origin_marker")]
 script = ExtResource("1_8idll")
-min_units = 1
+max_units = 12
 nine_patch = NodePath("NinePatch")
 editor_shape_area = NodePath("EditorShapeArea")
 editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
@@ -39,32 +39,20 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -32.0
+offset_left = -20.5
 offset_top = -9.0
-offset_right = 32.0
+offset_right = 19.5
 offset_bottom = 9.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_gxggx")
-region_rect = Rect2(0, 0, 64, 18)
-patch_margin_left = 14
-patch_margin_right = 14
+region_rect = Rect2(0, 0, 70, 18)
+patch_margin_left = 21
+patch_margin_right = 19
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
-[node name="TextureRect" type="TextureRect" parent="NinePatch" unique_id=1826512652]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -5.0
-offset_top = -9.0
-offset_right = 5.0
-offset_bottom = 9.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="TippingLogCenter" type="Sprite2D" parent="." unique_id=1387785343]
 texture = ExtResource("4_gxggx")
 
 [node name="EditorShapeArea" type="Area2D" parent="." unique_id=1717977380]

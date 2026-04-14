@@ -120,29 +120,27 @@ func _update_sizing(pos: Vector2) -> void:
 		return
 	
 	if _sizing_object.is_telescoping_x():
-		var anchor: Vector2 = _sizing_anchor_left if _sizing_dir >= 0.0 else _sizing_anchor_right
-		var delta_x: float = pos.x - anchor.x
-		if delta_x != 0.0:
+		var delta_x: float = pos.x - _sizing_anchor_left.x
+		if absf(delta_x) > _sizing_object.get_end_collision_width() / 2.0:
 			_sizing_dir = signf(delta_x)
-			anchor = _sizing_anchor_left if _sizing_dir >= 0.0 else _sizing_anchor_right
+		var anchor: Vector2 = _sizing_anchor_left if _sizing_dir >= 0.0 else _sizing_anchor_right
 		var seg: float = float(_sizing_object.get_middle_segment_width())
-		var raw_units: int = int(absf(delta_x) / seg)
+		var raw_units: int = int(absf(pos.x - anchor.x) / seg)
 		var clamped_units: int = _sizing_object.clamp_units(raw_units)
 		_sizing_object.set_property(&"t_size_x", clamped_units)
-		var total: float = _sizing_object.get_total_width(raw_units)
+		var total: float = _sizing_object.get_total_width(clamped_units)
 		_sizing_object.position.x = anchor.x + (total / 2.0) * _sizing_dir
 	
 	if _sizing_object.is_telescoping_y():
-		var anchor: Vector2 = _sizing_anchor_left if _sizing_dir >= 0.0 else _sizing_anchor_right
-		var delta_y: float = pos.y - anchor.y
-		if delta_y != 0.0:
+		var delta_y: float = pos.y - _sizing_anchor_left.y
+		if absf(delta_y) > _sizing_object.get_end_collision_width() / 2.0:
 			_sizing_dir = signf(delta_y)
-			anchor = _sizing_anchor_left if _sizing_dir >= 0.0 else _sizing_anchor_right
+		var anchor: Vector2 = _sizing_anchor_left if _sizing_dir >= 0.0 else _sizing_anchor_right
 		var seg: float = float(_sizing_object.get_middle_segment_width())
-		var raw_units: int = int(absf(delta_y) / seg)
+		var raw_units: int = int(absf(pos.y - anchor.y) / seg)
 		var clamped_units: int = _sizing_object.clamp_units(raw_units)
 		_sizing_object.set_property(&"t_size_y", clamped_units)
-		var total: float = _sizing_object.get_total_height(raw_units)
+		var total: float = _sizing_object.get_total_height(clamped_units)
 		_sizing_object.position.y = anchor.y + (total / 2.0) * _sizing_dir
 
 
@@ -151,6 +149,9 @@ func _commit_sizing() -> void:
 		return
 	
 	var placed: LDObjectTelescoping = _sizing_object
+	
+	if placed.has_property(&"position"):
+		placed.set_property(&"position", placed.position)
 	
 	var history: LDHistoryHandler = LD.get_history_handler()
 	history.begin_action("Place Telescoping Object")
