@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://oo8tdxwidlkl"]
 
-[ext_resource type="Texture2D" uid="uid://bbav62xiuc73i" path="res://assets/textures/object/props/nature/flowers_blue.png" id="1_15k3s"]
+[ext_resource type="Texture2D" uid="uid://bbav62xiuc73i" path="res://assets/textures/props/nature/flowers_blue.png" id="1_15k3s"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_l4wdm"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_kd5e5"]
 

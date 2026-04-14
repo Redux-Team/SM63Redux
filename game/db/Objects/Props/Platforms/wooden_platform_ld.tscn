@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b3mrac5qo7r3g" path="res://game/db/Objects/ld_object_telescoping.gd" id="1_rqmkv"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_rqmkv"]
-[ext_resource type="Texture2D" uid="uid://cybx48dgm813r" path="res://assets/textures/object/props/platform/wooden_platform.png" id="3_5mus0"]
+[ext_resource type="Texture2D" uid="uid://cybx48dgm813r" path="res://assets/textures/props/platform/wooden_platform.png" id="3_5mus0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5mus0"]
 resource_local_to_scene = true

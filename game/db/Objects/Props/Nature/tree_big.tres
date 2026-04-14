@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bmcvyfgksclfm" path="res://game/db/Objects/Props/Nature/tree_big_ld.tscn" id="1_gade0"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_8yjrl"]
-[ext_resource type="Texture2D" uid="uid://bwwvgmbahnlcy" path="res://assets/textures/object/props/nature/tree_big.png" id="2_kmam2"]
+[ext_resource type="Texture2D" uid="uid://bwwvgmbahnlcy" path="res://assets/textures/props/nature/tree_big.png" id="2_kmam2"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_ci8sl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ounpj"]

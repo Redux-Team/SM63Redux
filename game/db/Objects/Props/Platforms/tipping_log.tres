@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dkyd466tbfa22"]
 
 [ext_resource type="PackedScene" uid="uid://taxkdf07e5q7" path="res://game/db/Objects/Props/Platforms/tipping_log_ld.tscn" id="1_hs1pe"]
-[ext_resource type="Texture2D" uid="uid://bnjhvv0pcctk4" path="res://assets/textures/object/props/platform/tipping_log_ld.png" id="2_kbjqa"]
+[ext_resource type="Texture2D" uid="uid://bnjhvv0pcctk4" path="res://assets/textures/props/platform/tipping_log_ld.png" id="2_kbjqa"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_gajl3"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_puidc"]
 [ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="5_02qmg"]

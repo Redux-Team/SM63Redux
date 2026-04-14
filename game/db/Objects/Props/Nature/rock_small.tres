@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bywn2c1kw0pxn"]
 
-[ext_resource type="Texture2D" uid="uid://cgf8cokpn8q8s" path="res://assets/textures/object/props/nature/rock_small.png" id="1_d272c"]
+[ext_resource type="Texture2D" uid="uid://cgf8cokpn8q8s" path="res://assets/textures/props/nature/rock_small.png" id="1_d272c"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_mjm7j"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_wa8fr"]
 

@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://fa37unypkcqe"]
 
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_nos1b"]
-[ext_resource type="Texture2D" uid="uid://krqjismkwu4j" path="res://assets/textures/object/props/hints/arrow.png" id="1_u0w75"]
+[ext_resource type="Texture2D" uid="uid://krqjismkwu4j" path="res://assets/textures/props/hints/arrow.png" id="1_u0w75"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_7ryrs"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6y7o3"]

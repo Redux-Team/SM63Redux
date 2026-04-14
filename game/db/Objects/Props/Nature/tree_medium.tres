@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_4s81q"]
 [ext_resource type="PackedScene" uid="uid://4xwk4ou278o3" path="res://game/db/Objects/Props/Nature/tree_medium_ld.tscn" id="1_6afwt"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_6afwt"]
-[ext_resource type="Texture2D" uid="uid://u36r15ijlqeb" path="res://assets/textures/object/props/nature/tree_medium.png" id="2_ff5js"]
+[ext_resource type="Texture2D" uid="uid://u36r15ijlqeb" path="res://assets/textures/props/nature/tree_medium.png" id="2_ff5js"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5p1y3"]
 atlas = ExtResource("2_ff5js")

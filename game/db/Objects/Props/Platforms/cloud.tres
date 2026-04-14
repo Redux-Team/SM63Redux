@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cdt1c8k3ssy42" path="res://game/db/Objects/Props/Platforms/cloud_ld.tscn" id="1_6e1ic"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_7janf"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_fbuxj"]
-[ext_resource type="Texture2D" uid="uid://c7s0tisyw4sv7" path="res://assets/textures/object/props/platform/cloud_ld.png" id="2_i6ukj"]
+[ext_resource type="Texture2D" uid="uid://c7s0tisyw4sv7" path="res://assets/textures/props/platform/cloud_ld.png" id="2_i6ukj"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_4qind"]
 [ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="5_i4ngb"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_ibh1c"]

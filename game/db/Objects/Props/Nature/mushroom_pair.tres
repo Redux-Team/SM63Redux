@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://7xl4vm48exsa"]
 
-[ext_resource type="Texture2D" uid="uid://e2n0xxcniny6" path="res://assets/textures/object/props/nature/mushroom_pair.png" id="1_ocmao"]
+[ext_resource type="Texture2D" uid="uid://e2n0xxcniny6" path="res://assets/textures/props/nature/mushroom_pair.png" id="1_ocmao"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_e4y0g"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_ofogo"]
 

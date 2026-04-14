@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://km8g6043fcab" path="res://game/db/Objects/Terrain/Grass/terrain_grass_ld.tscn" id="1_fwwft"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_o2ahu"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_fwwft"]
-[ext_resource type="Texture2D" uid="uid://cmsnqvls7t2l3" path="res://assets/textures/object/terrain/grass/terrain_grass_ld.png" id="2_g0k2x"]
+[ext_resource type="Texture2D" uid="uid://cmsnqvls7t2l3" path="res://assets/textures/terrain/grass/terrain_grass_ld.png" id="2_g0k2x"]
 
 [resource]
 script = ExtResource("2_fwwft")
