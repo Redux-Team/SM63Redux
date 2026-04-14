@@ -56,6 +56,7 @@ var current_frame: int:
 	set(cf):
 		current_frame = cf
 		apply_frame(current_animation, current_frame)
+var speed_scale: float = 1.0
 var playing: bool = false:
 	set(p):
 		playing = p
@@ -87,7 +88,7 @@ func _process(delta: float) -> void:
 	if fps <= 0.0 or frame_count == 0:
 		return
 	
-	_playback_time += delta
+	_playback_time += delta * speed_scale
 	
 	var new_frame: int = int(_playback_time * fps)
 	
@@ -147,6 +148,10 @@ func _get_property_list() -> Array[Dictionary]:
 		"usage": locked_usage if playing else normal_usage
 	})
 	property_list.append({
+		"name": "speed_scale",
+		"type": TYPE_FLOAT,
+	})
+	property_list.append({
 		"name": "playing",
 		"type": TYPE_BOOL
 	})
@@ -170,9 +175,12 @@ func _update_preview() -> void:
 	match preview:
 		COMPOSITE: 
 			texture = canvas_texture
-			if texture.diffuse_texture is not CompressedTexture2D:
+			var diff: Texture2D = canvas_texture.diffuse_texture
+			if diff and diff is not CompressedTexture2D:
+				# BUG this is an issue with godot where re-assigning the texture
+				# to a CanvasTexture does not update unless a region is set.
 				region_enabled = true
-				region_rect = texture.diffuse_texture.region
+				region_rect = diff.region
 		DIFFUSE: texture = canvas_texture.diffuse_texture
 		NORMAL: texture = canvas_texture.normal_texture
 		SHEEN: texture = canvas_texture.specular_texture
