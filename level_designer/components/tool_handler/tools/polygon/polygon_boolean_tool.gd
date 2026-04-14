@@ -88,7 +88,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 		return
 	if get_viewport().is_input_handled():
 		return
-	if Singleton.current_input_device == Singleton.InputType.TOUCHSCREEN:
+	if Singleton.get_input_handler().is_using_touch():
 		return
 	
 	if event is InputEventMouseMotion:

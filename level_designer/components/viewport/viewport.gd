@@ -110,7 +110,7 @@ func _input(event: InputEvent) -> void:
 func _on_viewport_input(event: InputEvent) -> void:
 	viewport_input.emit(event)
 	
-	if Singleton.current_input_device != Singleton.InputType.TOUCHSCREEN:
+	if not Singleton.get_input_handler().is_using_touch():
 		if event is InputEventMouseButton:
 			match event.button_index:
 				MOUSE_BUTTON_MIDDLE when event.is_pressed():
@@ -144,7 +144,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 				KEY_Q:
 					LD.get_tool_handler().select_tool("select")
 	
-	if Singleton.current_input_device == Singleton.InputType.TOUCHSCREEN:
+	if Singleton.get_input_handler().is_using_touch():
 		if event is InputEventScreenTouch:
 			if event.pressed:
 				_touch_points[event.index] = event.position

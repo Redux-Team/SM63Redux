@@ -28,7 +28,7 @@ func _on_ready() -> void:
 func _on_viewport_input(event: InputEvent) -> void:
 	if not is_active():
 		return
-	if Singleton.current_input_device == Singleton.InputType.TOUCHSCREEN:
+	if Singleton.get_input_handler().is_using_touch():
 		return
 	
 	if shortcut_handler:
