@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="1_cxjo5"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_5slaf"]
 [ext_resource type="Texture2D" uid="uid://di1d8ih6gfgmm" path="res://assets/textures/entity/passive/goonie_glide.png" id="3_5slaf"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_rww3b"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rww3b"]
 resource_local_to_scene = true
@@ -18,6 +19,9 @@ shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
 
+[sub_resource type="CanvasTexture" id="CanvasTexture_labg4"]
+diffuse_texture = ExtResource("3_5slaf")
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_labg4"]
 size = Vector2(58, 20)
 
@@ -29,9 +33,15 @@ editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
 origin_marker = NodePath("Origin")
 metadata/_custom_type_script = "uid://cfx4civm76jwr"
 
-[node name="Sprite" type="Sprite2D" parent="." unique_id=1614337796]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=563026728]
 material = SubResource("ShaderMaterial_rww3b")
-texture = ExtResource("3_5slaf")
+texture = SubResource("CanvasTexture_labg4")
+script = ExtResource("4_rww3b")
+canvas_texture = SubResource("CanvasTexture_labg4")
+diffuse_texture = ExtResource("3_5slaf")
+current_animation = ""
+current_frame = 0
+playing = false
 
 [node name="EditorShapeArea" type="Area2D" parent="." unique_id=497598327]
 

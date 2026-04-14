@@ -82,14 +82,14 @@ var jump_chain_timer: float = 0.0
 @export var lock_flipping: bool = false
 
 
-func _ready() -> void:
-	super()
-	Singleton.debug_mode_toggled.connect(_on_debug_toggle)
-
-
-func _on_debug_toggle() -> void:
-	debug_container.visible = Singleton.debug_mode
-	debug_container.set_process(Singleton.debug_mode)
+#func _ready() -> void:
+	#super()
+	#Singleton.debug_mode_toggled.connect(_on_debug_toggle)
+#
+#
+#func _on_debug_toggle() -> void:
+	#debug_container.visible = Singleton.debug_mode
+	#debug_container.set_process(Singleton.debug_mode)
 
 
 func _process(_delta: float) -> void:

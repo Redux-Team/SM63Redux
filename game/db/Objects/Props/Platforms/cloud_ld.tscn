@@ -18,6 +18,9 @@ shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
 
+[sub_resource type="CanvasTexture" id="CanvasTexture_t7j16"]
+diffuse_texture = ExtResource("3_4v1f7")
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wog8m"]
 resource_local_to_scene = true
 size = Vector2(22, 20)
@@ -44,7 +47,7 @@ offset_right = 12.5
 offset_bottom = 13.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_4v1f7")
+texture = SubResource("CanvasTexture_t7j16")
 region_rect = Rect2(0, 0, 49, 25)
 patch_margin_left = 10
 patch_margin_right = 15

@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="1_s55gt"]
 [ext_resource type="Texture2D" uid="uid://daac41f3cff3v" path="res://assets/textures/props/platform/log_falling_ld.png" id="2_2tonp"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_s55gt"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_7f3w1"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hwhe7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wq45l"]
 resource_local_to_scene = true
 shader = ExtResource("2_s55gt")
 shader_parameter/state = 0
@@ -18,6 +19,9 @@ shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
 
+[sub_resource type="CanvasTexture" id="CanvasTexture_cfu06"]
+diffuse_texture = ExtResource("2_2tonp")
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s55gt"]
 size = Vector2(16, 21.5)
 
@@ -29,10 +33,15 @@ editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
 origin_marker = NodePath("Origin")
 metadata/_custom_type_script = "uid://cfx4civm76jwr"
 
-[node name="Sprite" type="Sprite2D" parent="." unique_id=1747522246]
-material = SubResource("ShaderMaterial_hwhe7")
-texture = ExtResource("2_2tonp")
-offset = Vector2(0, -1)
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1051475768]
+material = SubResource("ShaderMaterial_wq45l")
+texture = SubResource("CanvasTexture_cfu06")
+script = ExtResource("4_7f3w1")
+canvas_texture = SubResource("CanvasTexture_cfu06")
+diffuse_texture = ExtResource("2_2tonp")
+current_animation = ""
+current_frame = 0
+playing = false
 
 [node name="EditorShapeArea" type="Area2D" parent="." unique_id=1385945401]
 

@@ -4,12 +4,12 @@ class_name LDObjectSprite
 extends LDObject
 
 
-@export var sprite_ref: Sprite2D
+@export var sprite_ref: SmartSprite2D
 
 @export_tool_button("Create Sprite Props") var _create_sprite_props: Callable:
 	get: return func() -> void:
 		if not sprite_ref:
-			sprite_ref = Sprite2D.new()
+			sprite_ref = SmartSprite2D.new()
 			sprite_ref.name = "Sprite"
 			add_child(sprite_ref)
 			sprite_ref.owner = self
@@ -66,7 +66,7 @@ func _set_shader_param(param: StringName, value: Variant) -> void:
 	mat.set_shader_parameter(param, value)
 
 
-func _setup_sprite_material(s: Sprite2D) -> void:
+func _setup_sprite_material(s: SmartSprite2D) -> void:
 	var mat: ShaderMaterial = ShaderMaterial.new()
 	mat.shader = load("uid://dxlbj210tsi10")
 	mat.resource_local_to_scene = true

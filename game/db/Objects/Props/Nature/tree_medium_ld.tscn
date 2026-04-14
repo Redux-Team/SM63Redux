@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="1_o38po"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_8kjxy"]
 [ext_resource type="Texture2D" uid="uid://u36r15ijlqeb" path="res://assets/textures/props/nature/tree_medium.png" id="3_o38po"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_tepw8"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ak664"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_alwvw"]
 resource_local_to_scene = true
 shader = ExtResource("2_8kjxy")
 shader_parameter/state = 0
@@ -18,6 +19,9 @@ shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
 
+[sub_resource type="CanvasTexture" id="CanvasTexture_6y8hn"]
+diffuse_texture = ExtResource("3_o38po")
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m03ki"]
 size = Vector2(38, 61)
 
@@ -29,9 +33,15 @@ editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
 origin_marker = NodePath("Origin")
 metadata/_custom_type_script = "uid://cfx4civm76jwr"
 
-[node name="Sprite" type="Sprite2D" parent="." unique_id=716865355]
-material = SubResource("ShaderMaterial_ak664")
-texture = ExtResource("3_o38po")
+[node name="Sprite" type="Sprite2D" parent="." unique_id=2104131461]
+material = SubResource("ShaderMaterial_alwvw")
+texture = SubResource("CanvasTexture_6y8hn")
+script = ExtResource("4_tepw8")
+canvas_texture = SubResource("CanvasTexture_6y8hn")
+diffuse_texture = ExtResource("3_o38po")
+current_animation = ""
+current_frame = 0
+playing = false
 
 [node name="EditorShapeArea" type="Area2D" parent="." unique_id=1978033632]
 

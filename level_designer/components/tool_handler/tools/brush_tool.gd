@@ -50,7 +50,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 		return
 	if get_viewport().is_input_handled():
 		return
-	if Singleton.current_input_device == Singleton.InputType.TOUCHSCREEN:
+	if Singleton.get_input_handler().is_using_touch():
 		return
 	
 	if event is InputEventMouseMotion:
@@ -98,10 +98,9 @@ func _on_object_changed(obj: GameObject) -> void:
 		get_tool_handler().select_tool("polygon")
 		return
 	
-	if Singleton.get_input_handler().is_using_touch():
+	_cache_stamp_size(obj)
+	if not Singleton.get_input_handler().is_using_touch():
 		_spawn_cursor(obj)
-	else:
-		_cache_stamp_size(obj)
 
 
 func _is_polygon_object(obj: GameObject) -> bool:
@@ -133,7 +132,7 @@ func _spawn_cursor(obj: GameObject) -> void:
 		return
 	if not obj.ld_editor_instance:
 		return
-	if Singleton.current_input_device == Singleton.InputType.TOUCHSCREEN:
+	if Singleton.get_input_handler().is_using_touch():
 		return
 	_preview_cursor = obj.ld_editor_instance.instantiate() as LDObject
 	_preview_cursor.is_preview = true
@@ -314,7 +313,7 @@ func _on_touch_swipe_ended() -> void:
 func _on_input_type_changed() -> void:
 	if not is_active():
 		return
-	if Singleton.current_input_device == Singleton.InputType.TOUCHSCREEN:
+	if Singleton.get_input_handler().is_using_touch():
 		if _preview_cursor:
 			_preview_cursor.queue_free()
 			_preview_cursor = null

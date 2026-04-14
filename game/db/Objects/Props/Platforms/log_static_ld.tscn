@@ -3,13 +3,14 @@
 [ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="1_2dvmx"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_2dvmx"]
 [ext_resource type="Texture2D" uid="uid://eg3jm1ifajro" path="res://assets/textures/props/platform/log_static.png" id="2_mbyu4"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_128g7"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ycd4g"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fuidc"]
 resource_local_to_scene = true
 shader = ExtResource("2_2dvmx")
 shader_parameter/state = 0
 shader_parameter/custom_modulate = Color(1, 1, 1, 1)
-shader_parameter/outline_width = 1.0000000475
+shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/fill_color = Color(1, 1, 1, 0.25)
 shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
@@ -17,6 +18,9 @@ shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
 shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_ggxns"]
+diffuse_texture = ExtResource("2_mbyu4")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ycd4g"]
 size = Vector2(16, 22)
@@ -29,9 +33,15 @@ editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
 origin_marker = NodePath("Origin")
 metadata/_custom_type_script = "uid://cfx4civm76jwr"
 
-[node name="Sprite" type="Sprite2D" parent="." unique_id=1626177154]
-material = SubResource("ShaderMaterial_ycd4g")
-texture = ExtResource("2_mbyu4")
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1112021418]
+material = SubResource("ShaderMaterial_fuidc")
+texture = SubResource("CanvasTexture_ggxns")
+script = ExtResource("4_128g7")
+canvas_texture = SubResource("CanvasTexture_ggxns")
+diffuse_texture = ExtResource("2_mbyu4")
+current_animation = ""
+current_frame = 0
+playing = false
 
 [node name="EditorShapeArea" type="Area2D" parent="." unique_id=1099242803]
 

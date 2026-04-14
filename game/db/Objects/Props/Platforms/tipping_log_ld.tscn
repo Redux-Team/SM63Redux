@@ -4,6 +4,7 @@
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_utg06"]
 [ext_resource type="Texture2D" uid="uid://10rfu3k8wxbr" path="res://assets/textures/props/platform/tipping_log_base.png" id="3_mu7ru"]
 [ext_resource type="Texture2D" uid="uid://dvul14sedgp7l" path="res://assets/textures/props/platform/tipping_log_center.png" id="4_ru17a"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="5_yxx86"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o01rm"]
 resource_local_to_scene = true
@@ -18,6 +19,12 @@ shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
 shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_guk28"]
+diffuse_texture = ExtResource("3_mu7ru")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_hm08m"]
+diffuse_texture = ExtResource("4_ru17a")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mwdyh"]
 resource_local_to_scene = true
@@ -45,15 +52,22 @@ offset_right = 19.5
 offset_bottom = 9.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_mu7ru")
+texture = SubResource("CanvasTexture_guk28")
 region_rect = Rect2(0, 0, 70, 18)
 patch_margin_left = 21
 patch_margin_right = 19
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
-[node name="TippingLogCenter" type="Sprite2D" parent="." unique_id=1387785343]
-texture = ExtResource("4_ru17a")
+[node name="TippingLogCenter" type="Sprite2D" parent="." unique_id=169820774]
+texture = SubResource("CanvasTexture_hm08m")
+script = ExtResource("5_yxx86")
+canvas_texture = SubResource("CanvasTexture_hm08m")
+diffuse_texture = ExtResource("4_ru17a")
+current_animation = ""
+current_frame = 0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="EditorShapeArea" type="Area2D" parent="." unique_id=1717977380]
 

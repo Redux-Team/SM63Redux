@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://cofupxvmqvmkc"]
+
+[ext_resource type="Script" uid="uid://bph21tonmy3li" path="res://game/entity/passive/goonie/goonie.gd" id="1_jfxkd"]
+[ext_resource type="Texture2D" uid="uid://dcq1kqe3c5wbk" path="res://assets/textures/entity/passive/goonie_fly.png" id="2_dma5t"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_kaxjy"]
+[ext_resource type="Texture2D" uid="uid://di1d8ih6gfgmm" path="res://assets/textures/entity/passive/goonie_glide.png" id="4_1cx3s"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1cx3s"]
+atlas = ExtResource("2_dma5t")
+region = Rect2(288, 0, 48, 46)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_1cx3s"]
+diffuse_texture = SubResource("AtlasTexture_1cx3s")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0v6xk"]
+atlas = ExtResource("2_dma5t")
+region = Rect2(0, 0, 48, 46)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i5hl1"]
+atlas = ExtResource("2_dma5t")
+region = Rect2(48, 0, 48, 46)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pbwgp"]
+atlas = ExtResource("2_dma5t")
+region = Rect2(96, 0, 48, 46)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dskmv"]
+atlas = ExtResource("2_dma5t")
+region = Rect2(144, 0, 48, 46)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xtefv"]
+atlas = ExtResource("2_dma5t")
+region = Rect2(192, 0, 48, 46)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bslqv"]
+atlas = ExtResource("2_dma5t")
+region = Rect2(240, 0, 48, 46)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oohn0"]
+atlas = ExtResource("4_1cx3s")
+region = Rect2(0, 0, 64, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bodhv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0v6xk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i5hl1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pbwgp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dskmv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xtefv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bslqv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1cx3s")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oohn0")
+}],
+"loop": true,
+"name": &"glide",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oohn0"]
+size = Vector2(22, 12)
+
+[node name="Goonie" type="CharacterBody2D" unique_id=1544647944 node_paths=PackedStringArray("sprite", "components_root")]
+script = ExtResource("1_jfxkd")
+sprite = NodePath("SmartSprite2D")
+components_root = NodePath("Components")
+metadata/_custom_type_script = "uid://bph21tonmy3li"
+
+[node name="Components" type="Node" parent="." unique_id=566607527]
+
+[node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=189232163]
+texture = SubResource("CanvasTexture_1cx3s")
+region_enabled = true
+region_rect = Rect2(288, 0, 48, 46)
+script = ExtResource("2_kaxjy")
+canvas_texture = SubResource("CanvasTexture_1cx3s")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_bodhv")
+current_animation = "fly"
+current_frame = 6
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1397534028]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_oohn0")
+one_way_collision = true
