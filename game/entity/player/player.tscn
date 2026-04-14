@@ -513,10 +513,13 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x4rrl"]
-size = Vector2(10, 27)
+size = Vector2(10, 26.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i5qpf"]
 size = Vector2(4, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kyrvb"]
+size = Vector2(10, 2)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4neg5"]
 animation = &"backflip"
@@ -1111,6 +1114,7 @@ _data = {
 }
 
 [node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("state_machine", "debug_container", "floor_slope_raycast", "sprite", "components_root")]
+collision_mask = 3
 floor_snap_length = 16.0
 script = ExtResource("1_oic1i")
 midair_turn_speed = 2.5
@@ -1146,6 +1150,7 @@ animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
 current_animation = "idle"
 current_frame = 3
+speed_scale = 1.0
 playing = false
 
 [node name="FluddB" type="AnimatedSprite2D" parent="Doll" unique_id=372465100]
@@ -1161,15 +1166,23 @@ position = Vector2(-1, -7.5)
 sprite_frames = SubResource("SpriteFrames_51d5m")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=159540419]
-position = Vector2(2, -3)
+position = Vector2(2, -3.25)
 shape = SubResource("RectangleShape2D_x4rrl")
 
 [node name="WaterCheck" type="Area2D" parent="." unique_id=258307688]
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WaterCheck" unique_id=1009172898]
-position = Vector2(1, -8)
+position = Vector2(2, -8)
 shape = SubResource("RectangleShape2D_i5qpf")
+
+[node name="Feet" type="Area2D" parent="." unique_id=109336614]
+collision_layer = 257
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Feet" unique_id=1164291329]
+position = Vector2(2, 9)
+shape = SubResource("RectangleShape2D_kyrvb")
 
 [node name="FloorSlopeRaycast" type="RayCast2D" parent="." unique_id=1059318358]
 position = Vector2(2, 0)

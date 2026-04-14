@@ -1,20 +1,22 @@
 [gd_scene format=3 uid="uid://cofupxvmqvmkc"]
 
 [ext_resource type="Script" uid="uid://bph21tonmy3li" path="res://game/entity/passive/goonie/goonie.gd" id="1_jfxkd"]
-[ext_resource type="Texture2D" uid="uid://dcq1kqe3c5wbk" path="res://assets/textures/entity/passive/goonie_fly.png" id="2_dma5t"]
+[ext_resource type="Texture2D" uid="uid://dcq1kqe3c5wbk" path="res://assets/textures/entity/passive/goonie_flap.png" id="2_dma5t"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_kaxjy"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="2_pbwgp"]
 [ext_resource type="Texture2D" uid="uid://di1d8ih6gfgmm" path="res://assets/textures/entity/passive/goonie_glide.png" id="4_1cx3s"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1cx3s"]
-atlas = ExtResource("2_dma5t")
-region = Rect2(288, 0, 48, 46)
-
-[sub_resource type="CanvasTexture" id="CanvasTexture_1cx3s"]
-diffuse_texture = SubResource("AtlasTexture_1cx3s")
+[ext_resource type="Script" uid="uid://be2xsj74ekqmn" path="res://util/state_machine/state_machine.gd" id="5_0v6xk"]
+[ext_resource type="Script" uid="uid://dvgmjlr0vfw4r" path="res://game/entity/passive/goonie/state_machine/states/flap.gd" id="6_i5hl1"]
+[ext_resource type="Script" uid="uid://5pi4dw3u72p2" path="res://game/entity/passive/goonie/state_machine/states/glide.gd" id="7_pbwgp"]
+[ext_resource type="Script" uid="uid://cpfwdp3pr6hbk" path="res://game/entity/passive/goonie/state_machine/states/heavy_flap.gd" id="8_dskmv"]
+[ext_resource type="Script" uid="uid://gh1mr3ptc6np" path="res://game/entity/passive/goonie/state_machine/processes/rider_handler.gd" id="10_xtefv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0v6xk"]
 atlas = ExtResource("2_dma5t")
 region = Rect2(0, 0, 48, 46)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_xtefv"]
+diffuse_texture = SubResource("AtlasTexture_0v6xk")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i5hl1"]
 atlas = ExtResource("2_dma5t")
@@ -35,6 +37,10 @@ region = Rect2(192, 0, 48, 46)
 [sub_resource type="AtlasTexture" id="AtlasTexture_bslqv"]
 atlas = ExtResource("2_dma5t")
 region = Rect2(240, 0, 48, 46)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1cx3s"]
+atlas = ExtResource("2_dma5t")
+region = Rect2(288, 0, 48, 46)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oohn0"]
 atlas = ExtResource("4_1cx3s")
@@ -65,7 +71,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_1cx3s")
 }],
 "loop": true,
-"name": &"fly",
+"name": &"flap",
 "speed": 10.0
 }, {
 "frames": [{
@@ -75,34 +81,187 @@ animations = [{
 "loop": true,
 "name": &"glide",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0v6xk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i5hl1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pbwgp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dskmv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xtefv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bslqv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1cx3s")
+}],
+"loop": true,
+"name": &"heavy_flap",
+"speed": 20.0
 }]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dskmv"]
+size = Vector2(20, 3)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oohn0"]
 size = Vector2(22, 12)
 
-[node name="Goonie" type="CharacterBody2D" unique_id=1544647944 node_paths=PackedStringArray("sprite", "components_root")]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0v6xk"]
+animation = &"base"
+use_custom_timeline = true
+timeline_length = 7.800000000000001
+stretch_time_scale = true
+start_offset = 0.0
+loop_mode = 0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i5hl1"]
+animation = &"base"
+use_custom_timeline = true
+timeline_length = 1.4
+stretch_time_scale = true
+start_offset = 0.0
+loop_mode = 0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xtefv"]
+animation = &"base"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_pbwgp"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dskmv"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0v6xk"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xtefv"]
+advance_mode = 2
+advance_expression = "!riders.is_empty()"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bslqv"]
+advance_mode = 2
+advance_expression = "!riders.is_empty()"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bodhv"]
+reset = false
+advance_mode = 2
+advance_expression = "riders.is_empty()"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_0v6xk"]
+states/flap/node = SubResource("AnimationNodeAnimation_0v6xk")
+states/flap/position = Vector2(388, 100)
+states/glide/node = SubResource("AnimationNodeAnimation_i5hl1")
+states/glide/position = Vector2(577, 100)
+states/heavy_flap/node = SubResource("AnimationNodeAnimation_xtefv")
+states/heavy_flap/position = Vector2(479, 223)
+transitions = ["Start", "flap", SubResource("AnimationNodeStateMachineTransition_pbwgp"), "flap", "glide", SubResource("AnimationNodeStateMachineTransition_dskmv"), "glide", "flap", SubResource("AnimationNodeStateMachineTransition_0v6xk"), "flap", "heavy_flap", SubResource("AnimationNodeStateMachineTransition_xtefv"), "glide", "heavy_flap", SubResource("AnimationNodeStateMachineTransition_bslqv"), "heavy_flap", "flap", SubResource("AnimationNodeStateMachineTransition_bodhv")]
+graph_offset = Vector2(0, 55)
+
+[sub_resource type="Animation" id="Animation_i5hl1"]
+resource_name = "base"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pbwgp"]
+_data = {
+&"base": SubResource("Animation_i5hl1")
+}
+
+[node name="Goonie" type="CharacterBody2D" unique_id=459377689 node_paths=PackedStringArray("sprite", "components_root")]
+collision_mask = 0
 script = ExtResource("1_jfxkd")
+heavy_flap_angle = 45.0
 sprite = NodePath("SmartSprite2D")
 components_root = NodePath("Components")
-metadata/_custom_type_script = "uid://bph21tonmy3li"
 
 [node name="Components" type="Node" parent="." unique_id=566607527]
 
+[node name="GravityComponent" type="Node" parent="Components" unique_id=296573466]
+script = ExtResource("2_pbwgp")
+enabled = false
+metadata/_custom_type_script = "uid://cb672xli6i2ns"
+
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=189232163]
-texture = SubResource("CanvasTexture_1cx3s")
+texture = SubResource("CanvasTexture_xtefv")
 region_enabled = true
-region_rect = Rect2(288, 0, 48, 46)
+region_rect = Rect2(0, 0, 48, 46)
 script = ExtResource("2_kaxjy")
-canvas_texture = SubResource("CanvasTexture_1cx3s")
+canvas_texture = SubResource("CanvasTexture_xtefv")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_bodhv")
-current_animation = "fly"
-current_frame = 6
+current_animation = "flap"
+current_frame = 0
 speed_scale = 1.0
 playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="RideArea" type="Area2D" parent="." unique_id=282315773]
+position = Vector2(1, 0)
+collision_layer = 0
+collision_mask = 265
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RideArea" unique_id=1995378084]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_dskmv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1397534028]
 position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_oohn0")
 one_way_collision = true
+
+[node name="StateMachine" type="AnimationTree" parent="." unique_id=984869023 node_paths=PackedStringArray("entity", "sprite", "states")]
+root_node = NodePath(".")
+tree_root = SubResource("AnimationNodeStateMachine_0v6xk")
+advance_expression_base_node = NodePath("..")
+anim_player = NodePath("AnimationPlayer")
+script = ExtResource("5_0v6xk")
+entity = NodePath("..")
+sprite = NodePath("../SmartSprite2D")
+states = {
+&"flap": NodePath("States/Flap"),
+&"glide": NodePath("States/Glide"),
+&"heavy_flap": NodePath("States/HeavyFlap")
+}
+metadata/_custom_type_script = "uid://be2xsj74ekqmn"
+
+[node name="States" type="Node" parent="StateMachine" unique_id=76322337]
+
+[node name="Flap" type="Node" parent="StateMachine/States" unique_id=2013043316]
+script = ExtResource("6_i5hl1")
+has_default_animations = true
+animations = Array[StringName]([&"flap"])
+metadata/_custom_type_script = "uid://ra55p55nrtg4"
+
+[node name="HeavyFlap" type="Node" parent="StateMachine/States" unique_id=1129753875]
+script = ExtResource("8_dskmv")
+has_default_animations = true
+animations = Array[StringName]([&"heavy_flap"])
+metadata/_custom_type_script = "uid://ra55p55nrtg4"
+
+[node name="Glide" type="Node" parent="StateMachine/States" unique_id=894392998]
+script = ExtResource("7_pbwgp")
+has_default_animations = true
+animations = Array[StringName]([&"glide"])
+metadata/_custom_type_script = "uid://ra55p55nrtg4"
+
+[node name="Processes" type="Node" parent="StateMachine" unique_id=1976689383]
+
+[node name="RiderHandler" type="Node" parent="StateMachine/Processes" unique_id=1252140157]
+script = ExtResource("10_xtefv")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="StateMachine" unique_id=197117955]
+libraries/ = SubResource("AnimationLibrary_pbwgp")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="." unique_id=1510130642]
+
+[connection signal="body_entered" from="RideArea" to="StateMachine/Processes/RiderHandler" method="_on_ride_area_body_entered"]
+[connection signal="body_exited" from="RideArea" to="StateMachine/Processes/RiderHandler" method="_on_ride_area_body_exited"]

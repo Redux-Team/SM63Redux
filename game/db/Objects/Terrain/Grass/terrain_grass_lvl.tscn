@@ -26,5 +26,6 @@ texture = ExtResource("2_lcvi5")
 [node name="ToplineContainer" type="Node2D" parent="." unique_id=2082800021]
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1252583713]
+collision_layer = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=714933582]

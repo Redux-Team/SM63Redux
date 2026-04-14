@@ -1,13 +1,14 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://ya5iq8bilpi"]
 
+[ext_resource type="PackedScene" uid="uid://cofupxvmqvmkc" path="res://game/entity/passive/goonie/goonie.tscn" id="1_1tr6h"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_aommt"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_f48il"]
 [ext_resource type="PackedScene" uid="uid://b0ppti3x23nm4" path="res://game/db/Objects/Entity/Passive/goonie_ld.tscn" id="1_podw1"]
-[ext_resource type="Texture2D" uid="uid://dcq1kqe3c5wbk" path="res://assets/textures/entity/passive/goonie_fly.png" id="1_spkst"]
+[ext_resource type="Texture2D" uid="uid://dcq1kqe3c5wbk" path="res://assets/textures/entity/passive/goonie_flap.png" id="1_spkst"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_podw1"]
 atlas = ExtResource("1_spkst")
-region = Rect2(282, -5, 48, 48)
+region = Rect2(288, -5, 48, 48)
 
 [resource]
 script = ExtResource("1_aommt")
@@ -18,4 +19,5 @@ group_path = "Passive"
 ld_object_path = "Entity/Passive/goonie"
 ld_entry_texture = SubResource("AtlasTexture_podw1")
 ld_editor_instance = ExtResource("1_podw1")
+game_instance = ExtResource("1_1tr6h")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

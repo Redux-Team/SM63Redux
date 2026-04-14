@@ -101,15 +101,17 @@ func _instantiate_object(data: Dictionary, layer_id: String) -> void:
 		return
 	
 	var instance: Node = game_object.game_instance.instantiate()
+	var layer: LevelLayer = _get_or_create_layer(layer_id, data)
+	layer.add_child(instance)
+	
 	var level_object: LevelObject = instance as LevelObject
-	if not level_object:
-		push_error("Game instance for '%s' does not extend LevelObject." % object_id)
-		instance.queue_free()
+	if level_object:
+		level_object.init_from_data(data)
 		return
 	
-	var layer: LevelLayer = _get_or_create_layer(layer_id, data)
-	layer.add_child(level_object)
-	level_object.init_from_data(data)
+	var entity: Entity = instance as Entity
+	if entity:
+		entity.init_from_data(data)
 
 
 func _get_or_create_layer(layer_id: String, layer_data: Dictionary) -> LevelLayer:
