@@ -36,7 +36,12 @@ enum ObjectCategory {
 	set(p):
 		ld_object_path = p
 		_update_subpath()
-@export var ld_entry_texture: Texture2D
+@export var ld_entry_texture: Texture2D:
+	set(value):
+		if value is AtlasTexture:
+			ld_entry_texture = value
+		else:
+			ld_entry_texture = _make_atlas_texture(value)
 @export var ld_editor_instance: PackedScene
 @export var ld_properties: Array[LDProperty]
 @export var ld_indexable: bool = true
@@ -111,6 +116,26 @@ func has_property(key: StringName) -> bool:
 func _update_subpath() -> void:
 	if category_string:
 		subpath = get_object_path().trim_prefix(category_string + "/")
+
+
+func _make_atlas_texture(tex: Texture2D) -> Texture2D:
+	if tex == null:
+		return null
+	
+	var size: Vector2i = tex.get_size()
+	var atlas: AtlasTexture = AtlasTexture.new()
+	atlas.atlas = tex
+	
+	var pos: Vector2i = Vector2i.ZERO
+	
+	if size.x >= 48 and size.y >= 48:
+		pos = Vector2i((size.x - 48) >> 1, (size.y - 48) >> 1)
+	else:
+		pos = Vector2i(-((48 - size.x) >> 1), -((48 - size.y) >> 1))
+	
+	atlas.region = Rect2i(pos, Vector2i(48, 48))
+	
+	return atlas
 
 
 func _snake_to_title(text: String) -> String:

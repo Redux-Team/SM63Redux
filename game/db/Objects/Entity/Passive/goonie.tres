@@ -2,7 +2,11 @@
 
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_aommt"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_f48il"]
-[ext_resource type="Texture2D" uid="uid://bc0afr4xgq4p2" path="res://assets/textures/object/entity/passive/ld_goonie.png" id="1_spkst"]
+[ext_resource type="Texture2D" uid="uid://dcq1kqe3c5wbk" path="res://assets/textures/object/entity/passive/goonie_fly.png" id="1_spkst"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_podw1"]
+atlas = ExtResource("1_spkst")
+region = Rect2(282, -5, 48, 48)
 
 [resource]
 script = ExtResource("1_aommt")
@@ -11,5 +15,5 @@ category_string = "Entity"
 subpath = "Passive/goonie"
 group_path = "Passive"
 ld_object_path = "Entity/Passive/goonie"
-ld_entry_texture = ExtResource("1_spkst")
+ld_entry_texture = SubResource("AtlasTexture_podw1")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

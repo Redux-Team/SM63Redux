@@ -4,6 +4,10 @@
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_8ocry"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_vn05c"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_1rg4h"]
+atlas = ExtResource("1_vn05c")
+region = Rect2(0, 0, 48, 48)
+
 [resource]
 script = ExtResource("2_vn05c")
 id = "mushroom_tall"
@@ -12,5 +16,5 @@ category_string = "Props"
 subpath = "Nature/mushroom_tall"
 group_path = "Nature"
 ld_object_path = "Props/Nature/mushroom_tall"
-ld_entry_texture = ExtResource("1_vn05c")
+ld_entry_texture = SubResource("AtlasTexture_1rg4h")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -11,7 +11,7 @@
 [ext_resource type="Resource" uid="uid://ya5iq8bilpi" path="res://game/db/Objects/Entity/Passive/goonie.tres" id="6_uuvj5"]
 [ext_resource type="Resource" uid="uid://dooks7pjmro81" path="res://game/db/Objects/Entity/Passive/toad.tres" id="7_mtptv"]
 [ext_resource type="Resource" uid="uid://by8vbnkxga54a" path="res://game/db/Objects/Props/Platforms/log_static.tres" id="7_q34o8"]
-[ext_resource type="Resource" uid="uid://dkyd466tbfa22" path="res://game/db/Objects/Props/Platforms/log_tipping.tres" id="8_2g8kd"]
+[ext_resource type="Resource" uid="uid://dkyd466tbfa22" path="res://game/db/Objects/Props/Platforms/tipping_log.tres" id="8_2g8kd"]
 [ext_resource type="Resource" uid="uid://dorouht47oho6" path="res://game/db/Objects/Props/Nature/tree_big.tres" id="10_a6jo3"]
 [ext_resource type="Resource" uid="uid://dsj6dbrrkgdee" path="res://game/db/Objects/Props/Nature/tree_small.tres" id="11_3c5mt"]
 [ext_resource type="Resource" uid="uid://cxjkf33colukt" path="res://game/db/Objects/Props/Interactable/breakable_box.tres" id="13_mtptv"]

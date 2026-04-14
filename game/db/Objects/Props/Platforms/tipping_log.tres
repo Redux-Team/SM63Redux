@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dkyd466tbfa22"]
+
+[ext_resource type="PackedScene" uid="uid://taxkdf07e5q7" path="res://game/db/Objects/Props/Platforms/tipping_log_ld.tscn" id="1_hs1pe"]
+[ext_resource type="Texture2D" uid="uid://bnjhvv0pcctk4" path="res://assets/textures/object/props/platform/tipping_log_ld.png" id="2_kbjqa"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_gajl3"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_puidc"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="5_02qmg"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_ehxpq"]
+[ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="7_vt87j"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_xvy65"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_poit2"]
+atlas = ExtResource("2_kbjqa")
+region = Rect2(-4, -9, 48, 48)
+margin = Rect2(3, 0, 0, 0)
+
+[resource]
+script = ExtResource("8_xvy65")
+id = "log_tipping"
+category = 5
+category_string = "Props"
+subpath = "Platforms/log_tipping"
+group_path = "Platforms"
+ld_object_path = "Props/Platforms/log_tipping"
+ld_entry_texture = SubResource("AtlasTexture_poit2")
+ld_editor_instance = ExtResource("1_hs1pe")
+ld_properties = Array[ExtResource("3_gajl3")]([ExtResource("4_puidc"), ExtResource("5_02qmg"), ExtResource("6_ehxpq"), ExtResource("7_vt87j")])
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

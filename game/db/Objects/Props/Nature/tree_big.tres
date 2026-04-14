@@ -1,9 +1,13 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dorouht47oho6"]
 
-[ext_resource type="Texture2D" uid="uid://62dn703scibk" path="res://assets/textures/object/props/nature/ld_tree_big.png" id="1_0fxnu"]
 [ext_resource type="PackedScene" uid="uid://bmcvyfgksclfm" path="res://game/db/Objects/Props/Nature/tree_big_ld.tscn" id="1_gade0"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_8yjrl"]
+[ext_resource type="Texture2D" uid="uid://bwwvgmbahnlcy" path="res://assets/textures/object/props/nature/tree_big.png" id="2_kmam2"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_ci8sl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ounpj"]
+atlas = ExtResource("2_kmam2")
+region = Rect2(4, 36, 48, 48)
 
 [resource]
 script = ExtResource("2_8yjrl")
@@ -13,6 +17,6 @@ category_string = "Props"
 subpath = "Nature/tree_big"
 group_path = "Nature"
 ld_object_path = "Props/Nature/tree_big"
-ld_entry_texture = ExtResource("1_0fxnu")
+ld_entry_texture = SubResource("AtlasTexture_ounpj")
 ld_editor_instance = ExtResource("1_gade0")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
