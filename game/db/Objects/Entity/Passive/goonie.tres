@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_aommt"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_f48il"]
+[ext_resource type="Texture2D" uid="uid://bc0afr4xgq4p2" path="res://assets/textures/object/entity/passive/ld_goonie.png" id="1_spkst"]
 
 [resource]
 script = ExtResource("1_aommt")
@@ -10,4 +11,5 @@ category_string = "Entity"
 subpath = "Passive/goonie"
 group_path = "Passive"
 ld_object_path = "Entity/Passive/goonie"
+ld_entry_texture = ExtResource("1_spkst")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

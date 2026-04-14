@@ -49,7 +49,6 @@ export/convert_text_resources_to_binary=false
 
 folder_colors={
 "res://assets/": "teal",
-"res://assets/textures/gui/": "teal",
 "res://core/": "red",
 "res://game/": "blue",
 "res://global/": "orange",
