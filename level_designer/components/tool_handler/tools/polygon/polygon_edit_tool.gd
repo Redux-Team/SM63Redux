@@ -359,8 +359,9 @@ func _delete_point(index: int) -> void:
 		var hole: PackedVector2Array = _editing_object.get_hole(hole_idx)
 		var hi: int = hole_idx
 		
+		var history: LDHistoryHandler = LD.get_history_handler()
+		
 		if hole.size() <= 3:
-			var history: LDHistoryHandler = LD.get_history_handler()
 			history.begin_action("Remove Hole")
 			history.add_do(func() -> void:
 				if is_instance_valid(obj):
@@ -387,7 +388,6 @@ func _delete_point(index: int) -> void:
 		var new_hole: PackedVector2Array = hole.duplicate()
 		new_hole.remove_at(local_idx)
 		
-		var history: LDHistoryHandler = LD.get_history_handler()
 		history.begin_action("Delete Hole Point")
 		history.add_do(func() -> void:
 			if is_instance_valid(obj):

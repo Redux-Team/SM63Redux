@@ -132,7 +132,8 @@ func _exit_current_state(to_state: StringName) -> void:
 
 func _enter_new_state(new_state: State, old_state: State, silent: bool) -> void:
 	state_timer = 0.0
-	animation_player.play(&"RESET")
+	if animation_player.has_animation(&"RESET"):
+		animation_player.play(&"RESET")
 	current_state = new_state
 	current_state.enable_processing()
 	

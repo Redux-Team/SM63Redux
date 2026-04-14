@@ -1,3 +1,4 @@
+@warning_ignore_start("unused_parameter")
 extends LDPolygonBooleanTool
 
 
