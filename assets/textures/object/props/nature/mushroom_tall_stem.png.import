@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmsnqvls7t2l3"
-path="res://.godot/imported/ld_terrain_grass.png-002a4558e2bcfd4e6b97f3fc08dd2485.ctex"
+uid="uid://7nxc5tdqfj5d"
+path="res://.godot/imported/mushroom_tall_stem.png-6cba05f6fc1bd547eacf937c78c09cc4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/object/terrain/grass/ld_terrain_grass.png"
-dest_files=["res://.godot/imported/ld_terrain_grass.png-002a4558e2bcfd4e6b97f3fc08dd2485.ctex"]
+source_file="res://assets/textures/object/props/nature/mushroom_tall_stem.png"
+dest_files=["res://.godot/imported/mushroom_tall_stem.png-6cba05f6fc1bd547eacf937c78c09cc4.ctex"]
 
 [params]
 
