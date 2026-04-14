@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://1ymxj4gqgbyl"]
+
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_4s81q"]
+[ext_resource type="Texture2D" uid="uid://y5y8y1fcb3a7" path="res://assets/textures/object/props/nature/ld_tree_medium.png" id="1_5wid2"]
+[ext_resource type="PackedScene" uid="uid://4xwk4ou278o3" path="res://game/db/Objects/Props/Nature/tree_medium_ld.tscn" id="1_6afwt"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_6afwt"]
+
+[resource]
+script = ExtResource("1_4s81q")
+id = "tree_medium"
+category = 5
+category_string = "Props"
+subpath = "Nature/tree_medium"
+group_path = "Nature"
+ld_object_path = "Props/Nature/tree_medium"
+ld_entry_texture = ExtResource("1_5wid2")
+ld_editor_instance = ExtResource("1_6afwt")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dooks7pjmro81"]
+
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_032ic"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_mva43"]
+
+[resource]
+script = ExtResource("1_032ic")
+id = "toad"
+category_string = "Entity"
+subpath = "Passive/toad"
+group_path = "Passive"
+ld_object_path = "Entity/Passive/toad"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bywn2c1kw0pxn"]
+
+[ext_resource type="Texture2D" uid="uid://cgf8cokpn8q8s" path="res://assets/textures/object/props/nature/ld_rock_small.png" id="1_d272c"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_mjm7j"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_wa8fr"]
+
+[resource]
+script = ExtResource("3_wa8fr")
+id = "rock_small"
+category = 5
+category_string = "Props"
+subpath = "Nature/rock_small"
+group_path = "Nature"
+ld_object_path = "Props/Nature/rock_small"
+ld_entry_texture = ExtResource("1_d272c")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

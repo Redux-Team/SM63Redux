@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://eipogn3jdakv"]
+
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_essyf"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_a30of"]
+
+[resource]
+script = ExtResource("3_a30of")
+id = "pipe"
+category = 5
+category_string = "Props"
+subpath = "Gizmos/pipe"
+group_path = "Gizmos"
+ld_object_path = "Props/Gizmos/pipe"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

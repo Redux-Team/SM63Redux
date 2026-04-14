@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://bmcvyfgksclfm"]
+
+[ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="1_bik1t"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_bik1t"]
+[ext_resource type="Texture2D" uid="uid://bwwvgmbahnlcy" path="res://assets/textures/object/props/nature/tree_big.png" id="3_m2suw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ak664"]
+resource_local_to_scene = true
+shader = ExtResource("2_bik1t")
+shader_parameter/state = 0
+shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m03ki"]
+size = Vector2(52, 83)
+
+[node name="TreeBig" type="Node2D" unique_id=1039791590 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+script = ExtResource("1_bik1t")
+sprite_ref = NodePath("Sprite")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+metadata/_custom_type_script = "uid://cfx4civm76jwr"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=716865355]
+material = SubResource("ShaderMaterial_ak664")
+texture = ExtResource("3_m2suw")
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=1978033632]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=416735272]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_m03ki")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=47708532]

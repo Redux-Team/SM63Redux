@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://b0vrwrys5wyru"]
+
+[ext_resource type="Texture2D" uid="uid://brxwoltll0h4e" path="res://assets/textures/object/props/interactable/ld_sign_hanging.png" id="1_puh3m"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_7xat1"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_wm0dj"]
+
+[resource]
+script = ExtResource("2_7xat1")
+id = "sign_hanging"
+category = 5
+category_string = "Props"
+subpath = "Interactable/sign_hanging"
+group_path = "Interactable"
+name_override = "Hanging Sign"
+ld_object_path = "Props/Interactable/sign_hanging"
+ld_entry_texture = ExtResource("1_puh3m")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

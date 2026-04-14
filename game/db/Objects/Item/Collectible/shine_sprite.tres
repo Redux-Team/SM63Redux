@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dp8ylwxcasadn"]
+
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_14b87"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_q4ysq"]
+
+[resource]
+script = ExtResource("1_14b87")
+id = "shine_sprite"
+category = 1
+category_string = "Item"
+subpath = "Collectible/shine_sprite"
+group_path = "Collectible"
+ld_object_path = "Item/Collectible/shine_sprite"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

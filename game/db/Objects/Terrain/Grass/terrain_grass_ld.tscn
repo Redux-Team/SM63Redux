@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://km8g6043fcab"]
+
+[ext_resource type="Script" uid="uid://cpps8bcdccbtj" path="res://game/db/Objects/ld_object_polygon.gd" id="1_joldw"]
+[ext_resource type="Resource" uid="uid://dk6i5cghf5cya" path="res://game/db/Objects/Terrain/Grass/terrain_grass_data.tres" id="2_56xei"]
+[ext_resource type="Texture2D" uid="uid://lwejtx4lbmrb" path="res://assets/textures/object/terrain/grass/terrain_grass_base.png" id="3_t5nss"]
+
+[node name="Grass" type="Node2D" unique_id=642150737 node_paths=PackedStringArray("_polygon", "_topline_container", "_topline_shadow_container", "_outline_container", "editor_polygon", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+script = ExtResource("1_joldw")
+terrain_data = ExtResource("2_56xei")
+_polygon = NodePath("Polygon")
+_topline_container = NodePath("ToplineContainer")
+_topline_shadow_container = NodePath("Polygon/ToplineShadowContainer")
+_outline_container = NodePath("OutlineContainer")
+editor_polygon = NodePath("EditorShapeArea/EditorShape")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+metadata/_custom_type_script = "uid://cpps8bcdccbtj"
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=345933363]
+
+[node name="EditorShape" type="CollisionPolygon2D" parent="EditorShapeArea" unique_id=619848017]
+
+[node name="Origin" type="Marker2D" parent="." unique_id=1031779291]
+
+[node name="Polygon" type="Polygon2D" parent="." unique_id=955545888]
+clip_children = 2
+texture_repeat = 2
+texture = ExtResource("3_t5nss")
+
+[node name="ToplineShadowContainer" type="Node2D" parent="Polygon" unique_id=503219557]
+
+[node name="OutlineContainer" type="Node2D" parent="." unique_id=1580151796]
+
+[node name="ToplineContainer" type="Node2D" parent="." unique_id=341742083]

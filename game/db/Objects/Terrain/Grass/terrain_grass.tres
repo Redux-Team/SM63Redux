@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cfa6sdichbg83"]
+
+[ext_resource type="PackedScene" uid="uid://cv8nnea0n101c" path="res://game/db/Objects/Terrain/Grass/terrain_grass_lvl.tscn" id="1_8ntgt"]
+[ext_resource type="PackedScene" uid="uid://km8g6043fcab" path="res://game/db/Objects/Terrain/Grass/terrain_grass_ld.tscn" id="1_fwwft"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_o2ahu"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_fwwft"]
+[ext_resource type="Texture2D" uid="uid://cmsnqvls7t2l3" path="res://assets/textures/object/terrain/grass/ld_terrain_grass.png" id="2_g0k2x"]
+
+[resource]
+script = ExtResource("2_fwwft")
+id = "terrain_grass"
+category = 2
+category_string = "Terrain"
+subpath = "Grass/terrain_grass"
+group_path = "Grass"
+ld_object_path = "Terrain/Grass/terrain_grass"
+ld_entry_texture = ExtResource("2_g0k2x")
+ld_editor_instance = ExtResource("1_fwwft")
+game_instance = ExtResource("1_8ntgt")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

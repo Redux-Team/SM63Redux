@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://dau7wqu8mh6uk"]
+
+[ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="1_s55gt"]
+[ext_resource type="Texture2D" uid="uid://daac41f3cff3v" path="res://assets/textures/object/props/platform/ld_log_falling.png" id="2_2tonp"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_s55gt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hwhe7"]
+resource_local_to_scene = true
+shader = ExtResource("2_s55gt")
+shader_parameter/state = 0
+shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s55gt"]
+size = Vector2(16, 21.5)
+
+[node name="LogFalling" type="Node2D" unique_id=897880741 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+script = ExtResource("1_s55gt")
+sprite_ref = NodePath("Sprite")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+metadata/_custom_type_script = "uid://cfx4civm76jwr"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1747522246]
+material = SubResource("ShaderMaterial_hwhe7")
+texture = ExtResource("2_2tonp")
+offset = Vector2(0, -1)
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=1385945401]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=746685743]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_s55gt")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=1626338790]
