@@ -146,12 +146,13 @@ switch_mode = 2
 advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xtefv"]
+reset = false
 advance_mode = 2
 advance_expression = "has_rider()"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bslqv"]
 advance_mode = 2
-advance_expression = "!has_rider()"
+advance_expression = "has_rider()"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bodhv"]
 reset = false
@@ -166,7 +167,7 @@ states/glide/position = Vector2(577, 100)
 states/heavy_flap/node = SubResource("AnimationNodeAnimation_xtefv")
 states/heavy_flap/position = Vector2(479, 223)
 transitions = ["Start", "flap", SubResource("AnimationNodeStateMachineTransition_pbwgp"), "flap", "glide", SubResource("AnimationNodeStateMachineTransition_dskmv"), "glide", "flap", SubResource("AnimationNodeStateMachineTransition_0v6xk"), "flap", "heavy_flap", SubResource("AnimationNodeStateMachineTransition_xtefv"), "glide", "heavy_flap", SubResource("AnimationNodeStateMachineTransition_bslqv"), "heavy_flap", "flap", SubResource("AnimationNodeStateMachineTransition_bodhv")]
-graph_offset = Vector2(0, 55)
+graph_offset = Vector2(78.29999, 36.06255)
 
 [sub_resource type="Animation" id="Animation_i5hl1"]
 resource_name = "base"
