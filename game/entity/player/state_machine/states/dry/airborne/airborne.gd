@@ -10,10 +10,11 @@ func _physics_process(delta: float) -> void:
 func air_move(move_dir: float) -> void:
 	var accel: float = player.walk_acceleration
 	var max_speed: float = player.run_max_speed
-	var accel_mult: float = 0.85
+	var is_spinning: bool = state_machine.current_state.name == "Spin"
+	var accel_mult: float = 0.35 if is_spinning else 0.85
 	
 	if sign(player.velocity.x) != sign(move_dir) and abs(player.velocity.x) > 10.0:
-		accel_mult = 2.8
+		accel_mult = 1.4 if is_spinning else 2.8
 	
 	var vx: float = player.velocity.x
 	
