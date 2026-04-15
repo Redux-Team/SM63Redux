@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://cmyi1dmnejyfe"]
+
+[ext_resource type="Script" uid="uid://bsswcbgcrlwv2" path="res://game/db/Objects/level_object.gd" id="1_wkafj"]
+[ext_resource type="Texture2D" uid="uid://krqjismkwu4j" path="res://assets/textures/props/hints/arrow.png" id="2_77io5"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_1n5ni"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_77io5"]
+diffuse_texture = ExtResource("2_77io5")
+
+[node name="Arrow" type="Node2D" unique_id=272511246]
+script = ExtResource("1_wkafj")
+metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=2085095849]
+texture = SubResource("CanvasTexture_77io5")
+script = ExtResource("3_1n5ni")
+canvas_texture = SubResource("CanvasTexture_77io5")
+diffuse_texture = ExtResource("2_77io5")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"

@@ -22,7 +22,7 @@ func populate_list(category: GameObject.ObjectCategory = GameObject.ObjectCatego
 	
 	for n: Node in groups_v_box.get_children(): n.queue_free()
 	
-	var objects: Array[GameObject] = GameObjectDB.get_db().get_from_category(category)
+	var objects: Array[GameObject] = GameDB.get_db().get_from_category(category)
 	var groups: Dictionary[String, LDObjectBrowserGroup]
 	
 	for obj: GameObject in objects:

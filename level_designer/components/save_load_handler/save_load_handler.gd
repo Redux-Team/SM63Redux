@@ -156,7 +156,7 @@ func _deserialize(data: Dictionary) -> Error:
 		viewport._layers_root.remove_child(abs_layer)
 		abs_layer.free()
 	
-	var db: GameObjectDB = GameObjectDB.get_db()
+	var db: GameDB = GameDB.get_db()
 	
 	for layer_data: Variant in data["layers"]:
 		if not layer_data is Dictionary:
@@ -177,7 +177,7 @@ func _deserialize(data: Dictionary) -> Error:
 	return OK
 
 
-func _deserialize_object(data: Dictionary, layer_id: String, db: GameObjectDB) -> void:
+func _deserialize_object(data: Dictionary, layer_id: String, db: GameDB) -> void:
 	var object_id: String = data.get("object_id", "")
 	if object_id.is_empty():
 		return
@@ -223,10 +223,10 @@ func _deserialize_object(data: Dictionary, layer_id: String, db: GameObjectDB) -
 func find_game_object_for(obj: LDObject) -> GameObject:
 	if obj.source_object_id.is_empty():
 		return null
-	return find_game_object_by_id(obj.source_object_id, GameObjectDB.get_db())
+	return find_game_object_by_id(obj.source_object_id, GameDB.get_db())
 
 
-func find_game_object_by_id(id: String, db: GameObjectDB) -> GameObject:
+func find_game_object_by_id(id: String, db: GameDB) -> GameObject:
 	for game_object: GameObject in db.objects.values():
 		if game_object.id == id:
 			return game_object

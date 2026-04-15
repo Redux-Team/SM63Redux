@@ -441,7 +441,7 @@ func _commit() -> void:
 				for h: PackedVector2Array in first_holes:
 					obj.add_hole(h)
 				
-				var game_object: GameObject = GameObjectDB.get_db().find_game_object(target.source_object_id)
+				var game_object: GameObject = GameDB.get_db().find_game_object(target.source_object_id)
 				var layer_id: String = "a0r0"
 				if target.get_parent() is LDLayer:
 					layer_id = (target.get_parent() as LDLayer).layer_id
@@ -583,7 +583,7 @@ func _commit() -> void:
 				for h: PackedVector2Array in first_holes:
 					obj.add_hole(h)
 				
-				var game_object: GameObject = GameObjectDB.get_db().find_game_object(target.source_object_id)
+				var game_object: GameObject = GameDB.get_db().find_game_object(target.source_object_id)
 				var layer_id: String = "a0r0"
 				if target.get_parent() is LDLayer:
 					layer_id = (target.get_parent() as LDLayer).layer_id

@@ -1,27 +1,36 @@
 @tool
 @warning_ignore_start("unused_private_class_variable")
-class_name GameObjectDB
+class_name GameDB
 extends Resource
 
-static var _inst: GameObjectDB
+static var _inst: GameDB
 
 @export var objects: Dictionary[String, GameObject]
-@export_dir var database_dir: String
+@export var properties: Dictionary[String, LDProperty]
+@export_dir var objects_root: String
+@export_dir var properties_root: String
 
 @export_tool_button("Auto-populate objects") var _populate_objects: Callable:
 	get:
 		return func() -> void:
-			populate_objects(database_dir)
+			populate_objects(objects_root)
+
+
+@export_tool_button("Auto-populate properties") var _populate_props: Callable:
+	get:
+		return func() -> void:
+			populate_properties(properties_root)
+
 
 @export_tool_button("Repopulate objects (clean)") var _repopulate_objects: Callable:
 	get:
 		return func() -> void:
 			objects.clear()
-			populate_objects.call(database_dir)
+			populate_objects.call(objects_root)
 
 @export_category("Debug")
-@export_dir var ld_object_database_dir: String
-@export_dir var level_object_database_dir: String
+@export_dir var ld_object_objects_root: String
+@export_dir var level_object_objects_root: String
 
 
 
@@ -30,7 +39,7 @@ static var _inst: GameObjectDB
 		return func() -> void:
 			var game_files: Array[String] = _collect_ld_eligible_basenames()
 			var skipped: int = objects.size() - game_files.size()
-			var ld_files: Array[String] = _collect_basenames(ld_object_database_dir, "tscn")
+			var ld_files: Array[String] = _collect_basenames(ld_object_objects_root, "tscn")
 			var missing: Array[String] = []
 			for name: String in game_files:
 				if name not in ld_files:
@@ -48,7 +57,7 @@ static var _inst: GameObjectDB
 		return func() -> void:
 			var game_files: Array[String] = _collect_ld_eligible_basenames()
 			var skipped: int = objects.size() - game_files.size()
-			var level_files: Array[String] = _collect_basenames(level_object_database_dir, "tscn")
+			var level_files: Array[String] = _collect_basenames(level_object_objects_root, "tscn")
 			var missing: Array[String] = []
 			for name: String in game_files:
 				if name not in level_files:
@@ -94,7 +103,7 @@ static var _inst: GameObjectDB
 
 
 
-static func get_db() -> GameObjectDB:
+static func get_db() -> GameDB:
 	if not _inst:
 		_inst = load("uid://860ancqo5p43")
 	return _inst
@@ -127,7 +136,7 @@ func populate_objects(path: String) -> void:
 		elif file_name.ends_with(".tres"):
 			var res: Resource = load(full_path)
 			if res is GameObject:
-				var obj_path: String = full_path.trim_prefix(database_dir.trim_suffix("/") + "/").trim_suffix(".tres")
+				var obj_path: String = full_path.trim_prefix(objects_root.trim_suffix("/") + "/").trim_suffix(".tres")
 				var category_name: String = obj_path.get_slice("/", 0)
 				var obj: GameObject = res as GameObject
 				obj.id = file_name.get_basename()
@@ -143,6 +152,28 @@ func find_game_object(id: String) -> GameObject:
 		if obj.id == id:
 			return obj
 	return null
+
+
+func populate_properties(path: String) -> void:
+	var dir: DirAccess = DirAccess.open(path)
+	if not dir:
+		return
+	
+	dir.list_dir_begin()
+	var file_name: String = dir.get_next()
+	
+	while file_name != "":
+		var full_path: String = path.path_join(file_name)
+		if dir.current_is_dir():
+			populate_properties(full_path)
+		elif file_name.ends_with(".tres"):
+			var res: Resource = load(full_path)
+			if res is LDProperty:
+				var prop: LDProperty = res as LDProperty
+				var prop_path: String = full_path.trim_prefix(properties_root.trim_suffix("/") + "/").trim_suffix(".tres")
+				if prop_path not in properties:
+					properties.set(prop_path, prop)
+		file_name = dir.get_next()
 
 
 func _collect_ld_eligible_basenames() -> Array[String]:

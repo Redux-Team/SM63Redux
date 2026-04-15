@@ -96,7 +96,7 @@ func _instantiate_object(data: Dictionary, layer_id: String) -> void:
 	if object_id.is_empty():
 		return
 	
-	var game_object: GameObject = GameObjectDB.get_db().find_game_object(object_id)
+	var game_object: GameObject = GameDB.get_db().find_game_object(object_id)
 	if not game_object or not game_object.game_instance:
 		return
 	
