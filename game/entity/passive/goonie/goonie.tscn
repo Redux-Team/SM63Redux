@@ -110,10 +110,10 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dskmv"]
-size = Vector2(20, 3)
+size = Vector2(32, 3)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oohn0"]
-size = Vector2(22, 12)
+size = Vector2(32, 12)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0v6xk"]
 animation = &"base"
@@ -147,16 +147,16 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xtefv"]
 advance_mode = 2
-advance_expression = "!riders.is_empty()"
+advance_expression = "has_rider()"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bslqv"]
 advance_mode = 2
-advance_expression = "!riders.is_empty()"
+advance_expression = "!has_rider()"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bodhv"]
 reset = false
 advance_mode = 2
-advance_expression = "riders.is_empty()"
+advance_expression = "!has_rider()"
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_0v6xk"]
 states/flap/node = SubResource("AnimationNodeAnimation_0v6xk")
@@ -260,8 +260,6 @@ script = ExtResource("10_xtefv")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="StateMachine" unique_id=197117955]
 libraries/ = SubResource("AnimationLibrary_pbwgp")
-
-[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="." unique_id=1510130642]
 
 [connection signal="body_entered" from="RideArea" to="StateMachine/Processes/RiderHandler" method="_on_ride_area_body_entered"]
 [connection signal="body_exited" from="RideArea" to="StateMachine/Processes/RiderHandler" method="_on_ride_area_body_exited"]
