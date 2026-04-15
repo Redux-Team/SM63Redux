@@ -234,6 +234,8 @@ jump={
 2d_physics/layer_3="Water"
 2d_physics/layer_4="Entity"
 2d_physics/layer_9="Feet"
+2d_physics/layer_10="Ground Pound"
+2d_physics/layer_11="Spin"
 
 [rendering]
 

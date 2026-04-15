@@ -10,6 +10,7 @@ signal machine_ended
 @export var sprite: SmartSprite2D
 @export var states: Dictionary[StringName, State]
 @export var processes: Array[StateProcess]
+@export var default_collision_shape: CollisionShape2D
 
 
 var animation_player: AnimationPlayer:
@@ -21,6 +22,7 @@ var last_animation_node: StringName
 var active_animations: Array[AnimationChain] = []
 var state_buffer: float = 0.0
 var state_timer: float = 0.0
+var base_collision_mask: int = -1
 var can_consume_buffer: bool = false
 
 
@@ -114,6 +116,13 @@ func _exit_current_state(to_state: StringName) -> void:
 	
 	current_state._on_exit(to_state)
 	
+	if current_state.has_collision_override:
+		default_collision_shape.set_deferred(&"disabled", false)
+		current_state.collision_override.set_deferred(&"disabled", true)
+		
+		if current_state.has_collision_mask_override:
+			entity.collision_mask = base_collision_mask
+	
 	if current_state.has_default_sfx and current_state.enter_sfx:
 		if current_state.enter_sfx.stop_on_state_exit:
 			current_state.enter_sfx.stop_all()
@@ -140,6 +149,15 @@ func _enter_new_state(new_state: State, old_state: State, silent: bool) -> void:
 	if current_state.has_default_sfx and not silent:
 		if current_state.enter_sfx:
 			current_state.enter_sfx.play_sfx()
+	
+	if current_state.has_collision_override:
+		default_collision_shape.set_deferred(&"disabled", true)
+		current_state.collision_override.set_deferred(&"disabled", false)
+		
+		if current_state.has_collision_mask_override:
+			if base_collision_mask == -1:
+				base_collision_mask = entity.collision_mask
+			entity.collision_mask = current_state.collision_mask
 	
 	current_state._on_enter(old_state.state_name if old_state else &"")
 	

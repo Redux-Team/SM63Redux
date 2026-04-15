@@ -9,7 +9,5 @@ func _physics_process(_delta: float) -> void:
 		state_machine.change_state(&"SwimIdle")
 	if player.is_in_water:
 		player.velocity.y = lerpf(player.velocity.y, 0, 0.08)
-
-
-func _on_exit(_to: StringName) -> void:
-	player.set_gravity_enabled(true)
+	
+	player.velocity.y = min(player.velocity.y, 800)

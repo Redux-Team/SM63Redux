@@ -86,12 +86,12 @@
 [ext_resource type="AudioStream" uid="uid://bbscycsfnsu3l" path="res://assets/sfx/player/mario/ground_pound/ground_pound_snow.wav" id="67_iy1it"]
 [ext_resource type="Script" uid="uid://veukwwx18y5s" path="res://game/entity/player/fludd_handler.gd" id="81_va0vu"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8pcyd"]
-atlas = ExtResource("2_heu0c")
-region = Rect2(96, 0, 48, 48)
+[sub_resource type="AtlasTexture" id="AtlasTexture_ijn2u"]
+atlas = ExtResource("9_k6116")
+region = Rect2(48, 0, 48, 48)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_kyrvb"]
-diffuse_texture = SubResource("AtlasTexture_8pcyd")
+diffuse_texture = SubResource("AtlasTexture_ijn2u")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
 atlas = ExtResource("2_conr4")
@@ -141,6 +141,10 @@ region = Rect2(0, 0, 48, 48)
 atlas = ExtResource("2_heu0c")
 region = Rect2(48, 0, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_8pcyd"]
+atlas = ExtResource("2_heu0c")
+region = Rect2(96, 0, 48, 48)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_fq5t3"]
 atlas = ExtResource("2_heu0c")
 region = Rect2(144, 0, 48, 48)
@@ -164,10 +168,6 @@ region = Rect2(0, 0, 48, 48)
 [sub_resource type="AtlasTexture" id="AtlasTexture_j8m7m"]
 atlas = ExtResource("9_k6116")
 region = Rect2(0, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ijn2u"]
-atlas = ExtResource("9_k6116")
-region = Rect2(48, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_or46b"]
 atlas = ExtResource("9_k6116")
@@ -512,8 +512,14 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fstnu"]
+size = Vector2(40, 13)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x4rrl"]
 size = Vector2(10, 27)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q4egk"]
+size = Vector2(10, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i5qpf"]
 size = Vector2(4, 4)
@@ -1113,14 +1119,16 @@ _data = {
 &"triple_jump": SubResource("Animation_tv6ny")
 }
 
-[node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("state_machine", "debug_container", "floor_slope_raycast", "sprite", "components_root")]
-collision_mask = 3
-floor_snap_length = 16.0
+[node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("state_machine", "debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "sprite", "components_root")]
+collision_mask = 515
+floor_snap_length = 0.5
 script = ExtResource("1_oic1i")
 midair_turn_speed = 2.5
 state_machine = NodePath("StateMachine")
 debug_container = NodePath("DebugContainer")
 floor_slope_raycast = NodePath("FloorSlopeRaycast")
+spin_area = NodePath("SpinArea")
+spin_shape = NodePath("SpinArea/CollisionShape2D")
 sprite = NodePath("Doll")
 components_root = NodePath("Components")
 
@@ -1143,13 +1151,13 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 position = Vector2(2, -13)
 texture = SubResource("CanvasTexture_kyrvb")
 region_enabled = true
-region_rect = Rect2(96, 0, 48, 48)
+region_rect = Rect2(48, 0, 48, 48)
 script = ExtResource("2_cjmyu")
 canvas_texture = SubResource("CanvasTexture_kyrvb")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
-current_animation = "idle"
-current_frame = 2
+current_animation = "spin_loop"
+current_frame = 1
 speed_scale = 1.0
 playing = false
 
@@ -1165,9 +1173,24 @@ visible = false
 position = Vector2(-1, -7.5)
 sprite_frames = SubResource("SpriteFrames_51d5m")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=159540419]
+[node name="SpinArea" type="Area2D" parent="." unique_id=95437441]
+position = Vector2(2, -10)
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpinArea" unique_id=1772297716]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_fstnu")
+disabled = true
+
+[node name="BaseCollision" type="CollisionShape2D" parent="." unique_id=159540419]
 position = Vector2(2, -3)
 shape = SubResource("RectangleShape2D_x4rrl")
+
+[node name="GroundPoundCollision" type="CollisionShape2D" parent="." unique_id=726160771]
+position = Vector2(2, -5)
+shape = SubResource("RectangleShape2D_q4egk")
+disabled = true
 
 [node name="WaterCheck" type="Area2D" parent="." unique_id=258307688]
 collision_mask = 4
@@ -1206,7 +1229,7 @@ theme_type_variation = &"DebugLabel"
 text = "Current State: Idle"
 horizontal_alignment = 1
 
-[node name="StateMachine" type="AnimationTree" parent="." unique_id=533484663 node_paths=PackedStringArray("entity", "sprite")]
+[node name="StateMachine" type="AnimationTree" parent="." unique_id=533484663 node_paths=PackedStringArray("entity", "sprite", "default_collision_shape")]
 root_node = NodePath(".")
 tree_root = SubResource("AnimationNodeStateMachine_oic1i")
 advance_expression_base_node = NodePath("..")
@@ -1215,6 +1238,7 @@ parameters/conditions/landed = false
 script = ExtResource("5_v0nmi")
 entity = NodePath("..")
 sprite = NodePath("../Doll")
+default_collision_shape = NodePath("../BaseCollision")
 metadata/_custom_type_script = "uid://be2xsj74ekqmn"
 
 [node name="States" type="Node" parent="StateMachine" unique_id=1047315341]
@@ -1352,27 +1376,39 @@ has_default_sfx = true
 enter_sfx = SubResource("Resource_d345w")
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
-[node name="GroundPoundStart" type="Node" parent="StateMachine/States/Dry/Airborne" unique_id=1339852990]
+[node name="GroundPoundStart" type="Node" parent="StateMachine/States/Dry/Airborne" unique_id=1339852990 node_paths=PackedStringArray("collision_override")]
 script = ExtResource("26_6strl")
 lock_sprite_flipping = true
 has_default_animations = true
 animations = Array[StringName]([&"ground_pound_start"])
 has_default_sfx = true
 enter_sfx = SubResource("Resource_edb1s")
+has_collision_override = true
+collision_override = NodePath("../../../../../GroundPoundCollision")
+has_collision_mask_override = true
+collision_mask = 3
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
-[node name="GroundPoundFall" type="Node" parent="StateMachine/States/Dry/Airborne/GroundPoundStart" unique_id=1948773742]
+[node name="GroundPoundFall" type="Node" parent="StateMachine/States/Dry/Airborne/GroundPoundStart" unique_id=1948773742 node_paths=PackedStringArray("collision_override")]
 script = ExtResource("27_tv6ny")
 lock_sprite_flipping = true
 has_default_animations = true
 animations = Array[StringName]([&"ground_pound_fall"])
+has_collision_override = true
+collision_override = NodePath("../../../../../../GroundPoundCollision")
+has_collision_mask_override = true
+collision_mask = 3
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
-[node name="GroundPoundSlam" type="Node" parent="StateMachine/States/Dry/Airborne/GroundPoundStart" unique_id=1203054088]
+[node name="GroundPoundSlam" type="Node" parent="StateMachine/States/Dry/Airborne/GroundPoundStart" unique_id=1203054088 node_paths=PackedStringArray("collision_override")]
 script = ExtResource("28_2vc1s")
 lock_sprite_flipping = true
 has_default_sfx = true
 enter_sfx = SubResource("Resource_6bnsh")
+has_collision_override = true
+collision_override = NodePath("../../../../../../GroundPoundCollision")
+has_collision_mask_override = true
+collision_mask = 3
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="Spin" type="Node" parent="StateMachine/States/Dry" unique_id=890508127 node_paths=PackedStringArray("superstate")]

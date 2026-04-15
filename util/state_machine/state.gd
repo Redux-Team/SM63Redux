@@ -18,6 +18,15 @@ extends Node
 @export var continuous_sfx: SFXBank
 
 
+@export_group("Collision Override")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var has_collision_override: bool = false
+@export var collision_override: CollisionShape2D
+
+@export_subgroup("Collision Mask Override")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var has_collision_mask_override: bool = false
+@export_flags_2d_physics var collision_mask: int = 0
+
+
 @export_group("Assertions", "assertions")
 ## Whether assertions are enabled, useful when tracking down incorrect behavior during a state.
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var assertions_enabled: bool = false

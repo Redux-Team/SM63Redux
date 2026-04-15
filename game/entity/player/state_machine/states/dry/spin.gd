@@ -6,6 +6,9 @@ func _on_enter(_from: StringName) -> void:
 	player.is_spinning = true
 	player.current_jump = 0
 	player.jump_chain_timer = 0
+	player.spin_area.set_deferred(&"monitoring", true)
+	player.spin_area.set_deferred(&"monitorable", true)
+	player.spin_shape.set_deferred(&"disabled", false)
 	
 	if not player.is_on_floor():
 		player.set_gravity_enabled(false)
@@ -32,3 +35,7 @@ func _physics_process(_delta: float) -> void:
 func _on_exit(_to: StringName) -> void:
 	player.set_gravity_enabled(true)
 	player.set_gravity_scale_factor(1.0)
+	
+	player.spin_area.set_deferred(&"monitoring", false)
+	player.spin_area.set_deferred(&"monitorable", false)
+	player.spin_shape.set_deferred(&"disabled", true)

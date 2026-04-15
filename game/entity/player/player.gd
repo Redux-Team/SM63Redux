@@ -30,6 +30,8 @@ signal exited_water
 @export var state_machine: StateMachine
 @export var debug_container: Control
 @export var floor_slope_raycast: RayCast2D
+@export var spin_area: Area2D
+@export var spin_shape: CollisionShape2D
 
 
 var move_dir: float = 0.0

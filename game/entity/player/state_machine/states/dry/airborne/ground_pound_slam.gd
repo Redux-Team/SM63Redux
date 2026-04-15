@@ -1,7 +1,6 @@
 extends State
 
 func _on_enter(_from: StringName) -> void:
-	player.set_gravity_enabled(true)
 	player.can_jump = false
 
 
