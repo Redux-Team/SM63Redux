@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://hsblflmkc6wq" path="res://assets/textures/terrain/grass/terrain_grass_top_left.png" id="4_6y8lx"]
 [ext_resource type="Texture2D" uid="uid://da4iii6wieke3" path="res://assets/textures/terrain/grass/terrain_grass_top_right.png" id="5_7ymwp"]
 [ext_resource type="Texture2D" uid="uid://dt5o1wfangng7" path="res://assets/textures/terrain/grass/terrain_grass_shadow.png" id="6_dy7xf"]
-[ext_resource type="Texture2D" uid="uid://bnujv1chhr2ow" path="res://_local/testing/top.png" id="7_pt30h"]
+[ext_resource type="Texture2D" uid="uid://rskimd81gk3w" path="res://assets/textures/terrain/grass/terrain_grass_top.png" id="7_pt30h"]
 
 [resource]
 script = ExtResource("3_ud44r")
