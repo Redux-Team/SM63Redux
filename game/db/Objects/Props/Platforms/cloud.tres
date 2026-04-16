@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://v3yk2lwwo751"]
 
 [ext_resource type="PackedScene" uid="uid://cdt1c8k3ssy42" path="res://game/db/Objects/Props/Platforms/cloud_ld.tscn" id="1_6e1ic"]
+[ext_resource type="PackedScene" uid="uid://cptpegsjf3l40" path="res://game/object/cloud/cloud.tscn" id="1_7ifo6"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_7janf"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_fbuxj"]
 [ext_resource type="Texture2D" uid="uid://c7s0tisyw4sv7" path="res://assets/textures/props/platform/cloud_ld.png" id="2_i6ukj"]
@@ -24,4 +25,5 @@ ld_object_path = "Props/Platforms/cloud"
 ld_entry_texture = SubResource("AtlasTexture_7ifo6")
 ld_editor_instance = ExtResource("1_6e1ic")
 ld_properties = Array[ExtResource("2_fbuxj")]([ExtResource("4_4qind"), ExtResource("5_i4ngb"), ExtResource("6_ibh1c"), ExtResource("7_as7ay")])
+game_instance = ExtResource("1_7ifo6")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

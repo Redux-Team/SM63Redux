@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://cptpegsjf3l40"]
+
+[ext_resource type="Script" uid="uid://u0c5qwqjxkub" path="res://game/db/Objects/level_object_telescoping.gd" id="1_kupju"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="1_qgg2m"]
+[ext_resource type="Texture2D" uid="uid://37ek0og0lnq8" path="res://assets/textures/props/platform/cloud.png" id="2_kupju"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_25uf0"]
+resource_local_to_scene = true
+shader = ExtResource("1_qgg2m")
+shader_parameter/state = 0
+shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_qiyv7"]
+diffuse_texture = ExtResource("2_kupju")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qgg2m"]
+resource_local_to_scene = true
+size = Vector2(22, 16)
+
+[node name="Cloud" type="Node2D" unique_id=922197771 node_paths=PackedStringArray("nine_patch", "collision_shape")]
+script = ExtResource("1_kupju")
+nine_patch = NodePath("NinePatch")
+collision_shape = NodePath("StaticBody2D/CollisionShape2D")
+metadata/_custom_type_script = "uid://u0c5qwqjxkub"
+
+[node name="NinePatch" type="NinePatchRect" parent="." unique_id=1366655319]
+material = SubResource("ShaderMaterial_25uf0")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.5
+offset_top = -13.0
+offset_right = 12.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_qiyv7")
+region_rect = Rect2(0, 0, 49, 25)
+patch_margin_left = 10
+patch_margin_right = 15
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1719331164]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=702463023]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_qgg2m")
+one_way_collision = true

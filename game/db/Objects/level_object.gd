@@ -3,17 +3,16 @@ extends Node2D
 
 
 var data: Dictionary
-var properties: Dictionary[StringName, Variant] = {}
+var properties: Dictionary = {}
 var source_object_id: String = ""
 
 
 func init_from_data(obj_data: Dictionary) -> void:
 	data = obj_data
 	source_object_id = obj_data.get("object_id", "")
-	var props: Dictionary = obj_data.get("properties", {})
-	for key: String in props:
-		properties[key] = props[key]
-	position = _array_to_vec2(obj_data.get("position", [0.0, 0.0]))
+	properties = obj_data.get("properties")
+	_pre_init()
+	_handle_properties()
 	_on_init()
 
 
@@ -25,7 +24,26 @@ func set_property(key: StringName, value: Variant) -> void:
 	properties[key] = value
 	_on_property_changed(key, value)
 
+## Main property method to be overridden, if necessary. This will go property by property. Call super()
+## to let the superclass handle the property (if applicable).
+func _handle_property(property_name: String, property_value: Variant) -> void:
+	print("%s | %s | %s" % [property_name, property_value, self])
+	if property_name in ["position", "scale"]:
+		set(property_name, _array_to_vec2(property_value))
+	else:
+		set(property_name, property_value)
 
+## Overrides the full property logic of the object.
+func _handle_properties() -> void:
+	for prop_name: String in properties:
+		_handle_property(prop_name, properties.get(prop_name))
+
+
+## Called before properties are set
+func _pre_init() -> void:
+	pass
+
+## Called after properties are set
 func _on_init() -> void:
 	pass
 
