@@ -22,12 +22,13 @@ shader_parameter/pulse_max = 1.0
 diffuse_texture = ExtResource("3_ld7ko")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j2070"]
-size = Vector2(28, 9)
+resource_local_to_scene = true
+size = Vector2(30, 2)
 
-[node name="WoodenPlatform" type="Node2D" unique_id=1192818580 node_paths=PackedStringArray("nine_patch", "collision_shape")]
+[node name="WoodenPlatform" type="Node2D" unique_id=1192818580 node_paths=PackedStringArray("nine_patch", "collision_shapes")]
 script = ExtResource("1_nwkwp")
 nine_patch = NodePath("NinePatch")
-collision_shape = NodePath("StaticBody2D/CollisionShape2D")
+collision_shapes = [NodePath("StaticBody2D/CollisionShape2D")]
 metadata/_custom_type_script = "uid://u0c5qwqjxkub"
 
 [node name="NinePatch" type="NinePatchRect" parent="." unique_id=1848364648]
@@ -53,6 +54,7 @@ axis_stretch_vertical = 1
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=663931534]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1869497392]
-position = Vector2(0, 0.5)
+position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_j2070")
 one_way_collision = true
+one_way_collision_margin = 4.0

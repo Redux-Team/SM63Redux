@@ -2,6 +2,8 @@ class_name LevelObject
 extends Node2D
 
 
+@export var spawn_offset: Vector2
+
 var data: Dictionary
 var properties: Dictionary = {}
 var source_object_id: String = ""
@@ -13,6 +15,9 @@ func init_from_data(obj_data: Dictionary) -> void:
 	properties = obj_data.get("properties")
 	_pre_init()
 	_handle_properties()
+	
+	position += spawn_offset
+	
 	_on_init()
 
 
@@ -27,9 +32,12 @@ func set_property(key: StringName, value: Variant) -> void:
 ## Main property method to be overridden, if necessary. This will go property by property. Call super()
 ## to let the superclass handle the property (if applicable).
 func _handle_property(property_name: String, property_value: Variant) -> void:
-	print("%s | %s | %s" % [property_name, property_value, self])
 	if property_name in ["position", "scale"]:
 		set(property_name, _array_to_vec2(property_value))
+	elif property_name == "disabled":
+		set_process(not property_value)
+		set_physics_process(not property_value)
+		set_process_internal(not property_value)
 	else:
 		set(property_name, property_value)
 

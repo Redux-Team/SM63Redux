@@ -7,22 +7,28 @@ enum ExpandDirection {
 	Y
 }
 
+
 @export var nine_patch: NinePatchRect
-@export var collision_shape: CollisionShape2D
+@export var collision_shapes: Array[CollisionShape2D]
 @export var expand_direction: ExpandDirection = ExpandDirection.X
 
-var _initial_collision_size: Vector2
-var _initial_nine_patch_size: Vector2
 
+var _initial_collision_sizes: Array[Vector2]
+var _initial_nine_patch_size: Vector2
 var t_size_x: int = 0
 var t_size_y: int = 0
 
 
 func _on_init() -> void:
-	if collision_shape and collision_shape.shape is RectangleShape2D:
-		_initial_collision_size = (collision_shape.shape as RectangleShape2D).size
+	for shape: CollisionShape2D in collision_shapes:
+		if shape and shape.shape is RectangleShape2D:
+			_initial_collision_sizes.append((shape.shape as RectangleShape2D).size)
+		else:
+			_initial_collision_sizes.append(Vector2.ZERO)
+	
 	if nine_patch:
 		_initial_nine_patch_size = nine_patch.size
+	
 	_apply_size(t_size_x if expand_direction == ExpandDirection.X else t_size_y)
 
 
@@ -40,11 +46,15 @@ func _apply_size(units: int) -> void:
 		)
 		nine_patch.position = -nine_patch.size / 2.0
 	
-	if collision_shape and collision_shape.shape is RectangleShape2D:
-		var shape: RectangleShape2D = collision_shape.shape 
+	for i: int in collision_shapes.size():
+		var col: CollisionShape2D = collision_shapes[i]
+		if not col or not col.shape is RectangleShape2D:
+			continue
+		var initial: Vector2 = _initial_collision_sizes[i]
+		var shape: RectangleShape2D = col.shape as RectangleShape2D
 		shape.size = Vector2(
-			total if is_x else _initial_collision_size.x,
-			total if not is_x else _initial_collision_size.y
+			total if is_x else initial.x,
+			total if not is_x else initial.y
 		)
 
 

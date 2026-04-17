@@ -19,7 +19,7 @@ shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_ggxns"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_128g7"]
 diffuse_texture = ExtResource("2_mbyu4")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ycd4g"]
@@ -35,12 +35,13 @@ metadata/_custom_type_script = "uid://cfx4civm76jwr"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1112021418]
 material = SubResource("ShaderMaterial_fuidc")
-texture = SubResource("CanvasTexture_ggxns")
+texture = SubResource("CanvasTexture_128g7")
 script = ExtResource("4_128g7")
-canvas_texture = SubResource("CanvasTexture_ggxns")
+canvas_texture = SubResource("CanvasTexture_128g7")
 diffuse_texture = ExtResource("2_mbyu4")
 current_animation = ""
 current_frame = 0
+speed_scale = 1.0
 playing = false
 
 [node name="EditorShapeArea" type="Area2D" parent="." unique_id=1099242803]

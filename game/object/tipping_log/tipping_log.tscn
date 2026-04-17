@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://crc4nl4nsnqah"]
+
+[ext_resource type="Script" uid="uid://dhylcwhc7lj0p" path="res://game/object/tipping_log/tipping_log.gd" id="1_sk8mv"]
+[ext_resource type="Texture2D" uid="uid://10rfu3k8wxbr" path="res://assets/textures/props/platform/tipping_log_base.png" id="3_sk8mv"]
+[ext_resource type="Texture2D" uid="uid://dvul14sedgp7l" path="res://assets/textures/props/platform/tipping_log_center.png" id="4_sk8mv"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="5_q3fnv"]
+[ext_resource type="Script" uid="uid://dvxkxevaf2f45" path="res://core/custom_nodes/2d/ride_area.gd" id="6_q3fnv"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_7e0u6"]
+diffuse_texture = ExtResource("3_sk8mv")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_j421e"]
+diffuse_texture = ExtResource("4_sk8mv")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sk8mv"]
+resource_local_to_scene = true
+size = Vector2(32, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q3fnv"]
+resource_local_to_scene = true
+size = Vector2(32, 2)
+
+[node name="LogTipping" type="Node2D" unique_id=1813505387 node_paths=PackedStringArray("ride_area", "static_body_2d", "nine_patch", "collision_shapes")]
+script = ExtResource("1_sk8mv")
+ride_area = NodePath("RideArea")
+static_body_2d = NodePath("StaticBody2D")
+nine_patch = NodePath("NinePatch")
+collision_shapes = [NodePath("StaticBody2D/CollisionShape2D"), NodePath("RideArea/CollisionShape2D")]
+metadata/_custom_type_script = "uid://u0c5qwqjxkub"
+
+[node name="NinePatch" type="NinePatchRect" parent="." unique_id=1004792424]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.5
+offset_top = -9.0
+offset_right = 19.5
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_7e0u6")
+region_rect = Rect2(0, 0, 70, 18)
+patch_margin_left = 21
+patch_margin_right = 19
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="TippingLogCenter" type="Sprite2D" parent="." unique_id=51585662]
+texture = SubResource("CanvasTexture_j421e")
+script = ExtResource("5_q3fnv")
+canvas_texture = SubResource("CanvasTexture_j421e")
+diffuse_texture = ExtResource("4_sk8mv")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=689719996]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=706654042]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_sk8mv")
+one_way_collision = true
+
+[node name="RideArea" type="Area2D" parent="." unique_id=1178477417]
+collision_mask = 256
+script = ExtResource("6_q3fnv")
+metadata/_custom_type_script = "uid://dvxkxevaf2f45"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RideArea" unique_id=796793170]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_q3fnv")

@@ -7,6 +7,7 @@ extends Entity
 @export var heavy_flap_angle: float = 40
 @export var glide_angle: float = 28
 @export var glide_x_boost: float = 1.3
+@export var ride_area: RideArea
 
 var bodies: Dictionary[Entity, bool]
 
@@ -17,17 +18,8 @@ func _ready() -> void:
 
 
 func has_rider() -> bool:
-	for rider: Entity in bodies:
-		if rider.is_on_floor():
-			return true
-	return false
+	return ride_area.has_rider()
 
 
 func get_riders() -> Array[Entity]:
-	var riders: Array[Entity]
-	
-	for rider: Entity in bodies:
-		if rider.is_on_floor():
-			riders.append(rider)
-	
-	return riders
+	return ride_area.get_riders()

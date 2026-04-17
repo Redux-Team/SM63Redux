@@ -516,7 +516,7 @@ animations = [{
 size = Vector2(40, 13)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x4rrl"]
-size = Vector2(10, 27)
+size = Vector2(10, 26.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q4egk"]
 size = Vector2(10, 11)
@@ -525,7 +525,7 @@ size = Vector2(10, 11)
 size = Vector2(4, 4)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kw6gy"]
-size = Vector2(10, 1)
+size = Vector2(10, 2)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4neg5"]
 animation = &"backflip"
@@ -1121,7 +1121,7 @@ _data = {
 
 [node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("state_machine", "debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "sprite", "components_root")]
 collision_mask = 515
-floor_snap_length = 0.5
+floor_snap_length = 8.0
 script = ExtResource("1_oic1i")
 midair_turn_speed = 2.5
 state_machine = NodePath("StateMachine")
@@ -1184,11 +1184,11 @@ shape = SubResource("RectangleShape2D_fstnu")
 disabled = true
 
 [node name="BaseCollision" type="CollisionShape2D" parent="." unique_id=159540419]
-position = Vector2(2, -3)
+position = Vector2(2, -3.25)
 shape = SubResource("RectangleShape2D_x4rrl")
 
 [node name="GroundPoundCollision" type="CollisionShape2D" parent="." unique_id=726160771]
-position = Vector2(2, -5)
+position = Vector2(2, 5)
 shape = SubResource("RectangleShape2D_q4egk")
 disabled = true
 
@@ -1201,10 +1201,10 @@ shape = SubResource("RectangleShape2D_i5qpf")
 
 [node name="Feet" type="Area2D" parent="." unique_id=296179064]
 collision_layer = 256
-collision_mask = 8
+collision_mask = 9
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Feet" unique_id=624629830]
-position = Vector2(2, 9.5)
+position = Vector2(2, 10)
 shape = SubResource("RectangleShape2D_kw6gy")
 
 [node name="FloorSlopeRaycast" type="RayCast2D" parent="." unique_id=1059318358]

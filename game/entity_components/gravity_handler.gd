@@ -39,6 +39,10 @@ func clear_modifier(key: StringName) -> void:
 	_modifiers.erase(key)
 
 
+func get_effective_strength() -> float:
+	return strength * scale_factor
+
+
 func _physics_process(_delta: float) -> void:
 	if enabled and entity:
 		entity.velocity.y += (strength * scale_factor)

@@ -6,16 +6,16 @@
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="2_pbwgp"]
 [ext_resource type="Texture2D" uid="uid://di1d8ih6gfgmm" path="res://assets/textures/entity/passive/goonie_glide.png" id="4_1cx3s"]
 [ext_resource type="Script" uid="uid://be2xsj74ekqmn" path="res://util/state_machine/state_machine.gd" id="5_0v6xk"]
+[ext_resource type="Script" uid="uid://dvxkxevaf2f45" path="res://core/custom_nodes/2d/ride_area.gd" id="6_bslqv"]
 [ext_resource type="Script" uid="uid://dvgmjlr0vfw4r" path="res://game/entity/passive/goonie/state_machine/states/flap.gd" id="6_i5hl1"]
 [ext_resource type="Script" uid="uid://5pi4dw3u72p2" path="res://game/entity/passive/goonie/state_machine/states/glide.gd" id="7_pbwgp"]
 [ext_resource type="Script" uid="uid://cpfwdp3pr6hbk" path="res://game/entity/passive/goonie/state_machine/states/heavy_flap.gd" id="8_dskmv"]
-[ext_resource type="Script" uid="uid://gh1mr3ptc6np" path="res://game/entity/passive/goonie/state_machine/processes/rider_handler.gd" id="10_xtefv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0v6xk"]
 atlas = ExtResource("2_dma5t")
 region = Rect2(0, 0, 48, 46)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_xtefv"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_bslqv"]
 diffuse_texture = SubResource("AtlasTexture_0v6xk")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i5hl1"]
@@ -177,10 +177,11 @@ _data = {
 &"base": SubResource("Animation_i5hl1")
 }
 
-[node name="Goonie" type="CharacterBody2D" unique_id=459377689 node_paths=PackedStringArray("sprite", "components_root")]
+[node name="Goonie" type="CharacterBody2D" unique_id=459377689 node_paths=PackedStringArray("ride_area", "sprite", "components_root")]
 collision_mask = 0
 script = ExtResource("1_jfxkd")
 heavy_flap_angle = 45.0
+ride_area = NodePath("RideArea")
 sprite = NodePath("SmartSprite2D")
 components_root = NodePath("Components")
 
@@ -192,11 +193,11 @@ enabled = false
 metadata/_custom_type_script = "uid://cb672xli6i2ns"
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=189232163]
-texture = SubResource("CanvasTexture_xtefv")
+texture = SubResource("CanvasTexture_bslqv")
 region_enabled = true
 region_rect = Rect2(0, 0, 48, 46)
 script = ExtResource("2_kaxjy")
-canvas_texture = SubResource("CanvasTexture_xtefv")
+canvas_texture = SubResource("CanvasTexture_bslqv")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_bodhv")
 current_animation = "flap"
@@ -205,19 +206,20 @@ speed_scale = 1.0
 playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
-[node name="RideArea" type="Area2D" parent="." unique_id=282315773]
-position = Vector2(1, 0)
-collision_layer = 0
-collision_mask = 265
+[node name="RideArea" type="Area2D" parent="." unique_id=2094668029]
+collision_mask = 256
+script = ExtResource("6_bslqv")
+metadata/_custom_type_script = "uid://dvxkxevaf2f45"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RideArea" unique_id=1995378084]
-position = Vector2(0, -7)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RideArea" unique_id=1947052236]
+position = Vector2(1, -7)
 shape = SubResource("RectangleShape2D_dskmv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1397534028]
 position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_oohn0")
 one_way_collision = true
+one_way_collision_margin = 12.0
 
 [node name="StateMachine" type="AnimationTree" parent="." unique_id=984869023 node_paths=PackedStringArray("entity", "sprite", "states")]
 root_node = NodePath(".")
@@ -254,13 +256,5 @@ has_default_animations = true
 animations = Array[StringName]([&"glide"])
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
-[node name="Processes" type="Node" parent="StateMachine" unique_id=1976689383]
-
-[node name="RiderHandler" type="Node" parent="StateMachine/Processes" unique_id=1252140157]
-script = ExtResource("10_xtefv")
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="StateMachine" unique_id=197117955]
 libraries/ = SubResource("AnimationLibrary_pbwgp")
-
-[connection signal="body_entered" from="RideArea" to="StateMachine/Processes/RiderHandler" method="_on_ride_area_body_entered"]
-[connection signal="body_exited" from="RideArea" to="StateMachine/Processes/RiderHandler" method="_on_ride_area_body_exited"]

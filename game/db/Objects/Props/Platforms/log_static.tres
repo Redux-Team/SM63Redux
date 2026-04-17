@@ -1,13 +1,50 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://by8vbnkxga54a"]
 
 [ext_resource type="PackedScene" uid="uid://c5svhilmprh7p" path="res://game/db/Objects/Props/Platforms/log_static_ld.tscn" id="1_7dr6y"]
+[ext_resource type="PackedScene" uid="uid://dpcrmrdy17ep" path="res://game/object/log_static/log_static.tscn" id="1_gnkvx"]
 [ext_resource type="Texture2D" uid="uid://eg3jm1ifajro" path="res://assets/textures/props/platform/log_static.png" id="2_e5oxh"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_glv48"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_c6brf"]
+[ext_resource type="Script" uid="uid://bbqpe78tlk6yc" path="res://game/db/Properties/position.gd" id="5_w6avw"]
+[ext_resource type="Script" uid="uid://cnfsiqwgu44qm" path="res://game/db/Properties/rotation.gd" id="6_3ei4c"]
+[ext_resource type="Script" uid="uid://o5m0xxdfdd40" path="res://game/db/Properties/scale.gd" id="7_pmt4f"]
+[ext_resource type="Script" uid="uid://crrkj8ocrq3rr" path="res://game/db/Properties/disabled.gd" id="8_4hdhx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gnkvx"]
 atlas = ExtResource("2_e5oxh")
 region = Rect2(-15, -11, 48, 48)
+
+[sub_resource type="Resource" id="Resource_qnb0j"]
+script = ExtResource("5_w6avw")
+key = &"position"
+label = "Position"
+type = 4
+default_value = Vector2(0, 0)
+exclusive = true
+metadata/_custom_type_script = "uid://bbqpe78tlk6yc"
+
+[sub_resource type="Resource" id="Resource_ny7vv"]
+script = ExtResource("6_3ei4c")
+key = &"rotation"
+label = "Rotation"
+type = 2
+default_value = 0.0
+metadata/_custom_type_script = "uid://cnfsiqwgu44qm"
+
+[sub_resource type="Resource" id="Resource_xu0eq"]
+script = ExtResource("7_pmt4f")
+key = &"scale"
+label = "Scale"
+type = 4
+default_value = Vector2(1, 1)
+metadata/_custom_type_script = "uid://o5m0xxdfdd40"
+
+[sub_resource type="Resource" id="Resource_jqhfi"]
+script = ExtResource("8_4hdhx")
+key = &"disabled"
+label = "Disabled"
+default_value = false
+metadata/_custom_type_script = "uid://crrkj8ocrq3rr"
 
 [resource]
 script = ExtResource("2_glv48")
@@ -20,4 +57,6 @@ name_override = "Static Log"
 ld_object_path = "Props/Platforms/log_static"
 ld_entry_texture = SubResource("AtlasTexture_gnkvx")
 ld_editor_instance = ExtResource("1_7dr6y")
+ld_properties = Array[ExtResource("3_c6brf")]([SubResource("Resource_qnb0j"), SubResource("Resource_ny7vv"), SubResource("Resource_xu0eq"), SubResource("Resource_jqhfi")])
+game_instance = ExtResource("1_gnkvx")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

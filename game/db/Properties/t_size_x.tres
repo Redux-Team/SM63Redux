@@ -7,5 +7,5 @@ script = ExtResource("1_jutf8")
 key = &"t_size_x"
 label = "Width"
 type = 1
-default_value = 1
+default_value = 0
 metadata/_custom_type_script = "uid://c74p8giulwgqm"
