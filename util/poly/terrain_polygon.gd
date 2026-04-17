@@ -168,6 +168,12 @@ static func get_closed_points(points: PackedVector2Array) -> PackedVector2Array:
 	return closed
 
 
+static func get_segment_angle(segment: PackedVector2Array) -> float:
+	if segment.size() < 2:
+		return 0.0
+	return (segment[segment.size() - 1] - segment[0]).angle()
+
+
 static func setup_line2d(line: Line2D) -> void:
 	line.joint_mode = Line2D.LINE_JOINT_ROUND
 	line.begin_cap_mode = Line2D.LINE_CAP_ROUND

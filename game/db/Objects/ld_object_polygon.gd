@@ -267,10 +267,32 @@ func _update_visuals() -> void:
 		for segment: PackedVector2Array in top_segments:
 			var line: Line2D = Line2D.new()
 			TerrainPolygon.setup_line2d(line)
+			line.begin_cap_mode = Line2D.LINE_CAP_NONE
+			line.end_cap_mode = Line2D.LINE_CAP_NONE
 			line.width = topline_w
 			line.texture = topline_tex
 			line.points = TerrainPolygon.subdivide_for_line2d(segment, topline_tex)
 			_topline_container.add_child(line)
+			
+			var angle: float = TerrainPolygon.get_segment_angle(segment)
+			
+			if terrain_data.topline_left_end and segment.size() >= 2:
+				var left_cap: Sprite2D = Sprite2D.new()
+				left_cap.texture = terrain_data.topline_left_end
+				var left_dir: Vector2 = (segment[0] - segment[1]).normalized()
+				left_cap.position = segment[0] + left_dir * (terrain_data.topline_left_end.get_width() / 2.0)
+				left_cap.rotation = angle
+				left_cap.centered = true
+				_topline_container.add_child(left_cap)
+			
+			if terrain_data.topline_right_end and segment.size() >= 2:
+				var right_cap: Sprite2D = Sprite2D.new()
+				right_cap.texture = terrain_data.topline_right_end
+				var right_dir: Vector2 = (segment[segment.size() - 1] - segment[segment.size() - 2]).normalized()
+				right_cap.position = segment[segment.size() - 1] + right_dir * (terrain_data.topline_right_end.get_width() / 2.0)
+				right_cap.rotation = angle
+				right_cap.centered = true
+				_topline_container.add_child(right_cap)
 	
 	if _topline_shadow_container:
 		for child: Node in _topline_shadow_container.get_children():

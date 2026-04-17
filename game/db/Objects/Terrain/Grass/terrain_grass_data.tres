@@ -16,5 +16,6 @@ topline_shadow_texture = ExtResource("6_dy7xf")
 topline_left_end = ExtResource("4_6y8lx")
 topline_right_end = ExtResource("5_7ymwp")
 topline_angle_threshold = 0.6499999999999999
+topline_width = 23.0
 outline_texture = ExtResource("2_hh1oy")
 metadata/_custom_type_script = "uid://drs86mw0b40vi"

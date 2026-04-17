@@ -4,12 +4,12 @@
 [ext_resource type="Resource" uid="uid://dk6i5cghf5cya" path="res://game/db/Objects/Terrain/Grass/terrain_grass_data.tres" id="2_guwji"]
 [ext_resource type="Texture2D" uid="uid://lwejtx4lbmrb" path="res://assets/textures/terrain/grass/terrain_grass_base.png" id="2_lcvi5"]
 
-[node name="Grass" type="Node2D" unique_id=335077795 node_paths=PackedStringArray("_polygon", "_collision", "_outline", "_topline_container", "_topline_shadow_container")]
+[node name="Grass" type="Node2D" unique_id=335077795 node_paths=PackedStringArray("_polygon", "_collision", "_outline_container", "_topline_container", "_topline_shadow_container")]
 script = ExtResource("1_7585l")
 terrain_data = ExtResource("2_guwji")
 _polygon = NodePath("Polygon")
 _collision = NodePath("StaticBody2D/CollisionPolygon2D")
-_outline = NodePath("Outline")
+_outline_container = NodePath("OutlineContainer")
 _topline_container = NodePath("ToplineContainer")
 _topline_shadow_container = NodePath("Polygon/ToplineShadowContainer")
 metadata/_custom_type_script = "uid://vlqjxmxsgk8p"
@@ -21,7 +21,7 @@ texture = ExtResource("2_lcvi5")
 
 [node name="ToplineShadowContainer" type="Node2D" parent="Polygon" unique_id=449835504]
 
-[node name="Outline" type="Line2D" parent="." unique_id=1054822553]
+[node name="OutlineContainer" type="Node2D" parent="." unique_id=1875783226]
 
 [node name="ToplineContainer" type="Node2D" parent="." unique_id=2082800021]
 

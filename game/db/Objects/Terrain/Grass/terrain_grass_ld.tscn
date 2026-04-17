@@ -29,6 +29,7 @@ texture_repeat = 2
 texture = ExtResource("3_t5nss")
 
 [node name="ToplineShadowContainer" type="Node2D" parent="Polygon" unique_id=503219557]
+visible = false
 
 [node name="OutlineContainer" type="Node2D" parent="." unique_id=1580151796]
 
