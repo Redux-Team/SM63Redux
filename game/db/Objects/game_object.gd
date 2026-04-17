@@ -2,6 +2,12 @@
 class_name GameObject
 extends Resource
 
+enum {
+	LD_MOVABLE,
+	LD_SELECTABLE,
+	LD_DELETABLE
+}
+
 
 enum ObjectCategory {
 	ENTITY,
@@ -45,6 +51,8 @@ enum ObjectCategory {
 @export var ld_editor_instance: PackedScene
 @export var ld_properties: Array[LDProperty]
 @export var ld_indexable: bool = true
+@export_subgroup("Flags")
+@export_flags("Movable", "Selectable", "Deletable") var ld_flags: int = 7
 
 @export_group("Game", "game_")
 @export var game_instance: PackedScene

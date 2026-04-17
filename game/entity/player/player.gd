@@ -84,7 +84,8 @@ var jump_chain_timer: float = 0.0
 @export var lock_flipping: bool = false
 
 
-#func _ready() -> void:
+func _ready() -> void:
+	add_child(Camera2D.new())
 	#super()
 	#Singleton.debug_mode_toggled.connect(_on_debug_toggle)
 #

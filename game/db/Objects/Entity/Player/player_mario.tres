@@ -1,7 +1,24 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dy8oygc3wj1a5"]
 
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_5s2g4"]
+[ext_resource type="PackedScene" uid="uid://b4nw5k2oa3ro0" path="res://game/entity/player/player.tscn" id="1_7sqcv"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_r1t5l"]
+[ext_resource type="Texture2D" uid="uid://bfvi3e017qacq" path="res://assets/textures/entity/player/mario/idle.png" id="1_rkxvd"]
+[ext_resource type="PackedScene" uid="uid://c0fmf7xmrf32i" path="res://game/db/Objects/Entity/Player/player_mario_ld.tscn" id="2_e20s5"]
+[ext_resource type="Script" uid="uid://bbqpe78tlk6yc" path="res://game/db/Properties/position.gd" id="5_1xexh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7sqcv"]
+atlas = ExtResource("1_rkxvd")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="Resource" id="Resource_ngb72"]
+script = ExtResource("5_1xexh")
+key = &"position"
+label = "Position"
+type = 4
+default_value = Vector2(0, 0)
+exclusive = true
+metadata/_custom_type_script = "uid://bbqpe78tlk6yc"
 
 [resource]
 script = ExtResource("1_5s2g4")
@@ -10,5 +27,10 @@ category_string = "Entity"
 subpath = "Player/player_mario"
 group_path = "Player"
 ld_object_path = "Entity/Player/player_mario"
+ld_entry_texture = SubResource("AtlasTexture_7sqcv")
+ld_editor_instance = ExtResource("2_e20s5")
+ld_properties = Array[ExtResource("1_r1t5l")]([SubResource("Resource_ngb72")])
 ld_indexable = false
+ld_flags = 3
+game_instance = ExtResource("1_7sqcv")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

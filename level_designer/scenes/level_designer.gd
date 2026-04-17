@@ -57,3 +57,7 @@ static func is_ready() -> bool:
 
 func _init() -> void:
 	_inst = self
+
+
+func _ready() -> void:
+	get_save_load_handler().load_raw_data({})

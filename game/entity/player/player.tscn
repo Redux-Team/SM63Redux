@@ -1134,17 +1134,20 @@ components_root = NodePath("Components")
 
 [node name="Components" type="Node" parent="." unique_id=958645498]
 
-[node name="GravityComponent" type="Node" parent="Components" unique_id=1687328346]
+[node name="GravityComponent" type="Node" parent="Components" unique_id=1687328346 node_paths=PackedStringArray("entity")]
 script = ExtResource("2_51d5m")
+entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cb672xli6i2ns"
 
-[node name="FrictionComponent" type="Node" parent="Components" unique_id=281605969]
+[node name="FrictionComponent" type="Node" parent="Components" unique_id=281605969 node_paths=PackedStringArray("entity")]
 script = ExtResource("3_qhcb0")
 base_friction = 0.3
+entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
 
-[node name="HealthComponent" type="Node" parent="Components" unique_id=1079797538]
+[node name="HealthComponent" type="Node" parent="Components" unique_id=1079797538 node_paths=PackedStringArray("entity")]
 script = ExtResource("4_o0v17")
+entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101]

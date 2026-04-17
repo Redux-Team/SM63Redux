@@ -84,6 +84,9 @@ func _on_selected_object_changed(_obj: GameObject) -> void:
 
 func _update_hover_states() -> void:
 	for obj: LDObject in viewport.get_all_objects():
+		var game_obj: GameObject = GameDB.get_db().find_game_object(obj.source_object_id)
+		if not game_obj.ld_flags & (1 << GameObject.LD_SELECTABLE):
+			continue
 		if obj.is_preview:
 			continue
 		if obj in viewport.get_selected_objects():

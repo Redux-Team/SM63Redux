@@ -112,6 +112,4 @@ properties = Dictionary[String, ExtResource("46_d7ntl")]({
 })
 objects_root = "res://game/db/Objects"
 properties_root = "res://game/db/Properties/"
-ld_object_objects_root = null
-level_object_objects_root = null
 metadata/_custom_type_script = "uid://dc4nc2ctw5fm5"

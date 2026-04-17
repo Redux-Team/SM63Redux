@@ -234,7 +234,10 @@ func set_selected_objects(objects: Array[LDObject]) -> void:
 		if obj and not obj.is_queued_for_deletion():
 			obj.set_selection_state(LDObject.SelectionState.HIDDEN)
 	
-	_selected_objects = objects
+	_selected_objects = objects.filter(func(o: LDObject) -> bool:
+		var game_object: GameObject = GameDB.get_db().find_game_object(o.source_object_id)
+		return game_object.ld_flags & (1 << GameObject.LD_SELECTABLE)
+	)
 	
 	for obj: LDObject in _selected_objects:
 		obj.set_selection_state(LDObject.SelectionState.SELECTED)

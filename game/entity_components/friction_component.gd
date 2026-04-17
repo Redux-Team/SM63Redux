@@ -8,12 +8,12 @@ extends EntityComponent
 
 
 func _physics_process(_delta: float) -> void:
-	if enabled and entity.is_on_floor():
+	if entity and enabled and entity.is_on_floor():
 		apply()
 
 
 func apply(factor: float = 1.0, enforce: bool = false) -> void:
-	if entity.is_on_floor() or enforce:
+	if entity and entity.is_on_floor() or enforce:
 		var friction: float = get_effective() * factor
 		if abs(entity.velocity.x) <= friction:
 			entity.velocity.x = 0.0

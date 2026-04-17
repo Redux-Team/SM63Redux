@@ -2,4 +2,4 @@
 extends Node
 
 @export var enabled: bool = true
-var entity: Entity
+@export var entity: Entity

@@ -4,7 +4,7 @@ class_name LDObjectSprite
 extends LDObject
 
 
-@export var sprite_ref: SmartSprite2D
+@export var sprite_ref: Sprite2D
 
 @export_tool_button("Create Sprite Props") var _create_sprite_props: Callable:
 	get: return func() -> void:

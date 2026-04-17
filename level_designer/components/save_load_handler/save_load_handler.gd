@@ -2,6 +2,7 @@ class_name LDSaveLoadHandler
 extends LDComponent
 
 
+const PLAYER_SPAWN_UID: String = "uid://c0fmf7xmrf32i"
 const BINARY_EXTENSION: String = ".63r.lvl"
 const JSON_EXTENSION: String = ".json"
 const FORMAT_VERSION: int = 1
@@ -37,6 +38,10 @@ func load_binary(path: String) -> Error:
 	if err == OK:
 		LD.get_tool_handler().select_tool("select")
 	return err
+
+
+func load_raw_data(data: Dictionary) -> void:
+	_deserialize(data)
 
 
 func save_json(path: String) -> Error:
@@ -147,6 +152,7 @@ func _serialize_object(obj: LDObject) -> Dictionary:
 
 func _deserialize(data: Dictionary) -> Error:
 	if not data.has("version") or not data.has("layers"):
+		_ensure_player_spawn()
 		return ERR_INVALID_DATA
 	
 	var viewport: LDViewport = LD.get_editor_viewport()
@@ -174,7 +180,42 @@ func _deserialize(data: Dictionary) -> Error:
 		if editor_data.has("camera_zoom"):
 			viewport.camera_zoom = _array_to_vec2(editor_data["camera_zoom"])
 	
+	_ensure_player_spawn()
+	
 	return OK
+
+
+func _ensure_player_spawn() -> void:
+	var spawn_scene: PackedScene = load(PLAYER_SPAWN_UID)
+	if not spawn_scene:
+		return
+	
+	var game_object: GameObject = _find_game_object_by_scene(spawn_scene)
+	if not game_object or not game_object.ld_editor_instance:
+		return
+	
+	var viewport: LDViewport = LD.get_editor_viewport()
+	for abs_layer: Node in viewport._layers_root.get_children():
+		for rel_layer: Node in abs_layer.get_children():
+			for child: Node in rel_layer.get_children():
+				var obj: LDObject = child as LDObject
+				if obj and obj.source_object_id == game_object.id:
+					return
+	
+	var instance: LDObject = game_object.ld_editor_instance.instantiate() as LDObject
+	if not instance:
+		return
+	
+	viewport.add_object(instance, Vector2i.ZERO, "a0r0")
+	instance.init_properties(game_object)
+	instance.place()
+
+
+func _find_game_object_by_scene(scene: PackedScene) -> GameObject:
+	for game_object: GameObject in GameDB.get_db().objects.values():
+		if game_object.ld_editor_instance == scene:
+			return game_object
+	return null
 
 
 func _deserialize_object(data: Dictionary, layer_id: String, db: GameDB) -> void:

@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://c0fmf7xmrf32i"]
+
+[ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="1_nuo8m"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_20ei4"]
+[ext_resource type="Texture2D" uid="uid://bxvc5b2qfwmxl" path="res://assets/textures/entity/player/mario/ld_preview.png" id="3_20ei4"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_r0oyx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fqtis"]
+resource_local_to_scene = true
+shader = ExtResource("2_20ei4")
+shader_parameter/state = 0
+shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_r0oyx"]
+diffuse_texture = ExtResource("3_20ei4")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xqtqf"]
+size = Vector2(16, 32)
+
+[node name="PlayerMarioLd" type="Node2D" unique_id=1652252112 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+script = ExtResource("1_nuo8m")
+sprite_ref = NodePath("Sprite2D")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+metadata/_custom_type_script = "uid://cfx4civm76jwr"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1173513281]
+material = SubResource("ShaderMaterial_fqtis")
+texture = SubResource("CanvasTexture_r0oyx")
+script = ExtResource("4_r0oyx")
+canvas_texture = SubResource("CanvasTexture_r0oyx")
+diffuse_texture = ExtResource("3_20ei4")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=429428207]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=76067328]
+shape = SubResource("RectangleShape2D_xqtqf")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=1173989834]

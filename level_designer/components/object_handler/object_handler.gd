@@ -26,27 +26,36 @@ func delete_placed_selection() -> void:
 	if objects.is_empty():
 		return
 	
+	var deletable: Array[LDObject] = []
+	for obj: LDObject in objects:
+		var game_obj: GameObject = GameDB.get_db().find_game_object(obj.source_object_id)
+		if game_obj and game_obj.ld_flags & (1 << GameObject.LD_DELETABLE):
+			deletable.append(obj)
+	
+	if deletable.is_empty():
+		return
+	
 	LD.get_editor_viewport().clear_selection()
 	
 	var parents: Array[Node] = []
-	for obj: LDObject in objects:
+	for obj: LDObject in deletable:
 		parents.append(obj.get_parent())
 	
 	var history: LDHistoryHandler = LD.get_history_handler()
 	history.begin_action("Delete Objects")
 	history.add_do(func() -> void:
-		for obj: LDObject in objects:
+		for obj: LDObject in deletable:
 			if is_instance_valid(obj) and obj.get_parent():
 				obj.get_parent().remove_child(obj)
 	)
 	history.add_undo(func() -> void:
-		for i: int in objects.size():
-			if is_instance_valid(objects[i]) and is_instance_valid(parents[i]):
-				parents[i].add_child(objects[i])
+		for i: int in deletable.size():
+			if is_instance_valid(deletable[i]) and is_instance_valid(parents[i]):
+				parents[i].add_child(deletable[i])
 	)
 	history.commit_action()
 	
-	for obj: LDObject in objects:
+	for obj: LDObject in deletable:
 		if obj.get_parent():
 			obj.get_parent().remove_child(obj)
 
