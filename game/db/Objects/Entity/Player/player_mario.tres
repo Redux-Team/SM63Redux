@@ -31,6 +31,6 @@ ld_entry_texture = SubResource("AtlasTexture_7sqcv")
 ld_editor_instance = ExtResource("2_e20s5")
 ld_properties = Array[ExtResource("1_r1t5l")]([SubResource("Resource_ngb72")])
 ld_indexable = false
-ld_flags = 3
+ld_flags = 1
 game_instance = ExtResource("1_7sqcv")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
