@@ -26,7 +26,7 @@ func _physics_process(_delta: float) -> void:
 	
 	# sum of torques, torque has an inverse relationship with the size of the log so that smaller logs are
 	# more sensitive and bigger logs are more resistant.
-	angular_velocity += (net_torque / TORQUE_DENOMINATOR) / (INERTIA * (0.4 * t_size_x))
+	angular_velocity += (net_torque / TORQUE_DENOMINATOR) / (INERTIA * (0.4 * max(t_size_x, 1)))
 	rotation += angular_velocity
 	
 	if ride_area.has_rider():

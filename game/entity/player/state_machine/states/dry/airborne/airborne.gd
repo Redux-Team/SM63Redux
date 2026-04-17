@@ -1,7 +1,7 @@
 extends State
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if abs(player.move_dir) > 0 and not player.is_diving:
 		air_move(player.move_dir)
 	

@@ -19,9 +19,9 @@ size = Vector2(32, 4)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_po2cq"]
 size = Vector2(20, 25)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_tmrtw"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ipbxf"]
 atlas = ExtResource("5_3wji2")
-region = Rect2(0, 17, 11, 8)
+region = Rect2(0, 25, 11, 8)
 
 [sub_resource type="Curve" id="Curve_3wji2"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.052631572, 1), 0.0, 0.0, 0, 0]
@@ -39,9 +39,9 @@ region = Rect2(0, 1, 11, 8)
 atlas = ExtResource("5_3wji2")
 region = Rect2(0, 9, 11, 8)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ipbxf"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_tmrtw"]
 atlas = ExtResource("5_3wji2")
-region = Rect2(0, 25, 11, 8)
+region = Rect2(0, 17, 11, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cir5m"]
 atlas = ExtResource("5_3wji2")
@@ -131,7 +131,7 @@ bus = &"SFX"
 
 [node name="ParticleEmitter" type="CPUParticles2D" parent="." unique_id=1781001774]
 emitting = false
-texture = SubResource("AtlasTexture_tmrtw")
+texture = SubResource("AtlasTexture_ipbxf")
 lifetime = 2.0
 one_shot = true
 explosiveness = 1.0

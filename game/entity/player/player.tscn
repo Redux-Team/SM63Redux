@@ -1121,7 +1121,7 @@ _data = {
 
 [node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("state_machine", "debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "sprite", "components_root")]
 collision_mask = 515
-floor_snap_length = 8.0
+floor_snap_length = 4.0
 script = ExtResource("1_oic1i")
 midair_turn_speed = 2.5
 state_machine = NodePath("StateMachine")

@@ -6,5 +6,5 @@ func _on_enter(_from: StringName) -> void:
 	player.current_jump = 0
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	player.velocity.y = -38

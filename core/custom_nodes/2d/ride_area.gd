@@ -14,6 +14,8 @@ var _signalled: Array[Entity]
 
 
 func _init() -> void:
+	monitorable = false
+	input_pickable = false
 	area_entered.connect(_on_area_entered)
 	area_exited.connect(_on_area_exited)
 

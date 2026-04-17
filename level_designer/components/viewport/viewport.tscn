@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b6vwygexlf4ht" path="res://level_designer/components/viewport/viewport.gd" id="1_urtws"]
 [ext_resource type="Script" uid="uid://bkvfc547p3vis" path="res://level_designer/components/viewport/root/viewport_root.gd" id="2_itnej"]
-[ext_resource type="Shader" uid="uid://d4m57jrrlul8l" path="res://core/shader/ld_viewport_bg.gdshader" id="2_vq6wp"]
+[ext_resource type="Shader" path="res://core/shader/ld_viewport_bg.gdshader" id="2_vq6wp"]
 [ext_resource type="Texture2D" uid="uid://crqnqwpps0m8c" path="res://assets/textures/level_designer/viewport/bg_texture.png" id="3_nmc72"]
 [ext_resource type="Script" uid="uid://bemjucm1rn4g1" path="res://level_designer/components/viewport/selection_overlay/selection_overlay.gd" id="5_pf3pc"]
 [ext_resource type="Script" uid="uid://ctu3ksd4yarv0" path="res://level_designer/components/viewport/touch_swipe_indicator.gd" id="6_uet0v"]
