@@ -24,10 +24,12 @@ offset_bottom = 62.0
 
 [node name="ObjectBrowserButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=1541290733]
 layout_mode = 2
+focus_mode = 0
 text = "Object Browser"
 
 [node name="PropertiesButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=1478737431]
 layout_mode = 2
+focus_mode = 0
 text = "Properties"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="ViewportUI" unique_id=1713123835]
@@ -47,30 +49,37 @@ mouse_filter = 2
 
 [node name="SelectButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1240001976]
 layout_mode = 2
+focus_mode = 0
 text = "Select"
 
 [node name="BrushButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1759864043]
 layout_mode = 2
+focus_mode = 0
 text = "Brush"
 
 [node name="MoveButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1672483253]
 layout_mode = 2
+focus_mode = 0
 text = "Move"
 
 [node name="RotateButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1358070352]
 layout_mode = 2
+focus_mode = 0
 text = "Rotate"
 
 [node name="PolyEditButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=891112985]
 layout_mode = 2
+focus_mode = 0
 text = "Edit (P)"
 
 [node name="PolyAddButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=472817273]
 layout_mode = 2
+focus_mode = 0
 text = "Add (P)"
 
 [node name="PolyCutButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1121572227]
 layout_mode = 2
+focus_mode = 0
 text = "Cut (P)"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="ViewportUI/VBoxContainer2" unique_id=227411509]
@@ -80,10 +89,12 @@ alignment = 2
 
 [node name="DeleteButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1153339096]
 layout_mode = 2
+focus_mode = 0
 text = "Delete"
 
 [node name="ResetButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1951778345]
 layout_mode = 2
+focus_mode = 0
 text = "Reset Cam"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="ViewportUI/VBoxContainer2" unique_id=1216125888]
@@ -93,10 +104,12 @@ alignment = 2
 
 [node name="SaveButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer3" unique_id=244361035]
 layout_mode = 2
+focus_mode = 0
 text = "Save"
 
 [node name="LoadButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer3" unique_id=1138989682]
 layout_mode = 2
+focus_mode = 0
 text = "Load"
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="ViewportUI" unique_id=2052051468]
@@ -120,6 +133,7 @@ mouse_filter = 2
 
 [node name="TestButton" type="Button" parent="ViewportUI/VBoxContainer3/HBoxContainer" unique_id=700489393]
 layout_mode = 2
+focus_mode = 0
 text = "Test"
 
 [node name="WindowLayer" type="CanvasLayer" parent="." unique_id=783443360]

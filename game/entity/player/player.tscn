@@ -1121,7 +1121,7 @@ _data = {
 
 [node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("state_machine", "debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "sprite", "components_root")]
 collision_mask = 515
-floor_snap_length = 4.0
+floor_snap_length = 7.0
 script = ExtResource("1_oic1i")
 midair_turn_speed = 2.5
 state_machine = NodePath("StateMachine")
@@ -1210,9 +1210,9 @@ shape = SubResource("RectangleShape2D_kw6gy")
 [node name="FloorSlopeRaycast" type="RayCast2D" parent="." unique_id=1059318358]
 position = Vector2(2, 0)
 target_position = Vector2(0, 27)
+collision_mask = 3
 
 [node name="DebugContainer" type="VBoxContainer" parent="." unique_id=1243358989 node_paths=PackedStringArray("debug_label")]
-visible = false
 z_index = 1
 offset_left = -47.0
 offset_top = -32.0

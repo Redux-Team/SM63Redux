@@ -60,16 +60,13 @@ func update_slide_rotation() -> void:
 	elif is_in_ledge_buffer:
 		body_rotation = lerp_angle(body_rotation, last_slope_angle, SLIDE_ANGLE_LERP_SPEED)
 	elif not player.is_on_floor():
-		var facing: int = -1 if player.sprite.flip_h else 1
-		var nosedive_angle: float = deg_to_rad(max_nosedive_angle * facing)
+		var facing: float = -1.0 if player.sprite.flip_h else 1.0
+		var nosedive_angle: float = deg_to_rad(max_nosedive_angle) * facing
 		body_rotation = lerp_angle(body_rotation, nosedive_angle, AIRBORNE_NOSEDIVE_SPEED)
 	else:
-		body_rotation = lerp_angle(body_rotation, deg_to_rad(slide_flat_angle), SLIDE_ANGLE_LERP_SPEED)
+		body_rotation = lerp_angle(body_rotation, 0.0, SLIDE_ANGLE_LERP_SPEED)
 	
-	var visual_angle: float = rad_to_deg(body_rotation) + rotation_offset
-	if player.sprite.flip_h:
-		visual_angle = -visual_angle
-	player.sprite.rotation_degrees = visual_angle
+	player.sprite.rotation_degrees = rad_to_deg(body_rotation)
 
 
 func get_slope_angle() -> float:

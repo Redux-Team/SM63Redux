@@ -15,7 +15,7 @@
 atlas = ExtResource("2_dma5t")
 region = Rect2(0, 0, 48, 46)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_bslqv"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_xtefv"]
 diffuse_texture = SubResource("AtlasTexture_0v6xk")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i5hl1"]
@@ -193,11 +193,11 @@ enabled = false
 metadata/_custom_type_script = "uid://cb672xli6i2ns"
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=189232163]
-texture = SubResource("CanvasTexture_bslqv")
+texture = SubResource("CanvasTexture_xtefv")
 region_enabled = true
 region_rect = Rect2(0, 0, 48, 46)
 script = ExtResource("2_kaxjy")
-canvas_texture = SubResource("CanvasTexture_bslqv")
+canvas_texture = SubResource("CanvasTexture_xtefv")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_bodhv")
 current_animation = "flap"
