@@ -1,6 +1,26 @@
 [gd_scene format=3 uid="uid://ctssku6r3gx0a"]
 
 [ext_resource type="Script" uid="uid://7h213kjqdaqn" path="res://level_designer/scenes/level_test.gd" id="1_5nuwi"]
+[ext_resource type="Texture2D" uid="uid://psk8ih50fovd" path="res://assets/textures/world/background/clouds_0/bg_clouds_01.png" id="2_x1m06"]
+[ext_resource type="Texture2D" uid="uid://ch6v5mpjjdw7a" path="res://assets/textures/world/background/hills_0/bg_hills_01.png" id="3_1sbsh"]
+[ext_resource type="AudioStream" uid="uid://cmiulmppvmbql" path="res://assets/music/04.mp3" id="4_h52q2"]
+
+[sub_resource type="Gradient" id="Gradient_x1m06"]
+colors = PackedColorArray(0.57254905, 0.7372549, 1, 1, 0.29803923, 0.4627451, 0.78039217, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1sbsh"]
+gradient = SubResource("Gradient_x1m06")
+fill_from = Vector2(0, 1)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="Gradient" id="Gradient_1sbsh"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_h52q2"]
+gradient = SubResource("Gradient_1sbsh")
+width = 256
+fill_from = Vector2(0, 1)
+fill_to = Vector2(0, 0)
 
 [sub_resource type="InputEventKey" id="InputEventKey_x1m06"]
 device = -1
@@ -12,6 +32,69 @@ events = [SubResource("InputEventKey_x1m06")]
 [node name="LevelTest" type="Node2D" unique_id=1539087846 node_paths=PackedStringArray("level_root")]
 script = ExtResource("1_5nuwi")
 level_root = NodePath("LevelRoot")
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=1398886530]
+layer = -1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer2" unique_id=1505865261]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_1sbsh")
+
+[node name="Control" type="Control" parent="CanvasLayer2" unique_id=634580475]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Parallax2D4" type="Parallax2D" parent="CanvasLayer2/Control" unique_id=167903396]
+scroll_scale = Vector2(0, 0.05)
+scroll_offset = Vector2(0, 45)
+limit_begin = Vector2(-10000000, 0)
+follow_viewport = false
+
+[node name="Parallax2D" type="Parallax2D" parent="CanvasLayer2/Control" unique_id=1478447903]
+scroll_scale = Vector2(0, 0)
+scroll_offset = Vector2(-304, -157)
+repeat_size = Vector2(400, 0)
+autoscroll = Vector2(-4, 0)
+repeat_times = 5
+follow_viewport = false
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer2/Control/Parallax2D" unique_id=1425504194]
+texture = ExtResource("2_x1m06")
+
+[node name="Parallax2D2" type="Parallax2D" parent="CanvasLayer2/Control" unique_id=643700170]
+scroll_scale = Vector2(0.05, 0.05)
+scroll_offset = Vector2(-304, -128)
+repeat_size = Vector2(800, 0)
+repeat_times = 3
+limit_end = Vector2(10000000, 2000)
+follow_viewport = false
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer2/Control/Parallax2D2" unique_id=712313900]
+position = Vector2(27, -100)
+texture = ExtResource("3_1sbsh")
+
+[node name="Parallax2D3" type="Parallax2D" parent="CanvasLayer2/Control" unique_id=102141550]
+scroll_offset = Vector2(-162, 41)
+repeat_size = Vector2(256, 0)
+repeat_times = 10
+
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer2/Control/Parallax2D3" unique_id=1104549218]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_h52q2")
 
 [node name="LevelRoot" type="Node2D" parent="." unique_id=526161922]
 
@@ -31,5 +114,10 @@ grow_horizontal = 0
 grow_vertical = 0
 shortcut = SubResource("Shortcut_1sbsh")
 text = "Back to LD"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1523917071]
+stream = ExtResource("4_h52q2")
+autoplay = true
+bus = &"Music"
 
 [connection signal="pressed" from="CanvasLayer/BackButton" to="." method="_on_back_button_pressed"]

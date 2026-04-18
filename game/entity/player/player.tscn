@@ -1216,6 +1216,7 @@ target_position = Vector2(0, 27)
 collision_mask = 515
 
 [node name="DebugContainer" type="VBoxContainer" parent="." unique_id=1243358989 node_paths=PackedStringArray("debug_label")]
+visible = false
 z_index = 1
 offset_left = -47.0
 offset_top = -32.0
@@ -1227,6 +1228,7 @@ script = ExtResource("4_kn1iv")
 debug_label = NodePath("DebugLabel")
 
 [node name="DebugLabel" type="Label" parent="DebugContainer" unique_id=1388430990]
+visible = false
 layout_mode = 2
 theme_type_variation = &"DebugLabel"
 text = "Current State: Idle"

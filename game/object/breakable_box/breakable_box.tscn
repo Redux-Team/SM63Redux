@@ -19,9 +19,9 @@ size = Vector2(32, 4)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_po2cq"]
 size = Vector2(20, 25)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_2pebe"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ndpu"]
 atlas = ExtResource("5_3wji2")
-region = Rect2(0, 1, 11, 8)
+region = Rect2(0, 41, 11, 8)
 
 [sub_resource type="Curve" id="Curve_3wji2"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.052631572, 1), 0.0, 0.0, 0, 0]
@@ -30,6 +30,10 @@ point_count = 2
 [sub_resource type="Gradient" id="Gradient_po2cq"]
 offsets = PackedFloat32Array(0, 0.91007197, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0.97482014, 0.97482014, 0.97482014, 1, 1, 1, 1, 0)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2pebe"]
+atlas = ExtResource("5_3wji2")
+region = Rect2(0, 1, 11, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rbqaj"]
 atlas = ExtResource("5_3wji2")
@@ -46,10 +50,6 @@ region = Rect2(0, 25, 11, 8)
 [sub_resource type="AtlasTexture" id="AtlasTexture_cir5m"]
 atlas = ExtResource("5_3wji2")
 region = Rect2(0, 33, 11, 8)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7ndpu"]
-atlas = ExtResource("5_3wji2")
-region = Rect2(0, 41, 11, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tt2s6"]
 atlas = ExtResource("5_3wji2")
@@ -131,11 +131,12 @@ shape = SubResource("RectangleShape2D_po2cq")
 
 [node name="BreakSFX" type="AudioStreamPlayer2D" parent="." unique_id=593496812]
 stream = ExtResource("4_prsgq")
+volume_db = 8.0
 bus = &"SFX"
 
 [node name="ParticleEmitter" type="CPUParticles2D" parent="." unique_id=1781001774]
 emitting = false
-texture = SubResource("AtlasTexture_2pebe")
+texture = SubResource("AtlasTexture_7ndpu")
 lifetime = 2.0
 one_shot = true
 explosiveness = 1.0
