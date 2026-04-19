@@ -90,12 +90,8 @@ func _on_object_changed(obj: GameObject) -> void:
 		_preview_cursor = null
 	_clear_stroke()
 	
-	if _is_telescoping_object(obj):
-		get_tool_handler().select_tool("telescoping")
-		return
-	
-	if _is_polygon_object(obj):
-		get_tool_handler().select_tool("polygon")
+	if obj and obj.ld_placement_tool_override:
+		get_tool_handler().select_tool(obj.ld_placement_tool_override)
 		return
 	
 	_cache_stamp_size(obj)
@@ -321,6 +317,9 @@ func _on_input_type_changed() -> void:
 		if obj:
 			_cache_stamp_size(obj)
 	else:
+		if _preview_cursor:
+			_preview_cursor.queue_free()
+			_preview_cursor = null
 		var obj: GameObject = LD.get_object_handler().get_selected_object()
 		if obj:
 			_spawn_cursor(obj)
