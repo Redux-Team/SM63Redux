@@ -6,18 +6,37 @@
 [ext_resource type="PackedScene" uid="uid://uigqohx8qhm7" path="res://game/db/Objects/Props/Hints/arrow_ld.tscn" id="2_00ge2"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_7ryrs"]
 [ext_resource type="Script" uid="uid://cnfsiqwgu44qm" path="res://game/db/Properties/rotation.gd" id="3_6y7o3"]
+[ext_resource type="Script" uid="uid://bbqpe78tlk6yc" path="res://game/db/Properties/position.gd" id="6_00ge2"]
+[ext_resource type="Script" uid="uid://o5m0xxdfdd40" path="res://game/db/Properties/scale.gd" id="7_annuh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6y7o3"]
 atlas = ExtResource("1_u0w75")
 region = Rect2(-9, -14, 48, 48)
 
-[sub_resource type="Resource" id="Resource_73nrl"]
+[sub_resource type="Resource" id="Resource_i1b32"]
+script = ExtResource("6_00ge2")
+key = &"position"
+label = "Position"
+type = 4
+default_value = Vector2(0, 0)
+exclusive = true
+metadata/_custom_type_script = "uid://bbqpe78tlk6yc"
+
+[sub_resource type="Resource" id="Resource_pvw8h"]
 script = ExtResource("3_6y7o3")
 key = &"rotation"
 label = "Rotation"
 type = 2
 default_value = 0.0
 metadata/_custom_type_script = "uid://cnfsiqwgu44qm"
+
+[sub_resource type="Resource" id="Resource_mygvr"]
+script = ExtResource("7_annuh")
+key = &"scale"
+label = "Scale"
+type = 4
+default_value = Vector2(1, 1)
+metadata/_custom_type_script = "uid://o5m0xxdfdd40"
 
 [resource]
 script = ExtResource("1_nos1b")
@@ -29,6 +48,6 @@ group_path = "Hints"
 ld_object_path = "Props/Hints/arrow"
 ld_entry_texture = SubResource("AtlasTexture_6y7o3")
 ld_editor_instance = ExtResource("2_00ge2")
-ld_properties = Array[ExtResource("2_7ryrs")]([SubResource("Resource_73nrl")])
+ld_properties = Array[ExtResource("2_7ryrs")]([SubResource("Resource_i1b32"), SubResource("Resource_pvw8h"), SubResource("Resource_mygvr")])
 game_instance = ExtResource("1_hlyct")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
