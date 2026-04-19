@@ -4,8 +4,10 @@ class_name LDObjectSprite
 extends LDObject
 
 
-@export var sprite_ref: Sprite2D
+@export var shader_objects: Array[CanvasItem]
 
+@export_group("Debug")
+@export var sprite_ref: Sprite2D
 @export_tool_button("Create Sprite Props") var _create_sprite_props: Callable:
 	get: return func() -> void:
 		if not sprite_ref:
@@ -58,12 +60,13 @@ func reset_shader_modulate() -> void:
 
 
 func _set_shader_param(param: StringName, value: Variant) -> void:
-	if not sprite_ref:
-		return
-	var mat: ShaderMaterial = sprite_ref.material as ShaderMaterial
-	if not mat:
-		return
-	mat.set_shader_parameter(param, value)
+	for shader_obj: CanvasItem in shader_objects:
+		if shader_obj and shader_obj.material:
+			shader_obj.material.set_shader_parameter(param, value)
+	
+	if sprite_ref and sprite_ref.material:
+		sprite_ref.material.set_shader_parameter(param, value)
+
 
 
 func _setup_sprite_material(s: SmartSprite2D) -> void:
