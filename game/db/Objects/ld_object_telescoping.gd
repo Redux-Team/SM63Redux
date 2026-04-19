@@ -91,10 +91,22 @@ func get_middle_segment_width() -> int:
 	return nine_patch.texture.get_width() - nine_patch.patch_margin_left - nine_patch.patch_margin_right
 
 
+func get_middle_segment_height() -> int:
+	if not nine_patch or not nine_patch.texture:
+		return 16
+	return nine_patch.texture.get_height() - nine_patch.patch_margin_top - nine_patch.patch_margin_bottom
+
+
 func get_end_segment_width() -> int:
 	if not nine_patch:
 		return 8
 	return nine_patch.patch_margin_left
+
+
+func get_end_segment_height() -> int:
+	if not nine_patch:
+		return 8
+	return nine_patch.patch_margin_top
 
 
 func get_end_collision_width() -> int:
@@ -103,14 +115,18 @@ func get_end_collision_width() -> int:
 	return nine_patch.patch_margin_left + nine_patch.patch_margin_right
 
 
+func get_end_collision_height() -> int:
+	if not nine_patch:
+		return 15
+	return nine_patch.patch_margin_top + nine_patch.patch_margin_bottom
+
+
 func get_total_width(units: int) -> float:
 	return get_middle_segment_width() * units + get_end_collision_width()
 
 
-func get_total_height(_units: int) -> float:
-	if not nine_patch or not nine_patch.texture:
-		return 16.0
-	return float(nine_patch.texture.get_height())
+func get_total_height(units: int) -> float:
+	return get_middle_segment_height() * units + get_end_collision_height()
 
 
 func _on_preview() -> void:
@@ -152,7 +168,7 @@ func _apply_width(units: int) -> void:
 func _apply_height(units: int) -> void:
 	units = clamp_units(units)
 	var total: float = get_total_height(units)
-	var half: float = total / 2.0
+	var half: float = roundi(total / 2.0)
 	
 	if nine_patch:
 		nine_patch.size.y = total
@@ -160,6 +176,11 @@ func _apply_height(units: int) -> void:
 	
 	if editor_placement_rect and editor_placement_rect.shape is RectangleShape2D:
 		(editor_placement_rect.shape as RectangleShape2D).size.y = total
+	
+	if safety_net:
+		var safety_shape: CollisionShape2D = safety_net.get_child(0) as CollisionShape2D
+		if safety_shape and safety_shape.shape is RectangleShape2D:
+			(safety_shape.shape as RectangleShape2D).size.y = total
 	
 	_sync_shader_state()
 
