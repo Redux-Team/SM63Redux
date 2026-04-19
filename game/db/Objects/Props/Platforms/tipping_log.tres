@@ -17,14 +17,15 @@ margin = Rect2(3, 0, 0, 0)
 
 [resource]
 script = ExtResource("8_xvy65")
-id = "log_tipping"
+id = "tipping_log"
 category = 5
 category_string = "Props"
-subpath = "Platforms/log_tipping"
+subpath = "Platforms/tipping_log"
 group_path = "Platforms"
-ld_object_path = "Props/Platforms/log_tipping"
+ld_object_path = "Props/Platforms/tipping_log"
 ld_entry_texture = SubResource("AtlasTexture_poit2")
 ld_editor_instance = ExtResource("1_hs1pe")
 ld_properties = Array[ExtResource("3_gajl3")]([ExtResource("4_puidc"), ExtResource("5_02qmg"), ExtResource("6_ehxpq"), ExtResource("7_vt87j")])
+ld_placement_tool_override = "telescoping"
 game_instance = ExtResource("1_kbjqa")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

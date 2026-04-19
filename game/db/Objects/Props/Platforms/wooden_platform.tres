@@ -25,5 +25,6 @@ ld_object_path = "Props/Platforms/wooden_platform"
 ld_entry_texture = SubResource("AtlasTexture_nu505")
 ld_editor_instance = ExtResource("1_mqugf")
 ld_properties = Array[ExtResource("3_nm4fc")]([ExtResource("4_pep4j"), ExtResource("6_bqaeb"), ExtResource("5_ew300"), ExtResource("7_ew300")])
+ld_placement_tool_override = "telescoping"
 game_instance = ExtResource("1_nu505")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

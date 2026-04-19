@@ -22,5 +22,6 @@ ld_object_path = "Terrain/Grass/terrain_grass"
 ld_entry_texture = SubResource("AtlasTexture_pbes7")
 ld_editor_instance = ExtResource("1_fwwft")
 ld_properties = Array[ExtResource("1_o2ahu")]([ExtResource("5_k1ik6")])
+ld_placement_tool_override = "polygon"
 game_instance = ExtResource("1_8ntgt")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

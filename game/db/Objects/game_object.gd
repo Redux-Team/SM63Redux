@@ -7,7 +7,6 @@ enum {
 	LD_DELETABLE
 }
 
-
 enum ObjectCategory {
 	ENTITY,
 	ITEM,
@@ -18,7 +17,6 @@ enum ObjectCategory {
 	TRIGGER,
 	ALL,
 }
-
 
 # These are cached to not have to do string manipulation every time we index a bunch of these resources.
 @export_storage var id: String
@@ -50,6 +48,7 @@ enum ObjectCategory {
 @export var ld_editor_instance: PackedScene
 @export var ld_properties: Array[LDProperty]
 @export var ld_indexable: bool = true
+@export var ld_placement_tool_override: String
 @export_subgroup("Flags")
 @export_flags("Selectable", "Deletable") var ld_flags: int = 3
 

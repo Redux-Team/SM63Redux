@@ -25,5 +25,6 @@ ld_object_path = "Props/Platforms/cloud"
 ld_entry_texture = SubResource("AtlasTexture_7ifo6")
 ld_editor_instance = ExtResource("1_6e1ic")
 ld_properties = Array[ExtResource("2_fbuxj")]([ExtResource("4_4qind"), ExtResource("5_i4ngb"), ExtResource("6_ibh1c"), ExtResource("7_as7ay")])
+ld_placement_tool_override = "telescoping"
 game_instance = ExtResource("1_7ifo6")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
