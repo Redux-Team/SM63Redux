@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bww4xucqbsvkh"]
+
+[ext_resource type="Script" uid="uid://bsswcbgcrlwv2" path="res://game/db/Objects/level_object.gd" id="1_gq4t3"]
+[ext_resource type="Texture2D" uid="uid://lavy7rkcjnkh" path="res://assets/textures/props/nature/flowers_pink.png" id="2_qe57d"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_oy6p1"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_pvc0l"]
+diffuse_texture = ExtResource("2_qe57d")
+
+[node name="FlowersPink" type="Node2D" unique_id=300950601]
+script = ExtResource("1_gq4t3")
+metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
+
+[node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1438364340]
+texture = SubResource("CanvasTexture_pvc0l")
+script = ExtResource("3_oy6p1")
+canvas_texture = SubResource("CanvasTexture_pvc0l")
+diffuse_texture = ExtResource("2_qe57d")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LDPropertyTelescopeY" format=3 uid="uid://cmrdgbqp43tvo"]
+
+[ext_resource type="Script" uid="uid://h7dx3ktmjlh4" path="res://game/db/Properties/t_size_y.gd" id="1_utnxd"]
+
+[resource]
+script = ExtResource("1_utnxd")
+key = &"t_size_y"
+label = "Height"
+type = 1
+default_value = 1
+metadata/_custom_type_script = "uid://h7dx3ktmjlh4"

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://mupwvevffb1p"]
+
+[ext_resource type="Texture2D" uid="uid://c6sa6vp30j3wm" path="res://assets/textures/props/hints/arrow_sign_ld.png" id="1_87sl6"]
+[ext_resource type="PackedScene" uid="uid://t5m70fv7apwb" path="res://game/object/arrow_sign/arrow_sign.tscn" id="1_ijjhc"]
+[ext_resource type="PackedScene" uid="uid://ctm1hxf5eu8wn" path="res://game/db/Objects/Props/Hints/arrow_sign_ld.tscn" id="1_r8jh6"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_qvn33"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_46csr"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_r8jh6"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="5_ijjhc"]
+[ext_resource type="Resource" uid="uid://d2h3b48dglc0v" path="res://game/db/Properties/arrow_sign/arrow_rotation.tres" id="6_oq1al"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_jvqy7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j8dcr"]
+atlas = ExtResource("1_87sl6")
+region = Rect2(-4, -3, 48, 48)
+
+[resource]
+script = ExtResource("3_46csr")
+id = "arrow_sign"
+category = 5
+category_string = "Props"
+subpath = "Hints/arrow_sign"
+group_path = "Hints"
+ld_object_path = "Props/Hints/arrow_sign"
+ld_entry_texture = SubResource("AtlasTexture_j8dcr")
+ld_editor_instance = ExtResource("1_r8jh6")
+ld_properties = Array[ExtResource("2_qvn33")]([ExtResource("4_r8jh6"), ExtResource("5_ijjhc"), ExtResource("6_oq1al"), ExtResource("7_jvqy7")])
+game_instance = ExtResource("1_ijjhc")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

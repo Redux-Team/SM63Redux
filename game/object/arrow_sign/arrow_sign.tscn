@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://t5m70fv7apwb"]
+
+[ext_resource type="Script" uid="uid://ibswqocsqhn6" path="res://game/object/arrow_sign/arrow_sign.gd" id="1_stryq"]
+[ext_resource type="Texture2D" uid="uid://dw2jgag2n485c" path="res://assets/textures/props/hints/arrow_sign_base.png" id="2_stryq"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_m6is0"]
+[ext_resource type="Texture2D" uid="uid://dmiqbt6l0n065" path="res://assets/textures/props/hints/arrow_sign_arrow.png" id="4_khtv6"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_dctr8"]
+diffuse_texture = ExtResource("2_stryq")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_182sn"]
+diffuse_texture = ExtResource("4_khtv6")
+
+[node name="ArrowSign" type="Node2D" unique_id=272511246 node_paths=PackedStringArray("arrow")]
+script = ExtResource("1_stryq")
+arrow = NodePath("Sprite/Arrow")
+metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=2085095849]
+texture = SubResource("CanvasTexture_dctr8")
+script = ExtResource("3_m6is0")
+canvas_texture = SubResource("CanvasTexture_dctr8")
+diffuse_texture = ExtResource("2_stryq")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="Arrow" type="Sprite2D" parent="Sprite" unique_id=198162551]
+position = Vector2(0, -3)
+texture = SubResource("CanvasTexture_182sn")
+script = ExtResource("3_m6is0")
+canvas_texture = SubResource("CanvasTexture_182sn")
+diffuse_texture = ExtResource("4_khtv6")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"

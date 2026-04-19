@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://duukwfxuutbsc"]
+
+[ext_resource type="Script" uid="uid://bxr3seoje748a" path="res://game/db/Objects/Props/Gizmos/moving_platform_ld.gd" id="1_3gntl"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="1_7n0db"]
+[ext_resource type="Texture2D" uid="uid://byl75lxvs6tmy" path="res://assets/textures/props/gizmos/moving_platform_center.png" id="2_7n0db"]
+[ext_resource type="Texture2D" uid="uid://c5bh2c13mp628" path="res://assets/textures/props/gizmos/moving_platform.png" id="3_7n0db"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j72wb"]
+shader = ExtResource("1_7n0db")
+shader_parameter/state = 0
+shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+
+[sub_resource type="GDScript" id="GDScript_3gntl"]
+script/source = "@tool
+extends Node2D
+
+var platform_radius: float = 64
+
+
+func _draw() -> void:
+	const DASH_COUNT: int = 24
+	const DASH_FRACTION: float = 0.5
+	const COLOR: Color = Color(1, 1, 1, 0.4)
+	const WIDTH: float = 1.0
+	const POINTS_PER_DASH: int = 8
+	
+	for d: int in DASH_COUNT:
+		var start: float = (TAU / DASH_COUNT) * d
+		var end: float = start + (TAU / DASH_COUNT) * DASH_FRACTION
+		draw_arc(Vector2.ZERO, platform_radius, start, end, POINTS_PER_DASH, COLOR, WIDTH)
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_af2u0"]
+size = Vector2(14, 14)
+
+[node name="MovingPlatformLd" type="Node2D" unique_id=1024621747 node_paths=PackedStringArray("platform_nine_patch", "path_drawer", "shader_objects", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+material = SubResource("ShaderMaterial_j72wb")
+script = ExtResource("1_3gntl")
+center_texture = ExtResource("2_7n0db")
+platform_nine_patch = NodePath("NinePatchRect")
+path_drawer = NodePath("PathDrawer")
+shader_objects = [NodePath(".")]
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+metadata/_custom_type_script = "uid://cfx4civm76jwr"
+
+[node name="PathDrawer" type="Node2D" parent="." unique_id=221669102]
+show_behind_parent = true
+script = SubResource("GDScript_3gntl")
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=1239431520]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=1312948576]
+shape = SubResource("RectangleShape2D_af2u0")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=1581909616]
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=342991916]
+process_mode = 4
+visible = false
+offset_right = 40.0
+offset_bottom = 18.0
+texture = ExtResource("3_7n0db")
+region_rect = Rect2(0, 0, 35, 17)
+patch_margin_left = 10
+patch_margin_right = 10
+axis_stretch_horizontal = 1

@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://ckdfyoldc0frd"]
+
+[ext_resource type="Script" uid="uid://eec7sd15yna5" path="res://game/object/moving_platform/moving_platform.gd" id="1_7bkp1"]
+[ext_resource type="Texture2D" uid="uid://c5bh2c13mp628" path="res://assets/textures/props/gizmos/moving_platform.png" id="2_moklk"]
+[ext_resource type="Texture2D" uid="uid://byl75lxvs6tmy" path="res://assets/textures/props/gizmos/moving_platform_center.png" id="3_5u651"]
+
+[sub_resource type="GDScript" id="GDScript_moklk"]
+script/source = "@tool
+extends Node2D
+
+var platform_radius: float = 64
+
+
+func _draw() -> void:
+	const DASH_COUNT: int = 24
+	const DASH_FRACTION: float = 0.5
+	const COLOR: Color = Color(1, 1, 1, 0.4)
+	const WIDTH: float = 1.0
+	const POINTS_PER_DASH: int = 8
+	
+	for d: int in DASH_COUNT:
+		var start: float = (TAU / DASH_COUNT) * d
+		var end: float = start + (TAU / DASH_COUNT) * DASH_FRACTION
+		draw_arc(Vector2.ZERO, platform_radius, start, end, POINTS_PER_DASH, COLOR, WIDTH)
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_moklk"]
+size = Vector2(38, 4)
+
+[node name="MovingPlatform" type="Node2D" unique_id=2073047360 node_paths=PackedStringArray("platform_nine_patch", "platform_collision_shape", "platform_container", "preview_container", "path_drawer")]
+script = ExtResource("1_7bkp1")
+platform_nine_patch = NodePath("Preview/NinePatchRect")
+platform_collision_shape = NodePath("Preview/CollisionShape2D")
+platform_container = NodePath("OrbitPlatforms")
+preview_container = NodePath("Preview")
+path_drawer = NodePath("PathDrawer")
+metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=943409140]
+texture = ExtResource("3_5u651")
+
+[node name="PathDrawer" type="Node2D" parent="." unique_id=1861769869]
+show_behind_parent = true
+script = SubResource("GDScript_moklk")
+
+[node name="Preview" type="Node2D" parent="." unique_id=2095832125]
+visible = false
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Preview" unique_id=880066877]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -9.0
+offset_right = 20.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_moklk")
+region_rect = Rect2(0, 0, 35, 17)
+patch_margin_left = 10
+patch_margin_right = 10
+axis_stretch_horizontal = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Preview" unique_id=154872236]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_moklk")
+one_way_collision = true
+one_way_collision_margin = 2.0
+
+[node name="OrbitPlatforms" type="Node2D" parent="." unique_id=431980625]
