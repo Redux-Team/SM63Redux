@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LDPropertyPlatformRadius" format=3 uid="uid://cwscua7waq0vn"]
+
+[ext_resource type="Script" uid="uid://dtm3d71ejnmdd" path="res://game/db/Properties/moving_platform/platform_radius.gd" id="1_grfud"]
+
+[resource]
+script = ExtResource("1_grfud")
+key = &"platform_radius"
+label = "Radius"
+type = 2
+default_value = 64.0
+metadata/_custom_type_script = "uid://dtm3d71ejnmdd"

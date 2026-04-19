@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LDPropertyPlatformAmount" format=3 uid="uid://dk8qlbripls8x"]
+
+[ext_resource type="Script" uid="uid://gn3liql55e8e" path="res://game/db/Properties/moving_platform/platform_amount.gd" id="1_3b2n5"]
+
+[resource]
+script = ExtResource("1_3b2n5")
+key = &"platform_amount"
+label = "Amount"
+type = 1
+default_value = 1
+metadata/_custom_type_script = "uid://gn3liql55e8e"

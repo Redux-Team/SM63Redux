@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LDPropertyArrowRotation" format=3 uid="uid://d2h3b48dglc0v"]
+
+[ext_resource type="Script" uid="uid://tyj3etw81jik" path="res://game/db/Properties/arrow_sign/arrow_rotation.gd" id="1_hx01v"]
+
+[resource]
+script = ExtResource("1_hx01v")
+key = &"arrow_rotation"
+label = "Arrow Rotation"
+type = 2
+default_value = 0.0
+metadata/_custom_type_script = "uid://tyj3etw81jik"
