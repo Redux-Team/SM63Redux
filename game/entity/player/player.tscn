@@ -86,12 +86,12 @@
 [ext_resource type="AudioStream" uid="uid://bbscycsfnsu3l" path="res://assets/sfx/player/mario/ground_pound/ground_pound_snow.wav" id="67_iy1it"]
 [ext_resource type="Script" uid="uid://veukwwx18y5s" path="res://game/entity/player/fludd_handler.gd" id="81_va0vu"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ijn2u"]
-atlas = ExtResource("9_k6116")
+[sub_resource type="AtlasTexture" id="AtlasTexture_t56eh"]
+atlas = ExtResource("2_heu0c")
 region = Rect2(48, 0, 48, 48)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_kyrvb"]
-diffuse_texture = SubResource("AtlasTexture_ijn2u")
+diffuse_texture = SubResource("AtlasTexture_t56eh")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
 atlas = ExtResource("2_conr4")
@@ -137,10 +137,6 @@ region = Rect2(0, 0, 48, 48)
 atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_t56eh"]
-atlas = ExtResource("2_heu0c")
-region = Rect2(48, 0, 48, 48)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_8pcyd"]
 atlas = ExtResource("2_heu0c")
 region = Rect2(96, 0, 48, 48)
@@ -168,6 +164,10 @@ region = Rect2(0, 0, 48, 48)
 [sub_resource type="AtlasTexture" id="AtlasTexture_j8m7m"]
 atlas = ExtResource("9_k6116")
 region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ijn2u"]
+atlas = ExtResource("9_k6116")
+region = Rect2(48, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_or46b"]
 atlas = ExtResource("9_k6116")
@@ -515,8 +515,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fstnu"]
 size = Vector2(40, 13)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_x4rrl"]
-size = Vector2(10, 26.5)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kw6gy"]
+radius = 5.0
+height = 32.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q4egk"]
 size = Vector2(10, 11)
@@ -1159,7 +1160,7 @@ script = ExtResource("2_cjmyu")
 canvas_texture = SubResource("CanvasTexture_kyrvb")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
-current_animation = "spin_loop"
+current_animation = "idle"
 current_frame = 1
 speed_scale = 1.0
 playing = false
@@ -1187,11 +1188,11 @@ shape = SubResource("RectangleShape2D_fstnu")
 disabled = true
 
 [node name="BaseCollision" type="CollisionShape2D" parent="." unique_id=159540419]
-position = Vector2(2, -3.25)
-shape = SubResource("RectangleShape2D_x4rrl")
+position = Vector2(2, -5)
+shape = SubResource("CapsuleShape2D_kw6gy")
 
 [node name="GroundPoundCollision" type="CollisionShape2D" parent="." unique_id=726160771]
-position = Vector2(2, 5)
+position = Vector2(2, 4)
 shape = SubResource("RectangleShape2D_q4egk")
 disabled = true
 

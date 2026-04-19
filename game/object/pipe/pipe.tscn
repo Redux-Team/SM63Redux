@@ -19,7 +19,8 @@ shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_whkaj"]
-size = Vector2(32, 28)
+resource_local_to_scene = true
+size = Vector2(32, 25)
 
 [node name="Pipe" type="Node2D" unique_id=1818977910 node_paths=PackedStringArray("nine_patch", "collision_shapes")]
 script = ExtResource("1_4p6u2")
@@ -48,6 +49,9 @@ axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1107194163]
+collision_layer = 2
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=602091392]
+position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_whkaj")
