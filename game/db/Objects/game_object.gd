@@ -49,6 +49,7 @@ enum ObjectCategory {
 @export var ld_properties: Array[LDProperty]
 @export var ld_indexable: bool = true
 @export var ld_placement_tool_override: String
+@export var ld_select_tool_override: String
 @export_subgroup("Flags")
 @export_flags("Selectable", "Deletable") var ld_flags: int = 3
 

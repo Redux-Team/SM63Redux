@@ -1,7 +1,8 @@
 shader_type canvas_item;
 
-
 uniform int state: hint_range(0, 2) = 0;
+uniform int palette_index: hint_range(0, 16) = 0;
+uniform sampler2D palette_texture: filter_nearest, repeat_disable;
 uniform vec4 custom_modulate: source_color = vec4(1.0, 1.0, 1.0, 1.0);
 
 uniform float outline_width: hint_range(0.0, 10.0) = 1.0;
@@ -12,6 +13,38 @@ uniform vec4 hover_fill_color: source_color = vec4(1.0, 1.0, 1.0, 0.1);
 uniform float pulse_speed: hint_range(0.0, 5.0) = 0.5;
 uniform float pulse_min: hint_range(0.0, 1.0) = 0.3;
 uniform float pulse_max: hint_range(0.0, 1.0) = 1.0;
+
+
+vec3 swap_palette(sampler2D pal, vec3 rgb, vec2 pal_size) {
+	if (palette_index <= 0) {
+		return rgb;
+	}
+
+	float palette_row = float(palette_index) / pal_size.y;
+	if (palette_row >= 1.0) {
+		return rgb;
+	}
+
+	float base_row = 0.5 / pal_size.y;
+	float target_row = (float(palette_index) + 0.5) / pal_size.y;
+	int col_count = int(pal_size.x);
+
+	float best_dist = 0.0001;
+	vec3 result = rgb;
+
+	for (int i = 0; i < col_count; i++) {
+		float u = (float(i) + 0.5) / pal_size.x;
+		vec3 src = texture(pal, vec2(u, base_row)).rgb;
+		vec3 diff = rgb - src;
+		float dist = dot(diff, diff);
+		if (dist < best_dist) {
+			best_dist = dist;
+			result = texture(pal, vec2(u, target_row)).rgb;
+		}
+	}
+
+	return result;
+}
 
 
 float get_neighbor_max(sampler2D tex, vec2 uv, vec2 texel) {
@@ -60,7 +93,7 @@ vec4 apply_selection(sampler2D tex, vec4 tex_color, vec2 uv) {
 	float neighbor_max = get_neighbor_max(tex, uv, texel);
 	bool is_outline = tex_color.a < 0.1 && neighbor_max > 0.1;
 	bool is_inside = tex_color.a > 0.1;
-	
+
 	if (state == 1) {
 		return apply_hover(tex_color, is_outline, is_inside);
 	}
@@ -69,7 +102,16 @@ vec4 apply_selection(sampler2D tex, vec4 tex_color, vec2 uv) {
 
 
 void fragment() {
+	vec2 pal_size = vec2(textureSize(palette_texture, 0));
 	vec4 tex = texture(TEXTURE, UV);
-	vec4 result = state != 0 ? apply_selection(TEXTURE, tex, UV) : tex;
+	vec4 tex_swapped = vec4(swap_palette(palette_texture, tex.rgb, pal_size), tex.a);
+
+	vec4 result;
+	if (state != 0) {
+		result = apply_selection(TEXTURE, tex_swapped, UV);
+	} else {
+		result = tex_swapped;
+	}
+
 	COLOR = vec4(result.rgb * custom_modulate.rgb, result.a * custom_modulate.a);
 }

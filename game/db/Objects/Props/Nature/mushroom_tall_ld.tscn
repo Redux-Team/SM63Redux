@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://db8w1e2gd8p1i"]
+
+[ext_resource type="Script" uid="uid://c65ji18lfx7xr" path="res://game/db/Objects/Props/Nature/mushroom_tall_ld.gd" id="1_bct8k"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_ahj0n"]
+[ext_resource type="Texture2D" uid="uid://7nxc5tdqfj5d" path="res://assets/textures/props/nature/mushroom_tall_stem.png" id="3_5rq3p"]
+[ext_resource type="Texture2D" uid="uid://ch68bypk0kj63" path="res://assets/textures/props/nature/mushroom_tall_head.png" id="4_xct21"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="5_g3smx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_58h0g"]
+resource_local_to_scene = true
+shader = ExtResource("2_ahj0n")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_58h0g"]
+diffuse_texture = ExtResource("3_5rq3p")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hwjv0"]
+resource_local_to_scene = true
+shader = ExtResource("2_ahj0n")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_hwjv0"]
+diffuse_texture = ExtResource("4_xct21")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_63d8k"]
+size = Vector2(56, 20)
+
+[node name="MushroomTall" type="Node2D" unique_id=1318691084 node_paths=PackedStringArray("head", "stem", "head_shape_area", "stem_shape_area", "editor_shape_area", "editor_placement_rect", "editor_shape_areas", "origin_marker", "shader_objects")]
+script = ExtResource("1_bct8k")
+head = NodePath("Head")
+stem = NodePath("Stem")
+head_shape_area = NodePath("EditorShapeArea")
+stem_shape_area = NodePath("StemShapeArea")
+stem_shape_width = 10.0
+subdivide_path = true
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+editor_shape_areas = [NodePath("StemShapeArea")]
+origin_marker = NodePath("Origin")
+shader_objects = [NodePath("Head"), NodePath("Stem")]
+metadata/_custom_type_script = "uid://2em0q35qtycp"
+
+[node name="Stem" type="Line2D" parent="." unique_id=201217882]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_58h0g")
+texture = SubResource("CanvasTexture_58h0g")
+texture_mode = 1
+
+[node name="Head" type="Sprite2D" parent="." unique_id=1512811414]
+material = SubResource("ShaderMaterial_hwjv0")
+texture = SubResource("CanvasTexture_hwjv0")
+script = ExtResource("5_g3smx")
+canvas_texture = SubResource("CanvasTexture_hwjv0")
+diffuse_texture = ExtResource("4_xct21")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=907268022]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=2054745134]
+shape = SubResource("RectangleShape2D_63d8k")
+
+[node name="StemShapeArea" type="Area2D" parent="." unique_id=442460714]
+
+[node name="Origin" type="Marker2D" parent="." unique_id=914170790]

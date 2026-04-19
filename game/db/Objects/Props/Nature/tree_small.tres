@@ -5,38 +5,13 @@
 [ext_resource type="Texture2D" uid="uid://kkqqt81dw4uf" path="res://assets/textures/props/nature/tree_small.png" id="2_kthna"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_xhytj"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_rtk2o"]
-[ext_resource type="Script" uid="uid://bbqpe78tlk6yc" path="res://game/db/Properties/position.gd" id="5_b3tqo"]
-[ext_resource type="Script" uid="uid://cnfsiqwgu44qm" path="res://game/db/Properties/rotation.gd" id="6_u6hh4"]
-[ext_resource type="Script" uid="uid://o5m0xxdfdd40" path="res://game/db/Properties/scale.gd" id="7_jvhx3"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_b3tqo"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_u6hh4"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_jvhx3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gh333"]
 atlas = ExtResource("2_kthna")
 region = Rect2(-9, -3, 48, 48)
-
-[sub_resource type="Resource" id="Resource_mg83m"]
-script = ExtResource("5_b3tqo")
-key = &"position"
-label = "Position"
-type = 4
-default_value = Vector2(0, 0)
-exclusive = true
-metadata/_custom_type_script = "uid://bbqpe78tlk6yc"
-
-[sub_resource type="Resource" id="Resource_6kkh8"]
-script = ExtResource("6_u6hh4")
-key = &"rotation"
-label = "Rotation"
-type = 2
-default_value = 0.0
-metadata/_custom_type_script = "uid://cnfsiqwgu44qm"
-
-[sub_resource type="Resource" id="Resource_qn0iu"]
-script = ExtResource("7_jvhx3")
-key = &"scale"
-label = "Scale"
-type = 4
-default_value = Vector2(1, 1)
-metadata/_custom_type_script = "uid://o5m0xxdfdd40"
 
 [resource]
 script = ExtResource("2_xhytj")
@@ -48,6 +23,6 @@ group_path = "Nature"
 ld_object_path = "Props/Nature/tree_small"
 ld_entry_texture = SubResource("AtlasTexture_gh333")
 ld_editor_instance = ExtResource("1_3tecv")
-ld_properties = Array[ExtResource("3_rtk2o")]([SubResource("Resource_mg83m"), SubResource("Resource_6kkh8"), SubResource("Resource_qn0iu")])
+ld_properties = Array[ExtResource("3_rtk2o")]([ExtResource("5_b3tqo"), ExtResource("6_u6hh4"), ExtResource("7_jvhx3")])
 game_instance = ExtResource("1_gh333")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

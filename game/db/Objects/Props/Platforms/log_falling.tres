@@ -5,46 +5,14 @@
 [ext_resource type="Texture2D" uid="uid://daac41f3cff3v" path="res://assets/textures/props/platform/log_falling_ld.png" id="2_ng04l"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_v6mas"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_36k4b"]
-[ext_resource type="Script" uid="uid://bbqpe78tlk6yc" path="res://game/db/Properties/position.gd" id="5_xcq5a"]
-[ext_resource type="Script" uid="uid://cnfsiqwgu44qm" path="res://game/db/Properties/rotation.gd" id="6_cjyi2"]
-[ext_resource type="Script" uid="uid://o5m0xxdfdd40" path="res://game/db/Properties/scale.gd" id="7_w45c5"]
-[ext_resource type="Script" uid="uid://crrkj8ocrq3rr" path="res://game/db/Properties/disabled.gd" id="8_b4dku"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_xcq5a"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_cjyi2"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_w45c5"]
+[ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="8_b4dku"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ng04l"]
 atlas = ExtResource("2_ng04l")
 region = Rect2(-15, -7, 48, 48)
-
-[sub_resource type="Resource" id="Resource_0ytq3"]
-script = ExtResource("5_xcq5a")
-key = &"position"
-label = "Position"
-type = 4
-default_value = Vector2(0, 0)
-exclusive = true
-metadata/_custom_type_script = "uid://bbqpe78tlk6yc"
-
-[sub_resource type="Resource" id="Resource_ndlwa"]
-script = ExtResource("6_cjyi2")
-key = &"rotation"
-label = "Rotation"
-type = 2
-default_value = 0.0
-metadata/_custom_type_script = "uid://cnfsiqwgu44qm"
-
-[sub_resource type="Resource" id="Resource_tiyrj"]
-script = ExtResource("7_w45c5")
-key = &"scale"
-label = "Scale"
-type = 4
-default_value = Vector2(1, 1)
-metadata/_custom_type_script = "uid://o5m0xxdfdd40"
-
-[sub_resource type="Resource" id="Resource_or7y1"]
-script = ExtResource("8_b4dku")
-key = &"disabled"
-label = "Disabled"
-default_value = false
-metadata/_custom_type_script = "uid://crrkj8ocrq3rr"
 
 [resource]
 script = ExtResource("2_v6mas")
@@ -57,6 +25,6 @@ name_override = "Falling Log"
 ld_object_path = "Props/Platforms/log_falling"
 ld_entry_texture = SubResource("AtlasTexture_ng04l")
 ld_editor_instance = ExtResource("1_jdj4q")
-ld_properties = Array[ExtResource("3_36k4b")]([SubResource("Resource_0ytq3"), SubResource("Resource_ndlwa"), SubResource("Resource_tiyrj"), SubResource("Resource_or7y1")])
+ld_properties = Array[ExtResource("3_36k4b")]([ExtResource("5_xcq5a"), ExtResource("6_cjyi2"), ExtResource("7_w45c5"), ExtResource("8_b4dku")])
 game_instance = ExtResource("1_8r2cj")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

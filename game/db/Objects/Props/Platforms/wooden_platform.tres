@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_pep4j"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_ew300"]
 [ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="6_bqaeb"]
-[ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="7_ew300"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_nu505"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nu505"]
 atlas = ExtResource("2_r4fve")
@@ -24,7 +24,7 @@ group_path = "Platforms"
 ld_object_path = "Props/Platforms/wooden_platform"
 ld_entry_texture = SubResource("AtlasTexture_nu505")
 ld_editor_instance = ExtResource("1_mqugf")
-ld_properties = Array[ExtResource("3_nm4fc")]([ExtResource("4_pep4j"), ExtResource("6_bqaeb"), ExtResource("5_ew300"), ExtResource("7_ew300")])
+ld_properties = Array[ExtResource("3_nm4fc")]([ExtResource("4_pep4j"), ExtResource("6_nu505"), ExtResource("5_ew300"), ExtResource("6_bqaeb")])
 ld_placement_tool_override = "telescoping"
 game_instance = ExtResource("1_nu505")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

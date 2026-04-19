@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="LDPropertyPathPoints" format=3 uid="uid://byf56jqxund1r"]
+
+[ext_resource type="Script" uid="uid://ioxgqssypqgx" path="res://game/db/Properties/path/path_points.gd" id="1_rm8ke"]
+
+[resource]
+script = ExtResource("1_rm8ke")
+key = &"path_points"
+label = "Path Points"
+type = 6
+default_value = PackedVector2Array()
+visible_in_editor = false
+metadata/_custom_type_script = "uid://ioxgqssypqgx"

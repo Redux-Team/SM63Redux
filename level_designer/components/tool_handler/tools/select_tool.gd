@@ -47,6 +47,10 @@ func _on_viewport_input(event: InputEvent) -> void:
 				get_tool_handler().select_tool("move")
 				return
 			var clicked: LDObject = _get_object_at(mouse_pos)
+			if clicked is LDObjectPath:
+				viewport.set_selected_objects([clicked])
+				get_tool_handler().select_tool("path_edit")
+				return
 			if clicked is LDObjectPolygon:
 				viewport.set_selected_objects([clicked])
 				get_tool_handler().select_tool("polygon_edit")
@@ -189,41 +193,44 @@ func _object_intersects_box(obj: LDObject) -> bool:
 					return true
 		return false
 	
-	if not obj.editor_shape_area:
+	var areas: Array[Area2D] = obj.get_all_editor_shape_areas()
+	if areas.is_empty():
 		var half: Vector2 = obj.get_stamp_size() * 0.5
 		var screen_rect: Rect2 = viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size())
 		return _box_select_rect.intersects(screen_rect)
 	
-	for child: Node in obj.editor_shape_area.get_children():
-		var shape: CollisionShape2D = child as CollisionShape2D
-		if not shape or not shape.shape is RectangleShape2D:
-			continue
-		var points: PackedVector2Array = _get_shape_screen_points(shape)
-		for p: Vector2 in points:
-			if _box_select_rect.has_point(p):
-				return true
-		var box_corners: Array[Vector2] = [
-			_box_select_rect.position,
-			_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0),
-			_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y),
-			_box_select_rect.position + _box_select_rect.size,
-		]
-		for corner: Vector2 in box_corners:
-			if Geometry2D.is_point_in_polygon(corner, points):
-				return true
-		var count: int = points.size()
-		var box_edges: Array[Array] = [
-			[_box_select_rect.position, _box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0)],
-			[_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0), _box_select_rect.position + _box_select_rect.size],
-			[_box_select_rect.position + _box_select_rect.size, _box_select_rect.position + Vector2(0.0, _box_select_rect.size.y)],
-			[_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y), _box_select_rect.position],
-		]
-		for i: int in count:
-			var a1: Vector2 = points[i]
-			var a2: Vector2 = points[(i + 1) % count]
-			for edge: Array in box_edges:
-				if Geometry2D.segment_intersects_segment(a1, a2, edge[0], edge[1]) != null:
+	var box_corners: Array[Vector2] = [
+		_box_select_rect.position,
+		_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0),
+		_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y),
+		_box_select_rect.position + _box_select_rect.size,
+	]
+	var box_edges: Array[Array] = [
+		[_box_select_rect.position, _box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0)],
+		[_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0), _box_select_rect.position + _box_select_rect.size],
+		[_box_select_rect.position + _box_select_rect.size, _box_select_rect.position + Vector2(0.0, _box_select_rect.size.y)],
+		[_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y), _box_select_rect.position],
+	]
+	
+	for area: Area2D in areas:
+		for child: Node in area.get_children():
+			var shape: CollisionShape2D = child as CollisionShape2D
+			if not shape or not shape.shape is RectangleShape2D:
+				continue
+			var points: PackedVector2Array = _get_shape_screen_points(shape)
+			for p: Vector2 in points:
+				if _box_select_rect.has_point(p):
 					return true
+			for corner: Vector2 in box_corners:
+				if Geometry2D.is_point_in_polygon(corner, points):
+					return true
+			var count: int = points.size()
+			for i: int in count:
+				var a1: Vector2 = points[i]
+				var a2: Vector2 = points[(i + 1) % count]
+				for edge: Array in box_edges:
+					if Geometry2D.segment_intersects_segment(a1, a2, edge[0], edge[1]) != null:
+						return true
 	
 	return false
 
@@ -243,19 +250,22 @@ func _get_object_at(mouse_pos: Vector2) -> LDObject:
 			if Geometry2D.is_point_in_polygon(mouse_pos, screen_points):
 				return obj
 			continue
-		if not obj.editor_shape_area:
+		var areas: Array[Area2D] = obj.get_all_editor_shape_areas()
+		if areas.is_empty():
 			var half: Vector2 = obj.get_stamp_size() * 0.5
 			var screen_rect: Rect2 = viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size())
 			if screen_rect.has_point(mouse_pos):
 				return obj
 			continue
-		for child: Node in obj.editor_shape_area.get_children():
-			var shape: CollisionShape2D = child as CollisionShape2D
-			if not shape or not shape.shape is RectangleShape2D:
-				continue
-			var points: PackedVector2Array = _get_shape_screen_points(shape)
-			if Geometry2D.is_point_in_polygon(mouse_pos, points):
-				return obj
+		for area: Area2D in areas:
+			for child: Node in area.get_children():
+				var shape: CollisionShape2D = child as CollisionShape2D
+				if not shape or not shape.shape is RectangleShape2D:
+					continue
+				var points: PackedVector2Array = _get_shape_screen_points(shape)
+				if Geometry2D.is_point_in_polygon(mouse_pos, points):
+					return obj
+	
 	return null
 
 
@@ -275,7 +285,9 @@ func _on_touch_tap(pos: Vector2) -> void:
 	var obj: LDObject = _get_object_at(pos)
 	if obj:
 		viewport.set_selected_objects([obj])
-		if obj is LDObjectPolygon:
+		if obj is LDObjectPath:
+			get_tool_handler().select_tool("path_edit")
+		elif obj is LDObjectPolygon:
 			get_tool_handler().select_tool("polygon_edit")
 	else:
 		viewport.clear_selection()

@@ -4,39 +4,14 @@
 [ext_resource type="PackedScene" uid="uid://c2rhnypjjp5uq" path="res://game/object/rock_medium/rock_medium.tscn" id="1_p3oix"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_8cpal"]
 [ext_resource type="PackedScene" uid="uid://dns82ygrth7yh" path="res://game/db/Objects/Props/Nature/rock_medium_ld.tscn" id="2_misvj"]
-[ext_resource type="Script" uid="uid://bbqpe78tlk6yc" path="res://game/db/Properties/position.gd" id="3_6aikr"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_x2rfd"]
-[ext_resource type="Script" uid="uid://cnfsiqwgu44qm" path="res://game/db/Properties/rotation.gd" id="4_p3oix"]
-[ext_resource type="Script" uid="uid://o5m0xxdfdd40" path="res://game/db/Properties/scale.gd" id="5_misvj"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_misvj"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_muc4s"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_voeus"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8cpal"]
 atlas = ExtResource("1_c85l3")
 region = Rect2(1, -14, 48, 48)
-
-[sub_resource type="Resource" id="Resource_i1b32"]
-script = ExtResource("3_6aikr")
-key = &"position"
-label = "Position"
-type = 4
-default_value = Vector2(0, 0)
-exclusive = true
-metadata/_custom_type_script = "uid://bbqpe78tlk6yc"
-
-[sub_resource type="Resource" id="Resource_pvw8h"]
-script = ExtResource("4_p3oix")
-key = &"rotation"
-label = "Rotation"
-type = 2
-default_value = 0.0
-metadata/_custom_type_script = "uid://cnfsiqwgu44qm"
-
-[sub_resource type="Resource" id="Resource_mygvr"]
-script = ExtResource("5_misvj")
-key = &"scale"
-label = "Scale"
-type = 4
-default_value = Vector2(1, 1)
-metadata/_custom_type_script = "uid://o5m0xxdfdd40"
 
 [resource]
 script = ExtResource("3_x2rfd")
@@ -48,6 +23,6 @@ group_path = "Nature"
 ld_object_path = "Props/Nature/rock_medium"
 ld_entry_texture = SubResource("AtlasTexture_8cpal")
 ld_editor_instance = ExtResource("2_misvj")
-ld_properties = Array[ExtResource("2_8cpal")]([SubResource("Resource_i1b32"), SubResource("Resource_pvw8h"), SubResource("Resource_mygvr")])
+ld_properties = Array[ExtResource("2_8cpal")]([ExtResource("5_misvj"), ExtResource("6_muc4s"), ExtResource("7_voeus")])
 game_instance = ExtResource("1_p3oix")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -10,6 +10,7 @@ enum Type {
 	STRING,
 	VECTOR2,
 	COLOR,
+	ARRAY_VECTOR2
 }
 
 

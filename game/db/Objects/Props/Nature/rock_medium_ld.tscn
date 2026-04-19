@@ -9,6 +9,7 @@
 resource_local_to_scene = true
 shader = ExtResource("2_wsqp8")
 shader_parameter/state = 0
+shader_parameter/palette_index = 0
 shader_parameter/custom_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
@@ -19,7 +20,7 @@ shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_loa7b"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_hr7so"]
 diffuse_texture = ExtResource("3_hr7so")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m03ki"]
@@ -35,9 +36,9 @@ metadata/_custom_type_script = "uid://cfx4civm76jwr"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1849251792]
 material = SubResource("ShaderMaterial_sa7u4")
-texture = SubResource("CanvasTexture_loa7b")
+texture = SubResource("CanvasTexture_hr7so")
 script = ExtResource("4_upsot")
-canvas_texture = SubResource("CanvasTexture_loa7b")
+canvas_texture = SubResource("CanvasTexture_hr7so")
 diffuse_texture = ExtResource("3_hr7so")
 current_animation = ""
 current_frame = 0

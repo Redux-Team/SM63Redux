@@ -11,6 +11,8 @@
 [ext_resource type="Script" uid="uid://cqvblppfibjsb" path="res://level_designer/components/tool_handler/tools/polygon/polygon_edit_tool.gd" id="8_c517l"]
 [ext_resource type="Script" uid="uid://s77vtjwxty2o" path="res://level_designer/components/tool_handler/tools/polygon/polygon_add_tool.gd" id="10_u22y6"]
 [ext_resource type="Script" uid="uid://cedokux8eoge8" path="res://level_designer/components/tool_handler/tools/polygon/polygon_cut_tool.gd" id="11_4dp4y"]
+[ext_resource type="Script" uid="uid://druukx3pdt26k" path="res://level_designer/components/tool_handler/tools/path/path_tool.gd" id="12_4dp4y"]
+[ext_resource type="Script" uid="uid://bwf8y786yhocf" path="res://level_designer/components/tool_handler/tools/path/path_edit.gd" id="13_lxvty"]
 
 [node name="ToolHandler" type="Node" unique_id=1124731823]
 script = ExtResource("1_0flew")
@@ -45,3 +47,9 @@ script = ExtResource("10_u22y6")
 
 [node name="PolygonCutTool" type="Node" parent="PolygonTool" unique_id=1318500431]
 script = ExtResource("11_4dp4y")
+
+[node name="PathTool" type="Node" parent="." unique_id=2075599837]
+script = ExtResource("12_4dp4y")
+
+[node name="PathEditTool" type="Node" parent="PathTool" unique_id=1803315856]
+script = ExtResource("13_lxvty")

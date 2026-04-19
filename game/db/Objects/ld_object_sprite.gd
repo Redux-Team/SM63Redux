@@ -4,8 +4,6 @@ class_name LDObjectSprite
 extends LDObject
 
 
-@export var shader_objects: Array[CanvasItem]
-
 @export_group("Debug")
 @export var sprite_ref: Sprite2D
 @export_tool_button("Create Sprite Props") var _create_sprite_props: Callable:

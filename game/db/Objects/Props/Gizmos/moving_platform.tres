@@ -5,56 +5,16 @@
 [ext_resource type="PackedScene" uid="uid://ckdfyoldc0frd" path="res://game/object/moving_platform/moving_platform.tscn" id="1_kh23k"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_7ohvu"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_kqnkv"]
-[ext_resource type="Script" uid="uid://bbqpe78tlk6yc" path="res://game/db/Properties/position.gd" id="4_smnfa"]
-[ext_resource type="Script" uid="uid://c74p8giulwgqm" path="res://game/db/Properties/t_size_x.gd" id="5_lspli"]
-[ext_resource type="Script" uid="uid://gn3liql55e8e" path="res://game/db/Properties/moving_platform/platform_amount.gd" id="6_20ud1"]
-[ext_resource type="Script" uid="uid://dtm3d71ejnmdd" path="res://game/db/Properties/moving_platform/platform_radius.gd" id="7_kh23k"]
-[ext_resource type="Script" uid="uid://b0fxtl0hudiya" path="res://game/db/Properties/moving_platform/platform_speed.gd" id="8_qjrcg"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_qjrcg"]
+[ext_resource type="Resource" uid="uid://cmrdgbqp43tvo" path="res://game/db/Properties/t_size_y.tres" id="6_72rtd"]
+[ext_resource type="Resource" uid="uid://dk8qlbripls8x" path="res://game/db/Properties/moving_platform/platform_amount.tres" id="7_nuxwn"]
+[ext_resource type="Resource" uid="uid://cwscua7waq0vn" path="res://game/db/Properties/moving_platform/platform_radius.tres" id="8_ajhpr"]
+[ext_resource type="Resource" uid="uid://ctlyyrjsbjt07" path="res://game/db/Properties/moving_platform/platform_period.tres" id="9_7ed3c"]
+[ext_resource type="Resource" uid="uid://ch70dly76448g" path="res://game/db/Properties/moving_platform/platform_start_angle.tres" id="10_1qsx4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bb6u5"]
 atlas = ExtResource("1_bb6u5")
 region = Rect2(0, 0, 48, 48)
-
-[sub_resource type="Resource" id="Resource_lspli"]
-script = ExtResource("4_smnfa")
-key = &"position"
-label = "Position"
-type = 4
-default_value = Vector2(0, 0)
-exclusive = true
-metadata/_custom_type_script = "uid://bbqpe78tlk6yc"
-
-[sub_resource type="Resource" id="Resource_46s6n"]
-script = ExtResource("5_lspli")
-key = &"t_size_x"
-label = "Width"
-type = 1
-default_value = 1
-metadata/_custom_type_script = "uid://c74p8giulwgqm"
-
-[sub_resource type="Resource" id="Resource_72rtd"]
-script = ExtResource("6_20ud1")
-key = &"platform_amount"
-label = "Amount"
-type = 1
-default_value = 1
-metadata/_custom_type_script = "uid://gn3liql55e8e"
-
-[sub_resource type="Resource" id="Resource_nuxwn"]
-script = ExtResource("7_kh23k")
-key = &"platform_radius"
-label = "Radius"
-type = 2
-default_value = 64.0
-metadata/_custom_type_script = "uid://dtm3d71ejnmdd"
-
-[sub_resource type="Resource" id="Resource_ajhpr"]
-script = ExtResource("8_qjrcg")
-key = &"platform_speed"
-label = "Speed"
-type = 2
-default_value = 1.0
-metadata/_custom_type_script = "uid://b0fxtl0hudiya"
 
 [resource]
 script = ExtResource("2_kqnkv")
@@ -66,6 +26,6 @@ group_path = "Gizmos"
 ld_object_path = "Props/Gizmos/moving_platform"
 ld_entry_texture = SubResource("AtlasTexture_bb6u5")
 ld_editor_instance = ExtResource("1_gr6rl")
-ld_properties = Array[ExtResource("2_7ohvu")]([SubResource("Resource_lspli"), SubResource("Resource_46s6n"), SubResource("Resource_72rtd"), SubResource("Resource_nuxwn"), SubResource("Resource_ajhpr")])
+ld_properties = Array[ExtResource("2_7ohvu")]([ExtResource("5_qjrcg"), ExtResource("6_72rtd"), ExtResource("7_nuxwn"), ExtResource("8_ajhpr"), ExtResource("9_7ed3c"), ExtResource("10_1qsx4")])
 game_instance = ExtResource("1_kh23k")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

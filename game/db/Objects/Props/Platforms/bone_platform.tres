@@ -5,47 +5,14 @@
 [ext_resource type="PackedScene" uid="uid://c6mg5t53mae1m" path="res://game/object/bone_platform/bone_platform.tscn" id="1_8f6vu"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_vghde"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_kq1ea"]
-[ext_resource type="Script" uid="uid://bbqpe78tlk6yc" path="res://game/db/Properties/position.gd" id="3_8ckqg"]
-[ext_resource type="Script" uid="uid://cnfsiqwgu44qm" path="res://game/db/Properties/rotation.gd" id="4_8f6vu"]
-[ext_resource type="Script" uid="uid://o5m0xxdfdd40" path="res://game/db/Properties/scale.gd" id="5_hirio"]
-[ext_resource type="Script" uid="uid://c74p8giulwgqm" path="res://game/db/Properties/t_size_x.gd" id="6_tfedt"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_8f6vu"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_hirio"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_tfedt"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="8_5shr0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5shr0"]
 atlas = ExtResource("1_1ehh4")
 region = Rect2(0, 0, 48, 48)
-
-[sub_resource type="Resource" id="Resource_c0b6r"]
-script = ExtResource("3_8ckqg")
-key = &"position"
-label = "Position"
-type = 4
-default_value = Vector2(0, 0)
-exclusive = true
-metadata/_custom_type_script = "uid://bbqpe78tlk6yc"
-
-[sub_resource type="Resource" id="Resource_j2pfh"]
-script = ExtResource("4_8f6vu")
-key = &"rotation"
-label = "Rotation"
-type = 2
-default_value = 0.0
-metadata/_custom_type_script = "uid://cnfsiqwgu44qm"
-
-[sub_resource type="Resource" id="Resource_m6om4"]
-script = ExtResource("5_hirio")
-key = &"scale"
-label = "Scale"
-type = 4
-default_value = Vector2(1, 1)
-metadata/_custom_type_script = "uid://o5m0xxdfdd40"
-
-[sub_resource type="Resource" id="Resource_x1p1q"]
-script = ExtResource("6_tfedt")
-key = &"t_size_x"
-label = "Width"
-type = 1
-default_value = 1
-metadata/_custom_type_script = "uid://c74p8giulwgqm"
 
 [resource]
 script = ExtResource("2_kq1ea")
@@ -57,7 +24,7 @@ group_path = "Platforms"
 ld_object_path = "Props/Platforms/bone_platform"
 ld_entry_texture = SubResource("AtlasTexture_5shr0")
 ld_editor_instance = ExtResource("1_8ckqg")
-ld_properties = Array[ExtResource("1_vghde")]([SubResource("Resource_c0b6r"), SubResource("Resource_j2pfh"), SubResource("Resource_m6om4"), SubResource("Resource_x1p1q")])
+ld_properties = Array[ExtResource("1_vghde")]([ExtResource("5_8f6vu"), ExtResource("6_hirio"), ExtResource("7_tfedt"), ExtResource("8_5shr0")])
 ld_placement_tool_override = "telescoping"
 game_instance = ExtResource("1_8f6vu")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

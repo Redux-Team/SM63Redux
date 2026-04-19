@@ -3,38 +3,13 @@
 [ext_resource type="Texture2D" uid="uid://dcoump5mt4pp3" path="res://assets/textures/props/interactable/sign.png" id="1_c370i"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_6ss1s"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_784q2"]
-[ext_resource type="Script" uid="uid://bbqpe78tlk6yc" path="res://game/db/Properties/position.gd" id="3_lv4ed"]
-[ext_resource type="Script" uid="uid://cnfsiqwgu44qm" path="res://game/db/Properties/rotation.gd" id="4_lqupp"]
-[ext_resource type="Script" uid="uid://o5m0xxdfdd40" path="res://game/db/Properties/scale.gd" id="5_8eyit"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_lv4ed"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_lqupp"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_8eyit"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1q8d5"]
 atlas = ExtResource("1_c370i")
 region = Rect2(-7, -5, 48, 48)
-
-[sub_resource type="Resource" id="Resource_i1b32"]
-script = ExtResource("3_lv4ed")
-key = &"position"
-label = "Position"
-type = 4
-default_value = Vector2(0, 0)
-exclusive = true
-metadata/_custom_type_script = "uid://bbqpe78tlk6yc"
-
-[sub_resource type="Resource" id="Resource_pvw8h"]
-script = ExtResource("4_lqupp")
-key = &"rotation"
-label = "Rotation"
-type = 2
-default_value = 0.0
-metadata/_custom_type_script = "uid://cnfsiqwgu44qm"
-
-[sub_resource type="Resource" id="Resource_mygvr"]
-script = ExtResource("5_8eyit")
-key = &"scale"
-label = "Scale"
-type = 4
-default_value = Vector2(1, 1)
-metadata/_custom_type_script = "uid://o5m0xxdfdd40"
 
 [resource]
 script = ExtResource("2_6ss1s")
@@ -46,5 +21,5 @@ group_path = "Interactable"
 name_override = "Sign"
 ld_object_path = "Props/Interactable/sign"
 ld_entry_texture = SubResource("AtlasTexture_1q8d5")
-ld_properties = Array[ExtResource("2_784q2")]([SubResource("Resource_i1b32"), SubResource("Resource_pvw8h"), SubResource("Resource_mygvr")])
+ld_properties = Array[ExtResource("2_784q2")]([ExtResource("3_lv4ed"), ExtResource("4_lqupp"), ExtResource("5_8eyit")])
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dkwum2wy3clju" path="res://assets/textures/props/nature/rock_medium.png" id="2_dotvg"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_g533f"]
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_2yv6t"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_irxtb"]
 diffuse_texture = ExtResource("2_dotvg")
 
 [node name="RockMedium" type="Node2D" unique_id=439743552]
@@ -12,12 +12,17 @@ script = ExtResource("1_irxtb")
 metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=297195645]
-texture = SubResource("CanvasTexture_2yv6t")
+texture = SubResource("CanvasTexture_irxtb")
 script = ExtResource("3_g533f")
-canvas_texture = SubResource("CanvasTexture_2yv6t")
+canvas_texture = SubResource("CanvasTexture_irxtb")
 diffuse_texture = ExtResource("2_dotvg")
 current_animation = ""
 current_frame = 0
 speed_scale = 1.0
 playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1953384236]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1898101865]
+polygon = PackedVector2Array(-23, 21, -16, -9, -14, -14, -2, -20, 12, -11, 16, 5, 19, 6, 23, 21)
