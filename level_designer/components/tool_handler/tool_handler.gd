@@ -1,7 +1,6 @@
 class_name LDToolHandler
 extends LDComponent
 
-
 var _selected_tool: LDTool
 var _bound_tools: Dictionary[String, LDTool]
 
