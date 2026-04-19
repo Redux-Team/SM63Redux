@@ -63,7 +63,9 @@ func update_drag(mouse_pos: Vector2) -> void:
 	var world_mouse: Vector2 = full_transform.affine_inverse() * mouse_pos
 	
 	for i: int in _objects.size():
-		var new_pos: Vector2 = (world_mouse + _drag_offsets[i]).snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
+		var new_pos: Vector2 = world_mouse + _drag_offsets[i]
+		if not Input.is_key_pressed(KEY_ALT):
+			new_pos = new_pos.snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
 		_objects[i].position = new_pos
 		if _objects[i]._properties.size() > 0:
 			_objects[i].set_property(&"position", new_pos)
