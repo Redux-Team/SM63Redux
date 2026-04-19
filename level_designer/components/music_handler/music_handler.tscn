@@ -1,9 +1,137 @@
 [gd_scene format=3 uid="uid://drwhx30m8d8f7"]
 
 [ext_resource type="Script" uid="uid://ddiwtpjpciapl" path="res://level_designer/components/music_handler/music_handler.gd" id="1_rkng7"]
+[ext_resource type="AudioStream" uid="uid://s37wfuyxf504" path="res://assets/music/91.mp3" id="2_bjm6i"]
+[ext_resource type="AudioStream" uid="uid://cm8xohoo5vmy" path="res://assets/music/92.mp3" id="3_j5u7t"]
+[ext_resource type="AudioStream" uid="uid://buy6m2r0lxnge" path="res://assets/music/93.mp3" id="4_brcp4"]
 
-[node name="LDMusicHandler" type="Node" unique_id=803692291 node_paths=PackedStringArray("audio_stream_player")]
+[sub_resource type="Animation" id="Animation_bjm6i"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/Control/SongLabel:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/Control/SongLabel:anchor_top")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CanvasLayer/Control/SongLabel:anchor_bottom")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_f0jjn"]
+resource_name = "new_song"
+length = 3.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/Control/SongLabel:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.23, 3, 3.3666666),
+"transitions": PackedFloat32Array(0.3, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/Control/SongLabel:anchor_top")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.43333334, 3, 3.4570436),
+"transitions": PackedFloat32Array(0.3, 0.3, 0.3, 0.3),
+"update": 0,
+"values": [0.06, 0.03, 0.03, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CanvasLayer/Control/SongLabel:anchor_bottom")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.43333334, 3, 3.4570436),
+"transitions": PackedFloat32Array(0.3, 0.3, 0.3, 0.3),
+"update": 0,
+"values": [0.06, 0.03, 0.03, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j5u7t"]
+_data = {
+&"RESET": SubResource("Animation_bjm6i"),
+&"new_song": SubResource("Animation_f0jjn")
+}
+
+[node name="LDMusicHandler" type="Node" unique_id=803692291 node_paths=PackedStringArray("song_label", "audio_stream_player", "animation_player")]
 script = ExtResource("1_rkng7")
+tracks = Dictionary[String, AudioStream]({
+"Level Editor - 64": ExtResource("2_bjm6i"),
+"Level Editor - Galaxy": ExtResource("4_brcp4"),
+"Level Editor - Sunshine": ExtResource("3_j5u7t")
+})
+song_label = NodePath("CanvasLayer/Control/SongLabel")
 audio_stream_player = NodePath("AudioStreamPlayer")
+animation_player = NodePath("AnimationPlayer")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1360963884]
+volume_db = -5.0
+bus = &"Music"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=129802626]
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=770919875]
+layout_mode = 3
+anchor_top = 0.11111111
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="SongLabel" type="Label" parent="CanvasLayer/Control" unique_id=582419050]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -38.0
+offset_right = 38.0
+offset_bottom = 15.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 4
+text = "<Song Name>"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1132745657]
+libraries/ = SubResource("AnimationLibrary_j5u7t")

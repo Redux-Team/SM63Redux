@@ -28,7 +28,8 @@ static var _inst: LDViewport
 @export var camera: Camera2D
 @export_group("Internal")
 @export var _layers_root: Node2D
-@export var _viewport_bg: ColorRect
+@export var _viewport_bg_root: Node
+@export var _viewport_grid: ColorRect
 @export var _root: LDViewportRoot
 @export var _selection_overlay: LDSelectionOverlay
 @export var _touch_indicator: LDTouchSwipeIndicator
@@ -245,6 +246,11 @@ func set_selected_objects(objects: Array[LDObject]) -> void:
 	selection_changed.emit(_selected_objects)
 
 
+func set_background(node: Node) -> void:
+	for n: Node in _viewport_bg_root.get_children(): n.queue_free()
+	_viewport_bg_root.add_child(node)
+
+
 func clear_selection() -> void:
 	set_selected_objects([])
 
@@ -374,7 +380,7 @@ func _sort_layers() -> void:
 
 
 func _on_viewport_moved(pos: Vector2 = camera_position, zoom: Vector2 = camera_zoom) -> void:
-	var mat: ShaderMaterial = _viewport_bg.material as ShaderMaterial
+	var mat: ShaderMaterial = _viewport_grid.material as ShaderMaterial
 	if not mat:
 		return
 	mat.set_shader_parameter("camera_position", pos)

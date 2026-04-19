@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b6vwygexlf4ht" path="res://level_designer/components/viewport/viewport.gd" id="1_urtws"]
 [ext_resource type="Script" uid="uid://bkvfc547p3vis" path="res://level_designer/components/viewport/root/viewport_root.gd" id="2_itnej"]
-[ext_resource type="Shader" path="res://core/shader/ld_viewport_bg.gdshader" id="2_vq6wp"]
+[ext_resource type="Shader" uid="uid://d4m57jrrlul8l" path="res://core/shader/ld_viewport_bg.gdshader" id="2_vq6wp"]
 [ext_resource type="Texture2D" uid="uid://crqnqwpps0m8c" path="res://assets/textures/level_designer/viewport/bg_texture.png" id="3_nmc72"]
 [ext_resource type="Script" uid="uid://bemjucm1rn4g1" path="res://level_designer/components/viewport/selection_overlay/selection_overlay.gd" id="5_pf3pc"]
 [ext_resource type="Script" uid="uid://ctu3ksd4yarv0" path="res://level_designer/components/viewport/touch_swipe_indicator.gd" id="6_uet0v"]
@@ -19,11 +19,12 @@ shader_parameter/screen_size = Vector2(1152, 648)
 shader_parameter/grid_offset = Vector2(0, 0)
 shader_parameter/grid_fade_threshold = 1.0
 
-[node name="LDViewport" type="Node" unique_id=110890990 node_paths=PackedStringArray("camera", "_layers_root", "_viewport_bg", "_root", "_selection_overlay", "_touch_indicator", "_viewport_input")]
+[node name="LDViewport" type="Node" unique_id=110890990 node_paths=PackedStringArray("camera", "_layers_root", "_viewport_bg_root", "_viewport_grid", "_root", "_selection_overlay", "_touch_indicator", "_viewport_input")]
 script = ExtResource("1_urtws")
 camera = NodePath("Root/LDCamera")
 _layers_root = NodePath("Root/Layers")
-_viewport_bg = NodePath("Root/BGCanvasLayer/ViewportBG")
+_viewport_bg_root = NodePath("Root/BGCanvasLayer/ViewportBG")
+_viewport_grid = NodePath("Root/BGCanvasLayer/ViewportGrid")
 _root = NodePath("Root")
 _selection_overlay = NodePath("CanvasLayer/SelectionOverlay")
 _touch_indicator = NodePath("CanvasLayer/TouchSwipeIndicator")
@@ -35,7 +36,9 @@ script = ExtResource("2_itnej")
 [node name="BGCanvasLayer" type="CanvasLayer" parent="Root" unique_id=318284600]
 layer = -1
 
-[node name="ViewportBG" type="ColorRect" parent="Root/BGCanvasLayer" unique_id=1665666835]
+[node name="ViewportBG" type="Node" parent="Root/BGCanvasLayer" unique_id=1288112237]
+
+[node name="ViewportGrid" type="ColorRect" parent="Root/BGCanvasLayer" unique_id=1665666835]
 material = SubResource("ShaderMaterial_nmc72")
 anchors_preset = 15
 anchor_right = 1.0

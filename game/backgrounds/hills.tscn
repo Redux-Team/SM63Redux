@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://st4r6o6hqwhj"]
+
+[ext_resource type="Texture2D" uid="uid://psk8ih50fovd" path="res://assets/textures/world/background/clouds_0/bg_clouds_01.png" id="1_ujg0q"]
+[ext_resource type="Texture2D" uid="uid://cg0354brx4x1h" path="res://assets/textures/world/background/clouds_0/bg_clouds_02.png" id="2_cwu3l"]
+[ext_resource type="Texture2D" uid="uid://ch6v5mpjjdw7a" path="res://assets/textures/world/background/hills_0/bg_hills_01.png" id="3_uht0x"]
+
+[sub_resource type="Gradient" id="Gradient_x1m06"]
+colors = PackedColorArray(0.57254905, 0.7372549, 1, 1, 0.29803923, 0.4627451, 0.78039217, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1sbsh"]
+gradient = SubResource("Gradient_x1m06")
+fill_from = Vector2(0, 1)
+fill_to = Vector2(0, 0)
+
+[node name="HillsBG" type="CanvasLayer" unique_id=1464026582]
+layer = -2
+
+[node name="BG" type="TextureRect" parent="." unique_id=724976930]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_1sbsh")
+
+[node name="Anchor" type="Control" parent="." unique_id=658899895]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="BottomClouds" type="Parallax2D" parent="Anchor" unique_id=1200636629]
+scroll_scale = Vector2(0, 0)
+scroll_offset = Vector2(-304, -157)
+repeat_size = Vector2(400, 0)
+autoscroll = Vector2(-4, 0)
+repeat_times = 5
+follow_viewport = false
+
+[node name="Sprite2D" type="Sprite2D" parent="Anchor/BottomClouds" unique_id=667366939]
+texture = ExtResource("1_ujg0q")
+
+[node name="TopClouds" type="Parallax2D" parent="Anchor" unique_id=204617315]
+scroll_scale = Vector2(0, 0)
+scroll_offset = Vector2(-289, -360)
+repeat_size = Vector2(800, 0)
+autoscroll = Vector2(-4, 0)
+repeat_times = 5
+follow_viewport = false
+
+[node name="Sprite2D" type="Sprite2D" parent="Anchor/TopClouds" unique_id=1947250510]
+position = Vector2(2, 25)
+texture = ExtResource("2_cwu3l")
+
+[node name="Hills" type="Parallax2D" parent="Anchor" unique_id=331395786]
+scroll_scale = Vector2(0.05, 0.05)
+scroll_offset = Vector2(-304, -117)
+repeat_size = Vector2(800, 0)
+repeat_times = 3
+limit_end = Vector2(10000000, 2000)
+follow_viewport = false
+
+[node name="Sprite2D" type="Sprite2D" parent="Anchor/Hills" unique_id=333179693]
+position = Vector2(27, -100)
+texture = ExtResource("3_uht0x")

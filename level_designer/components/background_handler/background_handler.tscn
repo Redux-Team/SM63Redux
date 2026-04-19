@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ddgadu7krmqus"]
+
+[ext_resource type="Script" uid="uid://cvxlhoe2rct5j" path="res://level_designer/components/background_handler/background_handler.gd" id="1_0laph"]
+
+[node name="BackgroundHandler" type="Node" unique_id=2038020054]
+script = ExtResource("1_0laph")

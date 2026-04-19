@@ -36,6 +36,6 @@ func _on_toggle_group_button_toggled(toggled_on: bool) -> void:
 	group_list.visible = toggled_on
 	
 	if toggled_on:
-		SFX.play(SFX.UI_CONFIRM)
+		SFX.play(SFX.LD_SELECT)
 	else:
-		SFX.play(SFX.UI_BACK)
+		SFX.play(SFX.LD_BACK)

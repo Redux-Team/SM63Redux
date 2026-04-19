@@ -15,6 +15,15 @@ const UI_NEXT: AudioStream = preload("uid://c457x4e2iw7b")
 const UI_BACK: AudioStream = preload("uid://dv2aeiyho5qtn")
 const UI_CONFIRM: AudioStream = preload("uid://cg8o8vgknq1li")
 const UI_START: AudioStream = preload("uid://dmop45sygbxda")
+
+const LD_BACK: AudioStream = preload("uid://dje63yjntwtic")
+const LD_CLOSE: AudioStream = preload("uid://ba7fbbaan7823")
+const LD_CONFIRM: AudioStream = preload("uid://dyapufoemwyie")
+const LD_DENY: AudioStream = preload("uid://bjujqv87d3mx0")
+const LD_ERROR: AudioStream = preload("uid://7fdllxb8tiqr")
+const LD_OPEN: AudioStream = preload("uid://b41jeumeks5wp")
+const LD_SELECT: AudioStream = preload("uid://b1fnunf32dpve")
+
 #const UI_WINDOW_OPEN: AudioStream
 
 

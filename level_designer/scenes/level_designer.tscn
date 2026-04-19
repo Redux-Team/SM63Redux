@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bn3grnflnno82" path="res://level_designer/components/object_handler/object_handler.tscn" id="4_whrr0"]
 [ext_resource type="PackedScene" uid="uid://dgqiataa68ctv" path="res://level_designer/components/save_load_handler/save_load_handler.tscn" id="6_7s4qu"]
 [ext_resource type="PackedScene" uid="uid://8h1itr5llov7" path="res://level_designer/components/history_handler/history_handler.tscn" id="6_yforh"]
+[ext_resource type="PackedScene" uid="uid://ddgadu7krmqus" path="res://level_designer/components/background_handler/background_handler.tscn" id="8_pwhqf"]
 
 [node name="LevelDesigner" type="Node" unique_id=204056479 node_paths=PackedStringArray("_ld_input_handler", "_ld_object_handler", "_ld_tool_handler", "_ld_music_handler", "_ld_history_handler", "_ld_save_load_handler", "_ld_viewport", "_ld_ui")]
 script = ExtResource("1_n6dip")
@@ -32,6 +33,8 @@ _ld_ui = NodePath("LDUI")
 [node name="SaveLoadHandler" parent="." unique_id=1300597135 instance=ExtResource("6_7s4qu")]
 
 [node name="HistoryHandler" parent="." unique_id=1463716079 instance=ExtResource("6_yforh")]
+
+[node name="BackgroundHandler" parent="." unique_id=2038020054 instance=ExtResource("8_pwhqf")]
 
 [node name="LDUI" parent="." unique_id=783443360 instance=ExtResource("3_ihrx4")]
 

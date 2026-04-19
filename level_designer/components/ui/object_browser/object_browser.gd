@@ -16,7 +16,7 @@ func _ready() -> void:
 func populate_list(category: GameObject.ObjectCategory = GameObject.ObjectCategory.ALL) -> void:
 	#aka if none are selected
 	if entities_button.button_group.get_pressed_button() == null and category != GameObject.ObjectCategory.ALL:
-		SFX.play(SFX.UI_BACK)
+		SFX.play(SFX.LD_BACK)
 		populate_list()
 		return
 	
@@ -89,4 +89,4 @@ func _on_triggers_category_toggled(toggled_on: bool) -> void:
 
 func _play_sfx(toggled_on: bool) -> void:
 	if toggled_on:
-		SFX.play(SFX.UI_NEXT)
+		SFX.play(SFX.LD_SELECT)

@@ -51,7 +51,7 @@ func _input(event: InputEvent) -> void:
 @warning_ignore("native_method_override")
 func popin() -> void:
 	if pop_in_sfx:
-		SFX.play(SFX.UI_CONFIRM)
+		SFX.play(SFX.LD_OPEN)
 	
 	scale = Vector2.ONE
 	
@@ -82,7 +82,7 @@ func popin() -> void:
 @warning_ignore("native_method_override")
 func popout() -> void:
 	if pop_out_sfx:
-		SFX.play(SFX.UI_BACK)
+		SFX.play(SFX.LD_CLOSE)
 	scale = window_scale
 	modulate = Color.WHITE
 	
