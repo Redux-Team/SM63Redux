@@ -142,3 +142,15 @@ func _on_poly_add_pressed() -> void:
 
 func _on_poly_cut_pressed() -> void:
 	LD.get_tool_handler().select_tool("polygon_cut")
+
+
+func _on_move_to_front_button_pressed() -> void:
+	var objs: Array[LDObject] = LD.get_editor_viewport().get_selected_objects()
+	for obj: LDObject in objs:
+		obj.get_parent().move_child(obj, -1)
+
+
+func _on_move_to_back_button_pressed() -> void:
+	var objs: Array[LDObject] = LD.get_editor_viewport().get_selected_objects()
+	for obj: LDObject in objs:
+		obj.get_parent().move_child(obj, 0)

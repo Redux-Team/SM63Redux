@@ -92,6 +92,16 @@ layout_mode = 2
 focus_mode = 0
 text = "Delete"
 
+[node name="MoveToFrontButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1732178860]
+layout_mode = 2
+focus_mode = 0
+text = "MTF*"
+
+[node name="MoveToBackButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=865471635]
+layout_mode = 2
+focus_mode = 0
+text = "MTB*"
+
 [node name="ResetButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1951778345]
 layout_mode = 2
 focus_mode = 0
@@ -180,6 +190,8 @@ use_native_dialog = true
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyAddButton" to="." method="_on_poly_add_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyCutButton" to="." method="_on_poly_cut_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeleteButton" to="." method="_on_delete_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/MoveToFrontButton" to="." method="_on_move_to_front_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/MoveToBackButton" to="." method="_on_move_to_back_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/LoadButton" to="." method="_on_load_button_pressed"]
