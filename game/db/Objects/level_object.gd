@@ -34,6 +34,8 @@ func set_property(key: StringName, value: Variant) -> void:
 func _handle_property(property_name: String, property_value: Variant) -> void:
 	if property_name in ["position", "scale"]:
 		set(property_name, _array_to_vec2(property_value))
+	elif property_name == "rotation":
+		rotation_degrees = property_value
 	elif property_name == "disabled":
 		set_process(not property_value)
 		set_physics_process(not property_value)
