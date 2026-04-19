@@ -85,7 +85,11 @@ var jump_chain_timer: float = 0.0
 
 
 func _ready() -> void:
-	add_child(Camera2D.new())
+	var cam: Camera2D = Camera2D.new()
+	cam.zoom = Vector2(1.2, 1.2)
+	cam.position_smoothing_enabled = true
+	cam.position_smoothing_speed = 10
+	add_child(cam)
 	#super()
 	#Singleton.debug_mode_toggled.connect(_on_debug_toggle)
 #
