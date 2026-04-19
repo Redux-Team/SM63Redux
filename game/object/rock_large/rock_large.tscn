@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://jbsaikmyavb"]
+
+[ext_resource type="Script" uid="uid://bsswcbgcrlwv2" path="res://game/db/Objects/level_object.gd" id="1_h752y"]
+[ext_resource type="Texture2D" uid="uid://bjkmbxc341wv4" path="res://assets/textures/props/nature/rock_large.png" id="2_3oeua"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_60kw0"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_ex7gp"]
+diffuse_texture = ExtResource("2_3oeua")
+
+[node name="RockLarge" type="Node2D" unique_id=439743552]
+script = ExtResource("1_h752y")
+metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
+
+[node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=297195645]
+texture = SubResource("CanvasTexture_ex7gp")
+script = ExtResource("3_60kw0")
+canvas_texture = SubResource("CanvasTexture_ex7gp")
+diffuse_texture = ExtResource("2_3oeua")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"

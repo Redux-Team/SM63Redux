@@ -1,12 +1,42 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://7xl4vm48exsa"]
 
+[ext_resource type="PackedScene" uid="uid://321574xqxaeg" path="res://game/object/mushroom_pair/mushroom_pair.tscn" id="1_ltveh"]
 [ext_resource type="Texture2D" uid="uid://e2n0xxcniny6" path="res://assets/textures/props/nature/mushroom_pair.png" id="1_ocmao"]
+[ext_resource type="PackedScene" uid="uid://bfiva1nhu1a8f" path="res://game/db/Objects/Props/Nature/mushroom_pair_ld.tscn" id="2_4dqcf"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_e4y0g"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_ofogo"]
+[ext_resource type="Script" uid="uid://bbqpe78tlk6yc" path="res://game/db/Properties/position.gd" id="4_olf4x"]
+[ext_resource type="Script" uid="uid://cnfsiqwgu44qm" path="res://game/db/Properties/rotation.gd" id="5_4dqcf"]
+[ext_resource type="Script" uid="uid://o5m0xxdfdd40" path="res://game/db/Properties/scale.gd" id="6_cbvyc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ocmao"]
 atlas = ExtResource("1_ocmao")
 region = Rect2(-6, -14, 48, 48)
+
+[sub_resource type="Resource" id="Resource_i1b32"]
+script = ExtResource("4_olf4x")
+key = &"position"
+label = "Position"
+type = 4
+default_value = Vector2(0, 0)
+exclusive = true
+metadata/_custom_type_script = "uid://bbqpe78tlk6yc"
+
+[sub_resource type="Resource" id="Resource_pvw8h"]
+script = ExtResource("5_4dqcf")
+key = &"rotation"
+label = "Rotation"
+type = 2
+default_value = 0.0
+metadata/_custom_type_script = "uid://cnfsiqwgu44qm"
+
+[sub_resource type="Resource" id="Resource_mygvr"]
+script = ExtResource("6_cbvyc")
+key = &"scale"
+label = "Scale"
+type = 4
+default_value = Vector2(1, 1)
+metadata/_custom_type_script = "uid://o5m0xxdfdd40"
 
 [resource]
 script = ExtResource("3_ofogo")
@@ -17,4 +47,7 @@ subpath = "Nature/mushroom_pair"
 group_path = "Nature"
 ld_object_path = "Props/Nature/mushroom_pair"
 ld_entry_texture = SubResource("AtlasTexture_ocmao")
+ld_editor_instance = ExtResource("2_4dqcf")
+ld_properties = Array[ExtResource("2_e4y0g")]([SubResource("Resource_i1b32"), SubResource("Resource_pvw8h"), SubResource("Resource_mygvr")])
+game_instance = ExtResource("1_ltveh")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
