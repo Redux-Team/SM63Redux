@@ -4,7 +4,10 @@ extends LDTool
 var _sizing_object: LDObjectTelescoping
 var _sizing_anchor_left: Vector2
 var _sizing_anchor_right: Vector2
-var _sizing_dir: float = 1.0
+var _sizing_anchor_top: Vector2
+var _sizing_anchor_bottom: Vector2
+var _sizing_dir_x: float = 1.0
+var _sizing_dir_y: float = 1.0
 var _is_sizing: bool = false
 var _preview_cursor: LDObjectTelescoping
 
@@ -14,6 +17,9 @@ func get_tool_name() -> String:
 
 
 func get_cursor_shape() -> Control.CursorShape:
+	var obj: GameObject = LD.get_object_handler().get_selected_object()
+	if obj and obj.has_property(&"t_size_y") and not obj.has_property(&"t_size_x"):
+		return Control.CURSOR_VSIZE
 	return Control.CURSOR_HSIZE
 
 
@@ -85,6 +91,11 @@ func _spawn_cursor(obj: GameObject) -> void:
 	_preview_cursor = instance as LDObjectTelescoping
 	_preview_cursor.is_preview = true
 	_preview_cursor.init_properties(obj)
+	var min_units: int = _preview_cursor.clamp_units(0)
+	if _preview_cursor.is_telescoping_x():
+		_preview_cursor.set_property(&"t_size_x", min_units)
+	if _preview_cursor.is_telescoping_y():
+		_preview_cursor.set_property(&"t_size_y", min_units)
 	viewport.add_object(_preview_cursor)
 
 
@@ -101,14 +112,25 @@ func _begin_sizing(pos: Vector2) -> void:
 	_sizing_object = instance as LDObjectTelescoping
 	_sizing_object.is_preview = true
 	_sizing_object.init_properties(obj)
+	var min_units: int = _sizing_object.clamp_units(0)
+	if _sizing_object.is_telescoping_x():
+		_sizing_object.set_property(&"t_size_x", min_units)
+	if _sizing_object.is_telescoping_y():
+		_sizing_object.set_property(&"t_size_y", min_units)
 	viewport.add_object(_sizing_object, Vector2i(pos))
 	if obj.has_property(&"position"):
 		_sizing_object.set_property(&"position", pos)
 	
-	var half_caps: float = _sizing_object.get_end_collision_width() / 2.0
-	_sizing_anchor_left = Vector2(pos.x - half_caps, pos.y)
-	_sizing_anchor_right = Vector2(pos.x + half_caps, pos.y)
-	_sizing_dir = 1.0
+	var half_caps_x: float = _sizing_object.get_end_collision_width() / 2.0
+	_sizing_anchor_left = Vector2(pos.x - half_caps_x, pos.y)
+	_sizing_anchor_right = Vector2(pos.x + half_caps_x, pos.y)
+	
+	var initial_total_y: float = _sizing_object.get_total_height(min_units)
+	_sizing_anchor_top = Vector2(pos.x, pos.y - initial_total_y / 2.0)
+	_sizing_anchor_bottom = Vector2(pos.x, pos.y + initial_total_y / 2.0)
+	
+	_sizing_dir_x = 1.0
+	_sizing_dir_y = 1.0
 	_is_sizing = true
 	
 	if _preview_cursor:
@@ -120,28 +142,26 @@ func _update_sizing(pos: Vector2) -> void:
 		return
 	
 	if _sizing_object.is_telescoping_x():
+		var half_cap: float = _sizing_object.get_end_collision_width() / 2.0
 		var delta_x: float = pos.x - _sizing_anchor_left.x
-		if absf(delta_x) > _sizing_object.get_end_collision_width() / 2.0:
-			_sizing_dir = signf(delta_x)
-		var anchor: Vector2 = _sizing_anchor_left if _sizing_dir >= 0.0 else _sizing_anchor_right
-		var seg: float = float(_sizing_object.get_middle_segment_width())
-		var raw_units: int = int(absf(pos.x - anchor.x) / seg)
+		if absf(delta_x) > half_cap:
+			_sizing_dir_x = signf(delta_x)
+		var anchor_x: float = _sizing_anchor_left.x if _sizing_dir_x >= 0.0 else _sizing_anchor_right.x
+		var raw_units: int = int(maxf(absf(pos.x - anchor_x) - half_cap, 0.0) / float(_sizing_object.get_middle_segment_width()))
 		var clamped_units: int = _sizing_object.clamp_units(raw_units)
 		_sizing_object.set_property(&"t_size_x", clamped_units)
-		var total: float = _sizing_object.get_total_width(clamped_units)
-		_sizing_object.position.x = anchor.x + (total / 2.0) * _sizing_dir
+		_sizing_object.position.x = anchor_x + (_sizing_object.get_total_width(clamped_units) / 2.0) * _sizing_dir_x
 	
 	if _sizing_object.is_telescoping_y():
-		var delta_y: float = pos.y - _sizing_anchor_left.y
-		if absf(delta_y) > _sizing_object.get_end_collision_width() / 2.0:
-			_sizing_dir = signf(delta_y)
-		var anchor: Vector2 = _sizing_anchor_left if _sizing_dir >= 0.0 else _sizing_anchor_right
-		var seg: float = float(_sizing_object.get_middle_segment_width())
-		var raw_units: int = int(absf(pos.y - anchor.y) / seg)
+		var half_cap: float = _sizing_object.get_end_collision_height() / 2.0
+		var delta_y: float = pos.y - _sizing_anchor_top.y
+		if absf(delta_y) > half_cap:
+			_sizing_dir_y = signf(delta_y)
+		var anchor_y: float = _sizing_anchor_top.y if _sizing_dir_y >= 0.0 else _sizing_anchor_bottom.y
+		var raw_units: int = int(maxf(absf(pos.y - anchor_y) - half_cap, 0.0) / float(_sizing_object.get_middle_segment_height()))
 		var clamped_units: int = _sizing_object.clamp_units(raw_units)
 		_sizing_object.set_property(&"t_size_y", clamped_units)
-		var total: float = _sizing_object.get_total_height(clamped_units)
-		_sizing_object.position.y = anchor.y + (total / 2.0) * _sizing_dir
+		_sizing_object.position.y = anchor_y + (_sizing_object.get_total_height(clamped_units) / 2.0) * _sizing_dir_y
 
 
 func _commit_sizing() -> void:
