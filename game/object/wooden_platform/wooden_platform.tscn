@@ -8,6 +8,7 @@
 resource_local_to_scene = true
 shader = ExtResource("2_n3ly8")
 shader_parameter/state = 0
+shader_parameter/palette_index = 0
 shader_parameter/custom_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
@@ -54,7 +55,7 @@ axis_stretch_vertical = 1
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=663931534]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1869497392]
-position = Vector2(0, -3)
+position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_j2070")
 one_way_collision = true
 one_way_collision_margin = 7.0
