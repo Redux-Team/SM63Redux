@@ -45,12 +45,12 @@ func _input(event: InputEvent) -> void:
 	
 	match event.keycode:
 		KEY_ENTER:
-			if _head_placed and _points.size() >= 2:
+			if _head_placed and _points.size() >= 1:
 				var commit_points: PackedVector2Array = _points.duplicate()
 				if _cursor_pos != Vector2.ZERO and (commit_points.is_empty() or commit_points[commit_points.size() - 1] != _cursor_pos):
 					if _check_min_distance_all(_cursor_pos, commit_points):
 						commit_points.append(_cursor_pos)
-				if commit_points.size() >= 2:
+				if commit_points.size() >= 1:
 					_points = commit_points
 					_commit_path()
 			get_viewport().set_input_as_handled()
@@ -173,7 +173,7 @@ func _update_preview() -> void:
 
 
 func _commit_path() -> void:
-	if not _active_object or _points.size() < 2:
+	if not _active_object or not _is_valid:
 		return
 	
 	var local_points: PackedVector2Array = PackedVector2Array()

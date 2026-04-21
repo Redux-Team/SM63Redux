@@ -114,6 +114,12 @@ func set_selection_state(state: SelectionState) -> void:
 			(item.material as ShaderMaterial).set_shader_parameter(&"state", state)
 
 
+func set_shader_parameter(parameter: StringName, value: Variant) -> void:
+	for item: CanvasItem in shader_objects:
+		if item and item.material is ShaderMaterial:
+			(item.material as ShaderMaterial).set_shader_parameter(parameter, value)
+
+
 func get_all_editor_shape_areas() -> Array[Area2D]:
 	var result: Array[Area2D] = []
 	if editor_shape_area:

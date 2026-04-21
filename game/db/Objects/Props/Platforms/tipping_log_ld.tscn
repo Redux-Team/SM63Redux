@@ -10,6 +10,7 @@
 resource_local_to_scene = true
 shader = ExtResource("2_utg06")
 shader_parameter/state = 0
+shader_parameter/palette_index = 0
 shader_parameter/custom_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
@@ -23,7 +24,7 @@ shader_parameter/pulse_max = 1.0
 [sub_resource type="CanvasTexture" id="CanvasTexture_guk28"]
 diffuse_texture = ExtResource("3_mu7ru")
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_hm08m"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_yxx86"]
 diffuse_texture = ExtResource("4_ru17a")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mwdyh"]
@@ -60,12 +61,13 @@ axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
 [node name="TippingLogCenter" type="Sprite2D" parent="." unique_id=169820774]
-texture = SubResource("CanvasTexture_hm08m")
+texture = SubResource("CanvasTexture_yxx86")
 script = ExtResource("5_yxx86")
-canvas_texture = SubResource("CanvasTexture_hm08m")
+canvas_texture = SubResource("CanvasTexture_yxx86")
 diffuse_texture = ExtResource("4_ru17a")
 current_animation = ""
 current_frame = 0
+speed_scale = 1.0
 playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 

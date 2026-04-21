@@ -39,7 +39,7 @@ shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_hwjv0"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_bct8k"]
 diffuse_texture = ExtResource("4_xct21")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_63d8k"]
@@ -68,9 +68,9 @@ texture_mode = 1
 
 [node name="Head" type="Sprite2D" parent="." unique_id=1512811414]
 material = SubResource("ShaderMaterial_hwjv0")
-texture = SubResource("CanvasTexture_hwjv0")
+texture = SubResource("CanvasTexture_bct8k")
 script = ExtResource("5_g3smx")
-canvas_texture = SubResource("CanvasTexture_hwjv0")
+canvas_texture = SubResource("CanvasTexture_bct8k")
 diffuse_texture = ExtResource("4_xct21")
 current_animation = ""
 current_frame = 0
