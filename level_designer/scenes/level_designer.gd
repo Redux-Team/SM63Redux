@@ -61,3 +61,8 @@ func _init() -> void:
 
 func _ready() -> void:
 	get_save_load_handler().load_raw_data({})
+	
+	Singleton.get_discord_handler().set_presence(
+		"In the Level Designer",
+		"Creating a level..."
+	)
