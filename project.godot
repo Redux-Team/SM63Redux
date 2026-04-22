@@ -44,7 +44,7 @@ export/convert_text_resources_to_binary=false
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/redux_dev/plugin.cfg")
+enabled=PackedStringArray("res://addons/discord_social_sdk/plugin.cfg", "res://addons/redux_dev/plugin.cfg")
 
 [file_customization]
 

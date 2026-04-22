@@ -6,7 +6,8 @@ reloadable = true
 
 [libraries]
 
-macos.debug = "res://addons/discord_social_sdk/bin/macos/libdiscord_social_sdk.macos.template_debug.framework"
+macos.debug = "res://addons/discord_social_sdk/bin/macos/libdiscord_social_sdk.macos.template_debug.dylib"
+macos.debug = "res://addons/discord_social_sdk/bin/macos/libdiscord_social_sdk.macos.template_debug.dylib"
 macos.release = "res://addons/discord_social_sdk/bin/macos/libdiscord_social_sdk.macos.template_release.framework"
 ios.debug = "res://addons/discord_social_sdk/bin/ios/libdiscord_social_sdk.ios.template_debug.xcframework"
 ios.release = "res://addons/discord_social_sdk/bin/ios/libdiscord_social_sdk.ios.template_release.xcframework"
