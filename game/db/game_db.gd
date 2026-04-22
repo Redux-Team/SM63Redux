@@ -33,7 +33,6 @@ static var _inst: GameDB
 @export_dir var level_object_objects_root: String
 
 
-
 @export_tool_button("Find missing LD objects") var _find_missing_ld: Callable:
 	get:
 		return func() -> void:
@@ -102,11 +101,103 @@ static var _inst: GameDB
 					print("  - ", name)
 
 
+class GameObjectGroup:
+	var _id: String
+	var _objects: Dictionary[String, GameObject] = {}
+
+
+	func get_name() -> String:
+		return _id
+
+
+	func get_object(obj_id: String) -> GameObject:
+		return _objects.get(obj_id, null)
+
+
+	func get_object_names() -> Array[String]:
+		var result: Array[String] = []
+		result.assign(_objects.keys())
+		return result
+
+
+	func get_objects() -> Array[GameObject]:
+		var result: Array[GameObject] = []
+		result.assign(_objects.values())
+		return result
+
+
+class GameObjectCategory:
+	var _id: String
+	var _groups: Dictionary[String, GameObjectGroup] = {}
+
+
+	func get_name() -> String:
+		return _id
+
+
+	func get_group(group_id: String) -> GameObjectGroup:
+		return _groups.get(group_id, null)
+
+
+	func get_group_names() -> Array[String]:
+		var result: Array[String] = []
+		result.assign(_groups.keys())
+		return result
+
+
+	func get_groups() -> Array[GameObjectGroup]:
+		var result: Array[GameObjectGroup] = []
+		result.assign(_groups.values())
+		return result
+
+
+	func get_objects() -> Array[GameObject]:
+		var result: Array[GameObject] = []
+		for group: GameObjectGroup in _groups.values():
+			result.append_array(group.get_objects())
+		return result
+
 
 static func get_db() -> GameDB:
 	if not _inst:
 		_inst = load("uid://860ancqo5p43")
 	return _inst
+
+
+func get_tree() -> Array[GameObjectCategory]:
+	var cats: Dictionary[String, GameObjectCategory] = {}
+	for obj: GameObject in objects.values():
+		var cat_id: String = obj.ld_object_path.get_slice("/", 0)
+		var group_id: String = obj.ld_object_path.get_slice("/", 1)
+		if cat_id not in cats:
+			var cat: GameObjectCategory = GameObjectCategory.new()
+			cat._id = cat_id
+			cats[cat_id] = cat
+		var cat: GameObjectCategory = cats[cat_id]
+		if group_id not in cat._groups:
+			var group: GameObjectGroup = GameObjectGroup.new()
+			group._id = group_id
+			cat._groups[group_id] = group
+		cat._groups[group_id]._objects[obj.id] = obj
+	var result: Array[GameObjectCategory] = []
+	result.assign(cats.values())
+	return result
+
+
+func get_category(cat_id: String) -> GameObjectCategory:
+	for cat: GameObjectCategory in get_tree():
+		if cat._id == cat_id:
+			return cat
+	return null
+
+
+func get_category_names() -> Array[String]:
+	var result: Array[String] = []
+	for obj: GameObject in objects.values():
+		var cat_id: String = obj.ld_object_path.get_slice("/", 0)
+		if cat_id not in result:
+			result.append(cat_id)
+	return result
 
 
 func get_from_category(cat: GameObject.ObjectCategory) -> Array[GameObject]:
