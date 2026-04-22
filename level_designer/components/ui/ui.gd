@@ -128,12 +128,6 @@ func _on_rotate_button_pressed() -> void:
 
 
 func _on_test_button_pressed() -> void:
-	var mario: LDObject = LD.get_object_handler().find_object("player_mario")
-	
-	if mario:
-		LD.get_editor_viewport().refocus_camera(mario.position, Vector2(1.3, 1.3))
-		await get_tree().create_timer(0.55).timeout
-	
 	Singleton.set_meta("playtest", LD.get_save_load_handler().get_level_data())
 	Singleton.get_discord_handler().set_presence("In the Level Designer", "Testing a level")
 	
