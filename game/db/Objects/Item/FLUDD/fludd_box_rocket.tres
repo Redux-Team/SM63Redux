@@ -15,6 +15,7 @@ category = 1
 category_string = "Item"
 subpath = "FLUDD/fludd_box_rocket"
 group_path = "FLUDD"
+name_override = "Rocket FLUDD Box"
 ld_object_path = "Item/FLUDD/fludd_box_rocket"
 ld_entry_texture = SubResource("AtlasTexture_wxuox")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

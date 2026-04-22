@@ -15,6 +15,7 @@ category = 1
 category_string = "Item"
 subpath = "FLUDD/water_bottle_big"
 group_path = "FLUDD"
+name_override = "Big Water Bottle"
 ld_object_path = "Item/FLUDD/water_bottle_big"
 ld_entry_texture = SubResource("AtlasTexture_s4qyk")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
