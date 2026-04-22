@@ -232,7 +232,8 @@ func _column_has_overlap(cell_x: int, y: float) -> bool:
 
 func _pos_to_cell_x(pos: Vector2) -> int:
 	var stamp_size: Vector2 = _get_stamp_size()
-	return floori((pos.x - _stroke_origin.x) / stamp_size.x)
+	var relative_x: float = pos.x - _stroke_origin.x
+	return roundi(relative_x / stamp_size.x)
 
 
 func _cell_x_to_pos(cell_x: int) -> float:
