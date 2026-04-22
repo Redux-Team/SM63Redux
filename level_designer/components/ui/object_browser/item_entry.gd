@@ -3,6 +3,8 @@ extends Button
 
 signal entry_mouse_entered(ref: LDObjectItemEntry)
 signal entry_mouse_exited(ref: LDObjectItemEntry)
+signal entry_focus_entered(ref: LDObjectItemEntry)
+signal entry_focus_exited(ref: LDObjectItemEntry)
 signal entry_selected(ref: LDObjectItemEntry)
 
 @export var obj_ref: GameObject
@@ -31,3 +33,11 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	entry_mouse_exited.emit(self)
+
+
+func _on_focus_entered() -> void:
+	entry_focus_entered.emit(self)
+
+
+func _on_focus_exited() -> void:
+	entry_focus_exited.emit(self)

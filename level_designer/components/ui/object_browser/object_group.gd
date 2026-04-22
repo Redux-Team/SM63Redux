@@ -2,14 +2,20 @@ class_name LDObjectBrowserGroup
 extends PanelContainer
 
 signal entry_selected(obj: GameObject)
+signal entry_hovered(obj: GameObject)
+signal entry_unhovered
+signal entry_focused(obj: GameObject, entry: Control)
+signal entry_unfocused
 
 @export var group_list: HFlowContainer
 @export var toggle_group_button: Button
 
 const ITEM_ENTRY = preload("uid://dwtx65wov5nfl")
 
+
 func clear_entries() -> void:
-	for n: Node in group_list.get_children(): n.queue_free()
+	for n: Node in group_list.get_children():
+		n.queue_free()
 
 
 func set_group_name(group_name: String) -> void:
@@ -25,6 +31,10 @@ func add_entry(obj: GameObject) -> void:
 	var entry: LDObjectItemEntry = ITEM_ENTRY.instantiate()
 	entry.obj_ref = obj
 	entry.entry_selected.connect(_on_item_entry_selected, CONNECT_REFERENCE_COUNTED)
+	entry.entry_mouse_entered.connect(_on_item_entry_mouse_entered, CONNECT_REFERENCE_COUNTED)
+	entry.entry_mouse_exited.connect(_on_item_entry_mouse_exited, CONNECT_REFERENCE_COUNTED)
+	entry.entry_focus_entered.connect(_on_item_entry_focus_entered, CONNECT_REFERENCE_COUNTED)
+	entry.entry_focus_exited.connect(_on_item_entry_focus_exited, CONNECT_REFERENCE_COUNTED)
 	group_list.add_child(entry)
 
 
@@ -32,9 +42,24 @@ func _on_item_entry_selected(ref: LDObjectItemEntry) -> void:
 	entry_selected.emit(ref.obj_ref)
 
 
+func _on_item_entry_mouse_entered(ref: LDObjectItemEntry) -> void:
+	entry_hovered.emit(ref.obj_ref)
+
+
+func _on_item_entry_mouse_exited(_ref: LDObjectItemEntry) -> void:
+	entry_unhovered.emit()
+
+
+func _on_item_entry_focus_entered(ref: LDObjectItemEntry) -> void:
+	entry_focused.emit(ref.obj_ref, ref)
+
+
+func _on_item_entry_focus_exited(_ref: LDObjectItemEntry) -> void:
+	entry_unfocused.emit()
+
+
 func _on_toggle_group_button_toggled(toggled_on: bool) -> void:
 	group_list.visible = toggled_on
-	
 	if toggled_on:
 		SFX.play(SFX.LD_SELECT)
 	else:

@@ -3,11 +3,28 @@
 [ext_resource type="Script" uid="uid://iuigahxwdcr1" path="res://level_designer/components/ui/object_browser/object_browser.gd" id="1_3hax8"]
 [ext_resource type="PackedScene" uid="uid://d11ohrgxcihxx" path="res://level_designer/components/ui/object_browser/object_group.tscn" id="2_5hwe3"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_3hax8"]
-allow_unpress = true
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5hwe3"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.42352942)
 
-[node name="LDObjectBrowser" type="MarginContainer" unique_id=1077961562 node_paths=PackedStringArray("groups_v_box", "entities_button")]
-custom_minimum_size = Vector2(0, 320)
+[node name="LDObjectBrowser" type="Control" unique_id=2001061774 node_paths=PackedStringArray("groups_v_box", "category_buttons_container", "tooltip_label")]
+custom_minimum_size = Vector2(500, 320)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3hax8")
+groups_v_box = NodePath("MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/GroupsVBox")
+category_buttons_container = NodePath("MarginContainer/VBoxContainer/HBoxContainer")
+tooltip_label = NodePath("Tooltip")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1077961562]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,101 +34,46 @@ theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
-script = ExtResource("1_3hax8")
-groups_v_box = NodePath("VBoxContainer/ScrollContainer/MarginContainer/GroupsVBox")
-entities_button = NodePath("VBoxContainer/HBoxContainer/EntitiesCategory")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=288570383]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=288570383]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=929413553]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=929413553]
 layout_mode = 2
 theme_override_constants/separation = 0
+alignment = 1
 
-[node name="EntitiesCategory" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=604822491]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_default_cursor_shape = 2
-toggle_mode = true
-button_group = SubResource("ButtonGroup_3hax8")
-text = "Entity"
-
-[node name="ItemCategory" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=178571159]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_default_cursor_shape = 2
-toggle_mode = true
-button_group = SubResource("ButtonGroup_3hax8")
-text = "Item"
-
-[node name="PolygonCategory" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=996246757]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_default_cursor_shape = 2
-toggle_mode = true
-button_group = SubResource("ButtonGroup_3hax8")
-text = "Polygon"
-
-[node name="HazardsCategory" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=159384941]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_default_cursor_shape = 2
-toggle_mode = true
-button_group = SubResource("ButtonGroup_3hax8")
-text = "Hazards"
-
-[node name="PropsCategory" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1813494846]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_default_cursor_shape = 2
-toggle_mode = true
-button_group = SubResource("ButtonGroup_3hax8")
-text = "Props"
-
-[node name="TriggersCategory" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1808337931]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_default_cursor_shape = 2
-toggle_mode = true
-button_group = SubResource("ButtonGroup_3hax8")
-text = "Triggers"
-
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer" unique_id=244860177]
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer" unique_id=244860177]
 layout_mode = 2
 placeholder_text = "search !!!"
 
-[node name="HSeparator2" type="HSeparator" parent="VBoxContainer" unique_id=1525210317]
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=1525210317]
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=772767020]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer" unique_id=772767020]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer" unique_id=652421619]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer" unique_id=652421619]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GroupsVBox" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer" unique_id=1976992627]
+[node name="GroupsVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" unique_id=1976992627]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ObjectGroup" parent="VBoxContainer/ScrollContainer/MarginContainer/GroupsVBox" unique_id=380333878 instance=ExtResource("2_5hwe3")]
+[node name="ObjectGroup" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/GroupsVBox" unique_id=380333878 instance=ExtResource("2_5hwe3")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/EntitiesCategory" to="." method="_on_entities_category_toggled"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/ItemCategory" to="." method="_on_item_category_pressed"]
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/ItemCategory" to="." method="_on_item_category_toggled"]
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/PolygonCategory" to="." method="_on_polygon_category_toggled"]
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/HazardsCategory" to="." method="_on_hazards_category_toggled"]
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/PropsCategory" to="." method="_on_props_category_toggled"]
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/TriggersCategory" to="." method="_on_triggers_category_toggled"]
+[node name="Tooltip" type="Label" parent="." unique_id=1292007798]
+top_level = true
+layout_mode = 1
+offset_right = 64.0
+offset_bottom = 23.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_5hwe3")
+text = "<Object>"
+horizontal_alignment = 1
