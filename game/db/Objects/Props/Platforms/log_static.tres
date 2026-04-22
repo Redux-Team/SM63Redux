@@ -16,7 +16,7 @@ region = Rect2(-15, -11, 48, 48)
 [resource]
 script = ExtResource("2_glv48")
 id = "log_static"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Platforms/log_static"
 group_path = "Platforms"

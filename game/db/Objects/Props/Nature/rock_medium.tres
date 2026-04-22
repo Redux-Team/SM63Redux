@@ -16,7 +16,7 @@ region = Rect2(1, -14, 48, 48)
 [resource]
 script = ExtResource("3_x2rfd")
 id = "rock_medium"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Nature/rock_medium"
 group_path = "Nature"

@@ -19,7 +19,7 @@ region = Rect2(0, 0, 48, 48)
 [resource]
 script = ExtResource("2_kqnkv")
 id = "moving_platform"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Gizmos/moving_platform"
 group_path = "Gizmos"

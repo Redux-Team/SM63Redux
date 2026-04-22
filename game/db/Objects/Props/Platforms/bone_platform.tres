@@ -17,7 +17,7 @@ region = Rect2(0, 0, 48, 48)
 [resource]
 script = ExtResource("2_kq1ea")
 id = "bone_platform"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Platforms/bone_platform"
 group_path = "Platforms"

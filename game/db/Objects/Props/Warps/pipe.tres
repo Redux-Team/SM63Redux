@@ -17,7 +17,7 @@ region = Rect2(-7, -7, 48, 48)
 [resource]
 script = ExtResource("3_phxqm")
 id = "pipe"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Warps/pipe"
 group_path = "Warps"

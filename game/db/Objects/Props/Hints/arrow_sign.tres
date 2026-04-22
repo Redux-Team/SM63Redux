@@ -17,7 +17,7 @@ region = Rect2(-4, -3, 48, 48)
 [resource]
 script = ExtResource("3_46csr")
 id = "arrow_sign"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Hints/arrow_sign"
 group_path = "Hints"

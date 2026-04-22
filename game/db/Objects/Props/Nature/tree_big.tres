@@ -16,7 +16,7 @@ region = Rect2(4, 36, 48, 48)
 [resource]
 script = ExtResource("2_8yjrl")
 id = "tree_big"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Nature/tree_big"
 group_path = "Nature"

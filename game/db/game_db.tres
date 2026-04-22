@@ -41,7 +41,7 @@
 [ext_resource type="Resource" uid="uid://by8vbnkxga54a" path="res://game/db/Objects/Props/Platforms/log_static.tres" id="42_tk7mk"]
 [ext_resource type="Resource" uid="uid://dkyd466tbfa22" path="res://game/db/Objects/Props/Platforms/tipping_log.tres" id="43_77m44"]
 [ext_resource type="Resource" uid="uid://cnpufyaj5itij" path="res://game/db/Objects/Props/Platforms/wooden_platform.tres" id="44_76t45"]
-[ext_resource type="Resource" uid="uid://cfa6sdichbg83" path="res://game/db/Objects/Terrain/Grass/terrain_grass.tres" id="45_3w7om"]
+[ext_resource type="Resource" uid="uid://cfa6sdichbg83" path="res://game/db/Objects/Polygon/Terrain/terrain_grass.tres" id="45_3w7om"]
 [ext_resource type="Resource" uid="uid://c8r5muob8ljqs" path="res://game/db/Objects/Props/Nature/mushroom_small.tres" id="45_tbe6r"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="46_d7ntl"]
 [ext_resource type="Resource" uid="uid://3pu7061f4gdn" path="res://game/db/Objects/Props/Platforms/bone_platform.tres" id="46_kljvd"]
@@ -79,6 +79,7 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Item/FLUDD/fludd_box_turbo": ExtResource("16_fvosf"),
 "Item/FLUDD/water_bottle_big": ExtResource("17_tr1rm"),
 "Item/FLUDD/water_bottle_small": ExtResource("18_0h263"),
+"Polygon/Terrain/terrain_grass": ExtResource("45_3w7om"),
 "Props/Gizmos/moving_platform": ExtResource("19_s5833"),
 "Props/Gizmos/spinning_block_large": ExtResource("21_fpxyv"),
 "Props/Gizmos/spinning_block_medium": ExtResource("22_ojdkd"),
@@ -106,8 +107,7 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Props/Platforms/log_static": ExtResource("42_tk7mk"),
 "Props/Platforms/tipping_log": ExtResource("43_77m44"),
 "Props/Platforms/wooden_platform": ExtResource("44_76t45"),
-"Props/Warps/pipe": ExtResource("47_5oesr"),
-"Terrain/Grass/terrain_grass": ExtResource("45_3w7om")
+"Props/Warps/pipe": ExtResource("47_5oesr")
 })
 properties = Dictionary[String, ExtResource("46_d7ntl")]({
 "breakable_box/coin_amount": ExtResource("50_tbe6r"),

@@ -16,7 +16,7 @@ region = Rect2(-9, -10, 48, 48)
 [resource]
 script = ExtResource("3_h15jy")
 id = "mushroom_small"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Nature/mushroom_small"
 group_path = "Nature"

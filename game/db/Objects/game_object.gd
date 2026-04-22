@@ -10,8 +10,7 @@ enum {
 enum ObjectCategory {
 	ENTITY,
 	ITEM,
-	TERRAIN,
-	VOLUME,
+	POLYGON,
 	HAZARDS,
 	PROPS,
 	TRIGGER,
@@ -93,8 +92,7 @@ static func get_category_name(cat_value: ObjectCategory) -> String:
 	match cat_value:
 		ObjectCategory.ENTITY: return "ENTITY"
 		ObjectCategory.ITEM: return "ITEM"
-		ObjectCategory.TERRAIN: return "TERRAIN"
-		ObjectCategory.VOLUME: return "VOLUMES"
+		ObjectCategory.POLYGON: return "POLYGON"
 		ObjectCategory.HAZARDS: return "HAZARDS"
 		ObjectCategory.PROPS: return "PROPS"
 		ObjectCategory.TRIGGER: return "TRIGGERS"
@@ -105,8 +103,7 @@ static func get_category_value(cat_name: String) -> ObjectCategory:
 	match cat_name.to_upper():
 		"ENTITY": return ObjectCategory.ENTITY
 		"ITEM": return ObjectCategory.ITEM
-		"TERRAIN": return ObjectCategory.TERRAIN
-		"VOLUMES": return ObjectCategory.VOLUME
+		"POLYGON": return ObjectCategory.POLYGON
 		"HAZARDS": return ObjectCategory.HAZARDS
 		"PROPS": return ObjectCategory.PROPS
 		"TRIGGERS": return ObjectCategory.TRIGGER

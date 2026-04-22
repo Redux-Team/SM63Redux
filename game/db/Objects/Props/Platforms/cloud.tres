@@ -17,7 +17,7 @@ region = Rect2(-7, -12, 48, 48)
 [resource]
 script = ExtResource("2_7janf")
 id = "cloud"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Platforms/cloud"
 group_path = "Platforms"

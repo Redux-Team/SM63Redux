@@ -46,23 +46,14 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_3hax8")
 text = "Item"
 
-[node name="TerrainCategory" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=996246757]
+[node name="PolygonCategory" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=996246757]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_3hax8")
-text = "Terrain"
-
-[node name="VolumesCategory" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1457770165]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_default_cursor_shape = 2
-toggle_mode = true
-button_group = SubResource("ButtonGroup_3hax8")
-text = "Volumes"
+text = "Polygon"
 
 [node name="HazardsCategory" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=159384941]
 custom_minimum_size = Vector2(80, 0)
@@ -120,8 +111,7 @@ size_flags_vertical = 1
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/EntitiesCategory" to="." method="_on_entities_category_toggled"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/ItemCategory" to="." method="_on_item_category_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/ItemCategory" to="." method="_on_item_category_toggled"]
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/TerrainCategory" to="." method="_on_terrain_category_toggled"]
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/VolumesCategory" to="." method="_on_volumes_category_toggled"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/PolygonCategory" to="." method="_on_polygon_category_toggled"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HazardsCategory" to="." method="_on_hazards_category_toggled"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/PropsCategory" to="." method="_on_props_category_toggled"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/TriggersCategory" to="." method="_on_triggers_category_toggled"]

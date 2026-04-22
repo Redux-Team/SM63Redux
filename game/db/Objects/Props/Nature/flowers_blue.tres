@@ -16,7 +16,7 @@ region = Rect2(-8, -15, 48, 48)
 [resource]
 script = ExtResource("3_kd5e5")
 id = "flowers_blue"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Nature/flowers_blue"
 group_path = "Nature"

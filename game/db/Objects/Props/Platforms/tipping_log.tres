@@ -18,7 +18,7 @@ margin = Rect2(3, 0, 0, 0)
 [resource]
 script = ExtResource("8_xvy65")
 id = "tipping_log"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Platforms/tipping_log"
 group_path = "Platforms"

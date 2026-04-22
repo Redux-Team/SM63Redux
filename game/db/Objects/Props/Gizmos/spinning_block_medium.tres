@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_2jygj")
 id = "spinning_block_medium"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Gizmos/spinning_block_medium"
 group_path = "Gizmos"

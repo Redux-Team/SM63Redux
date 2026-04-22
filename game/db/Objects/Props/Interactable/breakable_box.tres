@@ -18,7 +18,7 @@ region = Rect2(-6, -6, 48, 48)
 [resource]
 script = ExtResource("2_ysnov")
 id = "breakable_box"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Interactable/breakable_box"
 group_path = "Interactable"

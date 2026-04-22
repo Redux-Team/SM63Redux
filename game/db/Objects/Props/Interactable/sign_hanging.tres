@@ -14,7 +14,7 @@ region = Rect2(-8, -9, 48, 48)
 [resource]
 script = ExtResource("2_7xat1")
 id = "sign_hanging"
-category = 5
+category = 4
 category_string = "Props"
 subpath = "Interactable/sign_hanging"
 group_path = "Interactable"
