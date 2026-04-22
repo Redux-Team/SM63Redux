@@ -64,5 +64,5 @@ func _ready() -> void:
 	
 	Singleton.get_discord_handler().set_presence(
 		"In the Level Designer",
-		"Creating a level..."
+		"Editing a level"
 	)

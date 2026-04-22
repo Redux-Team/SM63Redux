@@ -99,6 +99,7 @@ class DiscordHandler:
 	const APPLICATION_ID: int = 1496255367607488562
 	
 	var _client: DiscordClient = DiscordClient.new()
+	var _timestamp: DiscordActivityTimestamps = DiscordActivityTimestamps.new()
 	var _timer: Timer = Timer.new()
 	var _is_ready: bool = false
 	
@@ -106,6 +107,7 @@ class DiscordHandler:
 	func _init() -> void:
 		_client.set_application_id(APPLICATION_ID)
 		_client.set_status_changed_callback(_on_status_changed)
+		_timestamp.set_start(int(Time.get_unix_time_from_system()))
 	
 	
 	func _ready() -> void:
@@ -118,6 +120,7 @@ class DiscordHandler:
 	func set_presence(details: String = "", state: String = "") -> void:
 		var activity: DiscordActivity = _build_activity(details, state)
 		activity.set_assets(_build_assets())
+		activity.set_timestamps(_timestamp)
 		_client.update_rich_presence(activity, _on_presence_updated)
 	
 	
