@@ -47,7 +47,6 @@ var player: Player:
 		if entity is Player:
 			return entity as Player
 		else:
-			print_stack()
 			push_error("The current entity is not of type \"Player\"")
 			return entity
 var sprite: SmartSprite2D
