@@ -1,8 +1,30 @@
 [gd_scene format=3 uid="uid://bbf6gei1bmu46"]
 
 [ext_resource type="Script" uid="uid://xsj22tgidlld" path="res://level_designer/components/ui/window/window.gd" id="1_pd0vu"]
+[ext_resource type="Shader" uid="uid://dbldxfaveqoao" path="res://core/shader/ld_window_backdrop.gdshader" id="1_y8b6h"]
 
-[node name="LDWindow" type="PanelContainer" unique_id=1964419486 node_paths=PackedStringArray("_content_container", "_title_label")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hd74k"]
+shader = ExtResource("1_y8b6h")
+shader_parameter/tint = Color(0, 0, 0, 0.4)
+shader_parameter/blur = 8.0
+
+[node name="LDWindow" type="CanvasLayer" unique_id=354043236 node_paths=PackedStringArray("_panel", "_content_container", "_title_label", "_backdrop")]
+layer = 2
+script = ExtResource("1_pd0vu")
+_panel = NodePath("Content")
+_content_container = NodePath("Content/VBoxContainer/MarginContainer/VBoxContainer/ContentContainer")
+_title_label = NodePath("Content/VBoxContainer/MarginContainer/VBoxContainer/TitleLabel")
+_backdrop = NodePath("Backdrop")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=1736386305]
+material = SubResource("ShaderMaterial_hd74k")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Content" type="PanelContainer" parent="." unique_id=1964419486]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -13,16 +35,13 @@ grow_vertical = 2
 pivot_offset_ratio = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-script = ExtResource("1_pd0vu")
-_content_container = NodePath("VBoxContainer/MarginContainer/VBoxContainer/ContentContainer")
-_title_label = NodePath("VBoxContainer/MarginContainer/VBoxContainer/TitleLabel")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=551025918]
+[node name="VBoxContainer" type="VBoxContainer" parent="Content" unique_id=551025918]
 clip_contents = true
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=47268515]
+[node name="MarginContainer" type="MarginContainer" parent="Content/VBoxContainer" unique_id=47268515]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/margin_left = 8
@@ -30,24 +49,24 @@ theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=514969343]
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/VBoxContainer/MarginContainer" unique_id=514969343]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="TitleLabel" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=719007059]
+[node name="TitleLabel" type="Label" parent="Content/VBoxContainer/MarginContainer/VBoxContainer" unique_id=719007059]
 layout_mode = 2
 text = "Window Title"
 horizontal_alignment = 1
 
-[node name="ContentContainer" type="PanelContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=329307729]
+[node name="ContentContainer" type="PanelContainer" parent="Content/VBoxContainer/MarginContainer/VBoxContainer" unique_id=329307729]
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="Control" type="Control" parent="." unique_id=636116786]
+[node name="Control" type="Control" parent="Content" unique_id=636116786]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="CloseButton" type="Button" parent="Control" unique_id=1205102099]
+[node name="CloseButton" type="Button" parent="Content/Control" unique_id=1205102099]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -59,4 +78,4 @@ offset_bottom = 13.0
 grow_horizontal = 0
 text = "X"
 
-[connection signal="pressed" from="Control/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="Content/Control/CloseButton" to="." method="_on_close_button_pressed"]
