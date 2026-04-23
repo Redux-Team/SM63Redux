@@ -117,7 +117,6 @@ func _begin_polygon(obj: GameObject) -> void:
 	_active_object = instance as LDObjectPolygon
 	_active_object.is_preview = true
 	_active_object.init_properties(obj)
-	viewport.add_object(_active_object)
 	_points = PackedVector2Array()
 	_is_valid = false
 	set_cursor_shape(Control.CURSOR_CROSS)
@@ -126,6 +125,8 @@ func _begin_polygon(obj: GameObject) -> void:
 func _add_point(pos: Vector2) -> void:
 	if not _active_object:
 		return
+	if _points.is_empty():
+		viewport.add_object(_active_object, Vector2i.ZERO, viewport.get_active_layer())
 	_points.append(pos)
 	_update_preview()
 

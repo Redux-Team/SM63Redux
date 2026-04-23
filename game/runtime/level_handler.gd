@@ -22,11 +22,11 @@ func load_from_dict(data: Dictionary) -> Error:
 	for layer_data: Variant in data["layers"]:
 		if not layer_data is Dictionary:
 			continue
-		var layer_id: String = layer_data.get("layer_id", "a0r0")
+		var layer_index: int = layer_data.get("layer_index", 0)
 		for obj_data: Variant in layer_data.get("objects", []):
 			if not obj_data is Dictionary:
 				continue
-			_instantiate_object(obj_data, layer_id)
+			_instantiate_object(obj_data, layer_index)
 	
 	return OK
 
@@ -59,27 +59,25 @@ func load_from_json(path: String) -> Error:
 	return load_from_dict(data)
 
 
-func get_objects_in_layer(layer_id: String) -> Array[LevelObject]:
+func get_objects_in_layer(layer_index: int) -> Array[LevelObject]:
 	var result: Array[LevelObject] = []
-	for abs_layer: Node in _layers_root.get_children():
-		for rel_layer: Node in abs_layer.get_children():
-			var layer: LevelLayer = rel_layer as LevelLayer
-			if layer and layer.layer_id == layer_id:
-				for child: Node in layer.get_children():
-					var obj: LevelObject = child as LevelObject
-					if obj:
-						result.append(obj)
+	var layer: LevelLayer = _get_layer(layer_index)
+	if not layer:
+		return result
+	for child: Node in layer.get_children():
+		var obj: LevelObject = child as LevelObject
+		if obj:
+			result.append(obj)
 	return result
 
 
 func get_all_objects() -> Array[LevelObject]:
 	var result: Array[LevelObject] = []
-	for abs_layer: Node in _layers_root.get_children():
-		for rel_layer: Node in abs_layer.get_children():
-			for child: Node in rel_layer.get_children():
-				var obj: LevelObject = child as LevelObject
-				if obj:
-					result.append(obj)
+	for child: Node in _layers_root.get_children():
+		for obj_node: Node in child.get_children():
+			var obj: LevelObject = obj_node as LevelObject
+			if obj:
+				result.append(obj)
 	return result
 
 
@@ -91,7 +89,7 @@ func get_objects_by_id(object_id: String) -> Array[LevelObject]:
 	return result
 
 
-func _instantiate_object(data: Dictionary, layer_id: String) -> void:
+func _instantiate_object(data: Dictionary, layer_index: int) -> void:
 	var object_id: String = data.get("object_id", "")
 	if object_id.is_empty():
 		return
@@ -101,7 +99,7 @@ func _instantiate_object(data: Dictionary, layer_id: String) -> void:
 		return
 	
 	var instance: Node = game_object.game_instance.instantiate()
-	var layer: LevelLayer = _get_or_create_layer(layer_id, data)
+	var layer: LevelLayer = _get_or_create_layer(layer_index)
 	layer.add_child(instance)
 	
 	var level_object: LevelObject = instance as LevelObject
@@ -114,41 +112,41 @@ func _instantiate_object(data: Dictionary, layer_id: String) -> void:
 		entity.init_from_data(data)
 
 
-func _get_or_create_layer(layer_id: String, layer_data: Dictionary) -> LevelLayer:
-	var abs_index: int = _parse_absolute_index(layer_id)
-	var abs_name: String = "a%d" % abs_index
-	
-	var abs_layer: Node2D = _layers_root.get_node_or_null(abs_name) as Node2D
-	if not abs_layer:
-		abs_layer = Node2D.new()
-		abs_layer.name = abs_name
-		_layers_root.add_child(abs_layer)
-	
-	for child: Node in abs_layer.get_children():
-		var existing: LevelLayer = child as LevelLayer
-		if existing and existing.layer_id == layer_id:
-			return existing
+func _get_or_create_layer(layer_index: int) -> LevelLayer:
+	var existing: LevelLayer = _get_layer(layer_index)
+	if existing:
+		return existing
 	
 	var layer: LevelLayer = LevelLayer.new()
-	layer.name = layer_id
-	layer.layer_id = layer_id
-	layer.absolute_index = layer_data.get("absolute_index", abs_index)
-	layer.relative_index = layer_data.get("relative_index", 0)
-	layer.decoration_layer = layer_data.get("decoration_layer", false)
-	abs_layer.add_child(layer)
+	layer.name = "layer_%d" % layer_index
+	layer.layer_index = layer_index
+	_layers_root.add_child(layer)
+	_sort_layers()
 	return layer
+
+
+func _get_layer(layer_index: int) -> LevelLayer:
+	for child: Node in _layers_root.get_children():
+		var layer: LevelLayer = child as LevelLayer
+		if layer and layer.layer_index == layer_index:
+			return layer
+	return null
+
+
+func _sort_layers() -> void:
+	var layers: Array[Node] = _layers_root.get_children()
+	layers.sort_custom(func(a: Node, b: Node) -> bool:
+		var la: LevelLayer = a as LevelLayer
+		var lb: LevelLayer = b as LevelLayer
+		if not la or not lb:
+			return false
+		return la.layer_index < lb.layer_index
+	)
+	for i: int in layers.size():
+		_layers_root.move_child(layers[i], i)
 
 
 func _clear() -> void:
 	for child: Node in _layers_root.get_children():
 		_layers_root.remove_child(child)
 		child.free()
-
-
-func _parse_absolute_index(layer_id: String) -> int:
-	var regex: RegEx = RegEx.new()
-	regex.compile("a(\\d+)")
-	var result: RegExMatch = regex.search(layer_id)
-	if result:
-		return result.get_string(1).to_int()
-	return 0

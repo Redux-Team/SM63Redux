@@ -7,6 +7,7 @@ const SNAPPING_SIZE: int = 4
 const HOLD_THRESHOLD_SEC: float = 0.75
 const MOVE_THRESHOLD: float = 8.0
 const SWIPE_DISMISS_THRESHOLD: float = 6.0
+const LAYER_ALPHA_STEP: float = 0.25
 
 
 signal viewport_moved(pos: Vector2, zoom: Vector2)
@@ -18,6 +19,10 @@ signal touch_tap(pos: Vector2)
 signal touch_swipe_began(pos: Vector2)
 signal touch_swipe_moved(pos: Vector2)
 signal touch_swipe_ended
+signal active_layer_changed(layer_index: int)
+signal layer_visibility_changed(layer_index: int, visible: bool)
+signal preview_mode_changed(enabled: bool)
+
 
 const LINEAR_PAN_SPEED: float = 10.0
 const CAMERA_ZOOM_MIN: Vector2 = Vector2(0.05, 0.05)
@@ -60,6 +65,9 @@ var is_mouse_panning: bool = false:
 			else:
 				_viewport_input.mouse_default_cursor_shape = Control.CURSOR_ARROW
 
+var _preview_mode: bool = false
+var _active_layer: int = 0
+var _hidden_layers: Dictionary[int, bool] = {}
 var _selected_objects: Array[LDObject] = []
 
 var _touch_points: Dictionary[int, Vector2] = {}
@@ -247,7 +255,8 @@ func set_selected_objects(objects: Array[LDObject]) -> void:
 
 
 func set_background(node: Node) -> void:
-	for n: Node in _viewport_bg_root.get_children(): n.queue_free()
+	for n: Node in _viewport_bg_root.get_children():
+		n.queue_free()
 	_viewport_bg_root.add_child(node)
 
 
@@ -257,13 +266,83 @@ func clear_selection() -> void:
 
 func get_all_objects() -> Array[LDObject]:
 	var result: Array[LDObject] = []
-	for abs_layer: Node in _layers_root.get_children():
-		for rel_layer: Node in abs_layer.get_children():
-			for child: Node in rel_layer.get_children():
-				var obj: LDObject = child as LDObject
-				if obj:
-					result.append(obj)
+	for layer: Node in _layers_root.get_children():
+		for child: Node in layer.get_children():
+			var obj: LDObject = child as LDObject
+			if obj:
+				result.append(obj)
 	return result
+
+
+func get_all_objects_on_layer(layer_index: int) -> Array[LDObject]:
+	var result: Array[LDObject] = []
+	var layer: LDLayer = _get_layer(layer_index)
+	if not layer:
+		return result
+	for child: Node in layer.get_children():
+		var obj: LDObject = child as LDObject
+		if obj:
+			result.append(obj)
+	return result
+
+
+func is_layer_selectable(layer_index: int) -> bool:
+	if _preview_mode:
+		return true
+	return layer_index == _active_layer
+
+
+func is_layer_visible(layer_index: int) -> bool:
+	if _preview_mode:
+		return true
+	return not _hidden_layers.get(layer_index, false)
+
+
+func get_active_layer() -> int:
+	return _active_layer
+
+
+func set_active_layer(layer_index: int) -> void:
+	_active_layer = layer_index
+	_refresh_layer_visuals()
+	active_layer_changed.emit(layer_index)
+
+
+func step_active_layer(delta: int) -> void:
+	set_active_layer(_active_layer + delta)
+
+
+func set_layer_visible(layer_index: int, is_visible: bool) -> void:
+	if is_visible:
+		_hidden_layers.erase(layer_index)
+	else:
+		_hidden_layers[layer_index] = true
+	_refresh_layer_visuals()
+	layer_visibility_changed.emit(layer_index, is_visible)
+
+
+func toggle_layer_visible(layer_index: int) -> void:
+	set_layer_visible(layer_index, not is_layer_visible(layer_index))
+
+
+func set_preview_mode(enabled: bool) -> void:
+	_preview_mode = enabled
+	_refresh_layer_visuals()
+	preview_mode_changed.emit(enabled)
+
+
+func toggle_preview_mode() -> void:
+	set_preview_mode(not _preview_mode)
+
+
+func get_sorted_layer_indices() -> Array[int]:
+	var indices: Array[int] = []
+	for child: Node in _layers_root.get_children():
+		var layer: LDLayer = child as LDLayer
+		if layer:
+			indices.append(layer.layer_index)
+	indices.sort()
+	return indices
 
 
 func world_rect_to_screen(world_top_left: Vector2, world_size: Vector2) -> Rect2:
@@ -273,32 +352,25 @@ func world_rect_to_screen(world_top_left: Vector2, world_size: Vector2) -> Rect2
 	return Rect2(screen_top_left, screen_bottom_right - screen_top_left).abs()
 
 
-func add_object(object: LDObject, pos: Vector2i = Vector2i.ZERO, layer_id: String = "a0r0") -> void:
-	var layer: LDLayer = get_or_create_layer(layer_id)
+func add_object(object: LDObject, pos: Vector2i = Vector2i.ZERO, layer_index: int = _active_layer) -> void:
+	var layer: LDLayer = get_or_create_layer(layer_index)
 	layer.add_child(object)
 	object.position = pos
+	_apply_layer_visual(layer)
 
 
-func get_or_create_layer(layer_id: String) -> LDLayer:
-	var normalized: String = LDLayer.normalize_id(layer_id)
-	var parsed: Dictionary = LDLayer.parse_id(normalized)
-	var abs_id: String = "a%d" % parsed.absolute_index
+func get_or_create_layer(layer_index: int) -> LDLayer:
+	var existing: LDLayer = _get_layer(layer_index)
+	if existing:
+		return existing
 	
-	var abs_layer: LDLayer = _get_or_create_abs_layer(abs_id, parsed.absolute_index)
-	
-	for child: Node in abs_layer.get_children():
-		if child is LDLayer and (child as LDLayer).layer_id == normalized:
-			return child as LDLayer
-	
-	var rel_layer: LDLayer = LDLayer.new()
-	rel_layer.name = "r%d" % parsed.relative_index
-	rel_layer.layer_id = normalized
-	rel_layer.absolute_index = parsed.absolute_index
-	rel_layer.relative_index = parsed.relative_index
-	rel_layer.decoration_layer = parsed.absolute_index != 0
-	abs_layer.add_child(rel_layer)
-	_sort_rel_layers(abs_layer)
-	return rel_layer
+	var layer: LDLayer = LDLayer.new()
+	layer.name = "layer_%d" % layer_index
+	layer.layer_index = layer_index
+	_layers_root.add_child(layer)
+	_sort_layers()
+	_apply_layer_visual(layer)
+	return layer
 
 
 func is_panning() -> bool:
@@ -335,33 +407,38 @@ static func _get_instance() -> LDViewport:
 	return _inst
 
 
-func _get_or_create_abs_layer(abs_id: String, absolute_index: int) -> LDLayer:
+func _get_layer(layer_index: int) -> LDLayer:
 	for child: Node in _layers_root.get_children():
-		if child is LDLayer and (child as LDLayer).name == abs_id:
-			return child as LDLayer
+		var layer: LDLayer = child as LDLayer
+		if layer and layer.layer_index == layer_index:
+			return layer
+	return null
+
+
+func _refresh_layer_visuals() -> void:
+	for child: Node in _layers_root.get_children():
+		var layer: LDLayer = child as LDLayer
+		if layer:
+			_apply_layer_visual(layer)
+
+
+func _apply_layer_visual(layer: LDLayer) -> void:
+	if _preview_mode:
+		layer.visible = true
+		layer.modulate = Color(1.0, 1.0, 1.0, 1.0)
+		return
 	
-	var abs_layer: LDLayer = LDLayer.new()
-	abs_layer.name = abs_id
-	abs_layer.layer_id = abs_id
-	abs_layer.absolute_index = absolute_index
-	abs_layer.relative_index = 0
-	abs_layer.decoration_layer = absolute_index != 0
-	_layers_root.add_child(abs_layer)
-	_sort_layers()
-	return abs_layer
-
-
-func _sort_rel_layers(abs_layer: LDLayer) -> void:
-	var layers: Array[Node] = abs_layer.get_children()
-	layers.sort_custom(func(a: Node, b: Node) -> bool:
-		var la: LDLayer = a as LDLayer
-		var lb: LDLayer = b as LDLayer
-		if not la or not lb:
-			return false
-		return la.relative_index < lb.relative_index
-	)
-	for i: int in layers.size():
-		abs_layer.move_child(layers[i], i)
+	if _hidden_layers.get(layer.layer_index, false):
+		layer.visible = false
+		return
+	
+	layer.visible = true
+	var distance: int = layer.layer_index - _active_layer
+	var alpha: float = clampf(1.0 - absi(distance) * LAYER_ALPHA_STEP, 0.0, 1.0)
+	if distance < 0:
+		layer.modulate = Color(0.8, 0.8, 0.8, alpha)
+	else:
+		layer.modulate = Color(1.0, 1.0, 1.0, alpha)
 
 
 func _sort_layers() -> void:
@@ -371,9 +448,7 @@ func _sort_layers() -> void:
 		var lb: LDLayer = b as LDLayer
 		if not la or not lb:
 			return false
-		if la.absolute_index != lb.absolute_index:
-			return la.absolute_index < lb.absolute_index
-		return la.relative_index < lb.relative_index
+		return la.layer_index < lb.layer_index
 	)
 	for i: int in layers.size():
 		_layers_root.move_child(layers[i], i)

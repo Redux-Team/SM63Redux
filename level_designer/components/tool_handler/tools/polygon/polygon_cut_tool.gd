@@ -442,9 +442,6 @@ func _commit() -> void:
 					obj.add_hole(h)
 				
 				var game_object: GameObject = GameDB.get_db().find_game_object(target.source_object_id)
-				var layer_id: String = "a0r0"
-				if target.get_parent() is LDLayer:
-					layer_id = (target.get_parent() as LDLayer).layer_id
 				
 				for ci: int in range(1, clipped.size()):
 					var piece: PackedVector2Array = clipped[ci]
@@ -471,7 +468,7 @@ func _commit() -> void:
 						for p: Vector2 in hw:
 							adjusted.append(p - centroid)
 						adjusted_holes.append(adjusted)
-					viewport.add_object(new_poly, Vector2i(centroid), layer_id)
+					viewport.add_object(new_poly, Vector2i(centroid))
 					new_poly.init_properties(game_object)
 					new_poly.apply_points(piece_local)
 					for h: PackedVector2Array in adjusted_holes:
@@ -584,10 +581,6 @@ func _commit() -> void:
 					obj.add_hole(h)
 				
 				var game_object: GameObject = GameDB.get_db().find_game_object(target.source_object_id)
-				var layer_id: String = "a0r0"
-				if target.get_parent() is LDLayer:
-					layer_id = (target.get_parent() as LDLayer).layer_id
-				
 				var valid_piece_idx: int = 1
 				for ci: int in range(1, clipped.size()):
 					var piece: Variant = clipped[ci]
@@ -617,7 +610,7 @@ func _commit() -> void:
 							var world_p: Vector2 = target.get_global_transform() * p
 							adjusted.append(world_p - centroid)
 						adjusted_holes.append(adjusted)
-					viewport.add_object(new_poly, Vector2i(centroid), layer_id)
+					viewport.add_object(new_poly, Vector2i(centroid))
 					new_poly.init_properties(game_object)
 					new_poly.apply_points(piece_local)
 					for h: PackedVector2Array in adjusted_holes:

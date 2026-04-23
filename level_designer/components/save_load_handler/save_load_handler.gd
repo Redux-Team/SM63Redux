@@ -82,35 +82,30 @@ func _serialize() -> Dictionary:
 	var viewport: LDViewport = LD.get_editor_viewport()
 	var layers_data: Array = []
 	
-	for abs_layer: Node in viewport._layers_root.get_children():
-		var abs_layer_obj: LDLayer = abs_layer as LDLayer
-		if not abs_layer_obj:
+	for child: Node in viewport._layers_root.get_children():
+		var layer: LDLayer = child as LDLayer
+		if not layer:
 			continue
-		for rel_layer: Node in abs_layer_obj.get_children():
-			var rel_layer_obj: LDLayer = rel_layer as LDLayer
-			if not rel_layer_obj:
+		var objects_data: Array = []
+		for obj_node: Node in layer.get_children():
+			var obj: LDObject = obj_node as LDObject
+			if not obj or obj.is_preview:
 				continue
-			var objects_data: Array = []
-			for child: Node in rel_layer_obj.get_children():
-				var obj: LDObject = child as LDObject
-				if not obj or obj.is_preview:
-					continue
-				var obj_data: Dictionary = _serialize_object(obj)
-				if not obj_data.is_empty():
-					objects_data.append(obj_data)
-			layers_data.append({
-				"layer_id": rel_layer_obj.layer_id,
-				"absolute_index": rel_layer_obj.absolute_index,
-				"relative_index": rel_layer_obj.relative_index,
-				"decoration_layer": rel_layer_obj.decoration_layer,
-				"objects": objects_data,
-			})
+			var obj_data: Dictionary = _serialize_object(obj)
+			if not obj_data.is_empty():
+				objects_data.append(obj_data)
+		layers_data.append({
+			"layer_index": layer.layer_index,
+			"parallax_scale": _vec2_to_array(layer.parallax_scale),
+			"objects": objects_data,
+		})
 	
 	return {
 		"version": FORMAT_VERSION,
 		"editor": {
 			"camera_position": _vec2_to_array(viewport.camera_position),
 			"camera_zoom": _vec2_to_array(viewport.camera_zoom),
+			"active_layer": viewport.active_layer,
 		},
 		"layers": layers_data,
 	}
@@ -158,20 +153,24 @@ func _deserialize(data: Dictionary) -> Error:
 	var viewport: LDViewport = LD.get_editor_viewport()
 	viewport.clear_selection()
 	
-	for abs_layer: Node in viewport._layers_root.get_children():
-		viewport._layers_root.remove_child(abs_layer)
-		abs_layer.free()
+	for child: Node in viewport._layers_root.get_children():
+		viewport._layers_root.remove_child(child)
+		child.free()
 	
 	var db: GameDB = GameDB.get_db()
 	
 	for layer_data: Variant in data["layers"]:
 		if not layer_data is Dictionary:
 			continue
-		var layer_id: String = layer_data.get("layer_id", "a0r0")
+		var layer_index: int = layer_data.get("layer_index", 0)
+		var layer: LDLayer = viewport.get_or_create_layer(layer_index)
+		var raw_parallax: Variant = layer_data.get("parallax_scale", null)
+		if raw_parallax != null:
+			layer.parallax_scale = _array_to_vec2(raw_parallax)
 		for obj_data: Variant in layer_data.get("objects", []):
 			if not obj_data is Dictionary:
 				continue
-			_deserialize_object(obj_data, layer_id, db)
+			_deserialize_object(obj_data, layer_index, db)
 	
 	if data.has("editor"):
 		var editor_data: Dictionary = data["editor"]
@@ -179,6 +178,8 @@ func _deserialize(data: Dictionary) -> Error:
 			viewport.camera_position = _array_to_vec2(editor_data["camera_position"])
 		if editor_data.has("camera_zoom"):
 			viewport.camera_zoom = _array_to_vec2(editor_data["camera_zoom"])
+		if editor_data.has("active_layer"):
+			viewport.set_active_layer(editor_data["active_layer"])
 	
 	_ensure_player_spawn()
 	
@@ -195,18 +196,17 @@ func _ensure_player_spawn() -> void:
 		return
 	
 	var viewport: LDViewport = LD.get_editor_viewport()
-	for abs_layer: Node in viewport._layers_root.get_children():
-		for rel_layer: Node in abs_layer.get_children():
-			for child: Node in rel_layer.get_children():
-				var obj: LDObject = child as LDObject
-				if obj and obj.source_object_id == game_object.id:
-					return
+	for child: Node in viewport._layers_root.get_children():
+		for obj_node: Node in child.get_children():
+			var obj: LDObject = obj_node as LDObject
+			if obj and obj.source_object_id == game_object.id:
+				return
 	
 	var instance: LDObject = game_object.ld_editor_instance.instantiate() as LDObject
 	if not instance:
 		return
 	
-	viewport.add_object(instance, Vector2i.ZERO, "a0r0")
+	viewport.add_object(instance, Vector2i.ZERO, 0)
 	instance.init_properties(game_object)
 	instance.place()
 
@@ -218,7 +218,7 @@ func _find_game_object_by_scene(scene: PackedScene) -> GameObject:
 	return null
 
 
-func _deserialize_object(data: Dictionary, layer_id: String, db: GameDB) -> void:
+func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB) -> void:
 	var object_id: String = data.get("object_id", "")
 	if object_id.is_empty():
 		return
@@ -232,7 +232,7 @@ func _deserialize_object(data: Dictionary, layer_id: String, db: GameDB) -> void
 		return
 	
 	var pos: Vector2 = _array_to_vec2(data.get("position", [0.0, 0.0]))
-	LD.get_editor_viewport().add_object(instance, Vector2i(pos), layer_id)
+	LD.get_editor_viewport().add_object(instance, Vector2i(pos), layer_index)
 	
 	instance.init_properties(game_object)
 	
