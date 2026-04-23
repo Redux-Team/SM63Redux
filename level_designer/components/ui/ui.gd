@@ -160,3 +160,7 @@ func _on_move_to_back_button_pressed() -> void:
 
 func _on_layer_spin_box_value_changed(value: float) -> void:
 	LD.get_editor_viewport().set_active_layer(int(value))
+
+
+func _on_layer_properties_pressed() -> void:
+	pass # Replace with function body.

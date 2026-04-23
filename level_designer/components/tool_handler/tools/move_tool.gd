@@ -144,7 +144,7 @@ func _begin_drag(mouse_pos: Vector2, objects: Array[LDObject], return_to_select:
 
 
 func _get_object_at(mouse_pos: Vector2) -> LDObject:
-	for obj: LDObject in viewport.get_all_objects():
+	for obj: LDObject in viewport.get_all_objects_on_layer():
 		if obj.is_preview:
 			continue
 		if _object_contains_point(obj, mouse_pos):

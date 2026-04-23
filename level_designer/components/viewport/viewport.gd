@@ -274,7 +274,7 @@ func get_all_objects() -> Array[LDObject]:
 	return result
 
 
-func get_all_objects_on_layer(layer_index: int) -> Array[LDObject]:
+func get_all_objects_on_layer(layer_index: int = _active_layer) -> Array[LDObject]:
 	var result: Array[LDObject] = []
 	var layer: LDLayer = _get_layer(layer_index)
 	if not layer:
@@ -303,6 +303,10 @@ func get_active_layer() -> int:
 
 
 func set_active_layer(layer_index: int) -> void:
+	var objects: Array[LDObject] = get_selected_objects()
+	for object: LDObject in objects:
+		move_object_to_layer(object, layer_index)
+	
 	_active_layer = layer_index
 	_refresh_layer_visuals()
 	active_layer_changed.emit(layer_index)
@@ -310,6 +314,11 @@ func set_active_layer(layer_index: int) -> void:
 
 func step_active_layer(delta: int) -> void:
 	set_active_layer(_active_layer + delta)
+
+
+func move_object_to_layer(object: LDObject, layer_num: int) -> void:
+	var layer: LDLayer = get_or_create_layer(layer_num)
+	object.reparent(layer)
 
 
 func set_layer_visible(layer_index: int, is_visible: bool) -> void:

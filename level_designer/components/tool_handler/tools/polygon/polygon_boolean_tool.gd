@@ -257,7 +257,7 @@ func _get_results_for_target(_results: Array[PackedVector2Array], _start_idx: in
 func _snapshot_targets() -> void:
 	_targets.clear()
 	var selected: Array[LDObject] = viewport.get_selected_objects()
-	var candidates: Array[LDObject] = selected if not selected.is_empty() else viewport.get_all_objects()
+	var candidates: Array[LDObject] = selected if not selected.is_empty() else viewport.get_all_objects_on_layer()
 	for obj: LDObject in candidates:
 		var poly: LDObjectPolygon = obj as LDObjectPolygon
 		if poly and not poly.is_preview and poly._polygon and not poly._polygon.polygon.is_empty():

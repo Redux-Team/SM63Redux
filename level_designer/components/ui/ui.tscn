@@ -32,9 +32,17 @@ layout_mode = 2
 focus_mode = 0
 text = "Properties"
 
-[node name="LayerSpinBox" type="SpinBox" parent="ViewportUI/VBoxContainer" unique_id=347890108]
+[node name="HBoxContainer" type="HBoxContainer" parent="ViewportUI/VBoxContainer" unique_id=997386625]
+layout_mode = 2
+
+[node name="LayerProperties" type="Button" parent="ViewportUI/VBoxContainer/HBoxContainer" unique_id=2136314141]
+layout_mode = 2
+text = "P"
+
+[node name="LayerSpinBox" type="SpinBox" parent="ViewportUI/VBoxContainer/HBoxContainer" unique_id=347890108]
 layout_mode = 2
 min_value = -999.0
+max_value = 999.0
 alignment = 1
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="ViewportUI" unique_id=1713123835]
@@ -187,7 +195,8 @@ use_native_dialog = true
 
 [connection signal="pressed" from="ViewportUI/VBoxContainer/ObjectBrowserButton" to="." method="_on_object_browser_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer/PropertiesButton" to="." method="_on_properties_button_pressed"]
-[connection signal="value_changed" from="ViewportUI/VBoxContainer/LayerSpinBox" to="." method="_on_layer_spin_box_value_changed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer/HBoxContainer/LayerProperties" to="." method="_on_layer_properties_pressed"]
+[connection signal="value_changed" from="ViewportUI/VBoxContainer/HBoxContainer/LayerSpinBox" to="." method="_on_layer_spin_box_value_changed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/SelectButton" to="." method="_on_select_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/BrushButton" to="." method="_on_brush_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/MoveButton" to="." method="_on_move_button_pressed"]

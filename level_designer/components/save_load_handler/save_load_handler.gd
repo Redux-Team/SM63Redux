@@ -105,7 +105,7 @@ func _serialize() -> Dictionary:
 		"editor": {
 			"camera_position": _vec2_to_array(viewport.camera_position),
 			"camera_zoom": _vec2_to_array(viewport.camera_zoom),
-			"active_layer": viewport.active_layer,
+			"active_layer": viewport.get_active_layer(),
 		},
 		"layers": layers_data,
 	}

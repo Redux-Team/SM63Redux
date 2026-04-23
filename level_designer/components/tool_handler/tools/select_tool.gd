@@ -87,7 +87,7 @@ func _on_selected_object_changed(_obj: GameObject) -> void:
 
 
 func _update_hover_states() -> void:
-	for obj: LDObject in viewport.get_all_objects():
+	for obj: LDObject in viewport.get_all_objects_on_layer():
 		var game_obj: GameObject = GameDB.get_db().find_game_object(obj.source_object_id)
 		if not game_obj.ld_flags & (1 << GameObject.LD_SELECTABLE):
 			continue
@@ -121,7 +121,7 @@ func _commit_box_select() -> void:
 		return
 	
 	var found: Array[LDObject] = []
-	for obj: LDObject in viewport.get_all_objects():
+	for obj: LDObject in viewport.get_all_objects_on_layer():
 		if obj.is_preview:
 			continue
 		if _object_intersects_box(obj):
@@ -275,7 +275,7 @@ func _object_intersects_box(obj: LDObject) -> bool:
 
 
 func _get_object_at(mouse_pos: Vector2) -> LDObject:
-	var all: Array[LDObject] = viewport.get_all_objects()
+	var all: Array[LDObject] = viewport.get_all_objects_on_layer()
 	for i: int in range(all.size() - 1, -1, -1):
 		var obj: LDObject = all[i]
 		if obj.is_preview:
