@@ -1,15 +1,16 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cr1p0egoys1tf"]
 
 [ext_resource type="Texture2D" uid="uid://dcoump5mt4pp3" path="res://assets/textures/props/interactable/sign.png" id="1_c370i"]
+[ext_resource type="PackedScene" uid="uid://dfj8p8qglhiqd" path="res://game/db/Objects/Props/Interactable/sign_ld.tscn" id="1_lqupp"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_6ss1s"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_784q2"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_lv4ed"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_lqupp"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_8eyit"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1q8d5"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_lv4ed"]
 atlas = ExtResource("1_c370i")
-region = Rect2(-7, -5, 48, 48)
+region = Rect2(-7, -8, 48, 48)
 
 [resource]
 script = ExtResource("2_6ss1s")
@@ -20,6 +21,7 @@ subpath = "Interactable/sign"
 group_path = "Interactable"
 name_override = "Sign"
 ld_object_path = "Props/Interactable/sign"
-ld_entry_texture = SubResource("AtlasTexture_1q8d5")
+ld_entry_texture = SubResource("AtlasTexture_lv4ed")
+ld_editor_instance = ExtResource("1_lqupp")
 ld_properties = Array[ExtResource("2_784q2")]([ExtResource("3_lv4ed"), ExtResource("4_lqupp"), ExtResource("5_8eyit")])
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

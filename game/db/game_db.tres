@@ -19,9 +19,6 @@
 [ext_resource type="Resource" uid="uid://kxexxxdwa4sc" path="res://game/db/Objects/Item/FLUDD/water_bottle_big.tres" id="17_tr1rm"]
 [ext_resource type="Resource" uid="uid://40e42nc6itr8" path="res://game/db/Objects/Item/FLUDD/water_bottle_small.tres" id="18_0h263"]
 [ext_resource type="Resource" uid="uid://dhyodlkfh60hd" path="res://game/db/Objects/Props/Gizmos/moving_platform.tres" id="19_s5833"]
-[ext_resource type="Resource" uid="uid://dw6l2d61dkq6p" path="res://game/db/Objects/Props/Gizmos/spinning_block_large.tres" id="21_fpxyv"]
-[ext_resource type="Resource" uid="uid://caleu4psn324w" path="res://game/db/Objects/Props/Gizmos/spinning_block_medium.tres" id="22_ojdkd"]
-[ext_resource type="Resource" uid="uid://cpwcik2ad65p4" path="res://game/db/Objects/Props/Gizmos/spinning_block_small.tres" id="23_j0wnv"]
 [ext_resource type="Resource" uid="uid://fa37unypkcqe" path="res://game/db/Objects/Props/Hints/arrow.tres" id="24_naun0"]
 [ext_resource type="Resource" uid="uid://cxjkf33colukt" path="res://game/db/Objects/Props/Interactable/breakable_box.tres" id="26_rpot8"]
 [ext_resource type="Resource" uid="uid://cr1p0egoys1tf" path="res://game/db/Objects/Props/Interactable/sign.tres" id="27_2x7la"]
@@ -49,7 +46,9 @@
 [ext_resource type="Resource" uid="uid://eipogn3jdakv" path="res://game/db/Objects/Props/Warps/pipe.tres" id="47_5oesr"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="47_fs5pm"]
 [ext_resource type="Script" uid="uid://dc4nc2ctw5fm5" path="res://game/db/game_db.gd" id="47_j75gy"]
+[ext_resource type="Resource" uid="uid://dw6l2d61dkq6p" path="res://game/db/Objects/Props/Gizmos/spinning_block_colored.tres" id="47_lugbj"]
 [ext_resource type="Resource" uid="uid://mupwvevffb1p" path="res://game/db/Objects/Props/Hints/arrow_sign.tres" id="47_mp4qx"]
+[ext_resource type="Resource" uid="uid://caleu4psn324w" path="res://game/db/Objects/Props/Gizmos/spinning_block_monochrome.tres" id="48_fvosf"]
 [ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="48_i1cw8"]
 [ext_resource type="Resource" uid="uid://d3vfvvtqanxml" path="res://game/db/Objects/Polygon/Volumes/camera_area.tres" id="48_mp4qx"]
 [ext_resource type="Resource" uid="uid://eo78sgsdx7kt" path="res://game/db/Objects/Props/Platforms/tipping_platform_cold.tres" id="49_5oesr"]
@@ -84,9 +83,8 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Polygon/Terrain/terrain_grass": ExtResource("45_3w7om"),
 "Polygon/Volumes/camera_area": ExtResource("48_mp4qx"),
 "Props/Gizmos/moving_platform": ExtResource("19_s5833"),
-"Props/Gizmos/spinning_block_large": ExtResource("21_fpxyv"),
-"Props/Gizmos/spinning_block_medium": ExtResource("22_ojdkd"),
-"Props/Gizmos/spinning_block_small": ExtResource("23_j0wnv"),
+"Props/Gizmos/spinning_block_colored": ExtResource("47_lugbj"),
+"Props/Gizmos/spinning_block_monochrome": ExtResource("48_fvosf"),
 "Props/Hints/arrow": ExtResource("24_naun0"),
 "Props/Hints/arrow_sign": ExtResource("47_mp4qx"),
 "Props/Interactable/breakable_box": ExtResource("26_rpot8"),

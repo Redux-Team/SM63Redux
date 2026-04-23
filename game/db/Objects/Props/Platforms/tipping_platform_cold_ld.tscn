@@ -30,7 +30,6 @@ size = Vector2(38, 13)
 
 [node name="TippingPlatformCold" type="Node2D" unique_id=247389356 node_paths=PackedStringArray("nine_patch", "editor_shape_area", "editor_placement_rect", "origin_marker")]
 script = ExtResource("1_gihlu")
-min_units = 1
 max_units = 12
 nine_patch = NodePath("NinePatch")
 editor_shape_area = NodePath("EditorShapeArea")

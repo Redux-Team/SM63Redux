@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://b0vrwrys5wyru"]
 
+[ext_resource type="PackedScene" uid="uid://b1ldw7qsljflj" path="res://game/db/Objects/Props/Interactable/sign_hanging_ld.tscn" id="1_ku08p"]
 [ext_resource type="Texture2D" uid="uid://brxwoltll0h4e" path="res://assets/textures/props/interactable/sign_hanging.png" id="1_rx56u"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_7xat1"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_wm0dj"]
@@ -21,5 +22,6 @@ group_path = "Interactable"
 name_override = "Hanging Sign"
 ld_object_path = "Props/Interactable/sign_hanging"
 ld_entry_texture = SubResource("AtlasTexture_vbhlu")
+ld_editor_instance = ExtResource("1_ku08p")
 ld_properties = Array[ExtResource("2_wm0dj")]([ExtResource("3_s4hdl"), ExtResource("4_ku08p"), ExtResource("5_onkbi")])
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

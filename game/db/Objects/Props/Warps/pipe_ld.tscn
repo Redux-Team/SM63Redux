@@ -3,11 +3,14 @@
 [ext_resource type="Script" uid="uid://b3mrac5qo7r3g" path="res://game/db/Objects/ld_object_telescoping.gd" id="1_vi0gc"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_116sf"]
 [ext_resource type="Texture2D" uid="uid://bvhnsfmnwobe3" path="res://assets/textures/props/warps/pipe.png" id="3_cnnfh"]
+[ext_resource type="Texture2D" uid="uid://d1ejgxow46a1e" path="res://assets/textures/props/warps/pipe_palette.png" id="3_m3ju5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yv3ix"]
 resource_local_to_scene = true
 shader = ExtResource("2_116sf")
 shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/palette_texture = ExtResource("3_m3ju5")
 shader_parameter/custom_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
