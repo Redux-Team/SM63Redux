@@ -6,7 +6,7 @@
 
 [node name="Grass" type="Node2D" unique_id=335077795 node_paths=PackedStringArray("_polygon", "_collision", "_outline_container", "_topline_container", "_topline_shadow_container")]
 script = ExtResource("1_7585l")
-terrain_data = ExtResource("2_guwji")
+polygon_data = ExtResource("2_guwji")
 _polygon = NodePath("Polygon")
 _collision = NodePath("StaticBody2D/CollisionPolygon2D")
 _outline_container = NodePath("OutlineContainer")

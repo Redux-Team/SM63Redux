@@ -85,6 +85,10 @@ enum LineMode { TOPLINE, EDGES_ONLY, NONE }
 		redraw.emit()
 
 
+@export_group("Editor")
+@export var edge_selection: bool = false
+
+
 func _validate_property(property: Dictionary) -> void:
 	var texture_props: Array[StringName] = [
 		&"base_texture",

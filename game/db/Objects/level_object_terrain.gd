@@ -75,89 +75,112 @@ func _update_visuals() -> void:
 	if not is_node_ready() or not polygon_data:
 		return
 	
+	var textured: bool = polygon_data.textured
+	var line_mode: PolygonData.LineMode = polygon_data.line_mode
+	
 	if _polygon:
-		_polygon.texture = polygon_data.base_texture
-		_polygon.color = Color.WHITE if polygon_data.base_texture else Color.TRANSPARENT
+		if textured and polygon_data.base_texture:
+			_polygon.texture = polygon_data.base_texture
+			_polygon.color = Color.WHITE
+		else:
+			_polygon.texture = null
+			_polygon.color = polygon_data.base_color
 	
 	if _outer_points.size() < 3:
 		_clear_visuals()
 		return
 	
-	var outer_cw: PackedVector2Array = TerrainPolygon.ensure_clockwise(_outer_points)
-	var top_segments: Array[PackedVector2Array] = TerrainPolygon.get_topline_segments(outer_cw, polygon_data.topline_angle_threshold)
+	_clear_visuals()
 	
-	for hole: PackedVector2Array in _holes:
-		var hole_ccw: PackedVector2Array = TerrainPolygon.ensure_counter_clockwise(hole)
-		var hole_segments: Array[PackedVector2Array] = TerrainPolygon.get_topline_segments(hole_ccw, polygon_data.topline_angle_threshold)
-		top_segments.append_array(hole_segments)
+	if line_mode == PolygonData.LineMode.NONE:
+		return
 	
-	if _topline_container:
-		_clear_children(_topline_container)
-		for segment: PackedVector2Array in top_segments:
-			var line: Line2D = Line2D.new()
-			TerrainPolygon.setup_line2d(line)
-			line.begin_cap_mode = Line2D.LINE_CAP_NONE
-			line.end_cap_mode = Line2D.LINE_CAP_NONE
-			line.width = polygon_data.topline_width
-			line.texture = polygon_data.topline_texture
-			line.points = TerrainPolygon.subdivide_for_line2d(segment, polygon_data.topline_texture)
-			_topline_container.add_child(line)
-			
-			var angle: float = TerrainPolygon.get_segment_angle(segment)
-			
-			if polygon_data.topline_left_end and segment.size() >= 2:
-				var left_cap: Sprite2D = Sprite2D.new()
-				left_cap.texture = polygon_data.topline_left_end
-				var left_dir: Vector2 = (segment[0] - segment[1]).normalized()
-				left_cap.position = segment[0] + left_dir * (polygon_data.topline_left_end.get_width() / 2.0)
-				left_cap.rotation = angle
-				left_cap.centered = true
-				_topline_container.add_child(left_cap)
-			
-			if polygon_data.topline_right_end and segment.size() >= 2:
-				var right_cap: Sprite2D = Sprite2D.new()
-				right_cap.texture = polygon_data.topline_right_end
-				var right_dir: Vector2 = (segment[segment.size() - 1] - segment[segment.size() - 2]).normalized()
-				right_cap.position = segment[segment.size() - 1] + right_dir * (polygon_data.topline_right_end.get_width() / 2.0)
-				right_cap.rotation = angle
-				right_cap.centered = true
-				_topline_container.add_child(right_cap)
+	var outline_color: Color = polygon_data.outline_color
+	var outline_tex: Texture2D = polygon_data.outline_texture if textured else null
+	var outline_w: float = polygon_data.outline_width
 	
-	if _topline_shadow_container:
-		_clear_children(_topline_shadow_container)
-		for segment: PackedVector2Array in top_segments:
-			var line: Line2D = Line2D.new()
-			TerrainPolygon.setup_line2d(line)
-			line.begin_cap_mode = Line2D.LINE_CAP_NONE
-			line.end_cap_mode = Line2D.LINE_CAP_NONE
-			line.width = polygon_data.topline_width * 1.33
-			line.texture = polygon_data.topline_shadow_texture
-			line.default_color = Color(1.0, 1.0, 1.0, 0.6)
-			line.points = TerrainPolygon.subdivide_for_line2d(segment, polygon_data.topline_shadow_texture)
-			_topline_shadow_container.add_child(line)
+	if line_mode == PolygonData.LineMode.TOPLINE:
+		var outer_cw: PackedVector2Array = TerrainPolygon.ensure_clockwise(_outer_points)
+		var top_segments: Array[PackedVector2Array] = TerrainPolygon.get_topline_segments(outer_cw, polygon_data.topline_angle_threshold)
+		
+		for hole: PackedVector2Array in _holes:
+			var hole_ccw: PackedVector2Array = TerrainPolygon.ensure_counter_clockwise(hole)
+			top_segments.append_array(TerrainPolygon.get_topline_segments(hole_ccw, polygon_data.topline_angle_threshold))
+		
+		var topline_tex: Texture2D = polygon_data.topline_texture if textured else null
+		var topline_shadow_tex: Texture2D = polygon_data.topline_shadow_texture if textured else null
+		var topline_w: float = polygon_data.topline_width
+		
+		if _topline_container:
+			for segment: PackedVector2Array in top_segments:
+				var line: Line2D = Line2D.new()
+				TerrainPolygon.setup_line2d(line)
+				line.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST if not textured else CanvasItem.TEXTURE_FILTER_PARENT_NODE
+				line.antialiased = not textured
+				line.begin_cap_mode = Line2D.LINE_CAP_NONE
+				line.end_cap_mode = Line2D.LINE_CAP_NONE
+				line.width = topline_w
+				line.texture = topline_tex
+				line.default_color = Color.WHITE if topline_tex else outline_color
+				line.points = TerrainPolygon.subdivide_for_line2d(segment, topline_tex)
+				_topline_container.add_child(line)
+				
+				var angle: float = TerrainPolygon.get_segment_angle(segment)
+				
+				if textured and polygon_data.topline_left_end and segment.size() >= 2:
+					var left_cap: Sprite2D = Sprite2D.new()
+					left_cap.texture = polygon_data.topline_left_end
+					var left_dir: Vector2 = (segment[0] - segment[1]).normalized()
+					left_cap.position = segment[0] + left_dir * (polygon_data.topline_left_end.get_width() / 2.0)
+					left_cap.rotation = angle
+					left_cap.centered = true
+					_topline_container.add_child(left_cap)
+				
+				if textured and polygon_data.topline_right_end and segment.size() >= 2:
+					var right_cap: Sprite2D = Sprite2D.new()
+					right_cap.texture = polygon_data.topline_right_end
+					var right_dir: Vector2 = (segment[segment.size() - 1] - segment[segment.size() - 2]).normalized()
+					right_cap.position = segment[segment.size() - 1] + right_dir * (polygon_data.topline_right_end.get_width() / 2.0)
+					right_cap.rotation = angle
+					right_cap.centered = true
+					_topline_container.add_child(right_cap)
+		
+		if _topline_shadow_container and textured:
+			for segment: PackedVector2Array in top_segments:
+				var line: Line2D = Line2D.new()
+				TerrainPolygon.setup_line2d(line)
+				line.begin_cap_mode = Line2D.LINE_CAP_NONE
+				line.end_cap_mode = Line2D.LINE_CAP_NONE
+				line.width = topline_w * 1.33
+				line.texture = topline_shadow_tex
+				line.default_color = Color(1.0, 1.0, 1.0, 0.6)
+				line.points = TerrainPolygon.subdivide_for_line2d(segment, topline_shadow_tex)
+				_topline_shadow_container.add_child(line)
 	
 	if _outline_container:
-		_clear_children(_outline_container)
-		
 		var outer_line: Line2D = Line2D.new()
 		TerrainPolygon.setup_line2d(outer_line)
-		outer_line.width = polygon_data.outline_width
-		outer_line.texture = polygon_data.outline_texture
-		outer_line.default_color = Color.WHITE if polygon_data.outline_texture else Color.TRANSPARENT
+		outer_line.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST if not textured else CanvasItem.TEXTURE_FILTER_PARENT_NODE
+		outer_line.antialiased = not textured
+		outer_line.width = outline_w
+		outer_line.texture = outline_tex
+		outer_line.default_color = Color.WHITE if outline_tex else outline_color
 		outer_line.points = TerrainPolygon.subdivide_for_line2d(
 			TerrainPolygon.reverse_points(TerrainPolygon.get_closed_points(TerrainPolygon.ensure_counter_clockwise(_outer_points))),
-			polygon_data.outline_texture)
+			outline_tex)
 		_outline_container.add_child(outer_line)
 		
 		for hole: PackedVector2Array in _holes:
 			var hole_line: Line2D = Line2D.new()
 			TerrainPolygon.setup_line2d(hole_line)
-			hole_line.width = polygon_data.outline_width
-			hole_line.texture = polygon_data.outline_texture
-			hole_line.default_color = Color.WHITE if polygon_data.outline_texture else Color.TRANSPARENT
+			hole_line.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST if not textured else CanvasItem.TEXTURE_FILTER_PARENT_NODE
+			hole_line.antialiased = not textured
+			hole_line.width = outline_w
+			hole_line.texture = outline_tex
+			hole_line.default_color = Color.WHITE if outline_tex else outline_color
 			hole_line.points = TerrainPolygon.subdivide_for_line2d(
 				TerrainPolygon.reverse_points(TerrainPolygon.get_closed_points(TerrainPolygon.ensure_clockwise(hole))),
-				polygon_data.outline_texture)
+				outline_tex)
 			_outline_container.add_child(hole_line)
 
 

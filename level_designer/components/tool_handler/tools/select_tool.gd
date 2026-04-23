@@ -159,6 +159,41 @@ func _get_shape_screen_points(shape: CollisionShape2D) -> PackedVector2Array:
 	return points
 
 
+func _point_near_polygon_edge(point: Vector2, screen_points: PackedVector2Array, threshold: float) -> bool:
+	var count: int = screen_points.size()
+	for i: int in count:
+		var a: Vector2 = screen_points[i]
+		var b: Vector2 = screen_points[(i + 1) % count]
+		if Geometry2D.get_closest_point_to_segment(point, a, b).distance_to(point) <= threshold:
+			return true
+	return false
+
+
+func _polygon_edge_intersects_box(screen_points: PackedVector2Array, box: Rect2) -> bool:
+	var count: int = screen_points.size()
+	var box_corners: Array[Vector2] = [
+		box.position,
+		box.position + Vector2(box.size.x, 0.0),
+		box.position + Vector2(0.0, box.size.y),
+		box.position + box.size,
+	]
+	var box_edges: Array[Array] = [
+		[box_corners[0], box_corners[1]],
+		[box_corners[1], box_corners[3]],
+		[box_corners[3], box_corners[2]],
+		[box_corners[2], box_corners[0]],
+	]
+	for i: int in count:
+		var a: Vector2 = screen_points[i]
+		var b: Vector2 = screen_points[(i + 1) % count]
+		if box.has_point(a):
+			return true
+		for edge: Array in box_edges:
+			if Geometry2D.segment_intersects_segment(a, b, edge[0], edge[1]) != null:
+				return true
+	return false
+
+
 func _object_intersects_box(obj: LDObject) -> bool:
 	var poly_obj: LDObjectPolygon = obj as LDObjectPolygon
 	if poly_obj and poly_obj.editor_polygon:
@@ -166,6 +201,10 @@ func _object_intersects_box(obj: LDObject) -> bool:
 		var screen_points: PackedVector2Array = PackedVector2Array()
 		for point: Vector2 in poly_obj.editor_polygon.polygon:
 			screen_points.append(full_transform * point)
+		
+		if poly_obj.polygon_data and poly_obj.polygon_data.edge_selection:
+			return _polygon_edge_intersects_box(screen_points, _box_select_rect)
+		
 		for p: Vector2 in screen_points:
 			if _box_select_rect.has_point(p):
 				return true
@@ -247,7 +286,10 @@ func _get_object_at(mouse_pos: Vector2) -> LDObject:
 			var screen_points: PackedVector2Array = PackedVector2Array()
 			for point: Vector2 in poly_obj._polygon.polygon:
 				screen_points.append(full_transform * point)
-			if Geometry2D.is_point_in_polygon(mouse_pos, screen_points):
+			if poly_obj.polygon_data and poly_obj.polygon_data.edge_selection:
+				if _point_near_polygon_edge(mouse_pos, screen_points, 6.0):
+					return obj
+			elif Geometry2D.is_point_in_polygon(mouse_pos, screen_points):
 				return obj
 			continue
 		var areas: Array[Area2D] = obj.get_all_editor_shape_areas()

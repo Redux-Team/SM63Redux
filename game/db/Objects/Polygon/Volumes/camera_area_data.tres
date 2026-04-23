@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="PolygonData" format=3 uid="uid://cpoha60bjm6nr"]
+
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/db/Objects/Polygon/polygon_data.gd" id="1_uvmyj"]
+
+[resource]
+script = ExtResource("1_uvmyj")
+textured = false
+base_color = Color(0.23921569, 0.54901963, 0.8784314, 0.33333334)
+line_mode = 1
+outline_color = Color(0.23759998, 0.63374656, 0.88, 1)
+outline_width = 1.0
+metadata/_custom_type_script = "uid://drs86mw0b40vi"

@@ -32,6 +32,11 @@ layout_mode = 2
 focus_mode = 0
 text = "Properties"
 
+[node name="LayerEdit" type="LineEdit" parent="ViewportUI/VBoxContainer" unique_id=827715024]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "a0"
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="ViewportUI" unique_id=1713123835]
 anchors_preset = 1
 anchor_left = 1.0
