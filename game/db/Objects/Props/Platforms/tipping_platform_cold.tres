@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://eo78sgsdx7kt"]
+
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_rbw2q"]
+[ext_resource type="PackedScene" uid="uid://be2j7kr3d0h5d" path="res://game/db/Objects/Props/Platforms/tipping_platform_cold_ld.tscn" id="1_sj0il"]
+[ext_resource type="PackedScene" uid="uid://bmdiui1tdgn3f" path="res://game/object/tipping_platform_cold/tipping_platform_cold.tscn" id="1_um0mb"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_8m5ok"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_sj0il"]
+[ext_resource type="Texture2D" uid="uid://q8oipcmo03fn" path="res://assets/textures/props/platform/tipping_platform_cold_ld.png" id="3_um0mb"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="4_um0mb"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="5_js2jd"]
+[ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="6_floos"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_js2jd"]
+atlas = ExtResource("3_um0mb")
+region = Rect2(-3, -8, 48, 48)
+filter_clip = true
+
+[resource]
+script = ExtResource("2_8m5ok")
+id = "tipping_platform_cold"
+category = 4
+category_string = "Props"
+subpath = "Platforms/tipping_platform_cold"
+group_path = "Platforms"
+name_override = "Tipping Platform (Cold)"
+ld_object_path = "Props/Platforms/tipping_platform_cold"
+ld_entry_texture = SubResource("AtlasTexture_js2jd")
+ld_editor_instance = ExtResource("1_sj0il")
+ld_properties = Array[ExtResource("1_rbw2q")]([ExtResource("3_sj0il"), ExtResource("4_um0mb"), ExtResource("5_js2jd"), ExtResource("6_floos")])
+ld_placement_tool_override = "telescoping"
+game_instance = ExtResource("1_um0mb")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

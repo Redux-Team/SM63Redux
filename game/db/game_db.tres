@@ -52,6 +52,7 @@
 [ext_resource type="Resource" uid="uid://mupwvevffb1p" path="res://game/db/Objects/Props/Hints/arrow_sign.tres" id="47_mp4qx"]
 [ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="48_i1cw8"]
 [ext_resource type="Resource" uid="uid://d3vfvvtqanxml" path="res://game/db/Objects/Polygon/Volumes/camera_area.tres" id="48_mp4qx"]
+[ext_resource type="Resource" uid="uid://eo78sgsdx7kt" path="res://game/db/Objects/Props/Platforms/tipping_platform_cold.tres" id="49_5oesr"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="49_wp5r6"]
 [ext_resource type="Resource" uid="uid://bfbxhsv32nu3e" path="res://game/db/Properties/breakable_box/coin_amount.tres" id="50_tbe6r"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="51_kljvd"]
@@ -108,6 +109,7 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Props/Platforms/log_falling": ExtResource("41_rfddy"),
 "Props/Platforms/log_static": ExtResource("42_tk7mk"),
 "Props/Platforms/tipping_log": ExtResource("43_77m44"),
+"Props/Platforms/tipping_platform_cold": ExtResource("49_5oesr"),
 "Props/Platforms/wooden_platform": ExtResource("44_76t45"),
 "Props/Warps/pipe": ExtResource("47_5oesr")
 })

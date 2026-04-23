@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://be2j7kr3d0h5d"]
+
+[ext_resource type="Script" uid="uid://b3mrac5qo7r3g" path="res://game/db/Objects/ld_object_telescoping.gd" id="1_gihlu"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_vuns1"]
+[ext_resource type="Texture2D" uid="uid://cmerha3f3rw7u" path="res://assets/textures/props/platform/tipping_platform_cold.png" id="3_gihlu"]
+[ext_resource type="Texture2D" uid="uid://bqb6yhetauu1e" path="res://assets/textures/props/platform/tipping_platform_cold_center.png" id="4_gihlu"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="5_4x530"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o01rm"]
+resource_local_to_scene = true
+shader = ExtResource("2_vuns1")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_vuns1"]
+diffuse_texture = ExtResource("4_gihlu")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mwdyh"]
+resource_local_to_scene = true
+size = Vector2(38, 13)
+
+[node name="TippingPlatformCold" type="Node2D" unique_id=247389356 node_paths=PackedStringArray("nine_patch", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+script = ExtResource("1_gihlu")
+min_units = 1
+max_units = 12
+nine_patch = NodePath("NinePatch")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+metadata/_custom_type_script = "uid://b3mrac5qo7r3g"
+
+[node name="NinePatch" type="NinePatchRect" parent="." unique_id=510440931]
+material = SubResource("ShaderMaterial_o01rm")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -9.0
+offset_right = 19.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_gihlu")
+region_rect = Rect2(0, 0, 72, 15)
+patch_margin_left = 6
+patch_margin_right = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="TippingLogCenter" type="Sprite2D" parent="." unique_id=169820774]
+texture = SubResource("CanvasTexture_vuns1")
+script = ExtResource("5_4x530")
+canvas_texture = SubResource("CanvasTexture_vuns1")
+diffuse_texture = ExtResource("4_gihlu")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=1717977380]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=515550961]
+position = Vector2(0, -1.5)
+shape = SubResource("RectangleShape2D_mwdyh")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=1026179718]

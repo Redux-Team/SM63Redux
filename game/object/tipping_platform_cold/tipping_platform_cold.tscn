@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://bmdiui1tdgn3f"]
+
+[ext_resource type="Script" uid="uid://dhylcwhc7lj0p" path="res://game/object/tipping_log/tipping_log.gd" id="1_qngg4"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_wp00r"]
+[ext_resource type="Texture2D" uid="uid://cmerha3f3rw7u" path="res://assets/textures/props/platform/tipping_platform_cold.png" id="3_lyych"]
+[ext_resource type="Texture2D" uid="uid://bqb6yhetauu1e" path="res://assets/textures/props/platform/tipping_platform_cold_center.png" id="3_wp00r"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_2kyx3"]
+[ext_resource type="Script" uid="uid://dvxkxevaf2f45" path="res://core/custom_nodes/2d/ride_area.gd" id="5_em453"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_34jw4"]
+resource_local_to_scene = true
+shader = ExtResource("2_wp00r")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_lyych"]
+diffuse_texture = ExtResource("3_wp00r")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sk8mv"]
+resource_local_to_scene = true
+size = Vector2(36, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q3fnv"]
+resource_local_to_scene = true
+size = Vector2(36, 2)
+
+[node name="PlatformColdTipping" type="Node2D" unique_id=1813505387 node_paths=PackedStringArray("ride_area", "static_body_2d", "nine_patch", "collision_shapes")]
+script = ExtResource("1_qngg4")
+ride_area = NodePath("RideArea")
+static_body_2d = NodePath("StaticBody2D")
+nine_patch = NodePath("NinePatch")
+collision_shapes = [NodePath("StaticBody2D/CollisionShape2D"), NodePath("RideArea/CollisionShape2D")]
+metadata/_custom_type_script = "uid://u0c5qwqjxkub"
+
+[node name="NinePatch" type="NinePatchRect" parent="." unique_id=289572106]
+material = SubResource("ShaderMaterial_34jw4")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.0
+offset_top = -9.0
+offset_right = 19.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_lyych")
+region_rect = Rect2(0, 0, 72, 15)
+patch_margin_left = 6
+patch_margin_right = 6
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="TippingLogCenter" type="Sprite2D" parent="." unique_id=51585662]
+texture = SubResource("CanvasTexture_lyych")
+script = ExtResource("4_2kyx3")
+canvas_texture = SubResource("CanvasTexture_lyych")
+diffuse_texture = ExtResource("3_wp00r")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=689719996]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=706654042]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_sk8mv")
+one_way_collision = true
+one_way_collision_margin = 8.0
+
+[node name="RideArea" type="Area2D" parent="." unique_id=1178477417]
+collision_mask = 264
+input_pickable = false
+monitorable = false
+script = ExtResource("5_em453")
+metadata/_custom_type_script = "uid://dvxkxevaf2f45"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RideArea" unique_id=796793170]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_q3fnv")

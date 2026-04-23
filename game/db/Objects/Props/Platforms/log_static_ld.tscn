@@ -9,6 +9,7 @@
 resource_local_to_scene = true
 shader = ExtResource("2_2dvmx")
 shader_parameter/state = 0
+shader_parameter/palette_index = 0
 shader_parameter/custom_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
@@ -47,7 +48,6 @@ playing = false
 [node name="EditorShapeArea" type="Area2D" parent="." unique_id=1099242803]
 
 [node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=763031092]
-visible = false
 shape = SubResource("RectangleShape2D_ycd4g")
 
 [node name="Origin" type="Marker2D" parent="." unique_id=1571920310]
