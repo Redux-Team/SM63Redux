@@ -13,7 +13,7 @@ const PREVIEW_BORDER_WIDTH: float = 1.0
 const SELECTION_BORDER_WIDTH: float = 1.5
 
 
-@export var terrain_data: TerrainData
+@export var polygon_data: PolygonData
 
 @export_group("Internal")
 @export var _polygon: Polygon2D
@@ -82,10 +82,10 @@ var _seam_indices: PackedInt32Array = PackedInt32Array()
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	if terrain_data and not terrain_data.update_visuals.is_connected(_update_visuals):
-		terrain_data.update_visuals.connect(_update_visuals)
-	if terrain_data and not terrain_data.redraw.is_connected(queue_redraw):
-		terrain_data.redraw.connect(queue_redraw)
+	if polygon_data and not polygon_data.update_visuals.is_connected(_update_visuals):
+		polygon_data.update_visuals.connect(_update_visuals)
+	if polygon_data and not polygon_data.redraw.is_connected(queue_redraw):
+		polygon_data.redraw.connect(queue_redraw)
 
 
 func _on_preview() -> void:
@@ -229,8 +229,8 @@ func _update_visuals() -> void:
 		return
 	
 	if _polygon:
-		_polygon.texture = terrain_data.base_texture if terrain_data else null
-		_polygon.color = Color.WHITE if (terrain_data and terrain_data.base_texture) else Color.TRANSPARENT
+		_polygon.texture = polygon_data.base_texture if polygon_data else null
+		_polygon.color = Color.WHITE if (polygon_data and polygon_data.base_texture) else Color.TRANSPARENT
 	
 	var poly_points: PackedVector2Array = _polygon.polygon if _polygon else PackedVector2Array()
 	
@@ -246,12 +246,12 @@ func _update_visuals() -> void:
 				child.queue_free()
 		return
 	
-	var threshold: float = terrain_data.topline_angle_threshold if terrain_data else 0.55
-	var topline_tex: Texture2D = terrain_data.topline_texture if terrain_data else null
-	var topline_shadow_tex: Texture2D = terrain_data.topline_shadow_texture if terrain_data else null
-	var outline_tex: Texture2D = terrain_data.outline_texture if terrain_data else null
-	var topline_w: float = terrain_data.topline_width if terrain_data else 30.0
-	var outline_w: float = terrain_data.outline_width if terrain_data else 7.0
+	var threshold: float = polygon_data.topline_angle_threshold if polygon_data else 0.55
+	var topline_tex: Texture2D = polygon_data.topline_texture if polygon_data else null
+	var topline_shadow_tex: Texture2D = polygon_data.topline_shadow_texture if polygon_data else null
+	var outline_tex: Texture2D = polygon_data.outline_texture if polygon_data else null
+	var topline_w: float = polygon_data.topline_width if polygon_data else 30.0
+	var outline_w: float = polygon_data.outline_width if polygon_data else 7.0
 	
 	var outer_cw: PackedVector2Array = TerrainPolygon.ensure_clockwise(_outer_points)
 	var top_segments: Array[PackedVector2Array] = TerrainPolygon.get_topline_segments(outer_cw, threshold)
@@ -276,20 +276,20 @@ func _update_visuals() -> void:
 			
 			var angle: float = TerrainPolygon.get_segment_angle(segment)
 			
-			if terrain_data.topline_left_end and segment.size() >= 2:
+			if polygon_data.topline_left_end and segment.size() >= 2:
 				var left_cap: Sprite2D = Sprite2D.new()
-				left_cap.texture = terrain_data.topline_left_end
+				left_cap.texture = polygon_data.topline_left_end
 				var left_dir: Vector2 = (segment[0] - segment[1]).normalized()
-				left_cap.position = segment[0] + left_dir * (terrain_data.topline_left_end.get_width() / 2.0)
+				left_cap.position = segment[0] + left_dir * (polygon_data.topline_left_end.get_width() / 2.0)
 				left_cap.rotation = angle
 				left_cap.centered = true
 				_topline_container.add_child(left_cap)
 			
-			if terrain_data.topline_right_end and segment.size() >= 2:
+			if polygon_data.topline_right_end and segment.size() >= 2:
 				var right_cap: Sprite2D = Sprite2D.new()
-				right_cap.texture = terrain_data.topline_right_end
+				right_cap.texture = polygon_data.topline_right_end
 				var right_dir: Vector2 = (segment[segment.size() - 1] - segment[segment.size() - 2]).normalized()
-				right_cap.position = segment[segment.size() - 1] + right_dir * (terrain_data.topline_right_end.get_width() / 2.0)
+				right_cap.position = segment[segment.size() - 1] + right_dir * (polygon_data.topline_right_end.get_width() / 2.0)
 				right_cap.rotation = angle
 				right_cap.centered = true
 				_topline_container.add_child(right_cap)
@@ -353,13 +353,13 @@ func _draw() -> void:
 				draw_polyline(TerrainPolygon.get_closed_points(hole), p_border, PREVIEW_BORDER_WIDTH, true)
 		return
 	
-	if not (terrain_data and terrain_data.base_texture):
+	if not (polygon_data and polygon_data.base_texture):
 		draw_colored_polygon(draw_points, FALLBACK_FILL)
-		draw_polyline(TerrainPolygon.get_closed_points(draw_points), FALLBACK_BORDER, terrain_data.border_width if terrain_data else 3.0, true)
+		draw_polyline(TerrainPolygon.get_closed_points(draw_points), FALLBACK_BORDER, polygon_data.border_width if polygon_data else 3.0, true)
 		for hole: PackedVector2Array in _holes:
 			if hole.size() >= 3:
 				draw_colored_polygon(hole, Color(0.0, 0.0, 0.0, 0.5))
-				draw_polyline(TerrainPolygon.get_closed_points(hole), FALLBACK_BORDER, terrain_data.border_width if terrain_data else 3.0, true)
+				draw_polyline(TerrainPolygon.get_closed_points(hole), FALLBACK_BORDER, polygon_data.border_width if polygon_data else 3.0, true)
 	
 	if _selection_state == LDObject.SelectionState.HIDDEN:
 		return

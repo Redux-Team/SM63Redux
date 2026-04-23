@@ -6,7 +6,7 @@
 
 [node name="Grass" type="Node2D" unique_id=642150737 node_paths=PackedStringArray("_polygon", "_topline_container", "_topline_shadow_container", "_outline_container", "editor_polygon", "editor_shape_area", "editor_placement_rect", "origin_marker")]
 script = ExtResource("1_joldw")
-terrain_data = ExtResource("2_56xei")
+polygon_data = ExtResource("2_56xei")
 _polygon = NodePath("Polygon")
 _topline_container = NodePath("ToplineContainer")
 _topline_shadow_container = NodePath("Polygon/ToplineShadowContainer")

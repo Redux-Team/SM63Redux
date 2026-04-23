@@ -2,6 +2,29 @@
 
 [ext_resource type="Script" uid="uid://cpps8bcdccbtj" path="res://game/db/Objects/ld_object_polygon.gd" id="1_yivsu"]
 
-[node name="CameraAreaLd" type="Node2D" unique_id=1293551863]
+[node name="CameraAreaLd" type="Node2D" unique_id=1293551863 node_paths=PackedStringArray("_polygon", "_topline_container", "_topline_shadow_container", "_outline_container", "editor_polygon", "editor_shape_area", "origin_marker")]
 script = ExtResource("1_yivsu")
+_polygon = NodePath("Polygon")
+_topline_container = NodePath("ToplineContainer")
+_topline_shadow_container = NodePath("Polygon/ToplineShadowContainer")
+_outline_container = NodePath("OutlineContainer")
+editor_polygon = NodePath("EditorShapeArea/EditorPolygon")
+editor_shape_area = NodePath("EditorShapeArea")
+origin_marker = NodePath("Origin")
 metadata/_custom_type_script = "uid://cpps8bcdccbtj"
+
+[node name="Polygon" type="Polygon2D" parent="." unique_id=1956888043]
+clip_children = 2
+color = Color(1, 1, 1, 0)
+
+[node name="ToplineShadowContainer" type="Node2D" parent="Polygon" unique_id=1239886601]
+
+[node name="OutlineContainer" type="Node2D" parent="." unique_id=1915657545]
+
+[node name="ToplineContainer" type="Node2D" parent="." unique_id=1249167537]
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=1058087443]
+
+[node name="EditorPolygon" type="CollisionPolygon2D" parent="EditorShapeArea" unique_id=1480839050]
+
+[node name="Origin" type="Marker2D" parent="." unique_id=1788587091]
