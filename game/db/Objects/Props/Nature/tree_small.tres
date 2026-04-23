@@ -20,6 +20,7 @@ category = 4
 category_string = "Props"
 subpath = "Nature/tree_small"
 group_path = "Nature"
+name_override = "Small Tree"
 ld_object_path = "Props/Nature/tree_small"
 ld_entry_texture = SubResource("AtlasTexture_gh333")
 ld_editor_instance = ExtResource("1_3tecv")

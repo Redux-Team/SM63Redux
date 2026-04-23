@@ -51,6 +51,7 @@
 [ext_resource type="Script" uid="uid://dc4nc2ctw5fm5" path="res://game/db/game_db.gd" id="47_j75gy"]
 [ext_resource type="Resource" uid="uid://mupwvevffb1p" path="res://game/db/Objects/Props/Hints/arrow_sign.tres" id="47_mp4qx"]
 [ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="48_i1cw8"]
+[ext_resource type="Resource" uid="uid://d3vfvvtqanxml" path="res://game/db/Objects/Polygon/Volumes/camera_area.tres" id="48_mp4qx"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="49_wp5r6"]
 [ext_resource type="Resource" uid="uid://bfbxhsv32nu3e" path="res://game/db/Properties/breakable_box/coin_amount.tres" id="50_tbe6r"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="51_kljvd"]
@@ -80,6 +81,7 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Item/FLUDD/water_bottle_big": ExtResource("17_tr1rm"),
 "Item/FLUDD/water_bottle_small": ExtResource("18_0h263"),
 "Polygon/Terrain/terrain_grass": ExtResource("45_3w7om"),
+"Polygon/Volumes/camera_area": ExtResource("48_mp4qx"),
 "Props/Gizmos/moving_platform": ExtResource("19_s5833"),
 "Props/Gizmos/spinning_block_large": ExtResource("21_fpxyv"),
 "Props/Gizmos/spinning_block_medium": ExtResource("22_ojdkd"),

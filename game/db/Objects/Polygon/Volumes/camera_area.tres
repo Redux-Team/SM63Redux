@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://d3vfvvtqanxml"]
+
+[ext_resource type="Texture2D" uid="uid://d3p5x56xfhvko" path="res://assets/textures/level_designer/editor_objects/camera_area_ld.png" id="1_2b88n"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_rtvym"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_2b88n"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ckirr"]
+atlas = ExtResource("1_2b88n")
+region = Rect2(0, 0, 48, 48)
+
+[resource]
+script = ExtResource("2_2b88n")
+id = "camera_area"
+category = 2
+category_string = "Polygon"
+subpath = "Volumes/camera_area"
+group_path = "Volumes"
+ld_object_path = "Polygon/Volumes/camera_area"
+ld_entry_texture = SubResource("AtlasTexture_ckirr")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

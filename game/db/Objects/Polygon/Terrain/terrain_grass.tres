@@ -18,6 +18,7 @@ category = 2
 category_string = "Polygon"
 subpath = "Terrain/terrain_grass"
 group_path = "Terrain"
+name_override = "Grass"
 ld_object_path = "Polygon/Terrain/terrain_grass"
 ld_entry_texture = SubResource("AtlasTexture_pbes7")
 ld_editor_instance = ExtResource("1_fwwft")

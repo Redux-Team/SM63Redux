@@ -20,6 +20,7 @@ category = 4
 category_string = "Props"
 subpath = "Nature/tree_medium"
 group_path = "Nature"
+name_override = "Medium Tree"
 ld_object_path = "Props/Nature/tree_medium"
 ld_entry_texture = SubResource("AtlasTexture_5p1y3")
 ld_editor_instance = ExtResource("1_6afwt")

@@ -19,6 +19,7 @@ category = 4
 category_string = "Props"
 subpath = "Nature/mushroom_tall"
 group_path = "Nature"
+name_override = "Tall Mushroom"
 ld_object_path = "Props/Nature/mushroom_tall"
 ld_entry_texture = SubResource("AtlasTexture_b0p7m")
 ld_editor_instance = ExtResource("2_7xc2k")

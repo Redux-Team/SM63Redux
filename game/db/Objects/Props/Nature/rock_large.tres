@@ -20,6 +20,7 @@ category = 4
 category_string = "Props"
 subpath = "Nature/rock_large"
 group_path = "Nature"
+name_override = "Large Rock"
 ld_object_path = "Props/Nature/rock_large"
 ld_entry_texture = SubResource("AtlasTexture_5nxqx")
 ld_editor_instance = ExtResource("2_o6jsv")

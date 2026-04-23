@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bbr3dcpvk2mwl"]
+
+[ext_resource type="Script" uid="uid://cpps8bcdccbtj" path="res://game/db/Objects/ld_object_polygon.gd" id="1_yivsu"]
+
+[node name="CameraAreaLd" type="Node2D" unique_id=1293551863]
+script = ExtResource("1_yivsu")
+metadata/_custom_type_script = "uid://cpps8bcdccbtj"
