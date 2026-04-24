@@ -65,7 +65,7 @@ gui_touch=""
 [gui]
 
 theme/default_font_antialiasing=0
-theme/custom="uid://jwr7shpg3llo"
+theme/custom="res://core/theme/main_theme.tres"
 
 [input]
 
