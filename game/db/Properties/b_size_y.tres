@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LDPropertyBlockY" format=3 uid="uid://va740o4ucg11"]
+
+[ext_resource type="Script" uid="uid://b1myva5finvmf" path="res://game/db/Properties/b_size_y.gd" id="1_knrot"]
+
+[resource]
+script = ExtResource("1_knrot")
+key = &"b_size_y"
+label = "Height"
+type = 1
+default_value = 32
+metadata/_custom_type_script = "uid://b1myva5finvmf"

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LDPropertyBlockX" format=3 uid="uid://slnqfgiyquh8"]
+
+[ext_resource type="Script" uid="uid://bvw36kr0v85ar" path="res://game/db/Properties/b_size_x.gd" id="1_773t6"]
+
+[resource]
+script = ExtResource("1_773t6")
+key = &"b_size_x"
+label = "Width"
+type = 1
+default_value = 32
+metadata/_custom_type_script = "uid://bvw36kr0v85ar"
