@@ -1,0 +1,110 @@
+[gd_scene format=3 uid="uid://c6s8go3p2hh3f"]
+
+[ext_resource type="Script" uid="uid://om5f15t2keo7" path="res://game/object/spinning_block/spinning_block.gd" id="1_n0bea"]
+[ext_resource type="Texture2D" uid="uid://yjs38ak21x7k" path="res://assets/textures/props/gizmos/spinning_block_pattern_chainlink.png" id="2_n0bea"]
+[ext_resource type="Texture2D" uid="uid://mhqn7dpjtt73" path="res://assets/textures/props/gizmos/spinning_block_mono.png" id="3_sef56"]
+[ext_resource type="Texture2D" uid="uid://byohvqpuouqc6" path="res://assets/textures/props/gizmos/spinning_block_center.png" id="4_7uylk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kecoa"]
+resource_local_to_scene = true
+size = Vector2(28, 28)
+
+[node name="SpinningBlock" type="Node2D" unique_id=792413839 node_paths=PackedStringArray("rect")]
+script = ExtResource("1_n0bea")
+rect = NodePath("Rect")
+spinning_block = SubResource("RectangleShape2D_kecoa")
+metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
+
+[node name="Rect" type="Control" parent="." unique_id=190303782]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="Block" type="Control" parent="Rect" unique_id=212833015]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="BG" type="ColorRect" parent="Rect/Block" unique_id=1596194814]
+self_modulate = Color(1, 1, 1, 0.54509807)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.41568628, 0.48235294, 0.6901961, 0.59607846)
+metadata/_edit_lock_ = true
+
+[node name="Pattern" type="TextureRect" parent="Rect/Block" unique_id=1813598716]
+self_modulate = Color(0.72156864, 0.8784314, 0.9882353, 0.5647059)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_n0bea")
+stretch_mode = 1
+metadata/_edit_lock_ = true
+
+[node name="Edges" type="NinePatchRect" parent="Rect/Block" unique_id=1474354365]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("3_sef56")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+metadata/_edit_lock_ = true
+
+[node name="Center" type="TextureRect" parent="Rect/Block" unique_id=1863779117]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_7uylk")
+metadata/_edit_use_anchors_ = true
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Rect/Block/Center" unique_id=1754099045]
+position = Vector2(3, 3)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Rect/Block/Center/StaticBody2D" unique_id=1793513566]
+shape = SubResource("RectangleShape2D_kecoa")
