@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bqb6yhetauu1e" path="res://assets/textures/props/platform/tipping_platform_cold_center.png" id="4_gihlu"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="5_4x530"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o01rm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gihlu"]
 resource_local_to_scene = true
 shader = ExtResource("2_vuns1")
 shader_parameter/state = 0
@@ -26,7 +26,7 @@ diffuse_texture = ExtResource("4_gihlu")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mwdyh"]
 resource_local_to_scene = true
-size = Vector2(38, 13)
+size = Vector2(36, 13)
 
 [node name="TippingPlatformCold" type="Node2D" unique_id=247389356 node_paths=PackedStringArray("nine_patch", "editor_shape_area", "editor_placement_rect", "origin_marker")]
 script = ExtResource("1_gihlu")
@@ -37,17 +37,17 @@ editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
 origin_marker = NodePath("Origin")
 metadata/_custom_type_script = "uid://b3mrac5qo7r3g"
 
-[node name="NinePatch" type="NinePatchRect" parent="." unique_id=510440931]
-material = SubResource("ShaderMaterial_o01rm")
+[node name="NinePatch" type="NinePatchRect" parent="." unique_id=2080465559]
+material = SubResource("ShaderMaterial_gihlu")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -9.0
+offset_left = -19.0
+offset_top = -8.0
 offset_right = 19.0
-offset_bottom = 6.0
+offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_gihlu")
@@ -71,7 +71,7 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 [node name="EditorShapeArea" type="Area2D" parent="." unique_id=1717977380]
 
 [node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=515550961]
-position = Vector2(0, -1.5)
+position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_mwdyh")
 
 [node name="Origin" type="Marker2D" parent="." unique_id=1026179718]
