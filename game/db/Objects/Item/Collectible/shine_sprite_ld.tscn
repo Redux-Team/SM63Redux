@@ -1,0 +1,185 @@
+[gd_scene format=3 uid="uid://cm52ypeu3i6y0"]
+
+[ext_resource type="Script" uid="uid://bchhdiblji8ip" path="res://game/db/Objects/Item/Collectible/shine_sprite_ld.gd" id="1_xqumg"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_6iats"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_xqumg"]
+[ext_resource type="Texture2D" uid="uid://bh4jhqvk5nh4r" path="res://assets/textures/item/collectible/shine_sprite_spin.png" id="4_604nk"]
+[ext_resource type="Texture2D" uid="uid://6x6lxccsh6al" path="res://assets/textures/item/collectible/shine_sprite.png" id="5_xqumg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xqumg"]
+shader = ExtResource("2_6iats")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s0v3f"]
+resource_local_to_scene = true
+shader = ExtResource("2_6iats")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pj2iy"]
+atlas = ExtResource("4_604nk")
+region = Rect2(0, 0, 28, 31)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_xqumg"]
+diffuse_texture = SubResource("AtlasTexture_pj2iy")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_604nk"]
+atlas = ExtResource("5_xqumg")
+region = Rect2(0, 0, 28, 31)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rbtpv"]
+atlas = ExtResource("4_604nk")
+region = Rect2(28, 0, 28, 31)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j5foc"]
+atlas = ExtResource("4_604nk")
+region = Rect2(56, 0, 28, 31)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1jr0f"]
+atlas = ExtResource("4_604nk")
+region = Rect2(84, 0, 28, 31)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ypqng"]
+atlas = ExtResource("4_604nk")
+region = Rect2(112, 0, 28, 31)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_21hta"]
+atlas = ExtResource("4_604nk")
+region = Rect2(140, 0, 28, 31)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mecfo"]
+atlas = ExtResource("4_604nk")
+region = Rect2(168, 0, 28, 31)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_84qvm"]
+atlas = ExtResource("4_604nk")
+region = Rect2(196, 0, 28, 31)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rif5w"]
+atlas = ExtResource("4_604nk")
+region = Rect2(224, 0, 28, 31)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6gy7t"]
+atlas = ExtResource("4_604nk")
+region = Rect2(252, 0, 28, 31)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_114c6"]
+atlas = ExtResource("4_604nk")
+region = Rect2(280, 0, 28, 31)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bdbqc"]
+atlas = ExtResource("4_604nk")
+region = Rect2(308, 0, 28, 31)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7clx0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_604nk")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pj2iy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rbtpv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j5foc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1jr0f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ypqng")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_21hta")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mecfo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_84qvm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rif5w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6gy7t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_114c6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bdbqc")
+}],
+"loop": true,
+"name": &"spin",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1iq2w"]
+size = Vector2(26, 30)
+
+[node name="ShineSpriteLd" type="Node2D" unique_id=1568297185 node_paths=PackedStringArray("sprite", "sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker", "shader_objects")]
+material = SubResource("ShaderMaterial_xqumg")
+script = ExtResource("1_xqumg")
+sprite = NodePath("Sprite")
+sprite_ref = NodePath("Sprite")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+shader_objects = [NodePath("Sprite")]
+metadata/_custom_type_script = "uid://cfx4civm76jwr"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=784258312]
+material = SubResource("ShaderMaterial_s0v3f")
+texture = SubResource("CanvasTexture_xqumg")
+region_enabled = true
+region_rect = Rect2(0, 0, 28, 31)
+script = ExtResource("3_xqumg")
+canvas_texture = SubResource("CanvasTexture_xqumg")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_7clx0")
+current_animation = "spin"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=758870913]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=1943159570]
+visible = false
+shape = SubResource("RectangleShape2D_1iq2w")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=198463489]

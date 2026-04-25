@@ -15,16 +15,27 @@ fill_to = Vector2(0, 0)
 [node name="HillsBG" type="CanvasLayer" unique_id=1464026582]
 layer = -2
 
-[node name="BG" type="TextureRect" parent="." unique_id=724976930]
+[node name="Root" type="Control" parent="." unique_id=1901623950]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="BG" type="TextureRect" parent="Root" unique_id=724976930]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = SubResource("GradientTexture2D_1sbsh")
 
-[node name="Anchor" type="Control" parent="." unique_id=658899895]
-layout_mode = 3
+[node name="Anchor" type="Control" parent="Root" unique_id=658899895]
+layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -33,7 +44,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="BottomClouds" type="Parallax2D" parent="Anchor" unique_id=1200636629]
+[node name="BottomClouds" type="Parallax2D" parent="Root/Anchor" unique_id=1200636629]
 scroll_scale = Vector2(0, 0)
 scroll_offset = Vector2(-304, -157)
 repeat_size = Vector2(400, 0)
@@ -41,10 +52,10 @@ autoscroll = Vector2(-4, 0)
 repeat_times = 5
 follow_viewport = false
 
-[node name="Sprite2D" type="Sprite2D" parent="Anchor/BottomClouds" unique_id=667366939]
+[node name="Sprite2D" type="Sprite2D" parent="Root/Anchor/BottomClouds" unique_id=667366939]
 texture = ExtResource("1_ujg0q")
 
-[node name="TopClouds" type="Parallax2D" parent="Anchor" unique_id=204617315]
+[node name="TopClouds" type="Parallax2D" parent="Root/Anchor" unique_id=204617315]
 scroll_scale = Vector2(0, 0)
 scroll_offset = Vector2(-289, -360)
 repeat_size = Vector2(800, 0)
@@ -52,11 +63,11 @@ autoscroll = Vector2(-4, 0)
 repeat_times = 5
 follow_viewport = false
 
-[node name="Sprite2D" type="Sprite2D" parent="Anchor/TopClouds" unique_id=1947250510]
+[node name="Sprite2D" type="Sprite2D" parent="Root/Anchor/TopClouds" unique_id=1947250510]
 position = Vector2(2, 25)
 texture = ExtResource("2_cwu3l")
 
-[node name="Hills" type="Parallax2D" parent="Anchor" unique_id=331395786]
+[node name="Hills" type="Parallax2D" parent="Root/Anchor" unique_id=331395786]
 scroll_scale = Vector2(0.05, 0.05)
 scroll_offset = Vector2(-304, -117)
 repeat_size = Vector2(800, 0)
@@ -64,6 +75,6 @@ repeat_times = 3
 limit_end = Vector2(10000000, 2000)
 follow_viewport = false
 
-[node name="Sprite2D" type="Sprite2D" parent="Anchor/Hills" unique_id=333179693]
+[node name="Sprite2D" type="Sprite2D" parent="Root/Anchor/Hills" unique_id=333179693]
 position = Vector2(27, -100)
 texture = ExtResource("3_uht0x")

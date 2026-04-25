@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ctssku6r3gx0a"]
 
 [ext_resource type="Script" uid="uid://7h213kjqdaqn" path="res://level_designer/scenes/level_test.gd" id="1_5nuwi"]
-[ext_resource type="PackedScene" path="res://game/backgrounds/hills.tscn" id="2_1sbsh"]
+[ext_resource type="PackedScene" uid="uid://st4r6o6hqwhj" path="res://game/backgrounds/hills.tscn" id="2_1sbsh"]
 [ext_resource type="AudioStream" uid="uid://cmiulmppvmbql" path="res://assets/music/04.mp3" id="4_h52q2"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_x1m06"]
