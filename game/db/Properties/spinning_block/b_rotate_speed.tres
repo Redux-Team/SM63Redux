@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LDPropertyBlockRotateSpeed" format=3 uid="uid://ds4v7d38dsv1r"]
+
+[ext_resource type="Script" uid="uid://cqp2kxnog3ke5" path="res://game/db/Properties/spinning_block/b_rotate_speed.gd" id="1_v7kb0"]
+
+[resource]
+script = ExtResource("1_v7kb0")
+key = &"b_rotate_speed"
+label = "Rotation Speed"
+type = 2
+default_value = 1.0
+metadata/_custom_type_script = "uid://cqp2kxnog3ke5"

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LDPropertyBlockWaitTime" format=3 uid="uid://bodb72o31fuwr"]
+
+[ext_resource type="Script" uid="uid://4anx7sj3u0xb" path="res://game/db/Properties/spinning_block/b_wait_time.gd" id="1_kmkn7"]
+
+[resource]
+script = ExtResource("1_kmkn7")
+key = &"b_wait_time"
+label = "Wait Time"
+type = 2
+default_value = 2.0
+metadata/_custom_type_script = "uid://4anx7sj3u0xb"
