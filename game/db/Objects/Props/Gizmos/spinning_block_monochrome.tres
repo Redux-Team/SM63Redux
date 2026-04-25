@@ -1,8 +1,16 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://caleu4psn324w"]
 
 [ext_resource type="Texture2D" uid="uid://bbrh32ct6lb0e" path="res://assets/textures/props/gizmos/spinning_block_mono_ld.png" id="1_0hicg"]
+[ext_resource type="PackedScene" uid="uid://8jc2r14h0kqx" path="res://game/db/Objects/Props/Gizmos/spinning_block_mono_ld.tscn" id="1_5wnm1"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_b2egh"]
+[ext_resource type="PackedScene" uid="uid://c6s8go3p2hh3f" path="res://game/object/spinning_block/spinning_block.tscn" id="1_jqy8a"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_0hicg"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_5wnm1"]
+[ext_resource type="Resource" uid="uid://slnqfgiyquh8" path="res://game/db/Properties/b_size_x.tres" id="5_0vqk3"]
+[ext_resource type="Resource" uid="uid://va740o4ucg11" path="res://game/db/Properties/b_size_y.tres" id="6_0vqk3"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_l1noe"]
+[ext_resource type="Resource" uid="uid://bodb72o31fuwr" path="res://game/db/Properties/spinning_block/b_wait_time.tres" id="7_acfjd"]
+[ext_resource type="Resource" uid="uid://ds4v7d38dsv1r" path="res://game/db/Properties/spinning_block/b_rotate_speed.tres" id="8_ma8ym"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jqy8a"]
 atlas = ExtResource("1_0hicg")
@@ -18,4 +26,8 @@ group_path = "Gizmos"
 name_override = "Spinning Block (Mono)"
 ld_object_path = "Props/Gizmos/spinning_block_monochrome"
 ld_entry_texture = SubResource("AtlasTexture_jqy8a")
+ld_editor_instance = ExtResource("1_5wnm1")
+ld_properties = Array[ExtResource("1_b2egh")]([ExtResource("4_5wnm1"), ExtResource("6_l1noe"), ExtResource("5_0vqk3"), ExtResource("6_0vqk3"), ExtResource("7_acfjd"), ExtResource("8_ma8ym")])
+ld_placement_tool_override = "block"
+game_instance = ExtResource("1_jqy8a")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
