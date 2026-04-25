@@ -46,6 +46,8 @@ var _backdrop_alpha: float = 0.0:
 			var mat: ShaderMaterial = _backdrop.material as ShaderMaterial
 			mat.set_shader_parameter(&"tint", Color(backdrop_color.r, backdrop_color.g, backdrop_color.b, backdrop_color.a * v))
 			mat.set_shader_parameter(&"blur", backdrop_blur * v)
+var _popping_in: bool = false
+var _popping_out: bool = false
 
 
 static func create(control: Control) -> LDWindow:
@@ -82,7 +84,7 @@ func _setup_backdrop() -> void:
 	if backdrop_block_input:
 		_backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
 		_backdrop.gui_input.connect(func(ev: InputEvent) -> void:
-			if ev is InputEventMouseButton and ev.pressed:
+			if ev is InputEventScreenTouch and ev.is_pressed():
 				popout()
 		)
 	else:
@@ -91,6 +93,10 @@ func _setup_backdrop() -> void:
 
 @warning_ignore("native_method_override")
 func popin() -> void:
+	if _popping_in:
+		return
+	_popping_in = true
+	
 	if _tween:
 		_tween.kill()
 	
@@ -125,15 +131,15 @@ func popin() -> void:
 		_tween.tween_property(self, "_backdrop_alpha", 1.0, 0.3)
 	
 	await _tween.finished
+	_popping_in = false
 	popped_in.emit()
 
 
 @warning_ignore("native_method_override")
 func popout() -> void:
-	if not visible:
+	if not visible or _popping_out:
 		return
-	if _tween:
-		_tween.kill()
+	_popping_out = true
 	
 	if pop_out_sfx:
 		SFX.play(SFX.LD_CLOSE)
@@ -151,6 +157,7 @@ func popout() -> void:
 	
 	await _tween.finished
 	
+	_popping_out = false
 	visible = false
 	if backdrop_enabled and _backdrop:
 		_backdrop.visible = false

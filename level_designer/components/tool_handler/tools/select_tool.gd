@@ -46,15 +46,15 @@ func _on_viewport_input(event: InputEvent) -> void:
 				_move_tool = move
 				get_tool_handler().select_tool("move")
 				return
+			
 			var clicked: LDObject = _get_object_at(mouse_pos)
-			if clicked is LDObjectPath:
-				viewport.set_selected_objects([clicked])
-				get_tool_handler().select_tool("path_edit")
-				return
-			if clicked is LDObjectPolygon:
-				viewport.set_selected_objects([clicked])
-				get_tool_handler().select_tool("polygon_edit")
-				return
+			if clicked:
+				var game_object: GameObject = GameDB.get_db().find_game_object(clicked.source_object_id)
+				if game_object.ld_select_tool_override:
+					viewport.set_selected_objects([clicked])
+					get_tool_handler().select_tool(game_object.ld_select_tool_override)
+					return
+			
 			_is_box_selecting = true
 			_is_shift_selecting = event.shift_pressed
 			_box_select_origin = mouse_pos

@@ -12,12 +12,16 @@ func _init() -> void:
 
 
 func clamp_value(value: Variant) -> Variant:
-	return maxi(value as int, 0)
+	return maxf(value, 0)
 
 
 func get_range() -> Vector2:
-	return Vector2(0, 16)
+	return Vector2(0, 16.0)
+
+
+func get_arrow_step() -> float:
+	return 1.0
 
 
 func get_step() -> float:
-	return 1
+	return 0.1

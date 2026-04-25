@@ -29,5 +29,6 @@ ld_entry_texture = SubResource("AtlasTexture_jqy8a")
 ld_editor_instance = ExtResource("2_nvty3")
 ld_properties = Array[ExtResource("4_hr4cv")]([ExtResource("5_dwhwi"), ExtResource("6_eyn21"), ExtResource("7_jjesc"), ExtResource("8_vc4gf"), ExtResource("9_haasm"), ExtResource("10_t5y0h")])
 ld_placement_tool_override = "block"
+ld_select_tool_override = "block_edit"
 game_instance = ExtResource("1_hgi4e")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

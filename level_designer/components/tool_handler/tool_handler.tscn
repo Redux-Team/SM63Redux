@@ -13,7 +13,8 @@
 [ext_resource type="Script" uid="uid://cedokux8eoge8" path="res://level_designer/components/tool_handler/tools/polygon/polygon_cut_tool.gd" id="11_4dp4y"]
 [ext_resource type="Script" uid="uid://druukx3pdt26k" path="res://level_designer/components/tool_handler/tools/path/path_tool.gd" id="12_4dp4y"]
 [ext_resource type="Script" uid="uid://bwf8y786yhocf" path="res://level_designer/components/tool_handler/tools/path/path_edit.gd" id="13_lxvty"]
-[ext_resource type="Script" uid="uid://erc5f037htfv" path="res://level_designer/components/tool_handler/block_tool.gd" id="14_vdxla"]
+[ext_resource type="Script" uid="uid://erc5f037htfv" path="res://level_designer/components/tool_handler/tools/block/block_tool.gd" id="14_vdxla"]
+[ext_resource type="Script" uid="uid://bqq10cg8rpyuc" path="res://level_designer/components/tool_handler/tools/block/block_edit.gd" id="15_ila05"]
 
 [node name="ToolHandler" type="Node" unique_id=1124731823]
 script = ExtResource("1_0flew")
@@ -57,3 +58,6 @@ script = ExtResource("13_lxvty")
 
 [node name="BlockTool" type="Node" parent="." unique_id=87140422]
 script = ExtResource("14_vdxla")
+
+[node name="BlockEdit" type="Node" parent="BlockTool" unique_id=2110672232]
+script = ExtResource("15_ila05")

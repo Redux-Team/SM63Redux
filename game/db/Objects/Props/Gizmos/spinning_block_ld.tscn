@@ -112,7 +112,6 @@ metadata/_custom_type_script = "uid://drrpapnrx5n8l"
 
 [node name="Rect" type="Control" parent="." unique_id=415337978]
 material = SubResource("ShaderMaterial_7uylk")
-custom_minimum_size = Vector2(32, 32)
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
