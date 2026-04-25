@@ -5,12 +5,14 @@ extends Node
 var _discord_handler: DiscordHandler = DiscordHandler.new()
 var _input_handler: InputHandler = InputHandler.new()
 var _tree_hook: TreeHook = TreeHook.new()
+var _level_clock: LevelClock = LevelClock.new()
 
 
 func _init() -> void:
 	add_child(_input_handler)
 	add_child(_discord_handler)
 	add_child(_tree_hook)
+	add_child(_level_clock)
 
 
 func get_version() -> String:
@@ -24,6 +26,10 @@ func get_input_handler() -> InputHandler:
 ## with the SceneTree process.
 func get_tree_hook() -> TreeHook:
 	return _tree_hook
+
+
+func get_level_clock() -> LevelClock:
+	return _level_clock
 
 
 func get_discord_handler() -> DiscordHandler:
@@ -195,3 +201,32 @@ class DiscordHandler:
 	
 	func _on_presence_updated(_result: DiscordClientResult) -> void:
 		pass
+
+
+class LevelClock:
+	extends Node
+	
+	var _time: float = 0.0
+	var _running: bool = false
+	
+	
+	func _process(delta: float) -> void:
+		if _running:
+			_time += delta
+	
+	
+	func start() -> void:
+		_time = 0.0
+		_running = true
+	
+	
+	func resume() -> void:
+		_running = true
+	
+	
+	func stop() -> void:
+		_running = false
+	
+	
+	func get_time() -> float:
+		return _time
