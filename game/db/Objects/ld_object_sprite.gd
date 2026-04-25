@@ -50,7 +50,7 @@ func set_selection_state(state: LDObject.SelectionState) -> void:
 
 
 func set_shader_modulate(color: Color) -> void:
-	_set_shader_param(&"custom_modulate", color)
+	_set_shader_param(&"post_modulate", color)
 
 
 func reset_shader_modulate() -> void:

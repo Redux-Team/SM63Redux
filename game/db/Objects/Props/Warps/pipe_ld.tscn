@@ -11,7 +11,8 @@ shader = ExtResource("2_116sf")
 shader_parameter/state = 0
 shader_parameter/palette_index = 0
 shader_parameter/palette_texture = ExtResource("3_m3ju5")
-shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/fill_color = Color(1, 1, 1, 0.25)
@@ -20,6 +21,8 @@ shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
 shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_adtpg"]
 resource_local_to_scene = true

@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://6lqieg65s2re"]
+
+[ext_resource type="PackedScene" uid="uid://c6s8go3p2hh3f" path="res://game/object/spinning_block/spinning_block.tscn" id="1_dgsbl"]
+[ext_resource type="Texture2D" uid="uid://ct45rlq0w5euo" path="res://assets/textures/props/gizmos/spinning_block_pattern_stripes.png" id="2_tkjix"]
+[ext_resource type="Texture2D" uid="uid://mhqn7dpjtt73" path="res://assets/textures/props/gizmos/spinning_block_mono.png" id="3_4oovh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tkjix"]
+resource_local_to_scene = true
+size = Vector2(28, 28)
+
+[node name="SpinningBlock" unique_id=792413839 instance=ExtResource("1_dgsbl")]
+spinning_block = SubResource("RectangleShape2D_tkjix")
+
+[node name="BG" parent="Rect/Block" parent_id_path=PackedInt32Array(1248658969) index="0" unique_id=634141664]
+color = Color(0.5176471, 0.61960787, 0.7607843, 0.59607846)
+
+[node name="Pattern" parent="Rect/Block" parent_id_path=PackedInt32Array(1248658969) index="1" unique_id=1835776465]
+self_modulate = Color(1.431, 1.634, 1.917, 0.169)
+texture = ExtResource("2_tkjix")
+
+[node name="Edges" parent="Rect/Block" parent_id_path=PackedInt32Array(1248658969) index="2" unique_id=2067224482]
+texture = ExtResource("3_4oovh")
+
+[node name="CollisionShape2D" parent="Rect/Block/Center/StaticBody2D" parent_id_path=PackedInt32Array(1754099045) index="0" unique_id=1793513566]
+visible = false
+shape = SubResource("RectangleShape2D_tkjix")

@@ -188,7 +188,7 @@ func _apply_height(units: int) -> void:
 func _set_all_modulate(color: Color) -> void:
 	if nine_patch:
 		nine_patch.modulate = color
-		(nine_patch.material as ShaderMaterial).set_shader_parameter(&"custom_modulate", color)
+		(nine_patch.material as ShaderMaterial).set_shader_parameter(&"post_modulate", color)
 
 
 func _setup_sprite_material(_s: Sprite2D) -> void:

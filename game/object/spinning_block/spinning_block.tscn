@@ -1,13 +1,31 @@
 [gd_scene format=3 uid="uid://c6s8go3p2hh3f"]
 
 [ext_resource type="Script" uid="uid://om5f15t2keo7" path="res://game/object/spinning_block/spinning_block.gd" id="1_n0bea"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_kecoa"]
 [ext_resource type="Texture2D" uid="uid://yjs38ak21x7k" path="res://assets/textures/props/gizmos/spinning_block_pattern_chainlink.png" id="2_n0bea"]
-[ext_resource type="Texture2D" uid="uid://mhqn7dpjtt73" path="res://assets/textures/props/gizmos/spinning_block_mono.png" id="3_sef56"]
 [ext_resource type="Texture2D" uid="uid://byohvqpuouqc6" path="res://assets/textures/props/gizmos/spinning_block_center.png" id="4_7uylk"]
+[ext_resource type="Texture2D" uid="uid://dxk70eouctxtx" path="res://assets/textures/props/gizmos/spinning_block.png" id="4_sef56"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kecoa"]
 resource_local_to_scene = true
 size = Vector2(28, 28)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7uylk"]
+shader = ExtResource("2_kecoa")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/custom_modulate_2 = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
 
 [node name="SpinningBlock" type="Node2D" unique_id=792413839 node_paths=PackedStringArray("rect")]
 script = ExtResource("1_n0bea")
@@ -15,7 +33,8 @@ rect = NodePath("Rect")
 spinning_block = SubResource("RectangleShape2D_kecoa")
 metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
 
-[node name="Rect" type="Control" parent="." unique_id=190303782]
+[node name="Rect" type="Control" parent="." unique_id=1683479693]
+material = SubResource("ShaderMaterial_7uylk")
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 3
 anchors_preset = 8
@@ -23,15 +42,15 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
+offset_left = -17.0
+offset_top = -17.0
+offset_right = 17.0
+offset_bottom = 17.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset_ratio = Vector2(0.5, 0.5)
 
-[node name="Block" type="Control" parent="Rect" unique_id=212833015]
+[node name="Block" type="Control" parent="Rect" unique_id=1248658969]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -41,8 +60,7 @@ grow_vertical = 2
 pivot_offset_ratio = Vector2(0.5, 0.5)
 metadata/_edit_lock_ = true
 
-[node name="BG" type="ColorRect" parent="Rect/Block" unique_id=1596194814]
-self_modulate = Color(1, 1, 1, 0.54509807)
+[node name="BG" type="ColorRect" parent="Rect/Block" unique_id=634141664]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -53,11 +71,11 @@ offset_right = -2.0
 offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.41568628, 0.48235294, 0.6901961, 0.59607846)
+color = Color(0.7607843, 0.22745098, 0.22745098, 0.78431374)
 metadata/_edit_lock_ = true
 
-[node name="Pattern" type="TextureRect" parent="Rect/Block" unique_id=1813598716]
-self_modulate = Color(0.72156864, 0.8784314, 0.9882353, 0.5647059)
+[node name="Pattern" type="TextureRect" parent="Rect/Block" unique_id=1835776465]
+self_modulate = Color(1.917, 0.59, 0.59, 0.169)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -72,7 +90,7 @@ texture = ExtResource("2_n0bea")
 stretch_mode = 1
 metadata/_edit_lock_ = true
 
-[node name="Edges" type="NinePatchRect" parent="Rect/Block" unique_id=1474354365]
+[node name="Edges" type="NinePatchRect" parent="Rect/Block" unique_id=2067224482]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -80,14 +98,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset_ratio = Vector2(0.5, 0.5)
-texture = ExtResource("3_sef56")
+texture = ExtResource("4_sef56")
 patch_margin_left = 5
 patch_margin_top = 5
 patch_margin_right = 5
 patch_margin_bottom = 5
 metadata/_edit_lock_ = true
 
-[node name="Center" type="TextureRect" parent="Rect/Block" unique_id=1863779117]
+[node name="Center" type="TextureRect" parent="Rect/Block" unique_id=809605322]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -107,4 +125,5 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(3, 3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Rect/Block/Center/StaticBody2D" unique_id=1793513566]
+visible = false
 shape = SubResource("RectangleShape2D_kecoa")

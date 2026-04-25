@@ -13,6 +13,7 @@ static var _last_frame: int = -1
 @export var b_wait_time: float = 2.0
 @export var preview: Control
 @export var rect: Control
+@export var editor_shape: RectangleShape2D
 
 
 func _process(delta: float) -> void:
@@ -42,3 +43,4 @@ func _update_size() -> void:
 	if rect:
 		rect.position = -(block_size + Vector2(2.0, 2.0)) / 2.0
 		rect.size = block_size + Vector2(2.0, 2.0)
+		editor_shape.size = rect.size

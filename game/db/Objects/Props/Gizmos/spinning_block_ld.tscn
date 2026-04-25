@@ -1,0 +1,235 @@
+[gd_scene format=3 uid="uid://8jc2r14h0kqx"]
+
+[ext_resource type="Script" uid="uid://dh046v51jbyti" path="res://game/db/Objects/Props/Gizmos/spinning_block_ld.gd" id="1_d27t1"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_xje73"]
+[ext_resource type="Texture2D" uid="uid://dxk70eouctxtx" path="res://assets/textures/props/gizmos/spinning_block.png" id="3_f64mt"]
+[ext_resource type="Texture2D" uid="uid://yjs38ak21x7k" path="res://assets/textures/props/gizmos/spinning_block_pattern_chainlink.png" id="4_d27t1"]
+[ext_resource type="Texture2D" uid="uid://byohvqpuouqc6" path="res://assets/textures/props/gizmos/spinning_block_center.png" id="6_qin32"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tipch"]
+resource_local_to_scene = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7uylk"]
+shader = ExtResource("2_xje73")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wlltt"]
+resource_local_to_scene = true
+shader = ExtResource("2_xje73")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(0.7607843, 0.14509805, 0.14509805, 0.78431374)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d27t1"]
+resource_local_to_scene = true
+shader = ExtResource("2_xje73")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1.917, 0.31, 0.31, 0.169)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xje73"]
+resource_local_to_scene = true
+shader = ExtResource("2_xje73")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f64mt"]
+resource_local_to_scene = true
+shader = ExtResource("2_xje73")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[node name="SpinningBlock" type="Node2D" unique_id=2076118699 node_paths=PackedStringArray("preview", "rect", "editor_shape_area", "editor_placement_rect", "origin_marker", "shader_objects")]
+script = ExtResource("1_d27t1")
+block_size = Vector2(34, 34)
+preview = NodePath("Rect/Preview")
+rect = NodePath("Rect")
+editor_shape = SubResource("RectangleShape2D_tipch")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+shader_objects = [NodePath("Rect/Block/Edges"), NodePath("Rect/Block/Pattern"), NodePath("Rect/Block/BG"), NodePath("Rect/Block/Center")]
+metadata/_custom_type_script = "uid://drrpapnrx5n8l"
+
+[node name="Rect" type="Control" parent="." unique_id=415337978]
+material = SubResource("ShaderMaterial_7uylk")
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -17.0
+offset_top = -17.0
+offset_right = 17.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="Preview" type="Control" parent="Rect" unique_id=2102471773]
+modulate = Color(1, 1, 1, 0.4627451)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="Edges" type="NinePatchRect" parent="Rect/Preview" unique_id=462085121]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("3_f64mt")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+metadata/_edit_lock_ = true
+
+[node name="Block" type="Control" parent="Rect" unique_id=1959924254]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="BG" type="ColorRect" parent="Rect/Block" unique_id=2121326984]
+material = SubResource("ShaderMaterial_wlltt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="Pattern" type="TextureRect" parent="Rect/Block" unique_id=1563748244]
+material = SubResource("ShaderMaterial_d27t1")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_d27t1")
+stretch_mode = 1
+metadata/_edit_lock_ = true
+
+[node name="Edges" type="NinePatchRect" parent="Rect/Block" unique_id=1854922975]
+material = SubResource("ShaderMaterial_xje73")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("3_f64mt")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+metadata/_edit_lock_ = true
+
+[node name="Center" type="TextureRect" parent="Rect/Block" unique_id=704909322]
+material = SubResource("ShaderMaterial_f64mt")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_qin32")
+metadata/_edit_use_anchors_ = true
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=1688453063]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=24592221]
+visible = false
+shape = SubResource("RectangleShape2D_tipch")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=1974409710]

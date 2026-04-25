@@ -19,16 +19,16 @@ func _on_ready() -> void:
 
 
 func _on_preview() -> void:
-	set_shader_parameter(&"custom_modulate", Color(1.0, 1.0, 1.0, 0.6))
+	set_shader_parameter(&"post_modulate", Color(1.0, 1.0, 1.0, 0.6))
 
 
 func _on_place() -> void:
-	set_shader_parameter(&"custom_modulate", Color.WHITE)
+	set_shader_parameter(&"post_modulate", Color.WHITE)
 
 
 func _on_preview_valid_changed(valid: bool) -> void:
 	if is_preview:
-		set_shader_parameter(&"custom_modulate",
+		set_shader_parameter(&"post_modulate",
 		Color(1.0, 1.0, 1.0, 0.6) if valid else Color(1.0, 0.2, 0.2, 0.6))
 
 
