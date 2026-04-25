@@ -41,6 +41,18 @@ func _set_arrow_step(step: float) -> void:
 		spin_box.custom_arrow_step = step
 
 
+func _set_range(limits: Vector2) -> void:
+	if spin_box:
+		spin_box.min_value = limits.x
+		spin_box.max_value = limits.y
+
+
+func _set_unbound(unbound: bool) -> void:
+	if spin_box:
+		spin_box.allow_greater = unbound
+		spin_box.allow_lesser = unbound
+
+
 func _update_reset_button(current_value: Variant) -> void:
 	if not reset_button:
 		return

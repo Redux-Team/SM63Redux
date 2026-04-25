@@ -39,12 +39,10 @@ func _set_arrow_step(step: float) -> void:
 		spin_box.custom_arrow_step = step
 
 
-
 func _set_range(r: Vector2) -> void:
-	if not spin_box:
-		return
-	spin_box.min_value = r.x
-	spin_box.max_value = r.y
+	if spin_box:
+		spin_box.min_value = r.x
+		spin_box.max_value = r.y
 
 
 func _set_unbound(unbound: bool) -> void:
