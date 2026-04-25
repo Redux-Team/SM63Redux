@@ -14,8 +14,8 @@ size = Vector2(28, 28)
 shader = ExtResource("2_kecoa")
 shader_parameter/state = 0
 shader_parameter/palette_index = 0
-shader_parameter/custom_modulate = Color(1, 1, 1, 1)
-shader_parameter/custom_modulate_2 = Color(1, 1, 1, 1)
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/fill_color = Color(1, 1, 1, 0.25)
@@ -125,5 +125,5 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(3, 3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Rect/Block/Center/StaticBody2D" unique_id=1793513566]
-visible = false
+position = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_kecoa")
