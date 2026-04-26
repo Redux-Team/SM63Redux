@@ -286,6 +286,13 @@ func get_all_objects_on_layer(layer_index: int = _active_layer) -> Array[LDObjec
 	return result
 
 
+func find_object_by_id(id: String, layer_index: int = _active_layer) -> LDObject:
+	for object: LDObject in get_all_objects_on_layer(layer_index):
+		if object.source_object_id == id:
+			return object
+	return null
+
+
 func is_layer_selectable(layer_index: int) -> bool:
 	if _preview_mode:
 		return true

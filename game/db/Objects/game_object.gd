@@ -7,6 +7,13 @@ enum {
 	LD_DELETABLE
 }
 
+enum LDPlacementRules {
+	BEHIND_ALL,
+	BEHIND_PLAYER,
+	FRONT_PLAYER,
+	FRONT_ALL
+}
+
 enum ObjectCategory {
 	ENTITY,
 	ITEM,
@@ -49,6 +56,7 @@ enum ObjectCategory {
 @export var ld_indexable: bool = true
 @export var ld_placement_tool_override: String
 @export var ld_select_tool_override: String
+@export var ld_placement_rules: LDPlacementRules = LDPlacementRules.BEHIND_PLAYER
 @export_subgroup("Flags")
 @export_flags("Selectable", "Deletable") var ld_flags: int = 3
 

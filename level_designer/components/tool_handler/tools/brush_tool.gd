@@ -178,6 +178,22 @@ func _add_stroke_preview(pos: Vector2) -> void:
 	preview.is_preview = true
 	preview.source_object_id = obj.id
 	LD.get_editor_viewport().add_object(preview, Vector2i(pos))
+	
+	match obj.ld_placement_rules: 
+		GameObject.LDPlacementRules.BEHIND_ALL:
+			preview.get_parent().move_child(preview, 0)
+		GameObject.LDPlacementRules.FRONT_ALL:
+			preview.move_to_front()
+		_:
+			var player: LDObject = LD.get_editor_viewport().find_object_by_id("player_mario")
+			var player_index: int = player.get_index()
+			print(player_index)
+			match obj.ld_placement_rules:
+				GameObject.LDPlacementRules.BEHIND_PLAYER:
+					preview.get_parent().move_child(preview, player_index)
+				GameObject.LDPlacementRules.FRONT_PLAYER:
+					preview.get_parent().move_child(preview, player_index + 1)
+	
 	preview.init_properties(obj)
 	if obj.has_property(&"position"):
 		preview.set_property(&"position", pos)
