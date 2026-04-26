@@ -38,7 +38,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if current_state and current_state.has_default_animations and current_state.continuous_sfx:
-		current_state.continuous_sfx.play_sfx()
+		current_state.continuous_sfx.play_sfx(current_state.continuous_sfx.bank_group, entity, sprite)
 	
 	_check_animation_transition()
 
@@ -127,7 +127,7 @@ func _exit_current_state(to_state: StringName) -> void:
 		if current_state.enter_sfx.stop_on_state_exit:
 			current_state.enter_sfx.stop_all()
 		if current_state.exit_sfx:
-			current_state.exit_sfx.play_sfx()
+			current_state.exit_sfx.play_sfx(current_state.exit_sfx.bank_group, entity)
 	
 	if current_state.lock_sprite_flipping:
 		if entity is Player:
@@ -148,7 +148,7 @@ func _enter_new_state(new_state: State, old_state: State, silent: bool) -> void:
 	
 	if current_state.has_default_sfx and not silent:
 		if current_state.enter_sfx:
-			current_state.enter_sfx.play_sfx()
+			current_state.enter_sfx.play_sfx(current_state.enter_sfx.bank_group, entity)
 	
 	if current_state.has_collision_override:
 		default_collision_shape.set_deferred(&"disabled", true)

@@ -11,6 +11,7 @@
 [resource]
 script = ExtResource("3_j4qap")
 base_texture = ExtResource("1_ghjrc")
+terrain_type = "grass"
 topline_texture = ExtResource("7_pt30h")
 topline_shadow_texture = ExtResource("6_dy7xf")
 topline_left_end = ExtResource("4_6y8lx")

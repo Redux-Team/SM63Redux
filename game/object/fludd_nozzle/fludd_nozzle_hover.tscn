@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_saqq8"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="4_ljcff"]
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_ljcff"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_saqq8"]
 diffuse_texture = ExtResource("2_ltr0n")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_saqq8"]
@@ -13,14 +13,16 @@ resource_local_to_scene = true
 size = Vector2(24, 0)
 
 [node name="FluddNozzleHover" type="CharacterBody2D" unique_id=762472111 node_paths=PackedStringArray("sprite", "components_root")]
+collision_layer = 0
+collision_mask = 2
 script = ExtResource("1_saqq8")
 sprite = NodePath("SmartSprite2D")
 components_root = NodePath("Components/GravityComponent")
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=857828210]
-texture = SubResource("CanvasTexture_ljcff")
+texture = SubResource("CanvasTexture_saqq8")
 script = ExtResource("3_saqq8")
-canvas_texture = SubResource("CanvasTexture_ljcff")
+canvas_texture = SubResource("CanvasTexture_saqq8")
 diffuse_texture = ExtResource("2_ltr0n")
 current_animation = ""
 current_frame = 0

@@ -1,0 +1,57 @@
+[gd_resource type="Resource" script_class="SFXBank" format=3 uid="uid://dps3cdyw46lly"]
+
+[ext_resource type="Script" uid="uid://bn6i8m2caq1iq" path="res://util/audio/sfx_bank.gd" id="1_hylvs"]
+[ext_resource type="AudioStream" uid="uid://7bo2dwx3h262" path="res://assets/sfx/player/mario/footstep/generic/step_generic_0.wav" id="2_gooxi"]
+[ext_resource type="AudioStream" uid="uid://mmeee623jjf5" path="res://assets/sfx/player/mario/footstep/generic/step_generic_1.wav" id="3_w73hb"]
+[ext_resource type="AudioStream" uid="uid://cihror0vafpcs" path="res://assets/sfx/player/mario/footstep/generic/step_generic_2.wav" id="4_ulw41"]
+[ext_resource type="AudioStream" uid="uid://c7dq8utg2pwku" path="res://assets/sfx/player/mario/footstep/generic/step_generic_3.wav" id="5_hbiq7"]
+[ext_resource type="AudioStream" uid="uid://cfbctyhlwbvs2" path="res://assets/sfx/player/mario/footstep/generic/step_generic_4.wav" id="6_ykntv"]
+[ext_resource type="AudioStream" uid="uid://b64tgaqkx06dn" path="res://assets/sfx/player/mario/footstep/generic/step_generic_5.wav" id="7_l5wux"]
+[ext_resource type="AudioStream" uid="uid://docp74l4dcgux" path="res://assets/sfx/player/mario/footstep/generic/step_generic_6.wav" id="8_j1xcu"]
+[ext_resource type="AudioStream" uid="uid://vsklw2q0em6j" path="res://assets/sfx/player/mario/footstep/generic/step_generic_7.wav" id="9_s0xco"]
+[ext_resource type="AudioStream" uid="uid://bkchpuxm4m78e" path="res://assets/sfx/player/mario/footstep/generic/step_generic_8.wav" id="10_5go7w"]
+[ext_resource type="AudioStream" uid="uid://dsdjwghexhrb0" path="res://assets/sfx/player/mario/footstep/generic/step_generic_9.wav" id="11_fp2nc"]
+[ext_resource type="AudioStream" uid="uid://by2w07yywwldf" path="res://assets/sfx/player/mario/footstep/generic/step_generic_10.wav" id="12_o2143"]
+[ext_resource type="AudioStream" uid="uid://b833lacl5wgoo" path="res://assets/sfx/player/mario/footstep/generic/step_generic_11.wav" id="13_v6ici"]
+[ext_resource type="AudioStream" uid="uid://q3643u4b4my6" path="res://assets/sfx/player/mario/footstep/generic/step_generic_12.wav" id="14_ttvli"]
+[ext_resource type="AudioStream" uid="uid://d2cl8eaf3dcbj" path="res://assets/sfx/player/mario/footstep/generic/step_generic_13.wav" id="15_qjyou"]
+[ext_resource type="AudioStream" uid="uid://dbnwmumutor2o" path="res://assets/sfx/player/mario/footstep/grass/step_grass_0.wav" id="16_kb5y7"]
+[ext_resource type="AudioStream" uid="uid://det8fw8qao2ib" path="res://assets/sfx/player/mario/footstep/grass/step_grass_1.wav" id="17_3wwtw"]
+[ext_resource type="AudioStream" uid="uid://c2uyn1ygtkbkc" path="res://assets/sfx/player/mario/footstep/grass/step_grass_2.wav" id="18_68aeh"]
+[ext_resource type="AudioStream" uid="uid://q5q6byuos712" path="res://assets/sfx/player/mario/footstep/grass/step_grass_3.wav" id="19_7ytww"]
+[ext_resource type="AudioStream" uid="uid://b44b6h50lrwe4" path="res://assets/sfx/player/mario/footstep/snow/step_snow_0.wav" id="20_g0now"]
+[ext_resource type="AudioStream" uid="uid://d2ugqhakslyi0" path="res://assets/sfx/player/mario/footstep/snow/step_snow_1.wav" id="21_gmwb0"]
+[ext_resource type="AudioStream" uid="uid://do5vvuebmx42j" path="res://assets/sfx/player/mario/footstep/snow/step_snow_2.wav" id="22_hor8j"]
+[ext_resource type="AudioStream" uid="uid://dwmux7h7dnlk8" path="res://assets/sfx/player/mario/footstep/snow/step_snow_3.wav" id="23_aqywu"]
+[ext_resource type="AudioStream" uid="uid://b2jwd1crf3npu" path="res://assets/sfx/player/mario/footstep/snow/step_snow_4.wav" id="24_c274s"]
+[ext_resource type="AudioStream" uid="uid://mnehicsgbpr6" path="res://assets/sfx/player/mario/footstep/cloud/step_cloud_0.wav" id="25_mb76v"]
+[ext_resource type="AudioStream" uid="uid://do5dgnofb6kf0" path="res://assets/sfx/player/mario/footstep/cloud/step_cloud_1.wav" id="26_w3svu"]
+[ext_resource type="AudioStream" uid="uid://1ycr2uq515xk" path="res://assets/sfx/player/mario/footstep/ice/step_ice_0.wav" id="27_e4p04"]
+[ext_resource type="AudioStream" uid="uid://clwsyovhbrm4p" path="res://assets/sfx/player/mario/footstep/ice/step_ice_1.wav" id="28_tay1w"]
+[ext_resource type="AudioStream" uid="uid://oog3qgyjsm85" path="res://assets/sfx/player/mario/footstep/metal/step_metal_0.wav" id="29_mufr5"]
+[ext_resource type="AudioStream" uid="uid://beqaev37km22x" path="res://assets/sfx/player/mario/footstep/metal/step_metal_1.wav" id="30_i26sq"]
+[ext_resource type="AudioStream" uid="uid://csosodkyypuqs" path="res://assets/sfx/player/mario/footstep/metal/step_metal_2.wav" id="31_a6b63"]
+[ext_resource type="AudioStream" uid="uid://is0bpcfqf1a3" path="res://assets/sfx/player/mario/footstep/metal/step_metal_3.wav" id="32_8310e"]
+[ext_resource type="AudioStream" uid="uid://hs1bq6q25j8e" path="res://assets/sfx/player/mario/footstep/metal/step_metal_4.wav" id="33_ueeql"]
+[ext_resource type="AudioStream" uid="uid://d1der0l2ufqeb" path="res://assets/sfx/player/mario/footstep/metal/step_metal_5.wav" id="34_8l8co"]
+[ext_resource type="AudioStream" uid="uid://cdg8meyn5w7db" path="res://assets/sfx/player/mario/footstep/metal/step_metal_6.wav" id="35_bkbe7"]
+[ext_resource type="AudioStream" uid="uid://b2j7dvxejef4p" path="res://assets/sfx/player/mario/footstep/metal/step_metal_7.wav" id="36_5axi4"]
+[ext_resource type="AudioStream" uid="uid://bnprcpva3fqt0" path="res://assets/sfx/player/mario/footstep/metal/step_metal_8.wav" id="37_ntd7d"]
+[ext_resource type="AudioStream" uid="uid://w80s5voo8twe" path="res://assets/sfx/player/mario/footstep/metal/step_metal_9.wav" id="38_28np8"]
+
+[resource]
+script = ExtResource("1_hylvs")
+sound_effects = Array[AudioStream]([ExtResource("2_gooxi"), ExtResource("3_w73hb"), ExtResource("4_ulw41"), ExtResource("5_hbiq7"), ExtResource("6_ykntv"), ExtResource("7_l5wux"), ExtResource("8_j1xcu"), ExtResource("9_s0xco"), ExtResource("10_5go7w"), ExtResource("11_fp2nc"), ExtResource("12_o2143"), ExtResource("13_v6ici"), ExtResource("14_ttvli"), ExtResource("15_qjyou")])
+max_stack = 2
+interval = 0.1
+bank_group = &"Player"
+terrain_exclusive = true
+terrain_sfx_entries = Dictionary[StringName, Array]({
+&"cloud": Array[AudioStream]([ExtResource("25_mb76v"), ExtResource("26_w3svu")]),
+&"grass": Array[AudioStream]([ExtResource("16_kb5y7"), ExtResource("17_3wwtw"), ExtResource("18_68aeh"), ExtResource("19_7ytww")]),
+&"ice": Array[AudioStream]([ExtResource("27_e4p04"), ExtResource("28_tay1w")]),
+&"metal": Array[AudioStream]([ExtResource("29_mufr5"), ExtResource("30_i26sq"), ExtResource("31_a6b63"), ExtResource("32_8310e"), ExtResource("33_ueeql"), ExtResource("34_8l8co"), ExtResource("35_bkbe7"), ExtResource("36_5axi4"), ExtResource("37_ntd7d"), ExtResource("38_28np8")]),
+&"snow": Array[AudioStream]([ExtResource("20_g0now"), ExtResource("21_gmwb0"), ExtResource("22_hor8j"), ExtResource("23_aqywu"), ExtResource("24_c274s")])
+})
+sprite_frame_indices = Array[int]([0, 4])
+metadata/_custom_type_script = "uid://bn6i8m2caq1iq"

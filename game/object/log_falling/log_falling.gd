@@ -1,7 +1,6 @@
 extends LevelObject
 
 @export var falling_speed: float = 200.0
-@export var body: StaticBody2D
 @export var sprite: SmartSprite2D
 
 var shake: bool = false

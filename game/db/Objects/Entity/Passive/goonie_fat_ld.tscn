@@ -23,7 +23,7 @@ shader_parameter/pulse_max = 1.0
 shader_parameter/outline_ignore_holes = true
 shader_parameter/outline_enabled = true
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_iirq6"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_pars4"]
 diffuse_texture = ExtResource("3_hgvv0")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7e4js"]
@@ -39,9 +39,9 @@ metadata/_custom_type_script = "uid://cfx4civm76jwr"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=471975254]
 material = SubResource("ShaderMaterial_hgvv0")
-texture = SubResource("CanvasTexture_iirq6")
+texture = SubResource("CanvasTexture_pars4")
 script = ExtResource("3_pars4")
-canvas_texture = SubResource("CanvasTexture_iirq6")
+canvas_texture = SubResource("CanvasTexture_pars4")
 diffuse_texture = ExtResource("3_hgvv0")
 current_animation = ""
 current_frame = 0

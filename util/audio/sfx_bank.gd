@@ -9,29 +9,30 @@ enum PlayOrder {
 	SEQUENTIAL,
 }
 
-
-@export var sound_effects: Array[AudioStream]
-@export var play_order: PlayOrder
-@export var repeat_list: bool = true
-@export var max_stack: int = 1
-@export var interval: float = 0.0
-@export var overwrite_group: bool = false
-@export var bank_group: StringName
-@export_group("Terrain SFX")
-@export var terrain: SFX.TerrainType = SFX.TerrainType.GENERIC
-@export var terrain_exclusive: bool = false
-@export var grass_sfx: Array[AudioStream]
-@export var snow_sfx: Array[AudioStream]
-@export var cloud_sfx: Array[AudioStream]
-@export var sand_sfx: Array[AudioStream]
-@export_group("Entity")
-@export var stop_on_state_exit: bool = false
-
 static var all_banks: Array[SFXBank] = []
+
+@export var sound_effects: Array[AudioStream] ## The pool of audio streams to draw from.
+@export var play_order: PlayOrder ## Determines the order in which streams are selected.
+@export var repeat_list: bool = true ## Whether the list restarts after exhaustion.
+@export var max_stack: int = 1 ## Maximum number of simultaneous players.
+@export var interval: float = 0.0 ## Minimum time in seconds between plays. In frame-driven mode, acts as a cooldown buffer.
+@export var overwrite_group: bool = false ## Stops all other banks in the same group before playing.
+@export var bank_group: StringName ## Group identifier used for overwrite and is_in_group checks.
+@export_group("Terrain SFX")
+@export var terrain_exclusive: bool = false ## If true, only terrain SFX play; base sound_effects are ignored.
+@export var terrain_sfx_entries: Dictionary[StringName, Array] ## Map of terrain key to Array[AudioStream].
+@export_group("Entity")
+@export var stop_on_state_exit: bool = false ## If true, prevents stream cleanup when a player finishes, expecting the state to manage it.
+@export var sprite_frame_indices: Array[int] ## If non-empty, playback is gated to only these sprite frames.
+
+var _entity: Entity
+var _sprite: SmartSprite2D
+
 
 var _current_index: int = 0
 var _shuffled_indices: Array[int] = []
 var _last_played_index: int = -1
+var _last_frame_played: int = -1
 var _active_players: Array[Node] = []
 var _last_play_time: float = -INF
 
@@ -41,9 +42,16 @@ func _init() -> void:
 		all_banks.append(self)
 
 
-func play_sfx(bus: StringName = &"Master") -> void:
+func play_sfx(bus: StringName = bank_group, entity: Entity = null, sprite: SmartSprite2D = null) -> void:
+	_entity = entity
+	_sprite = sprite
 	var current_time: float = Time.get_ticks_msec() / 1000.0
-	if current_time - _last_play_time < interval:
+	if interval == 0.0:
+		if Engine.get_frames_drawn() == _last_frame_played:
+			return
+	elif current_time - _last_play_time < interval:
+		return
+	if not _sprite_frame_valid():
 		return
 	if overwrite_group:
 		_stop_group_banks()
@@ -55,6 +63,7 @@ func play_sfx(bus: StringName = &"Master") -> void:
 		return
 	_last_played_index = index
 	_last_play_time = current_time
+	_last_frame_played = Engine.get_frames_drawn()
 	var player: AudioStreamPlayer = _get_available_global_player()
 	if player == null:
 		return
@@ -63,9 +72,13 @@ func play_sfx(bus: StringName = &"Master") -> void:
 	player.play()
 
 
-func play_sfx_at(at: Variant, bus: StringName = &"Master") -> void:
+func play_sfx_at(at: Variant, bus: StringName = bank_group, entity: Entity = null, sprite: SmartSprite2D = null) -> void:
+	_entity = entity
+	_sprite = sprite
 	var current_time: float = Time.get_ticks_msec() / 1000.0
 	if current_time - _last_play_time < interval:
+		return
+	if not _sprite_frame_valid():
 		return
 	if overwrite_group:
 		_stop_group_banks()
@@ -96,6 +109,14 @@ func play_sfx_at(at: Variant, bus: StringName = &"Master") -> void:
 	player.play()
 
 
+func _sprite_frame_valid() -> bool:
+	if sprite_frame_indices.is_empty():
+		return true
+	if _sprite == null:
+		return false
+	return sprite_frame_indices.has(_sprite.current_frame)
+
+
 func stop_all() -> void:
 	for player: Node in _active_players:
 		if player is AudioStreamPlayer and (player as AudioStreamPlayer).playing:
@@ -113,6 +134,7 @@ func reset() -> void:
 	_shuffled_indices.clear()
 	_last_played_index = -1
 	_last_play_time = -INF
+	_last_frame_played = -1
 	stop_all()
 
 
@@ -132,7 +154,7 @@ func _stop_group_banks() -> void:
 
 func _get_active_sound_effects() -> Array[AudioStream]:
 	var terrain_effects: Array[AudioStream] = _get_terrain_effects()
-	if terrain == SFX.TerrainType.GENERIC:
+	if terrain_effects.is_empty():
 		return sound_effects
 	if terrain_exclusive:
 		return terrain_effects
@@ -143,17 +165,15 @@ func _get_active_sound_effects() -> Array[AudioStream]:
 
 
 func _get_terrain_effects() -> Array[AudioStream]:
-	match terrain:
-		SFX.TerrainType.GRASS:
-			return grass_sfx
-		SFX.TerrainType.SAND:
-			return sand_sfx
-		SFX.TerrainType.SNOW:
-			return snow_sfx
-		SFX.TerrainType.CLOUD:
-			return cloud_sfx
-		_:
-			return []
+	if _entity == null or terrain_sfx_entries.is_empty():
+		return []
+	var terrain_key: StringName = _entity.get_terrain()
+	if not terrain_sfx_entries.has(terrain_key):
+		return []
+	var result: Array[AudioStream] = []
+	for stream: AudioStream in terrain_sfx_entries[terrain_key]:
+		result.append(stream)
+	return result
 
 
 func _get_available_global_player() -> AudioStreamPlayer:

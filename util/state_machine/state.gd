@@ -135,5 +135,11 @@ func _enter_tree() -> void:
 		push_error("State created without state machine bind: \"%s\"" % name)
 
 
+func _exit_tree() -> void:
+	if enter_sfx: enter_sfx.stop_all()
+	if exit_sfx: exit_sfx.stop_all()
+	if continuous_sfx: continuous_sfx.stop_all()
+
+
 func _to_string() -> String:
 	return name

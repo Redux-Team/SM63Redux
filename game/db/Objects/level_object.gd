@@ -3,6 +3,8 @@ extends Node2D
 
 
 @export var spawn_offset: Vector2
+@export var body: CollisionObject2D
+@export var terrain_type: String
 
 var data: Dictionary
 var properties: Dictionary = {}
@@ -17,6 +19,9 @@ func init_from_data(obj_data: Dictionary) -> void:
 	_handle_properties()
 	
 	position += spawn_offset
+	
+	if body:
+		body.set_meta(&"terrain", terrain_type)
 	
 	_on_init()
 

@@ -14,6 +14,7 @@ extends LevelObject
 @export var _outline_container: Node2D
 @export var _topline_container: Node2D
 @export var _topline_shadow_container: Node2D
+@export var _static_body_2d: StaticBody2D
 
 
 var _outer_points: PackedVector2Array = PackedVector2Array()
@@ -36,6 +37,9 @@ func _on_init() -> void:
 				hole_points.append(_array_to_vec2(p))
 			if hole_points.size() >= 3:
 				_holes.append(hole_points)
+	
+	if not Engine.is_editor_hint():
+		_static_body_2d.set_meta("terrain", polygon_data.terrain_type)
 	
 	_rebuild_polygon()
 

@@ -5,12 +5,12 @@
 [ext_resource type="Texture2D" uid="uid://bo4bpi80efao4" path="res://assets/textures/entity/passive/fat_goonie_flap.png" id="4_kiosy"]
 [ext_resource type="AudioStream" uid="uid://dlcohj4bf5vpj" path="res://assets/sfx/entity/goonie_fat/goonie_fat_bounce.wav" id="4_x1g4f"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_uupct"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_urfmg"]
 atlas = ExtResource("4_kiosy")
 region = Rect2(288, 0, 48, 49)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_h26e3"]
-diffuse_texture = SubResource("AtlasTexture_uupct")
+[sub_resource type="CanvasTexture" id="CanvasTexture_x1g4f"]
+diffuse_texture = SubResource("AtlasTexture_urfmg")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2u7yk"]
 atlas = ExtResource("4_kiosy")
@@ -35,10 +35,6 @@ region = Rect2(192, 0, 48, 49)
 [sub_resource type="AtlasTexture" id="AtlasTexture_fvatu"]
 atlas = ExtResource("4_kiosy")
 region = Rect2(240, 0, 48, 49)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_urfmg"]
-atlas = ExtResource("4_kiosy")
-region = Rect2(288, 0, 48, 49)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7a6o2"]
 animations = [{
@@ -127,11 +123,11 @@ components_root = NodePath("Components")
 [node name="Components" type="Node" parent="." unique_id=566607527]
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=189232163]
-texture = SubResource("CanvasTexture_h26e3")
+texture = SubResource("CanvasTexture_x1g4f")
 region_enabled = true
 region_rect = Rect2(288, 0, 48, 49)
 script = ExtResource("4_gsk8c")
-canvas_texture = SubResource("CanvasTexture_h26e3")
+canvas_texture = SubResource("CanvasTexture_x1g4f")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_7a6o2")
 current_animation = "flap"
@@ -163,6 +159,7 @@ one_way_collision_margin = 0.0
 
 [node name="BounceSFX" type="AudioStreamPlayer2D" parent="." unique_id=660846019]
 stream = ExtResource("4_x1g4f")
+volume_db = 8.0
 bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1222638816]

@@ -29,6 +29,8 @@ enum LineMode { TOPLINE, EDGES_ONLY, NONE }
 		base_texture = t
 		update_visuals.emit()
 
+@export var terrain_type: String
+
 @export_group("Topline", "topline")
 @export var topline_texture: Texture2D:
 	set(t):

@@ -187,3 +187,10 @@ func resist(val: float, sub: float, div: float) -> float:
 
 func reset_jump_timer() -> void:
 	jump_buffer_timer = 0
+
+
+func get_terrain() -> String:
+	if floor_slope_raycast.is_colliding():
+		return floor_slope_raycast.get_collider().get_meta(&"terrain", "generic")
+	
+	return ""

@@ -8,7 +8,9 @@
 resource_local_to_scene = true
 shader = ExtResource("1_qgg2m")
 shader_parameter/state = 0
-shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/fill_color = Color(1, 1, 1, 0.25)
@@ -17,6 +19,8 @@ shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
 shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_qiyv7"]
 diffuse_texture = ExtResource("2_kupju")
@@ -25,10 +29,12 @@ diffuse_texture = ExtResource("2_kupju")
 resource_local_to_scene = true
 size = Vector2(22, 2)
 
-[node name="Cloud" type="Node2D" unique_id=922197771 node_paths=PackedStringArray("nine_patch", "collision_shapes")]
+[node name="Cloud" type="Node2D" unique_id=922197771 node_paths=PackedStringArray("nine_patch", "collision_shapes", "body")]
 script = ExtResource("1_kupju")
 nine_patch = NodePath("NinePatch")
 collision_shapes = [NodePath("StaticBody2D/CollisionShape2D")]
+body = NodePath("StaticBody2D")
+terrain_type = "cloud"
 metadata/_custom_type_script = "uid://u0c5qwqjxkub"
 
 [node name="NinePatch" type="NinePatchRect" parent="." unique_id=1366655319]
