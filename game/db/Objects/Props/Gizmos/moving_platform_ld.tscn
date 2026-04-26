@@ -10,7 +10,8 @@ resource_local_to_scene = true
 shader = ExtResource("1_7n0db")
 shader_parameter/state = 0
 shader_parameter/palette_index = 0
-shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/fill_color = Color(1, 1, 1, 0.25)
@@ -19,6 +20,8 @@ shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
 shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
 
 [sub_resource type="GDScript" id="GDScript_3gntl"]
 script/source = "@tool
@@ -43,7 +46,7 @@ func _draw() -> void:
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_af2u0"]
 size = Vector2(14, 14)
 
-[node name="MovingPlatformLd" type="Node2D" unique_id=1024621747 node_paths=PackedStringArray("platform_nine_patch", "path_drawer", "ghost_container", "ghost_root", "shader_objects", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+[node name="MovingPlatformLd" type="Node2D" unique_id=1024621747 node_paths=PackedStringArray("platform_nine_patch", "path_drawer", "ghost_container", "ghost_root", "editor_shape_area", "editor_placement_rect", "origin_marker", "shader_objects")]
 material = SubResource("ShaderMaterial_j72wb")
 script = ExtResource("1_3gntl")
 center_texture = ExtResource("2_7n0db")
@@ -51,10 +54,11 @@ platform_nine_patch = NodePath("NinePatchRect")
 path_drawer = NodePath("PathDrawer")
 ghost_container = NodePath("GhostTransform")
 ghost_root = NodePath("GhostRoot")
-shader_objects = [NodePath(".")]
+start_angle = null
 editor_shape_area = NodePath("EditorShapeArea")
 editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
 origin_marker = NodePath("Origin")
+shader_objects = [NodePath(".")]
 metadata/_custom_type_script = "uid://cfx4civm76jwr"
 
 [node name="PathDrawer" type="Node2D" parent="." unique_id=221669102]

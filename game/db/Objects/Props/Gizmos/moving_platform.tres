@@ -6,15 +6,23 @@
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_7ohvu"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_kqnkv"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_qjrcg"]
-[ext_resource type="Resource" uid="uid://cmrdgbqp43tvo" path="res://game/db/Properties/t_size_y.tres" id="6_72rtd"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_qjrcg"]
 [ext_resource type="Resource" uid="uid://dk8qlbripls8x" path="res://game/db/Properties/moving_platform/platform_amount.tres" id="7_nuxwn"]
+[ext_resource type="Script" uid="uid://c74p8giulwgqm" path="res://game/db/Properties/t_size_x.gd" id="7_qjrcg"]
 [ext_resource type="Resource" uid="uid://cwscua7waq0vn" path="res://game/db/Properties/moving_platform/platform_radius.tres" id="8_ajhpr"]
 [ext_resource type="Resource" uid="uid://ctlyyrjsbjt07" path="res://game/db/Properties/moving_platform/platform_period.tres" id="9_7ed3c"]
-[ext_resource type="Resource" uid="uid://ch70dly76448g" path="res://game/db/Properties/moving_platform/platform_start_angle.tres" id="10_1qsx4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bb6u5"]
 atlas = ExtResource("1_bb6u5")
 region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="Resource" id="Resource_72rtd"]
+script = ExtResource("7_qjrcg")
+key = &"t_size_x"
+label = "Width"
+type = 1
+default_value = 1
+metadata/_custom_type_script = "uid://c74p8giulwgqm"
 
 [resource]
 script = ExtResource("2_kqnkv")
@@ -26,6 +34,6 @@ group_path = "Gizmos"
 ld_object_path = "Props/Gizmos/moving_platform"
 ld_entry_texture = SubResource("AtlasTexture_bb6u5")
 ld_editor_instance = ExtResource("1_gr6rl")
-ld_properties = Array[ExtResource("2_7ohvu")]([ExtResource("5_qjrcg"), ExtResource("6_72rtd"), ExtResource("7_nuxwn"), ExtResource("8_ajhpr"), ExtResource("9_7ed3c"), ExtResource("10_1qsx4")])
+ld_properties = Array[ExtResource("2_7ohvu")]([ExtResource("5_qjrcg"), ExtResource("6_qjrcg"), SubResource("Resource_72rtd"), ExtResource("7_nuxwn"), ExtResource("8_ajhpr"), ExtResource("9_7ed3c")])
 game_instance = ExtResource("1_kh23k")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

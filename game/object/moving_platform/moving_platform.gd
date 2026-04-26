@@ -8,6 +8,8 @@ extends LevelObject
 @export var path_drawer: Node2D
 
 
+var start_angle: float
+
 var _platforms: Array[AnimatableBody2D] = []
 var _pivots: Node2D
 
@@ -16,8 +18,20 @@ func _on_init() -> void:
 	preview_container.hide()
 	preview_container.queue_free()
 	_pivots = Node2D.new()
+	_pivots.hide()
+	platform_container.hide()
 	platform_container.add_child(_pivots)
 	_rebuild_platforms()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	platform_container.show()
+
+
+func _handle_property(property_name: String, property_value: Variant) -> void:
+	if property_name == "rotation":
+		start_angle = property_value
+	else:
+		super(property_name, property_value)
 
 
 func _process(delta: float) -> void:
@@ -34,25 +48,24 @@ func _rebuild_platforms() -> void:
 	var amount: int = int(get_property(&"platform_amount")) if get_property(&"platform_amount") != null else 3
 	var units: int = int(get_property(&"t_size_x")) if get_property(&"t_size_x") != null else 1
 	var radius: float = get_property(&"platform_radius") if get_property(&"platform_radius") != null else 64.0
-	var start_angle: float = deg_to_rad(get_property(&"platform_start_angle") if get_property(&"platform_start_angle") != null else 0.0)
 	path_drawer.platform_radius = radius
-	_pivots.rotation = start_angle
+	_pivots.rotation_degrees = start_angle
 	for i: int in amount:
-		var body: AnimatableBody2D = _build_platform(units)
-		platform_container.add_child(body)
-		_platforms.append(body)
+		var platform_body: AnimatableBody2D = _build_platform(units)
+		platform_container.add_child(platform_body)
+		_platforms.append(platform_body)
 		var pivot: Node2D = Node2D.new()
 		pivot.position = Vector2.RIGHT.rotated((TAU / amount) * i) * radius
 		var remote: RemoteTransform2D = RemoteTransform2D.new()
 		remote.update_rotation = false
 		pivot.add_child(remote)
 		_pivots.add_child(pivot)
-		remote.remote_path = remote.get_path_to(body)
+		remote.remote_path = remote.get_path_to(platform_body)
 
 
 func _build_platform(units: int) -> AnimatableBody2D:
-	var body: AnimatableBody2D = AnimatableBody2D.new()
-	body.sync_to_physics = true
+	var platform_body: AnimatableBody2D = AnimatableBody2D.new()
+	platform_body.sync_to_physics = true
 	if platform_nine_patch and platform_nine_patch.texture:
 		var ml: int = platform_nine_patch.patch_margin_left
 		var mr: int = platform_nine_patch.patch_margin_right
@@ -68,7 +81,7 @@ func _build_platform(units: int) -> AnimatableBody2D:
 		sprite.axis_stretch_horizontal = NinePatchRect.AXIS_STRETCH_MODE_TILE
 		sprite.size = Vector2(total_w, h)
 		sprite.position = Vector2(-total_w / 2.0, -h / 2.0)
-		body.add_child(sprite)
+		platform_body.add_child(sprite)
 		if platform_collision_shape:
 			var src: RectangleShape2D = platform_collision_shape.shape as RectangleShape2D
 			var rect: RectangleShape2D = RectangleShape2D.new()
@@ -76,5 +89,5 @@ func _build_platform(units: int) -> AnimatableBody2D:
 				rect.size = Vector2(total_w, src.size.y)
 			var duped: CollisionShape2D = platform_collision_shape.duplicate() as CollisionShape2D
 			duped.shape = rect
-			body.add_child(duped)
-	return body
+			platform_body.add_child(duped)
+	return platform_body

@@ -8,5 +8,6 @@ key = &"position"
 label = "Position"
 type = 4
 default_value = Vector2(0, 0)
+visible_in_editor = false
 exclusive = true
 metadata/_custom_type_script = "uid://bbqpe78tlk6yc"

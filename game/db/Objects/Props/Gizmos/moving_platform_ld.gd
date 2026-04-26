@@ -14,6 +14,14 @@ enum Mode {
 @export var speed: float = 1
 @export var amount: int = 1
 @export var radius: float = 64
+@export var start_angle: float = 0
+
+
+func _apply_property(key: StringName, value: Variant) -> void:
+	if key == "rotation":
+		start_angle = deg_to_rad(value)
+	else:
+		super(key, value)
 
 
 func _process(_delta: float) -> void:
@@ -94,7 +102,6 @@ func _draw() -> void:
 		var platform_radius: float = get_property(&"platform_radius") if has_property(&"platform_radius") else radius
 		var platform_amount: int = int(get_property(&"platform_amount")) if has_property(&"platform_amount") else amount
 		var platform_width: float = get_property(&"t_size_x") if has_property(&"t_size_x") else width
-		var start_angle: float = deg_to_rad(get_property(&"platform_start_angle") if has_property(&"platform_start_angle") else 0.0)
 		if path_drawer:
 			path_drawer.platform_radius = platform_radius
 			path_drawer.queue_redraw()

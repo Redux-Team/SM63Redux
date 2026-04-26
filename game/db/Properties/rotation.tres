@@ -8,4 +8,5 @@ key = &"rotation"
 label = "Rotation"
 type = 2
 default_value = 0.0
+visible_in_editor = false
 metadata/_custom_type_script = "uid://cnfsiqwgu44qm"
