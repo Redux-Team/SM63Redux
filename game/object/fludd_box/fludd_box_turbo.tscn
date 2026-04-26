@@ -1,0 +1,129 @@
+[gd_scene format=3 uid="uid://d2l1sdnon2pr7"]
+
+[ext_resource type="PackedScene" uid="uid://cwhsjhk1kpwp1" path="res://game/object/fludd_box/fludd_box_hover.tscn" id="1_2x2gp"]
+[ext_resource type="PackedScene" uid="uid://d3jo6ug6hfdp2" path="res://game/object/fludd_nozzle/fludd_nozzle_turbo.tscn" id="2_witxg"]
+[ext_resource type="Texture2D" uid="uid://ce8qxxo2fw013" path="res://assets/textures/item/fludd/fludd_box_turbo_stretch.png" id="4_ogkx1"]
+[ext_resource type="Texture2D" uid="uid://c0md808v0xq33" path="res://assets/textures/item/fludd/fludd_box_turbo.png" id="4_stgt0"]
+[ext_resource type="Texture2D" uid="uid://du16igel6ks4x" path="res://assets/textures/item/fludd/fludd_box_turbo_open.png" id="5_2x2gp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bmc7g"]
+atlas = ExtResource("4_stgt0")
+region = Rect2(0, 0, 40, 36)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_ogkx1"]
+diffuse_texture = SubResource("AtlasTexture_bmc7g")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_witxg"]
+atlas = ExtResource("4_ogkx1")
+region = Rect2(60, 0, 60, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b2opg"]
+atlas = ExtResource("4_ogkx1")
+region = Rect2(120, 0, 60, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stgt0"]
+atlas = ExtResource("4_ogkx1")
+region = Rect2(180, 0, 60, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o8ece"]
+atlas = ExtResource("4_ogkx1")
+region = Rect2(240, 0, 60, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vdh2x"]
+atlas = ExtResource("5_2x2gp")
+region = Rect2(0, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ouo8"]
+atlas = ExtResource("5_2x2gp")
+region = Rect2(90, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m2fck"]
+atlas = ExtResource("5_2x2gp")
+region = Rect2(180, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5a0k7"]
+atlas = ExtResource("5_2x2gp")
+region = Rect2(270, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_706r8"]
+atlas = ExtResource("5_2x2gp")
+region = Rect2(360, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8qs45"]
+atlas = ExtResource("5_2x2gp")
+region = Rect2(450, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bopfb"]
+atlas = ExtResource("5_2x2gp")
+region = Rect2(540, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y5xvt"]
+atlas = ExtResource("5_2x2gp")
+region = Rect2(630, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gvlqo"]
+atlas = ExtResource("5_2x2gp")
+region = Rect2(630, 0, 90, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7ouo8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bmc7g")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_witxg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b2opg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stgt0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o8ece")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vdh2x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ouo8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m2fck")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5a0k7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_706r8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8qs45")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bopfb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y5xvt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gvlqo")
+}],
+"loop": true,
+"name": &"open",
+"speed": 29.0
+}]
+
+[node name="FluddBoxHover" unique_id=2137935164 instance=ExtResource("1_2x2gp")]
+spawn = ExtResource("2_witxg")
+
+[node name="Sprite" parent="." index="0" unique_id=499824916]
+texture = SubResource("CanvasTexture_ogkx1")
+canvas_texture = SubResource("CanvasTexture_ogkx1")
+diffuse_frames = SubResource("SpriteFrames_7ouo8")

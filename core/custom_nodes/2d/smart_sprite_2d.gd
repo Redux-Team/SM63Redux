@@ -63,10 +63,12 @@ var playing: bool = false:
 		notify_property_list_changed()
 		if playing:
 			_playback_time = 0.0
-
+@export_storage var looping: bool = true:
+	set(l):
+		looping = l
+		notify_property_list_changed()
 
 var _playback_time: float = 0.0
-var _loop: bool = true
 
 
 func _notification(what: int) -> void:
@@ -93,7 +95,7 @@ func _process(delta: float) -> void:
 	var new_frame: int = int(_playback_time * fps)
 	
 	if new_frame >= frame_count:
-		if _loop and diffuse_frames.get_animation_loop(current_animation):
+		if looping and diffuse_frames.get_animation_loop(current_animation):
 			_playback_time = fmod(_playback_time, float(frame_count) / fps)
 			current_frame = int(_playback_time * fps)
 			if not Engine.is_editor_hint():
@@ -107,11 +109,10 @@ func _process(delta: float) -> void:
 		current_frame = new_frame
 
 
-func play(animation_name: StringName, loop: bool = true) -> void:
+func play(animation_name: StringName) -> void:
 	if current_animation == animation_name and playing:
 		return
 	current_animation = animation_name
-	_loop = loop
 	_playback_time = 0.0
 	current_frame = 0
 	region_enabled = true
@@ -153,6 +154,10 @@ func _get_property_list() -> Array[Dictionary]:
 	})
 	property_list.append({
 		"name": "playing",
+		"type": TYPE_BOOL
+	})
+	property_list.append({
+		"name": "looping",
 		"type": TYPE_BOOL
 	})
 	

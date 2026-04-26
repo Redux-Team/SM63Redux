@@ -85,12 +85,13 @@
 [ext_resource type="AudioStream" uid="uid://bpig1nynumifi" path="res://assets/sfx/player/mario/ground_pound/ground_pound_sand.wav" id="66_7123u"]
 [ext_resource type="AudioStream" uid="uid://bbscycsfnsu3l" path="res://assets/sfx/player/mario/ground_pound/ground_pound_snow.wav" id="67_iy1it"]
 [ext_resource type="Script" uid="uid://veukwwx18y5s" path="res://game/entity/player/fludd_handler.gd" id="81_va0vu"]
+[ext_resource type="Script" uid="uid://dvu58h3dgt60w" path="res://game/entity/player/attached_top.gd" id="83_kw6gy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t56eh"]
 atlas = ExtResource("2_heu0c")
 region = Rect2(48, 0, 48, 48)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_kyrvb"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_q4egk"]
 diffuse_texture = SubResource("AtlasTexture_t56eh")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
@@ -1152,11 +1153,11 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101]
 position = Vector2(2, -13)
-texture = SubResource("CanvasTexture_kyrvb")
+texture = SubResource("CanvasTexture_q4egk")
 region_enabled = true
 region_rect = Rect2(48, 0, 48, 48)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_kyrvb")
+canvas_texture = SubResource("CanvasTexture_q4egk")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
 current_animation = "idle"
@@ -1460,6 +1461,13 @@ script = ExtResource("32_2jquf")
 superstate = NodePath("..")
 has_default_animations = true
 animations = Array[StringName]([&"swim"])
+metadata/_custom_type_script = "uid://ra55p55nrtg4"
+
+[node name="Disconnected" type="Node" parent="StateMachine/States" unique_id=1508212044]
+
+[node name="AttachedTop" type="Node" parent="StateMachine/States/Disconnected" unique_id=1508783922]
+script = ExtResource("83_kw6gy")
+lock_sprite_flipping = true
 metadata/_custom_type_script = "uid://ra55p55nrtg4"
 
 [node name="Processes" type="Node" parent="StateMachine" unique_id=1874141379]

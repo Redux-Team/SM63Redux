@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://2xq5hettpjm6"]
+
+[ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="1_hc35l"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_rrlhs"]
+[ext_resource type="Texture2D" uid="uid://ikxjrstfl432" path="res://assets/textures/entity/passive/fat_goonie.png" id="3_hgvv0"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_pars4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hgvv0"]
+resource_local_to_scene = true
+shader = ExtResource("2_rrlhs")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_iirq6"]
+diffuse_texture = ExtResource("3_hgvv0")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7e4js"]
+size = Vector2(30, 35)
+
+[node name="GoonieFatLd" type="Node2D" unique_id=303940728 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+script = ExtResource("1_hc35l")
+sprite_ref = NodePath("Sprite")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+metadata/_custom_type_script = "uid://cfx4civm76jwr"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=471975254]
+material = SubResource("ShaderMaterial_hgvv0")
+texture = SubResource("CanvasTexture_iirq6")
+script = ExtResource("3_pars4")
+canvas_texture = SubResource("CanvasTexture_iirq6")
+diffuse_texture = ExtResource("3_hgvv0")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=884730713]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=531270700]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_7e4js")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=309484922]

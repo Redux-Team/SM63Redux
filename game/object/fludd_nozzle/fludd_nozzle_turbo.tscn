@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://d3jo6ug6hfdp2"]
+
+[ext_resource type="PackedScene" uid="uid://b1bysf6h2qqww" path="res://game/object/fludd_nozzle/fludd_nozzle_hover.tscn" id="1_mbi1r"]
+[ext_resource type="Texture2D" uid="uid://sk0vulege217" path="res://assets/textures/item/fludd/fludd_nozzle_turbo.png" id="2_xn0mo"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_a430q"]
+diffuse_texture = ExtResource("2_xn0mo")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v03wf"]
+resource_local_to_scene = true
+size = Vector2(14, 0)
+
+[node name="FluddNozzleTurbo" unique_id=762472111 instance=ExtResource("1_mbi1r")]
+
+[node name="SmartSprite2D" parent="." index="0" unique_id=857828210]
+texture = SubResource("CanvasTexture_a430q")
+canvas_texture = SubResource("CanvasTexture_a430q")
+diffuse_texture = ExtResource("2_xn0mo")
+
+[node name="CollisionShape2D" parent="." index="2" unique_id=79070776]
+shape = SubResource("RectangleShape2D_v03wf")

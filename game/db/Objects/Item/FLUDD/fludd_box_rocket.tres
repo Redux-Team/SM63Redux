@@ -1,8 +1,11 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cp7abjc4l1sfn"]
 
+[ext_resource type="PackedScene" uid="uid://da7yy7qfbwkkt" path="res://game/object/fludd_box/fludd_box_rocket.tscn" id="1_6lafr"]
 [ext_resource type="Texture2D" uid="uid://cawur2ekoqo4o" path="res://assets/textures/item/fludd/fludd_box_rocket.png" id="1_j1wmt"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_0ppvn"]
+[ext_resource type="PackedScene" uid="uid://b3w8crcf58g6i" path="res://game/db/Objects/Item/FLUDD/fludd_box_rocket_ld.tscn" id="2_y30fn"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_ycukv"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_y30fn"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wxuox"]
 atlas = ExtResource("1_j1wmt")
@@ -18,4 +21,7 @@ group_path = "FLUDD"
 name_override = "Rocket FLUDD Box"
 ld_object_path = "Item/FLUDD/fludd_box_rocket"
 ld_entry_texture = SubResource("AtlasTexture_wxuox")
+ld_editor_instance = ExtResource("2_y30fn")
+ld_properties = Array[ExtResource("2_ycukv")]([ExtResource("5_y30fn")])
+game_instance = ExtResource("1_6lafr")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

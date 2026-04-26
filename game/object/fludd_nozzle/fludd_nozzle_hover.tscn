@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://b1bysf6h2qqww"]
+
+[ext_resource type="Script" uid="uid://bum2yr1b2mck6" path="res://game/object/fludd_nozzle/fludd_nozzle_hover.gd" id="1_saqq8"]
+[ext_resource type="Texture2D" uid="uid://cstnoxk1myead" path="res://assets/textures/item/fludd/fludd_nozzle_hover.png" id="2_ltr0n"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_saqq8"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="4_ljcff"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_ljcff"]
+diffuse_texture = ExtResource("2_ltr0n")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_saqq8"]
+resource_local_to_scene = true
+size = Vector2(24, 0)
+
+[node name="FluddNozzleHover" type="CharacterBody2D" unique_id=762472111 node_paths=PackedStringArray("sprite", "components_root")]
+script = ExtResource("1_saqq8")
+sprite = NodePath("SmartSprite2D")
+components_root = NodePath("Components/GravityComponent")
+
+[node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=857828210]
+texture = SubResource("CanvasTexture_ljcff")
+script = ExtResource("3_saqq8")
+canvas_texture = SubResource("CanvasTexture_ljcff")
+diffuse_texture = ExtResource("2_ltr0n")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="Components" type="Node" parent="." unique_id=1804980060]
+
+[node name="GravityComponent" type="Node" parent="Components" unique_id=352043193 node_paths=PackedStringArray("entity")]
+script = ExtResource("4_ljcff")
+entity = NodePath("../..")
+metadata/_custom_type_script = "uid://cb672xli6i2ns"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=79070776]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_saqq8")
+one_way_collision = true
+one_way_collision_margin = 8.0

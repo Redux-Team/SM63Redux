@@ -1,0 +1,136 @@
+[gd_scene format=3 uid="uid://da7yy7qfbwkkt"]
+
+[ext_resource type="PackedScene" uid="uid://cwhsjhk1kpwp1" path="res://game/object/fludd_box/fludd_box_hover.tscn" id="1_nxwtm"]
+[ext_resource type="Texture2D" uid="uid://7ys45pgcxppb" path="res://assets/textures/item/fludd/fludd_box_rocket_open.png" id="2_lau17"]
+[ext_resource type="PackedScene" uid="uid://cxhx88u13fqba" path="res://game/object/fludd_nozzle/fludd_nozzle_rocket.tscn" id="2_rg780"]
+[ext_resource type="Texture2D" uid="uid://cawur2ekoqo4o" path="res://assets/textures/item/fludd/fludd_box_rocket.png" id="3_rg780"]
+[ext_resource type="Texture2D" uid="uid://cm3w0c44jn7fh" path="res://assets/textures/item/fludd/fludd_box_rocket_stretch.png" id="4_rg780"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r2bdr"]
+atlas = ExtResource("3_rg780")
+region = Rect2(0, 0, 40, 36)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_nxwtm"]
+diffuse_texture = SubResource("AtlasTexture_r2bdr")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0gn0l"]
+atlas = ExtResource("4_rg780")
+region = Rect2(0, 0, 60, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q3nsy"]
+atlas = ExtResource("4_rg780")
+region = Rect2(60, 0, 60, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3oaqa"]
+atlas = ExtResource("4_rg780")
+region = Rect2(120, 0, 60, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a65c7"]
+atlas = ExtResource("4_rg780")
+region = Rect2(180, 0, 60, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_40v3s"]
+atlas = ExtResource("4_rg780")
+region = Rect2(240, 0, 60, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mwppj"]
+atlas = ExtResource("2_lau17")
+region = Rect2(0, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_parax"]
+atlas = ExtResource("2_lau17")
+region = Rect2(90, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hlrqj"]
+atlas = ExtResource("2_lau17")
+region = Rect2(180, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iui1a"]
+atlas = ExtResource("2_lau17")
+region = Rect2(270, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_284yh"]
+atlas = ExtResource("2_lau17")
+region = Rect2(360, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o1tqm"]
+atlas = ExtResource("2_lau17")
+region = Rect2(450, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1enbb"]
+atlas = ExtResource("2_lau17")
+region = Rect2(540, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8361q"]
+atlas = ExtResource("2_lau17")
+region = Rect2(630, 0, 90, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u443f"]
+atlas = ExtResource("2_lau17")
+region = Rect2(630, 0, 90, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_o1tqm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r2bdr")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0gn0l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q3nsy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3oaqa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a65c7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_40v3s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mwppj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_parax")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hlrqj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iui1a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_284yh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o1tqm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1enbb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8361q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u443f")
+}],
+"loop": true,
+"name": &"open",
+"speed": 25.0
+}]
+
+[node name="FluddBoxRocket" unique_id=2137935164 instance=ExtResource("1_nxwtm")]
+spawn = ExtResource("2_rg780")
+
+[node name="Sprite" parent="." index="0" unique_id=499824916]
+texture = SubResource("CanvasTexture_nxwtm")
+canvas_texture = SubResource("CanvasTexture_nxwtm")
+diffuse_frames = SubResource("SpriteFrames_o1tqm")

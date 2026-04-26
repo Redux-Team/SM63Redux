@@ -174,6 +174,10 @@ func set_friction_scale_factor(scale_factor: float) -> void:
 		friction_component.scale_factor = scale_factor
 
 
+func set_attached(object: Node2D, direction: String) -> void:
+	state_machine.change_state("attached_%s" % direction)
+
+
 func resist(val: float, sub: float, div: float) -> float:
 	var s: float = sign(val)
 	val = max(0.0, abs(val) - sub)
