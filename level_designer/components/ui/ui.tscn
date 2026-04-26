@@ -4,12 +4,14 @@
 [ext_resource type="PackedScene" uid="uid://bbf6gei1bmu46" path="res://level_designer/components/ui/window/window.tscn" id="2_ms7r3"]
 [ext_resource type="PackedScene" uid="uid://bk2iromqs3siv" path="res://level_designer/components/ui/object_browser/object_browser.tscn" id="3_ms7r3"]
 [ext_resource type="PackedScene" uid="uid://wfkq6ce52aet" path="res://level_designer/components/ui/object_properties/object_properties.tscn" id="4_4nlpt"]
+[ext_resource type="PackedScene" uid="uid://ckffdp04tglj1" path="res://level_designer/components/ui/layer_properties/layer_properties.tscn" id="5_uannl"]
 
-[node name="LDUI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window", "_save_file_dialog", "_load_file_dialog")]
+[node name="LDUI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window", "_layer_properties_window", "_save_file_dialog", "_load_file_dialog")]
 script = ExtResource("1_8w51u")
 _canvas_layer = NodePath("WindowLayer")
 _obj_browser_window = NodePath("WindowLayer/ObjectBrowserWindow")
 _object_property_window = NodePath("WindowLayer/ObjectPropertyWindow")
+_layer_properties_window = NodePath("WindowLayer/LayerPropertiesWindow")
 _save_file_dialog = NodePath("WindowLayer/SaveFileDialog")
 _load_file_dialog = NodePath("WindowLayer/LoadFileDialog")
 
@@ -167,7 +169,6 @@ visible = false
 title = "Objects - All"
 content = ExtResource("3_ms7r3")
 window_scale = Vector2(0.9, 0.9)
-pop_in_sfx = true
 
 [node name="ObjectPropertyWindow" parent="WindowLayer" unique_id=1576900173 instance=ExtResource("2_ms7r3")]
 visible = false
@@ -175,7 +176,11 @@ title = "Properties - <obj>"
 content = ExtResource("4_4nlpt")
 close_on_back_input = true
 window_scale = Vector2(0.9, 0.9)
-pop_in_sfx = true
+
+[node name="LayerPropertiesWindow" parent="WindowLayer" unique_id=354043236 instance=ExtResource("2_ms7r3")]
+visible = false
+title = "Layer Properties"
+content = ExtResource("5_uannl")
 
 [node name="SaveFileDialog" type="FileDialog" parent="WindowLayer" unique_id=1751840764]
 oversampling_override = 1.0

@@ -28,7 +28,6 @@ func _on_ready() -> void:
 
 func _on_enable() -> void:
 	super()
-	print("a")
 	var selected: Array[LDObject] = viewport.get_selected_objects()
 	if selected.size() == 1 and selected[0] is LDObjectPath:
 		_editing_object = selected[0] as LDObjectPath

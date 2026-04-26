@@ -87,7 +87,7 @@ func _serialize() -> Dictionary:
 		if not layer:
 			continue
 		var objects_data: Array = []
-		for obj_node: Node in layer.get_children():
+		for obj_node: Node in layer.get_content_root().get_children():
 			var obj: LDObject = obj_node as LDObject
 			if not obj or obj.is_preview:
 				continue
@@ -97,6 +97,8 @@ func _serialize() -> Dictionary:
 		layers_data.append({
 			"layer_index": layer.layer_index,
 			"parallax_scale": _vec2_to_array(layer.parallax_scale),
+			"decoration": layer.decoration,
+			"modulation": _color_to_array(layer.base_modulate),
 			"objects": objects_data,
 		})
 	
@@ -167,6 +169,10 @@ func _deserialize(data: Dictionary) -> Error:
 		var raw_parallax: Variant = layer_data.get("parallax_scale", null)
 		if raw_parallax != null:
 			layer.parallax_scale = _array_to_vec2(raw_parallax)
+		var raw_modulate: Variant = layer_data.get("modulation", null)
+		if raw_modulate != null:
+			layer.base_modulate = _array_to_color(raw_modulate)
+		layer.decoration = layer_data.get("decoration", false)
 		for obj_data: Variant in layer_data.get("objects", []):
 			if not obj_data is Dictionary:
 				continue
@@ -196,11 +202,10 @@ func _ensure_player_spawn() -> void:
 		return
 	
 	var viewport: LDViewport = LD.get_editor_viewport()
-	for child: Node in viewport._layers_root.get_children():
-		for obj_node: Node in child.get_children():
-			var obj: LDObject = obj_node as LDObject
-			if obj and obj.source_object_id == game_object.id:
-				return
+	
+	for obj: LDObject in viewport.get_all_objects():
+		if obj and obj.source_object_id == game_object.id:
+			return
 	
 	var instance: LDObject = game_object.ld_editor_instance.instantiate() as LDObject
 	if not instance:
@@ -280,15 +285,15 @@ func _serialize_variant(value: Variant) -> Variant:
 	if value is Vector2i:
 		return [value.x, value.y]
 	if value is Color:
-		return [value.r, value.g, value.b, value.a]
+		return _color_to_array(value)
 	return value
 
 
 func _deserialize_variant(value: Variant) -> Variant:
-	if value is Array and value.size() == 2:
+	if value is Array and (value as Array).size() == 2:
 		return _array_to_vec2(value)
-	if value is Array and value.size() == 4:
-		return Color(value[0], value[1], value[2], value[3])
+	if value is Array and (value as Array).size() == 4:
+		return _array_to_color(value)
 	return value
 
 
@@ -297,6 +302,16 @@ func _vec2_to_array(v: Vector2) -> Array:
 
 
 func _array_to_vec2(a: Variant) -> Vector2:
-	if a is Array and a.size() >= 2:
-		return Vector2(float(a[0]), float(a[1]))
+	if a is Array and (a as Array).size() >= 2:
+		return Vector2(float((a as Array)[0]), float((a as Array)[1]))
 	return Vector2.ZERO
+
+
+func _color_to_array(c: Color) -> Array:
+	return [c.r, c.g, c.b, c.a]
+
+
+func _array_to_color(a: Variant) -> Color:
+	if a is Array and (a as Array).size() == 4:
+		return Color(float((a as Array)[0]), float((a as Array)[1]), float((a as Array)[2]), float((a as Array)[3]))
+	return Color.WHITE

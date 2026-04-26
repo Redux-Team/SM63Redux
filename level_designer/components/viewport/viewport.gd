@@ -266,8 +266,11 @@ func clear_selection() -> void:
 
 func get_all_objects() -> Array[LDObject]:
 	var result: Array[LDObject] = []
-	for layer: Node in _layers_root.get_children():
-		for child: Node in layer.get_children():
+	for layer_node: Node in _layers_root.get_children():
+		var layer: LDLayer = layer_node as LDLayer
+		if not layer:
+			continue
+		for child: Node in layer.get_content_root().get_children():
 			var obj: LDObject = child as LDObject
 			if obj:
 				result.append(obj)
@@ -279,7 +282,7 @@ func get_all_objects_on_layer(layer_index: int = _active_layer) -> Array[LDObjec
 	var layer: LDLayer = _get_layer(layer_index)
 	if not layer:
 		return result
-	for child: Node in layer.get_children():
+	for child: Node in layer.get_content_root().get_children():
 		var obj: LDObject = child as LDObject
 		if obj:
 			result.append(obj)
@@ -325,7 +328,7 @@ func step_active_layer(delta: int) -> void:
 
 func move_object_to_layer(object: LDObject, layer_num: int) -> void:
 	var layer: LDLayer = get_or_create_layer(layer_num)
-	object.reparent(layer)
+	object.reparent(layer.get_content_root())
 
 
 func set_layer_visible(layer_index: int, is_visible: bool) -> void:
@@ -370,7 +373,7 @@ func world_rect_to_screen(world_top_left: Vector2, world_size: Vector2) -> Rect2
 
 func add_object(object: LDObject, pos: Vector2i = Vector2i.ZERO, layer_index: int = _active_layer) -> void:
 	var layer: LDLayer = get_or_create_layer(layer_index)
-	layer.add_child(object)
+	layer.get_content_root().add_child(object)
 	object.position = pos
 	_apply_layer_visual(layer)
 
@@ -441,7 +444,7 @@ func _refresh_layer_visuals() -> void:
 func _apply_layer_visual(layer: LDLayer) -> void:
 	if _preview_mode:
 		layer.visible = true
-		layer.modulate = Color(1.0, 1.0, 1.0, 1.0)
+		layer.visual_modulate = Color(1.0, 1.0, 1.0, 1.0)
 		return
 	
 	if _hidden_layers.get(layer.layer_index, false):
@@ -452,9 +455,9 @@ func _apply_layer_visual(layer: LDLayer) -> void:
 	var distance: int = layer.layer_index - _active_layer
 	var alpha: float = clampf(1.0 - absi(distance) * LAYER_ALPHA_STEP, 0.0, 1.0)
 	if distance < 0:
-		layer.modulate = Color(0.8, 0.8, 0.8, alpha)
+		layer.visual_modulate = Color(0.8, 0.8, 0.8, alpha)
 	else:
-		layer.modulate = Color(1.0, 1.0, 1.0, alpha)
+		layer.visual_modulate = Color(1.0, 1.0, 1.0, alpha)
 
 
 func _sort_layers() -> void:

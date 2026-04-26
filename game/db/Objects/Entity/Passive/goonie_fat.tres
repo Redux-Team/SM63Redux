@@ -22,5 +22,6 @@ ld_object_path = "Entity/Passive/goonie_fat"
 ld_entry_texture = SubResource("AtlasTexture_6be6k")
 ld_editor_instance = ExtResource("1_6be6k")
 ld_properties = Array[ExtResource("2_6be6k")]([ExtResource("5_ep4rv")])
+ld_placement_rules = 3
 game_instance = ExtResource("1_q0rcc")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

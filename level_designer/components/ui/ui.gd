@@ -6,6 +6,7 @@ extends LDComponent
 @export_group("Windows")
 @export var _obj_browser_window: LDWindow
 @export var _object_property_window: LDWindow
+@export var _layer_properties_window: LDWindow
 @export_group("File Dialogs")
 @export var _save_file_dialog: FileDialog
 @export var _load_file_dialog: FileDialog
@@ -95,6 +96,10 @@ func _on_properties_button_pressed() -> void:
 	_toggle_window(_object_property_window)
 
 
+func _on_layer_properties_pressed() -> void:
+	_toggle_window(_layer_properties_window)
+
+
 func _on_select_button_pressed() -> void:
 	LD.get_tool_handler().select_tool("select")
 
@@ -160,7 +165,3 @@ func _on_move_to_back_button_pressed() -> void:
 
 func _on_layer_spin_box_value_changed(value: float) -> void:
 	LD.get_editor_viewport().set_active_layer(int(value))
-
-
-func _on_layer_properties_pressed() -> void:
-	pass # Replace with function body.

@@ -14,7 +14,6 @@ func _ready() -> void:
 
 
 func _on_bounce_area_body_entered(body: Node2D) -> void:
-	print(body)
 	if body is Entity and body.velocity.y > 0:
 		body.velocity.y = -400
 		animation_player.play(&"squish")

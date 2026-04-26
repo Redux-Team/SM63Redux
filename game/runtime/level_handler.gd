@@ -23,6 +23,14 @@ func load_from_dict(data: Dictionary) -> Error:
 		if not layer_data is Dictionary:
 			continue
 		var layer_index: int = layer_data.get("layer_index", 0)
+		var layer: LevelLayer = _get_or_create_layer(layer_index)
+		var raw_parallax: Variant = layer_data.get("parallax_scale", null)
+		if raw_parallax != null:
+			layer.parallax_scale = _array_to_vec2(raw_parallax)
+		var raw_modulate: Variant = layer_data.get("modulation", null)
+		if raw_modulate != null:
+			layer.base_modulate = _array_to_color(raw_modulate)
+		layer.decoration_layer = layer_data.get("decoration", false)
 		for obj_data: Variant in layer_data.get("objects", []):
 			if not obj_data is Dictionary:
 				continue
@@ -100,7 +108,7 @@ func _instantiate_object(data: Dictionary, layer_index: int) -> void:
 	
 	var instance: Node = game_object.game_instance.instantiate()
 	var layer: LevelLayer = _get_or_create_layer(layer_index)
-	layer.add_child(instance)
+	layer.get_content_root().add_child(instance)
 	
 	var level_object: LevelObject = instance as LevelObject
 	if level_object:
@@ -144,6 +152,18 @@ func _sort_layers() -> void:
 	)
 	for i: int in layers.size():
 		_layers_root.move_child(layers[i], i)
+
+
+func _array_to_vec2(a: Variant) -> Vector2:
+	if a is Array and a.size() >= 2:
+		return Vector2(float(a[0]), float(a[1]))
+	return Vector2.ZERO
+
+
+func _array_to_color(a: Variant) -> Color:
+	if a is Array and (a as Array).size() == 4:
+		return Color(float(a[0]), float(a[1]), float(a[2]), float(a[3]))
+	return Color.WHITE
 
 
 func _clear() -> void:

@@ -18,7 +18,7 @@ signal popped_out
 @export var window_scale: Vector2 = Vector2.ONE
 
 @export_group("Pop In", "pop_in")
-@export var pop_in_sfx: bool = false
+@export var pop_in_sfx: bool = true
 @export var pop_in_centered: bool = true
 
 @export_group("Pop Out", "pop_out")
