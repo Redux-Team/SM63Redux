@@ -25,6 +25,10 @@ boot_splash/show_image=false
 config/icon="uid://b7hhchui2qslg"
 config/windows_native_icon="res://meta/icon.ico"
 
+[audio]
+
+buses/default_bus_layout="uid://dnbqnrs3tfb81"
+
 [autoload]
 
 Singleton="*res://singleton/singleton.tscn"
@@ -49,9 +53,13 @@ enabled=PackedStringArray("res://addons/discord_social_sdk/plugin.cfg", "res://a
 [file_customization]
 
 folder_colors={
+"res://addons/": "gray",
 "res://assets/": "teal",
+"res://build/": "gray",
 "res://core/": "red",
+"res://dev/": "gray",
 "res://game/": "blue",
+"res://level_designer/": "pink",
 "res://meta/": "yellow",
 "res://proto/": "gray",
 "res://singleton/": "orange",
