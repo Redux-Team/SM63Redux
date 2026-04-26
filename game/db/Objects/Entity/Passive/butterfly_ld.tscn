@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://oeddlm1gmrna"]
+
+[ext_resource type="Script" uid="uid://msixnc84hrmk" path="res://game/db/Objects/Entity/Passive/butterfly_ld.gd" id="1_64cp4"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_64cp4"]
+[ext_resource type="Texture2D" uid="uid://yr1mio7ywj4n" path="res://assets/textures/entity/passive/butterfly_palette.png" id="3_ccag5"]
+[ext_resource type="Texture2D" uid="uid://bib4p7qxydld3" path="res://assets/textures/entity/passive/butterfly_flap.png" id="4_7carj"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="5_3ab52"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2116e"]
+resource_local_to_scene = true
+shader = ExtResource("2_64cp4")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/palette_texture = ExtResource("3_ccag5")
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_64cp4"]
+atlas = ExtResource("4_7carj")
+region = Rect2(0, 0, 10, 10)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_64cp4"]
+diffuse_texture = SubResource("AtlasTexture_64cp4")
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ccag5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_64cp4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s4xt4"]
+size = Vector2(10, 10)
+
+[node name="ButterflyLd" type="Node2D" unique_id=1179513664 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker", "shader_objects")]
+script = ExtResource("1_64cp4")
+sprite_ref = NodePath("Sprite")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+shader_objects = [NodePath("Sprite")]
+metadata/_custom_type_script = "uid://cfx4civm76jwr"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1742315076]
+material = SubResource("ShaderMaterial_2116e")
+texture = SubResource("CanvasTexture_64cp4")
+region_enabled = true
+region_rect = Rect2(0, 0, 10, 10)
+script = ExtResource("5_3ab52")
+canvas_texture = SubResource("CanvasTexture_64cp4")
+preview = 1
+animated = true
+diffuse_frames = SubResource("SpriteFrames_ccag5")
+current_animation = "default"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=923267578]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=758156169]
+shape = SubResource("RectangleShape2D_s4xt4")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=392964746]

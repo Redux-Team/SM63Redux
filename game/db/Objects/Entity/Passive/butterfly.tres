@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bnah8mloey62o"]
+
+[ext_resource type="PackedScene" uid="uid://oeddlm1gmrna" path="res://game/db/Objects/Entity/Passive/butterfly_ld.tscn" id="1_8q3po"]
+[ext_resource type="PackedScene" uid="uid://c0c25k70keqvh" path="res://game/entity/passive/butterfly/butterfly.tscn" id="1_40h3p"]
+[ext_resource type="Texture2D" uid="uid://bop67m42up5h" path="res://assets/textures/entity/passive/butterfly_ld.png" id="1_bxlk4"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_l5p0o"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_bxlk4"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_2tfby"]
+[ext_resource type="Script" uid="uid://bsvpspsohskw0" path="res://game/db/Properties/palette.gd" id="6_nqpn7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8q3po"]
+atlas = ExtResource("1_bxlk4")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="Resource" id="Resource_y777j"]
+script = ExtResource("6_nqpn7")
+amount = 7
+random = 1
+key = &"palette"
+label = "Palette"
+type = 1
+default_value = 0
+metadata/_custom_type_script = "uid://bsvpspsohskw0"
+
+[resource]
+script = ExtResource("2_bxlk4")
+id = "butterfly"
+category_string = "Entity"
+subpath = "Passive/butterfly"
+group_path = "Passive"
+ld_object_path = "Entity/Passive/butterfly"
+ld_entry_texture = SubResource("AtlasTexture_8q3po")
+ld_editor_instance = ExtResource("1_8q3po")
+ld_properties = Array[ExtResource("1_l5p0o")]([ExtResource("5_2tfby"), SubResource("Resource_y777j")])
+game_instance = ExtResource("1_40h3p")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

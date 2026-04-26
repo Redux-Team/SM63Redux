@@ -9,10 +9,20 @@
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_mp52l"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="8_mp52l"]
 [ext_resource type="Resource" uid="uid://cmrdgbqp43tvo" path="res://game/db/Properties/t_size_y.tres" id="8_tsprs"]
+[ext_resource type="Script" uid="uid://bsvpspsohskw0" path="res://game/db/Properties/palette.gd" id="9_mp52l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i1eyc"]
 atlas = ExtResource("1_thx5c")
 region = Rect2(-7, -7, 48, 48)
+
+[sub_resource type="Resource" id="Resource_tsprs"]
+script = ExtResource("9_mp52l")
+amount = 4
+key = &"palette"
+label = "Palette"
+type = 1
+default_value = 0
+metadata/_custom_type_script = "uid://bsvpspsohskw0"
 
 [resource]
 script = ExtResource("3_phxqm")
@@ -24,7 +34,7 @@ group_path = "Warps"
 ld_object_path = "Props/Warps/pipe"
 ld_entry_texture = SubResource("AtlasTexture_i1eyc")
 ld_editor_instance = ExtResource("1_6ij0s")
-ld_properties = Array[ExtResource("2_vgd0w")]([ExtResource("5_wevwc"), ExtResource("6_mp52l"), ExtResource("8_mp52l"), ExtResource("8_tsprs")])
+ld_properties = Array[ExtResource("2_vgd0w")]([ExtResource("5_wevwc"), ExtResource("6_mp52l"), ExtResource("8_mp52l"), ExtResource("8_tsprs"), SubResource("Resource_tsprs")])
 ld_placement_tool_override = "telescoping"
 game_instance = ExtResource("1_horer")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

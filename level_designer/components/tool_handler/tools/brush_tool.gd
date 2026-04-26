@@ -189,7 +189,7 @@ func _commit_stroke() -> void:
 		return
 	
 	for obj: LDObject in _stroke:
-		obj.place()
+		obj._first_placement()
 	
 	var placed: Array[LDObject] = _stroke.duplicate()
 	var history: LDHistoryHandler = LD.get_history_handler()

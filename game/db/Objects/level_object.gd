@@ -5,6 +5,7 @@ extends Node2D
 @export var spawn_offset: Vector2
 @export var body: CollisionObject2D
 @export var terrain_type: String
+@export var palette_objects: Array[CanvasItem]
 
 var data: Dictionary
 var properties: Dictionary = {}
@@ -45,6 +46,9 @@ func _handle_property(property_name: String, property_value: Variant) -> void:
 		set_process(not property_value)
 		set_physics_process(not property_value)
 		set_process_internal(not property_value)
+	elif property_name == "palette":
+		for obj: CanvasItem in palette_objects:
+			obj.material.set_shader_parameter(&"palette_index", property_value)
 	else:
 		set(property_name, property_value)
 

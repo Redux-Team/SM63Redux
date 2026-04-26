@@ -30,7 +30,7 @@ func get_control_points() -> PackedVector2Array:
 	return _points.duplicate()
 
 
-func place() -> void:
+func place(_first: bool = false) -> void:
 	set_property(&"path_points", _points)
 	super()
 

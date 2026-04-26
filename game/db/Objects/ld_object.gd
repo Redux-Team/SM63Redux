@@ -60,10 +60,17 @@ func _on_place() -> void:
 	pass
 
 
-func place() -> void:
+func _first_placement() -> void:
+	place(true)
+
+
+func place(first: bool = false) -> void:
 	is_preview = false
 	for prop: LDProperty in _properties:
 		_apply_property(prop.key, _property_values.get(prop.key, prop.default_value))
+		
+		if first:
+			prop._on_first_placement(self, _property_values.get(prop.key, prop.default_value))
 
 
 func init_properties(obj: GameObject) -> void:

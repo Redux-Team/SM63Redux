@@ -28,13 +28,14 @@ shader_parameter/outline_enabled = true
 resource_local_to_scene = true
 size = Vector2(32, 31.5)
 
-[node name="Pipe" type="Node2D" unique_id=1215488278 node_paths=PackedStringArray("nine_patch", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+[node name="Pipe" type="Node2D" unique_id=1215488278 node_paths=PackedStringArray("nine_patch", "editor_shape_area", "editor_placement_rect", "origin_marker", "shader_objects")]
 script = ExtResource("1_vi0gc")
 min_units = 1
 nine_patch = NodePath("NinePatch")
 editor_shape_area = NodePath("EditorShapeArea")
 editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
 origin_marker = NodePath("Origin")
+shader_objects = [NodePath("NinePatch")]
 metadata/_custom_type_script = "uid://b3mrac5qo7r3g"
 
 [node name="NinePatch" type="NinePatchRect" parent="." unique_id=2013789319]

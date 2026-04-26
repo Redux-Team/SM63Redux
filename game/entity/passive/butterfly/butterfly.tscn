@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://c0c25k70keqvh"]
+
+[ext_resource type="Script" uid="uid://t34kco4abs1" path="res://game/entity/passive/butterfly/butterfly.gd" id="1_ib71x"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_ib71x"]
+[ext_resource type="Shader" uid="uid://dcb7jh0modabn" path="res://core/shader/level_object.gdshader" id="2_s4w4i"]
+[ext_resource type="Texture2D" uid="uid://yr1mio7ywj4n" path="res://assets/textures/entity/passive/butterfly_palette.png" id="3_g1e0l"]
+[ext_resource type="Texture2D" uid="uid://bib4p7qxydld3" path="res://assets/textures/entity/passive/butterfly_flap.png" id="3_s4w4i"]
+
+[sub_resource type="Curve2D" id="Curve2D_ib71x"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, -12.183065, -11.813882, 12.183065, 11.813882, 24, -12, 9.967963, -6.8299003, -9.967963, 6.8299003, 22, 13, 12.367658, -6.3684206, -12.367658, 6.3684206, -17, -16, -17.628527, -10.890923, 17.628527, 10.890923, -19, 16, 0, 0, 0, 0, 0, 0)
+}
+point_count = 6
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g1e0l"]
+resource_local_to_scene = true
+shader = ExtResource("2_s4w4i")
+shader_parameter/palette_index = 0
+shader_parameter/palette_texture = ExtResource("3_g1e0l")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xol00"]
+atlas = ExtResource("3_s4w4i")
+region = Rect2(0, 0, 10, 9)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_ib71x"]
+diffuse_texture = SubResource("AtlasTexture_xol00")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g63fv"]
+atlas = ExtResource("3_s4w4i")
+region = Rect2(0, 9, 10, 9)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fabbo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xol00")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g63fv")
+}],
+"loop": true,
+"name": &"flap",
+"speed": 4.0
+}]
+
+[node name="Butterfly" type="Node2D" unique_id=2143955410 node_paths=PackedStringArray("sprite", "path_follow_2d", "palette_objects")]
+script = ExtResource("1_ib71x")
+sprite = NodePath("Path2D/PathFollow2D/Sprite")
+path_follow_2d = NodePath("Path2D/PathFollow2D")
+palette_objects = [NodePath("Path2D/PathFollow2D/Sprite")]
+metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
+
+[node name="Path2D" type="Path2D" parent="." unique_id=398456105]
+curve = SubResource("Curve2D_ib71x")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1735559469]
+rotation = -1.1101769
+rotates = false
+
+[node name="Sprite" type="Sprite2D" parent="Path2D/PathFollow2D" unique_id=1527195959]
+material = SubResource("ShaderMaterial_g1e0l")
+rotation = 1.1101769
+texture = SubResource("CanvasTexture_ib71x")
+region_enabled = true
+region_rect = Rect2(0, 0, 10, 9)
+script = ExtResource("2_ib71x")
+canvas_texture = SubResource("CanvasTexture_ib71x")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_fabbo")
+current_animation = "flap"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"

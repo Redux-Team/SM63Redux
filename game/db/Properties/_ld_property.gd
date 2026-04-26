@@ -29,6 +29,11 @@ func apply(obj: LDObject, value: Variant) -> void:
 	obj.set(key, value)
 
 
+@warning_ignore("unused_parameter")
+func _on_first_placement(obj: LDObject, value: Variant) -> void:
+	pass
+
+
 func clamp_value(value: Variant) -> Variant:
 	return value
 
