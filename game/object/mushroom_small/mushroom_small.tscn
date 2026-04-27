@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c8d2dxe05kcmk"]
 
 [ext_resource type="Script" uid="uid://bsswcbgcrlwv2" path="res://game/db/Objects/level_object.gd" id="1_m1hyq"]
-[ext_resource type="Texture2D" uid="uid://r47wcu86srsw" path="res://assets/textures/props/nature/mushroom_small.png" id="2_cd7pd"]
+[ext_resource type="Texture2D" uid="uid://r47wcu86srsw" path="res://assets/textures/props/nature/small_mushroom.png" id="2_cd7pd"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_edn1x"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_7glgk"]

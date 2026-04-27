@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bywn2c1kw0pxn"]
+
+[ext_resource type="PackedScene" uid="uid://lwlutu05lf2r" path="res://game/object/rock_small/rock_small.tscn" id="1_l4ynb"]
+[ext_resource type="PackedScene" uid="uid://badbr2p1fbcup" path="res://game/db/Objects/Props/Nature/small_rock_ld.tscn" id="2_w3t3f"]
+[ext_resource type="Texture2D" uid="uid://cgf8cokpn8q8s" path="res://assets/textures/props/nature/small_rock.png" id="3_j4b1t"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_0w6sk"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_kmcpr"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_nu1uk"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_203d7"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_3v0dd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mjm7j"]
+atlas = ExtResource("3_j4b1t")
+region = Rect2(1, -28, 48, 48)
+
+[resource]
+script = ExtResource("8_3v0dd")
+id = "small_rock"
+category = 4
+category_string = "Props"
+subpath = "Nature/small_rock"
+group_path = "Nature"
+name_override = "Small Rock"
+ld_object_path = "Props/Nature/small_rock"
+ld_entry_texture = SubResource("AtlasTexture_mjm7j")
+ld_editor_instance = ExtResource("2_w3t3f")
+ld_index_id = "rock"
+ld_properties = Array[ExtResource("4_0w6sk")]([ExtResource("5_kmcpr"), ExtResource("6_nu1uk"), ExtResource("7_203d7")])
+game_instance = ExtResource("1_l4ynb")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

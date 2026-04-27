@@ -23,6 +23,7 @@ group_path = "Nature"
 ld_object_path = "Props/Nature/mushroom_pair"
 ld_entry_texture = SubResource("AtlasTexture_ocmao")
 ld_editor_instance = ExtResource("2_4dqcf")
+ld_index_id = "mushroom"
 ld_properties = Array[ExtResource("2_e4y0g")]([ExtResource("5_4dqcf"), ExtResource("6_cbvyc"), ExtResource("7_uit3e")])
 game_instance = ExtResource("1_ltveh")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

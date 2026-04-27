@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bso8nut1cu84h" path="res://game/object/mushroom_tall/mushroom_tall.gd" id="1_wkefi"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_vx3b5"]
-[ext_resource type="Texture2D" uid="uid://7nxc5tdqfj5d" path="res://assets/textures/props/nature/mushroom_tall_stem.png" id="3_lwufj"]
-[ext_resource type="Texture2D" uid="uid://ch68bypk0kj63" path="res://assets/textures/props/nature/mushroom_tall_head.png" id="4_y2gk1"]
+[ext_resource type="Texture2D" uid="uid://7nxc5tdqfj5d" path="res://assets/textures/props/nature/tall_mushroom_stem.png" id="3_lwufj"]
+[ext_resource type="Texture2D" uid="uid://ch68bypk0kj63" path="res://assets/textures/props/nature/tall_mushroom_head.png" id="4_y2gk1"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="5_6r5gk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rxuf3"]

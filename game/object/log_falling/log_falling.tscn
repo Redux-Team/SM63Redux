@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b0sxd34i5igm8"]
 
 [ext_resource type="Script" uid="uid://cx651ap757m0y" path="res://game/object/log_falling/log_falling.gd" id="1_w2h6g"]
-[ext_resource type="Texture2D" uid="uid://bcao06ecobm0x" path="res://assets/textures/props/platform/log_falling.png" id="2_w2h6g"]
+[ext_resource type="Texture2D" uid="uid://bcao06ecobm0x" path="res://assets/textures/props/platform/falling_log.png" id="2_w2h6g"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_epf5h"]
 [ext_resource type="Script" uid="uid://dvxkxevaf2f45" path="res://core/custom_nodes/2d/ride_area.gd" id="4_w2h6g"]
 

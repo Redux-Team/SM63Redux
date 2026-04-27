@@ -14,6 +14,6 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		sprite.play(&"open")
 		
 		var object: Node2D = spawn.instantiate()
-		get_parent().add_child(object)
-		get_parent().move_child(object, get_index())
+		get_parent().add_child.call_deferred(object)
+		get_parent().move_child.call_deferred(object, get_index())
 		object.position = position

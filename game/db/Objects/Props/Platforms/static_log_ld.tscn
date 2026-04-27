@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://c5svhilmprh7p"]
+
+[ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="1_2dvmx"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_2dvmx"]
+[ext_resource type="Texture2D" uid="uid://eg3jm1ifajro" path="res://assets/textures/props/platform/static_log.png" id="2_mbyu4"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_128g7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fuidc"]
+resource_local_to_scene = true
+shader = ExtResource("2_2dvmx")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_128g7"]
+diffuse_texture = ExtResource("2_mbyu4")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ycd4g"]
+size = Vector2(16, 22)
+
+[node name="LogStatic" type="Node2D" unique_id=1650835231 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+script = ExtResource("1_2dvmx")
+sprite_ref = NodePath("Sprite")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+metadata/_custom_type_script = "uid://cfx4civm76jwr"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1112021418]
+material = SubResource("ShaderMaterial_fuidc")
+texture = SubResource("CanvasTexture_128g7")
+script = ExtResource("4_128g7")
+canvas_texture = SubResource("CanvasTexture_128g7")
+diffuse_texture = ExtResource("2_mbyu4")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=1099242803]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=763031092]
+shape = SubResource("RectangleShape2D_ycd4g")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=1571920310]

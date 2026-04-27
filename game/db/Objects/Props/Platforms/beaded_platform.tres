@@ -1,21 +1,21 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://chq66ovm2j0a6"]
 
-[ext_resource type="PackedScene" uid="uid://cl526b0bymamg" path="res://game/db/Objects/Props/Platforms/beaded_platform_ld.tscn" id="1_5y614"]
-[ext_resource type="PackedScene" uid="uid://ccshl1g2bbx1h" path="res://game/object/beaded_platform/beaded_platform.tscn" id="1_hdax6"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_wcmor"]
-[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_esspy"]
-[ext_resource type="Texture2D" uid="uid://dv06cavccq55" path="res://assets/textures/props/platform/beaded_platform.png" id="2_hdax6"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_onm7f"]
-[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_63umn"]
-[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_6oebo"]
-[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="8_pbi23"]
+[ext_resource type="PackedScene" uid="uid://ccshl1g2bbx1h" path="res://game/object/platform_beaded/platform_beaded.tscn" id="1_onm7f"]
+[ext_resource type="PackedScene" uid="uid://cl526b0bymamg" path="res://game/db/Objects/Props/Platforms/beaded_platform_ld.tscn" id="2_63umn"]
+[ext_resource type="Texture2D" uid="uid://dv06cavccq55" path="res://assets/textures/props/platform/beaded_platform.png" id="3_6oebo"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_pbi23"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_mbbmd"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_qt1od"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_llq2o"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="8_nvnln"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="9_l51oq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5y614"]
-atlas = ExtResource("2_hdax6")
+atlas = ExtResource("3_6oebo")
 region = Rect2(-4, -20, 48, 48)
 
 [resource]
-script = ExtResource("2_esspy")
+script = ExtResource("9_l51oq")
 id = "beaded_platform"
 category = 4
 category_string = "Props"
@@ -23,8 +23,9 @@ subpath = "Platforms/beaded_platform"
 group_path = "Platforms"
 ld_object_path = "Props/Platforms/beaded_platform"
 ld_entry_texture = SubResource("AtlasTexture_5y614")
-ld_editor_instance = ExtResource("1_5y614")
-ld_properties = Array[ExtResource("1_wcmor")]([ExtResource("5_onm7f"), ExtResource("6_63umn"), ExtResource("7_6oebo"), ExtResource("8_pbi23")])
+ld_editor_instance = ExtResource("2_63umn")
+ld_index_id = "platform"
+ld_properties = Array[ExtResource("4_pbi23")]([ExtResource("5_mbbmd"), ExtResource("6_qt1od"), ExtResource("7_llq2o"), ExtResource("8_nvnln")])
 ld_placement_tool_override = "telescoping"
-game_instance = ExtResource("1_hdax6")
+game_instance = ExtResource("1_onm7f")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

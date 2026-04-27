@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://m5bph8r26l57"]
+
+[ext_resource type="PackedScene" uid="uid://f7ffejcgyot" path="res://game/db/Objects/Props/Platforms/cubic_platform_ld.tscn" id="1_kkroa"]
+[ext_resource type="Texture2D" uid="uid://b88v6wf53xiwa" path="res://assets/textures/props/platform/cubic_platform_ld.png" id="2_omu7d"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_avssd"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_556y3"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="5_w1xp3"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_2b4vs"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="7_bt85d"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_kj12h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kkeh1"]
+atlas = ExtResource("2_omu7d")
+region = Rect2(-7, -18, 48, 48)
+
+[resource]
+script = ExtResource("8_kj12h")
+id = "cubic_platform"
+category = 4
+category_string = "Props"
+subpath = "Platforms/cubic_platform"
+group_path = "Platforms"
+ld_object_path = "Props/Platforms/cubic_platform"
+ld_entry_texture = SubResource("AtlasTexture_kkeh1")
+ld_editor_instance = ExtResource("1_kkroa")
+ld_index_id = "platform"
+ld_properties = Array[ExtResource("3_avssd")]([ExtResource("4_556y3"), ExtResource("5_w1xp3"), ExtResource("6_2b4vs"), ExtResource("7_bt85d")])
+ld_placement_tool_override = "telescoping"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

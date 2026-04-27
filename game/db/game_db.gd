@@ -123,6 +123,11 @@ class GameObjectGroup:
 	func get_objects() -> Array[GameObject]:
 		var result: Array[GameObject] = []
 		result.assign(_objects.values())
+		
+		result.sort_custom(func(a, b) -> bool:
+			return a.get_index_id() < b.get_index_id()
+		)
+		
 		return result
 
 

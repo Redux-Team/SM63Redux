@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dsj6dbrrkgdee"]
+
+[ext_resource type="PackedScene" uid="uid://ctyxflakd1jrp" path="res://game/object/tree_small/tree_small.tscn" id="1_ae5a2"]
+[ext_resource type="PackedScene" uid="uid://cdqkpf5ha7wbu" path="res://game/db/Objects/Props/Nature/small_tree_ld.tscn" id="2_gy8w4"]
+[ext_resource type="Texture2D" uid="uid://kkqqt81dw4uf" path="res://assets/textures/props/nature/small_tree.png" id="3_5qdoh"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_n1bef"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_iiesp"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_ov70q"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_d5xgg"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_yt1w2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gh333"]
+atlas = ExtResource("3_5qdoh")
+region = Rect2(-9, -3, 48, 48)
+
+[resource]
+script = ExtResource("8_yt1w2")
+id = "small_tree"
+category = 4
+category_string = "Props"
+subpath = "Nature/small_tree"
+group_path = "Nature"
+name_override = "Small Tree"
+ld_object_path = "Props/Nature/small_tree"
+ld_entry_texture = SubResource("AtlasTexture_gh333")
+ld_editor_instance = ExtResource("2_gy8w4")
+ld_index_id = "tree"
+ld_properties = Array[ExtResource("4_n1bef")]([ExtResource("5_iiesp"), ExtResource("6_ov70q"), ExtResource("7_d5xgg")])
+game_instance = ExtResource("1_ae5a2")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://q1babwobqcyh"]
 
 [ext_resource type="Script" uid="uid://bsswcbgcrlwv2" path="res://game/db/Objects/level_object.gd" id="1_o7je3"]
-[ext_resource type="Texture2D" uid="uid://bbav62xiuc73i" path="res://assets/textures/props/nature/flowers_blue.png" id="2_aibfk"]
+[ext_resource type="Texture2D" uid="uid://bbav62xiuc73i" path="res://assets/textures/props/nature/blue_flowers.png" id="2_aibfk"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_uu2cc"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_s7leh"]

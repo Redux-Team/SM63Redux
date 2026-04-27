@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://oo8tdxwidlkl"]
+
+[ext_resource type="PackedScene" uid="uid://q1babwobqcyh" path="res://game/object/flowers_blue/flowers_blue.tscn" id="1_bm8t4"]
+[ext_resource type="PackedScene" uid="uid://bkjwvro0x77vg" path="res://game/db/Objects/Props/Nature/blue_flowers_ld.tscn" id="2_q4k5w"]
+[ext_resource type="Texture2D" uid="uid://bbav62xiuc73i" path="res://assets/textures/props/nature/blue_flowers.png" id="3_ca6wm"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_p1x7i"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_ytlta"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_w1gh6"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_dm3n7"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_wavbg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ea8py"]
+atlas = ExtResource("3_ca6wm")
+region = Rect2(-8, -15, 48, 48)
+
+[resource]
+script = ExtResource("8_wavbg")
+id = "blue_flowers"
+category = 4
+category_string = "Props"
+subpath = "Nature/blue_flowers"
+group_path = "Nature"
+name_override = "Flowers (Blue)"
+ld_object_path = "Props/Nature/blue_flowers"
+ld_entry_texture = SubResource("AtlasTexture_ea8py")
+ld_editor_instance = ExtResource("2_q4k5w")
+ld_index_id = "flowers"
+ld_properties = Array[ExtResource("4_p1x7i")]([ExtResource("5_ytlta"), ExtResource("6_w1gh6"), ExtResource("7_dm3n7")])
+game_instance = ExtResource("1_bm8t4")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

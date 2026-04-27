@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dj0au6bbsu7no"]
+
+[ext_resource type="PackedScene" uid="uid://d0xjjqk515fak" path="res://game/db/Objects/Props/Platforms/metallic_platform_ld.tscn" id="1_mm55l"]
+[ext_resource type="Texture2D" uid="uid://bm7kpgufbf3u0" path="res://assets/textures/props/platform/metallic_platform_ld.png" id="2_u23wr"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_e428j"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_0yxq4"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="5_8pe2m"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_6futk"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="7_wko7v"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_6kfpd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lnka1"]
+atlas = ExtResource("2_u23wr")
+region = Rect2(-7, -19, 48, 48)
+
+[resource]
+script = ExtResource("8_6kfpd")
+id = "metallic_platform"
+category = 4
+category_string = "Props"
+subpath = "Platforms/metallic_platform"
+group_path = "Platforms"
+ld_object_path = "Props/Platforms/metallic_platform"
+ld_entry_texture = SubResource("AtlasTexture_lnka1")
+ld_editor_instance = ExtResource("1_mm55l")
+ld_index_id = "platform"
+ld_properties = Array[ExtResource("3_e428j")]([ExtResource("4_0yxq4"), ExtResource("5_8pe2m"), ExtResource("6_6futk"), ExtResource("7_wko7v")])
+ld_placement_tool_override = "telescoping"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

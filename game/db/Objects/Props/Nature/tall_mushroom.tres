@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dtolfo1xycloe"]
+
+[ext_resource type="PackedScene" uid="uid://b8t1f0jigimu8" path="res://game/object/mushroom_tall/mushroom_tall.tscn" id="1_wdemp"]
+[ext_resource type="PackedScene" uid="uid://db8w1e2gd8p1i" path="res://game/db/Objects/Props/Nature/tall_mushroom_ld.tscn" id="2_nh86y"]
+[ext_resource type="Texture2D" uid="uid://cgndb5v0afqi" path="res://assets/textures/props/nature/tall_mushroom_ld.png" id="3_bl36k"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_a2k1m"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_6punl"]
+[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="6_me7si"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_nn1hi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b0p7m"]
+atlas = ExtResource("3_bl36k")
+region = Rect2(0, 0, 48, 48)
+
+[resource]
+script = ExtResource("7_nn1hi")
+id = "tall_mushroom"
+category = 4
+category_string = "Props"
+subpath = "Nature/tall_mushroom"
+group_path = "Nature"
+name_override = "Tall Mushroom"
+ld_object_path = "Props/Nature/tall_mushroom"
+ld_entry_texture = SubResource("AtlasTexture_b0p7m")
+ld_editor_instance = ExtResource("2_nh86y")
+ld_index_id = "mushroom"
+ld_properties = Array[ExtResource("4_a2k1m")]([ExtResource("5_6punl"), ExtResource("6_me7si")])
+ld_placement_tool_override = "path"
+ld_select_tool_override = "path_edit"
+game_instance = ExtResource("1_wdemp")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

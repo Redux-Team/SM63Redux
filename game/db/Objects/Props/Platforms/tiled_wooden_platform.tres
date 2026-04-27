@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://b84q7fdi1jpbg"]
+
+[ext_resource type="PackedScene" uid="uid://7xxi3bocvkce" path="res://game/db/Objects/Props/Platforms/tiled_wooden_platform.tscn" id="1_iv44y"]
+[ext_resource type="Texture2D" uid="uid://lgojqy7j5air" path="res://assets/textures/props/platform/wooden_tile_platform_ld.png" id="2_aixv2"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_0jeld"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_1d0jn"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="5_38a21"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_3fyw1"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="7_lo3aw"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_v0cq3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7if14"]
+atlas = ExtResource("2_aixv2")
+region = Rect2(-8, -17, 48, 48)
+
+[resource]
+script = ExtResource("8_v0cq3")
+id = "tiled_wooden_platform"
+category = 4
+category_string = "Props"
+subpath = "Platforms/tiled_wooden_platform"
+group_path = "Platforms"
+ld_object_path = "Props/Platforms/tiled_wooden_platform"
+ld_entry_texture = SubResource("AtlasTexture_7if14")
+ld_editor_instance = ExtResource("1_iv44y")
+ld_index_id = "platform"
+ld_properties = Array[ExtResource("3_0jeld")]([ExtResource("4_1d0jn"), ExtResource("5_38a21"), ExtResource("6_3fyw1"), ExtResource("7_lo3aw")])
+ld_placement_tool_override = "telescoping"
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

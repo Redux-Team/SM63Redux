@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://lv8lc3too2cm"]
+
+[ext_resource type="PackedScene" uid="uid://ecqp3x0ehsb3" path="res://game/object/platform_snowy_wooden/platform_snowy_wooden.tscn" id="1_do488"]
+[ext_resource type="PackedScene" uid="uid://dmjjppp7qe47f" path="res://game/db/Objects/Props/Platforms/snowy_wooden_platform_ld.tscn" id="2_73hbm"]
+[ext_resource type="Texture2D" uid="uid://bmxvle5bq22fd" path="res://assets/textures/props/platform/snowy_wooden_platform_ld.png" id="3_0k13o"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_nrqby"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_iuojx"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_udcqf"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_ou1pr"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="8_qq1aa"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="9_01qn5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ntl47"]
+atlas = ExtResource("3_0k13o")
+region = Rect2(-7, -16, 48, 48)
+
+[resource]
+script = ExtResource("9_01qn5")
+id = "snowy_wooden_platform"
+category = 4
+category_string = "Props"
+subpath = "Platforms/snowy_wooden_platform"
+group_path = "Platforms"
+name_override = "Wooden Platform (Snowy)"
+ld_object_path = "Props/Platforms/snowy_wooden_platform"
+ld_entry_texture = SubResource("AtlasTexture_ntl47")
+ld_editor_instance = ExtResource("2_73hbm")
+ld_index_id = "platform"
+ld_properties = Array[ExtResource("4_nrqby")]([ExtResource("5_iuojx"), ExtResource("6_udcqf"), ExtResource("7_ou1pr"), ExtResource("8_qq1aa")])
+ld_placement_tool_override = "telescoping"
+game_instance = ExtResource("1_do488")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

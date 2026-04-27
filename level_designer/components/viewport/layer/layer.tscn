@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://c2sydam8nrrib" path="res://level_designer/components/viewport/layer/layer.gd" id="1_280j3"]
 
-[node name="Layer" type="CanvasGroup" unique_id=2071592061]
+[node name="Layer" type="Node2D" unique_id=86269176]
 script = ExtResource("1_280j3")

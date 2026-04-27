@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c2rhnypjjp5uq"]
 
 [ext_resource type="Script" uid="uid://bsswcbgcrlwv2" path="res://game/db/Objects/level_object.gd" id="1_irxtb"]
-[ext_resource type="Texture2D" uid="uid://dkwum2wy3clju" path="res://assets/textures/props/nature/rock_medium.png" id="2_dotvg"]
+[ext_resource type="Texture2D" uid="uid://dkwum2wy3clju" path="res://assets/textures/props/nature/medium_rock.png" id="2_dotvg"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_g533f"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_irxtb"]

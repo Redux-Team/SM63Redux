@@ -52,6 +52,9 @@ enum ObjectCategory {
 		else:
 			ld_entry_texture = _make_atlas_texture(value)
 @export var ld_editor_instance: PackedScene
+## Override this to group different objects together, if not overriden
+## then the base ID is used.
+@export var ld_index_id: String
 @export var ld_properties: Array[LDProperty]
 @export var ld_indexable: bool = true
 @export var ld_placement_tool_override: String
@@ -94,6 +97,10 @@ func get_object_name() -> String:
 
 func get_object_path() -> String:
 	return ld_object_path
+
+
+func get_index_id() -> String:
+	return ("%s:%s" % [ld_index_id, id]).to_lower()
 
 
 static func get_category_name(cat_value: ObjectCategory) -> String:

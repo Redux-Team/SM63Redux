@@ -6,42 +6,44 @@
 [ext_resource type="Resource" uid="uid://w1ly8lgjddne" path="res://game/db/Objects/Entity/Enemy/goomba.tres" id="4_c8o3n"]
 [ext_resource type="Resource" uid="uid://dxc3v4jeaftcd" path="res://game/db/Objects/Entity/Enemy/koopa.tres" id="5_mp4ou"]
 [ext_resource type="Resource" uid="uid://ya5iq8bilpi" path="res://game/db/Objects/Entity/Passive/goonie.tres" id="6_3r3ml"]
+[ext_resource type="Resource" uid="uid://qnbrheuia718" path="res://game/db/Objects/Entity/Passive/fat_goonie.tres" id="8_fpxyv"]
 [ext_resource type="Resource" uid="uid://dy8oygc3wj1a5" path="res://game/db/Objects/Entity/Player/player_mario.tres" id="8_i1cw8"]
 [ext_resource type="Resource" uid="uid://enlwdtgbab6g" path="res://game/db/Objects/Item/Collectible/coin.tres" id="9_wp5r6"]
-[ext_resource type="Resource" uid="uid://c58m38fqamx21" path="res://game/db/Objects/Item/Collectible/coin_blue.tres" id="10_tbe6r"]
-[ext_resource type="Resource" uid="uid://clfw632lsiowg" path="res://game/db/Objects/Item/Collectible/coin_red.tres" id="11_kljvd"]
+[ext_resource type="Resource" uid="uid://clfw632lsiowg" path="res://game/db/Objects/Item/Collectible/red_coin.tres" id="11_ojdkd"]
 [ext_resource type="Resource" uid="uid://dp8ylwxcasadn" path="res://game/db/Objects/Item/Collectible/shine_sprite.tres" id="12_0kj6b"]
 [ext_resource type="Resource" uid="uid://ytnyiak6am65" path="res://game/db/Objects/Item/Collectible/star_coin.tres" id="13_mp4qx"]
-[ext_resource type="Resource" uid="uid://b6jgiuu3uuh70" path="res://game/db/Objects/Item/FLUDD/fludd_box_hover.tres" id="14_5oesr"]
-[ext_resource type="Resource" uid="uid://cp7abjc4l1sfn" path="res://game/db/Objects/Item/FLUDD/fludd_box_rocket.tres" id="15_lugbj"]
-[ext_resource type="Resource" uid="uid://cc85138ec57w4" path="res://game/db/Objects/Item/FLUDD/fludd_box_turbo.tres" id="16_fvosf"]
-[ext_resource type="Resource" uid="uid://kxexxxdwa4sc" path="res://game/db/Objects/Item/FLUDD/water_bottle_big.tres" id="17_tr1rm"]
-[ext_resource type="Resource" uid="uid://40e42nc6itr8" path="res://game/db/Objects/Item/FLUDD/water_bottle_small.tres" id="18_0h263"]
+[ext_resource type="Resource" uid="uid://c58m38fqamx21" path="res://game/db/Objects/Item/Collectible/blue_coin.tres" id="15_j0wnv"]
+[ext_resource type="Resource" uid="uid://cp7abjc4l1sfn" path="res://game/db/Objects/Item/FLUDD/rocket_fludd_box.tres" id="16_naun0"]
+[ext_resource type="Resource" uid="uid://kxexxxdwa4sc" path="res://game/db/Objects/Item/FLUDD/big_water_bottle.tres" id="17_ib6pc"]
+[ext_resource type="Resource" uid="uid://40e42nc6itr8" path="res://game/db/Objects/Item/FLUDD/small_water_bottle.tres" id="18_rpot8"]
+[ext_resource type="Resource" uid="uid://cc85138ec57w4" path="res://game/db/Objects/Item/FLUDD/turbo_fludd_box.tres" id="19_2x7la"]
 [ext_resource type="Resource" uid="uid://dhyodlkfh60hd" path="res://game/db/Objects/Props/Gizmos/moving_platform.tres" id="19_s5833"]
+[ext_resource type="Resource" uid="uid://b6jgiuu3uuh70" path="res://game/db/Objects/Item/FLUDD/hover_fludd_box.tres" id="20_cjg54"]
+[ext_resource type="Resource" uid="uid://c4h3ii5pr18kt" path="res://game/db/Objects/Props/Nature/pink_flowers.tres" id="21_q5xve"]
+[ext_resource type="Resource" uid="uid://bywn2c1kw0pxn" path="res://game/db/Objects/Props/Nature/small_rock.tres" id="22_gyvu6"]
+[ext_resource type="Resource" uid="uid://dlrgshm1kll7p" path="res://game/db/Objects/Props/Nature/large_rock.tres" id="24_echxs"]
 [ext_resource type="Resource" uid="uid://fa37unypkcqe" path="res://game/db/Objects/Props/Hints/arrow.tres" id="24_naun0"]
+[ext_resource type="Resource" uid="uid://1ymxj4gqgbyl" path="res://game/db/Objects/Props/Nature/medium_tree.tres" id="25_mgtur"]
+[ext_resource type="Resource" uid="uid://c8r5muob8ljqs" path="res://game/db/Objects/Props/Nature/small_mushroom.tres" id="26_83qap"]
 [ext_resource type="Resource" uid="uid://cxjkf33colukt" path="res://game/db/Objects/Props/Interactable/breakable_box.tres" id="26_rpot8"]
 [ext_resource type="Resource" uid="uid://cr1p0egoys1tf" path="res://game/db/Objects/Props/Interactable/sign.tres" id="27_2x7la"]
-[ext_resource type="Resource" uid="uid://b0vrwrys5wyru" path="res://game/db/Objects/Props/Interactable/sign_hanging.tres" id="28_cjg54"]
-[ext_resource type="Resource" uid="uid://oo8tdxwidlkl" path="res://game/db/Objects/Props/Nature/flowers_blue.tres" id="29_q5xve"]
-[ext_resource type="Resource" uid="uid://c4h3ii5pr18kt" path="res://game/db/Objects/Props/Nature/flowers_pink.tres" id="30_gyvu6"]
+[ext_resource type="Resource" uid="uid://b0iomyjpgculo" path="res://game/db/Objects/Props/Nature/medium_rock.tres" id="27_70utn"]
+[ext_resource type="Resource" uid="uid://dtolfo1xycloe" path="res://game/db/Objects/Props/Nature/tall_mushroom.tres" id="28_vw6cs"]
+[ext_resource type="Resource" uid="uid://dorouht47oho6" path="res://game/db/Objects/Props/Nature/big_tree.tres" id="29_j1xw6"]
+[ext_resource type="Resource" uid="uid://oo8tdxwidlkl" path="res://game/db/Objects/Props/Nature/blue_flowers.tres" id="30_jhnxf"]
+[ext_resource type="Resource" uid="uid://dsj6dbrrkgdee" path="res://game/db/Objects/Props/Nature/small_tree.tres" id="31_0boea"]
 [ext_resource type="Resource" uid="uid://7xl4vm48exsa" path="res://game/db/Objects/Props/Nature/mushroom_pair.tres" id="32_mgtur"]
-[ext_resource type="Resource" uid="uid://dtolfo1xycloe" path="res://game/db/Objects/Props/Nature/mushroom_tall.tres" id="33_83qap"]
-[ext_resource type="Resource" uid="uid://dlrgshm1kll7p" path="res://game/db/Objects/Props/Nature/rock_large.tres" id="34_70utn"]
-[ext_resource type="Resource" uid="uid://b0iomyjpgculo" path="res://game/db/Objects/Props/Nature/rock_medium.tres" id="35_vw6cs"]
-[ext_resource type="Resource" uid="uid://bywn2c1kw0pxn" path="res://game/db/Objects/Props/Nature/rock_small.tres" id="36_j1xw6"]
-[ext_resource type="Resource" uid="uid://dorouht47oho6" path="res://game/db/Objects/Props/Nature/tree_big.tres" id="37_jhnxf"]
-[ext_resource type="Resource" uid="uid://1ymxj4gqgbyl" path="res://game/db/Objects/Props/Nature/tree_medium.tres" id="38_0boea"]
-[ext_resource type="Resource" uid="uid://dsj6dbrrkgdee" path="res://game/db/Objects/Props/Nature/tree_small.tres" id="39_7vta1"]
+[ext_resource type="Resource" uid="uid://b0vrwrys5wyru" path="res://game/db/Objects/Props/Interactable/hanging_sign.tres" id="37_7vta1"]
 [ext_resource type="Resource" uid="uid://v3yk2lwwo751" path="res://game/db/Objects/Props/Platforms/cloud.tres" id="40_x5yi0"]
-[ext_resource type="Resource" uid="uid://bogqpam4pqfgi" path="res://game/db/Objects/Props/Platforms/log_falling.tres" id="41_rfddy"]
-[ext_resource type="Resource" uid="uid://by8vbnkxga54a" path="res://game/db/Objects/Props/Platforms/log_static.tres" id="42_tk7mk"]
+[ext_resource type="Resource" uid="uid://3pu7061f4gdn" path="res://game/db/Objects/Props/Platforms/bone_platform.tres" id="41_x5yi0"]
+[ext_resource type="Resource" uid="uid://by8vbnkxga54a" path="res://game/db/Objects/Props/Platforms/static_log.tres" id="42_rfddy"]
 [ext_resource type="Resource" uid="uid://dkyd466tbfa22" path="res://game/db/Objects/Props/Platforms/tipping_log.tres" id="43_77m44"]
-[ext_resource type="Resource" uid="uid://cnpufyaj5itij" path="res://game/db/Objects/Props/Platforms/wooden_platform.tres" id="44_76t45"]
+[ext_resource type="Resource" uid="uid://cnpufyaj5itij" path="res://game/db/Objects/Props/Platforms/wooden_platform.tres" id="43_tk7mk"]
+[ext_resource type="Resource" uid="uid://b84q7fdi1jpbg" path="res://game/db/Objects/Props/Platforms/tiled_wooden_platform.tres" id="44_77m44"]
 [ext_resource type="Resource" uid="uid://cfa6sdichbg83" path="res://game/db/Objects/Polygon/Terrain/terrain_grass.tres" id="45_3w7om"]
-[ext_resource type="Resource" uid="uid://c8r5muob8ljqs" path="res://game/db/Objects/Props/Nature/mushroom_small.tres" id="45_tbe6r"]
+[ext_resource type="Resource" uid="uid://bogqpam4pqfgi" path="res://game/db/Objects/Props/Platforms/falling_log.tres" id="45_76t45"]
+[ext_resource type="Resource" uid="uid://dj0au6bbsu7no" path="res://game/db/Objects/Props/Platforms/metallic_platform.tres" id="46_3w7om"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="46_d7ntl"]
-[ext_resource type="Resource" uid="uid://3pu7061f4gdn" path="res://game/db/Objects/Props/Platforms/bone_platform.tres" id="46_kljvd"]
-[ext_resource type="Resource" uid="uid://chq66ovm2j0a6" path="res://game/db/Objects/Props/Platforms/beaded_platform.tres" id="47_0kj6b"]
 [ext_resource type="Resource" uid="uid://eipogn3jdakv" path="res://game/db/Objects/Props/Warps/pipe.tres" id="47_5oesr"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="47_fs5pm"]
 [ext_resource type="Script" uid="uid://dc4nc2ctw5fm5" path="res://game/db/game_db.gd" id="47_j75gy"]
@@ -51,15 +53,19 @@
 [ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="48_i1cw8"]
 [ext_resource type="Resource" uid="uid://d3vfvvtqanxml" path="res://game/db/Objects/Polygon/Volumes/camera_area.tres" id="48_mp4qx"]
 [ext_resource type="Resource" uid="uid://eo78sgsdx7kt" path="res://game/db/Objects/Props/Platforms/tipping_platform_cold.tres" id="49_5oesr"]
-[ext_resource type="Resource" uid="uid://qnbrheuia718" path="res://game/db/Objects/Entity/Passive/goonie_fat.tres" id="49_lugbj"]
+[ext_resource type="Resource" uid="uid://bm4nay80th3nd" path="res://game/db/Objects/Props/Platforms/sandstone_platform.tres" id="49_d7ntl"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="49_wp5r6"]
+[ext_resource type="Resource" uid="uid://chq66ovm2j0a6" path="res://game/db/Objects/Props/Platforms/beaded_platform.tres" id="50_5ejvw"]
 [ext_resource type="Resource" uid="uid://dooks7pjmro81" path="res://game/db/Objects/Entity/NPC/toad.tres" id="50_fvosf"]
 [ext_resource type="Resource" uid="uid://bnah8mloey62o" path="res://game/db/Objects/Entity/Passive/butterfly.tres" id="50_lugbj"]
 [ext_resource type="Resource" uid="uid://bfbxhsv32nu3e" path="res://game/db/Properties/breakable_box/coin_amount.tres" id="50_tbe6r"]
+[ext_resource type="Resource" uid="uid://lv8lc3too2cm" path="res://game/db/Objects/Props/Platforms/snowy_wooden_platform.tres" id="51_dbtkv"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="51_kljvd"]
 [ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="52_0kj6b"]
+[ext_resource type="Resource" uid="uid://m5bph8r26l57" path="res://game/db/Objects/Props/Platforms/cubic_platform.tres" id="52_b0aep"]
 [ext_resource type="Resource" uid="uid://dk8qlbripls8x" path="res://game/db/Properties/moving_platform/platform_amount.tres" id="53_kljvd"]
 [ext_resource type="Resource" uid="uid://cwscua7waq0vn" path="res://game/db/Properties/moving_platform/platform_radius.tres" id="54_0kj6b"]
+[ext_resource type="Resource" uid="uid://du05wmn6o6uhx" path="res://game/db/Objects/Props/Platforms/dark_platform.tres" id="54_mtxdl"]
 [ext_resource type="Resource" uid="uid://ctlyyrjsbjt07" path="res://game/db/Properties/moving_platform/platform_period.tres" id="55_mp4qx"]
 
 [resource]
@@ -71,19 +77,19 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Entity/Enemy/koopa": ExtResource("5_mp4ou"),
 "Entity/NPC/toad": ExtResource("50_fvosf"),
 "Entity/Passive/butterfly": ExtResource("50_lugbj"),
+"Entity/Passive/fat_goonie": ExtResource("8_fpxyv"),
 "Entity/Passive/goonie": ExtResource("6_3r3ml"),
-"Entity/Passive/goonie_fat": ExtResource("49_lugbj"),
 "Entity/Player/player_mario": ExtResource("8_i1cw8"),
+"Item/Collectible/blue_coin": ExtResource("15_j0wnv"),
 "Item/Collectible/coin": ExtResource("9_wp5r6"),
-"Item/Collectible/coin_blue": ExtResource("10_tbe6r"),
-"Item/Collectible/coin_red": ExtResource("11_kljvd"),
+"Item/Collectible/red_coin": ExtResource("11_ojdkd"),
 "Item/Collectible/shine_sprite": ExtResource("12_0kj6b"),
 "Item/Collectible/star_coin": ExtResource("13_mp4qx"),
-"Item/FLUDD/fludd_box_hover": ExtResource("14_5oesr"),
-"Item/FLUDD/fludd_box_rocket": ExtResource("15_lugbj"),
-"Item/FLUDD/fludd_box_turbo": ExtResource("16_fvosf"),
-"Item/FLUDD/water_bottle_big": ExtResource("17_tr1rm"),
-"Item/FLUDD/water_bottle_small": ExtResource("18_0h263"),
+"Item/FLUDD/big_water_bottle": ExtResource("17_ib6pc"),
+"Item/FLUDD/hover_fludd_box": ExtResource("20_cjg54"),
+"Item/FLUDD/rocket_fludd_box": ExtResource("16_naun0"),
+"Item/FLUDD/small_water_bottle": ExtResource("18_rpot8"),
+"Item/FLUDD/turbo_fludd_box": ExtResource("19_2x7la"),
 "Polygon/Terrain/terrain_grass": ExtResource("45_3w7om"),
 "Polygon/Volumes/camera_area": ExtResource("48_mp4qx"),
 "Props/Gizmos/moving_platform": ExtResource("19_s5833"),
@@ -92,27 +98,33 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Props/Hints/arrow": ExtResource("24_naun0"),
 "Props/Hints/arrow_sign": ExtResource("47_mp4qx"),
 "Props/Interactable/breakable_box": ExtResource("26_rpot8"),
+"Props/Interactable/hanging_sign": ExtResource("37_7vta1"),
 "Props/Interactable/sign": ExtResource("27_2x7la"),
-"Props/Interactable/sign_hanging": ExtResource("28_cjg54"),
-"Props/Nature/flowers_blue": ExtResource("29_q5xve"),
-"Props/Nature/flowers_pink": ExtResource("30_gyvu6"),
+"Props/Nature/big_tree": ExtResource("29_j1xw6"),
+"Props/Nature/blue_flowers": ExtResource("30_jhnxf"),
+"Props/Nature/large_rock": ExtResource("24_echxs"),
+"Props/Nature/medium_rock": ExtResource("27_70utn"),
+"Props/Nature/medium_tree": ExtResource("25_mgtur"),
 "Props/Nature/mushroom_pair": ExtResource("32_mgtur"),
-"Props/Nature/mushroom_small": ExtResource("45_tbe6r"),
-"Props/Nature/mushroom_tall": ExtResource("33_83qap"),
-"Props/Nature/rock_large": ExtResource("34_70utn"),
-"Props/Nature/rock_medium": ExtResource("35_vw6cs"),
-"Props/Nature/rock_small": ExtResource("36_j1xw6"),
-"Props/Nature/tree_big": ExtResource("37_jhnxf"),
-"Props/Nature/tree_medium": ExtResource("38_0boea"),
-"Props/Nature/tree_small": ExtResource("39_7vta1"),
-"Props/Platforms/beaded_platform": ExtResource("47_0kj6b"),
-"Props/Platforms/bone_platform": ExtResource("46_kljvd"),
+"Props/Nature/pink_flowers": ExtResource("21_q5xve"),
+"Props/Nature/small_mushroom": ExtResource("26_83qap"),
+"Props/Nature/small_rock": ExtResource("22_gyvu6"),
+"Props/Nature/small_tree": ExtResource("31_0boea"),
+"Props/Nature/tall_mushroom": ExtResource("28_vw6cs"),
+"Props/Platforms/beaded_platform": ExtResource("50_5ejvw"),
+"Props/Platforms/bone_platform": ExtResource("41_x5yi0"),
 "Props/Platforms/cloud": ExtResource("40_x5yi0"),
-"Props/Platforms/log_falling": ExtResource("41_rfddy"),
-"Props/Platforms/log_static": ExtResource("42_tk7mk"),
+"Props/Platforms/cubic_platform": ExtResource("52_b0aep"),
+"Props/Platforms/dark_platform": ExtResource("54_mtxdl"),
+"Props/Platforms/falling_log": ExtResource("45_76t45"),
+"Props/Platforms/metallic_platform": ExtResource("46_3w7om"),
+"Props/Platforms/sandstone_platform": ExtResource("49_d7ntl"),
+"Props/Platforms/snowy_wooden_platform": ExtResource("51_dbtkv"),
+"Props/Platforms/static_log": ExtResource("42_rfddy"),
+"Props/Platforms/tiled_wooden_platform": ExtResource("44_77m44"),
 "Props/Platforms/tipping_log": ExtResource("43_77m44"),
 "Props/Platforms/tipping_platform_cold": ExtResource("49_5oesr"),
-"Props/Platforms/wooden_platform": ExtResource("44_76t45"),
+"Props/Platforms/wooden_platform": ExtResource("43_tk7mk"),
 "Props/Warps/pipe": ExtResource("47_5oesr")
 })
 properties = Dictionary[String, ExtResource("46_d7ntl")]({

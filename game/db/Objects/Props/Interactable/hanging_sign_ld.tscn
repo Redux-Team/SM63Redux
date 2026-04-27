@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://b1ldw7qsljflj"]
+
+[ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="1_o1mt7"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_qekxd"]
+[ext_resource type="Texture2D" uid="uid://brxwoltll0h4e" path="res://assets/textures/props/interactable/hanging_sign.png" id="3_o1mt7"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_h6o6t"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sa7u4"]
+resource_local_to_scene = true
+shader = ExtResource("2_qekxd")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_qekxd"]
+diffuse_texture = ExtResource("3_o1mt7")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m03ki"]
+size = Vector2(28, 24)
+
+[node name="HangingSign" type="Node2D" unique_id=1039791590 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+script = ExtResource("1_o1mt7")
+sprite_ref = NodePath("Sprite")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+metadata/_custom_type_script = "uid://cfx4civm76jwr"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1849251792]
+material = SubResource("ShaderMaterial_sa7u4")
+texture = SubResource("CanvasTexture_qekxd")
+script = ExtResource("4_h6o6t")
+canvas_texture = SubResource("CanvasTexture_qekxd")
+diffuse_texture = ExtResource("3_o1mt7")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=1978033632]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=416735272]
+shape = SubResource("RectangleShape2D_m03ki")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=47708532]

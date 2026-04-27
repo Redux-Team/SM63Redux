@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://2j04pedkoahb"]
 
 [ext_resource type="Script" uid="uid://bsswcbgcrlwv2" path="res://game/db/Objects/level_object.gd" id="1_mqg2n"]
-[ext_resource type="Texture2D" uid="uid://u36r15ijlqeb" path="res://assets/textures/props/nature/tree_medium.png" id="2_c8qg8"]
+[ext_resource type="Texture2D" uid="uid://u36r15ijlqeb" path="res://assets/textures/props/nature/medium_tree.png" id="2_c8qg8"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_kpfut"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_fin8j"]

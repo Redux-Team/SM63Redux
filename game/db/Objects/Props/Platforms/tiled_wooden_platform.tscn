@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://7xxi3bocvkce"]
+
+[ext_resource type="Script" uid="uid://b3mrac5qo7r3g" path="res://game/db/Objects/ld_object_telescoping.gd" id="1_jw2gu"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_3xokx"]
+[ext_resource type="Texture2D" uid="uid://djto6xwt85epj" path="res://assets/textures/props/platform/wooden_tile_platform.png" id="3_jw2gu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5mus0"]
+resource_local_to_scene = true
+shader = ExtResource("2_3xokx")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l581p"]
+resource_local_to_scene = true
+size = Vector2(30, 11)
+
+[node name="WoodenTiledPlatform" type="Node2D" unique_id=106321995 node_paths=PackedStringArray("nine_patch", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+script = ExtResource("1_jw2gu")
+nine_patch = NodePath("NinePatch")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+metadata/_custom_type_script = "uid://b3mrac5qo7r3g"
+
+[node name="NinePatch" type="NinePatchRect" parent="." unique_id=1855014636]
+material = SubResource("ShaderMaterial_5mus0")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -6.0
+offset_right = 16.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_jw2gu")
+region_rect = Rect2(0, 0, 64, 13)
+patch_margin_left = 16
+patch_margin_right = 16
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=1859621463]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=304951747]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_l581p")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=1641699275]

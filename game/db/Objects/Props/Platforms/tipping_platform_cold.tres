@@ -26,6 +26,7 @@ name_override = "Tipping Platform (Cold)"
 ld_object_path = "Props/Platforms/tipping_platform_cold"
 ld_entry_texture = SubResource("AtlasTexture_js2jd")
 ld_editor_instance = ExtResource("1_sj0il")
+ld_index_id = "tipping"
 ld_properties = Array[ExtResource("1_rbw2q")]([ExtResource("3_sj0il"), ExtResource("4_um0mb"), ExtResource("5_js2jd"), ExtResource("6_floos")])
 ld_placement_tool_override = "telescoping"
 game_instance = ExtResource("1_um0mb")
