@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bm4nay80th3nd"]
 
+[ext_resource type="PackedScene" uid="uid://cev31q1eaxcl3" path="res://game/object/platform/sandstone_platform.tscn" id="1_8pulo"]
 [ext_resource type="PackedScene" uid="uid://87tm78150f3v" path="res://game/db/Objects/Props/Platforms/sandstone_platform_ld.tscn" id="1_d32fa"]
 [ext_resource type="Texture2D" uid="uid://ynt8jp6hes21" path="res://assets/textures/props/platform/sandstone_platform_ld.png" id="2_8pulo"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_sfb1v"]
@@ -26,4 +27,5 @@ ld_editor_instance = ExtResource("1_d32fa")
 ld_index_id = "platform"
 ld_properties = Array[ExtResource("3_sfb1v")]([ExtResource("4_vmi8t"), ExtResource("5_8xix8"), ExtResource("6_4jpxg"), ExtResource("7_nq0au")])
 ld_placement_tool_override = "telescoping"
+game_instance = ExtResource("1_8pulo")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -18,4 +18,5 @@ group_path = "FLUDD"
 name_override = "Small Water Bottle"
 ld_object_path = "Item/FLUDD/small_water_bottle"
 ld_entry_texture = SubResource("AtlasTexture_octo7")
+ld_index_id = "fludd_bottle"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

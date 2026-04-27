@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://b0vrwrys5wyru"]
 
 [ext_resource type="PackedScene" uid="uid://b1ldw7qsljflj" path="res://game/db/Objects/Props/Interactable/hanging_sign_ld.tscn" id="1_2hwjv"]
-[ext_resource type="Texture2D" uid="uid://brxwoltll0h4e" path="res://assets/textures/props/interactable/hanging_sign.png" id="2_vyghi"]
+[ext_resource type="Texture2D" uid="uid://brxwoltll0h4e" path="res://assets/textures/props/interactable/hanging_sign.png" id="2_2hwjv"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_4057p"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_wsuir"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="5_vjra1"]
@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_ejld5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vbhlu"]
-atlas = ExtResource("2_vyghi")
+atlas = ExtResource("2_2hwjv")
 region = Rect2(-8, -9, 48, 48)
 
 [resource]
@@ -23,5 +23,6 @@ name_override = "Hanging Sign"
 ld_object_path = "Props/Interactable/hanging_sign"
 ld_entry_texture = SubResource("AtlasTexture_vbhlu")
 ld_editor_instance = ExtResource("1_2hwjv")
+ld_index_id = "sign"
 ld_properties = Array[ExtResource("3_4057p")]([ExtResource("4_wsuir"), ExtResource("5_vjra1"), ExtResource("6_t4dls")])
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

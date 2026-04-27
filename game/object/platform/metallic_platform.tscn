@@ -1,12 +1,12 @@
-[gd_scene format=3 uid="uid://dx54j0iw6438w"]
+[gd_scene format=3 uid="uid://bi71jl5qwdfct"]
 
-[ext_resource type="PackedScene" uid="uid://dqovon0ssjmn7" path="res://game/object/platform_wooden/platform_wooden.tscn" id="1_7y63m"]
-[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_qyv6t"]
-[ext_resource type="Texture2D" uid="uid://djto6xwt85epj" path="res://assets/textures/props/platform/wooden_tile_platform.png" id="3_wkyu7"]
+[ext_resource type="PackedScene" uid="uid://dqovon0ssjmn7" path="res://game/object/platform/wooden_platform.tscn" id="1_k7en2"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_nnn34"]
+[ext_resource type="Texture2D" uid="uid://dy72ba0afl82" path="res://assets/textures/props/platform/metallic_platform.png" id="3_k7en2"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_eq7tq"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nnn34"]
 resource_local_to_scene = true
-shader = ExtResource("2_qyv6t")
+shader = ExtResource("2_nnn34")
 shader_parameter/state = 0
 shader_parameter/palette_index = 0
 shader_parameter/pre_modulate = Color(1, 1, 1, 1)
@@ -22,20 +22,22 @@ shader_parameter/pulse_max = 1.0
 shader_parameter/outline_ignore_holes = true
 shader_parameter/outline_enabled = true
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_4oi7j"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3c62m"]
 resource_local_to_scene = true
 size = Vector2(32, 2)
 
-[node name="TiledWoodenPlatform" unique_id=1192818580 instance=ExtResource("1_7y63m")]
+[node name="MetallicPlatform" unique_id=1192818580 node_paths=PackedStringArray("body") instance=ExtResource("1_k7en2")]
+body = NodePath("StaticBody2D")
+terrain_type = "metal"
 
 [node name="NinePatch" parent="." index="0" unique_id=1848364648]
-material = SubResource("ShaderMaterial_eq7tq")
+material = SubResource("ShaderMaterial_nnn34")
 offset_left = -17.0
 offset_right = 17.0
 offset_bottom = 7.0
-texture = ExtResource("3_wkyu7")
-region_rect = Rect2(0, 0, 64, 13)
+texture = ExtResource("3_k7en2")
+region_rect = Rect2(0, 0, 66, 13)
 patch_margin_right = 15
 
 [node name="CollisionShape2D" parent="StaticBody2D" parent_id_path=PackedInt32Array(663931534) index="0" unique_id=1869497392]
-shape = SubResource("RectangleShape2D_4oi7j")
+shape = SubResource("RectangleShape2D_3c62m")

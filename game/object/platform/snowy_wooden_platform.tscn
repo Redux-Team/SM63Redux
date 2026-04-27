@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://ecqp3x0ehsb3"]
 
-[ext_resource type="PackedScene" uid="uid://dqovon0ssjmn7" path="res://game/object/platform_wooden/platform_wooden.tscn" id="1_o0yq4"]
-[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_ydshf"]
-[ext_resource type="Texture2D" uid="uid://bkltvforos0oq" path="res://assets/textures/props/platform/snowy_wooden_platform.png" id="3_stfmg"]
+[ext_resource type="PackedScene" uid="uid://dqovon0ssjmn7" path="res://game/object/platform/wooden_platform.tscn" id="1_tgfrj"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_ptwi5"]
+[ext_resource type="Texture2D" uid="uid://bkltvforos0oq" path="res://assets/textures/props/platform/snowy_wooden_platform.png" id="3_hj7c4"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2xqmk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7hspk"]
 resource_local_to_scene = true
-shader = ExtResource("2_ydshf")
+shader = ExtResource("2_ptwi5")
 shader_parameter/state = 0
 shader_parameter/palette_index = 0
 shader_parameter/pre_modulate = Color(1, 1, 1, 1)
@@ -22,20 +22,20 @@ shader_parameter/pulse_max = 1.0
 shader_parameter/outline_ignore_holes = true
 shader_parameter/outline_enabled = true
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_y8haw"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c13da"]
 resource_local_to_scene = true
 size = Vector2(28, 2)
 
-[node name="SnowyWoodenPlatform" unique_id=1192818580 node_paths=PackedStringArray("body") instance=ExtResource("1_o0yq4")]
+[node name="SnowyWoodenPlatform" unique_id=1192818580 node_paths=PackedStringArray("body") instance=ExtResource("1_tgfrj")]
 body = NodePath("StaticBody2D")
 terrain_type = "snow"
 
 [node name="NinePatch" parent="." index="0" unique_id=1848364648]
-material = SubResource("ShaderMaterial_2xqmk")
+material = SubResource("ShaderMaterial_7hspk")
 offset_bottom = 10.0
-texture = ExtResource("3_stfmg")
+texture = ExtResource("3_hj7c4")
 region_rect = Rect2(0, 0, 66, 16)
 
 [node name="CollisionShape2D" parent="StaticBody2D" parent_id_path=PackedInt32Array(663931534) index="0" unique_id=1869497392]
 position = Vector2(0, -2)
-shape = SubResource("RectangleShape2D_y8haw")
+shape = SubResource("RectangleShape2D_c13da")

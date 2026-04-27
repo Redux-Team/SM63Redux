@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dyffq4cv4sjv6"]
+
+[ext_resource type="PackedScene" uid="uid://cpc5pk3l3hhhf" path="res://game/object/rotating_log/rotating_log.tscn" id="1_nheia"]
+[ext_resource type="PackedScene" uid="uid://ch0ms1l0n7m27" path="res://game/db/Objects/Props/Gizmos/rotating_log_ld.tscn" id="2_nr6b5"]
+[ext_resource type="Texture2D" uid="uid://ola1dbcoju0j" path="res://assets/textures/props/platform/rotating_log_ld.png" id="3_eau7q"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_j70yd"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_wxf58"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_nmijh"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="7_sbqid"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="8_nr6b5"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="9_spmo1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nheia"]
+atlas = ExtResource("3_eau7q")
+region = Rect2(0, 0, 48, 48)
+
+[resource]
+script = ExtResource("9_spmo1")
+id = "rotating_log"
+category = 4
+category_string = "Props"
+subpath = "Gizmos/rotating_log"
+group_path = "Gizmos"
+ld_object_path = "Props/Gizmos/rotating_log"
+ld_entry_texture = SubResource("AtlasTexture_nheia")
+ld_editor_instance = ExtResource("2_nr6b5")
+ld_properties = Array[ExtResource("4_j70yd")]([ExtResource("5_wxf58"), ExtResource("6_nmijh"), ExtResource("7_sbqid"), ExtResource("8_nr6b5")])
+ld_placement_tool_override = "telescoping"
+game_instance = ExtResource("1_nheia")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

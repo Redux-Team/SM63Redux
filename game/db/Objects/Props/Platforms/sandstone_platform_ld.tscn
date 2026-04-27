@@ -24,7 +24,7 @@ shader_parameter/outline_enabled = true
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l581p"]
 resource_local_to_scene = true
-size = Vector2(32, 11)
+size = Vector2(36, 11)
 
 [node name="SandstonePlatform" type="Node2D" unique_id=106321995 node_paths=PackedStringArray("nine_patch", "editor_shape_area", "editor_placement_rect", "origin_marker")]
 script = ExtResource("1_s2sge")
@@ -41,16 +41,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -17.0
+offset_left = -19.0
 offset_top = -6.0
-offset_right = 17.0
+offset_right = 19.0
 offset_bottom = 7.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_s2sge")
 region_rect = Rect2(0, 0, 66, 13)
 patch_margin_left = 17
-patch_margin_right = 17
+patch_margin_right = 21
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 

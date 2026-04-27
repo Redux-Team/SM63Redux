@@ -22,6 +22,7 @@ name_override = "Turbo FLUDD Box"
 ld_object_path = "Item/FLUDD/turbo_fludd_box"
 ld_entry_texture = SubResource("AtlasTexture_uewb1")
 ld_editor_instance = ExtResource("2_t4whc")
+ld_index_id = "fludd"
 ld_properties = Array[ExtResource("4_ub4l0")]([ExtResource("5_xsqtd")])
 game_instance = ExtResource("1_3appl")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

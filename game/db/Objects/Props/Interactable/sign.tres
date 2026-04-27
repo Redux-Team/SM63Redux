@@ -23,5 +23,6 @@ name_override = "Sign"
 ld_object_path = "Props/Interactable/sign"
 ld_entry_texture = SubResource("AtlasTexture_lv4ed")
 ld_editor_instance = ExtResource("1_lqupp")
+ld_index_id = "sign"
 ld_properties = Array[ExtResource("2_784q2")]([ExtResource("3_lv4ed"), ExtResource("4_lqupp"), ExtResource("5_8eyit")])
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

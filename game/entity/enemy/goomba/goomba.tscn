@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://bu0cpqsoc43la"]
+
+[ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="1_kyaey"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_n0olq"]
+[ext_resource type="Texture2D" uid="uid://bvs0fsousuub6" path="res://assets/textures/entity/enemy/goomba/goomba.png" id="3_prjr3"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_whnfo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e0p0p"]
+resource_local_to_scene = true
+shader = ExtResource("2_n0olq")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_whnfo"]
+diffuse_texture = ExtResource("3_prjr3")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x5cu4"]
+
+[node name="Goomba" type="Node2D" unique_id=880164451 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+script = ExtResource("1_kyaey")
+sprite_ref = NodePath("Sprite")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+origin_marker = NodePath("Origin")
+metadata/_custom_type_script = "uid://cfx4civm76jwr"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=2054132123]
+material = SubResource("ShaderMaterial_e0p0p")
+position = Vector2(0, 6)
+texture = SubResource("CanvasTexture_whnfo")
+region_enabled = true
+region_rect = Rect2(0, 0, 20, 32)
+script = ExtResource("4_whnfo")
+canvas_texture = SubResource("CanvasTexture_whnfo")
+diffuse_texture = ExtResource("3_prjr3")
+current_animation = "default"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=1459208574]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=895623935]
+shape = SubResource("RectangleShape2D_x5cu4")
+
+[node name="Origin" type="Marker2D" parent="." unique_id=1387317860]

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cnpufyaj5itij"]
 
-[ext_resource type="PackedScene" uid="uid://dqovon0ssjmn7" path="res://game/object/platform_wooden/platform_wooden.tscn" id="1_nu505"]
+[ext_resource type="PackedScene" uid="uid://dqovon0ssjmn7" path="res://game/object/platform/wooden_platform.tscn" id="1_nu505"]
 [ext_resource type="PackedScene" uid="uid://c5sontv5csjex" path="res://game/db/Objects/Props/Platforms/wooden_platform_ld.tscn" id="2_av0g1"]
 [ext_resource type="Texture2D" uid="uid://cpce6xc5ll4o8" path="res://assets/textures/props/platform/wooden_platform_ld.png" id="3_sb0pp"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_12wv5"]

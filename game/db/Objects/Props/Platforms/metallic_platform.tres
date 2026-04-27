@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dj0au6bbsu7no"]
 
 [ext_resource type="PackedScene" uid="uid://d0xjjqk515fak" path="res://game/db/Objects/Props/Platforms/metallic_platform_ld.tscn" id="1_mm55l"]
+[ext_resource type="PackedScene" uid="uid://bi71jl5qwdfct" path="res://game/object/platform/metallic_platform.tscn" id="1_u23wr"]
 [ext_resource type="Texture2D" uid="uid://bm7kpgufbf3u0" path="res://assets/textures/props/platform/metallic_platform_ld.png" id="2_u23wr"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_e428j"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_0yxq4"]
@@ -26,4 +27,5 @@ ld_editor_instance = ExtResource("1_mm55l")
 ld_index_id = "platform"
 ld_properties = Array[ExtResource("3_e428j")]([ExtResource("4_0yxq4"), ExtResource("5_8pe2m"), ExtResource("6_6futk"), ExtResource("7_wko7v")])
 ld_placement_tool_override = "telescoping"
+game_instance = ExtResource("1_u23wr")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

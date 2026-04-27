@@ -21,6 +21,7 @@ name_override = "Fat Goonie"
 ld_object_path = "Entity/Passive/fat_goonie"
 ld_entry_texture = SubResource("AtlasTexture_6be6k")
 ld_editor_instance = ExtResource("2_r0rqo")
+ld_index_id = "goonie"
 ld_properties = Array[ExtResource("4_yogxy")]([ExtResource("5_l7mie")])
 ld_placement_rules = 3
 game_instance = ExtResource("1_a0ucj")

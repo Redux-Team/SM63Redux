@@ -1,11 +1,14 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://w1ly8lgjddne"]
 
-[ext_resource type="Texture2D" uid="uid://bvs0fsousuub6" path="res://assets/textures/entity/enemy/goomba.png" id="1_fe81p"]
+[ext_resource type="PackedScene" uid="uid://bsedd6nrix2dv" path="res://game/db/Objects/Entity/Enemy/goomba_ld.tscn" id="1_4qaqy"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_ifcwt"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_vilum"]
+[ext_resource type="Texture2D" uid="uid://bvs0fsousuub6" path="res://assets/textures/entity/enemy/goomba/goomba.png" id="2_0vh6f"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_12law"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_jeaq4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ey3o2"]
-atlas = ExtResource("1_fe81p")
+atlas = ExtResource("2_0vh6f")
 region = Rect2(-9, -10, 38, 38)
 
 [resource]
@@ -16,4 +19,7 @@ subpath = "Enemy/goomba"
 group_path = "Enemy"
 ld_object_path = "Entity/Enemy/goomba"
 ld_entry_texture = SubResource("AtlasTexture_ey3o2")
+ld_editor_instance = ExtResource("1_4qaqy")
+ld_properties = Array[ExtResource("1_ifcwt")]([ExtResource("4_12law"), ExtResource("5_jeaq4")])
+ld_placement_rules = 2
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

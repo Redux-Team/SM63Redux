@@ -19,6 +19,7 @@ group_path = "Passive"
 ld_object_path = "Entity/Passive/goonie"
 ld_entry_texture = SubResource("AtlasTexture_podw1")
 ld_editor_instance = ExtResource("1_podw1")
+ld_index_id = "goonie"
 ld_placement_rules = 3
 game_instance = ExtResource("1_1tr6h")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

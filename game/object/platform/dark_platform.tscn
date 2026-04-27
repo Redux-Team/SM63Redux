@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://cqenapptuo48t"]
+
+[ext_resource type="PackedScene" uid="uid://dqovon0ssjmn7" path="res://game/object/platform/wooden_platform.tscn" id="1_w0l5j"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_h1ft0"]
+[ext_resource type="Texture2D" uid="uid://yq1ospmabrnh" path="res://assets/textures/props/platform/dark_platform.png" id="3_w0l5j"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h1ft0"]
+resource_local_to_scene = true
+shader = ExtResource("2_h1ft0")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0w3e3"]
+resource_local_to_scene = true
+size = Vector2(24, 2)
+
+[node name="DarkPlatform" unique_id=1192818580 instance=ExtResource("1_w0l5j")]
+
+[node name="NinePatch" parent="." index="0" unique_id=1848364648]
+material = SubResource("ShaderMaterial_h1ft0")
+offset_left = -13.0
+offset_right = 13.0
+offset_bottom = 4.0
+texture = ExtResource("3_w0l5j")
+region_rect = Rect2(0, 0, 66, 13)
+patch_margin_left = 9
+patch_margin_right = 17
+
+[node name="CollisionShape2D" parent="StaticBody2D" parent_id_path=PackedInt32Array(663931534) index="0" unique_id=1869497392]
+shape = SubResource("RectangleShape2D_0w3e3")

@@ -8,7 +8,9 @@
 resource_local_to_scene = true
 shader = ExtResource("2_im1un")
 shader_parameter/state = 0
-shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/fill_color = Color(1, 1, 1, 0.25)
@@ -17,12 +19,14 @@ shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
 shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qgg2m"]
 resource_local_to_scene = true
 size = Vector2(31, 4)
 
-[node name="BonePlatform" type="Node2D" unique_id=922197771 node_paths=PackedStringArray("nine_patch", "collision_shapes")]
+[node name="BeadedPlatform" type="Node2D" unique_id=922197771 node_paths=PackedStringArray("nine_patch", "collision_shapes")]
 script = ExtResource("1_55tpy")
 nine_patch = NodePath("NinePatch")
 collision_shapes = [NodePath("StaticBody2D/CollisionShape2D")]

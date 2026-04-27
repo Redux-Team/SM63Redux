@@ -54,7 +54,6 @@ platform_nine_patch = NodePath("NinePatchRect")
 path_drawer = NodePath("PathDrawer")
 ghost_container = NodePath("GhostTransform")
 ghost_root = NodePath("GhostRoot")
-start_angle = null
 editor_shape_area = NodePath("EditorShapeArea")
 editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
 origin_marker = NodePath("Origin")

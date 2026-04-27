@@ -67,6 +67,7 @@
 [ext_resource type="Resource" uid="uid://cwscua7waq0vn" path="res://game/db/Properties/moving_platform/platform_radius.tres" id="54_0kj6b"]
 [ext_resource type="Resource" uid="uid://du05wmn6o6uhx" path="res://game/db/Objects/Props/Platforms/dark_platform.tres" id="54_mtxdl"]
 [ext_resource type="Resource" uid="uid://ctlyyrjsbjt07" path="res://game/db/Properties/moving_platform/platform_period.tres" id="55_mp4qx"]
+[ext_resource type="Resource" uid="uid://dyffq4cv4sjv6" path="res://game/db/Objects/Props/Gizmos/rotating_log.tres" id="57_ojdkd"]
 
 [resource]
 script = ExtResource("47_j75gy")
@@ -93,6 +94,7 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Polygon/Terrain/terrain_grass": ExtResource("45_3w7om"),
 "Polygon/Volumes/camera_area": ExtResource("48_mp4qx"),
 "Props/Gizmos/moving_platform": ExtResource("19_s5833"),
+"Props/Gizmos/rotating_log": ExtResource("57_ojdkd"),
 "Props/Gizmos/spinning_block": ExtResource("47_lugbj"),
 "Props/Gizmos/spinning_block_mono": ExtResource("48_fvosf"),
 "Props/Hints/arrow": ExtResource("24_naun0"),
