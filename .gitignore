@@ -5,6 +5,7 @@
 export.cfg
 export_credentials.cfg
 *.tmp
+*.env
 **/.DS_Store
 **/_local/
 build/

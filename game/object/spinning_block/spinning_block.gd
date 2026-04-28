@@ -18,7 +18,7 @@ func _on_init() -> void:
 func _process(_delta: float) -> void:
 	if not b_rotate_speed:
 		return
-	rect.rotation_degrees = _calc_degrees(Singleton.get_level_clock().get_time())
+	rect.rotation_degrees = _calc_degrees(Singleton.get_level_clock().get_elapsed_time())
 
 
 func _calc_degrees(t: float) -> float:

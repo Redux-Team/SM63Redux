@@ -57,6 +57,7 @@ func _physics_process(delta: float) -> void:
 
 
 func change_state(state_name: StringName) -> void:
+	print_stack()
 	_change_state_internal(state_name, false)
 
 
@@ -102,7 +103,7 @@ func _change_state_internal(state_name: StringName, silent: bool) -> void:
 	_enter_new_state(new_state, old_state, silent)
 	
 	playback.start(state_name)
-	state_changed.emit(old_state.state_name if old_state else &"", state_name)
+	state_changed.emit(old_state.state_name if old_state else "", state_name)
 
 
 func _stop_all_animation_chains() -> void:
@@ -159,7 +160,7 @@ func _enter_new_state(new_state: State, old_state: State, silent: bool) -> void:
 				base_collision_mask = entity.collision_mask
 			entity.collision_mask = current_state.collision_mask
 	
-	current_state._on_enter(old_state.state_name if old_state else &"")
+	current_state._on_enter(old_state.state_name if old_state else "")
 	
 	if current_state.lock_sprite_flipping:
 		if entity is Player:
@@ -182,6 +183,7 @@ func _initialize_states(node: Node = self) -> void:
 func _setup_child_node(child: Node) -> void:
 	child.state_machine = self
 	child.entity = entity
+	
 	if entity is Player:
 		child.player = entity as Player
 	child.sprite = sprite
@@ -201,6 +203,7 @@ func _initialize_processes() -> void:
 func _check_animation_transition() -> void:
 	var current_node: StringName = playback.get_current_node()
 	
+	print("last: %s | current: %s" % [last_animation_node, current_node])
 	if last_animation_node != current_node:
 		last_animation_node = current_node
 		_handle_animation_change(current_node)

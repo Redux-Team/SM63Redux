@@ -56,6 +56,7 @@ var current_frame: int:
 	set(cf):
 		current_frame = cf
 		apply_frame(current_animation, current_frame)
+		queue_redraw()
 var speed_scale: float = 1.0
 var playing: bool = false:
 	set(p):

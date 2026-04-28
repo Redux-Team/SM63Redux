@@ -2,6 +2,9 @@ extends State
 
 
 func _physics_process(delta: float) -> void:
+	if player._movement_locked:
+		return
+	
 	if abs(player.move_dir) == 0 and not player.is_diving:
 		var friction: FrictionComponent = player.get_component(FrictionComponent)
 		friction.apply(0.4)

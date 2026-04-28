@@ -156,10 +156,15 @@ alignment = 2
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TestButton" type="Button" parent="ViewportUI/VBoxContainer3/HBoxContainer" unique_id=700489393]
+[node name="TestClientButton" type="Button" parent="ViewportUI/VBoxContainer3/HBoxContainer" unique_id=1982310012]
 layout_mode = 2
 focus_mode = 0
-text = "Test"
+text = "Test (Client)"
+
+[node name="TestServerButton" type="Button" parent="ViewportUI/VBoxContainer3/HBoxContainer" unique_id=700489393]
+layout_mode = 2
+focus_mode = 0
+text = "Test (Server)"
 
 [node name="WindowLayer" type="CanvasLayer" parent="." unique_id=783443360]
 layer = 3
@@ -215,6 +220,7 @@ use_native_dialog = true
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/LoadButton" to="." method="_on_load_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer3/HBoxContainer/TestButton" to="." method="_on_test_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer3/HBoxContainer/TestClientButton" to="." method="_on_test_client_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer3/HBoxContainer/TestServerButton" to="." method="_on_test_server_button_pressed"]
 [connection signal="file_selected" from="WindowLayer/SaveFileDialog" to="." method="_on_save_file_selected"]
 [connection signal="file_selected" from="WindowLayer/LoadFileDialog" to="." method="_on_load_file_selected"]

@@ -6,6 +6,7 @@ var _discord_handler: DiscordHandler = DiscordHandler.new()
 var _input_handler: InputHandler = InputHandler.new()
 var _tree_hook: TreeHook = TreeHook.new()
 var _level_clock: LevelClock = LevelClock.new()
+var _multiplayer: MultiplayerHandler = MultiplayerHandler.new()
 
 
 func _init() -> void:
@@ -13,6 +14,18 @@ func _init() -> void:
 	add_child(_discord_handler)
 	add_child(_tree_hook)
 	add_child(_level_clock)
+	add_child(_multiplayer)
+
+
+func _ready() -> void:
+	every(1, func() -> void:
+		if get_multiplayer_handler().is_server():
+			for n: CanvasItem in get_tree().get_nodes_in_group(&"gui_mp_host"):
+				n.show()
+		else:
+			for n: CanvasItem in get_tree().get_nodes_in_group(&"gui_mp_client"):
+				n.show()
+	)
 
 
 func get_version() -> String:
@@ -34,6 +47,18 @@ func get_level_clock() -> LevelClock:
 
 func get_discord_handler() -> DiscordHandler:
 	return _discord_handler
+
+
+func get_multiplayer_handler() -> MultiplayerHandler:
+	return _multiplayer
+
+
+func every(interval: float, method: Callable) -> void:
+	var timer: Timer = Timer.new()
+	timer.wait_time = interval
+	timer.autostart = true
+	timer.timeout.connect(method)
+	add_child(timer)
 
 
 class InputHandler:
@@ -215,8 +240,8 @@ class LevelClock:
 			_time += delta
 	
 	
-	func start() -> void:
-		_time = 0.0
+	func start(offset: float = 0.0) -> void:
+		_time = offset
 		_running = true
 	
 	
@@ -228,5 +253,68 @@ class LevelClock:
 		_running = false
 	
 	
-	func get_time() -> float:
+	func get_elapsed_time() -> float:
 		return _time
+
+
+class MultiplayerHandler:
+	extends Node
+	
+	var peer: ENetMultiplayerPeer
+	
+	signal server_started
+	signal client_connected
+	
+	
+	func start_server() -> void:
+		peer = ENetMultiplayerPeer.new()
+		var err: Error = peer.create_server(get_port())
+		if err != OK:
+			push_error("Failed to start server: " + error_string(err))
+			return
+		multiplayer.multiplayer_peer = peer
+		server_started.emit()
+	
+	
+	func start_client() -> void:
+		peer = ENetMultiplayerPeer.new()
+		var err: Error = peer.create_client(get_ip(), get_port())
+		if err != OK:
+			push_error("Failed to connect: " + error_string(err))
+			return
+		multiplayer.multiplayer_peer = peer
+		multiplayer.connected_to_server.connect(_on_connected_to_server)
+	
+	
+	func get_ip() -> String:
+		return env.get_env("IP", "localhost")
+	
+	
+	func get_port() -> int:
+		return int(env.get_env("PORT", "42069"))
+	
+	
+	func is_server() -> bool:
+		return multiplayer.is_server()
+	
+	
+	func _on_connected_to_server() -> void:
+		client_connected.emit()
+
+
+class env:
+	static func get_env(key: String, default: String = "") -> String:
+		if has_env():
+			var file: FileAccess = FileAccess.open("res://.env", FileAccess.READ)
+			var file_content: String = file.get_as_text()
+			
+			var lines: PackedStringArray = file_content.split("\n")
+			
+			for line: String in lines:
+				if line.begins_with(key):
+					return line.split("=", true, 1).get(1)
+		return default
+	
+	
+	static func has_env() -> bool:
+		return FileAccess.file_exists("res://.env")

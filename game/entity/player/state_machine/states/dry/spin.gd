@@ -26,6 +26,9 @@ func _on_enter(_from: StringName) -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	if player._movement_locked:
+		return
+	
 	if player.is_on_floor():
 		player.lock_flipping = false
 	

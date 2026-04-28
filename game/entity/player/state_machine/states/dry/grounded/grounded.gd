@@ -2,6 +2,9 @@ extends State
 
 
 func _physics_process(_delta: float) -> void:
+	if player._movement_locked:
+		return
+	
 	if abs(player.move_dir) > 0.0 and not state_machine.current_state.name == "Crouch":
 		_speed_up(player.move_dir)
 	else:

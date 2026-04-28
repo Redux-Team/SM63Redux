@@ -6,8 +6,8 @@ extends EntityComponent
 signal died
 signal damaged(amount: float, type: Entity.DamageType)
 
-
 @export var max_hp: float = 1.0
+@export var hitbox: HitBox
 
 
 var hp: float:

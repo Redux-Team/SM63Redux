@@ -69,6 +69,8 @@ folder_colors={
 [global_group]
 
 gui_touch=""
+gui_mp_other=""
+gui_mp_host=""
 
 [gui]
 
@@ -243,6 +245,8 @@ jump={
 2d_physics/layer_2="Terrain"
 2d_physics/layer_3="Water"
 2d_physics/layer_4="Entity"
+2d_physics/layer_5="Hitbox"
+2d_physics/layer_6="Hurtbox"
 2d_physics/layer_9="Feet"
 2d_physics/layer_10="Ground Pound"
 2d_physics/layer_11="Spin"

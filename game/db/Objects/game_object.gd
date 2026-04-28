@@ -24,6 +24,11 @@ enum ObjectCategory {
 	ALL,
 }
 
+enum AuthorityMode {
+	SERVER,
+	PEER,
+}
+
 # These are cached to not have to do string manipulation every time we index a bunch of these resources.
 @export_storage var id: String
 @export_storage var category: ObjectCategory:
@@ -65,6 +70,8 @@ enum ObjectCategory {
 
 @export_group("Game", "game_")
 @export var game_instance: PackedScene
+@export var game_multiplayer_spawnable: bool = false
+@export var game_authority_mode: AuthorityMode = AuthorityMode.SERVER
 
 @warning_ignore("unused_private_class_variable")
 @export_tool_button("Update Internal Info") var _update_internal_info: Callable:

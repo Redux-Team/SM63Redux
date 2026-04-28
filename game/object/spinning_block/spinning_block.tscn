@@ -27,6 +27,11 @@ shader_parameter/pulse_max = 1.0
 shader_parameter/outline_ignore_holes = true
 shader_parameter/outline_enabled = true
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kecoa"]
+properties/0/path = NodePath("Rect:rotation")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
 [node name="SpinningBlock" type="Node2D" unique_id=792413839 node_paths=PackedStringArray("rect")]
 script = ExtResource("1_n0bea")
 rect = NodePath("Rect")
@@ -127,3 +132,6 @@ position = Vector2(3, 3)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Rect/Block/Center/StaticBody2D" unique_id=1793513566]
 position = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_kecoa")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=2012416869]
+replication_config = SubResource("SceneReplicationConfig_kecoa")

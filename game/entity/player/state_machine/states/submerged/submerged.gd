@@ -2,6 +2,9 @@ extends State
 
 
 func _physics_process(delta: float) -> void:
+	if player._movement_locked:
+		return
+	
 	player.swim_buffer_time = max(player.swim_buffer_time - delta, 0.0)
 	
 	if abs(player.move_dir) == 0:

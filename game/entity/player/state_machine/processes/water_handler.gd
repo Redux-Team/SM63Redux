@@ -13,7 +13,7 @@ func _on_water_check_area_entered(area: Area2D) -> void:
 
 
 func _on_water_check_area_exited(area: Area2D) -> void:
-	if state_machine.current_state.name == "GroundPoundStart":
+	if state_machine.current_state and state_machine.current_state.name == "GroundPoundStart":
 		return
 	
 	if area.collision_layer & (1 << (3 - 1)):

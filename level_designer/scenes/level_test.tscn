@@ -2,7 +2,10 @@
 
 [ext_resource type="Script" uid="uid://7h213kjqdaqn" path="res://level_designer/scenes/level_test.gd" id="1_5nuwi"]
 [ext_resource type="PackedScene" uid="uid://st4r6o6hqwhj" path="res://game/backgrounds/hills.tscn" id="2_1sbsh"]
+[ext_resource type="PackedScene" uid="uid://b4nw5k2oa3ro0" path="res://game/entity/player/player.tscn" id="2_h52q2"]
+[ext_resource type="PackedScene" uid="uid://deyfsp6xn4e27" path="res://game/screen_layers/ingame_hud/ingame_hud.tscn" id="4_0w1st"]
 [ext_resource type="AudioStream" uid="uid://cmiulmppvmbql" path="res://assets/music/04.mp3" id="4_h52q2"]
+[ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="6_q10qe"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_x1m06"]
 device = -1
@@ -11,9 +14,14 @@ keycode = 4194308
 [sub_resource type="Shortcut" id="Shortcut_1sbsh"]
 events = [SubResource("InputEventKey_x1m06")]
 
-[node name="LevelTest" type="Node2D" unique_id=1539087846 node_paths=PackedStringArray("level_root")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3myg6"]
+size = Vector2(22, 139)
+
+[node name="LevelTest" type="Node2D" unique_id=1539087846 node_paths=PackedStringArray("level_root", "multiplayer_spawner")]
 script = ExtResource("1_5nuwi")
 level_root = NodePath("LevelRoot")
+multiplayer_spawner = NodePath("MultiplayerSpawner")
+player_scene = ExtResource("2_h52q2")
 
 [node name="HillsBG" parent="." unique_id=1464026582 instance=ExtResource("2_1sbsh")]
 
@@ -36,9 +44,58 @@ grow_vertical = 0
 shortcut = SubResource("Shortcut_1sbsh")
 text = "Back to LD"
 
+[node name="HostLabel" type="Label" parent="CanvasLayer" unique_id=1364550266 groups=["gui_mp_host"]]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -15.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/outline_size = 4
+text = "Host"
+horizontal_alignment = 1
+
+[node name="ClientLabel" type="Label" parent="CanvasLayer" unique_id=90577290]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -15.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/outline_size = 4
+text = "Client"
+horizontal_alignment = 1
+
+[node name="IngameHud" parent="." unique_id=510807687 instance=ExtResource("4_0w1st")]
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1523917071]
 stream = ExtResource("4_h52q2")
 autoplay = true
 bus = &"Music"
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=243473474]
+spawn_path = NodePath("../LevelRoot")
+
+[node name="HitBox" type="Area2D" parent="." unique_id=829029193]
+position = Vector2(92, 5)
+collision_layer = 16
+script = ExtResource("6_q10qe")
+damage_amount = 1.0
+has_knockback = true
+knockback_vector = Vector2(400, -150)
+metadata/_custom_type_script = "uid://c103bnb5445y3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=2108698754]
+shape = SubResource("RectangleShape2D_3myg6")
+debug_color = Color(0.7019608, 0, 0, 0.41960785)
 
 [connection signal="pressed" from="CanvasLayer/BackButton" to="." method="_on_back_button_pressed"]

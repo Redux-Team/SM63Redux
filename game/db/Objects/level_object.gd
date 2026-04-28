@@ -60,7 +60,8 @@ func _handle_properties() -> void:
 
 ## Called before properties are set
 func _pre_init() -> void:
-	pass
+	if not Singleton.get_multiplayer_handler().is_server():
+		set_process(false)
 
 ## Called after properties are set
 func _on_init() -> void:

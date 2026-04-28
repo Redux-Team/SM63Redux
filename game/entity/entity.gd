@@ -12,6 +12,7 @@ enum DamageType {
 
 @export var sprite: SmartSprite2D
 @export var components_root: Node
+@export var state_machine: StateMachine
 
 
 var data: Dictionary
@@ -60,6 +61,10 @@ func get_component(type: Script) -> EntityComponent:
 		if is_instance_of(child, type):
 			return child as EntityComponent
 	return null
+
+
+func has_component(type: Script) -> bool:
+	return get_component(type) != null
 
 
 func damage(amount: float, type: DamageType, source: Node2D = null) -> void:

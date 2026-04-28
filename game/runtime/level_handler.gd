@@ -4,6 +4,8 @@ extends Node
 
 var _root: Node2D
 var _layers_root: Node2D
+var _player: Player
+var multiplayer_spawner: MultiplayerSpawner
 
 
 func setup(root: Node2D) -> void:
@@ -13,7 +15,16 @@ func setup(root: Node2D) -> void:
 	_root.add_child(_layers_root)
 
 
-func load_from_dict(data: Dictionary) -> Error:
+func set_multiplayer_spawner(ms: MultiplayerSpawner) -> void:
+	multiplayer_spawner = ms
+	ms.spawn_function = _spawn_multi
+
+
+func get_player() -> Player:
+	return _player
+
+
+func load_from_dict(data: Dictionary, peer_id: int = 1) -> Error:
 	if not data.has("version") or not data.has("layers"):
 		return ERR_INVALID_DATA
 	
@@ -34,7 +45,7 @@ func load_from_dict(data: Dictionary) -> Error:
 		for obj_data: Variant in layer_data.get("objects", []):
 			if not obj_data is Dictionary:
 				continue
-			_instantiate_object(obj_data, layer_index)
+			_instantiate_object(obj_data, layer_index, peer_id)
 	
 	return OK
 
@@ -97,7 +108,7 @@ func get_objects_by_id(object_id: String) -> Array[LevelObject]:
 	return result
 
 
-func _instantiate_object(data: Dictionary, layer_index: int) -> void:
+func _instantiate_object(data: Dictionary, layer_index: int, peer_id: int = 1) -> void:
 	var object_id: String = data.get("object_id", "")
 	if object_id.is_empty():
 		return
@@ -107,8 +118,18 @@ func _instantiate_object(data: Dictionary, layer_index: int) -> void:
 		return
 	
 	var instance: Node = game_object.game_instance.instantiate()
+	
+	if instance is Player:
+		instance.free()
+		return
+	
 	var layer: LevelLayer = _get_or_create_layer(layer_index)
-	layer.get_content_root().add_child(instance)
+	
+	if game_object.game_multiplayer_spawnable and multiplayer_spawner and multiplayer_spawner.is_inside_tree() and multiplayer.has_multiplayer_peer() and multiplayer_spawner.is_multiplayer_authority():
+		multiplayer_spawner.spawn_path = layer.get_content_root().get_path()
+		multiplayer_spawner.spawn(instance)
+	else:
+		layer.get_content_root().add_child(instance)
 	
 	var level_object: LevelObject = instance as LevelObject
 	if level_object:
@@ -152,6 +173,15 @@ func _sort_layers() -> void:
 	)
 	for i: int in layers.size():
 		_layers_root.move_child(layers[i], i)
+
+
+func _spawn_multi(data: Variant) -> Node:
+	if data is Player:
+		return data
+	elif data is EncodedObjectAsID:
+		return instance_from_id(data.object_id)
+	else:
+		return null
 
 
 func _array_to_vec2(a: Variant) -> Vector2:

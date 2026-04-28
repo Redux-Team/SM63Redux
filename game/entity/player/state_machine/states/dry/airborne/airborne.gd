@@ -2,6 +2,9 @@ extends State
 
 
 func _physics_process(_delta: float) -> void:
+	if player._movement_locked:
+		return
+	
 	if abs(player.move_dir) > 0 and not player.is_diving:
 		air_move(player.move_dir)
 	

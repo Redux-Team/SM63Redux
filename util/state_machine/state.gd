@@ -51,7 +51,9 @@ var player: Player:
 			return entity
 var sprite: SmartSprite2D
 var state_machine: StateMachine
-var state_name: StringName
+var state_name: String:
+	get:
+		return name
 var parent: Node:
 	get():
 		if get_parent() is not State:

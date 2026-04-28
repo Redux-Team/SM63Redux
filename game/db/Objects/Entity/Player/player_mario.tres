@@ -33,4 +33,5 @@ ld_properties = Array[ExtResource("1_r1t5l")]([SubResource("Resource_ngb72")])
 ld_indexable = false
 ld_flags = 1
 game_instance = ExtResource("1_7sqcv")
+game_multiplayer_spawnable = true
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
