@@ -5,7 +5,9 @@ extends Control
 
 const META_KEY := &"sm_resource_path"
 
-@export var current_node_button: Button
+@export var current_node_label: Label
+@export var current_node_icon: TextureRect
+
 @export var select_node_container: CenterContainer
 @export var create_state_machine_container: CenterContainer
 @export var state_machine_container: MarginContainer
@@ -31,8 +33,8 @@ func _on_node_selected(node_path: NodePath) -> void:
 		return
 	
 	_current_node = EditorInterface.get_edited_scene_root().get_node(node_path)
-	current_node_button.text = _current_node.name
-	current_node_button.icon = EditorInterface.get_editor_theme().get_icon(
+	current_node_label.text = _current_node.name
+	current_node_icon.texture = EditorInterface.get_editor_theme().get_icon(
 		_current_node.get_class(), &"EditorIcons"
 	)
 	

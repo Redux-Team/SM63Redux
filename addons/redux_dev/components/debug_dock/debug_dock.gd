@@ -1,12 +1,13 @@
 @tool
 extends MarginContainer
 
+
 const DEFAULT_VALUES: Dictionary[String, Variant] = {
 	"mute_music": false,
 	"mute_sfx": false,
 }
-
 const SETTINGS_PATH: String = "res://addons/redux_dev/_local/debug_settings.json"
+
 
 @export var mute_music: CheckBox
 @export var mute_sfx: CheckBox

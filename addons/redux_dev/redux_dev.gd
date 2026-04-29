@@ -1,9 +1,11 @@
 @tool
 extends EditorPlugin
 
+
 const DEBUG_DOCK = preload("uid://cgx6mbayfubdw")
 const DEBUG_HANDLER_UID: String = "components/debug_dock/debug_dock.gd"
 const STATE_MACHINE_EDITOR = preload("uid://dpvtgmjtc1tpk")
+
 
 var debug_dock: EditorDock
 var state_machine_editor_dock: EditorDock
@@ -12,13 +14,11 @@ var editor: EditorStateMachineEditor
 
 
 func _enable_plugin() -> void:
-	_setup_docks()
 	add_autoload_singleton("DebugHandler", DEBUG_HANDLER_UID)
 
 
 func _disable_plugin() -> void:
 	remove_autoload_singleton("DebugHandler")
-	_teardown_docks()
 
 
 func _enter_tree() -> void:
@@ -33,6 +33,14 @@ func _exit_tree() -> void:
 	if _decorator:
 		_decorator.teardown()
 		_decorator = null
+
+
+func _edit(object: Object) -> void:
+	editor._on_node_selected((object as Node).get_path())
+
+
+func _handles(object: Object) -> bool:
+	return object is Node
 
 
 func _setup_docks() -> void:
