@@ -32,7 +32,7 @@ buses/default_bus_layout="uid://dnbqnrs3tfb81"
 [autoload]
 
 Singleton="*res://singleton/singleton.tscn"
-DebugHandler="*uid://dyw3n7oxqk3vq"
+DebugHandler="*uid://b6cvall7q1s0u"
 
 [display]
 

@@ -1,363 +1,125 @@
 class_name StateMachine
-extends AnimationTree
+extends Node
 
 
-signal state_changed(from_state: StringName, to_state: StringName)
-signal machine_ended
+signal state_changed(from: StringName, to: StringName)
+signal state_entered(state_name: StringName)
+signal state_exited(state_name: StringName)
+signal state_added(state_name: StringName)
+signal state_removed(state_name: StringName)
+signal transitioned_to_unknown(state_name: StringName)
 
 
-@export var entity: Entity
-@export var sprite: SmartSprite2D
-@export var states: Dictionary[StringName, State]
-@export var processes: Array[StateProcess]
-@export var default_collision_shape: CollisionShape2D
+var current_state: State = null
+var previous_state_name: StringName = &""
+
+var _states: Dictionary = {}
 
 
-var animation_player: AnimationPlayer:
-	get():
-		return get_node(anim_player)
-var current_state: State
-var playback: AnimationNodeStateMachinePlayback
-var last_animation_node: StringName
-var active_animations: Array[AnimationChain] = []
-var state_buffer: float = 0.0
-var state_timer: float = 0.0
-var base_collision_mask: int = -1
-var can_consume_buffer: bool = false
-
-
-func _ready() -> void:
-	playback = get(&"parameters/playback")
-	_initialize_states()
-	_initialize_processes()
-	
-	if sprite:
-		sprite.animation_finished.connect(_on_sprite_animation_finished)
-		sprite.animation_looped.connect(_on_sprite_animation_looped)
-
-
-func _process(_delta: float) -> void:
-	if current_state and current_state.has_default_animations and current_state.continuous_sfx:
-		current_state.continuous_sfx.play_sfx(current_state.continuous_sfx.bank_group, entity, sprite)
-	
-	_check_animation_transition()
+func _process(delta: float) -> void:
+	if current_state:
+		current_state._on_tick(delta)
 
 
 func _physics_process(delta: float) -> void:
-	await get_tree().physics_frame
-	if current_state and current_state.assertions_enabled and current_state.assertions_run_on_process:
-		current_state._assertions_check.call_deferred("physics_process")
-	
-	if state_buffer > 0:
-		state_buffer = max(state_buffer - delta, 0)
-	else:
-		can_consume_buffer = false
-	
-	state_timer += delta
+	if current_state:
+		current_state._on_physics_tick(delta)
 
 
-func change_state(state_name: StringName) -> void:
-	print_stack()
-	_change_state_internal(state_name, false)
+func _input(event: InputEvent) -> void:
+	if current_state:
+		current_state._on_input(event)
 
 
-func change_state_silent(state_name: StringName) -> void:
-	_change_state_internal(state_name, true)
+func add_state(state: State, state_name: StringName) -> StringName:
+	var resolved: StringName = _resolve_name(state_name)
+	state.name = resolved
+	state.machine = self
+	state.host = get_parent()
+	_states[resolved] = state
+	add_child(state)
+	state_added.emit(resolved)
+	return resolved
 
 
-func set_condition(condition: StringName, value: bool) -> void:
-	set("parameters/conditions/" + condition, value)
-
-
-func play_animation(animation_name: StringName) -> AnimationChain:
-	var chain: AnimationChain = AnimationChain.new(self, animation_name)
-	active_animations.append(chain)
-	chain.start()
-	return chain
-
-
-func stop_animation_chain(chain: AnimationChain) -> void:
-	active_animations.erase(chain)
-
-
-func store_state_buffer(amount: float = 0.1) -> bool:
-	state_buffer = amount
-	return true
-
-
-func consume_state_buffer() -> bool:
-	can_consume_buffer = true
-	return state_buffer == 0
-
-
-func _change_state_internal(state_name: StringName, silent: bool) -> void:
-	var new_state: State = states.get(state_name)
-	if not new_state:
-		push_warning("State '%s' not found" % state_name)
+func remove_state(state_name: StringName) -> void:
+	if not _states.has(state_name):
 		return
 	
-	var old_state: State = current_state
+	var state: State = _states[state_name]
+	if current_state == state:
+		_exit_current()
+		current_state = null
 	
-	_stop_all_animation_chains()
-	_exit_current_state(state_name)
-	_enter_new_state(new_state, old_state, silent)
-	
-	playback.start(state_name)
-	state_changed.emit(old_state.state_name if old_state else "", state_name)
+	_states.erase(state_name)
+	state.queue_free()
+	state_removed.emit(state_name)
 
 
-func _stop_all_animation_chains() -> void:
-	for chain: AnimationChain in active_animations.duplicate():
-		chain.stop()
-
-
-func _exit_current_state(to_state: StringName) -> void:
-	if not current_state:
+func transition_to(state_name: StringName) -> void:
+	if not _states.has(state_name):
+		transitioned_to_unknown.emit(state_name)
 		return
 	
-	current_state._on_exit(to_state)
-	
-	if current_state.has_collision_override:
-		default_collision_shape.set_deferred(&"disabled", false)
-		current_state.collision_override.set_deferred(&"disabled", true)
-		
-		if current_state.has_collision_mask_override:
-			entity.collision_mask = base_collision_mask
-	
-	if current_state.has_default_sfx and current_state.enter_sfx:
-		if current_state.enter_sfx.stop_on_state_exit:
-			current_state.enter_sfx.stop_all()
-		if current_state.exit_sfx:
-			current_state.exit_sfx.play_sfx(current_state.exit_sfx.bank_group, entity)
-	
-	if current_state.lock_sprite_flipping:
-		if entity is Player:
-			entity.lock_flipping = false
-	
-	if current_state.assertions_enabled and current_state.assertions_run_on_exit:
-		current_state._assertions_check("exit")
-	
-	current_state.disable_processing()
-
-
-func _enter_new_state(new_state: State, old_state: State, silent: bool) -> void:
-	state_timer = 0.0
-	if animation_player.has_animation(&"RESET"):
-		animation_player.play(&"RESET")
-	current_state = new_state
-	current_state.enable_processing()
-	
-	if current_state.has_default_sfx and not silent:
-		if current_state.enter_sfx:
-			current_state.enter_sfx.play_sfx(current_state.enter_sfx.bank_group, entity)
-	
-	if current_state.has_collision_override:
-		default_collision_shape.set_deferred(&"disabled", true)
-		current_state.collision_override.set_deferred(&"disabled", false)
-		
-		if current_state.has_collision_mask_override:
-			if base_collision_mask == -1:
-				base_collision_mask = entity.collision_mask
-			entity.collision_mask = current_state.collision_mask
-	
-	current_state._on_enter(old_state.state_name if old_state else "")
-	
-	if current_state.lock_sprite_flipping:
-		if entity is Player:
-			entity.lock_flipping = true
-	
-	if current_state.assertions_enabled and current_state.assertions_run_on_enter:
-		current_state._assertions_check("enter")
-	
-	current_state._animation_handler()
-
-
-func _initialize_states(node: Node = self) -> void:
-	for child: Node in node.get_children():
-		if child is State or child is StateProcess:
-			_setup_child_node(child)
-		
-		_initialize_states(child)
-
-
-func _setup_child_node(child: Node) -> void:
-	child.state_machine = self
-	child.entity = entity
-	
-	if entity is Player:
-		child.player = entity as Player
-	child.sprite = sprite
-	
-	if child is State:
-		child.disable_processing()
-		states[child.name] = child
-	else:
-		processes.append(child)
-
-
-func _initialize_processes() -> void:
-	for process: StateProcess in processes:
-		process.state_machine = self
-
-
-func _check_animation_transition() -> void:
-	var current_node: StringName = playback.get_current_node()
-	
-	print("last: %s | current: %s" % [last_animation_node, current_node])
-	if last_animation_node != current_node:
-		last_animation_node = current_node
-		_handle_animation_change(current_node)
-
-
-func _handle_animation_change(animation_name: StringName) -> void:
-	if animation_name == &"End":
-		machine_ended.emit()
+	var next: State = _states[state_name]
+	if next == current_state:
 		return
 	
-	change_state(animation_name)
+	var from_name: StringName = _current_state_name()
+	_exit_current()
+	current_state = next
+	current_state._on_enter()
+	state_entered.emit(state_name)
+	state_changed.emit(from_name, state_name)
 
 
-func _on_sprite_animation_finished() -> void:
-	for chain: AnimationChain in active_animations:
-		chain._on_animation_event()
+func get_state(state_name: StringName) -> State:
+	return _states.get(state_name, null)
 
 
-func _on_sprite_animation_looped() -> void:
-	for chain: AnimationChain in active_animations:
-		chain._on_animation_event()
+func has_state(state_name: StringName) -> bool:
+	return _states.has(state_name)
 
 
-class AnimationChain:
-	var state_machine: StateMachine
-	var current_animation: StringName
-	var next_animations: Array[AnimationStep] = []
-	var current_step_index: int = 0
-	var is_playing: bool = false
-	
-	
-	func _init(sm: StateMachine, animation_name: StringName) -> void:
-		state_machine = sm
-		current_animation = animation_name
-	
-	
-	func start() -> void:
-		is_playing = true
-		current_step_index = 0
-		_connect_signals()
-		_play_current_animation()
-	
-	
-	func then(animation_name: StringName) -> AnimationChain:
-		var step: AnimationStep = AnimationStep.new()
-		step.animation_name = animation_name
-		step.trigger_type = AnimationStep.TriggerType.ON_FINISH
-		next_animations.append(step)
-		return self
-	
-	
-	func when_condition(condition: StringName, animation_name: StringName) -> AnimationChain:
-		var step: AnimationStep = AnimationStep.new()
-		step.animation_name = animation_name
-		step.trigger_type = AnimationStep.TriggerType.ON_CONDITION
-		step.condition = condition
-		next_animations.append(step)
-		return self
-	
-	
-	func when(predicate: Callable, animation_name: StringName) -> AnimationChain:
-		var step: AnimationStep = AnimationStep.new()
-		step.animation_name = animation_name
-		step.trigger_type = AnimationStep.TriggerType.ON_CALLABLE
-		step.predicate = predicate
-		next_animations.append(step)
-		return self
-	
-	
-	func after(seconds: float, animation_name: StringName) -> AnimationChain:
-		var step: AnimationStep = AnimationStep.new()
-		step.animation_name = animation_name
-		step.trigger_type = AnimationStep.TriggerType.ON_TIMER
-		step.timer = seconds
-		next_animations.append(step)
-		return self
-	
-	
-	func loop_back() -> AnimationChain:
-		var step: AnimationStep = AnimationStep.new()
-		step.animation_name = current_animation
-		step.trigger_type = AnimationStep.TriggerType.ON_FINISH
-		next_animations.append(step)
-		return self
-	
-	
-	func stop() -> void:
-		is_playing = false
-		_disconnect_signals()
-		state_machine.stop_animation_chain(self)
-	
-	
-	func _connect_signals() -> void:
-		if state_machine.sprite:
-			if not state_machine.sprite.animation_finished.is_connected(_on_animation_event):
-				state_machine.sprite.animation_finished.connect(_on_animation_event)
-			if not state_machine.sprite.animation_looped.is_connected(_on_animation_event):
-				state_machine.sprite.animation_looped.connect(_on_animation_event)
-	
-	
-	func _disconnect_signals() -> void:
-		if state_machine.sprite:
-			if state_machine.sprite.animation_finished.is_connected(_on_animation_event):
-				state_machine.sprite.animation_finished.disconnect(_on_animation_event)
-			if state_machine.sprite.animation_looped.is_connected(_on_animation_event):
-				state_machine.sprite.animation_looped.disconnect(_on_animation_event)
-	
-	
-	func _on_animation_event() -> void:
-		if not is_playing or current_step_index >= next_animations.size():
-			return
-		
-		var step: AnimationStep = next_animations[current_step_index]
-		
-		var should_advance: bool = false
-		
-		match step.trigger_type:
-			AnimationStep.TriggerType.ON_FINISH:
-				should_advance = true
-			
-			AnimationStep.TriggerType.ON_CONDITION:
-				should_advance = state_machine.get("parameters/conditions/" + step.condition)
-			
-			AnimationStep.TriggerType.ON_CALLABLE:
-				should_advance = step.predicate.call()
-		
-		if should_advance:
-			_advance_to_next_step()
-	
-	
-	func _advance_to_next_step() -> void:
-		if current_step_index >= next_animations.size():
-			return
-		
-		var step: AnimationStep = next_animations[current_step_index]
-		current_animation = step.animation_name
-		current_step_index += 1
-		_play_current_animation()
-	
-	
-	func _play_current_animation() -> void:
-		if not state_machine.sprite:
-			return
-		
-		if state_machine.sprite.diffuse_frames.has_animation(current_animation):
-			state_machine.sprite.current_animation = current_animation
-			state_machine.sprite.play(current_animation)
+func get_current_state_name() -> StringName:
+	return _current_state_name()
 
 
-class AnimationStep:
-	enum TriggerType { ON_FINISH, ON_CONDITION, ON_CALLABLE, ON_TIMER }
+func get_all_state_names() -> Array[StringName]:
+	var names: Array[StringName] = []
+	for key: StringName in _states:
+		names.append(key)
+	return names
+
+
+func _exit_current() -> void:
+	if current_state == null:
+		return
 	
-	var animation_name: StringName
-	var trigger_type: TriggerType
-	var condition: StringName
-	var predicate: Callable
-	var timer: float = 0.0
+	previous_state_name = _current_state_name()
+	current_state._on_exit()
+	state_exited.emit(previous_state_name)
+
+
+func _current_state_name() -> StringName:
+	if current_state == null:
+		return &""
+	
+	for key: StringName in _states:
+		if _states[key] == current_state:
+			return key
+	
+	return &""
+
+
+func _resolve_name(state_name: StringName) -> StringName:
+	if not _states.has(state_name):
+		return state_name
+	
+	var counter: int = 2
+	var candidate: StringName = StringName(str(state_name) + str(counter))
+	while _states.has(candidate):
+		counter += 1
+		candidate = StringName(str(state_name) + str(counter))
+	
+	return candidate

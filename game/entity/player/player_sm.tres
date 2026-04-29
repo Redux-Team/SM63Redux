@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="StateMachineResource" format=3 uid="uid://23w1tcf7x4a1"]
+
+[ext_resource type="Script" uid="uid://di0opl7mg2pei" path="res://addons/redux_dev/components/state_machine/state_machine_resource.gd" id="1_m8yjf"]
+
+[resource]
+script = ExtResource("1_m8yjf")
+states = Array[Dictionary]([{
+"name": "Test",
+"position_x": 260.0,
+"position_y": 80.0,
+"script_path": ""
+}, {
+"name": "Test2",
+"position_x": 560.0,
+"position_y": 80.0,
+"script_path": "res://game/entity/player/dummy.gd"
+}])
