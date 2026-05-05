@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://dpvtgmjtc1tpk"]
 
 [ext_resource type="Script" uid="uid://ryatl5meky7h" path="res://addons/redux_dev/components/state_machine/state_machine_editor.gd" id="1_kuqj5"]
-[ext_resource type="Script" uid="uid://ccqxytc8xqwkv" path="res://addons/redux_dev/components/state_machine/state_machine_graph.gd" id="2_hpxgv"]
+[ext_resource type="Script" uid="uid://d35km3u86rpo3" path="res://addons/redux_dev/components/state_machine/state_machine_graph_edit.gd" id="2_hpxgv"]
 
-[node name="StateMachineEditor" type="Control" unique_id=482283223 node_paths=PackedStringArray("current_node_label", "current_node_icon", "select_node_container", "create_state_machine_container", "state_machine_container", "graph")]
+[node name="State Machine" type="Control" unique_id=482283223 node_paths=PackedStringArray("graph_edit", "state_machine_graph_edit")]
 clip_contents = true
 layout_mode = 3
 anchors_preset = 15
@@ -12,34 +12,39 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_kuqj5")
-current_node_label = NodePath("VBoxContainer/HBoxContainer/CurrentNodeLabel")
-current_node_icon = NodePath("VBoxContainer/HBoxContainer/CurrentNodeIcon")
-select_node_container = NodePath("VBoxContainer/SelectNodeContainer")
-create_state_machine_container = NodePath("VBoxContainer/CreateStateMachineContainer")
-state_machine_container = NodePath("VBoxContainer/StateMachineContainer")
-graph = NodePath("VBoxContainer/StateMachineContainer/GraphEdit")
+graph_edit = NodePath("VBoxContainer/StateMachineContainer/StateMachineGraphEdit")
+state_machine_graph_edit = NodePath("VBoxContainer/StateMachineContainer/StateMachineGraphEdit")
 
 [node name="AddNodeMenu" type="PopupMenu" parent="." unique_id=122754592]
 oversampling_override = 1.0
 size = Vector2i(156, 100)
-item_count = 2
-item_0/text = "+ State"
-item_0/id = 0
-item_1/text = "+ State Process"
-item_1/id = 1
 
-[node name="AcceptDialog" type="AcceptDialog" parent="." unique_id=1317134733]
+[node name="AddStateDialog" type="AcceptDialog" parent="." unique_id=1317134733]
 oversampling_override = 1.0
 title = "State Name"
 position = Vector2i(0, 36)
 size = Vector2i(132, 100)
 
-[node name="StateNameInput" type="LineEdit" parent="AcceptDialog" unique_id=1072602393]
+[node name="NewStateNameInput" type="LineEdit" parent="AddStateDialog" unique_id=1072602393]
 offset_left = 8.0
-offset_top = 17.0
+offset_top = 8.0
 offset_right = 124.0
-offset_bottom = 48.0
+offset_bottom = 57.0
 placeholder_text = "Name"
+alignment = 1
+
+[node name="AddAnnotationDialog" type="AcceptDialog" parent="." unique_id=1227082513]
+oversampling_override = 1.0
+title = "New Annotation"
+position = Vector2i(0, 36)
+size = Vector2i(185, 100)
+
+[node name="NewAnnotationInput" type="LineEdit" parent="AddAnnotationDialog" unique_id=1270895021]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 177.0
+offset_bottom = 57.0
+placeholder_text = "Annotation Text"
 alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1640640607]
@@ -57,56 +62,35 @@ alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=340412901]
 layout_mode = 2
-text = "State Machine: "
+text = "Root Node: "
 horizontal_alignment = 1
 
 [node name="Control" type="Control" parent="VBoxContainer/HBoxContainer" unique_id=124418327]
 custom_minimum_size = Vector2(4, 0)
 layout_mode = 2
 
-[node name="CurrentNodeIcon" type="TextureRect" parent="VBoxContainer/HBoxContainer" unique_id=1742026968]
-layout_mode = 2
-stretch_mode = 5
-
-[node name="CurrentNodeLabel" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1630337273]
+[node name="CurrentNodeButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=2119032451]
 layout_mode = 2
 text = "<empty>"
 
-[node name="SelectNodeContainer" type="CenterContainer" parent="VBoxContainer" unique_id=1479273625]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Label" type="Label" parent="VBoxContainer/SelectNodeContainer" unique_id=1469688140]
-layout_mode = 2
-text = "No selected node. Please select a node from the SceneTree."
-
-[node name="CreateStateMachineContainer" type="CenterContainer" parent="VBoxContainer" unique_id=1198660996]
-visible = false
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/CreateStateMachineContainer" unique_id=19161893]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/CreateStateMachineContainer/VBoxContainer" unique_id=1583728037]
-layout_mode = 2
-text = "This node does not have a StateMachine attached. Create one?"
-
-[node name="CreateStateMachine" type="Button" parent="VBoxContainer/CreateStateMachineContainer/VBoxContainer" unique_id=2106999012]
-layout_mode = 2
-size_flags_horizontal = 4
-text = "Create"
-
 [node name="StateMachineContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1661052177]
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/StateMachineContainer" unique_id=1255820721]
+[node name="StateMachineGraphEdit" type="GraphEdit" parent="VBoxContainer/StateMachineContainer" unique_id=524944383 node_paths=PackedStringArray("add_node_menu", "add_state_dialog", "add_annotation_dialog", "state_machine_editor", "new_state_name_input", "new_annotation_input")]
 layout_mode = 2
-size_flags_vertical = 3
+show_grid_buttons = false
+show_arrange_button = false
 script = ExtResource("2_hpxgv")
+add_node_menu = NodePath("../../../AddNodeMenu")
+add_state_dialog = NodePath("../../../AddStateDialog")
+add_annotation_dialog = NodePath("../../../AddAnnotationDialog")
+state_machine_editor = NodePath("../../..")
+new_state_name_input = NodePath("../../../AddStateDialog/NewStateNameInput")
+new_annotation_input = NodePath("../../../AddAnnotationDialog/NewAnnotationInput")
 
-[connection signal="id_pressed" from="AddNodeMenu" to="." method="_on_add_node_menu_id_pressed"]
-[connection signal="pressed" from="VBoxContainer/CreateStateMachineContainer/VBoxContainer/CreateStateMachine" to="." method="_on_create_state_machine_pressed"]
-[connection signal="gui_input" from="VBoxContainer/StateMachineContainer/GraphEdit" to="VBoxContainer/StateMachineContainer/GraphEdit" method="_on_gui_input"]
+[connection signal="id_pressed" from="AddNodeMenu" to="VBoxContainer/StateMachineContainer/StateMachineGraphEdit" method="_on_add_node_menu_id_pressed"]
+[connection signal="confirmed" from="AddStateDialog" to="VBoxContainer/StateMachineContainer/StateMachineGraphEdit" method="_on_add_state_dialog_confirmed"]
+[connection signal="confirmed" from="AddAnnotationDialog" to="VBoxContainer/StateMachineContainer/StateMachineGraphEdit" method="_on_add_annotation_dialog_confirmed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/CurrentNodeButton" to="." method="_on_current_node_button_pressed"]
+[connection signal="gui_input" from="VBoxContainer/StateMachineContainer/StateMachineGraphEdit" to="." method="_on_graph_edit_gui_input"]

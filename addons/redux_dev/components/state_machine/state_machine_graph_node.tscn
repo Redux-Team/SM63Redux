@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://bmq7hu0i2pb8t"]
-
-[ext_resource type="Script" uid="uid://bjbh3ujw4ug6" path="res://addons/redux_dev/components/state_machine/state_machine_graph_node.gd" id="1_dxxyt"]
-
-[node name="StateMachineGraphNode" type="GraphNode" unique_id=2008767006]
-script = ExtResource("1_dxxyt")

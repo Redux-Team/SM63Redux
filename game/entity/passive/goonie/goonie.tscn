@@ -4,14 +4,16 @@
 [ext_resource type="Texture2D" uid="uid://dcq1kqe3c5wbk" path="res://assets/textures/entity/passive/goonie_flap.png" id="2_dma5t"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_kaxjy"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="2_pbwgp"]
+[ext_resource type="Script" uid="uid://dyjrhpdveexsr" path="res://addons/redux_dev/components/state_machine/state.gd" id="3_dskmv"]
 [ext_resource type="Texture2D" uid="uid://di1d8ih6gfgmm" path="res://assets/textures/entity/passive/goonie_glide.png" id="4_1cx3s"]
 [ext_resource type="Script" uid="uid://dvxkxevaf2f45" path="res://core/custom_nodes/2d/ride_area.gd" id="6_bslqv"]
+[ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="7_i5hl1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0v6xk"]
 atlas = ExtResource("2_dma5t")
 region = Rect2(0, 0, 48, 46)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_0v6xk"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_bslqv"]
 diffuse_texture = SubResource("AtlasTexture_0v6xk")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i5hl1"]
@@ -119,6 +121,20 @@ ride_area = NodePath("RideArea")
 sprite = NodePath("SmartSprite2D")
 components_root = NodePath("Components")
 
+[node name="StateMachine" type="Node" parent="." unique_id=242288983 node_paths=PackedStringArray("__states")]
+script = ExtResource("7_i5hl1")
+__last_editor_position = Vector2(-246.00714, -44.35173)
+__last_editor_zoom = 1.4223652
+__states = {
+&"flap": NodePath("Flap")
+}
+metadata/_custom_type_script = "uid://utibsg6xkllx"
+
+[node name="Flap" type="Node" parent="StateMachine" unique_id=2056644239]
+script = ExtResource("3_dskmv")
+_editor_name = &"flap"
+_editor_position = Vector2(462, 119)
+
 [node name="Components" type="Node" parent="." unique_id=566607527]
 
 [node name="GravityComponent" type="Node" parent="Components" unique_id=296573466]
@@ -127,11 +143,11 @@ enabled = false
 metadata/_custom_type_script = "uid://cb672xli6i2ns"
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=189232163]
-texture = SubResource("CanvasTexture_0v6xk")
+texture = SubResource("CanvasTexture_bslqv")
 region_enabled = true
 region_rect = Rect2(0, 0, 48, 46)
 script = ExtResource("2_kaxjy")
-canvas_texture = SubResource("CanvasTexture_0v6xk")
+canvas_texture = SubResource("CanvasTexture_bslqv")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_bodhv")
 current_animation = "flap"

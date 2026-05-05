@@ -3,14 +3,12 @@ extends EditorPlugin
 
 
 const DEBUG_DOCK = preload("uid://cgx6mbayfubdw")
-const DEBUG_HANDLER_UID: String = "components/debug_dock/debug_dock.gd"
+const DEBUG_HANDLER_UID: String = "components/debug_dock/debug_handler.gd"
 const STATE_MACHINE_EDITOR = preload("uid://dpvtgmjtc1tpk")
 
-
-var debug_dock: EditorDock
-var state_machine_editor_dock: EditorDock
-var _decorator: EditorSceneTreeDecorator
-var editor: EditorStateMachineEditor
+var _debug_dock: EditorDock
+var _state_machine_editor_dock: EditorDock
+var _editor: EditorStateMachineEditor
 
 
 func _enable_plugin() -> void:
@@ -22,63 +20,56 @@ func _disable_plugin() -> void:
 
 
 func _enter_tree() -> void:
-	if debug_dock == null:
-		_setup_docks()
-	_decorator = EditorSceneTreeDecorator.new(self)
-	call_deferred(&"_setup_decorator")
+	_setup_docks()
 
 
 func _exit_tree() -> void:
 	_teardown_docks()
-	if _decorator:
-		_decorator.teardown()
-		_decorator = null
 
 
 func _edit(object: Object) -> void:
-	editor._on_node_selected((object as Node).get_path())
+	if object is StateMachine:
+		_editor.load_state_machine(object as StateMachine)
 
 
 func _handles(object: Object) -> bool:
-	return object is Node
+	if object is not Node:
+		return false
+	
+	if object is StateMachine:
+		_state_machine_editor_dock.make_visible()
+	else:
+		_state_machine_editor_dock.close()
+	
+	return true
 
 
 func _setup_docks() -> void:
-	debug_dock = EditorDock.new()
-	debug_dock.default_slot = EditorDock.DOCK_SLOT_LEFT_UR
-	debug_dock.available_layouts = EditorDock.DOCK_LAYOUT_VERTICAL
-	debug_dock.add_child(DEBUG_DOCK.instantiate())
-	add_dock(debug_dock)
+	_debug_dock = EditorDock.new()
+	_debug_dock.default_slot = EditorDock.DOCK_SLOT_LEFT_UR
+	_debug_dock.available_layouts = EditorDock.DOCK_LAYOUT_VERTICAL
+	_debug_dock.add_child(DEBUG_DOCK.instantiate())
+	add_dock(_debug_dock)
 	
-	state_machine_editor_dock = EditorDock.new()
-	state_machine_editor_dock.default_slot = EditorDock.DOCK_SLOT_BOTTOM
-	editor = STATE_MACHINE_EDITOR.instantiate()
-	state_machine_editor_dock.add_child(editor)
-	add_dock(state_machine_editor_dock)
-
-
-func _setup_decorator() -> void:
-	_decorator.setup()
-	_decorator.refresh()
+	_state_machine_editor_dock = EditorDock.new()
+	_state_machine_editor_dock.default_slot = EditorDock.DOCK_SLOT_BOTTOM
+	_editor = STATE_MACHINE_EDITOR.instantiate()
+	_state_machine_editor_dock.add_child(_editor)
+	add_dock(_state_machine_editor_dock)
 
 
 func _teardown_docks() -> void:
-	if debug_dock == null:
+	if _debug_dock == null:
 		return
 	
-	remove_dock(debug_dock)
-	debug_dock.queue_free()
-	debug_dock = null
+	remove_dock(_debug_dock)
+	_debug_dock.queue_free()
+	_debug_dock = null
 	
-	remove_dock(state_machine_editor_dock)
-	state_machine_editor_dock.queue_free()
-	state_machine_editor_dock = null
-	editor = null
-
-
-func _save_external_data() -> void:
-	if _decorator:
-		_decorator.call_deferred(&"refresh")
+	remove_dock(_state_machine_editor_dock)
+	_state_machine_editor_dock.queue_free()
+	_state_machine_editor_dock = null
+	_editor = null
 
 
 func _get_plugin_name() -> String:

@@ -4,14 +4,9 @@
 
 [resource]
 script = ExtResource("1_m8yjf")
-states = Array[Dictionary]([{
-"name": "Test",
-"position_x": 260.0,
-"position_y": 80.0,
-"script_path": ""
-}, {
-"name": "Test2",
-"position_x": 560.0,
-"position_y": 80.0,
-"script_path": "res://game/entity/player/dummy.gd"
+transitions = Array[Dictionary]([{
+"conditions": [],
+"from": "@GraphNode@38645",
+"to": "@GraphNode@38653"
 }])
+entry_position = Vector2(80, 60)

@@ -96,17 +96,17 @@ func _serialize() -> Dictionary:
 				objects_data.append(obj_data)
 		layers_data.append({
 			"layer_index": layer.layer_index,
-			"parallax_scale": _vec2_to_array(layer.parallax_scale),
+			"parallax_scale": Packer.vec2_to_array(layer.parallax_scale),
 			"decoration": layer.decoration,
-			"modulation": _color_to_array(layer.base_modulate),
+			"modulation": Packer.color_to_array(layer.base_modulate),
 			"objects": objects_data,
 		})
 	
 	return {
 		"version": FORMAT_VERSION,
 		"editor": {
-			"camera_position": _vec2_to_array(viewport.camera_position),
-			"camera_zoom": _vec2_to_array(viewport.camera_zoom),
+			"camera_position": Packer.vec2_to_array(viewport.camera_position),
+			"camera_zoom": Packer.vec2_to_array(viewport.camera_zoom),
 			"active_layer": viewport.get_active_layer(),
 		},
 		"layers": layers_data,
@@ -120,7 +120,7 @@ func _serialize_object(obj: LDObject) -> Dictionary:
 	
 	var data: Dictionary = {
 		"object_id": game_object.id,
-		"position": _vec2_to_array(obj.position),
+		"position": Packer.vec2_to_array(obj.position),
 		"properties": {},
 	}
 	
@@ -129,20 +129,20 @@ func _serialize_object(obj: LDObject) -> Dictionary:
 		if not poly_obj.get_outer_points().is_empty():
 			var poly_points: Array = []
 			for p: Vector2 in poly_obj.get_outer_points():
-				poly_points.append(_vec2_to_array(p))
+				poly_points.append(Packer.vec2_to_array(p))
 			data["polygon_points"] = poly_points
 		if not poly_obj.get_holes().is_empty():
 			var holes_data: Array = []
 			for hole: PackedVector2Array in poly_obj.get_holes():
 				var hole_arr: Array = []
 				for p: Vector2 in hole:
-					hole_arr.append(_vec2_to_array(p))
+					hole_arr.append(Packer.vec2_to_array(p))
 				holes_data.append(hole_arr)
 			data["polygon_holes"] = holes_data
 	
 	var props: Dictionary = obj.get_property_values()
 	for key: StringName in props:
-		data["properties"][str(key)] = _serialize_variant(props[key])
+		data["properties"][str(key)] = Packer.serialize_json_variant(props[key])
 	
 	return data
 
@@ -168,10 +168,10 @@ func _deserialize(data: Dictionary) -> Error:
 		var layer: LDLayer = viewport.get_or_create_layer(layer_index)
 		var raw_parallax: Variant = layer_data.get("parallax_scale", null)
 		if raw_parallax != null:
-			layer.parallax_scale = _array_to_vec2(raw_parallax)
+			layer.parallax_scale = Packer.array_to_vec2(raw_parallax)
 		var raw_modulate: Variant = layer_data.get("modulation", null)
 		if raw_modulate != null:
-			layer.base_modulate = _array_to_color(raw_modulate)
+			layer.base_modulate = Packer.array_to_color(raw_modulate)
 		layer.decoration = layer_data.get("decoration", false)
 		for obj_data: Variant in layer_data.get("objects", []):
 			if not obj_data is Dictionary:
@@ -181,9 +181,9 @@ func _deserialize(data: Dictionary) -> Error:
 	if data.has("editor"):
 		var editor_data: Dictionary = data["editor"]
 		if editor_data.has("camera_position"):
-			viewport.camera_position = _array_to_vec2(editor_data["camera_position"])
+			viewport.camera_position = Packer.array_to_vec2(editor_data["camera_position"])
 		if editor_data.has("camera_zoom"):
-			viewport.camera_zoom = _array_to_vec2(editor_data["camera_zoom"])
+			viewport.camera_zoom = Packer.array_to_vec2(editor_data["camera_zoom"])
 		if editor_data.has("active_layer"):
 			viewport.set_active_layer(editor_data["active_layer"])
 	
@@ -236,20 +236,20 @@ func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB) -> void
 	if not instance:
 		return
 	
-	var pos: Vector2 = _array_to_vec2(data.get("position", [0.0, 0.0]))
+	var pos: Vector2 = Packer.array_to_vec2(data.get("position", [0.0, 0.0]))
 	LD.get_editor_viewport().add_object(instance, Vector2i(pos), layer_index)
 	
 	instance.init_properties(game_object)
 	
 	var props: Dictionary = data.get("properties", {})
 	for key: String in props:
-		instance.set_property(StringName(key), _deserialize_variant(props[key]))
+		instance.set_property(StringName(key), Packer.deserialize_json_variant((props[key])))
 	
 	if instance is LDObjectPolygon and data.has("polygon_points"):
 		var poly_obj: LDObjectPolygon = instance as LDObjectPolygon
 		var points: PackedVector2Array = PackedVector2Array()
 		for p: Variant in data["polygon_points"]:
-			points.append(_array_to_vec2(p))
+			points.append(Packer.array_to_vec2(p))
 		poly_obj.apply_points(points)
 	
 	if instance is LDObjectPolygon and data.has("polygon_holes"):
@@ -259,7 +259,7 @@ func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB) -> void
 				continue
 			var hole_points: PackedVector2Array = PackedVector2Array()
 			for p: Variant in hole_data:
-				hole_points.append(_array_to_vec2(p))
+				hole_points.append(Packer.array_to_vec2(p))
 			if hole_points.size() >= 3:
 				poly_obj.add_hole(hole_points)
 	
@@ -277,41 +277,3 @@ func find_game_object_by_id(id: String, db: GameDB) -> GameObject:
 		if game_object.id == id:
 			return game_object
 	return null
-
-
-func _serialize_variant(value: Variant) -> Variant:
-	if value is Vector2:
-		return _vec2_to_array(value)
-	if value is Vector2i:
-		return [value.x, value.y]
-	if value is Color:
-		return _color_to_array(value)
-	return value
-
-
-func _deserialize_variant(value: Variant) -> Variant:
-	if value is Array and (value as Array).size() == 2:
-		return _array_to_vec2(value)
-	if value is Array and (value as Array).size() == 4:
-		return _array_to_color(value)
-	return value
-
-
-func _vec2_to_array(v: Vector2) -> Array:
-	return [v.x, v.y]
-
-
-func _array_to_vec2(a: Variant) -> Vector2:
-	if a is Array and (a as Array).size() >= 2:
-		return Vector2(float((a as Array)[0]), float((a as Array)[1]))
-	return Vector2.ZERO
-
-
-func _color_to_array(c: Color) -> Array:
-	return [c.r, c.g, c.b, c.a]
-
-
-func _array_to_color(a: Variant) -> Color:
-	if a is Array and (a as Array).size() == 4:
-		return Color(float((a as Array)[0]), float((a as Array)[1]), float((a as Array)[2]), float((a as Array)[3]))
-	return Color.WHITE

@@ -39,7 +39,7 @@ func set_property(key: StringName, value: Variant) -> void:
 ## to let the superclass handle the property (if applicable).
 func _handle_property(property_name: String, property_value: Variant) -> void:
 	if property_name in ["position", "scale"]:
-		set(property_name, _array_to_vec2(property_value))
+		set(property_name, Packer.array_to_vec2(property_value))
 	elif property_name == "rotation":
 		rotation_degrees = property_value
 	elif property_name == "disabled":
@@ -70,17 +70,3 @@ func _on_init() -> void:
 
 func _on_property_changed(_key: StringName, _value: Variant) -> void:
 	pass
-
-
-func _array_to_vec2(a: Variant) -> Vector2:
-	if a is Array and a.size() >= 2:
-		return Vector2(float(a[0]), float(a[1]))
-	return Vector2.ZERO
-
-
-func _array_to_packed_vec2(a: Variant) -> PackedVector2Array:
-	var packed: PackedVector2Array = []
-	if a is Array and a.size() >= 1:
-		for v_a: Array in a:
-			packed.append(Vector2(float(v_a[0]), float(v_a[1])))
-	return packed

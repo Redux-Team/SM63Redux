@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cxlnpbgvix7ms"]
+
+[ext_resource type="Script" uid="uid://bhjpqsl082blx" path="res://addons/redux_dev/components/state_machine/state_machine_annotation.gd" id="1_k1hsl"]
+
+[node name="StateMachineAnnotation" type="GraphElement" unique_id=295851885 node_paths=PackedStringArray("line_edit")]
+offset_right = 1.0
+offset_bottom = 15.0
+script = ExtResource("1_k1hsl")
+line_edit = NodePath("LineEdit")
+
+[node name="LineEdit" type="LineEdit" parent="." unique_id=1444168764]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"GraphFrameTitleLabel"
+alignment = 1
+editable = false
+expand_to_text_length = true

@@ -23,7 +23,7 @@ var _holes: Array[PackedVector2Array] = []
 
 func _on_init() -> void:
 	var raw_points: Variant = data.get("polygon_points")
-	_outer_points = _array_to_packed_vec2(raw_points)
+	_outer_points = Packer.array_to_packed_vec2(raw_points)
 	
 	if data.has("polygon_data_path"):
 		polygon_data = load(data.get("polygon_data_path"))
@@ -34,7 +34,7 @@ func _on_init() -> void:
 				continue
 			var hole_points: PackedVector2Array = PackedVector2Array()
 			for p: Variant in hole_data:
-				hole_points.append(_array_to_vec2(p))
+				hole_points.append(Packer.array_to_vec2(p))
 			if hole_points.size() >= 3:
 				_holes.append(hole_points)
 	

@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://lw2tqa550ufn"]
+
+[ext_resource type="Script" uid="uid://21kxqdkxvn4r" path="res://addons/redux_dev/components/state_machine/state_machine_state_node.gd" id="1_yy6dh"]
+
+[node name="StateMachineStateNode" type="GraphNode" unique_id=629933862 node_paths=PackedStringArray("superstate_button", "superstate_delete_button")]
+offset_right = 9.0
+offset_bottom = 47.0
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = false
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+script = ExtResource("1_yy6dh")
+superstate_button = NodePath("HBoxContainer2/SuperstateButton")
+superstate_delete_button = NodePath("HBoxContainer2/SuperstateDeleteButton")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=299639834]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer2" unique_id=1372722582]
+layout_mode = 2
+text = "Superstate:"
+
+[node name="SuperstateButton" type="Button" parent="HBoxContainer2" unique_id=1133336935]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "<null>"
+
+[node name="SuperstateDeleteButton" type="Button" parent="HBoxContainer2" unique_id=622194105]
+visible = false
+layout_mode = 2
+
+[connection signal="pressed" from="HBoxContainer2/SuperstateButton" to="." method="_on_superstate_button_pressed"]
+[connection signal="pressed" from="HBoxContainer2/SuperstateDeleteButton" to="." method="_on_superstate_delete_button_pressed"]

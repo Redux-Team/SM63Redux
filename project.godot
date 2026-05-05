@@ -32,7 +32,7 @@ buses/default_bus_layout="uid://dnbqnrs3tfb81"
 [autoload]
 
 Singleton="*res://singleton/singleton.tscn"
-DebugHandler="*uid://b6cvall7q1s0u"
+DebugHandler="*uid://dyw3n7oxqk3vq"
 
 [display]
 
@@ -55,7 +55,6 @@ enabled=PackedStringArray("res://addons/discord_social_sdk/plugin.cfg", "res://a
 folder_colors={
 "res://addons/": "gray",
 "res://assets/": "teal",
-"res://build/": "gray",
 "res://core/": "red",
 "res://dev/": "gray",
 "res://game/": "blue",

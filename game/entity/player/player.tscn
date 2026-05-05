@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c7gtlwcfr4qrc" path="res://game/entity/player/player.gd" id="1_oic1i"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="2_51d5m"]
+[ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="2_cawmy"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_cjmyu"]
 [ext_resource type="Texture2D" uid="uid://bjysolnwpkvk2" path="res://assets/textures/entity/player/mario/crouch.png" id="2_conr4"]
 [ext_resource type="Texture2D" uid="uid://bfvi3e017qacq" path="res://assets/textures/entity/player/mario/idle.png" id="2_heu0c"]
@@ -10,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://cj2oiylp0acsj" path="res://assets/textures/entity/player/mario/dive.png" id="3_4neg5"]
 [ext_resource type="Texture2D" uid="uid://bgjdqabdv1mig" path="res://assets/textures/entity/player/mario/walk.png" id="3_dhej3"]
 [ext_resource type="Texture2D" uid="uid://bbtiri17e7rkq" path="res://assets/textures/entity/player/mario/jump.png" id="3_igs2l"]
+[ext_resource type="Script" uid="uid://dyjrhpdveexsr" path="res://addons/redux_dev/components/state_machine/state.gd" id="3_kmnjn"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="3_qhcb0"]
 [ext_resource type="Script" uid="uid://cr0v7cui52ho8" path="res://game/entity/player/player_debug.gd" id="4_kn1iv"]
 [ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="4_o0v17"]
@@ -26,7 +28,7 @@
 atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 48, 48)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_jw7m7"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_chnj6"]
 diffuse_texture = SubResource("AtlasTexture_dhej3")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
@@ -500,7 +502,68 @@ mp_player = NodePath("MPPlayer")
 mp_label = NodePath("MPLabel")
 sprite = NodePath("Doll")
 components_root = NodePath("Components")
-metadata/sm_resource_path = "res://game/entity/player/player_sm.tres"
+
+[node name="StateMachine" type="Node" parent="." unique_id=49398394 node_paths=PackedStringArray("__states")]
+script = ExtResource("2_cawmy")
+__root_node_path = NodePath("..")
+__last_editor_position = Vector2(313.23407, -235.38525)
+__last_editor_zoom = 0.87940836
+__states = {
+&"0d3c6416-807f-45e0-b378-e3c324435c5d": NodePath("Dry"),
+&"2ad92f81-e99c-4aa5-a640-30c499a752e2": NodePath("Grounded"),
+&"41a05909-f6c6-4e71-aa87-dffce4afd383": NodePath("Airborne"),
+&"6f11b44a-cb9e-4fa3-b597-6e50cdb866ae": NodePath("Jump"),
+&"d1403418-6405-4e7a-b448-8c93914dddb4": NodePath("Walk"),
+&"edf853c7-1ebf-4ce4-bced-fc05eadcd2d5": NodePath("DoubleJump")
+}
+__annotations = Dictionary[String, Dictionary]({
+"e9727638-a405-49a4-9b2f-ca4e2f545a66": {
+"position": Vector2(780, -200),
+"text": "Base Movement"
+}
+})
+metadata/_custom_type_script = "uid://utibsg6xkllx"
+
+[node name="Walk" type="Node" parent="StateMachine" unique_id=1811508994]
+script = ExtResource("3_kmnjn")
+_editor_name = &"walk"
+_editor_position = Vector2(880, -140)
+_editor_uuid = &"d1403418-6405-4e7a-b448-8c93914dddb4"
+_editor_superstate_uuid = &"2ad92f81-e99c-4aa5-a640-30c499a752e2"
+
+[node name="Jump" type="Node" parent="StateMachine" unique_id=2112049847]
+script = ExtResource("3_kmnjn")
+_editor_name = &"jump"
+_editor_position = Vector2(880, -20)
+_editor_uuid = &"6f11b44a-cb9e-4fa3-b597-6e50cdb866ae"
+_editor_superstate_uuid = &"41a05909-f6c6-4e71-aa87-dffce4afd383"
+
+[node name="Dry" type="Node" parent="StateMachine" unique_id=762830906]
+script = ExtResource("3_kmnjn")
+_editor_name = &"Dry"
+_editor_position = Vector2(380, -80)
+_editor_uuid = &"0d3c6416-807f-45e0-b378-e3c324435c5d"
+
+[node name="DoubleJump" type="Node" parent="StateMachine" unique_id=706189425]
+script = ExtResource("3_kmnjn")
+_editor_name = &"double_jump"
+_editor_position = Vector2(1160, -20)
+_editor_uuid = &"edf853c7-1ebf-4ce4-bced-fc05eadcd2d5"
+_editor_superstate_uuid = &"6f11b44a-cb9e-4fa3-b597-6e50cdb866ae"
+
+[node name="Airborne" type="Node" parent="StateMachine" unique_id=2023958468]
+script = ExtResource("3_kmnjn")
+_editor_name = &"Airborne"
+_editor_position = Vector2(620, -20)
+_editor_uuid = &"41a05909-f6c6-4e71-aa87-dffce4afd383"
+_editor_superstate_uuid = &"0d3c6416-807f-45e0-b378-e3c324435c5d"
+
+[node name="Grounded" type="Node" parent="StateMachine" unique_id=1097813777]
+script = ExtResource("3_kmnjn")
+_editor_name = &"Grounded"
+_editor_position = Vector2(620, -140)
+_editor_uuid = &"2ad92f81-e99c-4aa5-a640-30c499a752e2"
+_editor_superstate_uuid = &"0d3c6416-807f-45e0-b378-e3c324435c5d"
 
 [node name="Components" type="Node" parent="." unique_id=958645498]
 
@@ -522,11 +585,11 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101]
 position = Vector2(2, -13)
-texture = SubResource("CanvasTexture_jw7m7")
+texture = SubResource("CanvasTexture_chnj6")
 region_enabled = true
 region_rect = Rect2(0, 0, 48, 48)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_jw7m7")
+canvas_texture = SubResource("CanvasTexture_chnj6")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
 current_animation = "idle"
