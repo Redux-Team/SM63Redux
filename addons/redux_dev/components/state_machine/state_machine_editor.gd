@@ -26,6 +26,9 @@ func _refresh() -> void:
 	for uuid: String in _current_sm.__states:
 		state_machine_graph_edit._spawn_state_node(uuid)
 	
+	for uuid: String in _current_sm.__aliases:
+		state_machine_graph_edit._spawn_alias_node(uuid)
+	
 	for uuid: String in _current_sm.__annotations:
 		state_machine_graph_edit._spawn_annotation_node(uuid)
 	

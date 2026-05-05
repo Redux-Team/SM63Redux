@@ -19,6 +19,7 @@ const COLOR_SUPERSTATE := Color(0.498, 0.467, 0.867)
 var editor: EditorStateMachineEditor
 var uuid: String = ""
 var superstate_uuid: String = ""
+var alias_of: String = ""
 
 
 func _ready() -> void:
@@ -42,9 +43,13 @@ func _setup_titlebar() -> void:
 	
 	var label: Label = Label.new()
 	var state: State = _get_state()
-	label.text = state.name if state else name
+	label.text = "(%s)" % state.name if not alias_of.is_empty() else (state.name if state else name)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	
+	if not alias_of.is_empty():
+		label.modulate = Color.YELLOW
+		#label.add_theme_font_override("font", get_theme_font("italics", "EditorFonts"))
 	
 	hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	hbox.add_child(icon_rect)
@@ -67,29 +72,37 @@ func _setup_slots() -> void:
 		true, 0, COLOR_IN,
 		true, 0, COLOR_OUT)
 	set_slot(1,
-		true, 0, COLOR_SUPERSTATE,
+		alias_of.is_empty(), 0, COLOR_SUPERSTATE,
 		false, 0, COLOR_SUPERSTATE)
 
 
 func _get_state() -> State:
+	if not alias_of.is_empty():
+		return editor._current_sm.__states.get(alias_of, null)
 	return editor._current_sm.__states.get(uuid, null)
 
 
 func _get_superstate() -> State:
-	return editor._current_sm.__states.get(superstate_uuid, null)
+	var resolved: String = superstate_uuid
+	var alias_data: Dictionary = editor._current_sm.__aliases.get(superstate_uuid, {})
+	if not alias_data.is_empty():
+		resolved = alias_data.get("original_uuid", superstate_uuid)
+	return editor._current_sm.__states.get(resolved, null)
 
 
 func _set_entry_port_enabled(enabled: bool) -> void:
 	set_slot(1,
-		true, 0, COLOR_SUPERSTATE,
+		alias_of.is_empty(), 0, COLOR_SUPERSTATE,
 		enabled, 0, COLOR_SUPERSTATE)
 
 
 func _set_superstate(new_uuid: String) -> void:
 	superstate_uuid = new_uuid
-	var state: State = _get_state()
-	if state:
-		state.__editor_superstate_uuid = new_uuid
+	
+	if alias_of.is_empty():
+		var state: State = _get_state()
+		if state:
+			state.__editor_superstate_uuid = new_uuid
 	
 	var has_superstate: bool = not new_uuid.is_empty()
 	_set_entry_port_enabled(has_superstate)

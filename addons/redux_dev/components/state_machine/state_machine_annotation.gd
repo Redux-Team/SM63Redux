@@ -2,15 +2,15 @@
 class_name EditorStateMachineAnnotation
 extends GraphElement
 
-@export var line_edit: LineEdit
+@export var label: Label
 
 var uuid: String = ""
 var text: String = "":
 	set(value):
 		text = value
-		if line_edit:
-			line_edit.text = value
+		if label:
+			label.text = value
 
 
 func _ready() -> void:
-	line_edit.text = text
+	label.text = text

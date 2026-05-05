@@ -25,36 +25,141 @@
 [ext_resource type="Script" uid="uid://c02oltfntb3q8" path="res://game/entity/player/mp_player.gd" id="19_ntea6"]
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="20_1wiqr"]
 
+[sub_resource type="Resource" id="Resource_k8egu"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "5869f0f5-1853-49d5-9712-4fa267c83234"
+__to_uuid = "d872f348-fd78-42a4-8af6-93e4baf91db9"
+
 [sub_resource type="Resource" id="Resource_kmnjn"]
 script = ExtResource("3_kmnjn")
-__from_uuid = "c42e85f2-d252-43de-8bf8-24ae49091d8b"
-__to_uuid = "4733cc5d-de04-4e14-a26c-25401c4527a8"
-
-[sub_resource type="Resource" id="Resource_4j27x"]
-script = ExtResource("3_kmnjn")
-__from_uuid = "4733cc5d-de04-4e14-a26c-25401c4527a8"
-__to_uuid = "e11d577d-5865-48d9-881c-b627b5400894"
+__from_uuid = "0d2a0148-6d88-42ad-abd0-cf6bd1aab8ee"
+__to_uuid = "da2a77dc-e3d2-470e-9990-bfd3a0e740c3"
 
 [sub_resource type="Resource" id="Resource_0jrw7"]
 script = ExtResource("3_kmnjn")
-__from_uuid = "e11d577d-5865-48d9-881c-b627b5400894"
-__to_uuid = "df8ef25e-40ab-41e3-bcf3-ebe2d3d9253a"
+__from_uuid = "e465a7ea-4405-449b-ab06-120b336f109a"
+__to_uuid = "5869f0f5-1853-49d5-9712-4fa267c83234"
 
-[sub_resource type="Resource" id="Resource_je5mu"]
+[sub_resource type="Resource" id="Resource_tb30q"]
 script = ExtResource("3_kmnjn")
-__from_uuid = "e11d577d-5865-48d9-881c-b627b5400894"
-__to_uuid = "f6521943-0d18-4536-a182-4c22076d2be9"
+__from_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
+__to_uuid = "d6339528-2bcb-4829-ac0b-8374263c8a5b"
 
-[sub_resource type="Resource" id="Resource_k8egu"]
+[sub_resource type="Resource" id="Resource_8um7f"]
 script = ExtResource("3_kmnjn")
-__from_uuid = "f6521943-0d18-4536-a182-4c22076d2be9"
-__to_uuid = "e11d577d-5865-48d9-881c-b627b5400894"
+__from_uuid = "d6339528-2bcb-4829-ac0b-8374263c8a5b"
+__to_uuid = "eb395030-e83a-4bbb-8352-43b873b64d84"
+
+[sub_resource type="Resource" id="Resource_kycdh"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "0d2a0148-6d88-42ad-abd0-cf6bd1aab8ee"
+__to_uuid = "eb84e3c9-3c56-4cd8-a616-246ee21c7b6a"
+
+[sub_resource type="Resource" id="Resource_otk8c"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "eb395030-e83a-4bbb-8352-43b873b64d84"
+__to_uuid = "cc58c726-11f7-417c-93e8-b97cbc58d3b5"
+
+[sub_resource type="Resource" id="Resource_y6elw"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "6e4ec8f7-2f27-4c0c-b34a-a2675160d60f"
+__to_uuid = "c313e1f6-fa71-4820-8d9f-f3571736ebb4"
+
+[sub_resource type="Resource" id="Resource_mb70y"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "6e4ec8f7-2f27-4c0c-b34a-a2675160d60f"
+__to_uuid = "f50d887a-2d13-4e37-b49f-52f180677f81"
+
+[sub_resource type="Resource" id="Resource_b6ajd"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "c313e1f6-fa71-4820-8d9f-f3571736ebb4"
+__to_uuid = "a6a07b2e-c4d8-45df-9552-5a728fde0eb7"
+
+[sub_resource type="Resource" id="Resource_02rvq"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "f50d887a-2d13-4e37-b49f-52f180677f81"
+__to_uuid = "a6a07b2e-c4d8-45df-9552-5a728fde0eb7"
+
+[sub_resource type="Resource" id="Resource_20bnd"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "d6339528-2bcb-4829-ac0b-8374263c8a5b"
+__to_uuid = "a5fe6334-279b-408f-90af-cfed9a068e2b"
+
+[sub_resource type="Resource" id="Resource_5mhew"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "d6339528-2bcb-4829-ac0b-8374263c8a5b"
+__to_uuid = "39218533-b058-421b-af3a-20755de00719"
+
+[sub_resource type="Resource" id="Resource_eihrn"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "39218533-b058-421b-af3a-20755de00719"
+__to_uuid = "d6339528-2bcb-4829-ac0b-8374263c8a5b"
+
+[sub_resource type="Resource" id="Resource_ioda6"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "d872f348-fd78-42a4-8af6-93e4baf91db9"
+__to_uuid = "9f9a19a1-8f74-4665-adb3-138a4e3dcd1d"
+
+[sub_resource type="Resource" id="Resource_3grnp"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "5869f0f5-1853-49d5-9712-4fa267c83234"
+__to_uuid = "9f9a19a1-8f74-4665-adb3-138a4e3dcd1d"
+
+[sub_resource type="Resource" id="Resource_hi5jf"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "e465a7ea-4405-449b-ab06-120b336f109a"
+__to_uuid = "9f9a19a1-8f74-4665-adb3-138a4e3dcd1d"
+
+[sub_resource type="Resource" id="Resource_8yq6v"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+__to_uuid = "9f9a19a1-8f74-4665-adb3-138a4e3dcd1d"
+
+[sub_resource type="Resource" id="Resource_l4byk"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "3b4543ff-daee-4cf7-8cc7-ce938aa845e3"
+__to_uuid = "780543d6-d8cb-4e14-b41d-32035d4348b1"
+
+[sub_resource type="Resource" id="Resource_h2xdj"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "2575ccc5-09bc-45fe-9fce-7e402860b8b3"
+__to_uuid = "780543d6-d8cb-4e14-b41d-32035d4348b1"
+
+[sub_resource type="Resource" id="Resource_lh4k8"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "872d91ff-f8f0-42b6-a8e9-d27e847607aa"
+__to_uuid = "c6280b8b-1be4-419f-9dda-e44b60618236"
+
+[sub_resource type="Resource" id="Resource_ria7k"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "0bf30516-dffc-408f-aa9d-b4941a37d773"
+__to_uuid = "c6280b8b-1be4-419f-9dda-e44b60618236"
+
+[sub_resource type="Resource" id="Resource_6rqdb"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "8af83113-838f-4bfa-9d80-ed1d79e9bd07"
+__to_uuid = "c6280b8b-1be4-419f-9dda-e44b60618236"
+
+[sub_resource type="Resource" id="Resource_l0vtf"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "bdadf97e-a71b-472c-9ecb-312b7e7385d5"
+__to_uuid = "c6280b8b-1be4-419f-9dda-e44b60618236"
+
+[sub_resource type="Resource" id="Resource_8vwb3"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "345ba853-889e-4190-8ed2-776dadb40e2c"
+__to_uuid = "c6280b8b-1be4-419f-9dda-e44b60618236"
+
+[sub_resource type="Resource" id="Resource_5jc0j"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "e4af21b2-4317-4459-8d2a-08893f48551a"
+__to_uuid = "c6280b8b-1be4-419f-9dda-e44b60618236"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dhej3"]
 atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 48, 48)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_cawmy"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_chnj6"]
 diffuse_texture = SubResource("AtlasTexture_dhej3")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
@@ -532,51 +637,304 @@ components_root = NodePath("Components")
 [node name="StateMachine" type="Node" parent="." unique_id=49398394 node_paths=PackedStringArray("__states")]
 script = ExtResource("2_cawmy")
 __root_node_path = NodePath("..")
-__last__editor_position = Vector2(-389.6305, -219.25632)
-__last_editor_zoom = 0.6635437
+__last__editor_position = Vector2(-621.58905, -742.3645)
+__last_editor_zoom = 0.73076904
 __states = {
-&"4733cc5d-de04-4e14-a26c-25401c4527a8": NodePath("Grounded"),
-&"c42e85f2-d252-43de-8bf8-24ae49091d8b": NodePath("Dry"),
-&"c73d78c0-4e3e-43e0-a355-c7d441450b0a": NodePath("Walk"),
-&"e11d577d-5865-48d9-881c-b627b5400894": NodePath("Idle")
+&"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
+&"068e3668-b606-45ca-8c9c-faf07fe28b76": NodePath("Dry/Grounded/Idle"),
+&"0dd74506-66e0-4267-b86b-0572da305c2a": NodePath("Airborne/Dive"),
+&"153c8a33-2d47-4ccc-97e3-9e16b0b05f9c": NodePath("Airborne/Backflip"),
+&"1a672940-36b6-42fb-9579-e3e44c1736ad": NodePath("Airborne"),
+&"1c0b8823-6179-4117-9b5a-5a7e7c720250": NodePath("Submerged"),
+&"1f487687-d9c8-496b-9be9-7fd09f196b62": NodePath("Spin"),
+&"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2": NodePath("Airborne/IdleJump/Jump"),
+&"26117a90-ad8f-4dc7-b05f-b7d2d321b8c0": NodePath("GroundPound/GroundPoundStart"),
+&"4039c2e2-f597-43ee-b41e-d932b0a93a22": NodePath("GroundPound/GroundPoundFall"),
+&"44d79f3b-0f69-438b-8b37-d3a6915e88e5": NodePath("Dry/Grounded/Landed"),
+&"54a4d6c2-d938-40a1-92f4-ed7ef758c71c": NodePath("Airborne/IdleJump/DoubleJump"),
+&"56a353ee-c4c2-458c-a018-6302daa71851": NodePath("Dry/Grounded/Floorslide"),
+&"5ed7fb5d-7e2c-4110-92cb-cf15f641072e": NodePath("Dry/Grounded/Crouch"),
+&"5f26c6ee-ee21-44a2-9986-4f30b9f89611": NodePath("Airborne/BackflipUp"),
+&"72d567dd-e3ab-46f9-be2b-c2d0cebb27e8": NodePath("Airborne/RolloutF"),
+&"74d37025-c0e7-44f3-9562-5d9cae8dab86": NodePath("GroundPound"),
+&"7c9bf00f-ebfd-4920-b0c8-fe79e3d3ccb7": NodePath("Submerged/SwimWalk"),
+&"a8371ea8-4f4b-4cdc-8345-14368f1455d3": NodePath("Airborne/IdleJump"),
+&"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3": NodePath("Dry"),
+&"b3fdc091-1261-4006-a130-d7a725b6b4cd": NodePath("Dry/Grounded/Walk"),
+&"b6fb3a09-ab02-4680-8817-4127106f90df": NodePath("Submerged/Swim"),
+&"c129c1dc-f896-4e20-b678-2a396f143ae9": NodePath("Dry/Grounded"),
+&"cb2bce9e-79ca-46c1-9bc1-ab2d16c15822": NodePath("Submerged/SwimSpin"),
+&"d8126d47-03c3-4a9b-abee-8c68263ad4ab": NodePath("Airborne/Fall"),
+&"fac7caf1-9473-4b51-87ce-64f33b12c026": NodePath("Submerged/SwimIdle"),
+&"fcde7a01-9caf-4d7a-8016-ae92a2e45514": NodePath("Airborne/IdleJump/TripleJump")
 }
-__transitions = Dictionary[String, ExtResource("3_kmnjn")]({
-"1a1c9577-be85-4141-9e0d-71fbd9c697eb": SubResource("Resource_4j27x"),
-"7617a699-d2b2-4d14-8a13-1ef64de4aef1": SubResource("Resource_je5mu"),
-"c1d998b9-b297-4f53-be67-afd8cf55a9e0": SubResource("Resource_0jrw7"),
-"fb096990-349f-47b0-8ffb-377c6a256e56": SubResource("Resource_kmnjn"),
-"fdddee1e-c86e-4ae3-a754-19b5d7508e96": SubResource("Resource_k8egu")
+__annotations = Dictionary[String, Dictionary]({
+"aa8fc861-4855-4fa5-bac3-8381f55773e2": {
+"position": Vector2(-340, -840),
+"text": "Superstate/Definition Tree"
+}
 })
-__aliases = null
+__transitions = Dictionary[String, ExtResource("3_kmnjn")]({
+"015c9887-2678-4fd7-8402-269d0a291ec4": SubResource("Resource_8vwb3"),
+"0dfb590c-dca2-42e8-955b-8cd2f5c51a54": SubResource("Resource_5mhew"),
+"129c6f5c-b4f6-4a22-aa5a-58ad79052f6c": SubResource("Resource_tb30q"),
+"28580d18-f138-41af-8ac9-543863c01689": SubResource("Resource_k8egu"),
+"2da17ab6-ea39-4ea0-a016-eca948ccd983": SubResource("Resource_20bnd"),
+"4b4aa039-77e4-49c7-8464-fb4f5f401e5f": SubResource("Resource_ria7k"),
+"570a9b88-1d91-4425-9f6f-f6e1b8d7209d": SubResource("Resource_y6elw"),
+"5de5d925-e45c-49f3-a758-d6afe1d5bd83": SubResource("Resource_eihrn"),
+"650a5175-a57c-42a5-a970-9bb36931673c": SubResource("Resource_mb70y"),
+"6929caec-1af4-4199-8874-9c6f9e96675a": SubResource("Resource_l4byk"),
+"8a68777b-a92d-403f-ab2a-37c464eead1d": SubResource("Resource_h2xdj"),
+"8a8e4c41-d48f-4387-8874-5f9bb3717b4c": SubResource("Resource_0jrw7"),
+"8d970005-5136-40ed-b8e5-3d0cc7dcca8b": SubResource("Resource_6rqdb"),
+"afb8ed38-4796-469e-ad8d-da79a40b1551": SubResource("Resource_02rvq"),
+"b049de16-5516-4031-82c5-d43434bc9de5": SubResource("Resource_5jc0j"),
+"b945c277-bb58-48f6-9e62-364f1781ca07": SubResource("Resource_otk8c"),
+"d2fd3fb4-a5ab-42ac-9bef-e6d06d25915f": SubResource("Resource_ioda6"),
+"d6912368-0551-478a-8022-71f5c0806ae0": SubResource("Resource_kycdh"),
+"d82a0010-bdc6-4571-a4d5-2a1beb7626d6": SubResource("Resource_8um7f"),
+"dc47e35f-576b-4182-acb1-7c2fa0f525e4": SubResource("Resource_hi5jf"),
+"e60eeca3-7154-48f3-a1c5-af53a3659d70": SubResource("Resource_l0vtf"),
+"eacf8c5b-17ce-454d-9dbc-8dfafba23af0": SubResource("Resource_8yq6v"),
+"f869c14d-8cf3-4f74-96ae-4a5e3ca6874c": SubResource("Resource_kmnjn"),
+"f9db3a43-5669-45b3-a986-987a18adb07b": SubResource("Resource_3grnp"),
+"fee90788-cd4b-40ea-b834-d7984f5c5ca0": SubResource("Resource_lh4k8"),
+"fef3b299-ff70-4693-bd01-9b218f48d27c": SubResource("Resource_b6ajd")
+})
+__aliases = {
+"345ba853-889e-4190-8ed2-776dadb40e2c": {
+"original_uuid": "5869f0f5-1853-49d5-9712-4fa267c83234",
+"position": Vector2(-1800, 840)
+},
+"3b4543ff-daee-4cf7-8cc7-ce938aa845e3": {
+"original_uuid": "eb84e3c9-3c56-4cd8-a616-246ee21c7b6a",
+"position": Vector2(-1080, 780)
+},
+"bdadf97e-a71b-472c-9ecb-312b7e7385d5": {
+"original_uuid": "e465a7ea-4405-449b-ab06-120b336f109a",
+"position": Vector2(-1780, 720)
+},
+"e233e671-bc9e-440b-b93c-8eef38107716": {
+"original_uuid": "eb84e3c9-3c56-4cd8-a616-246ee21c7b6a",
+"position": Vector2(-180, 740)
+},
+"e4af21b2-4317-4459-8d2a-08893f48551a": {
+"original_uuid": "d872f348-fd78-42a4-8af6-93e4baf91db9",
+"position": Vector2(-1780, 960)
+}
+}
 metadata/_custom_type_script = "uid://utibsg6xkllx"
 
-[node name="Dry" type="Node" parent="StateMachine" unique_id=587842298]
+[node name="Dry" type="Node" parent="StateMachine" unique_id=1790975957]
 script = ExtResource("4_4j27x")
 __editor_name = &"dry"
-__editor_position = Vector2(-400, -40)
-__editor_uuid = &"c42e85f2-d252-43de-8bf8-24ae49091d8b"
+__editor_position = Vector2(-1020, -340)
+__editor_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 
-[node name="Grounded" type="Node" parent="StateMachine" unique_id=1496850571]
+[node name="Grounded" type="Node" parent="StateMachine/Dry" unique_id=2112507397]
 script = ExtResource("4_4j27x")
 __editor_name = &"grounded"
-__editor_position = Vector2(-200, -40)
-__editor_uuid = &"4733cc5d-de04-4e14-a26c-25401c4527a8"
-__editor_superstate_uuid = &"c42e85f2-d252-43de-8bf8-24ae49091d8b"
-__editor_superstate_wire_uuid = &"c42e85f2-d252-43de-8bf8-24ae49091d8b"
+__editor_position = Vector2(-840, -480)
+__editor_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
+__editor_superstate_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
+__editor_superstate_wire_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 
-[node name="Idle" type="Node" parent="StateMachine" unique_id=937174524]
+[node name="Idle" type="Node" parent="StateMachine/Dry/Grounded" unique_id=1731901379]
 script = ExtResource("4_4j27x")
 __editor_name = &"idle"
-__editor_position = Vector2(60, -40)
-__editor_uuid = &"e11d577d-5865-48d9-881c-b627b5400894"
-__editor_superstate_uuid = &"4733cc5d-de04-4e14-a26c-25401c4527a8"
-__editor_superstate_wire_uuid = &"4733cc5d-de04-4e14-a26c-25401c4527a8"
+__editor_position = Vector2(-520, -600)
+__editor_uuid = &"068e3668-b606-45ca-8c9c-faf07fe28b76"
+__editor_superstate_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
+__editor_superstate_wire_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
 
-[node name="Walk" type="Node" parent="StateMachine" unique_id=1935281646]
+[node name="Landed" type="Node" parent="StateMachine/Dry/Grounded" unique_id=1826889833]
+script = ExtResource("4_4j27x")
+__editor_name = &"landed"
+__editor_position = Vector2(-180, -600)
+__editor_uuid = &"44d79f3b-0f69-438b-8b37-d3a6915e88e5"
+__editor_superstate_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
+__editor_superstate_wire_uuid = &"068e3668-b606-45ca-8c9c-faf07fe28b76"
+
+[node name="Walk" type="Node" parent="StateMachine/Dry/Grounded" unique_id=1580509400]
 script = ExtResource("4_4j27x")
 __editor_name = &"walk"
-__editor_position = Vector2(560, -220)
-__editor_uuid = &"c73d78c0-4e3e-43e0-a355-c7d441450b0a"
+__editor_position = Vector2(-180, -740)
+__editor_uuid = &"b3fdc091-1261-4006-a130-d7a725b6b4cd"
+__editor_superstate_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
+__editor_superstate_wire_uuid = &"068e3668-b606-45ca-8c9c-faf07fe28b76"
+
+[node name="Crouch" type="Node" parent="StateMachine/Dry/Grounded" unique_id=220392553]
+script = ExtResource("4_4j27x")
+__editor_name = &"crouch"
+__editor_position = Vector2(120, -700)
+__editor_uuid = &"5ed7fb5d-7e2c-4110-92cb-cf15f641072e"
+__editor_superstate_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
+__editor_superstate_wire_uuid = &"b3fdc091-1261-4006-a130-d7a725b6b4cd"
+
+[node name="Floorslide" type="Node" parent="StateMachine/Dry/Grounded" unique_id=1890132868]
+script = ExtResource("4_4j27x")
+__editor_name = &"floorslide"
+__editor_position = Vector2(120, -840)
+__editor_uuid = &"56a353ee-c4c2-458c-a018-6302daa71851"
+__editor_superstate_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
+__editor_superstate_wire_uuid = &"b3fdc091-1261-4006-a130-d7a725b6b4cd"
+
+[node name="Airborne" type="Node" parent="StateMachine" unique_id=338446170]
+script = ExtResource("4_4j27x")
+__editor_name = &"airborne"
+__editor_position = Vector2(-840, -340)
+__editor_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+__editor_superstate_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
+__editor_superstate_wire_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
+
+[node name="Fall" type="Node" parent="StateMachine/Airborne" unique_id=1389110280]
+script = ExtResource("4_4j27x")
+__editor_name = &"fall"
+__editor_position = Vector2(-480, -360)
+__editor_uuid = &"d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+__editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+__editor_superstate_wire_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+
+[node name="Dive" type="Node" parent="StateMachine/Airborne" unique_id=2082405443]
+script = ExtResource("4_4j27x")
+__editor_name = &"dive"
+__editor_position = Vector2(-120, -400)
+__editor_uuid = &"0dd74506-66e0-4267-b86b-0572da305c2a"
+__editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+__editor_superstate_wire_uuid = &"d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+
+[node name="IdleJump" type="Node" parent="StateMachine/Airborne" unique_id=1248860808]
+script = ExtResource("4_4j27x")
+__editor_name = &"idle_jump"
+__editor_position = Vector2(-120, -260)
+__editor_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+__editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+__editor_superstate_wire_uuid = &"d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+
+[node name="Jump" type="Node" parent="StateMachine/Airborne/IdleJump" unique_id=2029960993]
+script = ExtResource("4_4j27x")
+__editor_name = &"jump"
+__editor_position = Vector2(160, -260)
+__editor_uuid = &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__editor_superstate_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+__editor_superstate_wire_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+
+[node name="DoubleJump" type="Node" parent="StateMachine/Airborne/IdleJump" unique_id=936922287]
+script = ExtResource("4_4j27x")
+__editor_name = &"double_jump"
+__editor_position = Vector2(440, -260)
+__editor_uuid = &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
+__editor_superstate_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+__editor_superstate_wire_uuid = &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+
+[node name="TripleJump" type="Node" parent="StateMachine/Airborne/IdleJump" unique_id=702472203]
+script = ExtResource("4_4j27x")
+__editor_name = &"triple_jump"
+__editor_position = Vector2(720, -260)
+__editor_uuid = &"fcde7a01-9caf-4d7a-8016-ae92a2e45514"
+__editor_superstate_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+__editor_superstate_wire_uuid = &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
+
+[node name="Backflip" type="Node" parent="StateMachine/Airborne" unique_id=1884281519]
+script = ExtResource("4_4j27x")
+__editor_name = &"backflip"
+__editor_position = Vector2(-120, -120)
+__editor_uuid = &"153c8a33-2d47-4ccc-97e3-9e16b0b05f9c"
+__editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+__editor_superstate_wire_uuid = &"d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+
+[node name="BackflipUp" type="Node" parent="StateMachine/Airborne" unique_id=420233348]
+script = ExtResource("4_4j27x")
+__editor_name = &"backflip_up"
+__editor_position = Vector2(160, -120)
+__editor_uuid = &"5f26c6ee-ee21-44a2-9986-4f30b9f89611"
+__editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+__editor_superstate_wire_uuid = &"153c8a33-2d47-4ccc-97e3-9e16b0b05f9c"
+
+[node name="RolloutF" type="Node" parent="StateMachine/Airborne" unique_id=1914267069]
+script = ExtResource("4_4j27x")
+__editor_name = &"rollout_f"
+__editor_position = Vector2(160, -400)
+__editor_uuid = &"72d567dd-e3ab-46f9-be2b-c2d0cebb27e8"
+__editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+__editor_superstate_wire_uuid = &"0dd74506-66e0-4267-b86b-0572da305c2a"
+
+[node name="Spin" type="Node" parent="StateMachine" unique_id=1685604128]
+script = ExtResource("4_4j27x")
+__editor_name = &"spin"
+__editor_position = Vector2(-840, -200)
+__editor_uuid = &"1f487687-d9c8-496b-9be9-7fd09f196b62"
+__editor_superstate_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
+__editor_superstate_wire_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
+
+[node name="Submerged" type="Node" parent="StateMachine" unique_id=1525831935]
+script = ExtResource("4_4j27x")
+__editor_name = &"Submerged"
+__editor_position = Vector2(-1040, 260)
+__editor_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
+
+[node name="SwimIdle" type="Node" parent="StateMachine/Submerged" unique_id=203521133]
+script = ExtResource("4_4j27x")
+__editor_name = &"swim_idle"
+__editor_position = Vector2(-760, 260)
+__editor_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
+__editor_superstate_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
+__editor_superstate_wire_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
+
+[node name="Swim" type="Node" parent="StateMachine/Submerged" unique_id=235025815]
+script = ExtResource("4_4j27x")
+__editor_name = &"swim"
+__editor_position = Vector2(-480, 100)
+__editor_uuid = &"b6fb3a09-ab02-4680-8817-4127106f90df"
+__editor_superstate_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
+__editor_superstate_wire_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
+
+[node name="SwimWalk" type="Node" parent="StateMachine/Submerged" unique_id=919158494]
+script = ExtResource("4_4j27x")
+__editor_name = &"swim_walk"
+__editor_position = Vector2(-480, 260)
+__editor_uuid = &"7c9bf00f-ebfd-4920-b0c8-fe79e3d3ccb7"
+__editor_superstate_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
+__editor_superstate_wire_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
+
+[node name="SwimSpin" type="Node" parent="StateMachine/Submerged" unique_id=1905840328]
+script = ExtResource("4_4j27x")
+__editor_name = &"swim_spin"
+__editor_position = Vector2(-480, 400)
+__editor_uuid = &"cb2bce9e-79ca-46c1-9bc1-ab2d16c15822"
+__editor_superstate_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
+__editor_superstate_wire_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
+
+[node name="GroundPound" type="Node" parent="StateMachine" unique_id=1959935352]
+script = ExtResource("4_4j27x")
+__editor_name = &"ground_pound"
+__editor_position = Vector2(-1060, 760)
+__editor_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
+
+[node name="GroundPoundStart" type="Node" parent="StateMachine/GroundPound" unique_id=1889846081]
+script = ExtResource("4_4j27x")
+__editor_name = &"ground_pound_start"
+__editor_position = Vector2(-780, 760)
+__editor_uuid = &"26117a90-ad8f-4dc7-b05f-b7d2d321b8c0"
+__editor_superstate_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
+__editor_superstate_wire_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
+
+[node name="GroundPoundFall" type="Node" parent="StateMachine/GroundPound" unique_id=2058012596]
+script = ExtResource("4_4j27x")
+__editor_name = &"ground_pound_fall"
+__editor_position = Vector2(-500, 760)
+__editor_uuid = &"4039c2e2-f597-43ee-b41e-d932b0a93a22"
+__editor_superstate_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
+__editor_superstate_wire_uuid = &"26117a90-ad8f-4dc7-b05f-b7d2d321b8c0"
+
+[node name="GroundPoundSlam" type="Node" parent="StateMachine/GroundPound" unique_id=333120121]
+script = ExtResource("4_4j27x")
+__editor_name = &"ground_pound_slam"
+__editor_position = Vector2(-220, 760)
+__editor_uuid = &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
+__editor_superstate_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
+__editor_superstate_wire_uuid = &"4039c2e2-f597-43ee-b41e-d932b0a93a22"
 
 [node name="Components" type="Node" parent="." unique_id=958645498]
 
@@ -598,11 +956,11 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101]
 position = Vector2(2, -13)
-texture = SubResource("CanvasTexture_cawmy")
+texture = SubResource("CanvasTexture_chnj6")
 region_enabled = true
 region_rect = Rect2(0, 0, 48, 48)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_cawmy")
+canvas_texture = SubResource("CanvasTexture_chnj6")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
 current_animation = "idle"
