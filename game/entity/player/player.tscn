@@ -11,8 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://cj2oiylp0acsj" path="res://assets/textures/entity/player/mario/dive.png" id="3_4neg5"]
 [ext_resource type="Texture2D" uid="uid://bgjdqabdv1mig" path="res://assets/textures/entity/player/mario/walk.png" id="3_dhej3"]
 [ext_resource type="Texture2D" uid="uid://bbtiri17e7rkq" path="res://assets/textures/entity/player/mario/jump.png" id="3_igs2l"]
-[ext_resource type="Script" uid="uid://dyjrhpdveexsr" path="res://addons/redux_dev/components/state_machine/state.gd" id="3_kmnjn"]
+[ext_resource type="Script" uid="uid://3y7t4ymugnxu" path="res://addons/redux_dev/components/state_machine/state_transition.gd" id="3_kmnjn"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="3_qhcb0"]
+[ext_resource type="Script" uid="uid://dyjrhpdveexsr" path="res://addons/redux_dev/components/state_machine/state.gd" id="4_4j27x"]
 [ext_resource type="Script" uid="uid://cr0v7cui52ho8" path="res://game/entity/player/player_debug.gd" id="4_kn1iv"]
 [ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="4_o0v17"]
 [ext_resource type="Texture2D" uid="uid://thf8bfre3p2d" path="res://assets/textures/entity/player/mario/triple_jump.png" id="5_0rdsw"]
@@ -24,11 +25,36 @@
 [ext_resource type="Script" uid="uid://c02oltfntb3q8" path="res://game/entity/player/mp_player.gd" id="19_ntea6"]
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="20_1wiqr"]
 
+[sub_resource type="Resource" id="Resource_kmnjn"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "c42e85f2-d252-43de-8bf8-24ae49091d8b"
+__to_uuid = "4733cc5d-de04-4e14-a26c-25401c4527a8"
+
+[sub_resource type="Resource" id="Resource_4j27x"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "4733cc5d-de04-4e14-a26c-25401c4527a8"
+__to_uuid = "e11d577d-5865-48d9-881c-b627b5400894"
+
+[sub_resource type="Resource" id="Resource_0jrw7"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "e11d577d-5865-48d9-881c-b627b5400894"
+__to_uuid = "df8ef25e-40ab-41e3-bcf3-ebe2d3d9253a"
+
+[sub_resource type="Resource" id="Resource_je5mu"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "e11d577d-5865-48d9-881c-b627b5400894"
+__to_uuid = "f6521943-0d18-4536-a182-4c22076d2be9"
+
+[sub_resource type="Resource" id="Resource_k8egu"]
+script = ExtResource("3_kmnjn")
+__from_uuid = "f6521943-0d18-4536-a182-4c22076d2be9"
+__to_uuid = "e11d577d-5865-48d9-881c-b627b5400894"
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_dhej3"]
 atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 48, 48)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_chnj6"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_cawmy"]
 diffuse_texture = SubResource("AtlasTexture_dhej3")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
@@ -506,64 +532,51 @@ components_root = NodePath("Components")
 [node name="StateMachine" type="Node" parent="." unique_id=49398394 node_paths=PackedStringArray("__states")]
 script = ExtResource("2_cawmy")
 __root_node_path = NodePath("..")
-__last_editor_position = Vector2(313.23407, -235.38525)
-__last_editor_zoom = 0.87940836
+__last__editor_position = Vector2(-389.6305, -219.25632)
+__last_editor_zoom = 0.6635437
 __states = {
-&"0d3c6416-807f-45e0-b378-e3c324435c5d": NodePath("Dry"),
-&"2ad92f81-e99c-4aa5-a640-30c499a752e2": NodePath("Grounded"),
-&"41a05909-f6c6-4e71-aa87-dffce4afd383": NodePath("Airborne"),
-&"6f11b44a-cb9e-4fa3-b597-6e50cdb866ae": NodePath("Jump"),
-&"d1403418-6405-4e7a-b448-8c93914dddb4": NodePath("Walk"),
-&"edf853c7-1ebf-4ce4-bced-fc05eadcd2d5": NodePath("DoubleJump")
+&"4733cc5d-de04-4e14-a26c-25401c4527a8": NodePath("Grounded"),
+&"c42e85f2-d252-43de-8bf8-24ae49091d8b": NodePath("Dry"),
+&"c73d78c0-4e3e-43e0-a355-c7d441450b0a": NodePath("Walk"),
+&"e11d577d-5865-48d9-881c-b627b5400894": NodePath("Idle")
 }
-__annotations = Dictionary[String, Dictionary]({
-"e9727638-a405-49a4-9b2f-ca4e2f545a66": {
-"position": Vector2(780, -200),
-"text": "Base Movement"
-}
+__transitions = Dictionary[String, ExtResource("3_kmnjn")]({
+"1a1c9577-be85-4141-9e0d-71fbd9c697eb": SubResource("Resource_4j27x"),
+"7617a699-d2b2-4d14-8a13-1ef64de4aef1": SubResource("Resource_je5mu"),
+"c1d998b9-b297-4f53-be67-afd8cf55a9e0": SubResource("Resource_0jrw7"),
+"fb096990-349f-47b0-8ffb-377c6a256e56": SubResource("Resource_kmnjn"),
+"fdddee1e-c86e-4ae3-a754-19b5d7508e96": SubResource("Resource_k8egu")
 })
+__aliases = null
 metadata/_custom_type_script = "uid://utibsg6xkllx"
 
-[node name="Walk" type="Node" parent="StateMachine" unique_id=1811508994]
-script = ExtResource("3_kmnjn")
-_editor_name = &"walk"
-_editor_position = Vector2(880, -140)
-_editor_uuid = &"d1403418-6405-4e7a-b448-8c93914dddb4"
-_editor_superstate_uuid = &"2ad92f81-e99c-4aa5-a640-30c499a752e2"
+[node name="Dry" type="Node" parent="StateMachine" unique_id=587842298]
+script = ExtResource("4_4j27x")
+__editor_name = &"dry"
+__editor_position = Vector2(-400, -40)
+__editor_uuid = &"c42e85f2-d252-43de-8bf8-24ae49091d8b"
 
-[node name="Jump" type="Node" parent="StateMachine" unique_id=2112049847]
-script = ExtResource("3_kmnjn")
-_editor_name = &"jump"
-_editor_position = Vector2(880, -20)
-_editor_uuid = &"6f11b44a-cb9e-4fa3-b597-6e50cdb866ae"
-_editor_superstate_uuid = &"41a05909-f6c6-4e71-aa87-dffce4afd383"
+[node name="Grounded" type="Node" parent="StateMachine" unique_id=1496850571]
+script = ExtResource("4_4j27x")
+__editor_name = &"grounded"
+__editor_position = Vector2(-200, -40)
+__editor_uuid = &"4733cc5d-de04-4e14-a26c-25401c4527a8"
+__editor_superstate_uuid = &"c42e85f2-d252-43de-8bf8-24ae49091d8b"
+__editor_superstate_wire_uuid = &"c42e85f2-d252-43de-8bf8-24ae49091d8b"
 
-[node name="Dry" type="Node" parent="StateMachine" unique_id=762830906]
-script = ExtResource("3_kmnjn")
-_editor_name = &"Dry"
-_editor_position = Vector2(380, -80)
-_editor_uuid = &"0d3c6416-807f-45e0-b378-e3c324435c5d"
+[node name="Idle" type="Node" parent="StateMachine" unique_id=937174524]
+script = ExtResource("4_4j27x")
+__editor_name = &"idle"
+__editor_position = Vector2(60, -40)
+__editor_uuid = &"e11d577d-5865-48d9-881c-b627b5400894"
+__editor_superstate_uuid = &"4733cc5d-de04-4e14-a26c-25401c4527a8"
+__editor_superstate_wire_uuid = &"4733cc5d-de04-4e14-a26c-25401c4527a8"
 
-[node name="DoubleJump" type="Node" parent="StateMachine" unique_id=706189425]
-script = ExtResource("3_kmnjn")
-_editor_name = &"double_jump"
-_editor_position = Vector2(1160, -20)
-_editor_uuid = &"edf853c7-1ebf-4ce4-bced-fc05eadcd2d5"
-_editor_superstate_uuid = &"6f11b44a-cb9e-4fa3-b597-6e50cdb866ae"
-
-[node name="Airborne" type="Node" parent="StateMachine" unique_id=2023958468]
-script = ExtResource("3_kmnjn")
-_editor_name = &"Airborne"
-_editor_position = Vector2(620, -20)
-_editor_uuid = &"41a05909-f6c6-4e71-aa87-dffce4afd383"
-_editor_superstate_uuid = &"0d3c6416-807f-45e0-b378-e3c324435c5d"
-
-[node name="Grounded" type="Node" parent="StateMachine" unique_id=1097813777]
-script = ExtResource("3_kmnjn")
-_editor_name = &"Grounded"
-_editor_position = Vector2(620, -140)
-_editor_uuid = &"2ad92f81-e99c-4aa5-a640-30c499a752e2"
-_editor_superstate_uuid = &"0d3c6416-807f-45e0-b378-e3c324435c5d"
+[node name="Walk" type="Node" parent="StateMachine" unique_id=1935281646]
+script = ExtResource("4_4j27x")
+__editor_name = &"walk"
+__editor_position = Vector2(560, -220)
+__editor_uuid = &"c73d78c0-4e3e-43e0-a355-c7d441450b0a"
 
 [node name="Components" type="Node" parent="." unique_id=958645498]
 
@@ -585,11 +598,11 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101]
 position = Vector2(2, -13)
-texture = SubResource("CanvasTexture_chnj6")
+texture = SubResource("CanvasTexture_cawmy")
 region_enabled = true
 region_rect = Rect2(0, 0, 48, 48)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_chnj6")
+canvas_texture = SubResource("CanvasTexture_cawmy")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
 current_animation = "idle"

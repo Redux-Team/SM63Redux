@@ -4,8 +4,17 @@ extends GraphNode
 
 const STATE_ICON = preload("uid://btg8b714itoxv")
 
+const SLOT_TRANSITION_OUT := 0
+const SLOT_TRANSITION_IN := 1
+const SLOT_SUPERSTATE := 2
+
+const COLOR_OUT := Color(0.114, 0.620, 0.459)
+const COLOR_IN := Color(0.886, 0.294, 0.290)
+const COLOR_SUPERSTATE := Color(0.498, 0.467, 0.867)
+
 @export var superstate_button: Button
-@export var superstate_delete_button: Button
+@export var superstate_h_box: HBoxContainer
+@export var empty_ss_label: Label
 
 var editor: EditorStateMachineEditor
 var uuid: String = ""
@@ -13,12 +22,12 @@ var superstate_uuid: String = ""
 
 
 func _ready() -> void:
+	if not editor:
+		return
+	
 	_setup_titlebar()
-	
-	var remove_icon: Texture2D = EditorInterface.get_editor_theme().get_icon(&"Remove", &"EditorIcons")
-	superstate_delete_button.icon = remove_icon
-	
-	_refresh_superstate_button()
+	_setup_slots()
+	_set_superstate(superstate_uuid)
 
 
 func _setup_titlebar() -> void:
@@ -32,7 +41,8 @@ func _setup_titlebar() -> void:
 	icon_rect.custom_minimum_size = Vector2(16.0, 16.0)
 	
 	var label: Label = Label.new()
-	label.text = _get_state().name
+	var state: State = _get_state()
+	label.text = state.name if state else name
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	
@@ -41,12 +51,24 @@ func _setup_titlebar() -> void:
 	hbox.add_child(label)
 
 
-func _refresh_superstate_button() -> void:
-	var superstate: State = _get_superstate()
-	var has_superstate: bool = superstate != null
-	superstate_button.text = superstate.name if has_superstate else "<null>"
-	superstate_button.icon = STATE_ICON if has_superstate else null
-	superstate_delete_button.visible = has_superstate
+func _on_node_selected() -> void:
+	var state: State = _get_state()
+	if state:
+		EditorInterface.inspect_object(state)
+
+
+func _setup_slots() -> void:
+	while get_child_count() < 2:
+		var spacer: Control = Control.new()
+		spacer.custom_minimum_size = Vector2(0.0, 8.0)
+		add_child(spacer)
+	
+	set_slot(0,
+		true, 0, COLOR_IN,
+		true, 0, COLOR_OUT)
+	set_slot(1,
+		true, 0, COLOR_SUPERSTATE,
+		false, 0, COLOR_SUPERSTATE)
 
 
 func _get_state() -> State:
@@ -57,26 +79,29 @@ func _get_superstate() -> State:
 	return editor._current_sm.__states.get(superstate_uuid, null)
 
 
+func _set_entry_port_enabled(enabled: bool) -> void:
+	set_slot(1,
+		true, 0, COLOR_SUPERSTATE,
+		enabled, 0, COLOR_SUPERSTATE)
+
+
 func _set_superstate(new_uuid: String) -> void:
 	superstate_uuid = new_uuid
 	var state: State = _get_state()
 	if state:
-		state._editor_superstate_uuid = new_uuid
-	_refresh_superstate_button()
+		state.__editor_superstate_uuid = new_uuid
+	
+	var has_superstate: bool = not new_uuid.is_empty()
+	_set_entry_port_enabled(has_superstate)
+	
+	if has_superstate:
+		var superstate: State = _get_superstate()
+		superstate_button.text = superstate.name if superstate else ""
+		superstate_button.icon = STATE_ICON
+		superstate_h_box.show()
+		empty_ss_label.hide()
+	else:
+		superstate_h_box.hide()
+		empty_ss_label.show()
+	
 	size = Vector2.ZERO
-
-
-func _on_superstate_button_pressed() -> void:
-	EditorInterface.popup_node_selector(func(node_path: NodePath) -> void:
-		if node_path.is_empty():
-			return
-		var picked: State = editor._current_sm.owner.get_node(node_path)
-		if picked._editor_uuid == uuid:
-			EditorInterface.get_editor_toaster().push_toast("Cannot set a state as its own superstate!")
-			return
-		_set_superstate(picked._editor_uuid)
-	, [&"State"])
-
-
-func _on_superstate_delete_button_pressed() -> void:
-	_set_superstate("")

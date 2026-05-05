@@ -79,6 +79,8 @@ size_flags_vertical = 3
 
 [node name="StateMachineGraphEdit" type="GraphEdit" parent="VBoxContainer/StateMachineContainer" unique_id=524944383 node_paths=PackedStringArray("add_node_menu", "add_state_dialog", "add_annotation_dialog", "state_machine_editor", "new_state_name_input", "new_annotation_input")]
 layout_mode = 2
+right_disconnects = true
+minimap_enabled = false
 show_grid_buttons = false
 show_arrange_button = false
 script = ExtResource("2_hpxgv")

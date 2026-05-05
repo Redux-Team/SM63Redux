@@ -1,11 +1,14 @@
 @icon("uid://btg8b714itoxv")
+@tool
 class_name State
 extends Node
 
-@export var _editor_name: StringName # This must be unique, serves as state name
-@export var _editor_position: Vector2 # Position in editor
-@export var _editor_uuid: StringName
-@export var _editor_superstate_uuid: StringName
+@export var __editor_name: StringName # This must be unique, serves as state name
+@export var __editor_position: Vector2 # Position in editor
+@export var __editor_uuid: StringName
+@export var __editor_superstate_uuid: StringName
+@export var __editor_entry_uuid: StringName
+@export var __editor_superstate_wire_uuid: StringName
 
 var state_machine: StateMachine
 var root_node: Node
@@ -23,6 +26,11 @@ var player: Player:
 		else:
 			print_debug("root_node passed as Player when type does not match!")
 			return null
+
+
+func _validate_property(property: Dictionary) -> void:
+	if property.name.begins_with("_") and not ReduxPlugin.SHOW_INTERNAL:
+		property.usage = PROPERTY_USAGE_NO_EDITOR
 
 
 ## Returns the time this state has been active for, in seconds.

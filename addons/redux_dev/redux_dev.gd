@@ -1,6 +1,8 @@
 @tool
+class_name ReduxPlugin
 extends EditorPlugin
 
+const SHOW_INTERNAL: bool = true
 
 const DEBUG_DOCK = preload("uid://cgx6mbayfubdw")
 const DEBUG_HANDLER_UID: String = "components/debug_dock/debug_handler.gd"
@@ -36,7 +38,7 @@ func _handles(object: Object) -> bool:
 	if object is not Node:
 		return false
 	
-	if object is StateMachine:
+	if object is StateMachine or object is State:
 		_state_machine_editor_dock.make_visible()
 	else:
 		_state_machine_editor_dock.close()
