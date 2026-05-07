@@ -3,6 +3,24 @@
 class_name State
 extends Node
 
+
+
+var sprite: SmartSprite2D
+
+@export_group("State Machine")
+## The max length time of the state, will automatically call [method done] once the
+## time has been reached.
+@export_custom(PROPERTY_HINT_NONE, "suffix:s") var runtime: float = 0.0
+
+@export_group("Sprite", "sprite_")
+@export var sprite_animation_name: StringName = ""
+@export var sprite_restart_if_playing: bool = true
+@export var sprite_override_loop: bool = false
+@export var sprite_loop: bool = true
+@export var sprite_speed_scale: float = 1.0
+@export var sprite_stop_on_exit: bool = false
+
+@export_group("Internal")
 @export var __editor_name: StringName # This must be unique, serves as state name
 @export var __editor_position: Vector2 # Position in editor
 @export var __editor_uuid: StringName
@@ -28,50 +46,120 @@ var player: Player:
 			return null
 
 
+func _ready() -> void:
+	if not Engine.is_editor_hint() and runtime > 0:
+		get_tree().process_frame.connect(func() -> void:
+			if get_elapsed_time() >= runtime:
+				done()
+		)
+
+
 func _validate_property(property: Dictionary) -> void:
 	if property.name.begins_with("_") and not ReduxPlugin.SHOW_INTERNAL:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
+	if property.name == "sprite_animation_name":
+		var sm: StateMachine = _get_state_machine()
+		var frames: SpriteFrames = null
+		if sm and sm.sprite and sm.sprite.diffuse_frames:
+			frames = sm.sprite.diffuse_frames
+		elif sprite and sprite.diffuse_frames:
+			frames = sprite.diffuse_frames
+		if frames:
+			property.hint = PROPERTY_HINT_ENUM
+			property.hint_string = ",".join(frames.get_animation_names())
+
+
+func _get_state_machine() -> StateMachine:
+	if state_machine:
+		return state_machine
+	var current: Node = get_parent()
+	while current:
+		if current is StateMachine:
+			return current as StateMachine
+		current = current.get_parent()
+	return null
+
+
+func done(force: bool = false) -> void:
+	if state_machine:
+		state_machine._notify_done(force)
 
 
 ## Returns the time this state has been active for, in seconds.
 func get_elapsed_time() -> float:
-	return 0.0
+	if not state_machine or state_machine._current_state != self:
+		return 0.0
+	return state_machine._elapsed_time
+
 
 ## Returns the amount of process frames this state has been active for.
 func get_elapsed_frames() -> int:
-	return 0
+	if not state_machine or state_machine._current_state != self:
+		return 0
+	return state_machine._elapsed_frames
+
 
 ## Returns the amount of physics frames this state has been active for.
 func get_elapsed_physics_frames() -> int:
-	return 0
+	if not state_machine or state_machine._current_state != self:
+		return 0
+	return state_machine._elapsed_physics_frames
+
 
 ## Returns the last active state before this one.
 func get_last_state() -> State:
-	return null
+	if not state_machine or state_machine._current_state != self:
+		return null
+	return state_machine._last_state
+
 
 ## Only valid for [method _on_exit] and [method _post_exit]. Will return the next
 ## state that the StateMachine is transitioning to.
 func get_next_state() -> State:
 	return null
 
+
 ## Returns the root superstate that is being ran on the StateMachine, if this node
 ## is the root, null is returned.
 func get_superstate_root() -> State:
-	return null
+	if not state_machine:
+		return null
+	var superstates: Array[State] = state_machine._active_superstates
+	if superstates.is_empty():
+		return null
+	return superstates[0]
+
 
 ## Returns the parent superstate that is being ran on the StateMachine, if this node
 ## has no superstate parent, null is returned.
 func get_superstate_parent() -> State:
-	return null
+	if not state_machine:
+		return null
+	var superstates: Array[State] = state_machine._active_superstates
+	if superstates.is_empty():
+		return null
+	if self == state_machine._current_state:
+		return superstates.back()
+	var idx: int = superstates.find(self)
+	if idx <= 0:
+		return null
+	return superstates[idx - 1]
+
 
 ## Returns whether this state is currently active in the state machine or not. This
 ## includes whether it is being ran as a superstate or not.
 func is_active() -> bool:
-	return false
+	if not state_machine:
+		return false
+	return state_machine._is_state_in_stack(self)
+
 
 ## Returns whether this state is the primary active state in the state machine.
 func is_primary_active() -> bool:
-	return false
+	if not state_machine:
+		return false
+	return state_machine._current_state == self
+
 
 ## Defines whether the state machine can transition to this state. If false is
 ## returned even when the transition case is true, it will not go through and
@@ -79,15 +167,18 @@ func is_primary_active() -> bool:
 func _can_enter() -> bool:
 	return true
 
+
 ## Defines whether the state machine can transition from this state. If false is
 ## returned even when the transition case is true, it will not go through and
 ## it will remain on this state, no exit methods from this state will be called.
 func _can_exit() -> bool:
 	return true
 
+
 ## Called every process frame, semantically used to handle sprite behavior
 func _sprite_rules() -> void:
 	pass
+
 
 ## Called before the state is entered, just after [method _on_exit] 
 ## is called on the previous state. Useful for ensuring behavior before any
@@ -95,10 +186,12 @@ func _sprite_rules() -> void:
 func _pre_enter() -> void:
 	pass
 
+
 ## Called after [method _post_exit] is called on the previous state and this
 ## state has officially been entered.
 func _on_enter() -> void:
 	pass
+
 
 ## Similar to [method _process], but will only be called when the state
 ## is active. You may call [method _process] for behavior that must be ran
@@ -106,10 +199,12 @@ func _on_enter() -> void:
 func _on_tick(delta: float) -> void:
 	pass
 
+
 ## Similar to [method _on_tick], but will only be called when the state
 ## is inactive.
 func _on_tick_inactive(delta: float) -> void:
 	pass
+
 
 ## Similar to [method _physics_process], but will only be called when the state
 ## is active. You may call [method _physics_process] for behavior that must be ran
@@ -117,10 +212,12 @@ func _on_tick_inactive(delta: float) -> void:
 func _on_physics_tick(delta: float) -> void:
 	pass
 
+
 ## Similar to [method _on_physics_tick], but will only be called when the state
 ## is inactive.
 func _on_physics_tick_inactive(delta: float) -> void:
 	pass
+
 
 ## Similar to [method _input], but will only be called when the state
 ## is active. You may call [method _input] for behavior that must be ran
@@ -128,12 +225,31 @@ func _on_physics_tick_inactive(delta: float) -> void:
 func _on_input(event: InputEvent) -> void:
 	pass
 
+
 ## Called before exiting the state and before [method _pre_enter] is called on the
 ## next state.
 func _on_exit() -> void:
 	pass
 
+
 ## Called after completely exiting the state and before [method _on_enter] is
 ## called on the next state.
 func _post_exit() -> void:
 	pass
+
+
+func __sprite_enter() -> void:
+	if not sprite or sprite_animation_name.is_empty():
+		return
+	if not sprite_restart_if_playing and sprite.playing and sprite.current_animation == sprite_animation_name:
+		return
+	if sprite_override_loop:
+		sprite.looping = sprite_loop
+	sprite.speed_scale = sprite_speed_scale
+	sprite.play(sprite_animation_name)
+
+
+func __sprite_exit() -> void:
+	if not sprite or not sprite_stop_on_exit:
+		return
+	sprite.stop()

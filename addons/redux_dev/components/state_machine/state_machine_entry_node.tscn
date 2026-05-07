@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://cc2qqqr86hdcx"]
+
+[ext_resource type="Script" uid="uid://cm15xn4oah1b8" path="res://addons/redux_dev/components/state_machine/state_machine_entry_node.gd" id="1_88wtl"]
+
+[node name="StateMachineEntryNode" type="GraphNode" unique_id=1611256391]
+offset_right = 40.0
+offset_bottom = 47.0
+title = "Enter"
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+script = ExtResource("1_88wtl")
+text = "Enter"
+
+[node name="Control" type="Control" parent="." unique_id=797723451]
+layout_mode = 2

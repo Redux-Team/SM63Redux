@@ -4,11 +4,61 @@
 [ext_resource type="Texture2D" uid="uid://dcq1kqe3c5wbk" path="res://assets/textures/entity/passive/goonie_flap.png" id="2_dma5t"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_kaxjy"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="2_pbwgp"]
-[ext_resource type="Script" uid="uid://dyjrhpdveexsr" path="res://addons/redux_dev/components/state_machine/state.gd" id="3_dskmv"]
 [ext_resource type="Script" uid="uid://3y7t4ymugnxu" path="res://addons/redux_dev/components/state_machine/state_transition.gd" id="3_xtefv"]
 [ext_resource type="Texture2D" uid="uid://di1d8ih6gfgmm" path="res://assets/textures/entity/passive/goonie_glide.png" id="4_1cx3s"]
+[ext_resource type="Script" uid="uid://uyk8qmuneqcb" path="res://game/entity/passive/goonie/state_machine/states/flap.gd" id="4_xtefv"]
+[ext_resource type="Script" uid="uid://4y5435fv7w4g" path="res://game/entity/passive/goonie/state_machine/states/glide.gd" id="5_xtefv"]
+[ext_resource type="Script" uid="uid://cpfwdp3pr6hbk" path="res://game/entity/passive/goonie/state_machine/states/heavy_flap.gd" id="6_bodhv"]
 [ext_resource type="Script" uid="uid://dvxkxevaf2f45" path="res://core/custom_nodes/2d/ride_area.gd" id="6_bslqv"]
 [ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="7_i5hl1"]
+
+[sub_resource type="Resource" id="Resource_ghncf"]
+resource_local_to_scene = true
+script = ExtResource("3_xtefv")
+mode = 1
+__from_uuid = "862ece4c-14a6-4be6-b5cf-a666bc20970a"
+__to_uuid = "a8621ec4-1c8c-4a98-86cc-08cb9d00fd82"
+__from_node_uuid = "862ece4c-14a6-4be6-b5cf-a666bc20970a"
+__to_node_uuid = "de5b538b-571a-4cd0-a99f-b83a7a6917c3"
+
+[sub_resource type="Resource" id="Resource_bslqv"]
+resource_local_to_scene = true
+script = ExtResource("3_xtefv")
+mode = 1
+__from_uuid = "a8621ec4-1c8c-4a98-86cc-08cb9d00fd82"
+__to_uuid = "862ece4c-14a6-4be6-b5cf-a666bc20970a"
+__from_node_uuid = "a8621ec4-1c8c-4a98-86cc-08cb9d00fd82"
+__to_node_uuid = "06717605-d064-492f-acf7-5ccfe16f7c57"
+
+[sub_resource type="Resource" id="Resource_bodhv"]
+resource_local_to_scene = true
+script = ExtResource("3_xtefv")
+mode = 3
+expression = "has_rider()"
+__from_uuid = "862ece4c-14a6-4be6-b5cf-a666bc20970a"
+__to_uuid = "060d90ff-934b-4eca-be91-eb3f9732391d"
+__from_node_uuid = "80ab4222-a732-4bea-b88a-474d8e1a234b"
+__to_node_uuid = "060d90ff-934b-4eca-be91-eb3f9732391d"
+
+[sub_resource type="Resource" id="Resource_jvot0"]
+resource_local_to_scene = true
+script = ExtResource("3_xtefv")
+mode = 3
+expression = "has_rider()"
+__from_uuid = "a8621ec4-1c8c-4a98-86cc-08cb9d00fd82"
+__to_uuid = "060d90ff-934b-4eca-be91-eb3f9732391d"
+__from_node_uuid = "a0da23fc-aa00-43fa-9c1a-c8bdb1a30331"
+__to_node_uuid = "060d90ff-934b-4eca-be91-eb3f9732391d"
+
+[sub_resource type="Resource" id="Resource_khk5a"]
+resource_local_to_scene = true
+script = ExtResource("3_xtefv")
+mode = 3
+expression = "!has_rider()"
+__from_uuid = "060d90ff-934b-4eca-be91-eb3f9732391d"
+__to_uuid = "862ece4c-14a6-4be6-b5cf-a666bc20970a"
+__from_node_uuid = "060d90ff-934b-4eca-be91-eb3f9732391d"
+__to_node_uuid = "792164a0-90ae-416c-bcb1-d978a5372cd8"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0v6xk"]
 atlas = ExtResource("2_dma5t")
@@ -114,28 +164,94 @@ size = Vector2(32, 3)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oohn0"]
 size = Vector2(32, 12)
 
-[node name="Goonie" type="CharacterBody2D" unique_id=459377689 node_paths=PackedStringArray("ride_area", "sprite", "components_root")]
+[node name="Goonie" type="CharacterBody2D" unique_id=459377689 node_paths=PackedStringArray("ride_area", "sprite", "components_root", "state_machine")]
 collision_mask = 0
 script = ExtResource("1_jfxkd")
 heavy_flap_angle = 45.0
 ride_area = NodePath("RideArea")
 sprite = NodePath("SmartSprite2D")
 components_root = NodePath("Components")
+state_machine = NodePath("StateMachine")
 
-[node name="StateMachine" type="Node" parent="." unique_id=242288983 node_paths=PackedStringArray("__states")]
+[node name="StateMachine" type="Node" parent="." unique_id=242288983 node_paths=PackedStringArray("sprite", "__states")]
 script = ExtResource("7_i5hl1")
-__last_editor_position = Vector2(-28.324646, 0)
-__last_editor_zoom = 0.97149444
+root_node = NodePath("..")
+sprite = NodePath("../SmartSprite2D")
+__last__editor_position = Vector2(109.281494, -201.46475)
+__last_editor_zoom = 0.6643354
 __states = {
-&"flap": NodePath("Flap")
+&"060d90ff-934b-4eca-be91-eb3f9732391d": NodePath("HeavyFlap"),
+&"862ece4c-14a6-4be6-b5cf-a666bc20970a": NodePath("Flap"),
+&"a8621ec4-1c8c-4a98-86cc-08cb9d00fd82": NodePath("Glide")
 }
-__transitions = Dictionary[String, ExtResource("3_xtefv")]({})
+__annotations = {
+&"9549d147-f0e6-4ee8-a261-5254f294e76d": {
+"position": Vector2(640, 60),
+"text": "Glide -> Flap"
+},
+&"b5619594-ca1e-4a19-8e7c-4e3e1e7e98e6": {
+"position": Vector2(640, -160),
+"text": "Flap -> Glide"
+},
+&"e19f413d-607f-4528-bd58-ea7bfb2e646f": {
+"position": Vector2(1300, -80),
+"text": "--> HeavyFlap -> Flap"
+}
+}
+__transitions = Dictionary[StringName, ExtResource("3_xtefv")]({
+&"0040b1b1-fd29-45ce-9d3c-c48270eee27a": SubResource("Resource_khk5a"),
+&"478fdcf7-cf55-485a-9405-19fcfbfbd565": SubResource("Resource_ghncf"),
+&"a5796144-ca07-409e-bf8d-338ce1b12449": SubResource("Resource_bodhv"),
+&"f44445c7-5b68-4909-8e05-b1b9daa0e224": SubResource("Resource_jvot0"),
+&"fed00128-003d-4733-b7c9-cbd5abba1b25": SubResource("Resource_bslqv")
+})
+__aliases = {
+&"06717605-d064-492f-acf7-5ccfe16f7c57": {
+"original_uuid": &"862ece4c-14a6-4be6-b5cf-a666bc20970a",
+"position": Vector2(800, 120)
+},
+&"792164a0-90ae-416c-bcb1-d978a5372cd8": {
+"original_uuid": &"862ece4c-14a6-4be6-b5cf-a666bc20970a",
+"position": Vector2(1760, 0)
+},
+&"80ab4222-a732-4bea-b88a-474d8e1a234b": {
+"original_uuid": &"862ece4c-14a6-4be6-b5cf-a666bc20970a",
+"position": Vector2(1100, -60)
+},
+&"a0da23fc-aa00-43fa-9c1a-c8bdb1a30331": {
+"original_uuid": &"a8621ec4-1c8c-4a98-86cc-08cb9d00fd82",
+"position": Vector2(1080, 80)
+},
+&"de5b538b-571a-4cd0-a99f-b83a7a6917c3": {
+"original_uuid": &"a8621ec4-1c8c-4a98-86cc-08cb9d00fd82",
+"position": Vector2(800, -100)
+}
+}
+__entry_node_position = Vector2(160, -20)
 metadata/_custom_type_script = "uid://utibsg6xkllx"
 
-[node name="Flap" type="Node" parent="StateMachine" unique_id=2056644239]
-script = ExtResource("3_dskmv")
-_editor_name = &"flap"
-_editor_position = Vector2(300, 160)
+[node name="Flap" type="Node" parent="StateMachine" unique_id=668680388]
+script = ExtResource("4_xtefv")
+runtime = 6.5
+sprite_animation_name = &"flap"
+__editor_name = &"flap"
+__editor_position = Vector2(520, -100)
+__editor_uuid = &"862ece4c-14a6-4be6-b5cf-a666bc20970a"
+
+[node name="Glide" type="Node" parent="StateMachine" unique_id=2019713984]
+script = ExtResource("5_xtefv")
+runtime = 1.5
+sprite_animation_name = &"glide"
+__editor_name = &"glide"
+__editor_position = Vector2(520, 120)
+__editor_uuid = &"a8621ec4-1c8c-4a98-86cc-08cb9d00fd82"
+
+[node name="HeavyFlap" type="Node" parent="StateMachine" unique_id=44810290]
+script = ExtResource("6_bodhv")
+sprite_animation_name = &"heavy_flap"
+__editor_name = &"heavy_flap"
+__editor_position = Vector2(1380, 0)
+__editor_uuid = &"060d90ff-934b-4eca-be91-eb3f9732391d"
 
 [node name="Components" type="Node" parent="." unique_id=566607527]
 

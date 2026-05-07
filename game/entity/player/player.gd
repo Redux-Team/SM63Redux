@@ -124,6 +124,7 @@ func _ready() -> void:
 	cam.zoom = Vector2(1.2, 1.2)
 	cam.position_smoothing_enabled = true
 	cam.position_smoothing_speed = 10
+	state_machine.change_state("Idle")
 	add_child(cam)
 	#super()
 	#Singleton.debug_mode_toggled.connect(_on_debug_toggle)

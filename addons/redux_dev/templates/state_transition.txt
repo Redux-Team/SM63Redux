@@ -1,0 +1,7 @@
+# %s -> %s
+@tool
+extends StateTransition
+
+# func _should_transition() -> bool (true)
+# func _on_before_transition() -> void:
+# func _on_after_transition() -> void:

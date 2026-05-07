@@ -1,0 +1,8 @@
+@tool
+extends State
+
+
+func _on_physics_tick(_delta: float) -> void:
+	var goonie: Goonie = entity as Goonie
+	goonie.velocity.x = goonie.speed * cos(deg_to_rad(goonie.heavy_flap_angle))
+	goonie.velocity.y = goonie.speed * sin(deg_to_rad(goonie.heavy_flap_angle))

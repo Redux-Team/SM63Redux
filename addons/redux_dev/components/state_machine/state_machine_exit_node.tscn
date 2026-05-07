@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bylae6s56vffn"]
+
+[ext_resource type="PackedScene" uid="uid://cc2qqqr86hdcx" path="res://addons/redux_dev/components/state_machine/state_machine_entry_node.tscn" id="1_530bi"]
+
+[node name="StateMachineExitNode" unique_id=1611256391 instance=ExtResource("1_530bi")]
+offset_right = 59.0
+offset_bottom = 62.0
+slot/0/left_enabled = true
+slot/0/right_enabled = false
+is_entry = false
+text = "Exit"
+
+[node name="Label" parent="." index="1" unique_id=135225410]
+text = "Exit"

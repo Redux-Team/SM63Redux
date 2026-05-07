@@ -13,6 +13,10 @@ var bodies: Dictionary[Entity, bool]
 
 
 func _ready() -> void:
+	if randf() > 0.5:
+		state_machine.change_state("flap")
+	else:
+		state_machine.change_state("glide")
 	velocity.x = speed * cos(deg_to_rad(flap_angle))
 	velocity.y = -speed * sin(deg_to_rad(flap_angle))
 

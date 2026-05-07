@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://ryatl5meky7h" path="res://addons/redux_dev/components/state_machine/state_machine_editor.gd" id="1_kuqj5"]
 [ext_resource type="Script" uid="uid://d35km3u86rpo3" path="res://addons/redux_dev/components/state_machine/state_machine_graph_edit.gd" id="2_hpxgv"]
 
-[node name="State Machine" type="Control" unique_id=482283223 node_paths=PackedStringArray("graph_edit", "state_machine_graph_edit")]
+[node name="State Machine" type="Control" unique_id=482283223 node_paths=PackedStringArray("graph_edit", "state_machine_graph_edit", "save_script_dialog")]
 clip_contents = true
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,6 +15,7 @@ grow_vertical = 2
 script = ExtResource("1_kuqj5")
 graph_edit = NodePath("VBoxContainer/StateMachineContainer/StateMachineGraphEdit")
 state_machine_graph_edit = NodePath("VBoxContainer/StateMachineContainer/StateMachineGraphEdit")
+save_script_dialog = NodePath("SaveScriptDialog")
 
 [node name="AddNodeMenu" type="PopupMenu" parent="." unique_id=122754592]
 oversampling_override = 1.0
@@ -47,6 +49,8 @@ offset_bottom = 57.0
 placeholder_text = "Annotation Text"
 alignment = 1
 
+[node name="SaveScriptDialog" type="FileDialog" parent="." unique_id=1255734430]
+
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1640640607]
 layout_mode = 1
 anchors_preset = 15
@@ -77,7 +81,7 @@ text = "<empty>"
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="StateMachineGraphEdit" type="GraphEdit" parent="VBoxContainer/StateMachineContainer" unique_id=524944383 node_paths=PackedStringArray("add_node_menu", "add_state_dialog", "add_annotation_dialog", "state_machine_editor", "new_state_name_input", "new_annotation_input")]
+[node name="StateMachineGraphEdit" type="GraphEdit" parent="VBoxContainer/StateMachineContainer" unique_id=524944383 node_paths=PackedStringArray("add_node_menu", "add_state_dialog", "add_annotation_dialog", "state_machine_editor", "new_state_name_input", "new_annotation_input", "connection_overlay")]
 layout_mode = 2
 right_disconnects = true
 zoom_min = 0.375
@@ -91,9 +95,16 @@ add_annotation_dialog = NodePath("../../../AddAnnotationDialog")
 state_machine_editor = NodePath("../../..")
 new_state_name_input = NodePath("../../../AddStateDialog/NewStateNameInput")
 new_annotation_input = NodePath("../../../AddAnnotationDialog/NewAnnotationInput")
+connection_overlay = NodePath("Overlay")
+
+[node name="Overlay" type="Control" parent="VBoxContainer/StateMachineContainer/StateMachineGraphEdit" unique_id=2030907375]
+layout_mode = 1
+anchors_preset = 0
+mouse_filter = 2
 
 [connection signal="id_pressed" from="AddNodeMenu" to="VBoxContainer/StateMachineContainer/StateMachineGraphEdit" method="_on_add_node_menu_id_pressed"]
 [connection signal="confirmed" from="AddStateDialog" to="VBoxContainer/StateMachineContainer/StateMachineGraphEdit" method="_on_add_state_dialog_confirmed"]
 [connection signal="confirmed" from="AddAnnotationDialog" to="VBoxContainer/StateMachineContainer/StateMachineGraphEdit" method="_on_add_annotation_dialog_confirmed"]
+[connection signal="file_selected" from="SaveScriptDialog" to="." method="_on_save_script_dialog_file_selected"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/CurrentNodeButton" to="." method="_on_current_node_button_pressed"]
 [connection signal="gui_input" from="VBoxContainer/StateMachineContainer/StateMachineGraphEdit" to="." method="_on_graph_edit_gui_input"]
