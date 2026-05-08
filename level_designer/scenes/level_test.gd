@@ -29,7 +29,7 @@ func _ready() -> void:
 func _spawn_player_with_id(peer_id: int) -> Node:
 	var spawned_player: Player = player_scene.instantiate()
 	spawned_player.name = str(peer_id)
-	spawned_player.multiplayer_id = peer_id
+	#spawned_player.multiplayer_id = peer_id
 	return spawned_player
 
 

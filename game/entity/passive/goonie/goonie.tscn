@@ -173,12 +173,13 @@ sprite = NodePath("SmartSprite2D")
 components_root = NodePath("Components")
 state_machine = NodePath("StateMachine")
 
-[node name="StateMachine" type="Node" parent="." unique_id=242288983 node_paths=PackedStringArray("sprite", "__states")]
+[node name="StateMachine" type="Node" parent="." unique_id=242288983 node_paths=PackedStringArray("initial_state", "sprite", "__states")]
 script = ExtResource("7_i5hl1")
+initial_state = NodePath("Flap")
 root_node = NodePath("..")
 sprite = NodePath("../SmartSprite2D")
-__last__editor_position = Vector2(109.281494, -201.46475)
-__last_editor_zoom = 0.6643354
+__last__editor_position = Vector2(170.24683, -212.79521)
+__last_editor_zoom = 0.60394126
 __states = {
 &"060d90ff-934b-4eca-be91-eb3f9732391d": NodePath("HeavyFlap"),
 &"862ece4c-14a6-4be6-b5cf-a666bc20970a": NodePath("Flap"),

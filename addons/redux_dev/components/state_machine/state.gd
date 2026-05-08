@@ -3,9 +3,8 @@
 class_name State
 extends Node
 
-
-
 var sprite: SmartSprite2D
+var animation_player: AnimationPlayer
 
 @export_group("State Machine")
 ## The max length time of the state, will automatically call [method done] once the
@@ -16,9 +15,16 @@ var sprite: SmartSprite2D
 @export var sprite_animation_name: StringName = ""
 @export var sprite_restart_if_playing: bool = true
 @export var sprite_override_loop: bool = false
+@export var sprite_lock_flipping: bool = false
 @export var sprite_loop: bool = true
 @export var sprite_speed_scale: float = 1.0
 @export var sprite_stop_on_exit: bool = false
+@export var sprite_chain: Array[StringName] = []
+@export var sprite_chain_loop_last: bool = true
+
+@export_group("Animation Player", "anim_")
+@export var anim_animation: String
+
 
 @export_group("Internal")
 @export var __editor_name: StringName # This must be unique, serves as state name
@@ -44,6 +50,7 @@ var player: Player:
 		else:
 			print_debug("root_node passed as Player when type does not match!")
 			return null
+var _sprite_chain_index: int = 0
 
 
 func _ready() -> void:
@@ -67,6 +74,11 @@ func _validate_property(property: Dictionary) -> void:
 		if frames:
 			property.hint = PROPERTY_HINT_ENUM
 			property.hint_string = ",".join(frames.get_animation_names())
+	if property.name == "anim_animation":
+		var sm: StateMachine = _get_state_machine()
+		if sm and sm.animation_player:
+			property.hint = PROPERTY_HINT_ENUM
+			property.hint_string = ",".join(sm.animation_player.get_animation_list())
 
 
 func _get_state_machine() -> StateMachine:
@@ -160,6 +172,10 @@ func is_primary_active() -> bool:
 		return false
 	return state_machine._current_state == self
 
+## Simple way to await time.
+func pause(time: float) -> void:
+	await get_tree().create_timer(time).timeout
+
 
 ## Defines whether the state machine can transition to this state. If false is
 ## returned even when the transition case is true, it will not go through and
@@ -243,13 +259,39 @@ func __sprite_enter() -> void:
 		return
 	if not sprite_restart_if_playing and sprite.playing and sprite.current_animation == sprite_animation_name:
 		return
+	_sprite_chain_index = 0
+	if sprite.animation_finished.is_connected(__sprite_chain_advance):
+		sprite.animation_finished.disconnect(__sprite_chain_advance)
 	if sprite_override_loop:
-		sprite.looping = sprite_loop
+		sprite.looping = sprite_chain.is_empty() and sprite_loop
 	sprite.speed_scale = sprite_speed_scale
 	sprite.play(sprite_animation_name)
+	if not sprite_chain.is_empty():
+		sprite.animation_finished.connect(__sprite_chain_advance, CONNECT_ONE_SHOT)
+
+
+func __sprite_chain_advance() -> void:
+	if not is_active() or _sprite_chain_index >= sprite_chain.size():
+		return
+	var next: StringName = sprite_chain[_sprite_chain_index]
+	_sprite_chain_index += 1
+	var is_last: bool = _sprite_chain_index >= sprite_chain.size()
+	if sprite_override_loop:
+		sprite.looping = is_last and sprite_chain_loop_last
+	sprite.play(next)
+	if not is_last:
+		sprite.animation_finished.connect(__sprite_chain_advance, CONNECT_ONE_SHOT)
 
 
 func __sprite_exit() -> void:
+	if sprite and sprite.animation_finished.is_connected(__sprite_chain_advance):
+		sprite.animation_finished.disconnect(__sprite_chain_advance)
 	if not sprite or not sprite_stop_on_exit:
 		return
 	sprite.stop()
+
+
+func __animation_enter() -> void:
+	if not animation_player or animation_player.get_animation_list().is_empty() or anim_animation.is_empty():
+		return
+	animation_player.play(anim_animation)

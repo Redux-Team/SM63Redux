@@ -34,6 +34,10 @@ buses/default_bus_layout="uid://dnbqnrs3tfb81"
 Singleton="*res://singleton/singleton.tscn"
 DebugHandler="*uid://dyw3n7oxqk3vq"
 
+[debug]
+
+gdscript/warnings/missing_tool=0
+
 [display]
 
 window/size/viewport_width=640

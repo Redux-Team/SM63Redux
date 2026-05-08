@@ -31,12 +31,14 @@ signal exited_water
 @export var floor_slope_raycast: RayCast2D
 @export var spin_area: Area2D
 @export var spin_shape: CollisionShape2D
-@export var multiplayer_synchronizer: MultiplayerSynchronizer
-@export var mp_player: AnimatedSprite2D
-@export var mp_label: Label
 
 
-var multiplayer_id: int = 1
+@export var _input_handler: PlayerInputHandler
+@export var _movement_handler: PlayerMovementHandler
+@export var _sprite_handler: PlayerSpriteHandler
+
+
+
 var move_dir: float = 0.0
 var run_speed_percent: float = 0.0
 var current_jump: int = 0
@@ -87,52 +89,12 @@ var jump_chain_timer: float = 0.0
 @export var lock_flipping: bool = false
 
 
-var _movement_locked: bool = false
-
-
-func _enter_tree() -> void:
-	name = str(multiplayer_id)
-
-
 func _ready() -> void:
-	multiplayer_id = int(name)
-	set_multiplayer_authority(multiplayer_id)
-	multiplayer_synchronizer.set_multiplayer_authority(multiplayer_id)
-	print("Player ready | name: %s | my_id: %s | is_authority: %s" % [name, multiplayer.get_unique_id(), is_multiplayer_authority()])
-	
-	if not is_multiplayer_authority():
-		set_process(false)
-		set_process_input(false)
-		set_physics_process(false)
-		
-		mp_player.show()
-		mp_player.process_mode = Node.PROCESS_MODE_ALWAYS
-		sprite.hide()
-		
-		if name == "1":
-			mp_label.text = "Host"
-		else:
-			mp_label.text = "Client %s" % name
-		mp_label.show()
-		
-		state_machine.set_process(false)
-		state_machine.set_process_input(false)
-		sprite.process_mode = Node.PROCESS_MODE_ALWAYS
-		return
-	
 	var cam: Camera2D = Camera2D.new()
 	cam.zoom = Vector2(1.2, 1.2)
 	cam.position_smoothing_enabled = true
 	cam.position_smoothing_speed = 10
-	state_machine.change_state("Idle")
 	add_child(cam)
-	#super()
-	#Singleton.debug_mode_toggled.connect(_on_debug_toggle)
-#
-#
-#func _on_debug_toggle() -> void:
-	#debug_container.visible = Singleton.debug_mode
-	#debug_container.set_process(Singleton.debug_mode)
 
 
 func _process(_delta: float) -> void:
@@ -152,7 +114,7 @@ func get_facing_velocity() -> float:
 
 
 func get_active_state_uptime() -> float:
-	return state_machine.state_timer
+	return state_machine.get_current_state().get_elapsed_time()
 
 
 func get_effective_friction() -> float:
@@ -167,6 +129,18 @@ func get_gravity_scale_factor() -> float:
 	if gravity_component:
 		return gravity_component.scale_factor
 	return 1.0
+
+
+func get_movement_handler() -> PlayerMovementHandler:
+	return _movement_handler
+
+
+func get_input_handler() -> PlayerInputHandler:
+	return _input_handler
+
+
+func get_sprite_handler() -> PlayerSpriteHandler:
+	return _sprite_handler
 
 
 func is_action_pressed(input: String) -> bool:

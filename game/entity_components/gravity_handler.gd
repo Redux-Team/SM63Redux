@@ -4,6 +4,7 @@ extends EntityComponent
 
 @export var strength: float = 15.0
 @export var scale_factor: float = 1.0
+@export var direction: Vector2 = Vector2(0, 1)
 
 var _locks: int = 0
 var _modifiers: Dictionary[StringName, float] = {}
@@ -29,6 +30,10 @@ func unlock() -> void:
 	_locks = max(_locks - 1, 0)
 	if _locks == 0:
 		enabled = true
+
+
+func get_angle() -> float:
+	return Vector2(0, 1).angle_to(direction)
 
 
 func set_modifier(key: StringName, scale: float) -> void:

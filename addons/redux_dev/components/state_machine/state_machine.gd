@@ -6,8 +6,10 @@ extends Node
 
 signal state_changed(from: State, to: State)
 
+@export var initial_state: State
 @export var root_node: NodePath
 @export var sprite: SmartSprite2D
+@export var animation_player: AnimationPlayer
 
 @export_group("Internal", "__")
 @export var __last__editor_position: Vector2
@@ -54,6 +56,8 @@ func _ready() -> void:
 		var entry_state: State = __states.get(__entry_target_uuid) as State
 		if entry_state:
 			_enter_state(entry_state)
+	elif initial_state:
+		_enter_state(initial_state)
 
 
 func _process(delta: float) -> void:
@@ -121,6 +125,7 @@ func _dispatch_root_node() -> void:
 		state.state_machine = self
 		state.root_node = _root_node
 		state.sprite = sprite
+		state.animation_player = animation_player
 	
 	for tid: StringName in __transitions:
 		var t: StateTransition = __transitions.get(tid) as StateTransition
@@ -229,6 +234,7 @@ func _transition_to(t: StateTransition, target: State) -> void:
 		s._on_enter()
 	target._on_enter()
 	target.__sprite_enter()
+	target.__animation_enter()
 	
 	t._on_after_transition()
 	state_changed.emit(from, target)
@@ -248,6 +254,7 @@ func _enter_state(state: State) -> void:
 	state._pre_enter()
 	state._on_enter()
 	state.__sprite_enter()
+	state.__animation_enter()
 
 
 func _collect_superstates(state: State) -> Array[State]:
