@@ -14,12 +14,10 @@
 [ext_resource type="Texture2D" uid="uid://bbtiri17e7rkq" path="res://assets/textures/entity/player/mario/jump.png" id="3_igs2l"]
 [ext_resource type="Script" uid="uid://bu5gt1lwfutvu" path="res://game/entity/player/shared/handlers/input_handler.gd" id="3_je5mu"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="3_qhcb0"]
-[ext_resource type="Script" uid="uid://yp68wr3v3bwa" path="res://game/entity/player/shared/state_machine/states/walk.gd" id="4_0jrw7"]
 [ext_resource type="Script" uid="uid://dyjrhpdveexsr" path="res://addons/redux_dev/components/state_machine/state.gd" id="4_4j27x"]
 [ext_resource type="Script" uid="uid://cr0v7cui52ho8" path="res://game/entity/player/player_debug.gd" id="4_kn1iv"]
 [ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="4_o0v17"]
 [ext_resource type="Texture2D" uid="uid://thf8bfre3p2d" path="res://assets/textures/entity/player/mario/triple_jump.png" id="5_0rdsw"]
-[ext_resource type="Script" uid="uid://c2kijkhuhxj18" path="res://game/entity/player/shared/state_machine/states/idle.gd" id="5_4j27x"]
 [ext_resource type="Texture2D" uid="uid://bj5kyipk5eild" path="res://assets/textures/entity/player/mario/groundpound.png" id="6_0f2w8"]
 [ext_resource type="Script" uid="uid://2tpewb2vj0d3" path="res://game/entity/player/shared/handlers/movement_handler.gd" id="6_0jrw7"]
 [ext_resource type="Script" uid="uid://bc37gx5nk2itj" path="res://game/entity/player/shared/state_machine/states/floorslide.gd" id="6_y6elw"]
@@ -33,24 +31,35 @@
 [ext_resource type="Script" uid="uid://bfttwny22bnoc" path="res://game/entity/player/shared/state_machine/states/backflip_up.gd" id="11_b6ajd"]
 [ext_resource type="Script" uid="uid://cscjl4ppceor3" path="res://game/entity/player/shared/state_machine/states/backflip.gd" id="11_mb70y"]
 [ext_resource type="Script" uid="uid://bv6pacjmfysox" path="res://game/entity/player/shared/state_machine/states/rollout_f.gd" id="12_02rvq"]
-[ext_resource type="Script" uid="uid://bnbyeuh75nmoj" path="res://game/entity/player/shared/state_machine/states/jump.gd" id="13_20bnd"]
 [ext_resource type="Texture2D" uid="uid://bjblyiou2qe0f" path="res://assets/textures/entity/player/shared/hover_fludd_r_0.png" id="13_gqe2a"]
-[ext_resource type="Script" uid="uid://uhp6bivoni74" path="res://game/entity/player/shared/state_machine/states/double_jump.gd" id="14_5mhew"]
-[ext_resource type="Script" uid="uid://caq8o1yhkeoru" path="res://game/entity/player/shared/state_machine/states/triple_jump.gd" id="15_eihrn"]
+[ext_resource type="Script" uid="uid://b40633h5y42cq" path="res://game/entity/player/shared/state_machine/states/spin.gd" id="14_20bnd"]
+[ext_resource type="Script" uid="uid://bisaomurugmd3" path="res://game/entity/player/shared/state_machine/states/base_jump.gd" id="15_5mhew"]
+[ext_resource type="Script" uid="uid://cf26ky7vulna0" path="res://game/entity/player/shared/state_machine/states/ground_pound_start.gd" id="15_eihrn"]
+[ext_resource type="Script" uid="uid://cj6o2ytwpw4bq" path="res://game/entity/player/shared/state_machine/states/ground_pound_fall.gd" id="16_eihrn"]
+[ext_resource type="Script" uid="uid://0amhvrekohhp" path="res://game/entity/player/shared/state_machine/states/ground_pound_slam.gd" id="17_aln35"]
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="19_1wiqr"]
 [ext_resource type="Script" uid="uid://c02oltfntb3q8" path="res://game/entity/player/mp_player.gd" id="19_ntea6"]
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="20_1wiqr"]
 
-[sub_resource type="Resource" id="Resource_6qpfs"]
+[sub_resource type="Resource" id="Resource_rlrt6"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
-check_immediately = true
-expression = "current_jump >= 2 && is_input_jump && abs(velocity.x) > 150 && is_on_floor()"
-__from_uuid = "54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
-__to_uuid = "fcde7a01-9caf-4d7a-8016-ae92a2e45514"
-__from_node_uuid = "d66f50c1-6db3-45f0-900c-3bc04f7b7ff5"
-__to_node_uuid = "098068e3-7ac4-4064-8239-8b4566a230c9"
+expression = "is_input_spin"
+__from_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
+__to_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
+__from_node_uuid = "b46d6b41-5198-44d8-a7ea-6fc17ff13b20"
+__to_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
+
+[sub_resource type="Resource" id="Resource_2swmp"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_on_floor() && is_input_jump"
+__from_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
+__to_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
+__from_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
+__to_node_uuid = "4b3b03dc-4110-4cee-b0f8-e2ff3f099f15"
 
 [sub_resource type="Resource" id="Resource_lh4k8"]
 resource_local_to_scene = true
@@ -72,12 +81,32 @@ __to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
 __from_node_uuid = "bad73193-ad8f-4801-9c65-c344b9ae116f"
 __to_node_uuid = "19756cb2-870e-4389-ac45-b7857f943765"
 
+[sub_resource type="Resource" id="Resource_r4b01"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_input_spin && velocity.y > -55"
+__from_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__to_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
+__from_node_uuid = "84362291-03ff-47ba-98e6-a08753eb61f8"
+__to_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
+
+[sub_resource type="Resource" id="Resource_6suq8"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_on_floor()"
+__from_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
+__from_node_uuid = "19756cb2-870e-4389-ac45-b7857f943765"
+__to_node_uuid = "ef17b68d-10e2-4919-8e7d-84844258bfb6"
+
 [sub_resource type="Resource" id="Resource_0vqd7"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
 expression = "is_action_just_pressed(\"dive\") && can_dive && get_active_state_uptime() > 0"
-__from_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__from_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __to_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
 __from_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 __to_node_uuid = "1a6db986-d32f-4647-9c61-30a3baed866c"
@@ -97,7 +126,7 @@ resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
 expression = "velocity.y >= 0 && !is_on_floor()"
-__from_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__from_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
 __from_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 __to_node_uuid = "47d80ca0-eba2-4f2f-abe5-5d1a702997a6"
@@ -119,7 +148,7 @@ resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
 expression = "is_on_floor() && !is_input_jump"
-__from_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__from_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 __to_node_uuid = "bee3ecfd-b265-4bfc-b4ea-e7afe4a62675"
@@ -138,7 +167,7 @@ __to_node_uuid = "0f4b75f7-bfab-489e-abee-b73251d54a97"
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
-expression = "is_action_just_pressed(\"crouch\") && abs(velocity.x) <= 50 && is_on_floor()"
+expression = "is_action_pressed(\"crouch\") && abs(velocity.x) <= 50 && is_on_floor()"
 __from_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __to_uuid = "5ed7fb5d-7e2c-4110-92cb-cf15f641072e"
 __from_node_uuid = "9d91ab68-66a0-4afc-9cc4-11e364931ace"
@@ -164,6 +193,36 @@ __to_uuid = "56a353ee-c4c2-458c-a018-6302daa71851"
 __from_node_uuid = "9d91ab68-66a0-4afc-9cc4-11e364931ace"
 __to_node_uuid = "abed3dd4-95f4-45f4-a3a0-32298e7cc932"
 
+[sub_resource type="Resource" id="Resource_sldje"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_input_spin && velocity.y > 155"
+__from_uuid = "5f26c6ee-ee21-44a2-9986-4f30b9f89611"
+__to_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
+__from_node_uuid = "c5dd9c97-1afa-429f-bbb6-1384aeab275b"
+__to_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
+
+[sub_resource type="Resource" id="Resource_d635j"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_input_spin && velocity.y > 100"
+__from_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+__to_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
+__from_node_uuid = "a543e24c-57e3-4922-a535-27d9488ad48e"
+__to_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
+
+[sub_resource type="Resource" id="Resource_6qpfs"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "current_jump == 1"
+__from_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
+__to_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__from_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
+__to_node_uuid = "a28a7d48-1ddb-462e-af13-1431f25a8a3b"
+
 [sub_resource type="Resource" id="Resource_6rqdb"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
@@ -174,15 +233,43 @@ __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "b5db5b39-5c86-4edb-87c2-91b17ede4ad5"
 __to_node_uuid = "31d0deb8-7915-434d-b931-44f3244dadf5"
 
-[sub_resource type="Resource" id="Resource_yna46"]
+[sub_resource type="Resource" id="Resource_ae0hi"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
-expression = "(velocity.y >= 0 && !is_on_floor()) || (is_on_floor() && get_active_state_uptime() > 0.5))"
+expression = "is_input_spin && velocity.y > -40"
+__from_uuid = "7a11481f-96a2-4861-99a6-5a97b2628e11"
+__to_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
+__from_node_uuid = "7a55f385-a1e7-46f0-a25e-f9bc8d8066d6"
+__to_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
+
+[sub_resource type="Resource" id="Resource_ntea6"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_input_spin && velocity.y > -55"
 __from_uuid = "54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
-__to_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
-__from_node_uuid = "a58ea9b9-705a-4e93-9892-b3ebfa4e8802"
-__to_node_uuid = "b6680552-d54b-42a5-9cac-e77db4edf7a1"
+__to_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
+__from_node_uuid = "b3be6cea-eb96-4799-97ff-5f53e7245198"
+__to_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
+
+[sub_resource type="Resource" id="Resource_3h1ly"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 1
+__from_uuid = "26117a90-ad8f-4dc7-b05f-b7d2d321b8c0"
+__to_uuid = "4039c2e2-f597-43ee-b41e-d932b0a93a22"
+__from_node_uuid = "26117a90-ad8f-4dc7-b05f-b7d2d321b8c0"
+__to_node_uuid = "4039c2e2-f597-43ee-b41e-d932b0a93a22"
+
+[sub_resource type="Resource" id="Resource_mjy7s"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 1
+__from_uuid = "74d37025-c0e7-44f3-9562-5d9cae8dab86"
+__to_uuid = "26117a90-ad8f-4dc7-b05f-b7d2d321b8c0"
+__from_node_uuid = "74d37025-c0e7-44f3-9562-5d9cae8dab86"
+__to_node_uuid = "26117a90-ad8f-4dc7-b05f-b7d2d321b8c0"
 
 [sub_resource type="Resource" id="Resource_8vwb3"]
 resource_local_to_scene = true
@@ -195,6 +282,16 @@ __from_uuid = "56a353ee-c4c2-458c-a018-6302daa71851"
 __to_uuid = "7a11481f-96a2-4861-99a6-5a97b2628e11"
 __from_node_uuid = "abed3dd4-95f4-45f4-a3a0-32298e7cc932"
 __to_node_uuid = "9926b8f7-53dc-4adb-a5e1-b7a3daa778e5"
+
+[sub_resource type="Resource" id="Resource_icsuc"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "current_jump == 2"
+__from_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
+__to_uuid = "54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
+__from_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
+__to_node_uuid = "d66f50c1-6db3-45f0-900c-3bc04f7b7ff5"
 
 [sub_resource type="Resource" id="Resource_ria7k"]
 resource_local_to_scene = true
@@ -215,6 +312,16 @@ __from_uuid = "5ed7fb5d-7e2c-4110-92cb-cf15f641072e"
 __to_uuid = "153c8a33-2d47-4ccc-97e3-9e16b0b05f9c"
 __from_node_uuid = "6a55bcd8-ceeb-47a0-857d-a18349c507f5"
 __to_node_uuid = "b5db5b39-5c86-4edb-87c2-91b17ede4ad5"
+
+[sub_resource type="Resource" id="Resource_001bj"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_action_just_pressed(\"dive\") && can_dive"
+__from_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+__to_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
+__from_node_uuid = "19756cb2-870e-4389-ac45-b7857f943765"
+__to_node_uuid = "991247db-edd4-43f5-af6f-227cf9aee3db"
 
 [sub_resource type="Resource" id="Resource_3i503"]
 resource_local_to_scene = true
@@ -245,6 +352,16 @@ __from_uuid = "b3fdc091-1261-4006-a130-d7a725b6b4cd"
 __to_uuid = "5ed7fb5d-7e2c-4110-92cb-cf15f641072e"
 __from_node_uuid = "0022c078-60f6-4847-9c15-315812bb51c7"
 __to_node_uuid = "6a55bcd8-ceeb-47a0-857d-a18349c507f5"
+
+[sub_resource type="Resource" id="Resource_ketxm"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "!is_input_spin && !is_spinning && is_on_floor()"
+__from_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
+__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
+__from_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
+__to_node_uuid = "0d111c82-e1fd-4f68-b56e-d964632b466d"
 
 [sub_resource type="Resource" id="Resource_eihrn"]
 resource_local_to_scene = true
@@ -286,15 +403,25 @@ __to_uuid = "56a353ee-c4c2-458c-a018-6302daa71851"
 __from_node_uuid = "0022c078-60f6-4847-9c15-315812bb51c7"
 __to_node_uuid = "abed3dd4-95f4-45f4-a3a0-32298e7cc932"
 
-[sub_resource type="Resource" id="Resource_rlrt6"]
+[sub_resource type="Resource" id="Resource_dtinm"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
-expression = "(velocity.y >= 0 && !is_on_floor()) || (is_on_floor() && get_active_state_uptime() > 0.5))"
-__from_uuid = "fcde7a01-9caf-4d7a-8016-ae92a2e45514"
-__to_uuid = "54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
-__from_node_uuid = "7bac08a2-8ceb-4ee4-a970-2466e9d89ddd"
-__to_node_uuid = "a58ea9b9-705a-4e93-9892-b3ebfa4e8802"
+expression = "is_input_spin && velocity.y > 155"
+__from_uuid = "153c8a33-2d47-4ccc-97e3-9e16b0b05f9c"
+__to_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
+__from_node_uuid = "1d0315de-ccff-4b38-b5b1-f5ece6941d7b"
+__to_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
+
+[sub_resource type="Resource" id="Resource_yna46"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "current_jump == 3"
+__from_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
+__to_uuid = "fcde7a01-9caf-4d7a-8016-ae92a2e45514"
+__from_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
+__to_node_uuid = "7bac08a2-8ceb-4ee4-a970-2466e9d89ddd"
 
 [sub_resource type="Resource" id="Resource_hi5jf"]
 resource_local_to_scene = true
@@ -310,9 +437,9 @@ __to_node_uuid = "abed3dd4-95f4-45f4-a3a0-32298e7cc932"
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
-expression = "is_on_floor() && is_input_jump && can_jump"
+expression = "is_on_floor() && is_action_just_pressed(\"jump\", 0.2) && can_jump"
 __from_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
-__to_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__to_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __from_node_uuid = "8f3ccb62-9749-4b1d-b817-1026a049a6e7"
 __to_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 
@@ -325,6 +452,26 @@ __from_uuid = "5ed7fb5d-7e2c-4110-92cb-cf15f641072e"
 __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "6a55bcd8-ceeb-47a0-857d-a18349c507f5"
 __to_node_uuid = "f8b6c9ea-5ed3-42f5-9353-37ed5f193c1a"
+
+[sub_resource type="Resource" id="Resource_1wiqr"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_action_just_pressed(\"dive\") && can_dive"
+__from_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
+__to_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
+__from_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
+__to_node_uuid = "576f791a-a3e0-4303-8c63-656b63182f46"
+
+[sub_resource type="Resource" id="Resource_eo5je"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_input_spin"
+__from_uuid = "b3fdc091-1261-4006-a130-d7a725b6b4cd"
+__to_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
+__from_node_uuid = "718fd436-cf8b-4e4a-a291-e729f19d5fe4"
+__to_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
 
 [sub_resource type="Resource" id="Resource_8yq6v"]
 resource_local_to_scene = true
@@ -345,29 +492,40 @@ script = ExtResource("3_0jrw7")
 mode = 3
 expression = "is_on_floor() && is_input_jump"
 __from_uuid = "b3fdc091-1261-4006-a130-d7a725b6b4cd"
-__to_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__to_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __from_node_uuid = "167d2846-17ec-4534-a26e-c582cae80f3a"
 __to_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 
-[sub_resource type="Resource" id="Resource_6suq8"]
+[sub_resource type="Resource" id="Resource_ohvaq"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+transition_time = 0.3
+expression = "!is_in_water"
+__from_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
+__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
+__from_node_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
+__to_node_uuid = "f1ae7997-f220-4334-a89c-0ea976bc8c8c"
+
+[sub_resource type="Resource" id="Resource_5ygwk"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
 expression = "is_on_floor()"
-__from_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
-__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
-__from_node_uuid = "19756cb2-870e-4389-ac45-b7857f943765"
-__to_node_uuid = "ef17b68d-10e2-4919-8e7d-84844258bfb6"
+__from_uuid = "4039c2e2-f597-43ee-b41e-d932b0a93a22"
+__to_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
+__from_node_uuid = "4039c2e2-f597-43ee-b41e-d932b0a93a22"
+__to_node_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
 
-[sub_resource type="Resource" id="Resource_icsuc"]
+[sub_resource type="Resource" id="Resource_fx7qh"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
-expression = "current_jump >= 1 && is_action_just_pressed(\"jump\") && is_on_floor()"
-__from_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
-__to_uuid = "54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
-__from_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
-__to_node_uuid = "d66f50c1-6db3-45f0-900c-3bc04f7b7ff5"
+expression = "!is_input_spin && !is_spinning && !is_on_floor()"
+__from_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
+__to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+__from_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
+__to_node_uuid = "6874c538-3b2b-4bf6-8eb7-064783902a81"
 
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
@@ -406,7 +564,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.7),
 "transitions": PackedFloat32Array(0.3, 1),
 "update": 0,
-"values": [0.0, -6.283185307179586]
+"values": [0.0, -360.0]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -423,6 +581,22 @@ tracks/1/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_20bnd"]
+resource_name = "ground_pound_start"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Doll:local_rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.26666668),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [0.0, 360.0]
+}
+
 [sub_resource type="Animation" id="Animation_02rvq"]
 resource_name = "backflip"
 tracks/0/type = "value"
@@ -435,7 +609,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.6333),
 "transitions": PackedFloat32Array(0.3, 1),
 "update": 0,
-"values": [0.0, 6.283185307179586]
+"values": [0.0, 360.0]
 }
 
 [sub_resource type="Animation" id="Animation_aln35"]
@@ -450,13 +624,14 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(0.3, 1),
 "update": 0,
-"values": [0.0, 12.566370614359172]
+"values": [0.0, 720.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mb70y"]
 _data = {
 &"RESET": SubResource("Animation_otk8c"),
 &"backflip": SubResource("Animation_y6elw"),
+&"ground_pound_start": SubResource("Animation_20bnd"),
 &"rollout_f": SubResource("Animation_02rvq"),
 &"triple_jump": SubResource("Animation_aln35")
 }
@@ -465,7 +640,7 @@ _data = {
 atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 48, 48)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_aln35"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_20bnd"]
 diffuse_texture = SubResource("AtlasTexture_dhej3")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
@@ -925,7 +1100,22 @@ properties/5/path = NodePath(".:rotation")
 properties/5/spawn = true
 properties/5/replication_mode = 1
 
-[node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "_input_handler", "_movement_handler", "_sprite_handler", "state_label", "sprite", "components_root", "state_machine")]
+[sub_resource type="GDScript" id="GDScript_aln35"]
+script/source = "extends Label
+
+@export var player: Player
+
+
+func _ready() -> void:
+	hide()
+
+
+func _process(_delta: float) -> void:
+	show()
+	text = str(player.state_machine.get_current_state())
+"
+
+[node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "_input_handler", "_movement_handler", "_sprite_handler", "sprite", "components_root", "state_machine")]
 collision_mask = 515
 floor_snap_length = 7.0
 script = ExtResource("1_oic1i")
@@ -937,22 +1127,9 @@ spin_shape = NodePath("Spin/CollisionShape2D")
 _input_handler = NodePath("Handlers/InputHandler")
 _movement_handler = NodePath("Handlers/MovementHandler")
 _sprite_handler = NodePath("Handlers/SpriteHandler")
-state_label = NodePath("StateLabel")
 sprite = NodePath("Doll")
 components_root = NodePath("Components")
 state_machine = NodePath("StateMachine")
-
-[node name="StateLabel" type="Label" parent="." unique_id=287046668]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -19.5
-offset_top = -40.0
-offset_right = 27.5
-offset_bottom = -25.0
-grow_horizontal = 2
-text = "<state>"
-horizontal_alignment = 1
 
 [node name="StateMachine" type="Node" parent="." unique_id=49398394 node_paths=PackedStringArray("initial_state", "sprite", "animation_player", "__states")]
 script = ExtResource("2_cawmy")
@@ -960,8 +1137,8 @@ initial_state = NodePath("Dry/Grounded/Idle")
 root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
-__last__editor_position = Vector2(1163.2361, 177.51367)
-__last_editor_zoom = 0.9726536
+__last__editor_position = Vector2(-511.10428, -296.89728)
+__last_editor_zoom = 0.13663907
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),
@@ -969,11 +1146,12 @@ __states = {
 &"153c8a33-2d47-4ccc-97e3-9e16b0b05f9c": NodePath("Dry/Airborne/Backflip"),
 &"1a672940-36b6-42fb-9579-e3e44c1736ad": NodePath("Dry/Airborne"),
 &"1c0b8823-6179-4117-9b5a-5a7e7c720250": NodePath("Submerged"),
-&"1f487687-d9c8-496b-9be9-7fd09f196b62": NodePath("Spin"),
-&"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2": NodePath("Dry/Airborne/Jump"),
+&"1f487687-d9c8-496b-9be9-7fd09f196b62": NodePath("Dry/Airborne/Spin"),
+&"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2": NodePath("Dry/Airborne/BaseJump/Jump"),
 &"26117a90-ad8f-4dc7-b05f-b7d2d321b8c0": NodePath("GroundPound/GroundPoundStart"),
 &"4039c2e2-f597-43ee-b41e-d932b0a93a22": NodePath("GroundPound/GroundPoundFall"),
-&"54a4d6c2-d938-40a1-92f4-ed7ef758c71c": NodePath("Dry/Airborne/DoubleJump"),
+&"4e77d567-5fca-48cf-9e61-dbb6250ef625": NodePath("Dry/Airborne/BaseJump"),
+&"54a4d6c2-d938-40a1-92f4-ed7ef758c71c": NodePath("Dry/Airborne/BaseJump/DoubleJump"),
 &"56a353ee-c4c2-458c-a018-6302daa71851": NodePath("Dry/Floorslide"),
 &"5ed7fb5d-7e2c-4110-92cb-cf15f641072e": NodePath("Dry/Grounded/Crouch"),
 &"5f26c6ee-ee21-44a2-9986-4f30b9f89611": NodePath("Dry/Airborne/BackflipUp"),
@@ -988,40 +1166,47 @@ __states = {
 &"cb2bce9e-79ca-46c1-9bc1-ab2d16c15822": NodePath("Submerged/SwimSpin"),
 &"d8126d47-03c3-4a9b-abee-8c68263ad4ab": NodePath("Dry/Airborne/Fall"),
 &"fac7caf1-9473-4b51-87ce-64f33b12c026": NodePath("Submerged/SwimIdle"),
-&"fcde7a01-9caf-4d7a-8016-ae92a2e45514": NodePath("Dry/Airborne/TripleJump")
+&"fcde7a01-9caf-4d7a-8016-ae92a2e45514": NodePath("Dry/Airborne/BaseJump/TripleJump")
 }
 __annotations = {
+&"2aa31aaa-0572-43b8-826f-6d767e605734": {
+"position": Vector2(4720, 580),
+"text": "-> Spin"
+},
 &"330df875-34da-434e-a124-19af2623a506": {
-"position": Vector2(1480, -600),
+"position": Vector2(3460, -400),
 "text": "Fall"
 },
 &"68adbcdd-bf03-4f89-a009-058392dc5b4a": {
-"position": Vector2(1440, 160),
+"position": Vector2(2640, 1020),
 "text": "Jump Stack"
 },
 &"6c64e40c-5902-4737-acc6-b02ded7eb7c0": {
-"position": Vector2(3080, -840),
+"position": Vector2(5300, -840),
 "text": "Crouch -> Backflip"
 },
 &"a544c92d-0764-46da-8ff7-d0467b839f46": {
-"position": Vector2(3120, -360),
+"position": Vector2(5340, -440),
 "text": "-> Floorslide"
 },
 "aa8fc861-4855-4fa5-bac3-8381f55773e2": {
-"position": Vector2(-40, -800),
+"position": Vector2(-260, -1060),
 "text": "Superstate/Definition Tree"
 },
 &"d5892822-66a2-4649-9d04-23d50cb0e08a": {
-"position": Vector2(1460, -840),
+"position": Vector2(3440, -840),
 "text": "Walk"
 }
 }
 __transitions = Dictionary[StringName, ExtResource("3_0jrw7")]({
-&"0d17bbe7-7954-4a1e-b0b9-b646249d72d8": SubResource("Resource_icsuc"),
-&"0e698df3-9e85-4c2e-9e8c-aea60029e709": SubResource("Resource_6qpfs"),
+&"0032f8c5-5953-472c-9198-d0117302261b": SubResource("Resource_rlrt6"),
+&"04b0a2e4-e250-4b41-beae-2e035fec9738": SubResource("Resource_ohvaq"),
+&"0baa52bd-925f-43ff-b063-ce9e22633433": SubResource("Resource_2swmp"),
 &"1936b444-0e84-4dbb-8a09-0b43aade58f6": SubResource("Resource_lh4k8"),
 &"1e635f1c-ff57-4ffd-828a-a34e40b83298": SubResource("Resource_mb70y"),
+&"2225b5e8-713c-4864-8cba-ac5ef93714c7": SubResource("Resource_r4b01"),
 &"26da65d8-bfd5-4841-9713-fd094dcbdcaf": SubResource("Resource_6suq8"),
+&"31d4fe48-f3a7-4bd7-b97b-aec36f09b162": SubResource("Resource_5ygwk"),
 &"33685278-85f2-4ace-834c-47cf977ef188": SubResource("Resource_0vqd7"),
 &"34499073-e207-49f7-a7cf-bd50ab62d9dc": SubResource("Resource_l0vtf"),
 &"3e941e54-3ecf-41eb-a95e-4dde2623e08a": SubResource("Resource_6wk8s"),
@@ -1031,61 +1216,82 @@ __transitions = Dictionary[StringName, ExtResource("3_0jrw7")]({
 &"492fb513-a7b5-48b9-bd50-6d7021a4d623": SubResource("Resource_b6ajd"),
 &"53bad02f-ca44-42ca-83a1-4599c4b97621": SubResource("Resource_8um7f"),
 &"55583825-433c-48ca-87e8-c8d5193536f0": SubResource("Resource_ioda6"),
+&"5dda3fb4-76b2-4742-87b6-de8f1d2ccb9f": SubResource("Resource_sldje"),
+&"6600d7f1-50dd-45be-bf05-2ccd1f9c5820": SubResource("Resource_d635j"),
+&"666e45d4-ccde-4c42-b835-912a00fe3c4a": SubResource("Resource_6qpfs"),
 &"6885fc21-c43b-4d73-a9fb-c0dde2c6f6e1": SubResource("Resource_6rqdb"),
-&"737936b5-2d4e-4506-abb3-b70c9c2ff7f0": SubResource("Resource_yna46"),
+&"77d5df5c-3d1a-4e02-900c-dda32e2dbf64": SubResource("Resource_ae0hi"),
+&"78082638-3d9c-4311-b124-ecbffe25c131": SubResource("Resource_ntea6"),
+&"975c29c6-0eeb-4fda-aae0-13f45fe8e62d": SubResource("Resource_3h1ly"),
+&"984f903a-a3f5-4315-a856-d288e577c772": SubResource("Resource_fx7qh"),
+&"9ad4c11a-cef7-4fa7-851f-98afa9890c5d": SubResource("Resource_mjy7s"),
 &"9b87e1b4-b003-44ab-992d-931b8a965951": SubResource("Resource_8vwb3"),
+&"a2eda702-f820-400a-bf52-dd2cfbe3fae8": SubResource("Resource_icsuc"),
 &"a7a93b41-c759-4a33-95eb-b237411e92d9": SubResource("Resource_ria7k"),
 &"a9caf83a-dcf8-42bd-8f8f-37dc6dc3bd97": SubResource("Resource_5mhew"),
+&"ac4793c5-54ff-4f64-bb18-5e2f1f25fe46": SubResource("Resource_001bj"),
 &"ac47bad9-ba1c-4fd9-90a8-19159b6f40f0": SubResource("Resource_3i503"),
 &"aeddfb49-d65a-4522-9dd2-00b34df62621": SubResource("Resource_6b4i6"),
 &"b59ae391-76d5-4a68-921b-c00bee5ea921": SubResource("Resource_02rvq"),
+&"b5b8a9f5-e463-4994-8920-28562b0ba3ca": SubResource("Resource_ketxm"),
 &"b797e1f8-f5a9-4489-a064-b962b6e7bfe3": SubResource("Resource_eihrn"),
 &"b8b4b892-5c5c-439f-992f-7893ab7b87aa": SubResource("Resource_tb30q"),
 &"d1fc7046-1e0f-4347-ab02-b9e62e93d7cb": SubResource("Resource_aln35"),
 &"d2a7a244-8db2-4689-9ed8-70c69e56ae18": SubResource("Resource_3grnp"),
-&"db6b19fa-70a8-42c3-b128-0bda854a1fba": SubResource("Resource_rlrt6"),
+&"d498b371-42f1-4ae5-8eaf-a88df4ac1f66": SubResource("Resource_dtinm"),
+&"daa11140-ecd7-4e1b-ae94-be1e232c1421": SubResource("Resource_yna46"),
 &"e3837ee6-54ed-4b81-849f-e43a559a01a6": SubResource("Resource_hi5jf"),
 &"e79a83e6-cd15-4ccf-8f16-74b60b1e9141": SubResource("Resource_h2rmy"),
 &"f074e2f8-bfb2-42b6-b9f2-600bd12d39a4": SubResource("Resource_20bnd"),
+&"f0e56a83-ad4f-454c-8ad0-100254a71640": SubResource("Resource_1wiqr"),
+&"fa786090-b986-46e7-8837-b1bb8918cbd9": SubResource("Resource_eo5je"),
 &"fca503a9-4018-4f15-a7d0-a6c78e83831f": SubResource("Resource_8yq6v"),
 &"ff5117b6-699a-4417-ad4a-b0b7f74bcd18": SubResource("Resource_l4byk")
 })
 __aliases = {
 &"0022c078-60f6-4847-9c15-315812bb51c7": {
 "original_uuid": &"b3fdc091-1261-4006-a130-d7a725b6b4cd",
-"position": Vector2(2760, -640)
+"position": Vector2(4680, -520)
 },
-&"098068e3-7ac4-4064-8239-8b4566a230c9": {
-"original_uuid": &"fcde7a01-9caf-4d7a-8016-ae92a2e45514",
-"position": Vector2(2080, 240)
+&"0d111c82-e1fd-4f68-b56e-d964632b466d": {
+"original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
+"position": Vector2(6380, 1940)
 },
 &"0f4b75f7-bfab-489e-abee-b73251d54a97": {
 "original_uuid": &"0dd74506-66e0-4267-b86b-0572da305c2a",
-"position": Vector2(3860, -640)
+"position": Vector2(6580, -640)
 },
 &"12a4f3c3-9986-4098-a5e8-79b8a8951847": {
 "original_uuid": &"5f26c6ee-ee21-44a2-9986-4f30b9f89611",
-"position": Vector2(3500, -920)
+"position": Vector2(5860, -1060)
 },
 &"167d2846-17ec-4534-a26e-c582cae80f3a": {
 "original_uuid": &"b3fdc091-1261-4006-a130-d7a725b6b4cd",
-"position": Vector2(1100, 300)
+"position": Vector2(1940, 1240)
 },
 &"19756cb2-870e-4389-ac45-b7857f943765": {
 "original_uuid": &"d8126d47-03c3-4a9b-abee-8c68263ad4ab",
-"position": Vector2(1400, -440)
+"position": Vector2(3300, -340)
 },
 &"1a6db986-d32f-4647-9c61-30a3baed866c": {
 "original_uuid": &"0dd74506-66e0-4267-b86b-0572da305c2a",
-"position": Vector2(1720, 380)
+"position": Vector2(3160, 1320)
+},
+&"1c616876-0e1b-4cbc-9519-7fabb4d0d419": {
+"original_uuid": &"1f487687-d9c8-496b-9be9-7fd09f196b62",
+"position": Vector2(5560, 1560)
+},
+&"1d0315de-ccff-4b38-b5b1-f5ece6941d7b": {
+"original_uuid": &"153c8a33-2d47-4ccc-97e3-9e16b0b05f9c",
+"position": Vector2(4540, 2080)
 },
 &"2302e3d7-ce33-4a4f-9359-0e5615b5dddd": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
-"position": Vector2(1100, -540)
+"position": Vector2(2760, -480)
 },
 &"31d0deb8-7915-434d-b931-44f3244dadf5": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
-"position": Vector2(3860, -500)
+"position": Vector2(6580, -380)
 },
 "345ba853-889e-4190-8ed2-776dadb40e2c": {
 "original_uuid": "5869f0f5-1853-49d5-9712-4fa267c83234",
@@ -1093,7 +1299,7 @@ __aliases = {
 },
 &"3698077b-791b-462f-8c92-b98301f30ddf": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
-"position": Vector2(1700, -780)
+"position": Vector2(3820, -780)
 },
 "3b4543ff-daee-4cf7-8cc7-ce938aa845e3": {
 "original_uuid": "eb84e3c9-3c56-4cd8-a616-246ee21c7b6a",
@@ -1101,23 +1307,47 @@ __aliases = {
 },
 &"47d80ca0-eba2-4f2f-abe5-5d1a702997a6": {
 "original_uuid": &"d8126d47-03c3-4a9b-abee-8c68263ad4ab",
-"position": Vector2(1720, 680)
+"position": Vector2(3160, 1880)
+},
+&"4b3b03dc-4110-4cee-b0f8-e2ff3f099f15": {
+"original_uuid": &"4e77d567-5fca-48cf-9e61-dbb6250ef625",
+"position": Vector2(6380, 1640)
+},
+&"576f791a-a3e0-4303-8c63-656b63182f46": {
+"original_uuid": &"0dd74506-66e0-4267-b86b-0572da305c2a",
+"position": Vector2(6380, 1340)
+},
+&"6874c538-3b2b-4bf6-8eb7-064783902a81": {
+"original_uuid": &"d8126d47-03c3-4a9b-abee-8c68263ad4ab",
+"position": Vector2(6400, 2240)
 },
 &"6a55bcd8-ceeb-47a0-857d-a18349c507f5": {
 "original_uuid": &"5ed7fb5d-7e2c-4110-92cb-cf15f641072e",
-"position": Vector2(3120, -780)
+"position": Vector2(5260, -780)
 },
 &"6e03a36b-a78c-4a1d-8973-340db56ff393": {
 "original_uuid": &"0dd74506-66e0-4267-b86b-0572da305c2a",
-"position": Vector2(2760, -500)
+"position": Vector2(4680, -240)
+},
+&"718fd436-cf8b-4e4a-a291-e729f19d5fe4": {
+"original_uuid": &"b3fdc091-1261-4006-a130-d7a725b6b4cd",
+"position": Vector2(4560, 960)
 },
 &"79751927-f38e-4c65-bf16-966deab6d21a": {
 "original_uuid": &"b3fdc091-1261-4006-a130-d7a725b6b4cd",
-"position": Vector2(1400, -780)
+"position": Vector2(3280, -780)
+},
+&"7a55f385-a1e7-46f0-a25e-f9bc8d8066d6": {
+"original_uuid": &"7a11481f-96a2-4861-99a6-5a97b2628e11",
+"position": Vector2(4540, 1520)
 },
 &"7bac08a2-8ceb-4ee4-a970-2466e9d89ddd": {
 "original_uuid": &"fcde7a01-9caf-4d7a-8016-ae92a2e45514",
-"position": Vector2(2080, 400)
+"position": Vector2(3160, 500)
+},
+&"84362291-03ff-47ba-98e6-a08753eb61f8": {
+"original_uuid": &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2",
+"position": Vector2(4600, 2360)
 },
 &"88b67923-0905-4892-96d4-33af90aa9e2d": {
 "original_uuid": &"72d567dd-e3ab-46f9-be2b-c2d0cebb27e8",
@@ -1125,39 +1355,51 @@ __aliases = {
 },
 &"8f3ccb62-9749-4b1d-b817-1026a049a6e7": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
-"position": Vector2(1100, 160)
+"position": Vector2(1940, 960)
+},
+&"991247db-edd4-43f5-af6f-227cf9aee3db": {
+"original_uuid": &"0dd74506-66e0-4267-b86b-0572da305c2a",
+"position": Vector2(3800, -80)
 },
 &"9926b8f7-53dc-4adb-a5e1-b7a3daa778e5": {
 "original_uuid": &"7a11481f-96a2-4861-99a6-5a97b2628e11",
-"position": Vector2(3500, -600)
+"position": Vector2(5880, -520)
 },
 &"9d91ab68-66a0-4afc-9cc4-11e364931ace": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
-"position": Vector2(2760, -780)
+"position": Vector2(4680, -780)
 },
-&"a58ea9b9-705a-4e93-9892-b3ebfa4e8802": {
-"original_uuid": &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c",
-"position": Vector2(2420, 400)
+&"a28a7d48-1ddb-462e-af13-1431f25a8a3b": {
+"original_uuid": &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2",
+"position": Vector2(3160, 1040)
+},
+&"a543e24c-57e3-4922-a535-27d9488ad48e": {
+"original_uuid": &"d8126d47-03c3-4a9b-abee-8c68263ad4ab",
+"position": Vector2(4560, 1240)
 },
 &"abed3dd4-95f4-45f4-a3a0-32298e7cc932": {
 "original_uuid": &"56a353ee-c4c2-458c-a018-6302daa71851",
-"position": Vector2(3120, -500)
+"position": Vector2(5240, -380)
+},
+&"b3be6cea-eb96-4799-97ff-5f53e7245198": {
+"original_uuid": &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c",
+"position": Vector2(4500, 2640)
+},
+&"b46d6b41-5198-44d8-a7ea-6fc17ff13b20": {
+"original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
+"position": Vector2(4540, 680)
 },
 &"b5db5b39-5c86-4edb-87c2-91b17ede4ad5": {
 "original_uuid": &"153c8a33-2d47-4ccc-97e3-9e16b0b05f9c",
-"position": Vector2(3500, -780)
-},
-&"b6680552-d54b-42a5-9cac-e77db4edf7a1": {
-"original_uuid": &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2",
-"position": Vector2(2800, 400)
+"position": Vector2(5860, -780)
 },
 &"bad73193-ad8f-4801-9c65-c344b9ae116f": {
 "original_uuid": &"b3fdc091-1261-4006-a130-d7a725b6b4cd",
-"position": Vector2(1100, -420)
+"position": Vector2(2780, -200)
 },
 &"bbac0708-891f-40b0-84ff-f90c3e883463": {
-"original_uuid": &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2",
-"position": Vector2(1420, 240)
+"original_uuid": &"4e77d567-5fca-48cf-9e61-dbb6250ef625",
+"position": Vector2(2460, 1140)
 },
 "bdadf97e-a71b-472c-9ecb-312b7e7385d5": {
 "original_uuid": "e465a7ea-4405-449b-ab06-120b336f109a",
@@ -1165,11 +1407,15 @@ __aliases = {
 },
 &"bee3ecfd-b265-4bfc-b4ea-e7afe4a62675": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
-"position": Vector2(1720, 520)
+"position": Vector2(3160, 1600)
+},
+&"c5dd9c97-1afa-429f-bbb6-1384aeab275b": {
+"original_uuid": &"5f26c6ee-ee21-44a2-9986-4f30b9f89611",
+"position": Vector2(4440, 1800)
 },
 &"d66f50c1-6db3-45f0-900c-3bc04f7b7ff5": {
 "original_uuid": &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c",
-"position": Vector2(1720, 240)
+"position": Vector2(3160, 760)
 },
 "e233e671-bc9e-440b-b93c-8eef38107716": {
 "original_uuid": "eb84e3c9-3c56-4cd8-a616-246ee21c7b6a",
@@ -1181,15 +1427,19 @@ __aliases = {
 },
 &"ef17b68d-10e2-4919-8e7d-84844258bfb6": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
-"position": Vector2(1680, -440)
+"position": Vector2(3800, -340)
+},
+&"f1ae7997-f220-4334-a89c-0ea976bc8c8c": {
+"original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
+"position": Vector2(520, 1440)
 },
 &"f79403a8-db53-422c-94ac-1755c46bddd9": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
-"position": Vector2(1100, -780)
+"position": Vector2(2760, -780)
 },
 &"f8b6c9ea-5ed3-42f5-9353-37ed5f193c1a": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
-"position": Vector2(3500, -1060)
+"position": Vector2(5860, -160)
 }
 }
 __entry_node_position = Vector2(60, -960)
@@ -1198,50 +1448,50 @@ metadata/_custom_type_script = "uid://utibsg6xkllx"
 [node name="Dry" type="Node" parent="StateMachine" unique_id=1790975957]
 script = ExtResource("7_je5mu")
 __editor_name = &"dry"
-__editor_position = Vector2(-1020, -340)
+__editor_position = Vector2(-1840, -480)
 __editor_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 
 [node name="Grounded" type="Node" parent="StateMachine/Dry" unique_id=2112507397]
 script = ExtResource("10_tb30q")
 __editor_name = &"grounded"
-__editor_position = Vector2(-840, -480)
+__editor_position = Vector2(-1420, -680)
 __editor_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
 __editor_superstate_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 __editor_superstate_wire_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 
 [node name="Idle" type="Node" parent="StateMachine/Dry/Grounded" unique_id=616950568]
-script = ExtResource("5_4j27x")
+script = ExtResource("4_4j27x")
 sprite_animation_name = &"idle"
 __editor_name = &"idle"
-__editor_position = Vector2(-340, -760)
+__editor_position = Vector2(-840, -980)
 __editor_uuid = &"8a68b754-5afa-4726-bb3e-46037c1cec89"
 __editor_superstate_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
 __editor_superstate_wire_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
-
-[node name="Walk" type="Node" parent="StateMachine/Dry/Grounded" unique_id=1580509400]
-script = ExtResource("4_0jrw7")
-sprite_animation_name = &"walk_start"
-sprite_chain = Array[StringName]([&"walk_loop"])
-__editor_name = &"walk"
-__editor_position = Vector2(-60, -600)
-__editor_uuid = &"580d4444-fdc7-4033-a33d-eda84275a95b"
-__editor_superstate_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
-__editor_superstate_wire_uuid = &"44d79f3b-0f69-438b-8b37-d3a6915e88e5"
 
 [node name="Crouch" type="Node" parent="StateMachine/Dry/Grounded" unique_id=220392553]
 script = ExtResource("4_4j27x")
 sprite_animation_name = &"crouch"
 sprite_lock_flipping = true
 __editor_name = &"crouch"
-__editor_position = Vector2(240, -580)
+__editor_position = Vector2(360, -980)
 __editor_uuid = &"5ed7fb5d-7e2c-4110-92cb-cf15f641072e"
 __editor_superstate_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
 __editor_superstate_wire_uuid = &"b3fdc091-1261-4006-a130-d7a725b6b4cd"
 
+[node name="Walk" type="Node" parent="StateMachine/Dry/Grounded" unique_id=1580509400]
+script = ExtResource("4_4j27x")
+sprite_animation_name = &"walk_start"
+sprite_chain = Array[StringName]([&"walk_loop"])
+__editor_name = &"walk"
+__editor_position = Vector2(-240, -980)
+__editor_uuid = &"580d4444-fdc7-4033-a33d-eda84275a95b"
+__editor_superstate_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
+__editor_superstate_wire_uuid = &"092ff28f-6a90-40e8-8c49-a55969c526c7"
+
 [node name="Airborne" type="Node" parent="StateMachine/Dry" unique_id=338446170]
 script = ExtResource("8_k8egu")
 __editor_name = &"airborne"
-__editor_position = Vector2(-840, -340)
+__editor_position = Vector2(-1420, -400)
 __editor_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 __editor_superstate_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 __editor_superstate_wire_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
@@ -1253,7 +1503,7 @@ rotation_curve = SubResource("Curve_aln35")
 y_velocity_to_rotation_offset_curve = SubResource("Curve_ioda6")
 sprite_animation_name = &"dive"
 __editor_name = &"dive"
-__editor_position = Vector2(-180, -400)
+__editor_position = Vector2(-400, -480)
 __editor_uuid = &"0dd74506-66e0-4267-b86b-0572da305c2a"
 __editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 __editor_superstate_wire_uuid = &"d8126d47-03c3-4a9b-abee-8c68263ad4ab"
@@ -1261,7 +1511,7 @@ __editor_superstate_wire_uuid = &"d8126d47-03c3-4a9b-abee-8c68263ad4ab"
 [node name="IdleJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1248860808]
 script = ExtResource("4_4j27x")
 __editor_name = &"idle_jump"
-__editor_position = Vector2(-180, -260)
+__editor_position = Vector2(-400, -200)
 __editor_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
 __editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 __editor_superstate_wire_uuid = &"d8126d47-03c3-4a9b-abee-8c68263ad4ab"
@@ -1271,7 +1521,7 @@ script = ExtResource("11_mb70y")
 sprite_animation_name = &"jump"
 anim_animation = "backflip"
 __editor_name = &"backflip"
-__editor_position = Vector2(-180, -120)
+__editor_position = Vector2(-400, 100)
 __editor_uuid = &"153c8a33-2d47-4ccc-97e3-9e16b0b05f9c"
 __editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 __editor_superstate_wire_uuid = &"d8126d47-03c3-4a9b-abee-8c68263ad4ab"
@@ -1281,7 +1531,7 @@ script = ExtResource("11_b6ajd")
 sprite_animation_name = &"jump"
 anim_animation = "backflip"
 __editor_name = &"backflip_up"
-__editor_position = Vector2(100, -120)
+__editor_position = Vector2(140, 100)
 __editor_uuid = &"5f26c6ee-ee21-44a2-9986-4f30b9f89611"
 __editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 __editor_superstate_wire_uuid = &"153c8a33-2d47-4ccc-97e3-9e16b0b05f9c"
@@ -1290,7 +1540,7 @@ __editor_superstate_wire_uuid = &"153c8a33-2d47-4ccc-97e3-9e16b0b05f9c"
 script = ExtResource("4_4j27x")
 sprite_animation_name = &"fall_start"
 __editor_name = &"fall"
-__editor_position = Vector2(-560, -340)
+__editor_position = Vector2(-880, -400)
 __editor_uuid = &"d8126d47-03c3-4a9b-abee-8c68263ad4ab"
 __editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 __editor_superstate_wire_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
@@ -1300,74 +1550,88 @@ script = ExtResource("12_02rvq")
 sprite_animation_name = &"jump"
 anim_animation = "rollout_f"
 __editor_name = &"rollout_f"
-__editor_position = Vector2(100, -400)
+__editor_position = Vector2(140, -480)
 __editor_uuid = &"7a11481f-96a2-4861-99a6-5a97b2628e11"
 __editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 __editor_superstate_wire_uuid = &"0dd74506-66e0-4267-b86b-0572da305c2a"
 
-[node name="Jump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=2029960993]
-script = ExtResource("13_20bnd")
-sprite_animation_name = &"jump"
-__editor_name = &"jump"
-__editor_position = Vector2(100, -260)
-__editor_uuid = &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+[node name="BaseJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1477404521]
+script = ExtResource("15_5mhew")
+always_transition = true
+__editor_name = &"base_jump"
+__editor_position = Vector2(100, -200)
+__editor_uuid = &"4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 __editor_superstate_wire_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
 
-[node name="DoubleJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=936922287]
-script = ExtResource("14_5mhew")
+[node name="Jump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" unique_id=2029960993]
+script = ExtResource("4_4j27x")
+sprite_animation_name = &"jump"
+__editor_name = &"jump"
+__editor_position = Vector2(680, -200)
+__editor_uuid = &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__editor_superstate_uuid = &"4e77d567-5fca-48cf-9e61-dbb6250ef625"
+__editor_superstate_wire_uuid = &"4e77d567-5fca-48cf-9e61-dbb6250ef625"
+
+[node name="DoubleJump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" unique_id=936922287]
+script = ExtResource("4_4j27x")
 sprite_animation_name = &"double_jump"
 __editor_name = &"double_jump"
-__editor_position = Vector2(380, -260)
+__editor_position = Vector2(1160, -200)
 __editor_uuid = &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
-__editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+__editor_superstate_uuid = &"4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __editor_superstate_wire_uuid = &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
 
-[node name="TripleJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=702472203]
-script = ExtResource("15_eihrn")
+[node name="TripleJump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" unique_id=702472203]
+script = ExtResource("4_4j27x")
 sprite_animation_name = &"triple_jump"
 anim_animation = "triple_jump"
 __editor_name = &"triple_jump"
-__editor_position = Vector2(680, -260)
+__editor_position = Vector2(1740, -200)
 __editor_uuid = &"fcde7a01-9caf-4d7a-8016-ae92a2e45514"
-__editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+__editor_superstate_uuid = &"4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __editor_superstate_wire_uuid = &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
+
+[node name="Spin" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1685604128]
+script = ExtResource("14_20bnd")
+sprite_animation_name = &"spin_start"
+sprite_chain = Array[StringName]([&"spin_loop"])
+__editor_name = &"spin"
+__editor_position = Vector2(-880, -140)
+__editor_uuid = &"1f487687-d9c8-496b-9be9-7fd09f196b62"
+__editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+__editor_superstate_wire_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 
 [node name="Floorslide" type="Node" parent="StateMachine/Dry" unique_id=1890132868]
 script = ExtResource("6_y6elw")
 sprite_animation_name = &"floor_slide"
 __editor_name = &"floorslide"
-__editor_position = Vector2(-840, -620)
+__editor_position = Vector2(-1420, -940)
 __editor_uuid = &"56a353ee-c4c2-458c-a018-6302daa71851"
-__editor_superstate_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
-__editor_superstate_wire_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
-
-[node name="Spin" type="Node" parent="StateMachine" unique_id=1685604128]
-script = ExtResource("4_4j27x")
-__editor_name = &"spin"
-__editor_position = Vector2(-840, -200)
-__editor_uuid = &"1f487687-d9c8-496b-9be9-7fd09f196b62"
 __editor_superstate_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 __editor_superstate_wire_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 
 [node name="Submerged" type="Node" parent="StateMachine" unique_id=1525831935]
 script = ExtResource("4_4j27x")
 __editor_name = &"Submerged"
-__editor_position = Vector2(-880, 320)
+__editor_position = Vector2(-1440, 760)
 __editor_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
 
 [node name="SwimIdle" type="Node" parent="StateMachine/Submerged" unique_id=203521133]
 script = ExtResource("4_4j27x")
 __editor_name = &"swim_idle"
-__editor_position = Vector2(-600, 320)
+__editor_position = Vector2(-840, 740)
 __editor_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
 __editor_superstate_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
 __editor_superstate_wire_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
 
 [node name="Swim" type="Node" parent="StateMachine/Submerged" unique_id=235025815]
 script = ExtResource("4_4j27x")
+sprite_animation_name = &"spin_start"
+sprite_stop_on_exit = true
+sprite_chain = Array[StringName]([&"spin_loop"])
 __editor_name = &"swim"
-__editor_position = Vector2(-320, 160)
+__editor_position = Vector2(-240, 460)
 __editor_uuid = &"b6fb3a09-ab02-4680-8817-4127106f90df"
 __editor_superstate_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
 __editor_superstate_wire_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
@@ -1375,7 +1639,7 @@ __editor_superstate_wire_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
 [node name="SwimWalk" type="Node" parent="StateMachine/Submerged" unique_id=919158494]
 script = ExtResource("4_4j27x")
 __editor_name = &"swim_walk"
-__editor_position = Vector2(-320, 320)
+__editor_position = Vector2(-240, 740)
 __editor_uuid = &"7c9bf00f-ebfd-4920-b0c8-fe79e3d3ccb7"
 __editor_superstate_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
 __editor_superstate_wire_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
@@ -1383,37 +1647,45 @@ __editor_superstate_wire_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
 [node name="SwimSpin" type="Node" parent="StateMachine/Submerged" unique_id=1905840328]
 script = ExtResource("4_4j27x")
 __editor_name = &"swim_spin"
-__editor_position = Vector2(-320, 460)
+__editor_position = Vector2(-240, 1020)
 __editor_uuid = &"cb2bce9e-79ca-46c1-9bc1-ab2d16c15822"
 __editor_superstate_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
 __editor_superstate_wire_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
 
 [node name="GroundPound" type="Node" parent="StateMachine" unique_id=1959935352]
 script = ExtResource("4_4j27x")
+is_passthrough = true
+always_transition = true
 __editor_name = &"ground_pound"
-__editor_position = Vector2(-1000, 820)
+__editor_position = Vector2(-2880, 1440)
 __editor_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
 
 [node name="GroundPoundStart" type="Node" parent="StateMachine/GroundPound" unique_id=1889846081]
-script = ExtResource("4_4j27x")
+script = ExtResource("15_eihrn")
+runtime = 0.3
+sprite_animation_name = &"ground_pound_start"
+sprite_lock_flipping = true
+anim_animation = "ground_pound_start"
 __editor_name = &"ground_pound_start"
-__editor_position = Vector2(-640, 820)
+__editor_position = Vector2(-2160, 1440)
 __editor_uuid = &"26117a90-ad8f-4dc7-b05f-b7d2d321b8c0"
 __editor_superstate_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
 __editor_superstate_wire_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
 
 [node name="GroundPoundFall" type="Node" parent="StateMachine/GroundPound" unique_id=2058012596]
-script = ExtResource("4_4j27x")
+script = ExtResource("16_eihrn")
+sprite_animation_name = &"ground_pound_fall"
+sprite_lock_flipping = true
 __editor_name = &"ground_pound_fall"
-__editor_position = Vector2(-180, 820)
+__editor_position = Vector2(-1280, 1440)
 __editor_uuid = &"4039c2e2-f597-43ee-b41e-d932b0a93a22"
 __editor_superstate_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
 __editor_superstate_wire_uuid = &"26117a90-ad8f-4dc7-b05f-b7d2d321b8c0"
 
 [node name="GroundPoundSlam" type="Node" parent="StateMachine/GroundPound" unique_id=333120121]
-script = ExtResource("4_4j27x")
+script = ExtResource("17_aln35")
 __editor_name = &"ground_pound_slam"
-__editor_position = Vector2(320, 820)
+__editor_position = Vector2(-420, 1440)
 __editor_uuid = &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
 __editor_superstate_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
 __editor_superstate_wire_uuid = &"4039c2e2-f597-43ee-b41e-d932b0a93a22"
@@ -1454,11 +1726,11 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101]
 position = Vector2(2, -13)
-texture = SubResource("CanvasTexture_aln35")
+texture = SubResource("CanvasTexture_20bnd")
 region_enabled = true
 region_rect = Rect2(0, 0, 48, 48)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_aln35")
+canvas_texture = SubResource("CanvasTexture_20bnd")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
 current_animation = ""
@@ -1587,3 +1859,20 @@ theme_override_constants/outline_size = 4
 text = "MP %s"
 horizontal_alignment = 1
 vertical_alignment = 2
+
+[node name="StateLabel" type="Label" parent="." unique_id=287046668 node_paths=PackedStringArray("player")]
+process_mode = 4
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 27.0
+offset_bottom = -25.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 4
+text = "<state>"
+horizontal_alignment = 1
+script = SubResource("GDScript_aln35")
+player = NodePath("..")

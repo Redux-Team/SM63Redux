@@ -40,6 +40,7 @@ var _pending_transition_target: State = null
 var _pending_transition_timer: float = 0.0
 var _state_buffer: float = 0.0
 var _can_consume_buffer: bool = false
+var _last_transition: StateTransition = null
 
 
 func _validate_property(property: Dictionary) -> void:
@@ -160,9 +161,22 @@ func _evaluate_transitions() -> void:
 	var candidates: Array[StateTransition] = []
 	for tid: StringName in __transitions:
 		var t: StateTransition = __transitions.get(tid) as StateTransition
-		if not t or (t.__from_uuid != current_uuid and __aliases.get(t.__from_uuid, {}).get("original_uuid", "") != current_uuid):
+		if not t:
 			continue
-		candidates.append(t)
+		if t.__from_uuid == current_uuid or __aliases.get(t.__from_uuid, {}).get("original_uuid", "") == current_uuid:
+			candidates.append(t)
+		else:
+			for superstate: State in _active_superstates:
+				if not superstate.always_transition:
+					continue
+				if t.__from_uuid == superstate.__editor_uuid or __aliases.get(t.__from_uuid, {}).get("original_uuid", "") == superstate.__editor_uuid:
+					var to_state: State = __states.get(t.__to_uuid) as State
+					if not to_state:
+						var alias_data: Dictionary = __aliases.get(t.__to_uuid, {})
+						to_state = __states.get(alias_data.get("original_uuid", "")) as State
+					if to_state and not _is_state_in_stack(to_state):
+						candidates.append(t)
+					break
 	
 	candidates.sort_custom(func(a: StateTransition, b: StateTransition) -> bool:
 		return a.priority > b.priority)
@@ -202,27 +216,60 @@ func _has_immediate_outgoing_transition() -> bool:
 
 
 func _should_fire(t: StateTransition) -> bool:
+	var target: State = __states.get(t.__to_uuid) as State
+	if not target:
+		var alias_data: Dictionary = __aliases.get(t.__to_uuid, {})
+		target = __states.get(alias_data.get("original_uuid", "")) as State
+	
 	match t.mode:
 		StateTransition.TransitionMode.AUTO:
-			return t._should_transition()
+			if not t._should_transition():
+				return false
 		StateTransition.TransitionMode.WAIT_UNTIL_DONE:
-			if _done_forced:
-				return true
-			if _done_requested:
-				return t._should_transition()
+			if not _done_forced and not (_done_requested and t._should_transition()):
+				return false
 		StateTransition.TransitionMode.WAIT_UNTIL_PARAMETER:
-			if not t.parameter_name.is_empty() and _root_node:
-				if _root_node.get(t.parameter_name):
-					return t._should_transition()
+			if t.parameter_name.is_empty() or not _root_node or not _root_node.get(t.parameter_name):
+				return false
+			if not t._should_transition():
+				return false
 		StateTransition.TransitionMode.WAIT_UNTIL_EXPRESSION:
-			if t._evaluate_expression():
-				return t._should_transition()
+			if not t._evaluate_expression() or not t._should_transition():
+				return false
 		StateTransition.TransitionMode.MANUAL:
 			return false
+	
+	if target and target.is_passthrough:
+		return _has_outgoing_transition_from(target)
+	
+	return true
+
+
+func _has_outgoing_transition_from(state: State) -> bool:
+	if not state._pre_entered:
+		state._pre_enter()
+		state._pre_entered = true
+	
+	var uuid: StringName = state.__editor_uuid
+	var candidates: Array[StateTransition] = []
+	for tid: StringName in __transitions:
+		var t: StateTransition = __transitions.get(tid) as StateTransition
+		if not t:
+			continue
+		if t.__from_uuid == uuid or __aliases.get(t.__from_uuid, {}).get("original_uuid", "") == uuid:
+			candidates.append(t)
+	
+	candidates.sort_custom(func(a: StateTransition, b: StateTransition) -> bool:
+		return a.priority > b.priority)
+	
+	for t: StateTransition in candidates:
+		if _should_fire(t):
+			return true
 	return false
 
 
 func _transition_to(t: StateTransition, target: State) -> void:
+	_last_transition = t
 	_done_requested = false
 	_done_forced = false
 	
@@ -252,8 +299,12 @@ func _transition_to(t: StateTransition, target: State) -> void:
 		s._post_exit()
 	
 	for s: State in entering:
-		s._pre_enter()
-	target._pre_enter()
+		if not s._pre_entered:
+			s._pre_enter()
+		s._pre_entered = false
+	if not target._pre_entered:
+		target._pre_enter()
+	target._pre_entered = false
 	
 	_current_state = target
 	_active_superstates = new_superstates
@@ -280,8 +331,14 @@ func _enter_state(state: State) -> void:
 	_running = true
 	
 	for s: State in _active_superstates:
-		s._pre_enter()
+		if not s._pre_entered:
+			s._pre_enter()
+		s._pre_entered = false
 		s._on_enter()
+	if not state._pre_entered:
+		state._pre_enter()
+	state._pre_entered = false
+	state._on_enter()
 	state._pre_enter()
 	state._on_enter()
 	state.__sprite_enter()

@@ -10,6 +10,11 @@ var animation_player: AnimationPlayer
 ## The max length time of the state, will automatically call [method done] once the
 ## time has been reached.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var runtime: float = 0.0
+## Whether the state can actually be rested on by the state machine. If disabled, then
+## this state only serves as a way to route to other states.
+@export var is_passthrough: bool = false
+## When enabled, transitions defined on this state are evaluated regardless of whether it is the active state or a superstate.
+@export var always_transition: bool = false
 
 @export_group("Sprite", "sprite_")
 @export var sprite_animation_name: StringName = ""
@@ -51,6 +56,7 @@ var player: Player:
 			print_debug("root_node passed as Player when type does not match!")
 			return null
 var _sprite_chain_index: int = 0
+var _pre_entered: bool = false
 
 
 func _ready() -> void:
@@ -95,6 +101,11 @@ func _get_state_machine() -> StateMachine:
 func done(force: bool = false) -> void:
 	if state_machine:
 		state_machine._notify_done(force)
+
+## Returns the state name parsed by the internal editor and state machine,
+## which is in snake case.
+func get_internal_name() -> String:
+	return __editor_name.to_snake_case()
 
 
 ## Returns the time this state has been active for, in seconds.
@@ -156,6 +167,12 @@ func get_superstate_parent() -> State:
 	if idx <= 0:
 		return null
 	return superstates[idx - 1]
+
+## Returns the last transition triggered by the StateMachine.
+func get_last_transition() -> StateTransition:
+	if not state_machine:
+		return null
+	return state_machine._last_transition
 
 
 ## Returns whether this state is currently active in the state machine or not. This
@@ -266,6 +283,10 @@ func __sprite_enter() -> void:
 		sprite.looping = sprite_chain.is_empty() and sprite_loop
 	sprite.speed_scale = sprite_speed_scale
 	sprite.play(sprite_animation_name)
+	
+	if sprite_lock_flipping:
+		player.lock_flipping = true
+	
 	if not sprite_chain.is_empty():
 		sprite.animation_finished.connect(__sprite_chain_advance, CONNECT_ONE_SHOT)
 
@@ -286,6 +307,7 @@ func __sprite_chain_advance() -> void:
 func __sprite_exit() -> void:
 	if sprite and sprite.animation_finished.is_connected(__sprite_chain_advance):
 		sprite.animation_finished.disconnect(__sprite_chain_advance)
+	player.lock_flipping = false
 	if not sprite or not sprite_stop_on_exit:
 		return
 	sprite.stop()
@@ -299,3 +321,7 @@ func __animation_enter() -> void:
 
 func __animation_exit() -> void:
 	animation_player.play(&"RESET")
+
+
+func _to_string() -> String:
+	return name

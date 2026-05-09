@@ -24,6 +24,9 @@ enum MenuItem {
 	NEW_ALIAS,
 	NEW_ENTRY,
 	NEW_EXIT,
+	CHANGE_STATE,
+	REPLACE_ALL,
+	DELETE_STATE,
 }
 
 @export var add_node_menu: PopupMenu
@@ -435,13 +438,29 @@ func _rebuild_add_menu() -> void:
 				break
 			selected_state = node
 	
+	for child: Node in add_node_menu.get_children():
+		child.queue_free()
+	
 	add_node_menu.clear()
 	add_node_menu.add_item("+ State", MenuItem.NEW_STATE)
+	add_node_menu.add_item("+ Annotation", MenuItem.NEW_ANNOTATION)
+	
 	if selected_state:
 		add_node_menu.add_item("+ Alias", MenuItem.NEW_ALIAS)
-	add_node_menu.add_item("+ Annotation", MenuItem.NEW_ANNOTATION)
-	add_node_menu.add_item("+ Entry", MenuItem.NEW_ENTRY)
-	add_node_menu.add_item("+ Exit", MenuItem.NEW_EXIT)
+		add_node_menu.add_separator()
+		add_node_menu.add_item("Change State", MenuItem.CHANGE_STATE)
+		add_node_menu.add_item("Replace All", MenuItem.REPLACE_ALL)
+		add_node_menu.add_separator()
+		add_node_menu.add_item("Delete", MenuItem.DELETE_STATE)
+	
+	add_node_menu.add_separator()
+	var control_flow_menu: PopupMenu = PopupMenu.new()
+	control_flow_menu.name = "ControlFlow"
+	control_flow_menu.add_item("+ Entry", MenuItem.NEW_ENTRY)
+	control_flow_menu.add_item("+ Exit", MenuItem.NEW_EXIT)
+	control_flow_menu.id_pressed.connect(_on_add_node_menu_id_pressed)
+	add_node_menu.add_child(control_flow_menu)
+	add_node_menu.add_submenu_item("Control Flow", "ControlFlow")
 
 
 func _on_delete_nodes_request(node_names: Array[StringName]) -> void:
@@ -482,6 +501,22 @@ func _on_add_node_menu_id_pressed(id: int) -> void:
 			_add_entry_node()
 		MenuItem.NEW_EXIT:
 			_add_exit_node()
+		MenuItem.CHANGE_STATE:
+			_try_change_state(false)
+		MenuItem.REPLACE_ALL:
+			_try_change_state(true)
+		MenuItem.DELETE_STATE:
+			_delete_selected_state()
+
+
+func _delete_selected_state() -> void:
+	var to_delete: Array[StringName] = []
+	for child: Node in get_children():
+		var node: EditorStateMachineStateNode = child as EditorStateMachineStateNode
+		if node and node.selected:
+			to_delete.append(node.name)
+	if not to_delete.is_empty():
+		_on_delete_nodes_request(to_delete)
 
 
 func _try_add_alias() -> void:
@@ -505,6 +540,77 @@ func _add_alias(original_uuid: StringName, pos: Vector2) -> void:
 
 func _remove_alias(alias_uuid: StringName) -> void:
 	_sm().__aliases.erase(alias_uuid)
+
+
+func _try_change_state(replace_all: bool) -> void:
+	var selected: EditorStateMachineStateNode
+	for child: Node in get_children():
+		var node: EditorStateMachineStateNode = child as EditorStateMachineStateNode
+		if node and node.selected:
+			selected = node
+			break
+	if not selected:
+		return
+	
+	EditorInterface.popup_node_selector(_on_change_state_picked.bind(selected, replace_all), ["State"])
+
+
+func _on_change_state_picked(path: NodePath, source_node: EditorStateMachineStateNode, replace_all: bool) -> void:
+	if path.is_empty():
+		return
+	
+	var target_state: State = _sm().owner.get_node_or_null(path) as State
+	if not target_state:
+		return
+	
+	var target_uuid: StringName = StringName("")
+	for uuid: StringName in _sm().__states:
+		if _sm().__states.get(uuid) == target_state:
+			target_uuid = uuid
+			break
+	if target_uuid.is_empty():
+		return
+	
+	var original_uuid: StringName = _resolve_uuid(source_node.uuid)
+	
+	if replace_all:
+		for child: Node in get_children():
+			var node: EditorStateMachineStateNode = child as EditorStateMachineStateNode
+			if not node:
+				continue
+			if _resolve_uuid(node.uuid) == original_uuid:
+				_remap_node(node, target_uuid)
+	else:
+		_remap_node(source_node, target_uuid)
+	
+	_on_state_node_deselected()
+
+
+
+func _remap_node(node: EditorStateMachineStateNode, target_uuid: StringName) -> void:
+	var target_state: State = _sm().__states.get(target_uuid) as State
+	if not target_state:
+		return
+	
+	if not node.alias_of.is_empty():
+		var data: Dictionary = _sm().__aliases.get(node.uuid, {})
+		data["original_uuid"] = target_uuid
+		_sm().__aliases[node.uuid] = data
+		node.alias_of = target_uuid
+	else:
+		node.uuid = target_uuid
+	
+	for tid: StringName in _sm().__transitions:
+		var t: StateTransition = _sm().__transitions.get(tid) as StateTransition
+		if not t:
+			continue
+		if t.__from_node_uuid == node.uuid:
+			t.__from_uuid = target_uuid
+		if t.__to_node_uuid == node.uuid:
+			t.__to_uuid = target_uuid
+	
+	node.title = target_state.__editor_name
+	node._update_script_button()
 
 
 func _add_entry_node() -> void:

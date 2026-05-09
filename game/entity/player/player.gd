@@ -4,6 +4,9 @@ extends Entity
 signal entered_water
 signal exited_water
 
+const BUFFER_ACTIONS: PackedStringArray = ["jump"]
+var buffer_dictionary: Dictionary[String, float]
+
 @export_group("Movement Variables")
 @export_subgroup("Horizontal Movement")
 @export var walk_acceleration: float = 20.0
@@ -87,7 +90,6 @@ var can_use_fludd: bool = true
 var jump_chain_timer: float = 0.0
 ## lock the sprite flipping
 @export var lock_flipping: bool = false
-@export var state_label: Label
 
 
 func _ready() -> void:
@@ -98,7 +100,7 @@ func _ready() -> void:
 	add_child(cam)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	move_dir = Input.get_axis("move_left", "move_right")
 	is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
 	is_input_dive = Input.is_action_pressed("dive") and not is_on_floor()
@@ -110,7 +112,23 @@ func _process(_delta: float) -> void:
 		jump_buffer_timer = jump_buffer_time if can_jump else 0.0
 	
 	
-	state_label.text = state_machine.get_current_state().name
+	for action: String in BUFFER_ACTIONS:
+		if Input.is_action_pressed(action):
+			if buffer_dictionary.has(action):
+				buffer_dictionary.set(action, buffer_dictionary.get(action, 0.0) + delta)
+			else:
+				buffer_dictionary.set(action, 0)
+		elif Input.is_action_just_released(action):
+			buffer_dictionary.erase(action)
+	
+	
+	if is_on_floor():
+		if jump_chain_timer > 0.0:
+			jump_chain_timer = max(jump_chain_timer - delta, 0.0)
+			if jump_chain_timer == 0.0:
+				current_jump = 0
+		elif current_jump >= 3:
+			current_jump = 0
 
 
 func get_facing_velocity() -> float:
@@ -147,12 +165,15 @@ func get_sprite_handler() -> PlayerSpriteHandler:
 	return _sprite_handler
 
 
-func is_action_pressed(input: String) -> bool:
-	return Input.is_action_pressed(input)
+func is_action_pressed(action: String) -> bool:
+	return Input.is_action_pressed(action)
 
 
-func is_action_just_pressed(input: String, buffer: float) -> bool:
-	return Input.is_action_just_pressed(input)
+func is_action_just_pressed(action: String, buffer: float = 0.0) -> bool:
+	if buffer > 0:
+		if action in BUFFER_ACTIONS and buffer_dictionary.has(action):
+			return buffer_dictionary.get(action) < buffer
+	return Input.is_action_just_pressed(action)
 
 
 func is_moving_with_facing() -> bool:

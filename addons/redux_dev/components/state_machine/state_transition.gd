@@ -42,6 +42,7 @@ enum TransitionMode {
 @export var __to_node_uuid: String
 
 var root_node: Node
+var payload: Dictionary[StringName, Variant] = {}
 var _expression: Expression
 
 

@@ -19,7 +19,7 @@ var last_slope_angle: float = 0.0
 func _on_enter() -> void:
 	player.lock_flipping = true
 	player.set_friction_scale_factor(1.6)
-	entered_from_dive = get_last_state().name == &"Dive"
+	entered_from_dive = get_last_state().get_internal_name() == "dive"
 	time_since_grounded = 0.0
 	
 	if entered_from_dive:

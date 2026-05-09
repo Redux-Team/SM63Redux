@@ -41,7 +41,6 @@ func _on_area_entered(area: Area2D) -> void:
 			var health_component: HealthComponent = entity.get_component(HealthComponent)
 			
 			health_component.hp -= hitbox.damage_amount
-			print(hitbox.global_position - global_position)
 			entity.velocity -= hitbox.knockback_vector * sign(hitbox.global_position - global_position)
 			
 			if damage_state and entity.state_machine:

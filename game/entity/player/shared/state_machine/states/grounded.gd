@@ -3,7 +3,7 @@ extends State
 
 
 func _on_physics_tick(_delta: float) -> void:
-	if abs(player.move_dir) > 0.0 and not state_machine.get_current_state().name == "Crouch":
+	if abs(player.move_dir) > 0.0 and not state_machine.get_current_state().get_internal_name() == "crouch":
 		_speed_up(player.move_dir)
 	else:
 		_apply_friction()

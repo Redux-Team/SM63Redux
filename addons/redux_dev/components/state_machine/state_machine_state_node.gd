@@ -20,6 +20,7 @@ var superstate_uuid: String = ""
 var alias_of: String = ""
 
 var _script_button: Button
+var _remove_script_button: Button
 
 
 func _ready() -> void:
@@ -115,10 +116,18 @@ func _setup_titlebar() -> void:
 	_script_button.custom_minimum_size = Vector2(16.0, 16.0)
 	_script_button.pressed.connect(_on_script_button_pressed)
 	
+	_remove_script_button = Button.new()
+	_remove_script_button.custom_minimum_size = Vector2(16.0, 16.0)
+	_remove_script_button.icon = get_theme_icon("Remove", "EditorIcons")
+	_remove_script_button.tooltip_text = "Remove Script"
+	_remove_script_button.pressed.connect(_on_remove_script_button_pressed)
+	_remove_script_button.hide()
+	
 	hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	hbox.add_child(icon_rect)
 	hbox.add_child(label)
 	hbox.add_child(_script_button)
+	hbox.add_child(_remove_script_button)
 
 
 func _update_script_button() -> void:
@@ -132,6 +141,32 @@ func _update_script_button() -> void:
 	_script_button.modulate = Color.DEEP_SKY_BLUE if has_custom else Color.WHITE
 	_script_button.icon = get_theme_icon("Script", "EditorIcons") if has_custom else get_theme_icon("ScriptExtend", "EditorIcons")
 	_script_button.tooltip_text = "Edit Script" if has_custom else "Attach Script"
+	if _remove_script_button:
+		_remove_script_button.visible = has_custom
+
+
+func _on_remove_script_button_pressed() -> void:
+	var state: State = _get_state()
+	if not state:
+		return
+	var base_script: Script = load("uid://dyjrhpdveexsr") as Script
+	if not base_script:
+		return
+	
+	var preserved: Dictionary = {}
+	for prop: Dictionary in state.get_property_list():
+		if prop.usage & PROPERTY_USAGE_SCRIPT_VARIABLE and prop.usage & PROPERTY_USAGE_STORAGE:
+			preserved[prop.name] = state.get(prop.name)
+	
+	state.set_script(base_script)
+	
+	for prop: Dictionary in state.get_property_list():
+		if prop.usage & PROPERTY_USAGE_SCRIPT_VARIABLE and prop.usage & PROPERTY_USAGE_STORAGE:
+			if preserved.has(prop.name):
+				state.set(prop.name, preserved[prop.name])
+	
+	_update_script_button()
+	EditorInterface.inspect_object(state)
 
 
 func _on_script_button_pressed() -> void:
@@ -183,6 +218,7 @@ func _set_entry_port_enabled(enabled: bool) -> void:
 
 
 func _set_superstate(new_uuid: String) -> void:
+	var old_uuid: String = superstate_uuid
 	superstate_uuid = new_uuid
 	
 	if alias_of.is_empty():
@@ -203,4 +239,18 @@ func _set_superstate(new_uuid: String) -> void:
 		superstate_h_box.hide()
 		empty_ss_label.show()
 	
+	if old_uuid != new_uuid and is_inside_tree():
+		var graph: EditorStateMachineGraphEdit = get_parent() as EditorStateMachineGraphEdit
+		if graph:
+			graph._propagate_superstate(uuid, old_uuid, new_uuid)
+	
 	size = Vector2.ZERO
+
+
+func _propagate_superstate(source_uuid: String, old_superstate_uuid: String, new_superstate_uuid: String) -> void:
+	for child: Node in get_children():
+		var node: EditorStateMachineStateNode = child as EditorStateMachineStateNode
+		if not node or node.uuid == source_uuid:
+			continue
+		if node.superstate_uuid == old_superstate_uuid:
+			node._set_superstate(new_superstate_uuid)

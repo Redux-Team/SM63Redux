@@ -20,6 +20,15 @@ enum {
 	set(p):
 		preview = p
 		_update_preview()
+@export var lock_flipping: bool = false
+
+## the rotation but it respects whether the sprite is flipped or not
+@export var local_rotation: float:
+	get:
+		return -rotation_degrees if flip_h else rotation_degrees
+	set(lr):
+		rotation_degrees = -lr if flip_h else lr
+
 @export var diffuse_texture: Texture2D:
 	set(t):
 		diffuse_texture = t
@@ -69,13 +78,6 @@ var playing: bool = false:
 		looping = l
 		notify_property_list_changed()
 
-# the rotation but it respects whether the sprite is flipped or not
-var local_rotation: float:
-	get:
-		return -rotation if flip_h else rotation
-	set(lr):
-		rotation = -lr if flip_h else lr
-
 var _playback_time: float = 0.0
 
 
@@ -84,6 +86,10 @@ func _notification(what: int) -> void:
 		if not canvas_texture:
 			canvas_texture = CanvasTexture.new()
 		texture = canvas_texture
+
+
+func _set(property: StringName, _value: Variant) -> bool:
+	return property == "flip_h" and lock_flipping
 
 
 func _process(delta: float) -> void:

@@ -59,7 +59,7 @@ func _on_enter() -> void:
 	player.is_diving = true
 	player.lock_flipping = true
 	player.is_falling = false
-	from_state = get_last_state().name
+	from_state = get_last_state().get_internal_name()
 	dive_timer = 0.0
 	dive_resetting = false
 	dive_reset_timer = 0.0
@@ -120,7 +120,7 @@ func apply_dive_impulse() -> void:
 	var acceleration: float = speed_difference / (time_to_target_speed * 60.0)
 	player.velocity.x += acceleration * effective_dir
 	
-	if from_state == &"Idle":
+	if from_state == "idle":
 		player.velocity.y = max(neutral_launch_y_cap, player.velocity.y + launch_y_boost)
 	else:
 		player.velocity.y += launch_y_boost
