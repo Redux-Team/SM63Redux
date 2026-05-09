@@ -38,6 +38,8 @@ var _running: bool = false
 var _pending_transition: StateTransition = null
 var _pending_transition_target: State = null
 var _pending_transition_timer: float = 0.0
+var _state_buffer: float = 0.0
+var _can_consume_buffer: bool = false
 
 
 func _validate_property(property: Dictionary) -> void:
@@ -75,6 +77,11 @@ func _process(delta: float) -> void:
 			_transition_to(t, target)
 		return
 	
+	if _state_buffer > 0.0:
+		_state_buffer = max(_state_buffer - delta, 0.0)
+	else:
+		_can_consume_buffer = false
+	
 	_elapsed_time += delta
 	_elapsed_frames += 1
 	
@@ -89,7 +96,15 @@ func _process(delta: float) -> void:
 		if state and not _is_state_in_stack(state):
 			state._on_tick_inactive(delta)
 	
-	_evaluate_transitions()
+	var max_cascade: int = 8
+	while max_cascade > 0:
+		var before: State = _current_state
+		_evaluate_transitions()
+		if _current_state == before or _pending_transition:
+			break
+		if not _has_immediate_outgoing_transition():
+			break
+		max_cascade -= 1
 
 
 func _physics_process(delta: float) -> void:
@@ -171,6 +186,21 @@ func _evaluate_transitions() -> void:
 	_done_forced = false
 
 
+func _has_immediate_outgoing_transition() -> bool:
+	var current_uuid: StringName = ""
+	for uuid: StringName in __states:
+		if __states.get(uuid) == _current_state:
+			current_uuid = uuid
+			break
+	for tid: StringName in __transitions:
+		var t: StateTransition = __transitions.get(tid) as StateTransition
+		if not t or not t.check_immediately:
+			continue
+		if t.__from_uuid == current_uuid or __aliases.get(t.__from_uuid, {}).get("original_uuid", "") == current_uuid:
+			return true
+	return false
+
+
 func _should_fire(t: StateTransition) -> bool:
 	match t.mode:
 		StateTransition.TransitionMode.AUTO:
@@ -208,6 +238,7 @@ func _transition_to(t: StateTransition, target: State) -> void:
 	
 	t._on_before_transition()
 	_current_state.__sprite_exit()
+	_current_state.__animation_exit()
 	
 	_current_state._on_exit()
 	for s: State in exiting:
@@ -293,6 +324,18 @@ func _notify_done(forced: bool) -> void:
 		_done_forced = true
 	else:
 		_done_requested = true
+
+
+
+func store_state_buffer(amount: float = 0.1) -> bool:
+	_state_buffer = amount
+	_can_consume_buffer = false
+	return true
+
+
+func consume_state_buffer() -> bool:
+	_can_consume_buffer = true
+	return _state_buffer == 0.0
 
 
 func change_state(state_name: String) -> void:

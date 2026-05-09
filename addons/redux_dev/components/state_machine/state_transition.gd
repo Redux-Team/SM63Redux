@@ -30,6 +30,9 @@ enum TransitionMode {
 @export var transition_time: float = 0.0
 @export var label: String = ""
 @export var parameter_name: StringName = ""
+## When enabled, this allows the transition to fire immediately before entering a state,
+## effectively skipping that state if this is true. Otherwise, the state is actuve for a frame.
+@export var check_immediately: bool = false
 @export_custom(PROPERTY_HINT_EXPRESSION, "") var expression: String = ""
 
 @export_group("Internal", "__")

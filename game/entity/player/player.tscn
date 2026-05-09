@@ -23,19 +23,34 @@
 [ext_resource type="Texture2D" uid="uid://bj5kyipk5eild" path="res://assets/textures/entity/player/mario/groundpound.png" id="6_0f2w8"]
 [ext_resource type="Script" uid="uid://2tpewb2vj0d3" path="res://game/entity/player/shared/handlers/movement_handler.gd" id="6_0jrw7"]
 [ext_resource type="Script" uid="uid://bc37gx5nk2itj" path="res://game/entity/player/shared/state_machine/states/floorslide.gd" id="6_y6elw"]
-[ext_resource type="Script" uid="uid://drrqaswaoenmg" path="res://game/entity/player/dry.gd" id="7_je5mu"]
+[ext_resource type="Script" uid="uid://drrqaswaoenmg" path="res://game/entity/player/shared/state_machine/states/dry.gd" id="7_je5mu"]
 [ext_resource type="Script" uid="uid://dx5p37ei2616j" path="res://game/entity/player/shared/handlers/sprite_handler.gd" id="7_tb30q"]
-[ext_resource type="Script" uid="uid://jhkyxpjlw3nu" path="res://game/entity/player/airborne.gd" id="8_k8egu"]
+[ext_resource type="Script" uid="uid://jhkyxpjlw3nu" path="res://game/entity/player/shared/state_machine/states/airborne.gd" id="8_k8egu"]
 [ext_resource type="Texture2D" uid="uid://u4yvxq51cr5f" path="res://assets/textures/entity/player/mario/spin.png" id="9_k6116"]
+[ext_resource type="Script" uid="uid://csmwm706d5wgl" path="res://game/entity/player/shared/state_machine/states/dive.gd" id="10_aln35"]
 [ext_resource type="Texture2D" uid="uid://bo87qv73dsfls" path="res://assets/textures/entity/player/mario/swim_idle.png" id="10_j8m7m"]
-[ext_resource type="Script" uid="uid://csbysfcj1b3rh" path="res://game/entity/player/grounded.gd" id="10_tb30q"]
+[ext_resource type="Script" uid="uid://csbysfcj1b3rh" path="res://game/entity/player/shared/state_machine/states/grounded.gd" id="10_tb30q"]
 [ext_resource type="Script" uid="uid://bfttwny22bnoc" path="res://game/entity/player/shared/state_machine/states/backflip_up.gd" id="11_b6ajd"]
 [ext_resource type="Script" uid="uid://cscjl4ppceor3" path="res://game/entity/player/shared/state_machine/states/backflip.gd" id="11_mb70y"]
 [ext_resource type="Script" uid="uid://bv6pacjmfysox" path="res://game/entity/player/shared/state_machine/states/rollout_f.gd" id="12_02rvq"]
+[ext_resource type="Script" uid="uid://bnbyeuh75nmoj" path="res://game/entity/player/shared/state_machine/states/jump.gd" id="13_20bnd"]
 [ext_resource type="Texture2D" uid="uid://bjblyiou2qe0f" path="res://assets/textures/entity/player/shared/hover_fludd_r_0.png" id="13_gqe2a"]
+[ext_resource type="Script" uid="uid://uhp6bivoni74" path="res://game/entity/player/shared/state_machine/states/double_jump.gd" id="14_5mhew"]
+[ext_resource type="Script" uid="uid://caq8o1yhkeoru" path="res://game/entity/player/shared/state_machine/states/triple_jump.gd" id="15_eihrn"]
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="19_1wiqr"]
 [ext_resource type="Script" uid="uid://c02oltfntb3q8" path="res://game/entity/player/mp_player.gd" id="19_ntea6"]
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="20_1wiqr"]
+
+[sub_resource type="Resource" id="Resource_6qpfs"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+check_immediately = true
+expression = "current_jump >= 2 && is_input_jump && abs(velocity.x) > 150 && is_on_floor()"
+__from_uuid = "54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
+__to_uuid = "fcde7a01-9caf-4d7a-8016-ae92a2e45514"
+__from_node_uuid = "d66f50c1-6db3-45f0-900c-3bc04f7b7ff5"
+__to_node_uuid = "098068e3-7ac4-4064-8239-8b4566a230c9"
 
 [sub_resource type="Resource" id="Resource_lh4k8"]
 resource_local_to_scene = true
@@ -57,6 +72,16 @@ __to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
 __from_node_uuid = "bad73193-ad8f-4801-9c65-c344b9ae116f"
 __to_node_uuid = "19756cb2-870e-4389-ac45-b7857f943765"
 
+[sub_resource type="Resource" id="Resource_0vqd7"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_action_just_pressed(\"dive\") && can_dive && get_active_state_uptime() > 0"
+__from_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__to_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
+__from_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
+__to_node_uuid = "1a6db986-d32f-4647-9c61-30a3baed866c"
+
 [sub_resource type="Resource" id="Resource_l0vtf"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
@@ -66,6 +91,48 @@ __from_uuid = "5f26c6ee-ee21-44a2-9986-4f30b9f89611"
 __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "12a4f3c3-9986-4098-a5e8-79b8a8951847"
 __to_node_uuid = "31d0deb8-7915-434d-b931-44f3244dadf5"
+
+[sub_resource type="Resource" id="Resource_6wk8s"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "velocity.y >= 0 && !is_on_floor()"
+__from_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+__from_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
+__to_node_uuid = "47d80ca0-eba2-4f2f-abe5-5d1a702997a6"
+
+[sub_resource type="Resource" id="Resource_5jc0j"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_on_floor() && get_active_state_uptime() > 0.1
+
+&& state_machine.consume_state_buffer()"
+__from_uuid = "7a11481f-96a2-4861-99a6-5a97b2628e11"
+__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
+__from_node_uuid = "9926b8f7-53dc-4adb-a5e1-b7a3daa778e5"
+__to_node_uuid = "31d0deb8-7915-434d-b931-44f3244dadf5"
+
+[sub_resource type="Resource" id="Resource_h2xdj"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_on_floor() && !is_input_jump"
+__from_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
+__from_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
+__to_node_uuid = "bee3ecfd-b265-4bfc-b4ea-e7afe4a62675"
+
+[sub_resource type="Resource" id="Resource_sxdt2"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_input_dive && get_active_state_uptime() > 0.2 && !is_on_floor() && can_dive"
+__from_uuid = "7a11481f-96a2-4861-99a6-5a97b2628e11"
+__to_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
+__from_node_uuid = "9926b8f7-53dc-4adb-a5e1-b7a3daa778e5"
+__to_node_uuid = "0f4b75f7-bfab-489e-abee-b73251d54a97"
 
 [sub_resource type="Resource" id="Resource_b6ajd"]
 resource_local_to_scene = true
@@ -107,6 +174,28 @@ __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "b5db5b39-5c86-4edb-87c2-91b17ede4ad5"
 __to_node_uuid = "31d0deb8-7915-434d-b931-44f3244dadf5"
 
+[sub_resource type="Resource" id="Resource_yna46"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "(velocity.y >= 0 && !is_on_floor()) || (is_on_floor() && get_active_state_uptime() > 0.5))"
+__from_uuid = "54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
+__to_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__from_node_uuid = "a58ea9b9-705a-4e93-9892-b3ebfa4e8802"
+__to_node_uuid = "b6680552-d54b-42a5-9cac-e77db4edf7a1"
+
+[sub_resource type="Resource" id="Resource_8vwb3"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_action_pressed(\"jump\") && is_on_floor() && get_facing_velocity() > 50
+
+&& state_machine.store_state_buffer()"
+__from_uuid = "56a353ee-c4c2-458c-a018-6302daa71851"
+__to_uuid = "7a11481f-96a2-4861-99a6-5a97b2628e11"
+__from_node_uuid = "abed3dd4-95f4-45f4-a3a0-32298e7cc932"
+__to_node_uuid = "9926b8f7-53dc-4adb-a5e1-b7a3daa778e5"
+
 [sub_resource type="Resource" id="Resource_ria7k"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
@@ -126,6 +215,26 @@ __from_uuid = "5ed7fb5d-7e2c-4110-92cb-cf15f641072e"
 __to_uuid = "153c8a33-2d47-4ccc-97e3-9e16b0b05f9c"
 __from_node_uuid = "6a55bcd8-ceeb-47a0-857d-a18349c507f5"
 __to_node_uuid = "b5db5b39-5c86-4edb-87c2-91b17ede4ad5"
+
+[sub_resource type="Resource" id="Resource_3i503"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_action_just_pressed(\"dive\")"
+__from_uuid = "153c8a33-2d47-4ccc-97e3-9e16b0b05f9c"
+__to_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
+__from_node_uuid = "b5db5b39-5c86-4edb-87c2-91b17ede4ad5"
+__to_node_uuid = "0f4b75f7-bfab-489e-abee-b73251d54a97"
+
+[sub_resource type="Resource" id="Resource_6b4i6"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_action_just_pressed(\"dive\") && can_dive"
+__from_uuid = "5f26c6ee-ee21-44a2-9986-4f30b9f89611"
+__to_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
+__from_node_uuid = "12a4f3c3-9986-4098-a5e8-79b8a8951847"
+__to_node_uuid = "0f4b75f7-bfab-489e-abee-b73251d54a97"
 
 [sub_resource type="Resource" id="Resource_02rvq"]
 resource_local_to_scene = true
@@ -177,6 +286,16 @@ __to_uuid = "56a353ee-c4c2-458c-a018-6302daa71851"
 __from_node_uuid = "0022c078-60f6-4847-9c15-315812bb51c7"
 __to_node_uuid = "abed3dd4-95f4-45f4-a3a0-32298e7cc932"
 
+[sub_resource type="Resource" id="Resource_rlrt6"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "(velocity.y >= 0 && !is_on_floor()) || (is_on_floor() && get_active_state_uptime() > 0.5))"
+__from_uuid = "fcde7a01-9caf-4d7a-8016-ae92a2e45514"
+__to_uuid = "54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
+__from_node_uuid = "7bac08a2-8ceb-4ee4-a970-2466e9d89ddd"
+__to_node_uuid = "a58ea9b9-705a-4e93-9892-b3ebfa4e8802"
+
 [sub_resource type="Resource" id="Resource_hi5jf"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
@@ -186,6 +305,16 @@ __from_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
 __to_uuid = "56a353ee-c4c2-458c-a018-6302daa71851"
 __from_node_uuid = "6e03a36b-a78c-4a1d-8973-340db56ff393"
 __to_node_uuid = "abed3dd4-95f4-45f4-a3a0-32298e7cc932"
+
+[sub_resource type="Resource" id="Resource_h2rmy"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_on_floor() && is_input_jump && can_jump"
+__from_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
+__to_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__from_node_uuid = "8f3ccb62-9749-4b1d-b817-1026a049a6e7"
+__to_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 
 [sub_resource type="Resource" id="Resource_20bnd"]
 resource_local_to_scene = true
@@ -197,61 +326,65 @@ __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "6a55bcd8-ceeb-47a0-857d-a18349c507f5"
 __to_node_uuid = "f8b6c9ea-5ed3-42f5-9353-37ed5f193c1a"
 
-[sub_resource type="Resource" id="Resource_otk8c"]
-resource_local_to_scene = true
-script = ExtResource("3_0jrw7")
-mode = 3
-expression = "is_on_floor()"
-__from_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
-__to_uuid = "44d79f3b-0f69-438b-8b37-d3a6915e88e5"
-__from_node_uuid = "19756cb2-870e-4389-ac45-b7857f943765"
-__to_node_uuid = "dc921999-7f82-466a-baf8-9082bf652fa6"
-
-[sub_resource type="Resource" id="Resource_y6elw"]
-resource_local_to_scene = true
-script = ExtResource("3_0jrw7")
-transition_time = 0.001
-__from_uuid = "44d79f3b-0f69-438b-8b37-d3a6915e88e5"
-__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
-__from_node_uuid = "dc921999-7f82-466a-baf8-9082bf652fa6"
-__to_node_uuid = "ef17b68d-10e2-4919-8e7d-84844258bfb6"
-
 [sub_resource type="Resource" id="Resource_8yq6v"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
-expression = "is_input_jump && is_on_floor() && is_moving_against_facing()"
+priority = 1.0
+expression = "is_input_jump && is_on_floor() && is_moving_against_facing() 
+
+&& state_machine.store_state_buffer()"
 __from_uuid = "56a353ee-c4c2-458c-a018-6302daa71851"
 __to_uuid = "153c8a33-2d47-4ccc-97e3-9e16b0b05f9c"
 __from_node_uuid = "abed3dd4-95f4-45f4-a3a0-32298e7cc932"
 __to_node_uuid = "b5db5b39-5c86-4edb-87c2-91b17ede4ad5"
 
-[sub_resource type="Resource" id="Resource_8vwb3"]
+[sub_resource type="Resource" id="Resource_l4byk"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
-expression = "is_action_pressed(\"jump\") && is_on_floor() && get_facing_velocity() > 50"
-__from_uuid = "56a353ee-c4c2-458c-a018-6302daa71851"
-__to_uuid = "7a11481f-96a2-4861-99a6-5a97b2628e11"
-__from_node_uuid = "abed3dd4-95f4-45f4-a3a0-32298e7cc932"
-__to_node_uuid = "9926b8f7-53dc-4adb-a5e1-b7a3daa778e5"
+expression = "is_on_floor() && is_input_jump"
+__from_uuid = "b3fdc091-1261-4006-a130-d7a725b6b4cd"
+__to_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__from_node_uuid = "167d2846-17ec-4534-a26e-c582cae80f3a"
+__to_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 
-[sub_resource type="Resource" id="Resource_5jc0j"]
+[sub_resource type="Resource" id="Resource_6suq8"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
-expression = "is_on_floor() && get_active_state_uptime() > 0.1"
-__from_uuid = "7a11481f-96a2-4861-99a6-5a97b2628e11"
+expression = "is_on_floor()"
+__from_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
 __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
-__from_node_uuid = "9926b8f7-53dc-4adb-a5e1-b7a3daa778e5"
-__to_node_uuid = "31d0deb8-7915-434d-b931-44f3244dadf5"
+__from_node_uuid = "19756cb2-870e-4389-ac45-b7857f943765"
+__to_node_uuid = "ef17b68d-10e2-4919-8e7d-84844258bfb6"
+
+[sub_resource type="Resource" id="Resource_icsuc"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "current_jump >= 1 && is_action_just_pressed(\"jump\") && is_on_floor()"
+__from_uuid = "2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__to_uuid = "54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
+__from_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
+__to_node_uuid = "d66f50c1-6db3-45f0-900c-3bc04f7b7ff5"
+
+[sub_resource type="Curve" id="Curve_aln35"]
+_limits = [-2.0, 0.0, 0.0, 2.0]
+_data = [Vector2(0, -1.3932585), 0.0, 0.9746846, 0, 0, Vector2(1.5965666, -0.05618429), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_ioda6"]
+_limits = [0.0, 1.0, -300.0, 500.0]
+_data = [Vector2(-300, 0.2696039), 0.0, 0.0, 0, 0, Vector2(500, 0.9474535), 0.0011276755, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Animation" id="Animation_otk8c"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Doll:rotation")
+tracks/0/path = NodePath("Doll:local_rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -266,7 +399,7 @@ resource_name = "backflip"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Doll:rotation")
+tracks/0/path = NodePath("Doll:local_rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -295,7 +428,7 @@ resource_name = "backflip"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Doll:rotation")
+tracks/0/path = NodePath("Doll:local_rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -305,18 +438,34 @@ tracks/0/keys = {
 "values": [0.0, 6.283185307179586]
 }
 
+[sub_resource type="Animation" id="Animation_aln35"]
+resource_name = "triple_jump"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Doll:local_rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [0.0, 12.566370614359172]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mb70y"]
 _data = {
 &"RESET": SubResource("Animation_otk8c"),
 &"backflip": SubResource("Animation_y6elw"),
-&"rollout_f": SubResource("Animation_02rvq")
+&"rollout_f": SubResource("Animation_02rvq"),
+&"triple_jump": SubResource("Animation_aln35")
 }
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dhej3"]
 atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 48, 48)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_02rvq"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_aln35"]
 diffuse_texture = SubResource("AtlasTexture_dhej3")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
@@ -776,7 +925,7 @@ properties/5/path = NodePath(".:rotation")
 properties/5/spawn = true
 properties/5/replication_mode = 1
 
-[node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "_input_handler", "_movement_handler", "_sprite_handler", "sprite", "components_root", "state_machine")]
+[node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "_input_handler", "_movement_handler", "_sprite_handler", "state_label", "sprite", "components_root", "state_machine")]
 collision_mask = 515
 floor_snap_length = 7.0
 script = ExtResource("1_oic1i")
@@ -788,9 +937,22 @@ spin_shape = NodePath("Spin/CollisionShape2D")
 _input_handler = NodePath("Handlers/InputHandler")
 _movement_handler = NodePath("Handlers/MovementHandler")
 _sprite_handler = NodePath("Handlers/SpriteHandler")
+state_label = NodePath("StateLabel")
 sprite = NodePath("Doll")
 components_root = NodePath("Components")
 state_machine = NodePath("StateMachine")
+
+[node name="StateLabel" type="Label" parent="." unique_id=287046668]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -19.5
+offset_top = -40.0
+offset_right = 27.5
+offset_bottom = -25.0
+grow_horizontal = 2
+text = "<state>"
+horizontal_alignment = 1
 
 [node name="StateMachine" type="Node" parent="." unique_id=49398394 node_paths=PackedStringArray("initial_state", "sprite", "animation_player", "__states")]
 script = ExtResource("2_cawmy")
@@ -798,8 +960,8 @@ initial_state = NodePath("Dry/Grounded/Idle")
 root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
-__last__editor_position = Vector2(1418.8518, -595.5652)
-__last_editor_zoom = 0.5490376
+__last__editor_position = Vector2(1163.2361, 177.51367)
+__last_editor_zoom = 0.9726536
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),
@@ -808,15 +970,13 @@ __states = {
 &"1a672940-36b6-42fb-9579-e3e44c1736ad": NodePath("Dry/Airborne"),
 &"1c0b8823-6179-4117-9b5a-5a7e7c720250": NodePath("Submerged"),
 &"1f487687-d9c8-496b-9be9-7fd09f196b62": NodePath("Spin"),
-&"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2": NodePath("Dry/Airborne/IdleJump/Jump"),
+&"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2": NodePath("Dry/Airborne/Jump"),
 &"26117a90-ad8f-4dc7-b05f-b7d2d321b8c0": NodePath("GroundPound/GroundPoundStart"),
 &"4039c2e2-f597-43ee-b41e-d932b0a93a22": NodePath("GroundPound/GroundPoundFall"),
-&"44d79f3b-0f69-438b-8b37-d3a6915e88e5": NodePath("Dry/Grounded/Landed"),
-&"54a4d6c2-d938-40a1-92f4-ed7ef758c71c": NodePath("Dry/Airborne/IdleJump/DoubleJump"),
+&"54a4d6c2-d938-40a1-92f4-ed7ef758c71c": NodePath("Dry/Airborne/DoubleJump"),
 &"56a353ee-c4c2-458c-a018-6302daa71851": NodePath("Dry/Floorslide"),
 &"5ed7fb5d-7e2c-4110-92cb-cf15f641072e": NodePath("Dry/Grounded/Crouch"),
 &"5f26c6ee-ee21-44a2-9986-4f30b9f89611": NodePath("Dry/Airborne/BackflipUp"),
-&"72d567dd-e3ab-46f9-be2b-c2d0cebb27e8": null,
 &"74d37025-c0e7-44f3-9562-5d9cae8dab86": NodePath("GroundPound"),
 &"7a11481f-96a2-4861-99a6-5a97b2628e11": NodePath("Dry/Airborne/RolloutF"),
 &"7c9bf00f-ebfd-4920-b0c8-fe79e3d3ccb7": NodePath("Submerged/SwimWalk"),
@@ -828,19 +988,23 @@ __states = {
 &"cb2bce9e-79ca-46c1-9bc1-ab2d16c15822": NodePath("Submerged/SwimSpin"),
 &"d8126d47-03c3-4a9b-abee-8c68263ad4ab": NodePath("Dry/Airborne/Fall"),
 &"fac7caf1-9473-4b51-87ce-64f33b12c026": NodePath("Submerged/SwimIdle"),
-&"fcde7a01-9caf-4d7a-8016-ae92a2e45514": NodePath("Dry/Airborne/IdleJump/TripleJump")
+&"fcde7a01-9caf-4d7a-8016-ae92a2e45514": NodePath("Dry/Airborne/TripleJump")
 }
 __annotations = {
 &"330df875-34da-434e-a124-19af2623a506": {
 "position": Vector2(1480, -600),
 "text": "Fall"
 },
+&"68adbcdd-bf03-4f89-a009-058392dc5b4a": {
+"position": Vector2(1440, 160),
+"text": "Jump Stack"
+},
 &"6c64e40c-5902-4737-acc6-b02ded7eb7c0": {
-"position": Vector2(2440, -860),
+"position": Vector2(3080, -840),
 "text": "Crouch -> Backflip"
 },
 &"a544c92d-0764-46da-8ff7-d0467b839f46": {
-"position": Vector2(2540, -380),
+"position": Vector2(3120, -360),
 "text": "-> Floorslide"
 },
 "aa8fc861-4855-4fa5-bac3-8381f55773e2": {
@@ -853,40 +1017,67 @@ __annotations = {
 }
 }
 __transitions = Dictionary[StringName, ExtResource("3_0jrw7")]({
+&"0d17bbe7-7954-4a1e-b0b9-b646249d72d8": SubResource("Resource_icsuc"),
+&"0e698df3-9e85-4c2e-9e8c-aea60029e709": SubResource("Resource_6qpfs"),
 &"1936b444-0e84-4dbb-8a09-0b43aade58f6": SubResource("Resource_lh4k8"),
 &"1e635f1c-ff57-4ffd-828a-a34e40b83298": SubResource("Resource_mb70y"),
+&"26da65d8-bfd5-4841-9713-fd094dcbdcaf": SubResource("Resource_6suq8"),
+&"33685278-85f2-4ace-834c-47cf977ef188": SubResource("Resource_0vqd7"),
 &"34499073-e207-49f7-a7cf-bd50ab62d9dc": SubResource("Resource_l0vtf"),
+&"3e941e54-3ecf-41eb-a95e-4dde2623e08a": SubResource("Resource_6wk8s"),
 &"40032a9d-9c67-47b1-9e8b-81622c3bcb7d": SubResource("Resource_5jc0j"),
+&"43c82f60-4fc3-4632-8322-38f178aeda49": SubResource("Resource_h2xdj"),
+&"44d1e688-3ad7-461d-af69-40d144acadf2": SubResource("Resource_sxdt2"),
 &"492fb513-a7b5-48b9-bd50-6d7021a4d623": SubResource("Resource_b6ajd"),
 &"53bad02f-ca44-42ca-83a1-4599c4b97621": SubResource("Resource_8um7f"),
 &"55583825-433c-48ca-87e8-c8d5193536f0": SubResource("Resource_ioda6"),
 &"6885fc21-c43b-4d73-a9fb-c0dde2c6f6e1": SubResource("Resource_6rqdb"),
+&"737936b5-2d4e-4506-abb3-b70c9c2ff7f0": SubResource("Resource_yna46"),
 &"9b87e1b4-b003-44ab-992d-931b8a965951": SubResource("Resource_8vwb3"),
 &"a7a93b41-c759-4a33-95eb-b237411e92d9": SubResource("Resource_ria7k"),
 &"a9caf83a-dcf8-42bd-8f8f-37dc6dc3bd97": SubResource("Resource_5mhew"),
+&"ac47bad9-ba1c-4fd9-90a8-19159b6f40f0": SubResource("Resource_3i503"),
+&"aeddfb49-d65a-4522-9dd2-00b34df62621": SubResource("Resource_6b4i6"),
 &"b59ae391-76d5-4a68-921b-c00bee5ea921": SubResource("Resource_02rvq"),
 &"b797e1f8-f5a9-4489-a064-b962b6e7bfe3": SubResource("Resource_eihrn"),
 &"b8b4b892-5c5c-439f-992f-7893ab7b87aa": SubResource("Resource_tb30q"),
 &"d1fc7046-1e0f-4347-ab02-b9e62e93d7cb": SubResource("Resource_aln35"),
 &"d2a7a244-8db2-4689-9ed8-70c69e56ae18": SubResource("Resource_3grnp"),
+&"db6b19fa-70a8-42c3-b128-0bda854a1fba": SubResource("Resource_rlrt6"),
 &"e3837ee6-54ed-4b81-849f-e43a559a01a6": SubResource("Resource_hi5jf"),
+&"e79a83e6-cd15-4ccf-8f16-74b60b1e9141": SubResource("Resource_h2rmy"),
 &"f074e2f8-bfb2-42b6-b9f2-600bd12d39a4": SubResource("Resource_20bnd"),
-&"f6961955-e823-491c-b176-e1f5e71218b9": SubResource("Resource_otk8c"),
-&"f9063ef8-61ee-4ed8-a49b-ac3d32e957bd": SubResource("Resource_y6elw"),
-&"fca503a9-4018-4f15-a7d0-a6c78e83831f": SubResource("Resource_8yq6v")
+&"fca503a9-4018-4f15-a7d0-a6c78e83831f": SubResource("Resource_8yq6v"),
+&"ff5117b6-699a-4417-ad4a-b0b7f74bcd18": SubResource("Resource_l4byk")
 })
 __aliases = {
 &"0022c078-60f6-4847-9c15-315812bb51c7": {
 "original_uuid": &"b3fdc091-1261-4006-a130-d7a725b6b4cd",
 "position": Vector2(2760, -640)
 },
+&"098068e3-7ac4-4064-8239-8b4566a230c9": {
+"original_uuid": &"fcde7a01-9caf-4d7a-8016-ae92a2e45514",
+"position": Vector2(2080, 240)
+},
+&"0f4b75f7-bfab-489e-abee-b73251d54a97": {
+"original_uuid": &"0dd74506-66e0-4267-b86b-0572da305c2a",
+"position": Vector2(3860, -640)
+},
 &"12a4f3c3-9986-4098-a5e8-79b8a8951847": {
 "original_uuid": &"5f26c6ee-ee21-44a2-9986-4f30b9f89611",
 "position": Vector2(3500, -920)
 },
+&"167d2846-17ec-4534-a26e-c582cae80f3a": {
+"original_uuid": &"b3fdc091-1261-4006-a130-d7a725b6b4cd",
+"position": Vector2(1100, 300)
+},
 &"19756cb2-870e-4389-ac45-b7857f943765": {
 "original_uuid": &"d8126d47-03c3-4a9b-abee-8c68263ad4ab",
-"position": Vector2(1400, -540)
+"position": Vector2(1400, -440)
+},
+&"1a6db986-d32f-4647-9c61-30a3baed866c": {
+"original_uuid": &"0dd74506-66e0-4267-b86b-0572da305c2a",
+"position": Vector2(1720, 380)
 },
 &"2302e3d7-ce33-4a4f-9359-0e5615b5dddd": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
@@ -908,6 +1099,10 @@ __aliases = {
 "original_uuid": "eb84e3c9-3c56-4cd8-a616-246ee21c7b6a",
 "position": Vector2(-1080, 780)
 },
+&"47d80ca0-eba2-4f2f-abe5-5d1a702997a6": {
+"original_uuid": &"d8126d47-03c3-4a9b-abee-8c68263ad4ab",
+"position": Vector2(1720, 680)
+},
 &"6a55bcd8-ceeb-47a0-857d-a18349c507f5": {
 "original_uuid": &"5ed7fb5d-7e2c-4110-92cb-cf15f641072e",
 "position": Vector2(3120, -780)
@@ -920,9 +1115,17 @@ __aliases = {
 "original_uuid": &"b3fdc091-1261-4006-a130-d7a725b6b4cd",
 "position": Vector2(1400, -780)
 },
+&"7bac08a2-8ceb-4ee4-a970-2466e9d89ddd": {
+"original_uuid": &"fcde7a01-9caf-4d7a-8016-ae92a2e45514",
+"position": Vector2(2080, 400)
+},
 &"88b67923-0905-4892-96d4-33af90aa9e2d": {
 "original_uuid": &"72d567dd-e3ab-46f9-be2b-c2d0cebb27e8",
 "position": Vector2(3500, -620)
+},
+&"8f3ccb62-9749-4b1d-b817-1026a049a6e7": {
+"original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
+"position": Vector2(1100, 160)
 },
 &"9926b8f7-53dc-4adb-a5e1-b7a3daa778e5": {
 "original_uuid": &"7a11481f-96a2-4861-99a6-5a97b2628e11",
@@ -932,6 +1135,10 @@ __aliases = {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
 "position": Vector2(2760, -780)
 },
+&"a58ea9b9-705a-4e93-9892-b3ebfa4e8802": {
+"original_uuid": &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c",
+"position": Vector2(2420, 400)
+},
 &"abed3dd4-95f4-45f4-a3a0-32298e7cc932": {
 "original_uuid": &"56a353ee-c4c2-458c-a018-6302daa71851",
 "position": Vector2(3120, -500)
@@ -940,17 +1147,29 @@ __aliases = {
 "original_uuid": &"153c8a33-2d47-4ccc-97e3-9e16b0b05f9c",
 "position": Vector2(3500, -780)
 },
+&"b6680552-d54b-42a5-9cac-e77db4edf7a1": {
+"original_uuid": &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2",
+"position": Vector2(2800, 400)
+},
 &"bad73193-ad8f-4801-9c65-c344b9ae116f": {
 "original_uuid": &"b3fdc091-1261-4006-a130-d7a725b6b4cd",
 "position": Vector2(1100, -420)
+},
+&"bbac0708-891f-40b0-84ff-f90c3e883463": {
+"original_uuid": &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2",
+"position": Vector2(1420, 240)
 },
 "bdadf97e-a71b-472c-9ecb-312b7e7385d5": {
 "original_uuid": "e465a7ea-4405-449b-ab06-120b336f109a",
 "position": Vector2(-1780, 720)
 },
-&"dc921999-7f82-466a-baf8-9082bf652fa6": {
-"original_uuid": &"44d79f3b-0f69-438b-8b37-d3a6915e88e5",
-"position": Vector2(1700, -540)
+&"bee3ecfd-b265-4bfc-b4ea-e7afe4a62675": {
+"original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
+"position": Vector2(1720, 520)
+},
+&"d66f50c1-6db3-45f0-900c-3bc04f7b7ff5": {
+"original_uuid": &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c",
+"position": Vector2(1720, 240)
 },
 "e233e671-bc9e-440b-b93c-8eef38107716": {
 "original_uuid": "eb84e3c9-3c56-4cd8-a616-246ee21c7b6a",
@@ -962,7 +1181,7 @@ __aliases = {
 },
 &"ef17b68d-10e2-4919-8e7d-84844258bfb6": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
-"position": Vector2(2000, -540)
+"position": Vector2(1680, -440)
 },
 &"f79403a8-db53-422c-94ac-1755c46bddd9": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
@@ -990,14 +1209,6 @@ __editor_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
 __editor_superstate_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 __editor_superstate_wire_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 
-[node name="Landed" type="Node" parent="StateMachine/Dry/Grounded" unique_id=1826889833]
-script = ExtResource("4_4j27x")
-__editor_name = &"landed"
-__editor_position = Vector2(-340, -620)
-__editor_uuid = &"44d79f3b-0f69-438b-8b37-d3a6915e88e5"
-__editor_superstate_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
-__editor_superstate_wire_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
-
 [node name="Idle" type="Node" parent="StateMachine/Dry/Grounded" unique_id=616950568]
 script = ExtResource("5_4j27x")
 sprite_animation_name = &"idle"
@@ -1020,6 +1231,7 @@ __editor_superstate_wire_uuid = &"44d79f3b-0f69-438b-8b37-d3a6915e88e5"
 [node name="Crouch" type="Node" parent="StateMachine/Dry/Grounded" unique_id=220392553]
 script = ExtResource("4_4j27x")
 sprite_animation_name = &"crouch"
+sprite_lock_flipping = true
 __editor_name = &"crouch"
 __editor_position = Vector2(240, -580)
 __editor_uuid = &"5ed7fb5d-7e2c-4110-92cb-cf15f641072e"
@@ -1035,7 +1247,11 @@ __editor_superstate_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 __editor_superstate_wire_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 
 [node name="Dive" type="Node" parent="StateMachine/Dry/Airborne" unique_id=2082405443]
-script = ExtResource("4_4j27x")
+script = ExtResource("10_aln35")
+launch_y_boost = 80.0
+rotation_curve = SubResource("Curve_aln35")
+y_velocity_to_rotation_offset_curve = SubResource("Curve_ioda6")
+sprite_animation_name = &"dive"
 __editor_name = &"dive"
 __editor_position = Vector2(-180, -400)
 __editor_uuid = &"0dd74506-66e0-4267-b86b-0572da305c2a"
@@ -1049,30 +1265,6 @@ __editor_position = Vector2(-180, -260)
 __editor_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
 __editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 __editor_superstate_wire_uuid = &"d8126d47-03c3-4a9b-abee-8c68263ad4ab"
-
-[node name="Jump" type="Node" parent="StateMachine/Dry/Airborne/IdleJump" unique_id=2029960993]
-script = ExtResource("4_4j27x")
-__editor_name = &"jump"
-__editor_position = Vector2(100, -260)
-__editor_uuid = &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
-__editor_superstate_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
-__editor_superstate_wire_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
-
-[node name="DoubleJump" type="Node" parent="StateMachine/Dry/Airborne/IdleJump" unique_id=936922287]
-script = ExtResource("4_4j27x")
-__editor_name = &"double_jump"
-__editor_position = Vector2(380, -260)
-__editor_uuid = &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
-__editor_superstate_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
-__editor_superstate_wire_uuid = &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
-
-[node name="TripleJump" type="Node" parent="StateMachine/Dry/Airborne/IdleJump" unique_id=702472203]
-script = ExtResource("4_4j27x")
-__editor_name = &"triple_jump"
-__editor_position = Vector2(680, -260)
-__editor_uuid = &"fcde7a01-9caf-4d7a-8016-ae92a2e45514"
-__editor_superstate_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
-__editor_superstate_wire_uuid = &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
 
 [node name="Backflip" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1884281519]
 script = ExtResource("11_mb70y")
@@ -1112,6 +1304,34 @@ __editor_position = Vector2(100, -400)
 __editor_uuid = &"7a11481f-96a2-4861-99a6-5a97b2628e11"
 __editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 __editor_superstate_wire_uuid = &"0dd74506-66e0-4267-b86b-0572da305c2a"
+
+[node name="Jump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=2029960993]
+script = ExtResource("13_20bnd")
+sprite_animation_name = &"jump"
+__editor_name = &"jump"
+__editor_position = Vector2(100, -260)
+__editor_uuid = &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+__editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+__editor_superstate_wire_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+
+[node name="DoubleJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=936922287]
+script = ExtResource("14_5mhew")
+sprite_animation_name = &"double_jump"
+__editor_name = &"double_jump"
+__editor_position = Vector2(380, -260)
+__editor_uuid = &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
+__editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+__editor_superstate_wire_uuid = &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
+
+[node name="TripleJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=702472203]
+script = ExtResource("15_eihrn")
+sprite_animation_name = &"triple_jump"
+anim_animation = "triple_jump"
+__editor_name = &"triple_jump"
+__editor_position = Vector2(680, -260)
+__editor_uuid = &"fcde7a01-9caf-4d7a-8016-ae92a2e45514"
+__editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
+__editor_superstate_wire_uuid = &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
 
 [node name="Floorslide" type="Node" parent="StateMachine/Dry" unique_id=1890132868]
 script = ExtResource("6_y6elw")
@@ -1234,14 +1454,14 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101]
 position = Vector2(2, -13)
-texture = SubResource("CanvasTexture_02rvq")
+texture = SubResource("CanvasTexture_aln35")
 region_enabled = true
 region_rect = Rect2(0, 0, 48, 48)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_02rvq")
+canvas_texture = SubResource("CanvasTexture_aln35")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
-current_animation = "idle"
+current_animation = ""
 current_frame = 0
 speed_scale = 1.0
 playing = false

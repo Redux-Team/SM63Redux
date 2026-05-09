@@ -69,6 +69,13 @@ var playing: bool = false:
 		looping = l
 		notify_property_list_changed()
 
+# the rotation but it respects whether the sprite is flipped or not
+var local_rotation: float:
+	get:
+		return -rotation if flip_h else rotation
+	set(lr):
+		rotation = -lr if flip_h else lr
+
 var _playback_time: float = 0.0
 
 

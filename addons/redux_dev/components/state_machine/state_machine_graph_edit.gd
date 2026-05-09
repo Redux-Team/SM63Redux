@@ -302,7 +302,7 @@ func _restore_connections() -> void:
 	
 	for tid: StringName in _sm().__transitions:
 		var t: StateTransition = _sm().__transitions.get(tid) as StateTransition
-		if not t:
+		if not is_instance_valid(t):
 			continue
 		var wire: Array = _transition_wire_cache.get(tid, [])
 		var from_node_uuid: StringName = wire[0] if wire.size() > 0 else t.__from_node_uuid
@@ -322,7 +322,7 @@ func _restore_connections() -> void:
 	
 	for uuid: StringName in _sm().__states:
 		var state: State = _sm().__states.get(uuid) as State
-		if not state or state.__editor_superstate_uuid.is_empty():
+		if not is_instance_valid(state) or state.__editor_superstate_uuid.is_empty():
 			continue
 		var to: EditorStateMachineStateNode = _find_node_by_uuid(uuid)
 		var wire_from: EditorStateMachineStateNode = _find_node_by_uuid(state.__editor_superstate_wire_uuid)

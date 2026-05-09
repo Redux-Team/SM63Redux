@@ -295,3 +295,7 @@ func __animation_enter() -> void:
 	if not animation_player or animation_player.get_animation_list().is_empty() or anim_animation.is_empty():
 		return
 	animation_player.play(anim_animation)
+
+
+func __animation_exit() -> void:
+	animation_player.play(&"RESET")

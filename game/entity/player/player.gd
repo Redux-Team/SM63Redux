@@ -87,6 +87,7 @@ var can_use_fludd: bool = true
 var jump_chain_timer: float = 0.0
 ## lock the sprite flipping
 @export var lock_flipping: bool = false
+@export var state_label: Label
 
 
 func _ready() -> void:
@@ -107,6 +108,9 @@ func _process(_delta: float) -> void:
 	
 	if Input.is_action_just_pressed("jump"):
 		jump_buffer_timer = jump_buffer_time if can_jump else 0.0
+	
+	
+	state_label.text = state_machine.get_current_state().name
 
 
 func get_facing_velocity() -> float:
@@ -147,7 +151,7 @@ func is_action_pressed(input: String) -> bool:
 	return Input.is_action_pressed(input)
 
 
-func is_action_just_pressed(input: String) -> bool:
+func is_action_just_pressed(input: String, buffer: float) -> bool:
 	return Input.is_action_just_pressed(input)
 
 
