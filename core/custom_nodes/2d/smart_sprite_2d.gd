@@ -29,6 +29,8 @@ enum {
 	set(lr):
 		rotation_degrees = -lr if flip_h else lr
 
+@export var rotation_source: Node2D
+
 @export var diffuse_texture: Texture2D:
 	set(t):
 		diffuse_texture = t

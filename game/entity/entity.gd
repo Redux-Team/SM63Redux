@@ -124,6 +124,11 @@ func move_and_slide_with_gravity() -> void:
 	
 	velocity = velocity.rotated(angle)
 	move_and_slide()
+	
+	if sprite:
+		up_direction = Vector2.UP.rotated(angle)
+		rotation = angle
+	
 	velocity = velocity.rotated(-angle)
 
 

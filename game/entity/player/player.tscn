@@ -1137,8 +1137,8 @@ initial_state = NodePath("Dry/Grounded/Idle")
 root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
-__last__editor_position = Vector2(-511.10428, -296.89728)
-__last_editor_zoom = 0.13663907
+__last__editor_position = Vector2(0, -794.8283)
+__last_editor_zoom = 0.93046093
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),
@@ -1724,13 +1724,14 @@ script = ExtResource("4_o0v17")
 entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
-[node name="Doll" type="Sprite2D" parent="." unique_id=1608363101]
+[node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -13)
 texture = SubResource("CanvasTexture_aln35")
 region_enabled = true
 region_rect = Rect2(0, 0, 48, 48)
 script = ExtResource("2_cjmyu")
 canvas_texture = SubResource("CanvasTexture_aln35")
+rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
 current_animation = ""

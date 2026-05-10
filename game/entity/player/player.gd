@@ -93,10 +93,17 @@ var jump_chain_timer: float = 0.0
 
 
 func _ready() -> void:
+	# TODO
+	# fix triple jump
+	# fix gravity sprite flipping
 	var cam: Camera2D = Camera2D.new()
 	cam.zoom = Vector2(1.2, 1.2)
 	cam.position_smoothing_enabled = true
 	cam.position_smoothing_speed = 10
+	
+	#var gc: GravityComponent = get_component(GravityComponent)
+	#gc.direction = Vector2.UP
+	
 	add_child(cam)
 
 
