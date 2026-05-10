@@ -12,6 +12,7 @@ enum DamageType {
 
 @export var sprite: SmartSprite2D
 @export var components_root: Node
+@export var collision_shapes: Array[CollisionShape2D]
 @export var state_machine: StateMachine
 
 

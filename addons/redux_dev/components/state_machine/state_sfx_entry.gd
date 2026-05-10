@@ -7,18 +7,14 @@ enum InterruptPolicy {
 	PLAY_IF_SUPERSTATE_ACTIVE,
 }
 
-enum Bus {
-	MASTER,
-	MUSIC,
-	SFX,
-}
 
 @export var playlist: Playlist
 @export var chance: float = 1.0
 @export var spatial: bool = true
 @export var pool_id: StringName = &"default"
-@export var bus: Bus = Bus.SFX
+@export var bus: Playlist.Bus = Playlist.Bus.SFX_
 @export var interrupt_policy: InterruptPolicy = InterruptPolicy.PLAY_ANYWAY
+@export var max_stack: int = 1
 @export_group("Pitch & Volume")
 @export var pitch_range: Vector2 = Vector2(1.0, 1.0)
 @export var volume_db: float = 0.0
@@ -26,6 +22,9 @@ enum Bus {
 @export var pitch_property_range: Vector2 = Vector2(0.0, 1.0)
 @export var volume_property: StringName = &""
 @export var volume_property_range: Vector2 = Vector2(0.0, 1.0)
+@export_group("Exit Behaviour")
+@export var stop_on_exit: bool = false
+@export var free_pool_on_exit: bool = false
 @export_group("Frame Trigger")
 @export var frame_range: Vector2i = Vector2i(-1, -1)
 
@@ -34,9 +33,10 @@ var _frame_triggered: bool = false
 
 func _get_bus_name() -> StringName:
 	match bus:
-		Bus.MASTER: return &"Master"
-		Bus.MUSIC: return &"Music"
-		Bus.SFX: return &"SFX"
+		Playlist.Bus.MASTER: return &"Master"
+		Playlist.Bus.MUSIC: return &"Music"
+		Playlist.Bus.SFX_: return &"SFX"
+		Playlist.Bus.PLAYER: return &"Player"
 	return &"Master"
 
 

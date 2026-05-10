@@ -42,8 +42,8 @@ var _pending_transition_timer: float = 0.0
 var _state_buffer: float = 0.0
 var _can_consume_buffer: bool = false
 var _last_transition: StateTransition = null
-var _sfx_pool: Dictionary[StringName, AudioStreamPlayer] = {}
-var _sfx_pool_2d: Dictionary[StringName, AudioStreamPlayer2D] = {}
+var _sfx_pool: Dictionary[StringName, Array] = {}
+var _sfx_pool_2d: Dictionary[StringName, Array] = {}
 
 
 func _validate_property(property: Dictionary) -> void:
@@ -298,6 +298,7 @@ func _transition_to(t: StateTransition, target: State) -> void:
 			entering.append(s)
 	
 	t._on_before_transition()
+	_current_state.__collision_exit()
 	_current_state.__sprite_exit()
 	_current_state.__animation_exit()
 	
@@ -331,18 +332,21 @@ func _transition_to(t: StateTransition, target: State) -> void:
 	target._on_enter()
 	target.__sprite_enter()
 	target.__animation_enter()
+	target.__collision_enter()
 	
 	if sfx_root:
+		for s: State in exiting:
+			if s.sfx_exit:
+				_play_sfx_entry(s.sfx_exit, s)
+			_handle_sfx_exit(s)
+		if from.sfx_exit:
+			_play_sfx_entry(from.sfx_exit, from)
+		_handle_sfx_exit(from)
 		for s: State in entering:
 			if s.sfx_enter:
 				_play_sfx_entry(s.sfx_enter, s)
 		if target.sfx_enter:
 			_play_sfx_entry(target.sfx_enter, target)
-		for s: State in exiting:
-			if s.sfx_exit:
-				_play_sfx_entry(s.sfx_exit, s)
-		if from.sfx_exit:
-			_play_sfx_entry(from.sfx_exit, from)
 	
 	t._on_after_transition()
 	state_changed.emit(from, target)
@@ -369,6 +373,7 @@ func _enter_state(state: State) -> void:
 	state._on_enter()
 	state.__sprite_enter()
 	state.__animation_enter()
+	state.__collision_enter()
 
 
 func _collect_superstates(state: State) -> Array[State]:
@@ -413,8 +418,7 @@ func _play_sfx_entry(entry: StateSFXEntry, state: State) -> void:
 			if _is_pool_playing(entry.pool_id, entry.spatial):
 				return
 		StateSFXEntry.InterruptPolicy.PLAY_IF_SUPERSTATE_ACTIVE:
-			var origin_sm: StateMachine = state.state_machine
-			if not origin_sm or not origin_sm._is_state_in_stack(state):
+			if not _is_state_in_stack(state):
 				return
 		StateSFXEntry.InterruptPolicy.PLAY_ANYWAY:
 			pass
@@ -428,14 +432,14 @@ func _play_sfx_entry(entry: StateSFXEntry, state: State) -> void:
 	var bus: StringName = entry._get_bus_name()
 	
 	if entry.spatial:
-		var player: AudioStreamPlayer2D = _get_pool_2d(entry.pool_id)
+		var player: AudioStreamPlayer2D = _get_pool_2d(entry.pool_id, entry.max_stack)
 		player.stream = stream
 		player.pitch_scale = pitch
 		player.volume_db = vol
 		player.bus = bus
 		player.play()
 	else:
-		var player: AudioStreamPlayer = _get_pool_flat(entry.pool_id)
+		var player: AudioStreamPlayer = _get_pool_flat(entry.pool_id, entry.max_stack)
 		player.stream = stream
 		player.pitch_scale = pitch
 		player.volume_db = vol
@@ -480,26 +484,82 @@ func _pick_stream(playlist: Playlist) -> AudioStream:
 	return null
 
 
-func _get_pool_flat(pool_id: StringName) -> AudioStreamPlayer:
+func _get_pool_flat(pool_id: StringName, max_stack: int) -> AudioStreamPlayer:
 	if not _sfx_pool.has(pool_id):
+		_sfx_pool[pool_id] = []
+	var pool: Array = _sfx_pool[pool_id]
+	for player: AudioStreamPlayer in pool:
+		if not player.playing:
+			return player
+	if pool.size() < max_stack:
 		var player: AudioStreamPlayer = AudioStreamPlayer.new()
 		sfx_root.add_child(player)
-		_sfx_pool[pool_id] = player
-	return _sfx_pool[pool_id]
+		pool.append(player)
+		return player
+	return pool[0]
 
 
-func _get_pool_2d(pool_id: StringName) -> AudioStreamPlayer2D:
+func _get_pool_2d(pool_id: StringName, max_stack: int) -> AudioStreamPlayer2D:
 	if not _sfx_pool_2d.has(pool_id):
+		_sfx_pool_2d[pool_id] = []
+	var pool: Array = _sfx_pool_2d[pool_id]
+	for player: AudioStreamPlayer2D in pool:
+		if not player.playing:
+			return player
+	if pool.size() < max_stack:
 		var player: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
 		sfx_root.add_child(player)
-		_sfx_pool_2d[pool_id] = player
-	return _sfx_pool_2d[pool_id]
+		pool.append(player)
+		return player
+	return pool[0]
 
 
 func _is_pool_playing(pool_id: StringName, spatial: bool) -> bool:
+	var pool: Array = _sfx_pool_2d[pool_id] if spatial else _sfx_pool[pool_id]
+	if not _sfx_pool_2d.has(pool_id) if spatial else not _sfx_pool.has(pool_id):
+		return false
+	for player: Object in pool:
+		if (player as AudioStreamPlayer2D).playing if spatial else (player as AudioStreamPlayer).playing:
+			return true
+	return false
+
+
+func _handle_sfx_exit(state: State) -> void:
+	for entry: StateSFXEntry in [state.sfx_enter, state.sfx_exit, state.sfx_tick, state.sfx_frame]:
+		if not entry:
+			continue
+		if entry.free_pool_on_exit:
+			_free_pool_entry(entry.pool_id, entry.spatial)
+		elif entry.stop_on_exit:
+			_stop_pool_entry(entry.pool_id, entry.spatial)
+
+
+func _stop_pool_entry(pool_id: StringName, spatial: bool) -> void:
 	if spatial:
-		return _sfx_pool_2d.has(pool_id) and _sfx_pool_2d[pool_id].playing
-	return _sfx_pool.has(pool_id) and _sfx_pool[pool_id].playing
+		if not _sfx_pool_2d.has(pool_id):
+			return
+		for player: AudioStreamPlayer2D in _sfx_pool_2d[pool_id]:
+			player.stop()
+	else:
+		if not _sfx_pool.has(pool_id):
+			return
+		for player: AudioStreamPlayer in _sfx_pool[pool_id]:
+			player.stop()
+
+
+func _free_pool_entry(pool_id: StringName, spatial: bool) -> void:
+	if spatial:
+		if not _sfx_pool_2d.has(pool_id):
+			return
+		for player: AudioStreamPlayer2D in _sfx_pool_2d[pool_id]:
+			player.queue_free()
+		_sfx_pool_2d.erase(pool_id)
+	else:
+		if not _sfx_pool.has(pool_id):
+			return
+		for player: AudioStreamPlayer in _sfx_pool[pool_id]:
+			player.queue_free()
+		_sfx_pool.erase(pool_id)
 
 
 func _notify_done(forced: bool) -> void:
@@ -507,7 +567,6 @@ func _notify_done(forced: bool) -> void:
 		_done_forced = true
 	else:
 		_done_requested = true
-
 
 
 func store_state_buffer(amount: float = 0.1) -> bool:

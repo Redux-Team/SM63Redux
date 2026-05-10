@@ -5,6 +5,7 @@ enum Bus {
 	MASTER,
 	MUSIC,
 	SFX_,
+	PLAYER,
 }
 
 enum PlayOrder {

@@ -7,13 +7,8 @@ var sprite: SmartSprite2D
 var animation_player: AnimationPlayer
 
 @export_group("State Machine")
-## The max length time of the state, will automatically call [method done] once the
-## time has been reached.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var runtime: float = 0.0
-## Whether the state can actually be rested on by the state machine. If disabled, then
-## this state only serves as a way to route to other states.
 @export var is_passthrough: bool = false
-## When enabled, transitions defined on this state are evaluated regardless of whether it is the active state or a superstate.
 @export var always_transition: bool = false
 
 @export_group("Sprite", "sprite_")
@@ -24,8 +19,15 @@ var animation_player: AnimationPlayer
 @export var sprite_loop: bool = true
 @export var sprite_speed_scale: float = 1.0
 @export var sprite_stop_on_exit: bool = false
+@export_subgroup("Offset", "sprite_offset")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sprite_offset_") var sprite_offset_enabled: bool = false
+@export var sprite_offset_value: Vector2 = Vector2.ZERO
+@export_subgroup("Chain", "sprite_")
 @export var sprite_chain: Array[StringName] = []
 @export var sprite_chain_loop_last: bool = true
+
+@export_group("Collision", "collision_")
+@export var collision_enabled_shapes: Array[CollisionShape2D] = []
 
 @export_group("SFX", "sfx_")
 @export var sfx_enter: StateSFXEntry
@@ -36,10 +38,9 @@ var animation_player: AnimationPlayer
 @export_group("Animation Player", "anim_")
 @export var anim_animation: String
 
-
 @export_group("Internal")
-@export var __editor_name: StringName # This must be unique, serves as state name
-@export var __editor_position: Vector2 # Position in editor
+@export var __editor_name: StringName
+@export var __editor_position: Vector2
 @export var __editor_uuid: StringName
 @export var __editor_superstate_uuid: StringName
 @export var __editor_entry_uuid: StringName
@@ -63,6 +64,7 @@ var player: Player:
 			return null
 var _sprite_chain_index: int = 0
 var _pre_entered: bool = false
+var _collision_snapshot: Array[CollisionShape2D] = []
 
 
 func _ready() -> void:
@@ -107,6 +109,7 @@ func _get_state_machine() -> StateMachine:
 func done(force: bool = false) -> void:
 	if state_machine:
 		state_machine._notify_done(force)
+
 
 ## Returns the state name parsed by the internal editor and state machine,
 ## which is in snake case.
@@ -289,12 +292,32 @@ func __sprite_enter() -> void:
 		sprite.looping = sprite_chain.is_empty() and sprite_loop
 	sprite.speed_scale = sprite_speed_scale
 	sprite.play(sprite_animation_name)
-	
+	sprite.offset = _resolve_sprite_offset()
 	if sprite_lock_flipping:
 		player.lock_flipping = true
-	
 	if not sprite_chain.is_empty():
 		sprite.animation_finished.connect(__sprite_chain_advance, CONNECT_ONE_SHOT)
+
+
+func __sprite_exit() -> void:
+	if sprite and sprite.animation_finished.is_connected(__sprite_chain_advance):
+		sprite.animation_finished.disconnect(__sprite_chain_advance)
+	player.lock_flipping = false
+	if not sprite or not sprite_stop_on_exit:
+		return
+	sprite.stop()
+
+
+func _resolve_sprite_offset() -> Vector2:
+	if sprite_offset_enabled:
+		return sprite_offset_value
+	if not state_machine:
+		return Vector2.ZERO
+	var superstates: Array[State] = state_machine._active_superstates
+	for i: int in range(superstates.size() - 1, -1, -1):
+		if superstates[i].sprite_offset_enabled:
+			return superstates[i].sprite_offset_value
+	return Vector2.ZERO
 
 
 func __sprite_chain_advance() -> void:
@@ -310,13 +333,41 @@ func __sprite_chain_advance() -> void:
 		sprite.animation_finished.connect(__sprite_chain_advance, CONNECT_ONE_SHOT)
 
 
-func __sprite_exit() -> void:
-	if sprite and sprite.animation_finished.is_connected(__sprite_chain_advance):
-		sprite.animation_finished.disconnect(__sprite_chain_advance)
-	player.lock_flipping = false
-	if not sprite or not sprite_stop_on_exit:
+func __collision_enter() -> void:
+	if not state_machine:
 		return
-	sprite.stop()
+	var entity_node: Entity = state_machine._root_node as Entity
+	if not entity_node or entity_node.collision_shapes.is_empty():
+		return
+	var shapes: Array[CollisionShape2D] = _resolve_collision_shapes()
+	if shapes.is_empty():
+		return
+	_collision_snapshot.clear()
+	for shape: CollisionShape2D in entity_node.collision_shapes:
+		if not shape.disabled:
+			_collision_snapshot.append(shape)
+		shape.disabled = shape not in shapes
+
+
+func __collision_exit() -> void:
+	if not state_machine or _collision_snapshot.is_empty():
+		return
+	var entity_node: Entity = state_machine._root_node as Entity
+	if not entity_node or entity_node.collision_shapes.is_empty():
+		return
+	for shape: CollisionShape2D in entity_node.collision_shapes:
+		shape.disabled = shape not in _collision_snapshot
+	_collision_snapshot.clear()
+
+
+func _resolve_collision_shapes() -> Array[CollisionShape2D]:
+	if not collision_enabled_shapes.is_empty():
+		return collision_enabled_shapes
+	var superstates: Array[State] = state_machine._active_superstates
+	for i: int in range(superstates.size() - 1, -1, -1):
+		if not superstates[i].collision_enabled_shapes.is_empty():
+			return superstates[i].collision_enabled_shapes
+	return []
 
 
 func __animation_enter() -> void:
