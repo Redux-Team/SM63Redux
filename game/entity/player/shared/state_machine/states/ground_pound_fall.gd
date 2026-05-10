@@ -6,7 +6,7 @@ func _on_enter() -> void:
 	player.velocity.y = 800
 
 
-func _physics_process(_delta: float) -> void:
+func _on_physics_tick(_delta: float) -> void:
 	if player.velocity.y <= 50 and player.is_in_water:
 		state_machine.change_state("swim_idle")
 	if player.is_in_water:

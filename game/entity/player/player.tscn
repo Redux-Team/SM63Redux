@@ -51,6 +51,17 @@ __to_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
 __from_node_uuid = "b46d6b41-5198-44d8-a7ea-6fc17ff13b20"
 __to_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
 
+[sub_resource type="Resource" id="Resource_ohvaq"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+transition_time = 0.3
+expression = "!is_in_water"
+__from_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
+__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
+__from_node_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
+__to_node_uuid = "f1ae7997-f220-4334-a89c-0ea976bc8c8c"
+
 [sub_resource type="Resource" id="Resource_2swmp"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
@@ -100,6 +111,16 @@ __from_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
 __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "19756cb2-870e-4389-ac45-b7857f943765"
 __to_node_uuid = "ef17b68d-10e2-4919-8e7d-84844258bfb6"
+
+[sub_resource type="Resource" id="Resource_5ygwk"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_on_floor()"
+__from_uuid = "4039c2e2-f597-43ee-b41e-d932b0a93a22"
+__to_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
+__from_node_uuid = "4039c2e2-f597-43ee-b41e-d932b0a93a22"
+__to_node_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
 
 [sub_resource type="Resource" id="Resource_0vqd7"]
 resource_local_to_scene = true
@@ -261,6 +282,16 @@ __from_uuid = "26117a90-ad8f-4dc7-b05f-b7d2d321b8c0"
 __to_uuid = "4039c2e2-f597-43ee-b41e-d932b0a93a22"
 __from_node_uuid = "26117a90-ad8f-4dc7-b05f-b7d2d321b8c0"
 __to_node_uuid = "4039c2e2-f597-43ee-b41e-d932b0a93a22"
+
+[sub_resource type="Resource" id="Resource_fx7qh"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "!is_input_spin && !is_spinning && !is_on_floor()"
+__from_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
+__to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+__from_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
+__to_node_uuid = "6874c538-3b2b-4bf6-8eb7-064783902a81"
 
 [sub_resource type="Resource" id="Resource_mjy7s"]
 resource_local_to_scene = true
@@ -496,37 +527,6 @@ __to_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __from_node_uuid = "167d2846-17ec-4534-a26e-c582cae80f3a"
 __to_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 
-[sub_resource type="Resource" id="Resource_ohvaq"]
-resource_local_to_scene = true
-script = ExtResource("3_0jrw7")
-mode = 3
-transition_time = 0.3
-expression = "!is_in_water"
-__from_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
-__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
-__from_node_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
-__to_node_uuid = "f1ae7997-f220-4334-a89c-0ea976bc8c8c"
-
-[sub_resource type="Resource" id="Resource_5ygwk"]
-resource_local_to_scene = true
-script = ExtResource("3_0jrw7")
-mode = 3
-expression = "is_on_floor()"
-__from_uuid = "4039c2e2-f597-43ee-b41e-d932b0a93a22"
-__to_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
-__from_node_uuid = "4039c2e2-f597-43ee-b41e-d932b0a93a22"
-__to_node_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
-
-[sub_resource type="Resource" id="Resource_fx7qh"]
-resource_local_to_scene = true
-script = ExtResource("3_0jrw7")
-mode = 3
-expression = "!is_input_spin && !is_spinning && !is_on_floor()"
-__from_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
-__to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
-__from_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
-__to_node_uuid = "6874c538-3b2b-4bf6-8eb7-064783902a81"
-
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
 _data = [Vector2(0, -1.3932585), 0.0, 0.9746846, 0, 0, Vector2(1.5965666, -0.05618429), 0.0, 0.0, 0, 0]
@@ -640,7 +640,7 @@ _data = {
 atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 48, 48)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_20bnd"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_aln35"]
 diffuse_texture = SubResource("AtlasTexture_dhej3")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
@@ -1726,11 +1726,11 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101]
 position = Vector2(2, -13)
-texture = SubResource("CanvasTexture_20bnd")
+texture = SubResource("CanvasTexture_aln35")
 region_enabled = true
 region_rect = Rect2(0, 0, 48, 48)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_20bnd")
+canvas_texture = SubResource("CanvasTexture_aln35")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
 current_animation = ""
