@@ -6,9 +6,11 @@ const SLIDE_ANGLE_LERP_SPEED: float = 0.5
 const AIRBORNE_NOSEDIVE_SPEED: float = 0.15
 const LEDGE_BUFFER_TIME: float = 0.15
 
+
 @export var slide_flat_angle: float = 90.0
 @export var max_nosedive_angle: float = 45.0
 @export var rotation_offset: float = -90.0
+
 
 var body_rotation: float = 0.0
 var entered_from_dive: bool = false
@@ -73,5 +75,7 @@ func update_slide_rotation() -> void:
 func get_slope_angle() -> float:
 	if not player.floor_slope_raycast or not player.floor_slope_raycast.is_colliding():
 		return deg_to_rad(slide_flat_angle)
+	var gc: GravityComponent = player.get_component(GravityComponent)
+	var g_angle: float = gc.get_angle() if gc else 0.0
 	var normal: Vector2 = player.floor_slope_raycast.get_collision_normal()
-	return normal.angle() + PI / 2.0
+	return normal.rotated(-g_angle).angle() + PI / 2.0

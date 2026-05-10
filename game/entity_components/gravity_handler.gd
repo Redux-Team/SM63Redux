@@ -5,6 +5,7 @@ extends EntityComponent
 @export var strength: float = 15.0
 @export var scale_factor: float = 1.0
 @export var direction: Vector2 = Vector2(0, 1)
+@export var rotate_root: bool = true
 
 var _locks: int = 0
 var _modifiers: Dictionary[StringName, float] = {}
@@ -46,6 +47,12 @@ func clear_modifier(key: StringName) -> void:
 
 func get_effective_strength() -> float:
 	return strength * scale_factor
+
+
+func _process(_delta: float) -> void:
+	if enabled and entity and rotate_root:
+		entity.rotation = get_angle()
+		entity.up_direction = direction.rotated(PI)
 
 
 func _physics_process(_delta: float) -> void:

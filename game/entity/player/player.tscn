@@ -338,7 +338,7 @@ __to_node_uuid = "31d0deb8-7915-434d-b931-44f3244dadf5"
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
-expression = "is_input_jump && is_moving_against_facing()"
+expression = "is_action_just_pressed(\"jump\") && is_moving_against_facing()"
 __from_uuid = "5ed7fb5d-7e2c-4110-92cb-cf15f641072e"
 __to_uuid = "153c8a33-2d47-4ccc-97e3-9e16b0b05f9c"
 __from_node_uuid = "6a55bcd8-ceeb-47a0-857d-a18349c507f5"
@@ -398,7 +398,7 @@ __to_node_uuid = "0d111c82-e1fd-4f68-b56e-d964632b466d"
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
-expression = "is_input_jump && move_dir == 0"
+expression = "is_action_just_pressed(\"jump\") && move_dir == 0"
 __from_uuid = "5ed7fb5d-7e2c-4110-92cb-cf15f641072e"
 __to_uuid = "5f26c6ee-ee21-44a2-9986-4f30b9f89611"
 __from_node_uuid = "6a55bcd8-ceeb-47a0-857d-a18349c507f5"
@@ -521,7 +521,7 @@ __to_node_uuid = "b5db5b39-5c86-4edb-87c2-91b17ede4ad5"
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
-expression = "is_on_floor() && is_input_jump"
+expression = "is_on_floor() && is_action_just_pressed(\"jump\", 0.2) && can_jump"
 __from_uuid = "b3fdc091-1261-4006-a130-d7a725b6b4cd"
 __to_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __from_node_uuid = "167d2846-17ec-4534-a26e-c582cae80f3a"
@@ -636,12 +636,7 @@ _data = {
 &"triple_jump": SubResource("Animation_aln35")
 }
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dhej3"]
-atlas = ExtResource("2_heu0c")
-region = Rect2(0, 0, 48, 48)
-
 [sub_resource type="CanvasTexture" id="CanvasTexture_aln35"]
-diffuse_texture = SubResource("AtlasTexture_dhej3")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
 atlas = ExtResource("2_conr4")
@@ -681,6 +676,10 @@ region = Rect2(0, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2jquf"]
 atlas = ExtResource("6_0f2w8")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dhej3"]
+atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t56eh"]
@@ -1137,8 +1136,8 @@ initial_state = NodePath("Dry/Grounded/Idle")
 root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
-__last__editor_position = Vector2(0, -794.8283)
-__last_editor_zoom = 0.93046093
+__last__editor_position = Vector2(2757.1184, -647.0388)
+__last_editor_zoom = 0.60854954
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),

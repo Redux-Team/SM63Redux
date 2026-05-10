@@ -10,6 +10,7 @@ signal state_changed(from: State, to: State)
 @export var root_node: NodePath
 @export var sprite: SmartSprite2D
 @export var animation_player: AnimationPlayer
+@export var sfx_root: Node
 
 @export_group("Internal", "__")
 @export var __last__editor_position: Vector2
@@ -41,6 +42,8 @@ var _pending_transition_timer: float = 0.0
 var _state_buffer: float = 0.0
 var _can_consume_buffer: bool = false
 var _last_transition: StateTransition = null
+var _sfx_pool: Dictionary[StringName, AudioStreamPlayer] = {}
+var _sfx_pool_2d: Dictionary[StringName, AudioStreamPlayer2D] = {}
 
 
 func _validate_property(property: Dictionary) -> void:
@@ -89,8 +92,19 @@ func _process(delta: float) -> void:
 	for state: State in _active_superstates:
 		state._sprite_rules()
 		state._on_tick(delta)
+		if sfx_root and state.sfx_tick:
+			_play_sfx_entry(state.sfx_tick, state)
+		if sfx_root and state.sfx_frame and sprite:
+			if state.sfx_frame.check_frame_trigger(sprite.get_frame()):
+				_play_sfx_entry(state.sfx_frame, state)
+	
 	_current_state._sprite_rules()
 	_current_state._on_tick(delta)
+	if sfx_root and _current_state.sfx_tick:
+		_play_sfx_entry(_current_state.sfx_tick, _current_state)
+	if sfx_root and _current_state.sfx_frame and sprite:
+		if _current_state.sfx_frame.check_frame_trigger(sprite.get_frame()):
+			_play_sfx_entry(_current_state.sfx_frame, _current_state)
 	
 	for uuid: StringName in __states:
 		var state: State = __states.get(uuid) as State
@@ -318,6 +332,18 @@ func _transition_to(t: StateTransition, target: State) -> void:
 	target.__sprite_enter()
 	target.__animation_enter()
 	
+	if sfx_root:
+		for s: State in entering:
+			if s.sfx_enter:
+				_play_sfx_entry(s.sfx_enter, s)
+		if target.sfx_enter:
+			_play_sfx_entry(target.sfx_enter, target)
+		for s: State in exiting:
+			if s.sfx_exit:
+				_play_sfx_entry(s.sfx_exit, s)
+		if from.sfx_exit:
+			_play_sfx_entry(from.sfx_exit, from)
+	
 	t._on_after_transition()
 	state_changed.emit(from, target)
 
@@ -374,6 +400,106 @@ func _resolve_state_name(state_name: String) -> State:
 		if state.__editor_name == state_name.to_snake_case() or state.__editor_name == state_name:
 			return state
 	return null
+
+
+func _play_sfx_entry(entry: StateSFXEntry, state: State) -> void:
+	if not entry or not entry.playlist or not sfx_root:
+		return
+	if randf() > entry.chance:
+		return
+	
+	match entry.interrupt_policy:
+		StateSFXEntry.InterruptPolicy.CANCEL:
+			if _is_pool_playing(entry.pool_id, entry.spatial):
+				return
+		StateSFXEntry.InterruptPolicy.PLAY_IF_SUPERSTATE_ACTIVE:
+			var origin_sm: StateMachine = state.state_machine
+			if not origin_sm or not origin_sm._is_state_in_stack(state):
+				return
+		StateSFXEntry.InterruptPolicy.PLAY_ANYWAY:
+			pass
+	
+	var stream: AudioStream = _pick_stream(entry.playlist)
+	if not stream:
+		return
+	
+	var pitch: float = entry._resolve_pitch(_root_node)
+	var vol: float = entry._resolve_volume(_root_node)
+	var bus: StringName = entry._get_bus_name()
+	
+	if entry.spatial:
+		var player: AudioStreamPlayer2D = _get_pool_2d(entry.pool_id)
+		player.stream = stream
+		player.pitch_scale = pitch
+		player.volume_db = vol
+		player.bus = bus
+		player.play()
+	else:
+		var player: AudioStreamPlayer = _get_pool_flat(entry.pool_id)
+		player.stream = stream
+		player.pitch_scale = pitch
+		player.volume_db = vol
+		player.bus = bus
+		player.play()
+
+
+func _pick_stream(playlist: Playlist) -> AudioStream:
+	if playlist.tracklist.is_empty():
+		return null
+	match playlist.play_order:
+		Playlist.PlayOrder.RANDOM:
+			return playlist.tracklist.pick_random()
+		Playlist.PlayOrder.RANDOM_NEW:
+			var pick: AudioStream = playlist.tracklist.pick_random()
+			var attempts: int = 0
+			while pick.get_instance_id() == playlist.last_pick and playlist.tracklist.size() > 1 and attempts < 8:
+				pick = playlist.tracklist.pick_random()
+				attempts += 1
+			playlist.last_pick = pick.get_instance_id()
+			return pick
+		Playlist.PlayOrder.RANDOM_ONCE:
+			if playlist.sfx_pool.size() >= playlist.tracklist.size():
+				if not playlist.repeat_list:
+					return null
+				playlist.sfx_pool.clear()
+			for _i: int in playlist.tracklist.size():
+				var pick: AudioStream = playlist.tracklist.pick_random()
+				var id: int = pick.get_instance_id()
+				if not playlist.sfx_pool.has(id) and id != playlist.last_pick:
+					playlist.sfx_pool.append(id)
+					playlist.last_pick = id
+					return pick
+		Playlist.PlayOrder.SEQUENTIAL:
+			if playlist.sfx_pool.size() >= playlist.tracklist.size():
+				if not playlist.repeat_list:
+					return null
+				playlist.sfx_pool.clear()
+			var pick: AudioStream = playlist.tracklist[playlist.sfx_pool.size()]
+			playlist.sfx_pool.append(0)
+			return pick
+	return null
+
+
+func _get_pool_flat(pool_id: StringName) -> AudioStreamPlayer:
+	if not _sfx_pool.has(pool_id):
+		var player: AudioStreamPlayer = AudioStreamPlayer.new()
+		sfx_root.add_child(player)
+		_sfx_pool[pool_id] = player
+	return _sfx_pool[pool_id]
+
+
+func _get_pool_2d(pool_id: StringName) -> AudioStreamPlayer2D:
+	if not _sfx_pool_2d.has(pool_id):
+		var player: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
+		sfx_root.add_child(player)
+		_sfx_pool_2d[pool_id] = player
+	return _sfx_pool_2d[pool_id]
+
+
+func _is_pool_playing(pool_id: StringName, spatial: bool) -> bool:
+	if spatial:
+		return _sfx_pool_2d.has(pool_id) and _sfx_pool_2d[pool_id].playing
+	return _sfx_pool.has(pool_id) and _sfx_pool[pool_id].playing
 
 
 func _notify_done(forced: bool) -> void:

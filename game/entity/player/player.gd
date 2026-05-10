@@ -42,7 +42,12 @@ var buffer_dictionary: Dictionary[String, float]
 
 
 
-var move_dir: float = 0.0
+var _move_dir_raw: float = 0.0
+var move_dir: float:
+	get:
+		return _move_dir_raw
+	set(v):
+		_move_dir_raw = v
 var run_speed_percent: float = 0.0
 var current_jump: int = 0
 var slide_friction: float = 1.0
@@ -91,24 +96,24 @@ var jump_chain_timer: float = 0.0
 ## lock the sprite flipping
 @export var lock_flipping: bool = false
 
+var cam: Camera2D
+
 
 func _ready() -> void:
 	# TODO
-	# fix triple jump
 	# fix gravity sprite flipping
-	var cam: Camera2D = Camera2D.new()
+	cam = Camera2D.new()
 	cam.zoom = Vector2(1.2, 1.2)
 	cam.position_smoothing_enabled = true
 	cam.position_smoothing_speed = 10
-	
-	#var gc: GravityComponent = get_component(GravityComponent)
-	#gc.direction = Vector2.UP
+	cam.ignore_rotation = false
+	cam.rotation_smoothing_enabled = true
 	
 	add_child(cam)
 
 
 func _process(delta: float) -> void:
-	move_dir = Input.get_axis("move_left", "move_right")
+	_move_dir_raw = Input.get_axis("move_left", "move_right")
 	is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
 	is_input_dive = Input.is_action_pressed("dive") and not is_on_floor()
 	is_input_ground_pound = Input.is_action_pressed("ground_pound")
@@ -117,7 +122,6 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("jump"):
 		jump_buffer_timer = jump_buffer_time if can_jump else 0.0
-	
 	
 	for action: String in BUFFER_ACTIONS:
 		if Input.is_action_pressed(action):
@@ -136,6 +140,12 @@ func _process(delta: float) -> void:
 				current_jump = 0
 		elif current_jump >= 3:
 			current_jump = 0
+	
+	
+	
+	if floor_slope_raycast.is_colliding():
+		var gc: GravityComponent = get_component(GravityComponent)
+		gc.direction = floor_slope_raycast.get_collision_normal().rotated(PI)
 
 
 func get_facing_velocity() -> float:
@@ -144,6 +154,11 @@ func get_facing_velocity() -> float:
 
 func get_active_state_uptime() -> float:
 	return state_machine.get_current_state().get_elapsed_time()
+
+
+func get_local_floor_normal() -> Vector2:
+	var gc: GravityComponent = get_component(GravityComponent)
+	return get_floor_normal().rotated(-gc.get_angle()) if gc else get_floor_normal()
 
 
 func get_effective_friction() -> float:
@@ -158,6 +173,15 @@ func get_gravity_scale_factor() -> float:
 	if gravity_component:
 		return gravity_component.scale_factor
 	return 1.0
+
+
+func get_gravity_relative_move_dir() -> float:
+	var gc: GravityComponent = get_component(GravityComponent)
+	if not gc:
+		return move_dir
+	var angle: float = gc.get_angle()
+	var input_vec: Vector2 = Vector2(move_dir, 0.0).rotated(-angle)
+	return input_vec.x
 
 
 func get_movement_handler() -> PlayerMovementHandler:
@@ -179,7 +203,7 @@ func is_action_pressed(action: String) -> bool:
 func is_action_just_pressed(action: String, buffer: float = 0.0) -> bool:
 	if buffer > 0:
 		if action in BUFFER_ACTIONS and buffer_dictionary.has(action):
-			return buffer_dictionary.get(action) < buffer
+			return buffer_dictionary.get(action) < buffer and Input.is_action_pressed(action)
 	return Input.is_action_just_pressed(action)
 
 
@@ -188,7 +212,7 @@ func is_moving_with_facing() -> bool:
 
 
 func is_moving_against_facing() -> bool:
-	return (sign(move_dir) == 1 && sprite.flip_h) || (sign(move_dir) == -1 && !sprite.flip_h)
+	return (sign(move_dir) == 1 and sprite.flip_h) or (sign(move_dir) == -1 and not sprite.flip_h)
 
 
 func is_gravity_enabled() -> bool:

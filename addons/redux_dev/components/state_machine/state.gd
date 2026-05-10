@@ -27,6 +27,12 @@ var animation_player: AnimationPlayer
 @export var sprite_chain: Array[StringName] = []
 @export var sprite_chain_loop_last: bool = true
 
+@export_group("SFX", "sfx_")
+@export var sfx_enter: StateSFXEntry
+@export var sfx_exit: StateSFXEntry
+@export var sfx_tick: StateSFXEntry
+@export var sfx_frame: StateSFXEntry
+
 @export_group("Animation Player", "anim_")
 @export var anim_animation: String
 

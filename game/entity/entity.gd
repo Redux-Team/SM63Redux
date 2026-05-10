@@ -115,21 +115,16 @@ func _on_property_changed(_key: StringName, _value: Variant) -> void:
 
 
 func move_and_slide_with_gravity() -> void:
-	# field calculation
 	var gravity: GravityComponent = get_component(GravityComponent)
 	if not gravity:
 		return
-	
 	var angle: float = gravity.get_angle()
-	
 	velocity = velocity.rotated(angle)
 	move_and_slide()
-	
+	velocity = velocity.rotated(-angle)
 	if sprite:
 		up_direction = Vector2.UP.rotated(angle)
 		rotation = angle
-	
-	velocity = velocity.rotated(-angle)
 
 
 func _array_to_vec2(a: Variant) -> Vector2:

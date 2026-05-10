@@ -20,7 +20,7 @@ func _speed_up(dir: float) -> void:
 	
 	player.velocity.x = move_toward(player.velocity.x, target, accel)
 	
-	if player.get_floor_normal().y < 0.999 and player.velocity.y >= 0.0:
+	if player.get_local_floor_normal().y < 0.999 and player.velocity.y >= 0.0:
 		player.velocity.y = 0.5
  
  
