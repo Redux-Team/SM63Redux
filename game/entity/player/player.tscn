@@ -1194,8 +1194,9 @@ radius = 5.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q4egk"]
 size = Vector2(10, 11)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_6suq8"]
-size = Vector2(32, 11)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6suq8"]
+radius = 5.25
+height = 10.5
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fstnu"]
 size = Vector2(40, 11)
@@ -1268,7 +1269,7 @@ root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(919.6594, -81.17755)
+__last__editor_position = Vector2(0, -81.17755)
 __last_editor_zoom = 0.41110235
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
@@ -1763,9 +1764,10 @@ __editor_uuid = &"1f487687-d9c8-496b-9be9-7fd09f196b62"
 __editor_superstate_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 __editor_superstate_wire_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 
-[node name="Floorslide" type="Node" parent="StateMachine/Dry" unique_id=1890132868]
+[node name="Floorslide" type="Node" parent="StateMachine/Dry" unique_id=1890132868 node_paths=PackedStringArray("collision_enabled_shapes")]
 script = ExtResource("6_y6elw")
 sprite_animation_name = &"floor_slide"
+collision_enabled_shapes = [NodePath("../../../DiveCollision")]
 __editor_name = &"floorslide"
 __editor_position = Vector2(-1420, -940)
 __editor_uuid = &"56a353ee-c4c2-458c-a018-6302daa71851"
@@ -1944,8 +1946,8 @@ shape = SubResource("RectangleShape2D_q4egk")
 disabled = true
 
 [node name="DiveCollision" type="CollisionShape2D" parent="." unique_id=1515166672]
-position = Vector2(2, 5)
-shape = SubResource("RectangleShape2D_6suq8")
+position = Vector2(2, 4.75)
+shape = SubResource("CapsuleShape2D_6suq8")
 disabled = true
 
 [node name="Hitboxes" type="Node2D" parent="." unique_id=1409973495]

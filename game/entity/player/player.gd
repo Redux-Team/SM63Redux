@@ -140,12 +140,6 @@ func _process(delta: float) -> void:
 				current_jump = 0
 		elif current_jump >= 3:
 			current_jump = 0
-	
-	
-	
-	if floor_slope_raycast.is_colliding():
-		var gc: GravityComponent = get_component(GravityComponent)
-		gc.direction = floor_slope_raycast.get_collision_normal().rotated(PI)
 
 
 func get_facing_velocity() -> float:
