@@ -1579,18 +1579,12 @@ metadata/_custom_type_script = "uid://utibsg6xkllx"
 
 [node name="Dry" type="Node" parent="StateMachine" unique_id=1790975957]
 script = ExtResource("7_je5mu")
-sprite_restart_if_playing = false
-sprite_loop = false
-sprite_speed_scale = 0.0
 __editor_name = &"dry"
 __editor_position = Vector2(-1840, -480)
 __editor_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 
 [node name="Grounded" type="Node" parent="StateMachine/Dry" unique_id=2112507397]
 script = ExtResource("10_tb30q")
-sprite_restart_if_playing = false
-sprite_loop = false
-sprite_speed_scale = 0.0
 __editor_name = &"grounded"
 __editor_position = Vector2(-1420, -680)
 __editor_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
@@ -1628,9 +1622,6 @@ __editor_superstate_wire_uuid = &"092ff28f-6a90-40e8-8c49-a55969c526c7"
 
 [node name="Airborne" type="Node" parent="StateMachine/Dry" unique_id=338446170]
 script = ExtResource("8_k8egu")
-sprite_restart_if_playing = false
-sprite_loop = false
-sprite_speed_scale = 0.0
 __editor_name = &"airborne"
 __editor_position = Vector2(-1420, -400)
 __editor_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"

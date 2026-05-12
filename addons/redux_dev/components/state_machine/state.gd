@@ -3,39 +3,71 @@
 class_name State
 extends Node
 
+## The [SmartSprite2D] linked to the [StateMachine].
 var sprite: SmartSprite2D
+## The [AnimationPlayer] linked to the [StateMachine].
 var animation_player: AnimationPlayer
 
 @export_group("State Machine")
+## How long in seconds this state will remain active before automatically calling [method done].
+## A value of 0.0 disables the runtime limit.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var runtime: float = 0.0
+## This defines whether the state can actually be [b]held[/b] by the [StateMachine].
+## if [code]true[/code], then this state only serves to check transitions when it is transitioned
+## to, otherwise the [StateMachine] will use the previous state.
 @export var is_passthrough: bool = false
+## When this state is not the primary state, but a superstate, transitions will 
+## normally not be checked. If [code]true[/code], then transitions will be checked
+## regardless of if this state is active as a superstate or primary state.
 @export var always_transition: bool = false
 
 @export_group("Sprite", "sprite_")
+## The animation of the [SmartSprite2D].
 @export var sprite_animation_name: StringName = ""
+## If [code]true[/code], the sprite animation will restart from the beginning even if it is
+## already playing the same animation when this state is entered.
 @export var sprite_restart_if_playing: bool = true
+## If [code]true[/code], overrides the sprite loop setting using [member sprite_loop]
+## instead of the animation's default.
 @export var sprite_override_loop: bool = false
+## If [code]true[/code], prevents the sprite from flipping horizontally while this state
+## is active. Automatically released on exit.
 @export var sprite_lock_flipping: bool = false
+## Whether the sprite animation loops. Only applied when [member sprite_override_loop] is [code]true[/code].
 @export var sprite_loop: bool = true
+## Playback speed multiplier applied to the sprite animation on enter.
 @export var sprite_speed_scale: float = 1.0
+## If [code]true[/code], stops the sprite animation when this state is exited.
 @export var sprite_stop_on_exit: bool = false
 @export_subgroup("Offset", "sprite_offset")
+## Enables a positional offset applied to the sprite while this state is active.
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "sprite_offset_") var sprite_offset_enabled: bool = false
+## The pixel offset applied to the sprite when [member sprite_offset_enabled] is [code]true[/code].
 @export var sprite_offset_value: Vector2 = Vector2.ZERO
 @export_subgroup("Chain", "sprite_")
+## A sequence of animation names played in order after [member sprite_animation_name] finishes.
 @export var sprite_chain: Array[StringName] = []
+## If [code]true[/code], the final animation in [member sprite_chain] will loop indefinitely.
 @export var sprite_chain_loop_last: bool = true
 
 @export_group("Collision", "collision_")
+## The subset of the entity's [CollisionShape2D] nodes that should be enabled while this state
+## is active. All others will be disabled on enter and restored on exit. If none set, it will
+## stay with what it entered with.
 @export var collision_enabled_shapes: Array[CollisionShape2D] = []
 
 @export_group("SFX", "sfx_")
+## SFX entry played when this state is entered.
 @export var sfx_enter: StateSFXEntry
+## SFX entry played when this state is exited.
 @export var sfx_exit: StateSFXEntry
+## SFX entry played every process tick while this state is active.
 @export var sfx_tick: StateSFXEntry
+## SFX entry triggered by specific sprite frames while this state is active.
 @export var sfx_frame: StateSFXEntry
 
 @export_group("Animation Player", "anim_")
+## The [AnimationPlayer] animation to play when this state is entered.
 @export var anim_animation: String
 
 @export_group("Internal")
@@ -94,7 +126,7 @@ func _validate_property(property: Dictionary) -> void:
 			property.hint = PROPERTY_HINT_ENUM
 			property.hint_string = ",".join(sm.animation_player.get_animation_list())
 
-
+# Walks up the scene tree to find the nearest parent StateMachine.
 func _get_state_machine() -> StateMachine:
 	if state_machine:
 		return state_machine
