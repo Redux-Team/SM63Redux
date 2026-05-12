@@ -1,3 +1,6 @@
+# TODO - The player is in a relatively stable state; however, I do plan
+# on reworking the API in the future, especially when it comes to class variables
+# affecting states.
 class_name Player
 extends Entity
 

@@ -1,3 +1,15 @@
+## Holds and organizes [State] resources, driving transitions between them.
+##
+## [StateMachine] is the central runtime controller for a node-based state graph.
+## It owns all [State] and [StateTransition] resources, evaluates transition conditions
+## each frame, manages superstate stacks, and dispatches lifecycle callbacks
+## ([method State._on_enter], [method State._on_tick], [method State._on_exit], etc.)
+## to active states. Audio pooling, sprite rules, and animation hooks are also
+## coordinated here. [br][br]
+## This StateMachine does not require the Redux Development Plugin to run, however it is
+## recommended to use it in order to [b]edit[/b] everything in the StateMachine.
+## In addition, it is also highly recommended to edit the states themselves in the dedicated
+## panel inside of the development plugin, otherwise scary things might happen..
 @icon("uid://c62fk8rmsd0do")
 @tool
 class_name StateMachine
@@ -46,11 +58,13 @@ var _sfx_pool: Dictionary[StringName, Array] = {}
 var _sfx_pool_2d: Dictionary[StringName, Array] = {}
 
 
+# hides __ prefixed properties from the inspector unless SHOW_INTERNAL is set in the development plugin.
 func _validate_property(property: Dictionary) -> void:
 	if property.name.begins_with("__") and not ReduxPlugin.SHOW_INTERNAL:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
 
 
+# resolves the root node and enters the initial or entry-linked state.
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
@@ -66,6 +80,7 @@ func _ready() -> void:
 		_enter_state(initial_state)
 
 
+# Ticks the active state stack, evaluates transitions, and cascades immediates.
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint() or not _running or not _current_state:
 		return
@@ -122,6 +137,7 @@ func _process(delta: float) -> void:
 		max_cascade -= 1
 
 
+# Physics tick forwarded to all active states and inactive states.
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint() or not _running or not _current_state:
 		return
@@ -138,6 +154,7 @@ func _physics_process(delta: float) -> void:
 			state._on_physics_tick_inactive(delta)
 
 
+# Forwards input events to all active states in the superstate stack.
 func _input(event: InputEvent) -> void:
 	if Engine.is_editor_hint() or not _running or not _current_state:
 		return
@@ -147,6 +164,7 @@ func _input(event: InputEvent) -> void:
 	_current_state._on_input(event)
 
 
+# Propagates the resolved root node, sprite, and animation player to all states and transitions.
 func _dispatch_root_node() -> void:
 	for uuid: StringName in __states:
 		var state: State = __states.get(uuid) as State
@@ -165,6 +183,7 @@ func _dispatch_root_node() -> void:
 		t._init_expression()
 
 
+# Collects and sorts by priority all outgoing transitions for the current state, then fires the first eligible one.
 func _evaluate_transitions() -> void:
 	var current_uuid: StringName = ""
 	for uuid: StringName in __states:
@@ -214,6 +233,7 @@ func _evaluate_transitions() -> void:
 	_done_forced = false
 
 
+# Returns true if the current state has at least one outgoing transition marked check_immediately.
 func _has_immediate_outgoing_transition() -> bool:
 	var current_uuid: StringName = ""
 	for uuid: StringName in __states:
@@ -229,6 +249,7 @@ func _has_immediate_outgoing_transition() -> bool:
 	return false
 
 
+# Evaluates whether a transition's mode conditions and target passthrough chain are satisfied.
 func _should_fire(t: StateTransition) -> bool:
 	var target: State = __states.get(t.__to_uuid) as State
 	if not target:
@@ -259,6 +280,7 @@ func _should_fire(t: StateTransition) -> bool:
 	return true
 
 
+# Checks if a passthrough state has at least one fireable outgoing transition, pre entering it if needed.
 func _has_outgoing_transition_from(state: State) -> bool:
 	if not state._pre_entered:
 		state._pre_enter()
@@ -282,6 +304,7 @@ func _has_outgoing_transition_from(state: State) -> bool:
 	return false
 
 
+# Executes the full exit/enter lifecycle, updates the active stack, and emits state_changed.
 func _transition_to(t: StateTransition, target: State) -> void:
 	_last_transition = t
 	_done_requested = false
@@ -352,6 +375,7 @@ func _transition_to(t: StateTransition, target: State) -> void:
 	state_changed.emit(from, target)
 
 
+# Sets the initial state, builds the superstate stack, and fires enter callbacks without a prior transition.
 func _enter_state(state: State) -> void:
 	_current_state = state
 	_active_superstates = _collect_superstates(state)
@@ -376,6 +400,7 @@ func _enter_state(state: State) -> void:
 	state.__collision_enter()
 
 
+# Walks the superstate chain of a state and returns an ordered array from outermost to innermost.
 func _collect_superstates(state: State) -> Array[State]:
 	var result: Array[State] = []
 	var current_uuid: StringName = state.__editor_superstate_uuid
@@ -388,6 +413,7 @@ func _collect_superstates(state: State) -> Array[State]:
 	return result
 
 
+# Returns true if the given state is either the current state or anywhere in the active superstate stack.
 func _is_state_in_stack(state: State) -> bool:
 	if state == _current_state:
 		return true
@@ -397,6 +423,7 @@ func _is_state_in_stack(state: State) -> bool:
 	return false
 
 
+# Looks up a state by its editor name, accepting both snake_case and original casing.
 func _resolve_state_name(state_name: String) -> State:
 	for uuid: StringName in __states:
 		var state: State = __states.get(uuid) as State
@@ -407,6 +434,7 @@ func _resolve_state_name(state_name: String) -> State:
 	return null
 
 
+# Resolves and plays a StateSFXEntry through the appropriate flat or 2D audio pool.
 func _play_sfx_entry(entry: StateSFXEntry, state: State) -> void:
 	if not entry or not entry.playlist or not sfx_root:
 		return
@@ -447,6 +475,7 @@ func _play_sfx_entry(entry: StateSFXEntry, state: State) -> void:
 		player.play()
 
 
+# Picks the next stream from a Playlist according to its play order and repeat settings.
 func _pick_stream(playlist: Playlist) -> AudioStream:
 	if playlist.tracklist.is_empty():
 		return null
@@ -484,6 +513,7 @@ func _pick_stream(playlist: Playlist) -> AudioStream:
 	return null
 
 
+# Returns an idle or newly created AudioStreamPlayer from the flat pool for the given pool_id.
 func _get_pool_flat(pool_id: StringName, max_stack: int) -> AudioStreamPlayer:
 	if not _sfx_pool.has(pool_id):
 		_sfx_pool[pool_id] = []
@@ -499,6 +529,7 @@ func _get_pool_flat(pool_id: StringName, max_stack: int) -> AudioStreamPlayer:
 	return pool[0]
 
 
+# Returns an idle or newly created AudioStreamPlayer2D from the spatial pool for the given pool_id.
 func _get_pool_2d(pool_id: StringName, max_stack: int) -> AudioStreamPlayer2D:
 	if not _sfx_pool_2d.has(pool_id):
 		_sfx_pool_2d[pool_id] = []
@@ -514,6 +545,7 @@ func _get_pool_2d(pool_id: StringName, max_stack: int) -> AudioStreamPlayer2D:
 	return pool[0]
 
 
+# Returns true if any player in the given pool is currently playing.
 func _is_pool_playing(pool_id: StringName, spatial: bool) -> bool:
 	var pool: Array = _sfx_pool_2d[pool_id] if spatial else _sfx_pool[pool_id]
 	if not _sfx_pool_2d.has(pool_id) if spatial else not _sfx_pool.has(pool_id):
@@ -524,6 +556,7 @@ func _is_pool_playing(pool_id: StringName, spatial: bool) -> bool:
 	return false
 
 
+# Stops or frees audio pools for all SFX entries belonging to a state that is exiting.
 func _handle_sfx_exit(state: State) -> void:
 	for entry: StateSFXEntry in [state.sfx_enter, state.sfx_exit, state.sfx_tick, state.sfx_frame]:
 		if not entry:
@@ -534,6 +567,7 @@ func _handle_sfx_exit(state: State) -> void:
 			_stop_pool_entry(entry.pool_id, entry.spatial)
 
 
+# Stops all players in the given pool without freeing them.
 func _stop_pool_entry(pool_id: StringName, spatial: bool) -> void:
 	if spatial:
 		if not _sfx_pool_2d.has(pool_id):
@@ -547,6 +581,7 @@ func _stop_pool_entry(pool_id: StringName, spatial: bool) -> void:
 			player.stop()
 
 
+# queue_frees all players in the given pool and removes the pool entry.
 func _free_pool_entry(pool_id: StringName, spatial: bool) -> void:
 	if spatial:
 		if not _sfx_pool_2d.has(pool_id):
@@ -562,6 +597,7 @@ func _free_pool_entry(pool_id: StringName, spatial: bool) -> void:
 		_sfx_pool.erase(pool_id)
 
 
+# Sets the done flag so WAIT_UNTIL_DONE transitions can fire; forced=true bypasses condition checks.
 func _notify_done(forced: bool) -> void:
 	if forced:
 		_done_forced = true
@@ -569,17 +605,34 @@ func _notify_done(forced: bool) -> void:
 		_done_requested = true
 
 
+## Stores an input buffer for the given duration in seconds (default 0.1).
+## Call this just before an action to allow a brief window where the next state
+## can consume it via [method consume_state_buffer].
+## [br][br]
+## [param amount] Duration in seconds the buffer remains active.[br]
+## [br]
+## Returns [code]true[/code] always (convenience for inline use in conditions).
 func store_state_buffer(amount: float = 0.1) -> bool:
 	_state_buffer = amount
 	_can_consume_buffer = false
 	return true
 
 
+## Attempts to consume a pending state buffer. Returns [code]true[/code] if the
+## buffer has already elapsed (i.e. the action can proceed immediately), or arms
+## consumption so the next [method store_state_buffer] expiry grants it.
+## [br][br]
+## Returns [code]true[/code] if the buffer is already empty and the action should fire now.
 func consume_state_buffer() -> bool:
 	_can_consume_buffer = true
 	return _state_buffer == 0.0
 
 
+## Immediately transitions to the state matching [param state_name].
+## Bypasses transition conditions. If the machine is not yet running, the state
+## is entered directly without an outgoing transition object.
+## [br][br]
+## [param state_name] The [member State.__editor_name] of the target state (snake_case or original casing).
 func change_state(state_name: String) -> void:
 	var target: State = _resolve_state_name(state_name)
 	if not target:
@@ -594,6 +647,10 @@ func change_state(state_name: String) -> void:
 	_transition_to(t, target)
 
 
+## Fires the first [constant StateTransition.TransitionMode.MANUAL] transition
+## from the current state whose label matches [param transition_label].
+## [br][br]
+## [param transition_label] The label string set on the target [StateTransition].
 func trigger(transition_label: String) -> void:
 	if not _current_state:
 		return
@@ -610,14 +667,20 @@ func trigger(transition_label: String) -> void:
 			return
 
 
+## Returns the currently active leaf [State].
 func get_current_state() -> State:
 	return _current_state
 
 
+## Returns a copy of the active superstate stack, ordered from outermost to innermost.
 func get_active_superstates() -> Array[State]:
 	return _active_superstates.duplicate()
 
 
+## Returns [code]true[/code] if the state matching [param state_name] is currently
+## active - either as the current state or anywhere in the superstate stack.
+## [br][br]
+## [param state_name] The [member State.__editor_name] of the state to check.
 func is_state_active(state_name: String) -> bool:
 	var target: State = _resolve_state_name(state_name)
 	if not target:

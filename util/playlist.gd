@@ -1,3 +1,4 @@
+## Resource which defines a set of audio files and the order in which they should be played. 
 class_name Playlist
 extends Resource
 

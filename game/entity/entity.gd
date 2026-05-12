@@ -1,3 +1,4 @@
+## Base entity class, can hold [EntityComponent]s as well as
 @warning_ignore_start("unused_parameter", "unused_private_class_variable")
 @abstract class_name Entity
 extends CharacterBody2D
@@ -45,7 +46,7 @@ func init_from_data(obj_data: Dictionary) -> void:
 	var props: Dictionary = obj_data.get("properties", {})
 	for key: String in props:
 		properties[key] = props[key]
-	position = _array_to_vec2(obj_data.get("position", [0.0, 0.0]))
+	position = Packer.array_to_vec2(obj_data.get("position", [0.0, 0.0]))
 	_on_init()
 
 
@@ -126,17 +127,3 @@ func move_and_slide_with_gravity() -> void:
 	if sprite:
 		up_direction = Vector2.UP.rotated(angle)
 		rotation = angle
-
-
-func _array_to_vec2(a: Variant) -> Vector2:
-	if a is Array and a.size() >= 2:
-		return Vector2(float(a[0]), float(a[1]))
-	return Vector2.ZERO
-
-
-func _array_to_packed_vec2(a: Variant) -> PackedVector2Array:
-	var packed: PackedVector2Array = []
-	if a is Array and a.size() >= 1:
-		for v_a: Array in a:
-			packed.append(Vector2(float(v_a[0]), float(v_a[1])))
-	return packed

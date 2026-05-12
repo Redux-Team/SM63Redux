@@ -1,3 +1,5 @@
+## Helper class to easily distinguish which device/platform the current instance
+## is running on.
 class_name Device
 extends Node
 

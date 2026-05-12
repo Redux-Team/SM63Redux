@@ -1,4 +1,4 @@
-## Helper class to easily pack/unpack data.
+## Helper class to easily handle and pack/unpack different types of data.
 class_name Packer
 
 
