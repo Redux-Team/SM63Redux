@@ -59,10 +59,5 @@ func _init() -> void:
 	_inst = self
 
 
-func _ready() -> void:
-	get_save_load_handler().load_raw_data({})
-	
-	Singleton.get_discord_handler().set_presence(
-		"In the Level Designer",
-		"Editing a level"
-	)
+func _exit_tree() -> void:
+	get_save_load_handler()

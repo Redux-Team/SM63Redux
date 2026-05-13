@@ -135,7 +135,6 @@ func _on_rotate_button_pressed() -> void:
 func _on_test_server_button_pressed() -> void:
 	Singleton.get_multiplayer_handler().start_server()
 	Singleton.set_meta("playtest", LD.get_save_load_handler().get_level_data())
-	Singleton.get_discord_handler().set_presence("In the Level Designer", "Testing a level")
 	
 	get_tree().change_scene_to_file("uid://ctssku6r3gx0a")
 
@@ -143,7 +142,6 @@ func _on_test_server_button_pressed() -> void:
 func _on_test_client_button_pressed() -> void:
 	Singleton.get_multiplayer_handler().start_client()
 	Singleton.set_meta("playtest", LD.get_save_load_handler().get_level_data())
-	Singleton.get_discord_handler().set_presence("In the Level Designer", "Testing a level")
 	
 	get_tree().change_scene_to_file("uid://ctssku6r3gx0a")
 

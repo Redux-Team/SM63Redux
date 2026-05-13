@@ -6,12 +6,54 @@ const PLAYER_SPAWN_UID: String = "uid://c0fmf7xmrf32i"
 const BINARY_EXTENSION: String = ".63r.lvl"
 const JSON_EXTENSION: String = ".json"
 const FORMAT_VERSION: int = 1
+const LAST_SESSION_PATH: String = "user://ld_last_session.json"
+const AUTOSAVE_PATH: String = "user://autosave_ld_session"
+const PERIODIC_AUTOSAVE_PATH: String = "user://periodic_autosave_ld_session"
+const PERIODIC_AUTOSAVE_ENABLED: bool = true
+const PERIODIC_AUTOSAVE_INTERVAL: float = 60.0
+
+var level_file_path: String
+var method: int = -1 # -1 X, 0 Bin, 1 JSON
+var _periodic_autosave_timer: Timer = null
+
+
+func _enter_tree() -> void:
+	if not FileAccess.file_exists(LAST_SESSION_PATH):
+		return
+	
+	var session_raw: String = FileAccess.open(LAST_SESSION_PATH, FileAccess.READ).get_as_text()
+	var session: Dictionary = JSON.parse_string(session_raw) if session_raw else {}
+	
+	level_file_path = session.get("level_file_path", "")
+	method = session.get("method", -1)
 
 
 func _on_ready() -> void:
 	if Singleton.has_meta(&"playtest"):
 		_deserialize(Singleton.get_meta(&"playtest"))
 		Singleton.remove_meta(&"playtest")
+	 
+	if PERIODIC_AUTOSAVE_ENABLED:
+		_periodic_autosave_timer = Timer.new()
+		_periodic_autosave_timer.wait_time = PERIODIC_AUTOSAVE_INTERVAL
+		_periodic_autosave_timer.autostart = true
+		_periodic_autosave_timer.timeout.connect(_on_periodic_autosave_timeout)
+		add_child(_periodic_autosave_timer)
+	
+	match method:
+		0: load_binary(level_file_path)
+		1: load_json(level_file_path)
+		_: _ensure_player_spawn()
+
+
+func _on_periodic_autosave_timeout() -> void:
+	if not FileAccess.file_exists(level_file_path) or method == -1:
+		return
+	
+	var file: FileAccess = FileAccess.open(PERIODIC_AUTOSAVE_PATH, FileAccess.WRITE)
+	if file:
+		file.store_buffer(var_to_bytes(_serialize()))
+		file.close()
 
 
 func save_binary(path: String) -> Error:
@@ -22,6 +64,9 @@ func save_binary(path: String) -> Error:
 		return FileAccess.get_open_error()
 	file.store_buffer(bytes)
 	file.close()
+	level_file_path = path
+	method = 0
+	autosave()
 	return OK
 
 
@@ -36,6 +81,9 @@ func load_binary(path: String) -> Error:
 		return ERR_INVALID_DATA
 	var err: Error = _deserialize(data)
 	if err == OK:
+		level_file_path = path
+		method = 0
+		autosave()
 		LD.get_tool_handler().select_tool("select")
 	return err
 
@@ -52,6 +100,9 @@ func save_json(path: String) -> Error:
 		return FileAccess.get_open_error()
 	file.store_string(json_string)
 	file.close()
+	level_file_path = path
+	method = 1
+	autosave()
 	return OK
 
 
@@ -70,12 +121,31 @@ func load_json(path: String) -> Error:
 		return ERR_INVALID_DATA
 	var deserialize_err: Error = _deserialize(data)
 	if deserialize_err == OK:
+		level_file_path = path
 		LD.get_tool_handler().select_tool("select")
+		method = 1
+		autosave()
 	return deserialize_err
 
 
 func get_level_data() -> Dictionary:
 	return _serialize()
+
+
+func autosave() -> void:
+	var session_file: FileAccess = FileAccess.open(LAST_SESSION_PATH, FileAccess.WRITE)
+	if FileAccess.file_exists(level_file_path):
+		session_file.store_string(JSON.stringify({
+			"level_file_path": level_file_path,
+			"method": method,
+		}))
+	else:
+		var autosave_file: FileAccess = FileAccess.open(AUTOSAVE_PATH, FileAccess.WRITE)
+		autosave_file.store_buffer(var_to_bytes(_serialize()))
+		session_file.store_string(JSON.stringify({
+			"level_file_path": AUTOSAVE_PATH,
+			"method": 0,
+		}))
 
 
 func _serialize() -> Dictionary:

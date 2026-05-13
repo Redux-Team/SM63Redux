@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://dkjnplx3hhp7q"]
+
+[ext_resource type="Script" uid="uid://dtvjt7k3c8dhn" path="res://game/world/level.gd" id="1_0euo3"]
+[ext_resource type="Script" uid="uid://bvchgcwpo2hdu" path="res://game/world/data/level_area_data.gd" id="2_mtv3p"]
+[ext_resource type="Script" uid="uid://w60fapixf1o5" path="res://game/world/level_camera.gd" id="2_n8vjl"]
+[ext_resource type="Script" uid="uid://mug2svtwqno4" path="res://game/world/data/level_scenario_data.gd" id="3_i4tki"]
+[ext_resource type="Script" uid="uid://dkei81xudqiay" path="res://game/world/data/level_data.gd" id="4_66k28"]
+
+[sub_resource type="Resource" id="Resource_ift6h"]
+script = ExtResource("4_66k28")
+metadata/_custom_type_script = "uid://dkei81xudqiay"
+
+[node name="Level" type="Node" unique_id=1240945081 node_paths=PackedStringArray("_music_player", "_camera")]
+script = ExtResource("1_0euo3")
+_data = SubResource("Resource_ift6h")
+_music_player = NodePath("MusicPlayer")
+_camera = NodePath("LevelCamera")
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="." unique_id=1044394242]
+
+[node name="LevelCamera" type="Camera2D" parent="." unique_id=1337012337]
+script = ExtResource("2_n8vjl")
