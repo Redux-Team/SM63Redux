@@ -15,6 +15,25 @@ var properties: Dictionary[StringName, Variant] = {}
 var source_object_id: String = ""
 var components: Array[EntityComponent]
 
+## Helper variable which takes into account the [member sprite]'s flip_h property.
+var local_velocity: Vector2:
+	get():
+		if not sprite:
+			return velocity
+		
+		return Vector2(
+			velocity.x * (-1 if sprite.flip_h else 1),
+			velocity.y
+		)
+	set(lv):
+		if not sprite:
+			velocity = lv
+		
+		velocity = Vector2(
+			lv.x * (-1 if sprite.flip_h else 1),
+			lv.y
+		)
+
 
 func _ready() -> void:
 	for child: Node in components_root.get_children():
@@ -40,6 +59,7 @@ func init_from_data(obj_data: Dictionary) -> void:
 	for key: String in props:
 		properties[key] = props[key]
 	position = Packer.array_to_vec2(obj_data.get("position", [0.0, 0.0]))
+	scale = Packer.array_to_vec2(properties.get("scale", [0.0, 0.0]))
 	_on_init()
 
 

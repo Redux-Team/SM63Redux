@@ -2,27 +2,89 @@
 
 [ext_resource type="Script" uid="uid://gx548aea8dxr" path="res://game/entity/enemy/goomba/goomba.gd" id="1_hysx3"]
 [ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="2_e0p0p"]
+[ext_resource type="Script" uid="uid://elx0fserr285" path="res://game/entity/enemy/goomba/states/patrol.gd" id="3_g7wuw"]
 [ext_resource type="Texture2D" uid="uid://djgg3rgm58230" path="res://assets/textures/entity/enemy/goomba/goomba_walk.png" id="3_hysx3"]
+[ext_resource type="Script" uid="uid://3y7t4ymugnxu" path="res://addons/redux_dev/components/state_machine/state_transition.gd" id="3_ios8m"]
+[ext_resource type="Script" uid="uid://dyjrhpdveexsr" path="res://addons/redux_dev/components/state_machine/state.gd" id="3_tx7nd"]
+[ext_resource type="Script" uid="uid://cd63gwefr4fp4" path="res://util/playlist.gd" id="4_dc2fh"]
 [ext_resource type="Texture2D" uid="uid://dtakiqymwlidq" path="res://assets/textures/entity/enemy/goomba/goomba_alert.png" id="4_kyaey"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_whnfo"]
+[ext_resource type="Script" uid="uid://deiaa5u8esvnc" path="res://addons/redux_dev/components/state_machine/state_sfx_entry.gd" id="4_wjeoi"]
+[ext_resource type="Script" uid="uid://ckuqr7ws7p6tk" path="res://game/entity/enemy/goomba/states/alert.gd" id="4_x5cu4"]
+[ext_resource type="AudioStream" uid="uid://dgmayxvw7oy3w" path="res://assets/sfx/entity/goomba/goomba_step.wav" id="5_dri63"]
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="5_n0olq"]
 [ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="5_whnfo"]
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="6_prjr3"]
+[ext_resource type="Texture2D" uid="uid://bpp7wgte6dq0l" path="res://assets/textures/entity/enemy/goomba/goomba_squish.png" id="7_phpar"]
+[ext_resource type="AudioStream" uid="uid://y56kvftd2idy" path="res://assets/sfx/entity/goomba/goomba_jump.ogg" id="8_dri63"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="10_d6enh"]
+[ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="11_8wobc"]
+[ext_resource type="Script" uid="uid://ptqlxnwadjpm" path="res://game/entity/enemy/goomba/states/chase.gd" id="11_fb4me"]
+[ext_resource type="Script" uid="uid://bu81quiseko6w" path="res://game/entity/enemy/goomba/states/squish.gd" id="12_6f57m"]
+[ext_resource type="AudioStream" uid="uid://cucdekyl58ypv" path="res://assets/sfx/entity/goomba/goomba_stomped.wav" id="13_eqg5w"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_n0olq"]
+[sub_resource type="Resource" id="Resource_eqg5w"]
+resource_local_to_scene = true
+script = ExtResource("3_ios8m")
+mode = 1
+__from_uuid = "53d6d36b-82d5-4959-a868-aff4d9ec2aba"
+__to_uuid = "7e6bd701-d523-4ed2-8296-7bb3425517f0"
+__from_node_uuid = "53d6d36b-82d5-4959-a868-aff4d9ec2aba"
+__to_node_uuid = "7e6bd701-d523-4ed2-8296-7bb3425517f0"
+
+[sub_resource type="Curve" id="Curve_g7wuw"]
+_limits = [-1.0, 1.0, -1.0, 1.0]
+_data = [Vector2(-1, -1), 0.0, 0.0, 0, 0, Vector2(-0.35, -1), 0.0, 0.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Resource" id="Resource_ios8m"]
+script = ExtResource("4_dc2fh")
+tracklist = Array[AudioStream]([ExtResource("5_dri63")])
+metadata/_custom_type_script = "uid://cd63gwefr4fp4"
+
+[sub_resource type="Resource" id="Resource_0js5a"]
+script = ExtResource("4_wjeoi")
+playlist = SubResource("Resource_ios8m")
+pitch_range = Vector2(0.9, 1.1)
+volume_db = -4.0
+max_distance = 500.0
+sfx_frames = Array[int]([0, 3])
+metadata/_custom_type_script = "uid://deiaa5u8esvnc"
+
+[sub_resource type="Resource" id="Resource_fb4me"]
+script = ExtResource("4_dc2fh")
+tracklist = Array[AudioStream]([ExtResource("8_dri63")])
+metadata/_custom_type_script = "uid://cd63gwefr4fp4"
+
+[sub_resource type="Resource" id="Resource_6f57m"]
+script = ExtResource("4_wjeoi")
+playlist = SubResource("Resource_fb4me")
+pitch_range = Vector2(0.9, 1.1)
+volume_db = -6.0
+metadata/_custom_type_script = "uid://deiaa5u8esvnc"
+
+[sub_resource type="Resource" id="Resource_xvu80"]
+script = ExtResource("4_dc2fh")
+tracklist = Array[AudioStream]([ExtResource("13_eqg5w")])
+metadata/_custom_type_script = "uid://cd63gwefr4fp4"
+
+[sub_resource type="Resource" id="Resource_lgdot"]
+script = ExtResource("4_wjeoi")
+playlist = SubResource("Resource_xvu80")
+pitch_range = Vector2(0.9, 1.1)
+volume_db = -10.0
+metadata/_custom_type_script = "uid://deiaa5u8esvnc"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_whnfo"]
 atlas = ExtResource("3_hysx3")
-region = Rect2(0, 0, 32, 32)
+region = Rect2(64, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_prjr3"]
-diffuse_texture = SubResource("AtlasTexture_n0olq")
+[sub_resource type="CanvasTexture" id="CanvasTexture_eqg5w"]
+diffuse_texture = SubResource("AtlasTexture_whnfo")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kyaey"]
 atlas = ExtResource("4_kyaey")
 region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8wobc"]
-atlas = ExtResource("4_kyaey")
-region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x5cu4"]
 atlas = ExtResource("4_kyaey")
@@ -32,13 +94,33 @@ region = Rect2(0, 0, 32, 32)
 atlas = ExtResource("4_kyaey")
 region = Rect2(32, 0, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_8wobc"]
+atlas = ExtResource("4_kyaey")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g7wuw"]
+atlas = ExtResource("7_phpar")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wjeoi"]
+atlas = ExtResource("7_phpar")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0js5a"]
+atlas = ExtResource("7_phpar")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dc2fh"]
+atlas = ExtResource("7_phpar")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0olq"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(0, 0, 32, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_prjr3"]
 atlas = ExtResource("3_hysx3")
 region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_whnfo"]
-atlas = ExtResource("3_hysx3")
-region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e0p0p"]
 atlas = ExtResource("3_hysx3")
@@ -58,16 +140,8 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kyaey")
 }],
-"loop": true,
+"loop": false,
 "name": &"alert_fall",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_8wobc")
-}],
-"loop": true,
-"name": &"alert_landed",
 "speed": 5.0
 }, {
 "frames": [{
@@ -78,7 +152,32 @@ animations = [{
 "texture": SubResource("AtlasTexture_d6enh")
 }],
 "loop": false,
-"name": &"alert_up",
+"name": &"alert_jump",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8wobc")
+}],
+"loop": false,
+"name": &"alert_landed",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g7wuw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wjeoi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0js5a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dc2fh")
+}],
+"loop": false,
+"name": &"squish",
 "speed": 10.0
 }, {
 "frames": [{
@@ -102,43 +201,108 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk",
-"speed": 10.0
+"speed": 8.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hysx3"]
-size = Vector2(17, 2)
+size = Vector2(9, 2)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_prjr3"]
-size = Vector2(17, 5)
+size = Vector2(17, 7)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_whnfo"]
-size = Vector2(16.5, 10.5)
+size = Vector2(21.5, 9)
 
-[node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("sprite", "components_root")]
-collision_layer = 0
+[node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("player_check", "sprite", "components_root", "state_machine")]
+collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_hysx3")
+player_check = NodePath("PlayerCheck")
 sprite = NodePath("SmartSprite2D")
 components_root = NodePath("Components")
+state_machine = NodePath("StateMachine")
 
-[node name="StateMachine" type="Node" parent="." unique_id=48097513]
+[node name="StateMachine" type="Node" parent="." unique_id=48097513 node_paths=PackedStringArray("initial_state", "sprite", "sfx_root", "__states")]
 script = ExtResource("2_e0p0p")
-__last__editor_position = Vector2(-330.47092, -94.6271)
+initial_state = NodePath("Wander/Patrol")
+root_node = NodePath("..")
+sprite = NodePath("../SmartSprite2D")
+sfx_root = NodePath("..")
+__last__editor_position = Vector2(274.15878, 115.922455)
 __last_editor_zoom = 0.74002534
+__states = {
+&"53d6d36b-82d5-4959-a868-aff4d9ec2aba": NodePath("Wander/Alert"),
+&"68c1c64e-e88a-4ed3-bfca-021d704423e3": NodePath("Wander/Patrol"),
+&"7e6bd701-d523-4ed2-8296-7bb3425517f0": NodePath("Chase"),
+&"97212f4c-f576-4616-8814-5379e9dd5a08": NodePath("Wander"),
+&"cf4bd5dd-e0ad-4126-89fc-a6690ce13562": NodePath("Squish")
+}
+__transitions = Dictionary[StringName, ExtResource("3_ios8m")]({
+&"9d0b9bc7-49b3-40ea-b458-e58eeed70ea0": SubResource("Resource_eqg5w")
+})
 metadata/_custom_type_script = "uid://utibsg6xkllx"
+
+[node name="Wander" type="Node" parent="StateMachine" unique_id=288151632]
+script = ExtResource("3_tx7nd")
+__editor_name = &"wander"
+__editor_position = Vector2(200, 260)
+__editor_uuid = &"97212f4c-f576-4616-8814-5379e9dd5a08"
+
+[node name="Patrol" type="Node" parent="StateMachine/Wander" unique_id=392367863 node_paths=PackedStringArray("floor_check_r", "floor_check_l", "wall_check_l", "wall_check_r")]
+script = ExtResource("3_g7wuw")
+displacement = SubResource("Curve_g7wuw")
+floor_check_r = NodePath("../../../FloorCheckR")
+floor_check_l = NodePath("../../../FloorCheckL")
+wall_check_l = NodePath("../../../WallCheckL")
+wall_check_r = NodePath("../../../WallCheckR")
+sprite_animation_name = &"walk"
+sfx_frame = SubResource("Resource_0js5a")
+__editor_name = &"patrol"
+__editor_position = Vector2(500, 260)
+__editor_uuid = &"68c1c64e-e88a-4ed3-bfca-021d704423e3"
+__editor_superstate_uuid = &"97212f4c-f576-4616-8814-5379e9dd5a08"
+__editor_superstate_wire_uuid = &"97212f4c-f576-4616-8814-5379e9dd5a08"
+
+[node name="Alert" type="Node" parent="StateMachine/Wander" unique_id=1129696963]
+script = ExtResource("4_x5cu4")
+sfx_enter = SubResource("Resource_6f57m")
+__editor_name = &"alert"
+__editor_position = Vector2(760, 260)
+__editor_uuid = &"53d6d36b-82d5-4959-a868-aff4d9ec2aba"
+__editor_superstate_uuid = &"97212f4c-f576-4616-8814-5379e9dd5a08"
+__editor_superstate_wire_uuid = &"68c1c64e-e88a-4ed3-bfca-021d704423e3"
+
+[node name="Chase" type="Node" parent="StateMachine" unique_id=1835913114]
+script = ExtResource("11_fb4me")
+sprite_animation_name = &"walk"
+sprite_speed_scale = 1.5
+sfx_frame = SubResource("Resource_0js5a")
+__editor_name = &"chase"
+__editor_position = Vector2(1080, 260)
+__editor_uuid = &"7e6bd701-d523-4ed2-8296-7bb3425517f0"
+
+[node name="Squish" type="Node" parent="StateMachine" unique_id=354975756 node_paths=PackedStringArray("hit_box")]
+script = ExtResource("12_6f57m")
+hit_box = NodePath("../../HitBox")
+sprite_animation_name = &"squish"
+sprite_speed_scale = 1.5
+sfx_enter = SubResource("Resource_lgdot")
+__editor_name = &"squish"
+__editor_position = Vector2(1080, 460)
+__editor_uuid = &"cf4bd5dd-e0ad-4126-89fc-a6690ce13562"
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(0, -7)
-texture = SubResource("CanvasTexture_prjr3")
+texture = SubResource("CanvasTexture_eqg5w")
 region_enabled = true
-region_rect = Rect2(0, 0, 32, 32)
+region_rect = Rect2(64, 0, 32, 32)
 script = ExtResource("4_whnfo")
-canvas_texture = SubResource("CanvasTexture_prjr3")
+canvas_texture = SubResource("CanvasTexture_eqg5w")
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_x5cu4")
 current_animation = "walk"
-current_frame = 0
+current_frame = 2
 speed_scale = 1.0
 playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
@@ -147,19 +311,52 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 position = Vector2(-0.5, 8)
 shape = SubResource("RectangleShape2D_hysx3")
 
+[node name="WallCheckR" type="RayCast2D" parent="." unique_id=1858743073]
+position = Vector2(6, 1)
+target_position = Vector2(10, 0)
+collision_mask = 2
+
+[node name="WallCheckL" type="RayCast2D" parent="." unique_id=1455851295]
+position = Vector2(0, 1)
+target_position = Vector2(-15, 0)
+collision_mask = 2
+
+[node name="FloorCheckR" type="RayCast2D" parent="." unique_id=148762016]
+position = Vector2(8, -4)
+target_position = Vector2(0, 22)
+collision_mask = 2
+
+[node name="FloorCheckL" type="RayCast2D" parent="." unique_id=2107847826]
+position = Vector2(-7, -4)
+target_position = Vector2(0, 22)
+collision_mask = 2
+
 [node name="Components" type="Node" parent="." unique_id=434262041]
 
 [node name="HealthComponent" type="Node" parent="Components" unique_id=1886471158]
 script = ExtResource("5_whnfo")
 metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
-[node name="Area2D" type="Area2D" parent="." unique_id=1423924391]
-visible = false
+[node name="GravityComponent" type="Node" parent="Components" unique_id=638734915 node_paths=PackedStringArray("entity")]
+script = ExtResource("10_d6enh")
+entity = NodePath("../..")
+metadata/_custom_type_script = "uid://cb672xli6i2ns"
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D" unique_id=450489105]
+[node name="FrictionComponent" type="Node" parent="Components" unique_id=1864046007 node_paths=PackedStringArray("entity")]
+script = ExtResource("11_8wobc")
+base_friction = 0.5
+entity = NodePath("../..")
+metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
+
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=1423924391]
+visible = false
+collision_layer = 0
+monitorable = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PlayerCheck" unique_id=450489105]
 polygon = PackedVector2Array(10, 9, 10, -8, 34, -23, 62, -32, 185, -46, 185, 40, 59, 24, 32, 19)
 
-[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Area2D" unique_id=389414123]
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="PlayerCheck" unique_id=389414123]
 position = Vector2(-112, -3)
 polygon = PackedVector2Array(100.796, 12.128, 100.796, -4.872, 76.796, -19.872, 48.796, -28.872, -74.204, -42.872, -74.204, 43.128, 51.796, 27.128, 78.796, 22.128)
 
@@ -173,7 +370,7 @@ knockback_vector = Vector2(150, 135)
 metadata/_custom_type_script = "uid://c103bnb5445y3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=1578956589]
-position = Vector2(-0.5, 4.5)
+position = Vector2(-0.5, 3.5)
 shape = SubResource("RectangleShape2D_prjr3")
 debug_color = Color(0.7, 0, 0, 0.41960785)
 
@@ -184,6 +381,9 @@ accepted_damage_types = Array[int]([2, 1])
 metadata/_custom_type_script = "uid://3ara7t8dqmih"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=856276483]
-position = Vector2(-0.25, -2.25)
+position = Vector2(-0.25, -5.5)
 shape = SubResource("RectangleShape2D_whnfo")
 debug_color = Color(0.7, 0.66499996, 0, 0.41960785)
+
+[connection signal="area_entered" from="PlayerCheck" to="." method="_on_area_2d_area_entered"]
+[connection signal="damaged" from="HurtBox" to="." method="_on_hurt_box_damaged"]

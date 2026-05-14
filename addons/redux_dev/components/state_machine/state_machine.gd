@@ -110,7 +110,7 @@ func _process(delta: float) -> void:
 		if sfx_root and state.sfx_tick:
 			_play_sfx_entry(state.sfx_tick, state)
 		if sfx_root and state.sfx_frame and sprite:
-			if state.sfx_frame.check_frame_trigger(sprite.get_frame()):
+			if state.sfx_frame.check_frame_trigger(sprite.current_frame):
 				_play_sfx_entry(state.sfx_frame, state)
 	
 	_current_state._sprite_rules()
@@ -118,7 +118,7 @@ func _process(delta: float) -> void:
 	if sfx_root and _current_state.sfx_tick:
 		_play_sfx_entry(_current_state.sfx_tick, _current_state)
 	if sfx_root and _current_state.sfx_frame and sprite:
-		if _current_state.sfx_frame.check_frame_trigger(sprite.get_frame()):
+		if _current_state.sfx_frame.check_frame_trigger(sprite.current_frame):
 			_play_sfx_entry(_current_state.sfx_frame, _current_state)
 	
 	for uuid: StringName in __states:
@@ -458,6 +458,8 @@ func _play_sfx_entry(entry: StateSFXEntry, state: State) -> void:
 	var pitch: float = entry._resolve_pitch(_root_node)
 	var vol: float = entry._resolve_volume(_root_node)
 	var bus: StringName = entry._get_bus_name()
+	var attentuation: float = entry.attentuation
+	var max_distance: float = entry.max_distance
 	
 	if entry.spatial:
 		var player: AudioStreamPlayer2D = _get_pool_2d(entry.pool_id, entry.max_stack)
@@ -465,6 +467,8 @@ func _play_sfx_entry(entry: StateSFXEntry, state: State) -> void:
 		player.pitch_scale = pitch
 		player.volume_db = vol
 		player.bus = bus
+		player.attenuation = attentuation
+		player.max_distance = max_distance
 		player.play()
 	else:
 		var player: AudioStreamPlayer = _get_pool_flat(entry.pool_id, entry.max_stack)

@@ -325,7 +325,7 @@ func __sprite_enter() -> void:
 	sprite.speed_scale = sprite_speed_scale
 	sprite.play(sprite_animation_name)
 	sprite.offset = _resolve_sprite_offset()
-	if sprite_lock_flipping:
+	if sprite_lock_flipping and entity and entity is Player:
 		player.lock_flipping = true
 	if not sprite_chain.is_empty():
 		sprite.animation_finished.connect(__sprite_chain_advance, CONNECT_ONE_SHOT)
@@ -334,7 +334,8 @@ func __sprite_enter() -> void:
 func __sprite_exit() -> void:
 	if sprite and sprite.animation_finished.is_connected(__sprite_chain_advance):
 		sprite.animation_finished.disconnect(__sprite_chain_advance)
-	player.lock_flipping = false
+	if entity and entity is Player:
+		player.lock_flipping = false
 	if not sprite or not sprite_stop_on_exit:
 		return
 	sprite.stop()
@@ -409,7 +410,8 @@ func __animation_enter() -> void:
 
 
 func __animation_exit() -> void:
-	animation_player.play(&"RESET")
+	if animation_player:
+		animation_player.play(&"RESET")
 
 
 func _to_string() -> String:

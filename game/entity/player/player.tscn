@@ -20,31 +20,31 @@
 [ext_resource type="Texture2D" uid="uid://thf8bfre3p2d" path="res://assets/textures/entity/player/mario/triple_jump.png" id="5_0rdsw"]
 [ext_resource type="Texture2D" uid="uid://bj5kyipk5eild" path="res://assets/textures/entity/player/mario/groundpound.png" id="6_0f2w8"]
 [ext_resource type="Script" uid="uid://2tpewb2vj0d3" path="res://game/entity/player/shared/handlers/movement_handler.gd" id="6_0jrw7"]
-[ext_resource type="Script" uid="uid://bc37gx5nk2itj" path="res://game/entity/player/shared/state_machine/states/floorslide.gd" id="6_y6elw"]
+[ext_resource type="Script" uid="uid://bc37gx5nk2itj" path="res://game/entity/player/shared/states/floorslide.gd" id="6_y6elw"]
 [ext_resource type="Script" uid="uid://deiaa5u8esvnc" path="res://addons/redux_dev/components/state_machine/state_sfx_entry.gd" id="7_ioda6"]
-[ext_resource type="Script" uid="uid://drrqaswaoenmg" path="res://game/entity/player/shared/state_machine/states/dry.gd" id="7_je5mu"]
+[ext_resource type="Script" uid="uid://drrqaswaoenmg" path="res://game/entity/player/shared/states/dry.gd" id="7_je5mu"]
 [ext_resource type="Script" uid="uid://dx5p37ei2616j" path="res://game/entity/player/shared/handlers/sprite_handler.gd" id="7_tb30q"]
-[ext_resource type="Script" uid="uid://jhkyxpjlw3nu" path="res://game/entity/player/shared/state_machine/states/airborne.gd" id="8_k8egu"]
+[ext_resource type="Script" uid="uid://jhkyxpjlw3nu" path="res://game/entity/player/shared/states/airborne.gd" id="8_k8egu"]
 [ext_resource type="Texture2D" uid="uid://u4yvxq51cr5f" path="res://assets/textures/entity/player/mario/spin.png" id="9_k6116"]
 [ext_resource type="AudioStream" uid="uid://ddyxdiykdet7b" path="res://assets/sfx/player/mario/dive/dive_0.wav" id="10_6suq8"]
-[ext_resource type="Script" uid="uid://csmwm706d5wgl" path="res://game/entity/player/shared/state_machine/states/dive.gd" id="10_aln35"]
+[ext_resource type="Script" uid="uid://csmwm706d5wgl" path="res://game/entity/player/shared/states/dive.gd" id="10_aln35"]
 [ext_resource type="Texture2D" uid="uid://bo87qv73dsfls" path="res://assets/textures/entity/player/mario/swim_idle.png" id="10_j8m7m"]
-[ext_resource type="Script" uid="uid://csbysfcj1b3rh" path="res://game/entity/player/shared/state_machine/states/grounded.gd" id="10_tb30q"]
-[ext_resource type="Script" uid="uid://bfttwny22bnoc" path="res://game/entity/player/shared/state_machine/states/backflip_up.gd" id="11_b6ajd"]
+[ext_resource type="Script" uid="uid://csbysfcj1b3rh" path="res://game/entity/player/shared/states/grounded.gd" id="10_tb30q"]
+[ext_resource type="Script" uid="uid://bfttwny22bnoc" path="res://game/entity/player/shared/states/backflip_up.gd" id="11_b6ajd"]
 [ext_resource type="AudioStream" uid="uid://vvilx4sjryos" path="res://assets/sfx/player/mario/dive/dive_1.wav" id="11_eo5je"]
-[ext_resource type="Script" uid="uid://cscjl4ppceor3" path="res://game/entity/player/shared/state_machine/states/backflip.gd" id="11_mb70y"]
-[ext_resource type="Script" uid="uid://bv6pacjmfysox" path="res://game/entity/player/shared/state_machine/states/rollout_f.gd" id="12_02rvq"]
+[ext_resource type="Script" uid="uid://cscjl4ppceor3" path="res://game/entity/player/shared/states/backflip.gd" id="11_mb70y"]
+[ext_resource type="Script" uid="uid://bv6pacjmfysox" path="res://game/entity/player/shared/states/rollout_f.gd" id="12_02rvq"]
 [ext_resource type="AudioStream" uid="uid://cv0wy731vhj3o" path="res://assets/sfx/player/mario/dive/dive_2.wav" id="12_d635j"]
 [ext_resource type="Script" uid="uid://cd63gwefr4fp4" path="res://util/playlist.gd" id="13_8yq6v"]
 [ext_resource type="AudioStream" uid="uid://cjcl5pn71sgyv" path="res://assets/sfx/player/mario/dive/dive_3.wav" id="13_ae0hi"]
 [ext_resource type="Texture2D" uid="uid://bjblyiou2qe0f" path="res://assets/textures/entity/player/shared/hover_fludd_r_0.png" id="13_gqe2a"]
-[ext_resource type="Script" uid="uid://b40633h5y42cq" path="res://game/entity/player/shared/state_machine/states/spin.gd" id="14_20bnd"]
+[ext_resource type="Script" uid="uid://b40633h5y42cq" path="res://game/entity/player/shared/states/spin.gd" id="14_20bnd"]
 [ext_resource type="AudioStream" uid="uid://bcy4wwvxfd7km" path="res://assets/sfx/player/mario/jump/jump_0.wav" id="14_lh4k8"]
-[ext_resource type="Script" uid="uid://bisaomurugmd3" path="res://game/entity/player/shared/state_machine/states/base_jump.gd" id="15_5mhew"]
-[ext_resource type="Script" uid="uid://cf26ky7vulna0" path="res://game/entity/player/shared/state_machine/states/ground_pound_start.gd" id="15_eihrn"]
+[ext_resource type="Script" uid="uid://bisaomurugmd3" path="res://game/entity/player/shared/states/base_jump.gd" id="15_5mhew"]
+[ext_resource type="Script" uid="uid://cf26ky7vulna0" path="res://game/entity/player/shared/states/ground_pound_start.gd" id="15_eihrn"]
 [ext_resource type="AudioStream" uid="uid://sskhnc1p4cbo" path="res://assets/sfx/player/mario/jump/jump_1.wav" id="15_ria7k"]
-[ext_resource type="Script" uid="uid://cj6o2ytwpw4bq" path="res://game/entity/player/shared/state_machine/states/ground_pound_fall.gd" id="16_eihrn"]
-[ext_resource type="Script" uid="uid://0amhvrekohhp" path="res://game/entity/player/shared/state_machine/states/ground_pound_slam.gd" id="17_aln35"]
+[ext_resource type="Script" uid="uid://cj6o2ytwpw4bq" path="res://game/entity/player/shared/states/ground_pound_fall.gd" id="16_eihrn"]
+[ext_resource type="Script" uid="uid://0amhvrekohhp" path="res://game/entity/player/shared/states/ground_pound_slam.gd" id="17_aln35"]
 [ext_resource type="AudioStream" uid="uid://cacxhcwvqwe3l" path="res://assets/sfx/player/mario/double_jump/double_jump_0.wav" id="17_lh4k8"]
 [ext_resource type="AudioStream" uid="uid://bb3kctktrncwe" path="res://assets/sfx/player/mario/double_jump/double_jump_1.wav" id="18_6rqdb"]
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="19_1wiqr"]
@@ -279,6 +279,17 @@ __from_uuid = "153c8a33-2d47-4ccc-97e3-9e16b0b05f9c"
 __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "b5db5b39-5c86-4edb-87c2-91b17ede4ad5"
 __to_node_uuid = "31d0deb8-7915-434d-b931-44f3244dadf5"
+
+[sub_resource type="Resource" id="Resource_wsr8k"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+transition_time = 0.25
+expression = "is_on_floor() && state_machine.get_current_state().get_elapsed_physics_frames() > 5"
+__from_uuid = "6b7a379a-f04e-4f63-b078-03fc149a26bf"
+__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
+__from_node_uuid = "fa056152-beb4-4b59-ac26-920719c61203"
+__to_node_uuid = "7cae40dc-c5e3-454c-b0d0-183d3e1c76a4"
 
 [sub_resource type="Resource" id="Resource_ae0hi"]
 resource_local_to_scene = true
@@ -551,17 +562,6 @@ __to_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __from_node_uuid = "167d2846-17ec-4534-a26e-c582cae80f3a"
 __to_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 
-[sub_resource type="Resource" id="Resource_wsr8k"]
-resource_local_to_scene = true
-script = ExtResource("3_0jrw7")
-mode = 3
-transition_time = 0.25
-expression = "is_on_floor() && state_machine.get_current_state().get_elapsed_physics_frames() > 5"
-__from_uuid = "6b7a379a-f04e-4f63-b078-03fc149a26bf"
-__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
-__from_node_uuid = "fa056152-beb4-4b59-ac26-920719c61203"
-__to_node_uuid = "7cae40dc-c5e3-454c-b0d0-183d3e1c76a4"
-
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
 _data = [Vector2(0, -1.3932585), 0.0, 0.9746846, 0, 0, Vector2(1.5965666, -0.05618429), 0.0, 0.0, 0, 0]
@@ -786,12 +786,16 @@ _data = {
 &"triple_jump": SubResource("Animation_aln35")
 }
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ae0hi"]
-atlas = ExtResource("51_d635j")
+[sub_resource type="AtlasTexture" id="AtlasTexture_dhej3"]
+atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 48, 48)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_d635j"]
-diffuse_texture = SubResource("AtlasTexture_ae0hi")
+diffuse_texture = SubResource("AtlasTexture_dhej3")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ae0hi"]
+atlas = ExtResource("51_d635j")
+region = Rect2(0, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sldje"]
 atlas = ExtResource("51_d635j")
@@ -835,10 +839,6 @@ region = Rect2(0, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2jquf"]
 atlas = ExtResource("6_0f2w8")
-region = Rect2(0, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_dhej3"]
-atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t56eh"]
@@ -1250,6 +1250,9 @@ size = Vector2(12, 3)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2swmp"]
 size = Vector2(8, 25)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_ae0hi"]
+radius = 2.236068
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i5qpf"]
 size = Vector2(4, 4)
 
@@ -1295,22 +1298,7 @@ func _process(_delta: float) -> void:
 collision_mask = 515
 floor_snap_length = 7.0
 script = ExtResource("1_oic1i")
-walk_acceleration = null
-turn_speed = null
 midair_turn_speed = 2.5
-air_resistance = null
-jump_strength = null
-double_jump_strength = null
-triple_jump_strength = null
-jump_chain_time = null
-water_resistance = null
-swim_up_strength = null
-water_y_cap = null
-water_sink_rate = null
-water_drag_x = null
-run_max_speed = null
-terminal_velocity_x = null
-terminal_velocity_y = null
 debug_container = NodePath("DebugContainer")
 floor_slope_raycast = NodePath("FloorSlopeRaycast")
 spin_area = NodePath("Hitboxes/Spin")
@@ -1318,7 +1306,6 @@ spin_shape = NodePath("Hitboxes/Spin/CollisionShape2D")
 _input_handler = NodePath("Handlers/InputHandler")
 _movement_handler = NodePath("Handlers/MovementHandler")
 _sprite_handler = NodePath("Handlers/SpriteHandler")
-lock_flipping = null
 sprite = NodePath("Doll")
 components_root = NodePath("Components")
 collision_shapes = [NodePath("BaseCollision"), NodePath("GroundPoundCollision"), NodePath("DiveCollision")]
@@ -1985,7 +1972,7 @@ canvas_texture = SubResource("CanvasTexture_d635j")
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
-current_animation = "bonk"
+current_animation = "idle"
 current_frame = 0
 speed_scale = 1.0
 playing = false
@@ -2075,7 +2062,15 @@ shape = SubResource("RectangleShape2D_2swmp")
 debug_color = Color(0.6901961, 0.7019608, 0, 0.41960785)
 
 [node name="Regions" type="Node2D" parent="." unique_id=75830729]
-visible = false
+
+[node name="DetectionShape" type="Area2D" parent="Regions" unique_id=844486494]
+collision_mask = 0
+monitoring = false
+metadata/player = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Regions/DetectionShape" unique_id=324087725]
+position = Vector2(2, -2)
+shape = SubResource("CircleShape2D_ae0hi")
 
 [node name="WaterCheck" type="Area2D" parent="Regions" unique_id=258307688]
 visible = false

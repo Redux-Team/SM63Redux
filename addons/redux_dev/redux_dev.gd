@@ -41,7 +41,8 @@ func _edit(object: Object) -> void:
 			node = node.get_parent()
 		if node is StateMachine:
 			if node == _editor._current_sm:
-				_editor.load_state_machine(node as StateMachine)
+				return
+			_editor.load_state_machine(node as StateMachine)
 
 
 func _handles(object: Object) -> bool:

@@ -9,7 +9,8 @@ resource_local_to_scene = true
 shader = ExtResource("2_n3ly8")
 shader_parameter/state = 0
 shader_parameter/palette_index = 0
-shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/fill_color = Color(1, 1, 1, 0.25)
@@ -18,6 +19,8 @@ shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
 shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_sam53"]
 diffuse_texture = ExtResource("3_ld7ko")
@@ -53,6 +56,8 @@ axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=663931534]
+collision_layer = 2
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1869497392]
 position = Vector2(0, -4)

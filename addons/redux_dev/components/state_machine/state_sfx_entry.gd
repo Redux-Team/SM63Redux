@@ -18,6 +18,8 @@ enum InterruptPolicy {
 @export_group("Pitch & Volume")
 @export var pitch_range: Vector2 = Vector2(1.0, 1.0)
 @export var volume_db: float = 0.0
+@export var attentuation: float = 1.0
+@export var max_distance: float = 2000.0
 @export var pitch_property: StringName = &""
 @export var pitch_property_range: Vector2 = Vector2(0.0, 1.0)
 @export var volume_property: StringName = &""
@@ -26,7 +28,8 @@ enum InterruptPolicy {
 @export var stop_on_exit: bool = false
 @export var free_pool_on_exit: bool = false
 @export_group("Frame Trigger")
-@export var frame_range: Vector2i = Vector2i(-1, -1)
+@export var sfx_frames: Array[int]
+var _last_frame: int = -1
 
 var _frame_triggered: bool = false
 
@@ -57,17 +60,11 @@ func _resolve_volume(root_node: Node) -> float:
 	return lerp(-80.0, 0.0, clampf(t, 0.0, 1.0))
 
 
-func reset_frame_trigger() -> void:
-	_frame_triggered = false
-
-
 func check_frame_trigger(frame: int) -> bool:
-	if frame_range.x < 0 or frame_range.y < 0:
+	if _last_frame == frame:
 		return false
-	var in_range: bool = frame >= frame_range.x and frame <= frame_range.y
-	if in_range and not _frame_triggered:
-		_frame_triggered = true
+	
+	if frame in sfx_frames:
+		_last_frame = frame
 		return true
-	if not in_range:
-		_frame_triggered = false
 	return false
