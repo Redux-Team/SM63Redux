@@ -1,9 +1,12 @@
 [gd_scene format=3 uid="uid://deyfsp6xn4e27"]
 
 [ext_resource type="Texture2D" uid="uid://bpmi17yjeho6o" path="res://assets/textures/gui/ingame_hud/health_meter_base.png" id="1_e2fet"]
+[ext_resource type="Script" uid="uid://bc8rgrn6u3y13" path="res://game/screen_layers/ingame_hud/ingame_hud.gd" id="1_reblr"]
 [ext_resource type="Texture2D" uid="uid://civwwnm7pwii7" path="res://assets/textures/gui/ingame_hud/health_meter_coin_base.png" id="2_w0ism"]
 
-[node name="IngameHud" type="CanvasLayer" unique_id=510807687]
+[node name="IngameHud" type="CanvasLayer" unique_id=510807687 node_paths=PackedStringArray("hp_label")]
+script = ExtResource("1_reblr")
+hp_label = NodePath("HealthContainer/Base/HPLabel")
 
 [node name="HealthContainer" type="Control" parent="." unique_id=1581326594]
 layout_mode = 3
@@ -28,6 +31,7 @@ grow_horizontal = 2
 texture = ExtResource("1_e2fet")
 
 [node name="Base2" type="TextureRect" parent="HealthContainer/Base" unique_id=1560102088]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -41,3 +45,21 @@ offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_w0ism")
+
+[node name="HPLabel" type="Label" parent="HealthContainer/Base" unique_id=500976471]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.0
+offset_top = -8.0
+offset_right = 21.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 8
+text = "8"
+horizontal_alignment = 1
+vertical_alignment = 1

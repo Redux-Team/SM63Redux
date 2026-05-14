@@ -31,7 +31,17 @@ func _exit_tree() -> void:
 
 func _edit(object: Object) -> void:
 	if object is StateMachine:
+		if object == _editor._current_sm:
+			return
 		_editor.load_state_machine(object as StateMachine)
+	
+	if object is State:
+		var node: Node = object
+		while (node is not StateMachine and node.get_parent()):
+			node = node.get_parent()
+		if node is StateMachine:
+			if node == _editor._current_sm:
+				_editor.load_state_machine(node as StateMachine)
 
 
 func _handles(object: Object) -> bool:

@@ -63,7 +63,9 @@
 [ext_resource type="AudioStream" uid="uid://e0gve7kc1mk1" path="res://assets/sfx/player/mario/spin/spin_air_2.wav" id="30_yna46"]
 [ext_resource type="AudioStream" uid="uid://csmh3s1xsm72b" path="res://assets/sfx/player/mario/spin/spin_air_3.wav" id="31_6qpfs"]
 [ext_resource type="AudioStream" uid="uid://cfcnya3ow457f" path="res://assets/sfx/player/mario/ground_pound/ground_pound_start.wav" id="34_rlrt6"]
+[ext_resource type="AudioStream" uid="uid://cvwxucpxjv4s2" path="res://assets/sfx/player/mario/damage/ough.ogg" id="37_d635j"]
 [ext_resource type="AudioStream" uid="uid://dly1p4x8t0r70" path="res://assets/sfx/player/mario/ground_pound/ground_pound_generic.wav" id="37_sxdt2"]
+[ext_resource type="Texture2D" uid="uid://b40h642ctik01" path="res://assets/textures/entity/player/mario/bonk.png" id="51_d635j"]
 
 [sub_resource type="Resource" id="Resource_rlrt6"]
 resource_local_to_scene = true
@@ -549,6 +551,17 @@ __to_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __from_node_uuid = "167d2846-17ec-4534-a26e-c582cae80f3a"
 __to_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 
+[sub_resource type="Resource" id="Resource_wsr8k"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+transition_time = 0.25
+expression = "is_on_floor() && state_machine.get_current_state().get_elapsed_physics_frames() > 5"
+__from_uuid = "6b7a379a-f04e-4f63-b078-03fc149a26bf"
+__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
+__from_node_uuid = "fa056152-beb4-4b59-ac26-920719c61203"
+__to_node_uuid = "7cae40dc-c5e3-454c-b0d0-183d3e1c76a4"
+
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
 _data = [Vector2(0, -1.3932585), 0.0, 0.9746846, 0, 0, Vector2(1.5965666, -0.05618429), 0.0, 0.0, 0, 0]
@@ -639,6 +652,17 @@ script = ExtResource("7_ioda6")
 playlist = SubResource("Resource_kw6gy")
 bus = 3
 stop_on_exit = true
+metadata/_custom_type_script = "uid://deiaa5u8esvnc"
+
+[sub_resource type="Resource" id="Resource_d3nks"]
+script = ExtResource("13_8yq6v")
+tracklist = Array[AudioStream]([ExtResource("37_d635j")])
+metadata/_custom_type_script = "uid://cd63gwefr4fp4"
+
+[sub_resource type="Resource" id="Resource_h7oe0"]
+script = ExtResource("7_ioda6")
+playlist = SubResource("Resource_d3nks")
+bus = 3
 metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
 [sub_resource type="Resource" id="Resource_fstnu"]
@@ -762,12 +786,16 @@ _data = {
 &"triple_jump": SubResource("Animation_aln35")
 }
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_aidgt"]
-atlas = ExtResource("3_4neg5")
+[sub_resource type="AtlasTexture" id="AtlasTexture_ae0hi"]
+atlas = ExtResource("51_d635j")
 region = Rect2(0, 0, 48, 48)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_6suq8"]
-diffuse_texture = SubResource("AtlasTexture_aidgt")
+[sub_resource type="CanvasTexture" id="CanvasTexture_d635j"]
+diffuse_texture = SubResource("AtlasTexture_ae0hi")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sldje"]
+atlas = ExtResource("51_d635j")
+region = Rect2(48, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k6116"]
 atlas = ExtResource("2_conr4")
@@ -776,6 +804,10 @@ region = Rect2(0, 0, 48, 48)
 [sub_resource type="AtlasTexture" id="AtlasTexture_so4hh"]
 atlas = ExtResource("2_conr4")
 region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aidgt"]
+atlas = ExtResource("3_4neg5")
+region = Rect2(0, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tv6ny"]
 atlas = ExtResource("2_xt77v")
@@ -945,6 +977,17 @@ region = Rect2(48, 0, 48, 48)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_ae0hi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sldje")
+}],
+"loop": false,
+"name": &"bonk",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_k6116")
 }, {
 "duration": 1.0,
@@ -1035,7 +1078,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_1s5sw")
 }],
-"loop": true,
+"loop": false,
 "name": &"idle",
 "speed": 5.0
 }, {
@@ -1199,10 +1242,13 @@ radius = 5.25
 height = 10.5
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fstnu"]
-size = Vector2(40, 11)
+size = Vector2(40, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d635j"]
+size = Vector2(12, 3)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2swmp"]
-size = Vector2(8, 23)
+size = Vector2(8, 25)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i5qpf"]
 size = Vector2(4, 4)
@@ -1249,7 +1295,22 @@ func _process(_delta: float) -> void:
 collision_mask = 515
 floor_snap_length = 7.0
 script = ExtResource("1_oic1i")
+walk_acceleration = null
+turn_speed = null
 midair_turn_speed = 2.5
+air_resistance = null
+jump_strength = null
+double_jump_strength = null
+triple_jump_strength = null
+jump_chain_time = null
+water_resistance = null
+swim_up_strength = null
+water_y_cap = null
+water_sink_rate = null
+water_drag_x = null
+run_max_speed = null
+terminal_velocity_x = null
+terminal_velocity_y = null
 debug_container = NodePath("DebugContainer")
 floor_slope_raycast = NodePath("FloorSlopeRaycast")
 spin_area = NodePath("Hitboxes/Spin")
@@ -1257,6 +1318,7 @@ spin_shape = NodePath("Hitboxes/Spin/CollisionShape2D")
 _input_handler = NodePath("Handlers/InputHandler")
 _movement_handler = NodePath("Handlers/MovementHandler")
 _sprite_handler = NodePath("Handlers/SpriteHandler")
+lock_flipping = null
 sprite = NodePath("Doll")
 components_root = NodePath("Components")
 collision_shapes = [NodePath("BaseCollision"), NodePath("GroundPoundCollision"), NodePath("DiveCollision")]
@@ -1269,8 +1331,8 @@ root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(0, -81.17755)
-__last_editor_zoom = 0.41110235
+__last__editor_position = Vector2(211.69092, -1.4710617)
+__last_editor_zoom = 0.1771561
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),
@@ -1287,6 +1349,7 @@ __states = {
 &"56a353ee-c4c2-458c-a018-6302daa71851": NodePath("Dry/Floorslide"),
 &"5ed7fb5d-7e2c-4110-92cb-cf15f641072e": NodePath("Dry/Grounded/Crouch"),
 &"5f26c6ee-ee21-44a2-9986-4f30b9f89611": NodePath("Dry/Airborne/BackflipUp"),
+&"6b7a379a-f04e-4f63-b078-03fc149a26bf": NodePath("Dry/Strike"),
 &"74d37025-c0e7-44f3-9562-5d9cae8dab86": NodePath("GroundPound"),
 &"7a11481f-96a2-4861-99a6-5a97b2628e11": NodePath("Dry/Airborne/RolloutF"),
 &"7c9bf00f-ebfd-4920-b0c8-fe79e3d3ccb7": NodePath("Submerged/SwimWalk"),
@@ -1352,6 +1415,7 @@ __transitions = Dictionary[StringName, ExtResource("3_0jrw7")]({
 &"6600d7f1-50dd-45be-bf05-2ccd1f9c5820": SubResource("Resource_d635j"),
 &"666e45d4-ccde-4c42-b835-912a00fe3c4a": SubResource("Resource_6qpfs"),
 &"6885fc21-c43b-4d73-a9fb-c0dde2c6f6e1": SubResource("Resource_6rqdb"),
+&"68d8db76-5810-4df6-a670-45997d6896e2": SubResource("Resource_wsr8k"),
 &"77d5df5c-3d1a-4e02-900c-dda32e2dbf64": SubResource("Resource_ae0hi"),
 &"78082638-3d9c-4311-b124-ecbffe25c131": SubResource("Resource_ntea6"),
 &"975c29c6-0eeb-4fda-aae0-13f45fe8e62d": SubResource("Resource_3h1ly"),
@@ -1477,6 +1541,10 @@ __aliases = {
 "original_uuid": &"fcde7a01-9caf-4d7a-8016-ae92a2e45514",
 "position": Vector2(3160, 500)
 },
+&"7cae40dc-c5e3-454c-b0d0-183d3e1c76a4": {
+"original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
+"position": Vector2(7840, -520)
+},
 &"84362291-03ff-47ba-98e6-a08753eb61f8": {
 "original_uuid": &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2",
 "position": Vector2(4600, 2360)
@@ -1572,6 +1640,10 @@ __aliases = {
 &"f8b6c9ea-5ed3-42f5-9353-37ed5f193c1a": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
 "position": Vector2(5860, -160)
+},
+&"fa056152-beb4-4b59-ac26-920719c61203": {
+"original_uuid": &"6b7a379a-f04e-4f63-b078-03fc149a26bf",
+"position": Vector2(7540, -520)
 }
 }
 __entry_node_position = Vector2(60, -960)
@@ -1765,6 +1837,18 @@ __editor_uuid = &"56a353ee-c4c2-458c-a018-6302daa71851"
 __editor_superstate_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 __editor_superstate_wire_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 
+[node name="Strike" type="Node" parent="StateMachine/Dry" unique_id=2014892043]
+script = ExtResource("4_4j27x")
+sprite_animation_name = &"bonk"
+sprite_lock_flipping = true
+sprite_loop = false
+sfx_enter = SubResource("Resource_h7oe0")
+__editor_name = &"strike"
+__editor_position = Vector2(-840, -680)
+__editor_uuid = &"6b7a379a-f04e-4f63-b078-03fc149a26bf"
+__editor_superstate_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
+__editor_superstate_wire_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
+
 [node name="Submerged" type="Node" parent="StateMachine" unique_id=1525831935]
 script = ExtResource("4_4j27x")
 __editor_name = &"Submerged"
@@ -1887,20 +1971,21 @@ metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
 
 [node name="HealthComponent" type="Node" parent="Components" unique_id=1079797538 node_paths=PackedStringArray("entity")]
 script = ExtResource("4_o0v17")
+max_hp = 2.0
 entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -13)
-texture = SubResource("CanvasTexture_6suq8")
+texture = SubResource("CanvasTexture_d635j")
 region_enabled = true
 region_rect = Rect2(0, 0, 48, 48)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_6suq8")
+canvas_texture = SubResource("CanvasTexture_d635j")
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
-current_animation = "dive"
+current_animation = "bonk"
 current_frame = 0
 speed_scale = 1.0
 playing = false
@@ -1932,38 +2017,60 @@ shape = SubResource("CapsuleShape2D_kw6gy")
 debug_color = Color(0, 0.59607846, 0.7019608, 0.1764706)
 
 [node name="GroundPoundCollision" type="CollisionShape2D" parent="." unique_id=726160771]
+visible = false
 position = Vector2(2, 4)
 shape = SubResource("RectangleShape2D_q4egk")
 disabled = true
 
 [node name="DiveCollision" type="CollisionShape2D" parent="." unique_id=1515166672]
+visible = false
 position = Vector2(2, 4.75)
 shape = SubResource("CapsuleShape2D_6suq8")
 disabled = true
 
 [node name="Hitboxes" type="Node2D" parent="." unique_id=1409973495]
-visible = false
 
 [node name="Spin" type="Area2D" parent="Hitboxes" unique_id=1300299390]
+visible = false
 position = Vector2(2, -10)
 monitoring = false
 script = ExtResource("19_1wiqr")
+hitbox_id = "spin"
 has_knockback = true
 metadata/_custom_type_script = "uid://c103bnb5445y3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/Spin" unique_id=1772297716]
-position = Vector2(0, 1.5)
+position = Vector2(0, 5)
 shape = SubResource("RectangleShape2D_fstnu")
 disabled = true
 debug_color = Color(0.7, 0, 0, 0.41960785)
 
-[node name="Base" type="Area2D" parent="Hitboxes" unique_id=2129200040]
+[node name="Feet" type="Area2D" parent="Hitboxes" unique_id=165454466]
+position = Vector2(2, -10)
+monitoring = false
+script = ExtResource("19_1wiqr")
+hitbox_id = "player_feet"
+damage_amount = 1.0
+damage_type = 2
+metadata/_custom_type_script = "uid://c103bnb5445y3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/Feet" unique_id=2140019092]
+position = Vector2(0, 18.5)
+shape = SubResource("RectangleShape2D_d635j")
+debug_color = Color(0.7, 0, 0, 0.41960785)
+
+[node name="Base" type="Area2D" parent="Hitboxes" unique_id=2129200040 node_paths=PackedStringArray("damage_state_map")]
+visible = false
 monitorable = false
 script = ExtResource("20_1wiqr")
+ignored_hitbox_ids = PackedStringArray("spin")
+damage_state_map = {
+1: NodePath("../../StateMachine/Dry/Strike")
+}
 metadata/_custom_type_script = "uid://3ara7t8dqmih"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/Base" unique_id=198873989]
-position = Vector2(2, -3.5)
+position = Vector2(2, -2.5)
 shape = SubResource("RectangleShape2D_2swmp")
 debug_color = Color(0.6901961, 0.7019608, 0, 0.41960785)
 

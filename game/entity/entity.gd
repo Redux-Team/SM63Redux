@@ -4,13 +4,6 @@
 extends CharacterBody2D
 
 
-enum DamageType {
-	GENERIC,
-	SQUASH,
-	STRIKE
-}
-
-
 @export var sprite: SmartSprite2D
 @export var components_root: Node
 @export var collision_shapes: Array[CollisionShape2D]
@@ -72,17 +65,17 @@ func has_component(type: Script) -> bool:
 	return get_component(type) != null
 
 
-func damage(amount: float, type: DamageType, source: Node2D = null) -> void:
+func damage(amount: float, type: HitBox.DamageType, source: Node2D = null) -> void:
 	var invulnerability: InvulnerabilityComponent = get_component(InvulnerabilityComponent)
 	if not invulnerability or invulnerability.can_receive(type):
 		force_damage(amount, type, source)
 
 
-func force_damage(amount: float, type: DamageType, source: Node2D = null) -> void:
+func force_damage(amount: float, type: HitBox.DamageType, source: Node2D = null) -> void:
 	var health: HealthComponent = get_component(HealthComponent)
 	if not health:
 		return
-	health.hp -= amount
+	health.damage(amount, type)
 	_on_damage(amount, type, source)
 	if health.hp <= 0.0:
 		_on_death(type, source)
@@ -93,7 +86,7 @@ func kill() -> void:
 	if not health:
 		return
 	health.hp = 0.0
-	_on_death(DamageType.GENERIC)
+	_on_death(HitBox.DamageType.GENERIC)
 
 
 func _on_init() -> void:
@@ -104,11 +97,11 @@ func _on_tick(delta: float) -> void:
 	pass
 
 
-func _on_death(type: DamageType, source: Node2D = null) -> void:
+func _on_death(type: HitBox.DamageType, source: Node2D = null) -> void:
 	queue_free()
 
 
-func _on_damage(amount: float, type: DamageType, source: Node2D = null) -> void:
+func _on_damage(amount: float, type: HitBox.DamageType, source: Node2D = null) -> void:
 	pass
 
 

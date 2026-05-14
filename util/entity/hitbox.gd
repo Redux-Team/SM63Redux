@@ -4,6 +4,7 @@ class_name HitBox
 extends Area2D
 
 enum DamageType {
+	GENERIC,
 	STRIKE,
 	SQUISH,
 }
@@ -23,7 +24,7 @@ enum DamageType {
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "knockback") var has_knockback: bool = false
 ## The velocity vector added to the entity upon being hit. Positive values knock away relative from
 ## the source of damage.
-@export var knockback_vector: Vector2
+@export var knockback_vector: Vector2 = Vector2(50, 10)
 
 
 func _init() -> void:

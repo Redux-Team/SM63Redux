@@ -125,7 +125,7 @@ func _process(delta: float) -> void:
 		current_frame = new_frame
 
 
-func play(animation_name: StringName) -> void:
+func play(animation_name: StringName = current_animation) -> void:
 	if current_animation == animation_name and playing:
 		return
 	current_animation = animation_name

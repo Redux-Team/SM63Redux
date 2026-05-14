@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://7h213kjqdaqn" path="res://level_designer/scenes/level_test.gd" id="1_5nuwi"]
 [ext_resource type="PackedScene" uid="uid://st4r6o6hqwhj" path="res://game/backgrounds/hills.tscn" id="2_1sbsh"]
 [ext_resource type="PackedScene" uid="uid://b4nw5k2oa3ro0" path="res://game/entity/player/player.tscn" id="2_h52q2"]
-[ext_resource type="PackedScene" uid="uid://deyfsp6xn4e27" path="res://game/screen_layers/ingame_hud/ingame_hud.tscn" id="4_0w1st"]
 [ext_resource type="AudioStream" uid="uid://cmiulmppvmbql" path="res://assets/music/04.mp3" id="4_h52q2"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_x1m06"]
@@ -73,8 +72,6 @@ grow_vertical = 0
 theme_override_constants/outline_size = 4
 text = "Client"
 horizontal_alignment = 1
-
-[node name="IngameHud" parent="." unique_id=510807687 instance=ExtResource("4_0w1st")]
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1523917071]
 stream = ExtResource("4_h52q2")

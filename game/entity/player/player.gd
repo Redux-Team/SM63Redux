@@ -103,8 +103,6 @@ var cam: Camera2D
 
 
 func _ready() -> void:
-	# TODO
-	# fix gravity sprite flipping
 	cam = Camera2D.new()
 	cam.zoom = Vector2(1.2, 1.2)
 	cam.position_smoothing_enabled = true
@@ -113,6 +111,10 @@ func _ready() -> void:
 	cam.rotation_smoothing_enabled = true
 	
 	add_child(cam)
+	
+	var ingame_hud: IngameHUD = preload("uid://deyfsp6xn4e27").instantiate()
+	ingame_hud.bind(self)
+	add_child(ingame_hud)
 
 
 func _process(delta: float) -> void:

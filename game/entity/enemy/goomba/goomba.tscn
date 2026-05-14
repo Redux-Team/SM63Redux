@@ -1,58 +1,189 @@
 [gd_scene format=3 uid="uid://bu0cpqsoc43la"]
 
-[ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="1_kyaey"]
-[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_n0olq"]
-[ext_resource type="Texture2D" uid="uid://bvs0fsousuub6" path="res://assets/textures/entity/enemy/goomba/goomba.png" id="3_prjr3"]
+[ext_resource type="Script" uid="uid://gx548aea8dxr" path="res://game/entity/enemy/goomba/goomba.gd" id="1_hysx3"]
+[ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="2_e0p0p"]
+[ext_resource type="Texture2D" uid="uid://djgg3rgm58230" path="res://assets/textures/entity/enemy/goomba/goomba_walk.png" id="3_hysx3"]
+[ext_resource type="Texture2D" uid="uid://dtakiqymwlidq" path="res://assets/textures/entity/enemy/goomba/goomba_alert.png" id="4_kyaey"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_whnfo"]
+[ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="5_n0olq"]
+[ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="5_whnfo"]
+[ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="6_prjr3"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_e0p0p"]
-resource_local_to_scene = true
-shader = ExtResource("2_n0olq")
-shader_parameter/state = 0
-shader_parameter/palette_index = 0
-shader_parameter/pre_modulate = Color(1, 1, 1, 1)
-shader_parameter/post_modulate = Color(1, 1, 1, 1)
-shader_parameter/outline_width = 1.0
-shader_parameter/outline_color = Color(1, 1, 1, 1)
-shader_parameter/fill_color = Color(1, 1, 1, 0.25)
-shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
-shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
-shader_parameter/pulse_speed = 0.5
-shader_parameter/pulse_min = 0.3
-shader_parameter/pulse_max = 1.0
-shader_parameter/outline_ignore_holes = true
-shader_parameter/outline_enabled = true
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0olq"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_whnfo"]
-diffuse_texture = ExtResource("3_prjr3")
+[sub_resource type="CanvasTexture" id="CanvasTexture_prjr3"]
+diffuse_texture = SubResource("AtlasTexture_n0olq")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_x5cu4"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyaey"]
+atlas = ExtResource("4_kyaey")
+region = Rect2(64, 0, 32, 32)
 
-[node name="Goomba" type="Node2D" unique_id=880164451 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
-script = ExtResource("1_kyaey")
-sprite_ref = NodePath("Sprite")
-editor_shape_area = NodePath("EditorShapeArea")
-editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
-origin_marker = NodePath("Origin")
-metadata/_custom_type_script = "uid://cfx4civm76jwr"
+[sub_resource type="AtlasTexture" id="AtlasTexture_8wobc"]
+atlas = ExtResource("4_kyaey")
+region = Rect2(96, 0, 32, 32)
 
-[node name="Sprite" type="Sprite2D" parent="." unique_id=2054132123]
-material = SubResource("ShaderMaterial_e0p0p")
-position = Vector2(0, 6)
-texture = SubResource("CanvasTexture_whnfo")
+[sub_resource type="AtlasTexture" id="AtlasTexture_x5cu4"]
+atlas = ExtResource("4_kyaey")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d6enh"]
+atlas = ExtResource("4_kyaey")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_prjr3"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_whnfo"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e0p0p"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tx7nd"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_phpar"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x5cu4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kyaey")
+}],
+"loop": true,
+"name": &"alert_fall",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8wobc")
+}],
+"loop": true,
+"name": &"alert_landed",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x5cu4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d6enh")
+}],
+"loop": false,
+"name": &"alert_up",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n0olq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_prjr3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_whnfo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e0p0p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tx7nd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_phpar")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hysx3"]
+size = Vector2(17, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_prjr3"]
+size = Vector2(17, 5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_whnfo"]
+size = Vector2(16.5, 10.5)
+
+[node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("sprite", "components_root")]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_hysx3")
+sprite = NodePath("SmartSprite2D")
+components_root = NodePath("Components")
+
+[node name="StateMachine" type="Node" parent="." unique_id=48097513]
+script = ExtResource("2_e0p0p")
+__last__editor_position = Vector2(-330.47092, -94.6271)
+__last_editor_zoom = 0.74002534
+metadata/_custom_type_script = "uid://utibsg6xkllx"
+
+[node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]
+position = Vector2(0, -7)
+texture = SubResource("CanvasTexture_prjr3")
 region_enabled = true
-region_rect = Rect2(0, 0, 20, 32)
+region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("4_whnfo")
-canvas_texture = SubResource("CanvasTexture_whnfo")
-diffuse_texture = ExtResource("3_prjr3")
-current_animation = "default"
+canvas_texture = SubResource("CanvasTexture_prjr3")
+rotation_source = NodePath("..")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_x5cu4")
+current_animation = "walk"
 current_frame = 0
 speed_scale = 1.0
 playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
-[node name="EditorShapeArea" type="Area2D" parent="." unique_id=1459208574]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=757983848]
+position = Vector2(-0.5, 8)
+shape = SubResource("RectangleShape2D_hysx3")
 
-[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=895623935]
-shape = SubResource("RectangleShape2D_x5cu4")
+[node name="Components" type="Node" parent="." unique_id=434262041]
 
-[node name="Origin" type="Marker2D" parent="." unique_id=1387317860]
+[node name="HealthComponent" type="Node" parent="Components" unique_id=1886471158]
+script = ExtResource("5_whnfo")
+metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1423924391]
+visible = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D" unique_id=450489105]
+polygon = PackedVector2Array(10, 9, 10, -8, 34, -23, 62, -32, 185, -46, 185, 40, 59, 24, 32, 19)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Area2D" unique_id=389414123]
+position = Vector2(-112, -3)
+polygon = PackedVector2Array(100.796, 12.128, 100.796, -4.872, 76.796, -19.872, 48.796, -28.872, -74.204, -42.872, -74.204, 43.128, 51.796, 27.128, 78.796, 22.128)
+
+[node name="HitBox" type="Area2D" parent="." unique_id=271769825]
+script = ExtResource("5_n0olq")
+hitbox_id = "enemy"
+damage_amount = 1.0
+damage_type = 1
+has_knockback = true
+knockback_vector = Vector2(150, 135)
+metadata/_custom_type_script = "uid://c103bnb5445y3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=1578956589]
+position = Vector2(-0.5, 4.5)
+shape = SubResource("RectangleShape2D_prjr3")
+debug_color = Color(0.7, 0, 0, 0.41960785)
+
+[node name="HurtBox" type="Area2D" parent="." unique_id=1587410193]
+script = ExtResource("6_prjr3")
+accepted_hitbox_ids = PackedStringArray("player_feet")
+accepted_damage_types = Array[int]([2, 1])
+metadata/_custom_type_script = "uid://3ara7t8dqmih"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=856276483]
+position = Vector2(-0.25, -2.25)
+shape = SubResource("RectangleShape2D_whnfo")
+debug_color = Color(0.7, 0.66499996, 0, 0.41960785)

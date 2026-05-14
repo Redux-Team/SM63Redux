@@ -8,12 +8,15 @@ signal damaged(source_hitbox: HitBox)
 
 ## Hitbox IDs to ignore
 @export var ignored_hitbox_ids: PackedStringArray
+## Hitbox IDs to ignore
+@export var accepted_hitbox_ids: PackedStringArray
 ## Leave empty to ignore none
 @export var ignored_damage_types: Array[HitBox.DamageType]
 ## Leave emtpy to accept all
 @export var accepted_damage_types: Array[HitBox.DamageType]
 ## State to change to when damaged
-@export var damage_state: State
+@export var default_damage_state: State
+@export var damage_state_map: Dictionary[HitBox.DamageType, State]
 
 
 func _init() -> void:
@@ -28,6 +31,8 @@ func _on_area_entered(area: Area2D) -> void:
 	var hitbox: HitBox = area as HitBox
 	
 	# Validity checks
+	if accepted_hitbox_ids and hitbox.hitbox_id not in accepted_hitbox_ids:
+		return 
 	if hitbox.hitbox_id in ignored_hitbox_ids:
 		return
 	if hitbox.damage_type in ignored_damage_types:
@@ -40,10 +45,13 @@ func _on_area_entered(area: Area2D) -> void:
 		if entity.has_component(HealthComponent):
 			var health_component: HealthComponent = entity.get_component(HealthComponent)
 			
-			health_component.hp -= hitbox.damage_amount
-			entity.velocity -= hitbox.knockback_vector * sign(hitbox.global_position - global_position)
+			health_component.damage(hitbox.damage_amount, hitbox.damage_type)
+			entity.velocity = -hitbox.knockback_vector * sign(hitbox.global_position - global_position)
 			
-			if damage_state and entity.state_machine:
-				entity.state_machine.change_state(damage_state.state_name)
+			if hitbox.damage_type in damage_state_map:
+				var damage_state: State = damage_state_map.get(hitbox.damage_type)
+				entity.state_machine.change_state(damage_state.get_internal_name())
+			elif default_damage_state and entity.state_machine:
+				entity.state_machine.change_state(default_damage_state.get_internal_name())
 	
 	damaged.emit(hitbox)
