@@ -19,7 +19,8 @@ func _on_area_2d_area_entered(area: Area2D) -> void:
 
 
 func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:
-	var player: Player = source_hitbox.owner
-	squished_by = player
-	
-	state_machine.change_state("squish")
+	if source_hitbox.damage_type == HitBox.DamageType.SQUISH:
+		var player: Player = source_hitbox.owner
+		squished_by = player
+		
+		state_machine.change_state("squish")

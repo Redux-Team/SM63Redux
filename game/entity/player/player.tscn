@@ -2018,12 +2018,14 @@ disabled = true
 [node name="Hitboxes" type="Node2D" parent="." unique_id=1409973495]
 
 [node name="Spin" type="Area2D" parent="Hitboxes" unique_id=1300299390]
-visible = false
 position = Vector2(2, -10)
 monitoring = false
 script = ExtResource("19_1wiqr")
 hitbox_id = "spin"
+damage_amount = 1.0
+damage_type = 1
 has_knockback = true
+knockback_vector = Vector2(150, -135)
 metadata/_custom_type_script = "uid://c103bnb5445y3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/Spin" unique_id=1772297716]
