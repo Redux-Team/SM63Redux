@@ -1,15 +1,15 @@
 @tool
 extends State
 
+@export var spin_hitbox: HitBox
+
 
 func _on_enter() -> void:
 	player.set_gravity_scale_factor(0.67)
 	player.is_spinning = true
 	player.current_jump = 0
 	player.jump_chain_timer = 0
-	player.spin_area.set_deferred(&"monitoring", true)
-	player.spin_area.set_deferred(&"monitorable", true)
-	player.spin_shape.set_deferred(&"disabled", false)
+	spin_hitbox.enable(0.3)
 	
 	if not player.is_on_floor():
 		player.set_gravity_enabled(false)
@@ -36,7 +36,4 @@ func _on_physics_tick(_delta: float) -> void:
 func _on_exit() -> void:
 	player.set_gravity_enabled(true)
 	player.set_gravity_scale_factor(1.0)
-	
-	player.spin_area.set_deferred(&"monitoring", false)
-	player.spin_area.set_deferred(&"monitorable", false)
-	player.spin_shape.set_deferred(&"disabled", true)
+	spin_hitbox.disable()

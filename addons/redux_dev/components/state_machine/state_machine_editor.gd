@@ -51,6 +51,17 @@ static func _make_state_script(state_name: String) -> GDScript:
 	return s
 
 
+static func _swap_state_script(state: State, new_script: Script) -> void:
+	var preserved: Dictionary = {}
+	for prop: Dictionary in state.get_property_list():
+		if prop.usage & PROPERTY_USAGE_STORAGE:
+			preserved[prop.name] = state.get(prop.name)
+	state.set_script(new_script)
+	for prop: Dictionary in state.get_property_list():
+		if prop.usage & PROPERTY_USAGE_STORAGE and preserved.has(prop.name):
+			state.set(prop.name, preserved[prop.name])
+
+
 func _open_or_create_transition_script(transition: StateTransition) -> void:
 	var s: Script = transition.get_script() as Script
 	if s and s != StateTransition:
@@ -133,19 +144,7 @@ func _open_or_create_state_script(uuid: String) -> void:
 		var loaded: Script = load(selected)
 		if not loaded:
 			return
-		var editor_name: StringName = state.__editor_name
-		var editor_position: Vector2 = state.__editor_position
-		var editor_uuid: StringName = state.__editor_uuid
-		var editor_superstate_uuid: StringName = state.__editor_superstate_uuid
-		var editor_entry_uuid: StringName = state.__editor_entry_uuid
-		var editor_superstate_wire_uuid: StringName = state.__editor_superstate_wire_uuid
-		state.set_script(loaded)
-		state.__editor_name = editor_name
-		state.__editor_position = editor_position
-		state.__editor_uuid = editor_uuid
-		state.__editor_superstate_uuid = editor_superstate_uuid
-		state.__editor_entry_uuid = editor_entry_uuid
-		state.__editor_superstate_wire_uuid = editor_superstate_wire_uuid
+		_swap_state_script(state, loaded)
 		EditorInterface.edit_script(loaded)
 		EditorInterface.set_main_screen_editor("Script")
 		var node: EditorStateMachineStateNode = state_machine_graph_edit._find_node_by_uuid(uuid)
@@ -162,20 +161,8 @@ func _on_save_script_dialog_file_selected(path: String) -> void:
 		var state: State = _current_sm.__states.get(uuid)
 		if not state:
 			return
-		var editor_name: StringName = state.__editor_name
-		var editor_position: Vector2 = state.__editor_position
-		var editor_uuid: StringName = state.__editor_uuid
-		var editor_superstate_uuid: StringName = state.__editor_superstate_uuid
-		var editor_entry_uuid: StringName = state.__editor_entry_uuid
-		var editor_superstate_wire_uuid: StringName = state.__editor_superstate_wire_uuid
 		var loaded: Script = load(path)
-		state.set_script(loaded)
-		state.__editor_name = editor_name
-		state.__editor_position = editor_position
-		state.__editor_uuid = editor_uuid
-		state.__editor_superstate_uuid = editor_superstate_uuid
-		state.__editor_entry_uuid = editor_entry_uuid
-		state.__editor_superstate_wire_uuid = editor_superstate_wire_uuid
+		_swap_state_script(state, loaded)
 		EditorInterface.edit_script(loaded)
 		EditorInterface.set_main_screen_editor("Script")
 		var node: EditorStateMachineStateNode = state_machine_graph_edit._find_node_by_uuid(uuid)

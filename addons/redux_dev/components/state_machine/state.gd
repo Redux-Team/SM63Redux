@@ -55,6 +55,11 @@ var animation_player: AnimationPlayer
 ## is active. All others will be disabled on enter and restored on exit. If none set, it will
 ## stay with what it entered with.
 @export var collision_enabled_shapes: Array[CollisionShape2D] = []
+## The subset of the entity's [CollisionShape2D] nodes that should be disabled while this state
+## is active. Only used when [member collision_enabled_shapes] is empty.
+@export var collision_disabled_shapes: Array[CollisionShape2D] = []
+@export_flags_2d_physics var collision_mask_override: int = 0
+
 
 @export_group("SFX", "sfx_")
 ## SFX entry played when this state is entered.
@@ -97,6 +102,7 @@ var player: Player:
 var _sprite_chain_index: int = 0
 var _pre_entered: bool = false
 var _collision_snapshot: Array[CollisionShape2D] = []
+var _original_collision_mask: int
 
 
 func _ready() -> void:
@@ -372,14 +378,21 @@ func __collision_enter() -> void:
 	var entity_node: Entity = state_machine._root_node as Entity
 	if not entity_node or entity_node.collision_shapes.is_empty():
 		return
-	var shapes: Array[CollisionShape2D] = _resolve_collision_shapes()
-	if shapes.is_empty():
+	var enabled: Array[CollisionShape2D] = _resolve_collision_shapes()
+	var disabled: Array[CollisionShape2D] = _resolve_disabled_collision_shapes()
+	if enabled.is_empty() and disabled.is_empty():
 		return
 	_collision_snapshot.clear()
+	if collision_mask_override:
+		entity_node.collision_mask = collision_mask_override
 	for shape: CollisionShape2D in entity_node.collision_shapes:
 		if not shape.disabled:
 			_collision_snapshot.append(shape)
-		shape.disabled = shape not in shapes
+		if not enabled.is_empty():
+			shape.set_deferred("disabled", shape not in enabled)
+		else:
+			if shape in disabled:
+				shape.set_deferred("disabled", true)
 
 
 func __collision_exit() -> void:
@@ -389,7 +402,8 @@ func __collision_exit() -> void:
 	if not entity_node or entity_node.collision_shapes.is_empty():
 		return
 	for shape: CollisionShape2D in entity_node.collision_shapes:
-		shape.disabled = shape not in _collision_snapshot
+		shape.set_deferred("disabled", shape not in _collision_snapshot)
+	entity_node.collision_mask = _original_collision_mask
 	_collision_snapshot.clear()
 
 
@@ -400,6 +414,16 @@ func _resolve_collision_shapes() -> Array[CollisionShape2D]:
 	for i: int in range(superstates.size() - 1, -1, -1):
 		if not superstates[i].collision_enabled_shapes.is_empty():
 			return superstates[i].collision_enabled_shapes
+	return []
+
+
+func _resolve_disabled_collision_shapes() -> Array[CollisionShape2D]:
+	if not collision_disabled_shapes.is_empty():
+		return collision_disabled_shapes
+	var superstates: Array[State] = state_machine._active_superstates
+	for i: int in range(superstates.size() - 1, -1, -1):
+		if not superstates[i].collision_disabled_shapes.is_empty():
+			return superstates[i].collision_disabled_shapes
 	return []
 
 

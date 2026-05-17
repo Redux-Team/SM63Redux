@@ -15,7 +15,6 @@ func _on_area_2d_area_entered(area: Area2D) -> void:
 		target = player
 		state_machine.change_state("alert")
 		player_check.set_deferred("monitoring", false)
-		
 
 
 func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:

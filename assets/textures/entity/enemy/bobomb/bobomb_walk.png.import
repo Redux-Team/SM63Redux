@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bbtiri17e7rkq"
-path="res://.godot/imported/jump.png-fbea2fa468c6678fff30a1ed20de5410.ctex"
+uid="uid://dxjm81n5gdd4w"
+path="res://.godot/imported/bobomb_walk.png-14f672d469aa424196e9ea1351ae1409.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/entity/player/mario/jump.png"
-dest_files=["res://.godot/imported/jump.png-fbea2fa468c6678fff30a1ed20de5410.ctex"]
+source_file="res://assets/textures/entity/enemy/bobomb/bobomb_walk.png"
+dest_files=["res://.godot/imported/bobomb_walk.png-14f672d469aa424196e9ea1351ae1409.ctex"]
 
 [params]
 

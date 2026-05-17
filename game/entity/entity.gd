@@ -14,6 +14,7 @@ var data: Dictionary
 var properties: Dictionary[StringName, Variant] = {}
 var source_object_id: String = ""
 var components: Array[EntityComponent]
+var _velocity_lock: bool = false
 
 ## Helper variable which takes into account the [member sprite]'s flip_h property.
 var local_velocity: Vector2:
@@ -47,9 +48,11 @@ func _physics_process(delta: float) -> void:
 		return
 	
 	if has_component(GravityComponent):
-		move_and_slide_with_gravity()
+		if not _velocity_lock:
+			move_and_slide_with_gravity()
 	else:
-		move_and_slide()
+		if not _velocity_lock:
+			move_and_slide()
 
 
 func init_from_data(obj_data: Dictionary) -> void:
@@ -127,6 +130,22 @@ func _on_damage(amount: float, type: HitBox.DamageType, source: Node2D = null) -
 
 func _on_property_changed(_key: StringName, _value: Variant) -> void:
 	pass
+
+
+func disable() -> void:
+	_velocity_lock = true
+	for c: EntityComponent in components_root.get_children():
+		c.enabled = false
+
+
+func enable() -> void:
+	_velocity_lock = false
+	for c: EntityComponent in components_root.get_children():
+		c.enabled = true
+
+
+func get_active_state_uptime() -> float:
+	return state_machine.get_current_state().get_elapsed_time()
 
 
 func move_and_slide_with_gravity() -> void:

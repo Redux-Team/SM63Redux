@@ -29,10 +29,14 @@ func _enter_tree() -> void:
 
 
 func _on_ready() -> void:
+	# If we are returning from a playtest, deserialize it immediately 
+	# and save the session so the cached state becomes our current baseline
 	if Singleton.has_meta(&"playtest"):
 		_deserialize(Singleton.get_meta(&"playtest"))
 		Singleton.remove_meta(&"playtest")
-	 
+		save_session() 
+		return # bypass standard file loading since we just restored the live session
+
 	if PERIODIC_AUTOSAVE_ENABLED:
 		_periodic_autosave_timer = Timer.new()
 		_periodic_autosave_timer.wait_time = PERIODIC_AUTOSAVE_INTERVAL
@@ -47,9 +51,8 @@ func _on_ready() -> void:
 
 
 func _on_periodic_autosave_timeout() -> void:
-	if not FileAccess.file_exists(level_file_path) or method == -1:
-		return
-	
+	# Allow autosaving even if the file hasn't been saved to a custom path yet
+	# > we want periodic backups of the workspace regardless of method
 	var file: FileAccess = FileAccess.open(PERIODIC_AUTOSAVE_PATH, FileAccess.WRITE)
 	if file:
 		file.store_buffer(var_to_bytes(_serialize()))
@@ -66,7 +69,7 @@ func save_binary(path: String) -> Error:
 	file.close()
 	level_file_path = path
 	method = 0
-	autosave()
+	save_session()
 	return OK
 
 
@@ -83,7 +86,7 @@ func load_binary(path: String) -> Error:
 	if err == OK:
 		level_file_path = path
 		method = 0
-		autosave()
+		save_session()
 		LD.get_tool_handler().select_tool("select")
 	return err
 
@@ -102,7 +105,7 @@ func save_json(path: String) -> Error:
 	file.close()
 	level_file_path = path
 	method = 1
-	autosave()
+	save_session()
 	return OK
 
 
@@ -124,7 +127,7 @@ func load_json(path: String) -> Error:
 		level_file_path = path
 		LD.get_tool_handler().select_tool("select")
 		method = 1
-		autosave()
+		save_session()
 	return deserialize_err
 
 
@@ -132,19 +135,27 @@ func get_level_data() -> Dictionary:
 	return _serialize()
 
 
-func autosave() -> void:
+func save_session() -> void:
 	var session_file: FileAccess = FileAccess.open(LAST_SESSION_PATH, FileAccess.WRITE)
-	if FileAccess.file_exists(level_file_path):
+	if not session_file:
+		return
+
+	# If we have an active, real file path were using on disk, save it normally
+	if not level_file_path.is_empty() and FileAccess.file_exists(level_file_path) and level_file_path != AUTOSAVE_PATH:
 		session_file.store_string(JSON.stringify({
 			"level_file_path": level_file_path,
 			"method": method,
 		}))
 	else:
+		# If the file hasn't been saved locally yet, back it up to the emergency state
 		var autosave_file: FileAccess = FileAccess.open(AUTOSAVE_PATH, FileAccess.WRITE)
-		autosave_file.store_buffer(var_to_bytes(_serialize()))
+		if autosave_file:
+			autosave_file.store_buffer(var_to_bytes(_serialize()))
+			autosave_file.close()
+		
 		session_file.store_string(JSON.stringify({
 			"level_file_path": AUTOSAVE_PATH,
-			"method": 0,
+			"method": 0, # force binary reading next load to parse the AUTOSAVE_PATH
 		}))
 
 

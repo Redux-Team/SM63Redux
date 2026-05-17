@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://gx548aea8dxr" path="res://game/entity/enemy/goomba/goomba.gd" id="1_hysx3"]
 [ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="2_e0p0p"]
-[ext_resource type="Script" uid="uid://elx0fserr285" path="res://game/entity/enemy/goomba/states/patrol.gd" id="3_g7wuw"]
 [ext_resource type="Texture2D" uid="uid://djgg3rgm58230" path="res://assets/textures/entity/enemy/goomba/goomba_walk.png" id="3_hysx3"]
 [ext_resource type="Script" uid="uid://3y7t4ymugnxu" path="res://addons/redux_dev/components/state_machine/state_transition.gd" id="3_ios8m"]
 [ext_resource type="Script" uid="uid://dyjrhpdveexsr" path="res://addons/redux_dev/components/state_machine/state.gd" id="3_tx7nd"]
@@ -11,6 +10,7 @@
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_whnfo"]
 [ext_resource type="Script" uid="uid://deiaa5u8esvnc" path="res://addons/redux_dev/components/state_machine/state_sfx_entry.gd" id="4_wjeoi"]
 [ext_resource type="Script" uid="uid://ckuqr7ws7p6tk" path="res://game/entity/enemy/goomba/states/alert.gd" id="4_x5cu4"]
+[ext_resource type="Script" uid="uid://bd8l4ri83uu5a" path="res://game/entity/enemy/_shared/states/patrol.gd" id="5_4grvk"]
 [ext_resource type="AudioStream" uid="uid://dgmayxvw7oy3w" path="res://assets/sfx/entity/goomba/goomba_step.wav" id="5_dri63"]
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="5_n0olq"]
 [ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="5_whnfo"]
@@ -89,12 +89,12 @@ playlist = SubResource("Resource_4grvk")
 volume_db = -7.0
 metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_whnfo"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0olq"]
 atlas = ExtResource("3_hysx3")
-region = Rect2(64, 0, 32, 32)
+region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_eqg5w"]
-diffuse_texture = SubResource("AtlasTexture_whnfo")
+[sub_resource type="CanvasTexture" id="CanvasTexture_4grvk"]
+diffuse_texture = SubResource("AtlasTexture_n0olq")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kyaey"]
 atlas = ExtResource("4_kyaey")
@@ -132,13 +132,13 @@ region = Rect2(96, 0, 32, 32)
 atlas = ExtResource("20_4grvk")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_n0olq"]
-atlas = ExtResource("3_hysx3")
-region = Rect2(0, 0, 32, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_prjr3"]
 atlas = ExtResource("3_hysx3")
 region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_whnfo"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e0p0p"]
 atlas = ExtResource("3_hysx3")
@@ -274,7 +274,7 @@ _data = {
 size = Vector2(17, 7)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_whnfo"]
-size = Vector2(21.5, 16)
+size = Vector2(21.5, 14)
 
 [node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("player_check", "sprite", "components_root", "state_machine")]
 collision_layer = 8
@@ -292,8 +292,8 @@ root_node = NodePath("..")
 sprite = NodePath("../SmartSprite2D")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(812.4718, 312.1302)
-__last_editor_zoom = 0.89543074
+__last__editor_position = Vector2(189.26038, 151.47421)
+__last_editor_zoom = 0.61159116
 __states = {
 &"53d6d36b-82d5-4959-a868-aff4d9ec2aba": NodePath("Wander/Alert"),
 &"5f76de65-09f3-4b6f-9847-15c247ae70f1": NodePath("Strike"),
@@ -314,7 +314,7 @@ __editor_position = Vector2(200, 260)
 __editor_uuid = &"97212f4c-f576-4616-8814-5379e9dd5a08"
 
 [node name="Patrol" type="Node" parent="StateMachine/Wander" unique_id=392367863 node_paths=PackedStringArray("floor_check_r", "floor_check_l", "wall_check_l", "wall_check_r")]
-script = ExtResource("3_g7wuw")
+script = ExtResource("5_4grvk")
 displacement = SubResource("Curve_g7wuw")
 floor_check_r = NodePath("../../../FloorCheckR")
 floor_check_l = NodePath("../../../FloorCheckL")
@@ -367,22 +367,22 @@ __editor_uuid = &"5f76de65-09f3-4b6f-9847-15c247ae70f1"
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(0, -7)
-texture = SubResource("CanvasTexture_eqg5w")
+texture = SubResource("CanvasTexture_4grvk")
 region_enabled = true
-region_rect = Rect2(64, 0, 32, 32)
+region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("4_whnfo")
-canvas_texture = SubResource("CanvasTexture_eqg5w")
+canvas_texture = SubResource("CanvasTexture_4grvk")
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_x5cu4")
 current_animation = "walk"
-current_frame = 2
+current_frame = 0
 speed_scale = 1.0
 playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=757983848]
-position = Vector2(-0.5, 8)
+position = Vector2(-0.5, 7)
 shape = SubResource("RectangleShape2D_hysx3")
 
 [node name="WallCheckR" type="RayCast2D" parent="." unique_id=1858743073]
@@ -439,11 +439,10 @@ polygon = PackedVector2Array(100.796, 12.128, 100.796, -4.872, 76.796, -19.872, 
 
 [node name="HitBox" type="Area2D" parent="." unique_id=271769825]
 script = ExtResource("5_n0olq")
-hitbox_id = "enemy"
+hitbox_ids = Array[String](["enemy", "goomba"])
 damage_amount = 1.0
 damage_type = 1
 has_knockback = true
-knockback_vector = Vector2(150, 135)
 metadata/_custom_type_script = "uid://c103bnb5445y3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=1578956589]
@@ -451,17 +450,12 @@ position = Vector2(-0.5, 3.5)
 shape = SubResource("RectangleShape2D_prjr3")
 debug_color = Color(0.7, 0, 0, 0.41960785)
 
-[node name="HurtBox" type="Area2D" parent="." unique_id=1587410193 node_paths=PackedStringArray("damage_state_map")]
+[node name="HurtBox" type="Area2D" parent="." unique_id=1587410193]
 script = ExtResource("6_prjr3")
-accepted_hitbox_ids = PackedStringArray("player_feet", "spin")
-accepted_damage_types = Array[int]([2, 1])
-damage_state_map = {
-1: NodePath("../StateMachine/Strike")
-}
 metadata/_custom_type_script = "uid://3ara7t8dqmih"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=856276483]
-position = Vector2(-0.25, -2)
+position = Vector2(-0.25, -3)
 shape = SubResource("RectangleShape2D_whnfo")
 debug_color = Color(0.7, 0.66499996, 0, 0.41960785)
 

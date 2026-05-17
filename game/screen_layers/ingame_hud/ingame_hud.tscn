@@ -3,10 +3,31 @@
 [ext_resource type="Texture2D" uid="uid://bpmi17yjeho6o" path="res://assets/textures/gui/ingame_hud/health_meter_base.png" id="1_e2fet"]
 [ext_resource type="Script" uid="uid://bc8rgrn6u3y13" path="res://game/screen_layers/ingame_hud/ingame_hud.gd" id="1_reblr"]
 [ext_resource type="Texture2D" uid="uid://civwwnm7pwii7" path="res://assets/textures/gui/ingame_hud/health_meter_coin_base.png" id="2_w0ism"]
+[ext_resource type="Texture2D" uid="uid://ur8gi014rt0d" path="res://assets/textures/gui/ingame_hud/health_meter_inner_bg.png" id="3_0c88u"]
+[ext_resource type="Shader" uid="uid://yfcro43orcr0" path="res://core/shader/hud_health.gdshader" id="3_d64ys"]
+[ext_resource type="Texture2D" uid="uid://cgms5235nrwsb" path="res://assets/textures/gui/ingame_hud/health_meter_inner.png" id="3_hbyb8"]
+[ext_resource type="Texture2D" uid="uid://dxeele2uos4o5" path="res://assets/textures/gui/ingame_hud/hp_power.png" id="7_2e807"]
+[ext_resource type="Texture2D" uid="uid://bmuhj0qbolft8" path="res://assets/textures/gui/ingame_hud/fludd_tank.png" id="8_37e64"]
 
-[node name="IngameHud" type="CanvasLayer" unique_id=510807687 node_paths=PackedStringArray("hp_label")]
+[sub_resource type="Gradient" id="Gradient_d64ys"]
+offsets = PackedFloat32Array(0, 0.203125, 0.3638393, 0.51339287, 0.7745536, 1)
+colors = PackedColorArray(0.20784314, 0.49411765, 0.9098039, 1, 0.3567391, 0.62493485, 0.8478261, 1, 0.3137255, 0.81960785, 0.23137255, 1, 0.84, 0.84, 0, 1, 0.98039216, 0.3019608, 0.2, 1, 0.41355386, 0, 0.002178085, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0c88u"]
+shader = ExtResource("3_d64ys")
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/health_texture = ExtResource("3_hbyb8")
+shader_parameter/total_slices = 8
+shader_parameter/filled_slices = 8
+shader_parameter/start_angle_degrees = 0.0
+shader_parameter/divider_color = Color(0.6392157, 0.6392157, 0.6392157, 1)
+
+[node name="IngameHud" type="CanvasLayer" unique_id=510807687 node_paths=PackedStringArray("inner_hp_texture", "inner_hpbg")]
+layer = 0
 script = ExtResource("1_reblr")
-hp_label = NodePath("HealthContainer/Base/HPLabel")
+health_gradient = SubResource("Gradient_d64ys")
+inner_hp_texture = NodePath("HealthContainer/Base/InnerHPBG/InnerHPTexture")
+inner_hpbg = NodePath("HealthContainer/Base/InnerHPBG")
 
 [node name="HealthContainer" type="Control" parent="." unique_id=1581326594]
 layout_mode = 3
@@ -30,8 +51,31 @@ offset_bottom = 77.0
 grow_horizontal = 2
 texture = ExtResource("1_e2fet")
 
+[node name="InnerHPBG" type="TextureRect" parent="HealthContainer/Base" unique_id=2134494592]
+show_behind_parent = true
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 56.0
+offset_bottom = 56.0
+texture = ExtResource("3_0c88u")
+
+[node name="InnerHPTexture" type="ColorRect" parent="HealthContainer/Base/InnerHPBG" unique_id=224584427]
+material = SubResource("ShaderMaterial_0c88u")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 24.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="Base2" type="TextureRect" parent="HealthContainer/Base" unique_id=1560102088]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -46,20 +90,39 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_w0ism")
 
-[node name="HPLabel" type="Label" parent="HealthContainer/Base" unique_id=500976471]
+[node name="TextureRect" type="TextureRect" parent="HealthContainer/Base" unique_id=529328457]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -35.0
+offset_top = 1.0
+offset_right = 34.0
+offset_bottom = 17.0
+grow_horizontal = 2
+texture = ExtResource("7_2e807")
+
+[node name="FLUDDContainer" type="Control" parent="." unique_id=2013215394]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="FLUDDContainer" unique_id=1095548232]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -19.0
-offset_top = -8.0
-offset_right = 21.0
-offset_bottom = 7.0
+offset_left = -52.0
+offset_top = -113.0
+offset_right = -8.0
+offset_bottom = -14.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/outline_size = 8
-text = "8"
-horizontal_alignment = 1
-vertical_alignment = 1
+texture = ExtResource("8_37e64")

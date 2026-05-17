@@ -174,6 +174,8 @@ func _dispatch_root_node() -> void:
 		state.root_node = _root_node
 		state.sprite = sprite
 		state.animation_player = animation_player
+		if _root_node is Entity:
+			state._original_collision_mask = _root_node.collision_mask
 	
 	for tid: StringName in __transitions:
 		var t: StateTransition = __transitions.get(tid) as StateTransition
@@ -451,8 +453,8 @@ func _play_sfx_entry(entry: StateSFXEntry, state: State) -> void:
 		StateSFXEntry.InterruptPolicy.PLAY_ANYWAY:
 			pass
 	
-	var stream: AudioStream = _pick_stream(entry.playlist)
-	if not stream:
+	var streams: Array[AudioStream] = _pick_stream(entry.playlist)
+	if streams.is_empty():
 		return
 	
 	var pitch: float = entry._resolve_pitch(_root_node)
@@ -461,31 +463,32 @@ func _play_sfx_entry(entry: StateSFXEntry, state: State) -> void:
 	var attentuation: float = entry.attentuation
 	var max_distance: float = entry.max_distance
 	
-	if entry.spatial:
-		var player: AudioStreamPlayer2D = _get_pool_2d(entry.pool_id, entry.max_stack)
-		player.stream = stream
-		player.pitch_scale = pitch
-		player.volume_db = vol
-		player.bus = bus
-		player.attenuation = attentuation
-		player.max_distance = max_distance
-		player.play()
-	else:
-		var player: AudioStreamPlayer = _get_pool_flat(entry.pool_id, entry.max_stack)
-		player.stream = stream
-		player.pitch_scale = pitch
-		player.volume_db = vol
-		player.bus = bus
-		player.play()
+	for stream: AudioStream in streams:
+		if entry.spatial:
+			var player: AudioStreamPlayer2D = _get_pool_2d(entry.pool_id, entry.max_stack)
+			player.stream = stream
+			player.pitch_scale = pitch
+			player.volume_db = vol
+			player.bus = bus
+			player.attenuation = attentuation
+			player.max_distance = max_distance
+			player.play()
+		else:
+			var player: AudioStreamPlayer = _get_pool_flat(entry.pool_id, entry.max_stack)
+			player.stream = stream
+			player.pitch_scale = pitch
+			player.volume_db = vol
+			player.bus = bus
+			player.play()
 
 
 # Picks the next stream from a Playlist according to its play order and repeat settings.
-func _pick_stream(playlist: Playlist) -> AudioStream:
+func _pick_stream(playlist: Playlist) -> Array[AudioStream]:
 	if playlist.tracklist.is_empty():
-		return null
+		return []
 	match playlist.play_order:
 		Playlist.PlayOrder.RANDOM:
-			return playlist.tracklist.pick_random()
+			return [playlist.tracklist.pick_random()]
 		Playlist.PlayOrder.RANDOM_NEW:
 			var pick: AudioStream = playlist.tracklist.pick_random()
 			var attempts: int = 0
@@ -493,11 +496,11 @@ func _pick_stream(playlist: Playlist) -> AudioStream:
 				pick = playlist.tracklist.pick_random()
 				attempts += 1
 			playlist.last_pick = pick.get_instance_id()
-			return pick
+			return [pick]
 		Playlist.PlayOrder.RANDOM_ONCE:
 			if playlist.sfx_pool.size() >= playlist.tracklist.size():
 				if not playlist.repeat_list:
-					return null
+					return []
 				playlist.sfx_pool.clear()
 			for _i: int in playlist.tracklist.size():
 				var pick: AudioStream = playlist.tracklist.pick_random()
@@ -505,16 +508,18 @@ func _pick_stream(playlist: Playlist) -> AudioStream:
 				if not playlist.sfx_pool.has(id) and id != playlist.last_pick:
 					playlist.sfx_pool.append(id)
 					playlist.last_pick = id
-					return pick
+					return [pick]
 		Playlist.PlayOrder.SEQUENTIAL:
 			if playlist.sfx_pool.size() >= playlist.tracklist.size():
 				if not playlist.repeat_list:
-					return null
+					return []
 				playlist.sfx_pool.clear()
 			var pick: AudioStream = playlist.tracklist[playlist.sfx_pool.size()]
 			playlist.sfx_pool.append(0)
-			return pick
-	return null
+			return [pick]
+		Playlist.PlayOrder.SYNCHRONOUS:
+			return playlist.tracklist
+	return []
 
 
 # Returns an idle or newly created AudioStreamPlayer from the flat pool for the given pool_id.
@@ -551,7 +556,9 @@ func _get_pool_2d(pool_id: StringName, max_stack: int) -> AudioStreamPlayer2D:
 
 # Returns true if any player in the given pool is currently playing.
 func _is_pool_playing(pool_id: StringName, spatial: bool) -> bool:
-	var pool: Array = _sfx_pool_2d[pool_id] if spatial else _sfx_pool[pool_id]
+	var pool: Array = _sfx_pool_2d.get(pool_id, []) if spatial else _sfx_pool.get(pool_id, [])
+	if not pool:
+		return false
 	if not _sfx_pool_2d.has(pool_id) if spatial else not _sfx_pool.has(pool_id):
 		return false
 	for player: Object in pool:

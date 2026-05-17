@@ -18,6 +18,8 @@ enum PlayOrder {
 	RANDOM_ONCE,
 	## All sound effects play in order upon each [code]play_sfx_at()[/code] call. Does not repeat unless [param repeat_list] is set to [code]true[/code]
 	SEQUENTIAL,
+	## All sound effects play at once.
+	SYNCHRONOUS
 }
 
 ## List of possible sound effect(s) this layer can iterate through.

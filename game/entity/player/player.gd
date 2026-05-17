@@ -151,10 +151,6 @@ func get_facing_velocity() -> float:
 	return velocity.x * (-1.0 if sprite.flip_h else 1.0)
 
 
-func get_active_state_uptime() -> float:
-	return state_machine.get_current_state().get_elapsed_time()
-
-
 func get_local_floor_normal() -> Vector2:
 	var gc: GravityComponent = get_component(GravityComponent)
 	return get_floor_normal().rotated(-gc.get_angle()) if gc else get_floor_normal()

@@ -1,8 +1,9 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://ek73rv0b4lqd"]
 
 [ext_resource type="PackedScene" uid="uid://dampck2fv0soy" path="res://game/db/Objects/Entity/Enemy/bobomb_ld.tscn" id="1_4j52t"]
-[ext_resource type="Texture2D" uid="uid://dv78fbvcq267j" path="res://assets/textures/entity/enemy/bobomb.png" id="1_7nxe1"]
+[ext_resource type="Texture2D" uid="uid://dv78fbvcq267j" path="res://assets/textures/entity/enemy/bobomb/bobomb_ld.png" id="1_7nxe1"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_c4row"]
+[ext_resource type="PackedScene" uid="uid://bb7m3g4mv00m5" path="res://game/entity/enemy/bobomb/bobomb.tscn" id="1_mddn3"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_x7ysr"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_mddn3"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_8im0m"]
@@ -22,4 +23,5 @@ ld_entry_texture = SubResource("AtlasTexture_s0lme")
 ld_editor_instance = ExtResource("1_4j52t")
 ld_properties = Array[ExtResource("1_c4row")]([ExtResource("4_mddn3"), ExtResource("5_8im0m")])
 ld_placement_rules = 2
+game_instance = ExtResource("1_mddn3")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

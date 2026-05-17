@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dv78fbvcq267j"
-path="res://.godot/imported/bobomb.png-30069a4f7aed684fab879a0390381972.ctex"
+uid="uid://ur8gi014rt0d"
+path="res://.godot/imported/health_meter_inner_bg.png-6e27533cc8941e2146f34706703ff21d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/entity/enemy/bobomb.png"
-dest_files=["res://.godot/imported/bobomb.png-30069a4f7aed684fab879a0390381972.ctex"]
+source_file="res://assets/textures/gui/ingame_hud/health_meter_inner_bg.png"
+dest_files=["res://.godot/imported/health_meter_inner_bg.png-6e27533cc8941e2146f34706703ff21d.ctex"]
 
 [params]
 

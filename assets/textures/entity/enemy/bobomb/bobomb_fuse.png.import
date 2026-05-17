@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://u4yvxq51cr5f"
-path="res://.godot/imported/spin.png-0b1f9a70befdee710755149d0df0c9f3.ctex"
+uid="uid://c6mg7sixneubo"
+path="res://.godot/imported/bobomb_fuse.png-0d6a780b5f058531dc1f9215df1943b7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/entity/player/mario/spin.png"
-dest_files=["res://.godot/imported/spin.png-0b1f9a70befdee710755149d0df0c9f3.ctex"]
+source_file="res://assets/textures/entity/enemy/bobomb/bobomb_fuse.png"
+dest_files=["res://.godot/imported/bobomb_fuse.png-0d6a780b5f058531dc1f9215df1943b7.ctex"]
 
 [params]
 

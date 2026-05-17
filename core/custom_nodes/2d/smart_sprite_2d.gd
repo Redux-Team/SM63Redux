@@ -49,6 +49,12 @@ enum {
 		if canvas_texture:
 			canvas_texture.specular_texture = t
 			_update_preview()
+
+## Subsprites will respect this sprite's flip properties such that the offsets of the subsprites will
+## remain consistent with the current sprite as if they were one.
+@export var subsprites: Array[SmartSprite2D]
+var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
+
 @export_group("Animated")
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "Animated") var animated: bool:
 	set(a):
@@ -67,6 +73,7 @@ var current_frame: int:
 	set(cf):
 		current_frame = cf
 		apply_frame(current_animation, current_frame)
+		frame_changed.emit()
 		queue_redraw()
 var speed_scale: float = 1.0
 var playing: bool = false:
@@ -83,6 +90,11 @@ var playing: bool = false:
 var _playback_time: float = 0.0
 
 
+func _ready() -> void:
+	for subsprite: SmartSprite2D in subsprites:
+		subsprite_initial_offsets.set(subsprite, subsprite.position)
+
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_POST_ENTER_TREE:
 		if not canvas_texture:
@@ -90,7 +102,29 @@ func _notification(what: int) -> void:
 		texture = canvas_texture
 
 
-func _set(property: StringName, _value: Variant) -> bool:
+func _set(property: StringName, value: Variant) -> bool:
+	# Subsprite horizontal handling
+	if property == "flip_h":
+		for subsprite: SmartSprite2D in subsprites:
+			subsprite.flip_h = value
+			var original_offset: Vector2 = subsprite_initial_offsets.get(subsprite)
+			
+			subsprite.position.x = original_offset.x * (-1 if value else 1)
+	# Subsprite vertical handling 
+	if property == "flip_v":
+		for subsprite: SmartSprite2D in subsprites:
+			subsprite.flip_v = value
+			var original_offset: Vector2 = subsprite_initial_offsets.get(subsprite)
+			
+			subsprite.position.y = original_offset.y * (-1 if value else 1)
+		return true
+	
+	# Subsprite speed scale
+	if property == "speed_scale":
+		for subsprite: SmartSprite2D in subsprites:
+			subsprite.speed_scale = value
+		return true
+	
 	return property == "flip_h" and lock_flipping
 
 

@@ -9,17 +9,15 @@ var goomba: Goomba:
 
 
 func _on_enter() -> void:
-	goomba.velocity.x = get_chase_vector()
+	entity.velocity.x = get_chase_vector()
 
 
 func _on_physics_tick(_delta: float) -> void:
 	sprite.flip_h = entity.velocity.x < 0
 	
-	goomba.velocity.x += get_chase_vector() / 8
-	goomba.velocity.x = clampf(goomba.velocity.x, -CHASE_VELOCITY, CHASE_VELOCITY)
-	
-	#print(entity.velocity.x)
+	entity.velocity.x += get_chase_vector() / 8
+	entity.velocity.x = clampf(entity.velocity.x, -CHASE_VELOCITY, CHASE_VELOCITY)
 
 
 func get_chase_vector() -> float:
-	return CHASE_VELOCITY * sign(goomba.target.global_position.x - goomba.global_position.x)
+	return CHASE_VELOCITY * sign(entity.target.global_position.x - entity.global_position.x)
