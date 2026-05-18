@@ -133,7 +133,7 @@ func _on_rotate_button_pressed() -> void:
 
 
 func _on_test_server_button_pressed() -> void:
-	Singleton.get_multiplayer_handler().start_server()
+	#Singleton.get_multiplayer_handler().start_server()
 	Singleton.set_meta("playtest", LD.get_save_load_handler().get_level_data())
 	
 	LD.get_save_load_handler().save_session()

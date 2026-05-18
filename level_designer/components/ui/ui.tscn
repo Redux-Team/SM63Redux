@@ -157,6 +157,7 @@ layout_mode = 2
 mouse_filter = 2
 
 [node name="TestClientButton" type="Button" parent="ViewportUI/VBoxContainer3/HBoxContainer" unique_id=1982310012]
+visible = false
 layout_mode = 2
 focus_mode = 0
 text = "Test (Client)"
@@ -164,7 +165,7 @@ text = "Test (Client)"
 [node name="TestServerButton" type="Button" parent="ViewportUI/VBoxContainer3/HBoxContainer" unique_id=700489393]
 layout_mode = 2
 focus_mode = 0
-text = "Test (Server)"
+text = "Test Level"
 
 [node name="WindowLayer" type="CanvasLayer" parent="." unique_id=783443360]
 layer = 3

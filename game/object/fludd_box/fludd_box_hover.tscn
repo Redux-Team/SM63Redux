@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cwhsjhk1kpwp1"]
 
 [ext_resource type="Script" uid="uid://d1vbfhdttehec" path="res://game/object/fludd_box/fludd_box.gd" id="1_scmcn"]
-[ext_resource type="PackedScene" uid="uid://bcbfi1awkwdyn" path="res://game/entity/enemy/parakoopa/parakoopa.tscn" id="2_8x4kl"]
+[ext_resource type="PackedScene" uid="uid://b1bysf6h2qqww" path="res://game/object/fludd_nozzle/fludd_nozzle_hover.tscn" id="2_6q8s3"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_js7x2"]
 [ext_resource type="Texture2D" uid="uid://cvuk603o47gb6" path="res://assets/textures/item/fludd/fludd_box_hover.png" id="3_748og"]
 [ext_resource type="Texture2D" uid="uid://chlxalycii75t" path="res://assets/textures/item/fludd/fludd_box_hover_open.png" id="4_748og"]
@@ -14,7 +14,7 @@
 atlas = ExtResource("3_748og")
 region = Rect2(0, 0, 40, 36)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_nempb"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ebuor"]
 diffuse_texture = SubResource("AtlasTexture_s2tvu")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3c337"]
@@ -134,18 +134,18 @@ size = Vector2(30, 3)
 
 [node name="FluddBoxHover" type="Node2D" unique_id=2137935164 node_paths=PackedStringArray("sprite", "open_sfx", "player_area_check")]
 script = ExtResource("1_scmcn")
-spawn = ExtResource("2_8x4kl")
+spawn = ExtResource("2_6q8s3")
 sprite = NodePath("Sprite")
 open_sfx = NodePath("OpenSFX")
 player_area_check = NodePath("PlayerAreaCheck")
 metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=499824916]
-texture = SubResource("CanvasTexture_nempb")
+texture = SubResource("CanvasTexture_ebuor")
 region_enabled = true
 region_rect = Rect2(0, 0, 40, 36)
 script = ExtResource("2_js7x2")
-canvas_texture = SubResource("CanvasTexture_nempb")
+canvas_texture = SubResource("CanvasTexture_ebuor")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_8x4kl")
 looping = false

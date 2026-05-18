@@ -4,6 +4,7 @@
 [ext_resource type="AudioStream" uid="uid://s37wfuyxf504" path="res://assets/music/91.mp3" id="2_bjm6i"]
 [ext_resource type="AudioStream" uid="uid://cm8xohoo5vmy" path="res://assets/music/92.mp3" id="3_j5u7t"]
 [ext_resource type="AudioStream" uid="uid://buy6m2r0lxnge" path="res://assets/music/93.mp3" id="4_brcp4"]
+[ext_resource type="AudioStream" uid="uid://bk7eyapdaww2u" path="res://assets/music/94.mp3" id="5_brcp4"]
 
 [sub_resource type="Animation" id="Animation_bjm6i"]
 length = 0.001
@@ -95,6 +96,7 @@ script = ExtResource("1_rkng7")
 tracks = Dictionary[String, AudioStream]({
 "Level Editor - 64": ExtResource("2_bjm6i"),
 "Level Editor - Galaxy": ExtResource("4_brcp4"),
+"Level Editor - Galaxy 2": ExtResource("5_brcp4"),
 "Level Editor - Sunshine": ExtResource("3_j5u7t")
 })
 song_label = NodePath("CanvasLayer/Control/SongLabel")

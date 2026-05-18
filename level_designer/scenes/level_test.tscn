@@ -12,9 +12,6 @@ keycode = 4194308
 [sub_resource type="Shortcut" id="Shortcut_1sbsh"]
 events = [SubResource("InputEventKey_x1m06")]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0w1st"]
-size = Vector2(157, 240)
-
 [node name="LevelTest" type="Node2D" unique_id=1539087846 node_paths=PackedStringArray("level_root", "multiplayer_spawner")]
 script = ExtResource("1_5nuwi")
 level_root = NodePath("LevelRoot")
@@ -42,37 +39,6 @@ grow_vertical = 0
 shortcut = SubResource("Shortcut_1sbsh")
 text = "Back to LD"
 
-[node name="HostLabel" type="Label" parent="CanvasLayer" unique_id=1364550266 groups=["gui_mp_host"]]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -15.0
-offset_right = 20.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/outline_size = 4
-text = "Host"
-horizontal_alignment = 1
-
-[node name="ClientLabel" type="Label" parent="CanvasLayer" unique_id=90577290]
-visible = false
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -15.0
-offset_right = 20.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/outline_size = 4
-text = "Client"
-horizontal_alignment = 1
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1523917071]
 stream = ExtResource("4_h52q2")
 volume_db = -10.0
@@ -81,15 +47,5 @@ bus = &"Music"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=243473474]
 spawn_path = NodePath("../LevelRoot")
-
-[node name="Area2D" type="Area2D" parent="." unique_id=1985565769]
-position = Vector2(319, -11)
-gravity_space_override = 3
-gravity_point_center = Vector2(0, -1)
-gravity_direction = Vector2(0, -1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=390739500]
-position = Vector2(68.5, 110)
-shape = SubResource("RectangleShape2D_0w1st")
 
 [connection signal="pressed" from="CanvasLayer/BackButton" to="." method="_on_back_button_pressed"]
