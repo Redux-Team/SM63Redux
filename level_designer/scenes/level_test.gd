@@ -12,6 +12,7 @@ func _ready() -> void:
 	add_child(_level_handler)
 	_level_handler.setup(level_root)
 	_level_handler.load_from_dict(Singleton.get_meta("playtest"))
+	Singleton.get_level_clock().start()
 	#_level_handler.set_multiplayer_spawner(multiplayer_spawner)
 	#
 	#multiplayer_spawner.spawn_function = _spawn_player_with_id
