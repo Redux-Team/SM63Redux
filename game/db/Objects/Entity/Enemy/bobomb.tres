@@ -18,6 +18,7 @@ id = "bobomb"
 category_string = "Entity"
 subpath = "Enemy/bobomb"
 group_path = "Enemy"
+name_override = "Bob-Omb"
 ld_object_path = "Entity/Enemy/bobomb"
 ld_entry_texture = SubResource("AtlasTexture_s0lme")
 ld_editor_instance = ExtResource("1_4j52t")
