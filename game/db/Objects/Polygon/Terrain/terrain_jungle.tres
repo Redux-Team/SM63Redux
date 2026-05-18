@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://3ja5avblhkr5" path="res://assets/textures/terrain/jungle/terrain_jungle_ld.png" id="3_8irv0"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_14ujc"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_554h7"]
+[ext_resource type="Resource" uid="uid://b12ma52j5x2hd" path="res://game/db/Properties/rng_seed.tres" id="6_daglj"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_oa82f"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_daglj"]
@@ -22,7 +23,7 @@ name_override = "Jungle"
 ld_object_path = "Polygon/Terrain/terrain_jungle"
 ld_entry_texture = SubResource("AtlasTexture_daglj")
 ld_editor_instance = ExtResource("2_8irv0")
-ld_properties = Array[ExtResource("4_14ujc")]([ExtResource("5_554h7")])
+ld_properties = Array[ExtResource("4_14ujc")]([ExtResource("5_554h7"), ExtResource("6_daglj")])
 ld_placement_tool_override = "polygon"
 ld_select_tool_override = "polygon_edit"
 ld_placement_rules = 2

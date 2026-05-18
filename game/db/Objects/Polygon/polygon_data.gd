@@ -80,6 +80,19 @@ enum LineMode { TOPLINE, EDGES_ONLY, NONE }
 		outline_width = v
 		update_visuals.emit()
 
+
+@export_group("Decorations")
+@export var decoration_weightmap: Dictionary[Texture2D, float] = {}:
+	set(v):
+		decoration_weightmap = v
+		update_visuals.emit()
+@export_range(0.1, 100.0, 0.1) var decoration_density: float = 20.0:
+	set(v):
+		decoration_density = v
+		update_visuals.emit()
+@export_storage var decoration_seed: int = 0
+
+
 @export_group("Display")
 @export var border_width: float = 3.0:
 	set(v):

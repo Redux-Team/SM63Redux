@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://b5ks8obhabj2l" path="res://game/db/Objects/Polygon/Terrain/terrain_snow_ld.tscn" id="2_odoqr"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_xxybb"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_1narg"]
+[ext_resource type="Resource" uid="uid://b12ma52j5x2hd" path="res://game/db/Properties/rng_seed.tres" id="6_swwlr"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_odoqr"]
 atlas = ExtResource("1_xxybb")
@@ -22,7 +23,7 @@ name_override = "Snow"
 ld_object_path = "Polygon/Terrain/terrain_snow"
 ld_entry_texture = SubResource("AtlasTexture_odoqr")
 ld_editor_instance = ExtResource("2_odoqr")
-ld_properties = Array[ExtResource("1_wrkex")]([ExtResource("5_1narg")])
+ld_properties = Array[ExtResource("1_wrkex")]([ExtResource("5_1narg"), ExtResource("6_swwlr")])
 ld_placement_tool_override = "polygon"
 ld_select_tool_override = "polygon_edit"
 ld_placement_rules = 2
