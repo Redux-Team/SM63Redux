@@ -11,12 +11,14 @@ const FALLBACK_FILL: Color = Color(0.2, 0.5, 1.0, 0.25)
 const FALLBACK_BORDER: Color = Color(0.4, 0.7, 1.0, 0.8)
 const PREVIEW_BORDER_WIDTH: float = 1.0
 const SELECTION_BORDER_WIDTH: float = 1.5
+const DECORATION_EDGE_BUFFER: float = 32.0
 
 
 @export var polygon_data: PolygonData
 
 @export_group("Internal")
 @export var _polygon: Polygon2D
+@export var _decoration_container: Node2D
 @export var _topline_container: Node2D
 @export var _topline_shadow_container: Node2D
 @export var _outline_container: Node2D
@@ -58,7 +60,7 @@ const SELECTION_BORDER_WIDTH: float = 1.5
 			editor_shape_area.name = "EditorShapeArea"
 			add_child(editor_shape_area)
 			editor_shape_area.owner = self
-			
+		
 			var col_poly: CollisionPolygon2D = CollisionPolygon2D.new()
 			col_poly.name = "EditorPolygon"
 			editor_shape_area.add_child(col_poly)
@@ -77,9 +79,13 @@ var _preview_valid: bool = true
 var _outer_points: PackedVector2Array = PackedVector2Array()
 var _holes: Array[PackedVector2Array] = []
 var _seam_indices: PackedInt32Array = PackedInt32Array()
+var _decoration_placements: Array[Dictionary] = []
 
 
 func _ready() -> void:
+	if get_property(&"rng_seed") == 0:
+		set_property(&"rng_seed", randi())
+	
 	if Engine.is_editor_hint():
 		return
 	if polygon_data and not polygon_data.update_visuals.is_connected(_update_visuals):
@@ -177,6 +183,8 @@ func get_hole(index: int) -> PackedVector2Array:
 
 
 func _rebuild_polygon() -> void:
+	_decoration_placements.clear()
+
 	if _outer_points.is_empty():
 		if _polygon:
 			_polygon.polygon = PackedVector2Array()
@@ -187,10 +195,10 @@ func _rebuild_polygon() -> void:
 		_update_visuals()
 		queue_redraw()
 		return
-	
+
 	var seam_polygon: PackedVector2Array = TerrainPolygon.clean_polygon(_outer_points)
 	_seam_indices = PackedInt32Array()
-	
+
 	for hole: PackedVector2Array in _holes:
 		if hole.size() < 3:
 			continue
@@ -204,13 +212,14 @@ func _rebuild_polygon() -> void:
 		seam_polygon = built
 		for idx: int in (seam_result["seam_indices"] as PackedInt32Array):
 			_seam_indices.append(idx)
-	
+
 	if _polygon:
 		_polygon.polygon = seam_polygon
 		_polygon.color = Color.TRANSPARENT
 	if editor_polygon and _preview_valid:
 		editor_polygon.polygon = seam_polygon
-	
+
+	_rebuild_decorations()
 	_update_visuals()
 	queue_redraw()
 
@@ -222,6 +231,78 @@ func apply_points_and_holes(points: PackedVector2Array, holes: Array[PackedVecto
 		if h.size() >= 3:
 			_holes.append(h)
 	_rebuild_polygon()
+
+
+func _rebuild_decorations() -> void:
+	if _decoration_container:
+		for child: Node in _decoration_container.get_children():
+			child.queue_free()
+	if not polygon_data or polygon_data.decoration_weightmap.is_empty() or _outer_points.size() < 3:
+		return
+	if not _decoration_container:
+		return
+	
+	var eroded: Array = Geometry2D.offset_polygon(_outer_points, -DECORATION_EDGE_BUFFER)
+	if eroded.is_empty():
+		return
+	var inner_polygon: PackedVector2Array = eroded[0]
+	if inner_polygon.size() < 3:
+		return
+	
+	var bounds: Rect2 = _get_polygon_bounds()
+	var area: float = bounds.size.x * bounds.size.y
+	var candidate_count: int = int(area / 10000.0 * polygon_data.decoration_density)
+	if candidate_count <= 0:
+		return
+	
+	var cell_size: float = sqrt(area / float(candidate_count))
+	var cols: int = maxi(1, int(ceil(bounds.size.x / cell_size)))
+	var rows: int = maxi(1, int(ceil(bounds.size.y / cell_size)))
+	var placed_rects: Array[Rect2] = []
+	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	
+	for row: int in rows:
+		for col: int in cols:
+			rng.seed = get_property(&"rng_seed") ^ (row * 198491317) ^ (col * 6542989)
+			var cell_origin: Vector2 = bounds.position + Vector2(col * cell_size, row * cell_size)
+			var point: Vector2 = cell_origin + Vector2(rng.randf() * cell_size, rng.randf() * cell_size)
+			if not Geometry2D.is_point_in_polygon(point, inner_polygon):
+				continue
+			var in_hole: bool = false
+			for hole: PackedVector2Array in _holes:
+				if Geometry2D.is_point_in_polygon(point, hole):
+					in_hole = true
+					break
+			if in_hole:
+				continue
+			var tex_index: int = 0
+			for tex: Texture2D in polygon_data.decoration_weightmap:
+				if not tex:
+					tex_index += 1
+					continue
+				rng.seed = get_property(&"rng_seed") ^ (row * 198491317) ^ (col * 6542989) ^ (tex_index * 374761393)
+				var chance: float = polygon_data.decoration_weightmap[tex]
+				if rng.randf() * 100.0 > chance:
+					tex_index += 1
+					continue
+				var tex_size: Vector2 = Vector2(tex.get_size())
+				var candidate_rect: Rect2 = Rect2(point - tex_size * 0.5, tex_size)
+				var overlaps: bool = false
+				for placed: Rect2 in placed_rects:
+					if candidate_rect.intersects(placed):
+						overlaps = true
+						break
+				if overlaps:
+					tex_index += 1
+					continue
+				placed_rects.append(candidate_rect)
+				var sprite: Sprite2D = Sprite2D.new()
+				sprite.texture = tex
+				sprite.position = point
+				sprite.centered = true
+				sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+				_decoration_container.add_child(sprite)
+				tex_index += 1
 
 
 func _update_visuals() -> void:
@@ -280,11 +361,11 @@ func _update_visuals() -> void:
 	if line_mode == PolygonData.LineMode.TOPLINE:
 		var outer_cw: PackedVector2Array = TerrainPolygon.ensure_clockwise(_outer_points)
 		var top_segments: Array[PackedVector2Array] = TerrainPolygon.get_topline_segments(outer_cw, threshold)
-		
+	
 		for hole: PackedVector2Array in _holes:
 			var hole_ccw: PackedVector2Array = TerrainPolygon.ensure_counter_clockwise(hole)
 			top_segments.append_array(TerrainPolygon.get_topline_segments(hole_ccw, threshold))
-		
+	
 		if _topline_container:
 			for segment: PackedVector2Array in top_segments:
 				var line: Line2D = Line2D.new()
@@ -382,6 +463,12 @@ func _draw() -> void:
 			if hole.size() >= 3:
 				draw_colored_polygon(hole, Color(0.0, 0.0, 0.0, 0.5))
 				draw_polyline(TerrainPolygon.get_closed_points(hole), border, border_w, true)
+	
+	for decoration: Dictionary in _decoration_placements:
+		var tex: Texture2D = decoration.get("tex") as Texture2D
+		var pos: Vector2 = decoration.get("pos") as Vector2
+		if tex:
+			draw_texture(tex, pos - Vector2(tex.get_size()) * 0.5)
 	
 	if _selection_state == LDObject.SelectionState.HIDDEN:
 		return

@@ -62,7 +62,9 @@ func get_object_properties_window() -> LDWindow:
 func _toggle_window(window: LDWindow) -> void:
 	if window.visible:
 		window.popout()
+		LD.get_input_handler().remove_input_priority(self)
 	else:
+		LD.get_input_handler().set_input_priority(self)
 		window.popin()
 
 

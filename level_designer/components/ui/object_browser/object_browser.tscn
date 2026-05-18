@@ -10,7 +10,7 @@ content_margin_right = 4.0
 content_margin_bottom = 4.0
 bg_color = Color(0, 0, 0, 0.42352942)
 
-[node name="LDObjectBrowser" type="Control" unique_id=2001061774 node_paths=PackedStringArray("groups_v_box", "category_buttons_container", "tooltip_label")]
+[node name="LDObjectBrowser" type="Control" unique_id=2001061774 node_paths=PackedStringArray("groups_v_box", "category_buttons_container", "tooltip_label", "search_line_edit")]
 custom_minimum_size = Vector2(500, 320)
 layout_mode = 3
 anchors_preset = 15
@@ -22,6 +22,7 @@ script = ExtResource("1_3hax8")
 groups_v_box = NodePath("MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/GroupsVBox")
 category_buttons_container = NodePath("MarginContainer/VBoxContainer/HBoxContainer")
 tooltip_label = NodePath("Tooltip")
+search_line_edit = NodePath("MarginContainer/VBoxContainer/SearchLineEdit")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1077961562]
 layout_mode = 1
@@ -43,9 +44,9 @@ layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer" unique_id=244860177]
+[node name="SearchLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer" unique_id=244860177]
 layout_mode = 2
-placeholder_text = "search !!!"
+placeholder_text = "Search..."
 
 [node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=1525210317]
 layout_mode = 2
@@ -69,11 +70,17 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 
-[node name="Tooltip" type="Label" parent="." unique_id=1292007798]
+[node name="Tooltip" type="RichTextLabel" parent="." unique_id=220684113]
 top_level = true
 layout_mode = 1
 offset_right = 64.0
 offset_bottom = 23.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_5hwe3")
+bbcode_enabled = true
 text = "<Object>"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
 horizontal_alignment = 1
+
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/SearchLineEdit" to="." method="_on_search_line_edit_text_changed"]
