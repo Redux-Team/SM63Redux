@@ -109,13 +109,13 @@ accepted_hitbox_ids = PackedStringArray("feet", "ground_pound")
 metadata/_custom_type_script = "uid://drtqc6at2evph"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2yeke"]
-size = Vector2(20, 4)
+size = Vector2(20, 5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lhbc1"]
 size = Vector2(16, 13)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ot2q4"]
-size = Vector2(20, 13)
+size = Vector2(20, 12)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rqgyx"]
 size = Vector2(11, 2)
@@ -187,7 +187,7 @@ components = Array[ExtResource("5_2yeke")]([SubResource("Resource_feb77"), SubRe
 metadata/_custom_type_script = "uid://3ara7t8dqmih"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=1041767698]
-position = Vector2(0, -6)
+position = Vector2(0, -5.5)
 shape = SubResource("RectangleShape2D_2yeke")
 debug_color = Color(0.7, 0.68833333, 0, 0.41960785)
 
@@ -206,7 +206,7 @@ has_knockback = true
 metadata/_custom_type_script = "uid://c103bnb5445y3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=600165017]
-position = Vector2(0, 2.5)
+position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_ot2q4")
 debug_color = Color(0.7, 0, 0, 0.41960785)
 

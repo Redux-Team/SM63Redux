@@ -27,4 +27,3 @@ func _on_bounce_area_body_entered(body: Node2D) -> void:
 func _on_foot_grab_area_body_entered(body: Node2D) -> void:
 	if body is Player and body.velocity.y < 0:
 		pass
-		#body.set_attached(self, "top")

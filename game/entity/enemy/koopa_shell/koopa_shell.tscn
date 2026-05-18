@@ -10,16 +10,16 @@
 [ext_resource type="AudioStream" uid="uid://bepvphyfaeuk5" path="res://assets/sfx/entity/koopa/shell_kick.ogg" id="8_hhtj8"]
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="8_oary1"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_2yeke"]
-atlas = ExtResource("2_g53pw")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="CanvasTexture" id="CanvasTexture_oary1"]
-diffuse_texture = SubResource("AtlasTexture_2yeke")
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_0apuc"]
 atlas = ExtResource("2_g53pw")
 region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_oary1"]
+diffuse_texture = SubResource("AtlasTexture_0apuc")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2yeke"]
+atlas = ExtResource("2_g53pw")
+region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_feb77"]
 atlas = ExtResource("2_g53pw")
@@ -106,13 +106,13 @@ components_root = NodePath("Components")
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1157867726]
 texture = SubResource("CanvasTexture_oary1")
 region_enabled = true
-region_rect = Rect2(32, 0, 32, 32)
+region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("3_ij2to")
 canvas_texture = SubResource("CanvasTexture_oary1")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_4agb1")
 current_animation = "spin"
-current_frame = 1
+current_frame = 0
 speed_scale = 1.0
 playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"

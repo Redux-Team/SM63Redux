@@ -62,7 +62,7 @@ func populate_list() -> void:
 		n.queue_free()
 	
 	var pressed: BaseButton = _tab_button_group.get_pressed_button()
-	var cat_name: String = pressed.name if pressed else ""
+	var cat_name: String = pressed.name if pressed else &""
 	
 	var groups: Array[GameDB.GameObjectGroup] = []
 	if cat_name.is_empty():

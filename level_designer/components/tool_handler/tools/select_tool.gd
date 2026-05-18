@@ -195,6 +195,19 @@ func _polygon_edge_intersects_box(screen_points: PackedVector2Array, box: Rect2)
 
 
 func _object_intersects_box(obj: LDObject) -> bool:
+	var box_corners: Array[Vector2] = [
+		_box_select_rect.position,
+		_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0),
+		_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y),
+		_box_select_rect.position + _box_select_rect.size,
+	]
+	var box_edges: Array[Array] = [
+		[_box_select_rect.position, _box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0)],
+		[_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0), _box_select_rect.position + _box_select_rect.size],
+		[_box_select_rect.position + _box_select_rect.size, _box_select_rect.position + Vector2(0.0, _box_select_rect.size.y)],
+		[_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y), _box_select_rect.position],
+	]
+	
 	var poly_obj: LDObjectPolygon = obj as LDObjectPolygon
 	if poly_obj and poly_obj.editor_polygon:
 		var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * obj.get_global_transform()
@@ -208,27 +221,15 @@ func _object_intersects_box(obj: LDObject) -> bool:
 		for p: Vector2 in screen_points:
 			if _box_select_rect.has_point(p):
 				return true
-		var box_corners: Array[Vector2] = [
-			_box_select_rect.position,
-			_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0),
-			_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y),
-			_box_select_rect.position + _box_select_rect.size,
-		]
 		for corner: Vector2 in box_corners:
 			if Geometry2D.is_point_in_polygon(corner, screen_points):
 				return true
 		var count: int = screen_points.size()
-		var box_edges: Array[Array] = [
-			[_box_select_rect.position, _box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0)],
-			[_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0), _box_select_rect.position + _box_select_rect.size],
-			[_box_select_rect.position + _box_select_rect.size, _box_select_rect.position + Vector2(0.0, _box_select_rect.size.y)],
-			[_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y), _box_select_rect.position],
-		]
 		for i: int in count:
 			var a1: Vector2 = screen_points[i]
 			var a2: Vector2 = screen_points[(i + 1) % count]
 			for edge: Array in box_edges:
-				if Geometry2D.segment_intersects_segment(a1, a2, edge[0], edge[1]) != null:
+				if Geometry2D.segment_intersects_segment(a1, a2, edge.front(), edge.back()) != null:
 					return true
 		return false
 	
@@ -237,19 +238,6 @@ func _object_intersects_box(obj: LDObject) -> bool:
 		var half: Vector2 = obj.get_stamp_size() * 0.5
 		var screen_rect: Rect2 = viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size())
 		return _box_select_rect.intersects(screen_rect)
-	
-	var box_corners: Array[Vector2] = [
-		_box_select_rect.position,
-		_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0),
-		_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y),
-		_box_select_rect.position + _box_select_rect.size,
-	]
-	var box_edges: Array[Array] = [
-		[_box_select_rect.position, _box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0)],
-		[_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0), _box_select_rect.position + _box_select_rect.size],
-		[_box_select_rect.position + _box_select_rect.size, _box_select_rect.position + Vector2(0.0, _box_select_rect.size.y)],
-		[_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y), _box_select_rect.position],
-	]
 	
 	for area: Area2D in areas:
 		for child: Node in area.get_children():
@@ -268,7 +256,7 @@ func _object_intersects_box(obj: LDObject) -> bool:
 				var a1: Vector2 = points[i]
 				var a2: Vector2 = points[(i + 1) % count]
 				for edge: Array in box_edges:
-					if Geometry2D.segment_intersects_segment(a1, a2, edge[0], edge[1]) != null:
+					if Geometry2D.segment_intersects_segment(a1, a2, edge.front(), edge.back()) != null:
 						return true
 	
 	return false

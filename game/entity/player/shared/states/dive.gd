@@ -268,9 +268,10 @@ func detect_landing() -> void:
 
 
 func get_rotation_time_offset_from_velocity(y_vel: float) -> float:
+	var clamped_y: float
 	if y_velocity_to_rotation_offset_curve:
-		var clamped_y: float = clamp(y_vel, y_velocity_to_rotation_offset_curve.min_domain, y_velocity_to_rotation_offset_curve.max_domain)
+		clamped_y = clamp(y_vel, y_velocity_to_rotation_offset_curve.min_domain, y_velocity_to_rotation_offset_curve.max_domain)
 		return y_velocity_to_rotation_offset_curve.sample(clamped_y)
 	
-	var clamped_y: float = clamp(y_vel, y_velocity_curve_min, y_velocity_curve_max)
+	clamped_y = clamp(y_vel, y_velocity_curve_min, y_velocity_curve_max)
 	return inverse_lerp(y_velocity_curve_min, y_velocity_curve_max, clamped_y) * rotation_curve.max_domain

@@ -39,5 +39,5 @@ func _on_preview_valid_changed(_valid: bool) -> void:
 	pass
 
 
-func _on_points_changed(_points: PackedVector2Array) -> void:
+func _on_points_changed(_path_points: PackedVector2Array) -> void:
 	pass

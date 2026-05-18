@@ -8,8 +8,8 @@ func _ready() -> void:
 	sprite.play(&"spin")
 
 # TODO this will obviously be improved when the player is fully complete
-func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body is Player:
+func _on_area_2d_body_entered(colliding_body: Node2D) -> void:
+	if colliding_body is Player:
 		sprite.hide()
 		audio_stream_player_2d.stop()
 		$ParticleEmitter.emitting = false

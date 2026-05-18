@@ -178,12 +178,12 @@ func get_tree() -> Array[GameObjectCategory]:
 			var cat: GameObjectCategory = GameObjectCategory.new()
 			cat._id = cat_id
 			cats[cat_id] = cat
-		var cat: GameObjectCategory = cats[cat_id]
-		if group_id not in cat._groups:
+		var category: GameObjectCategory = cats[cat_id]
+		if group_id not in category._groups:
 			var group: GameObjectGroup = GameObjectGroup.new()
 			group._id = group_id
-			cat._groups[group_id] = group
-		cat._groups[group_id]._objects[obj.id] = obj
+			category._groups[group_id] = group
+		category._groups[group_id]._objects[obj.id] = obj
 	var result: Array[GameObjectCategory] = []
 	result.assign(cats.values())
 	return result

@@ -2,7 +2,7 @@
 extends State
 
 
-func _on_physics_tick(delta: float) -> void:
+func _on_physics_tick(_delta: float) -> void:
 	if abs(player.move_dir) == 0 and not player.is_diving:
 		var friction: FrictionComponent = player.get_component(FrictionComponent)
 		friction.apply(0.4)
