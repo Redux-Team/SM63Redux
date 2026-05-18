@@ -23,7 +23,7 @@ func _on_sprite_frame_changed() -> void:
 
 
 func _on_player_check_area_entered(area: Area2D) -> void:
-	if area.has_meta("player") and state_machine.get_current_state().get_internal_name() != "strike":
+	if area.has_meta("player") and state_machine.get_current_state().get_internal_name() not in ["strike", "kaboom"]:
 		var player: Player = area.owner
 		var relative: int = sign(player.global_position.x - global_position.x)
 		sprite.flip_h = false if relative >= 0 else true

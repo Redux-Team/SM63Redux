@@ -32,7 +32,7 @@
 atlas = ExtResource("3_x8m5v")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_200vj"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_6sje6"]
 diffuse_texture = SubResource("AtlasTexture_ap0j0")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a0onm"]
@@ -111,7 +111,7 @@ animations = [{
 atlas = ExtResource("6_6sje6")
 region = Rect2(0, 0, 4, 4)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_6sje6"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ccar4"]
 diffuse_texture = SubResource("AtlasTexture_jixoj")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nwfm8"]
@@ -155,7 +155,7 @@ animations = [{
 atlas = ExtResource("6_4fxtu")
 region = Rect2(0, 0, 6, 10)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_ccar4"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ekeht"]
 diffuse_texture = SubResource("AtlasTexture_6akqm")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_swvkj"]
@@ -338,7 +338,6 @@ size = Vector2(8, 3)
 script = ExtResource("12_200vj")
 accepted_hitbox_ids = PackedStringArray("spin", "ground_pound", "bobomb")
 override_knockback = true
-knockback_mode_y = 2
 override_damage_state = true
 damage_state_name = &"strike"
 metadata/_custom_type_script = "uid://drtqc6at2evph"
@@ -444,11 +443,11 @@ state_machine = NodePath("StateMachine")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1859430176 node_paths=PackedStringArray("subsprites")]
 position = Vector2(0, -6)
-texture = SubResource("CanvasTexture_200vj")
+texture = SubResource("CanvasTexture_6sje6")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("17_gjan8")
-canvas_texture = SubResource("CanvasTexture_200vj")
+canvas_texture = SubResource("CanvasTexture_6sje6")
 subsprites = [NodePath("Offset/Fuse"), NodePath("Offset/Key")]
 animated = true
 diffuse_frames = SubResource("SpriteFrames_ibfi8")
@@ -463,11 +462,11 @@ metadata/_edit_lock_ = true
 
 [node name="Fuse" type="Sprite2D" parent="Sprite/Offset" unique_id=1770779985]
 position = Vector2(0, -4)
-texture = SubResource("CanvasTexture_6sje6")
+texture = SubResource("CanvasTexture_ccar4")
 region_enabled = true
 region_rect = Rect2(0, 0, 4, 4)
 script = ExtResource("17_gjan8")
-canvas_texture = SubResource("CanvasTexture_6sje6")
+canvas_texture = SubResource("CanvasTexture_ccar4")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_jixoj")
 current_animation = "default"
@@ -478,11 +477,11 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="Key" type="Sprite2D" parent="Sprite/Offset" unique_id=990773306]
 position = Vector2(-11, 7)
-texture = SubResource("CanvasTexture_ccar4")
+texture = SubResource("CanvasTexture_ekeht")
 region_enabled = true
 region_rect = Rect2(0, 0, 6, 10)
 script = ExtResource("17_gjan8")
-canvas_texture = SubResource("CanvasTexture_ccar4")
+canvas_texture = SubResource("CanvasTexture_ekeht")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_7nkl5")
 current_animation = "spin"
@@ -599,13 +598,11 @@ __transitions = Dictionary[StringName, ExtResource("13_i2i30")]({
 })
 metadata/_custom_type_script = "uid://utibsg6xkllx"
 
-[node name="Patrol" type="Node" parent="StateMachine" unique_id=1281863027 node_paths=PackedStringArray("floor_check_r", "floor_check_l", "wall_check_l", "wall_check_r")]
+[node name="Patrol" type="Node" parent="StateMachine" unique_id=1281863027 node_paths=PackedStringArray("floor_check_r", "floor_check_l")]
 script = ExtResource("14_qw5am")
 displacement = SubResource("Curve_tfdvb")
 floor_check_r = NodePath("../../FloorCheckR")
 floor_check_l = NodePath("../../FloorCheckL")
-wall_check_l = NodePath("../../WallCheckL")
-wall_check_r = NodePath("../../WallCheckR")
 sprite_animation_name = &"patrol"
 sfx_frame = SubResource("Resource_tfdvb")
 __editor_name = &"patrol"
