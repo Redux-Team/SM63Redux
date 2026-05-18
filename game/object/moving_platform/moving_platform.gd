@@ -65,6 +65,7 @@ func _rebuild_platforms() -> void:
 
 func _build_platform(units: int) -> AnimatableBody2D:
 	var platform_body: AnimatableBody2D = AnimatableBody2D.new()
+	platform_body.collision_layer = 514
 	platform_body.sync_to_physics = true
 	if platform_nine_patch and platform_nine_patch.texture:
 		var ml: int = platform_nine_patch.patch_margin_left

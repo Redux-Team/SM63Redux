@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="PolygonData" format=3 uid="uid://b5caq56hrympb"]
+
+[ext_resource type="Texture2D" uid="uid://c7cao14jm2etj" path="res://assets/textures/terrain/snow/terrain_snow_base.png" id="1_mcd0d"]
+[ext_resource type="Texture2D" uid="uid://llcy8x8hxjgj" path="res://assets/textures/terrain/snow/terrain_snow_outline.png" id="2_mcd0d"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/db/Objects/Polygon/polygon_data.gd" id="3_vvm51"]
+[ext_resource type="Texture2D" uid="uid://cpchki6mx2brf" path="res://assets/textures/terrain/snow/terrain_snow_top_left.png" id="4_mcd0d"]
+[ext_resource type="Texture2D" uid="uid://dufdvyfibqn74" path="res://assets/textures/terrain/snow/terrain_snow_top_right.png" id="5_xjh60"]
+[ext_resource type="Texture2D" uid="uid://dt5o1wfangng7" path="res://assets/textures/terrain/grass/terrain_grass_shadow.png" id="6_7waqi"]
+[ext_resource type="Texture2D" uid="uid://n0jyw6q5ioeo" path="res://assets/textures/terrain/snow/terrain_snow_top.png" id="7_mcd0d"]
+
+[resource]
+script = ExtResource("3_vvm51")
+base_texture = ExtResource("1_mcd0d")
+terrain_type = "snow"
+topline_texture = ExtResource("7_mcd0d")
+topline_shadow_texture = ExtResource("6_7waqi")
+topline_left_end = ExtResource("4_mcd0d")
+topline_right_end = ExtResource("5_xjh60")
+topline_angle_threshold = 0.6499999999999999
+topline_width = 28.0
+outline_texture = ExtResource("2_mcd0d")
+outline_width = 16.0
+metadata/_custom_type_script = "uid://drs86mw0b40vi"

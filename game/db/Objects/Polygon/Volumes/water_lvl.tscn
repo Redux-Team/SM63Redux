@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://bbikt30pixqht"]
+
+[ext_resource type="Script" uid="uid://vlqjxmxsgk8p" path="res://game/db/Objects/level_object_terrain.gd" id="1_s3lwc"]
+[ext_resource type="Resource" uid="uid://c1aygscm4h0bo" path="res://game/db/Objects/Polygon/Volumes/water_data.tres" id="2_tmccv"]
+[ext_resource type="Shader" uid="uid://d1bxotfi5tlpl" path="res://core/shader/water.gdshader" id="3_4iu6p"]
+[ext_resource type="Texture2D" uid="uid://bewe6m204j8b3" path="res://assets/textures/volume/water/water_deform.png" id="4_7mws3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7mws3"]
+shader = ExtResource("3_4iu6p")
+shader_parameter/water_color = Color(0.46666667, 0.5921569, 0.8117647, 0.53333336)
+shader_parameter/water_deform = ExtResource("4_7mws3")
+shader_parameter/warp_strength = 0.003
+shader_parameter/wave_speed = 0.06
+shader_parameter/deform_scale = 0.003
+
+[node name="Water" type="Node2D" unique_id=335077795 node_paths=PackedStringArray("_polygon", "_collision", "_outline_container", "_topline_container", "_topline_shadow_container", "_static_body_2d")]
+script = ExtResource("1_s3lwc")
+polygon_data = ExtResource("2_tmccv")
+_polygon = NodePath("Polygon")
+_collision = NodePath("StaticBody2D/CollisionPolygon2D")
+_outline_container = NodePath("OutlineContainer")
+_topline_container = NodePath("ToplineContainer")
+_topline_shadow_container = NodePath("Polygon/ToplineShadowContainer")
+_static_body_2d = NodePath("StaticBody2D")
+metadata/_custom_type_script = "uid://vlqjxmxsgk8p"
+
+[node name="Polygon" type="Polygon2D" parent="." unique_id=955545888]
+clip_children = 2
+texture_repeat = 2
+material = SubResource("ShaderMaterial_7mws3")
+color = Color(0.46666667, 0.5921569, 0.8117647, 0.53333336)
+
+[node name="ToplineShadowContainer" type="Node2D" parent="Polygon" unique_id=449835504]
+
+[node name="OutlineContainer" type="Node2D" parent="." unique_id=1875783226]
+
+[node name="ToplineContainer" type="Node2D" parent="." unique_id=2082800021]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1252583713]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=714933582]
+metadata/terrain = "grass"

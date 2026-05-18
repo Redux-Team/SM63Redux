@@ -13,6 +13,9 @@
 offsets = PackedFloat32Array(0, 0.203125, 0.3638393, 0.51339287, 0.7745536, 1)
 colors = PackedColorArray(0.20784314, 0.49411765, 0.9098039, 1, 0.3567391, 0.62493485, 0.8478261, 1, 0.3137255, 0.81960785, 0.23137255, 1, 0.84, 0.84, 0, 1, 0.98039216, 0.3019608, 0.2, 1, 0.41355386, 0, 0.002178085, 1)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_37e64"]
+light_mode = 1
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0c88u"]
 shader = ExtResource("3_d64ys")
 shader_parameter/modulate_color = Color(1, 1, 1, 1)
@@ -23,13 +26,13 @@ shader_parameter/start_angle_degrees = 0.0
 shader_parameter/divider_color = Color(0.6392157, 0.6392157, 0.6392157, 1)
 
 [node name="IngameHud" type="CanvasLayer" unique_id=510807687 node_paths=PackedStringArray("inner_hp_texture", "inner_hpbg")]
-layer = 0
 script = ExtResource("1_reblr")
 health_gradient = SubResource("Gradient_d64ys")
 inner_hp_texture = NodePath("HealthContainer/Base/InnerHPBG/InnerHPTexture")
 inner_hpbg = NodePath("HealthContainer/Base/InnerHPBG")
 
 [node name="HealthContainer" type="Control" parent="." unique_id=1581326594]
+material = SubResource("CanvasItemMaterial_37e64")
 layout_mode = 3
 anchors_preset = 5
 anchor_left = 0.5
@@ -103,6 +106,7 @@ grow_horizontal = 2
 texture = ExtResource("7_2e807")
 
 [node name="FLUDDContainer" type="Control" parent="." unique_id=2013215394]
+material = SubResource("CanvasItemMaterial_37e64")
 layout_mode = 3
 anchors_preset = 3
 anchor_left = 1.0

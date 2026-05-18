@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cwhsjhk1kpwp1"]
 
 [ext_resource type="Script" uid="uid://d1vbfhdttehec" path="res://game/object/fludd_box/fludd_box.gd" id="1_scmcn"]
-[ext_resource type="PackedScene" uid="uid://dvgipuaxvl4ci" path="res://game/entity/passive/goonie_fat/goonie_fat.tscn" id="2_8x4kl"]
+[ext_resource type="PackedScene" uid="uid://b1bysf6h2qqww" path="res://game/object/fludd_nozzle/fludd_nozzle_hover.tscn" id="2_8x4kl"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_js7x2"]
 [ext_resource type="Texture2D" uid="uid://cvuk603o47gb6" path="res://assets/textures/item/fludd/fludd_box_hover.png" id="3_748og"]
 [ext_resource type="Texture2D" uid="uid://chlxalycii75t" path="res://assets/textures/item/fludd/fludd_box_hover_open.png" id="4_748og"]

@@ -128,6 +128,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Rect/Block/Center" unique_id=1754099045]
 position = Vector2(3, 3)
+collision_layer = 514
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Rect/Block/Center/StaticBody2D" unique_id=1793513566]
 position = Vector2(1, 1)

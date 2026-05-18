@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://c7em3naeyouse"]
+
+[ext_resource type="PackedScene" uid="uid://d126weu6rop6a" path="res://game/db/Objects/Polygon/Terrain/terrain_snow_lvl.tscn" id="1_odoqr"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_wrkex"]
+[ext_resource type="Texture2D" uid="uid://c7ocqykwyg3e7" path="res://assets/textures/terrain/snow/terrain_snow_ld.png" id="1_xxybb"]
+[ext_resource type="PackedScene" uid="uid://b5ks8obhabj2l" path="res://game/db/Objects/Polygon/Terrain/terrain_snow_ld.tscn" id="2_odoqr"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_xxybb"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_1narg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_odoqr"]
+atlas = ExtResource("1_xxybb")
+region = Rect2(0, 0, 48, 48)
+
+[resource]
+script = ExtResource("2_xxybb")
+id = "terrain_snow"
+category = 2
+category_string = "Polygon"
+subpath = "Terrain/terrain_snow"
+group_path = "Terrain"
+name_override = "Snow"
+ld_object_path = "Polygon/Terrain/terrain_snow"
+ld_entry_texture = SubResource("AtlasTexture_odoqr")
+ld_editor_instance = ExtResource("2_odoqr")
+ld_properties = Array[ExtResource("1_wrkex")]([ExtResource("5_1narg")])
+ld_placement_tool_override = "polygon"
+ld_select_tool_override = "polygon_edit"
+ld_placement_rules = 2
+game_instance = ExtResource("1_odoqr")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

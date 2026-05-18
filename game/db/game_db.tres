@@ -68,6 +68,9 @@
 [ext_resource type="Resource" uid="uid://du05wmn6o6uhx" path="res://game/db/Objects/Props/Platforms/dark_platform.tres" id="54_mtxdl"]
 [ext_resource type="Resource" uid="uid://ctlyyrjsbjt07" path="res://game/db/Properties/moving_platform/platform_period.tres" id="55_mp4qx"]
 [ext_resource type="Resource" uid="uid://dyffq4cv4sjv6" path="res://game/db/Objects/Props/Gizmos/rotating_log.tres" id="57_ojdkd"]
+[ext_resource type="Resource" uid="uid://bvje86cos0jfb" path="res://game/db/Objects/Polygon/Volumes/water.tres" id="58_j0wnv"]
+[ext_resource type="Resource" uid="uid://gh4knuoeykoi" path="res://game/db/Objects/Polygon/Terrain/terrain_jungle.tres" id="59_ib6pc"]
+[ext_resource type="Resource" uid="uid://c7em3naeyouse" path="res://game/db/Objects/Polygon/Terrain/terrain_snow.tres" id="60_rpot8"]
 
 [resource]
 script = ExtResource("47_j75gy")
@@ -92,7 +95,10 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Item/FLUDD/small_water_bottle": ExtResource("18_rpot8"),
 "Item/FLUDD/turbo_fludd_box": ExtResource("19_2x7la"),
 "Polygon/Terrain/terrain_grass": ExtResource("45_3w7om"),
+"Polygon/Terrain/terrain_jungle": ExtResource("59_ib6pc"),
+"Polygon/Terrain/terrain_snow": ExtResource("60_rpot8"),
 "Polygon/Volumes/camera_area": ExtResource("48_mp4qx"),
+"Polygon/Volumes/water": ExtResource("58_j0wnv"),
 "Props/Gizmos/moving_platform": ExtResource("19_s5833"),
 "Props/Gizmos/rotating_log": ExtResource("57_ojdkd"),
 "Props/Gizmos/spinning_block": ExtResource("47_lugbj"),

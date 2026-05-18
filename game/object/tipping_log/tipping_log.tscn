@@ -59,6 +59,7 @@ playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=689719996]
+collision_layer = 514
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=706654042]
 position = Vector2(0, -4)

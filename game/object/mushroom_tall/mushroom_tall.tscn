@@ -11,7 +11,8 @@ resource_local_to_scene = true
 shader = ExtResource("2_vx3b5")
 shader_parameter/state = 0
 shader_parameter/palette_index = 0
-shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/fill_color = Color(1, 1, 1, 0.25)
@@ -20,6 +21,8 @@ shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
 shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_25enu"]
 diffuse_texture = ExtResource("3_lwufj")
@@ -29,7 +32,8 @@ resource_local_to_scene = true
 shader = ExtResource("2_vx3b5")
 shader_parameter/state = 0
 shader_parameter/palette_index = 0
-shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/fill_color = Color(1, 1, 1, 0.25)
@@ -38,8 +42,10 @@ shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
 shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_dstik"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_wkefi"]
 diffuse_texture = ExtResource("4_y2gk1")
 
 [node name="MushroomTall" type="Node2D" unique_id=723103023 node_paths=PackedStringArray("head", "stem", "head_static_body", "line2d")]
@@ -59,9 +65,9 @@ texture_mode = 1
 
 [node name="Head" type="Sprite2D" parent="." unique_id=1496399749]
 material = SubResource("ShaderMaterial_876of")
-texture = SubResource("CanvasTexture_dstik")
+texture = SubResource("CanvasTexture_wkefi")
 script = ExtResource("5_6r5gk")
-canvas_texture = SubResource("CanvasTexture_dstik")
+canvas_texture = SubResource("CanvasTexture_wkefi")
 diffuse_texture = ExtResource("4_y2gk1")
 current_animation = ""
 current_frame = 0
@@ -70,6 +76,7 @@ playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1448010876]
+collision_layer = 514
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=786503534]
 polygon = PackedVector2Array(-27, -5, -19, -8, -5, -10, 5, -10, 19, -8, 27, -4, 26, 3, -26, 3)

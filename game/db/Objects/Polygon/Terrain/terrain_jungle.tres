@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://gh4knuoeykoi"]
+
+[ext_resource type="PackedScene" uid="uid://ddgf0odq2hide" path="res://game/db/Objects/Polygon/Terrain/terrain_jungle_lvl.tscn" id="1_8irv0"]
+[ext_resource type="PackedScene" uid="uid://dddj0pwrqqg0d" path="res://game/db/Objects/Polygon/Terrain/terrain_jungle_ld.tscn" id="2_8irv0"]
+[ext_resource type="Texture2D" uid="uid://3ja5avblhkr5" path="res://assets/textures/terrain/terrain_jungle_ld.png" id="3_8irv0"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_14ujc"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_554h7"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_oa82f"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_daglj"]
+atlas = ExtResource("3_8irv0")
+region = Rect2(0, 0, 48, 48)
+
+[resource]
+script = ExtResource("6_oa82f")
+id = "terrain_jungle"
+category = 2
+category_string = "Polygon"
+subpath = "Terrain/terrain_jungle"
+group_path = "Terrain"
+name_override = "Jungle"
+ld_object_path = "Polygon/Terrain/terrain_jungle"
+ld_entry_texture = SubResource("AtlasTexture_daglj")
+ld_editor_instance = ExtResource("2_8irv0")
+ld_properties = Array[ExtResource("4_14ujc")]([ExtResource("5_554h7")])
+ld_placement_tool_override = "polygon"
+ld_select_tool_override = "polygon_edit"
+ld_placement_rules = 2
+game_instance = ExtResource("1_8irv0")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -108,7 +108,7 @@ func get_objects_by_id(object_id: String) -> Array[LevelObject]:
 	return result
 
 
-func _instantiate_object(data: Dictionary, layer_index: int, peer_id: int = 1) -> void:
+func _instantiate_object(data: Dictionary, layer_index: int, _peer_id: int = 1) -> void:
 	var object_id: String = data.get("object_id", "")
 	if object_id.is_empty():
 		return
@@ -120,16 +120,16 @@ func _instantiate_object(data: Dictionary, layer_index: int, peer_id: int = 1) -
 	var instance: Node = game_object.game_instance.instantiate()
 	
 	if instance is Player:
-		instance.free()
-		return
+		_player = instance
 	
 	var layer: LevelLayer = _get_or_create_layer(layer_index)
 	
-	if game_object.game_multiplayer_spawnable and multiplayer_spawner and multiplayer_spawner.is_inside_tree() and multiplayer.has_multiplayer_peer() and multiplayer_spawner.is_multiplayer_authority():
-		multiplayer_spawner.spawn_path = layer.get_content_root().get_path()
-		multiplayer_spawner.spawn(instance)
-	else:
-		layer.get_content_root().add_child(instance)
+	#if game_object.game_multiplayer_spawnable and multiplayer_spawner and multiplayer_spawner.is_inside_tree() and multiplayer.has_multiplayer_peer() and multiplayer_spawner.is_multiplayer_authority():
+		#multiplayer_spawner.spawn_path = layer.get_content_root().get_path()
+		#multiplayer_spawner.spawn(instance)
+	#else:
+	
+	layer.get_content_root().add_child(instance)
 	
 	var level_object: LevelObject = instance as LevelObject
 	if level_object:
@@ -176,9 +176,9 @@ func _sort_layers() -> void:
 
 
 func _spawn_multi(data: Variant) -> Node:
-	if data is Player:
-		return data
-	elif data is EncodedObjectAsID:
+	#if data is Player:
+		#return data
+	if data is EncodedObjectAsID:
 		return instance_from_id(data.object_id)
 	else:
 		return null

@@ -62,7 +62,7 @@ func init_from_data(obj_data: Dictionary) -> void:
 	for key: String in props:
 		properties[key] = props[key]
 	position = Packer.array_to_vec2(obj_data.get("position", [0.0, 0.0]))
-	scale = Packer.array_to_vec2(properties.get("scale", [0.0, 0.0]))
+	scale = Packer.array_to_vec2(properties.get("scale", [1.0, 1.0]))
 	_on_init()
 
 

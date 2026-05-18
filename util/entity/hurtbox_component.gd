@@ -3,10 +3,10 @@ class_name HurtBoxComponent
 extends Resource
 
 enum KnockbackMode {
-	PASSTHROUGH,
-	SET,
+	PASSTHROUGH, 
+	SET_RELATIVE,
 	SET_ABSOLUTE,
-	ADD,
+	ADD_RELATIVE,
 	ADD_ABSOLUTE,
 }
 
@@ -16,11 +16,11 @@ enum KnockbackMode {
 @export var accepted_damage_types: Array[HitBox.DamageType]
 @export var ignored_damage_types: Array[HitBox.DamageType]
 
-@export_group("Response")
+@export_group("Knockback")
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "knockback") var override_knockback: bool = false
 @export var knockback: Vector2 = Vector2(150, 135)
-@export var knockback_mode_x: KnockbackMode = KnockbackMode.SET
-@export var knockback_mode_y: KnockbackMode = KnockbackMode.SET
+@export var knockback_mode_x: KnockbackMode = KnockbackMode.SET_RELATIVE
+@export var knockback_mode_y: KnockbackMode = KnockbackMode.SET_ABSOLUTE
 
 @export_group("Damage State")
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var override_damage_state: bool = false
@@ -76,11 +76,11 @@ func _resolve_knockback(hitbox: HitBox, hurtbox: HurtBox, current_velocity: Vect
 		match mode:
 			KnockbackMode.PASSTHROUGH:
 				result[axis] = base[axis]
-			KnockbackMode.SET:
+			KnockbackMode.SET_RELATIVE:
 				result[axis] = -knockback[axis] * dir[axis]
 			KnockbackMode.SET_ABSOLUTE:
 				result[axis] = -knockback[axis]
-			KnockbackMode.ADD:
+			KnockbackMode.ADD_RELATIVE:
 				result[axis] = base[axis] + (-knockback[axis] * dir[axis])
 			KnockbackMode.ADD_ABSOLUTE:
 				result[axis] = base[axis] + (-knockback[axis])

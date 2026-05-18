@@ -23,6 +23,7 @@ playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1875526131]
+collision_layer = 514
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=608947256]
 polygon = PackedVector2Array(-23, 9, -11, -9, -8, -9, -2, -7, 3, -4, 7, -2, 13, -1, 17, 3, 23, 5, 22, 9)

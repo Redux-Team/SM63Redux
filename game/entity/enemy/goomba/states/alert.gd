@@ -11,7 +11,10 @@ var alert_state: AlertState = AlertState.JUMP
 
 
 func _on_enter() -> void:
-	entity.local_velocity = Vector2(-30, -200)
+	if entity.is_on_floor():
+		entity.local_velocity = Vector2(-30, -200)
+	else:
+		entity.local_velocity = Vector2(-30, 10)
 	sprite.play("alert_jump")
 
 

@@ -20,7 +20,7 @@ func _on_enter() -> void:
 
 
 func _on_physics_tick(_delta: float) -> void:
-	if (entity.velocity.x > 0 and not floor_check_r.is_colliding())\
+	if entity.is_on_floor() and (entity.velocity.x > 0 and not floor_check_r.is_colliding())\
 	or (entity.velocity.x < 0 and not floor_check_l.is_colliding())\
 	or (entity.velocity.x < 0 and wall_check_l.is_colliding())\
 	or (entity.velocity.x > 0 and wall_check_r.is_colliding()):

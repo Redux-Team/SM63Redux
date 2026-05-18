@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bvje86cos0jfb"]
+
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_0qos6"]
+[ext_resource type="PackedScene" uid="uid://bbikt30pixqht" path="res://game/db/Objects/Polygon/Volumes/water_lvl.tscn" id="1_2en0i"]
+[ext_resource type="PackedScene" uid="uid://33kgucwy1r6n" path="res://game/db/Objects/Polygon/Volumes/water_ld.tscn" id="1_ofgi6"]
+[ext_resource type="Texture2D" uid="uid://dbr74mgobfpsu" path="res://assets/textures/volume/water/water_ld.png" id="1_qjehh"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_qjehh"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_7iy10"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ofgi6"]
+atlas = ExtResource("1_qjehh")
+region = Rect2(0, 0, 48, 48)
+
+[resource]
+script = ExtResource("2_qjehh")
+id = "water"
+category = 2
+category_string = "Polygon"
+subpath = "Volumes/water"
+group_path = "Volumes"
+ld_object_path = "Polygon/Volumes/water"
+ld_entry_texture = SubResource("AtlasTexture_ofgi6")
+ld_editor_instance = ExtResource("1_ofgi6")
+ld_properties = Array[ExtResource("1_0qos6")]([ExtResource("4_7iy10")])
+ld_placement_tool_override = "polygon"
+ld_select_tool_override = "polygon_edit"
+ld_placement_rules = 2
+game_instance = ExtResource("1_2en0i")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

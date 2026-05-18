@@ -16,14 +16,15 @@ size = Vector2(16, 1)
 resource_local_to_scene = true
 size = Vector2(16, 4)
 
-[node name="FallingLog" type="Node2D" unique_id=155860088 node_paths=PackedStringArray("body", "sprite")]
+[node name="FallingLog" type="Node2D" unique_id=155860088 node_paths=PackedStringArray("sprite", "body")]
 script = ExtResource("1_w2h6g")
-body = NodePath("StaticBody2D")
 sprite = NodePath("StaticBody2D/SmartSprite2D")
 spawn_offset = Vector2(0, -4)
+body = NodePath("StaticBody2D")
 metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1297860924]
+collision_layer = 514
 
 [node name="SmartSprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=1648511067]
 texture = SubResource("CanvasTexture_w2h6g")

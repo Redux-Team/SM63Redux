@@ -58,6 +58,7 @@ axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1719331164]
+collision_layer = 514
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=702463023]
 position = Vector2(0, -5)

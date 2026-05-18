@@ -25,6 +25,7 @@
 [ext_resource type="Script" uid="uid://bxmdlmivclqhf" path="res://game/entity/enemy/goomba/states/strike.gd" id="14_xvu80"]
 [ext_resource type="AudioStream" uid="uid://dq4csxy68lb4q" path="res://assets/sfx/entity/goomba/goomba_struck.wav" id="15_lgdot"]
 [ext_resource type="Texture2D" uid="uid://djcybawlcos34" path="res://assets/textures/entity/enemy/goomba/goomba_hit.png" id="20_4grvk"]
+[ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="26_15o45"]
 
 [sub_resource type="Resource" id="Resource_eqg5w"]
 resource_local_to_scene = true
@@ -273,6 +274,21 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_prjr3"]
 size = Vector2(17, 7)
 
+[sub_resource type="Resource" id="Resource_onrng"]
+script = ExtResource("26_15o45")
+accepted_hitbox_ids = PackedStringArray("spin", "bobomb")
+override_knockback = true
+override_damage_state = true
+damage_state_name = &"strike"
+metadata/_custom_type_script = "uid://drtqc6at2evph"
+
+[sub_resource type="Resource" id="Resource_7e3mf"]
+script = ExtResource("26_15o45")
+accepted_hitbox_ids = PackedStringArray("feet")
+override_damage_state = true
+damage_state_name = &"squish"
+metadata/_custom_type_script = "uid://drtqc6at2evph"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_whnfo"]
 size = Vector2(21.5, 14)
 
@@ -452,6 +468,7 @@ debug_color = Color(0.7, 0, 0, 0.41960785)
 
 [node name="HurtBox" type="Area2D" parent="." unique_id=1587410193]
 script = ExtResource("6_prjr3")
+components = Array[ExtResource("26_15o45")]([SubResource("Resource_onrng"), SubResource("Resource_7e3mf")])
 metadata/_custom_type_script = "uid://3ara7t8dqmih"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=856276483]

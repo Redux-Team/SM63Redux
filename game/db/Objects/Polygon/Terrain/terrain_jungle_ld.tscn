@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dddj0pwrqqg0d"]
+
+[ext_resource type="PackedScene" uid="uid://km8g6043fcab" path="res://game/db/Objects/Polygon/Terrain/terrain_grass_ld.tscn" id="1_uwgvt"]
+[ext_resource type="Resource" uid="uid://dpghfowwjrwl8" path="res://game/db/Objects/Polygon/Terrain/terrain_jungle_data.tres" id="2_evs7e"]
+
+[node name="Jungle" unique_id=642150737 instance=ExtResource("1_uwgvt")]
+polygon_data = ExtResource("2_evs7e")
