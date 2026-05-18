@@ -8,7 +8,7 @@ var squished_by: Player
 
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
-	if area.has_meta("player"):
+	if area.has_meta("player") and not state_machine.get_current_state().get_internal_name() in ["squish", "strike"]:
 		var player: Player = area.owner
 		var relative: int = sign(player.global_position.x - global_position.x)
 		sprite.flip_h = false if relative >= 0 else true
