@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://jpjdlq3lc28d"
-path="res://.godot/imported/terrain_jungle_top_left.png-bf7aa1e786d16edeadad1e05ebc1f8d4.ctex"
+uid="uid://bh5q4brjmpql0"
+path="res://.godot/imported/koopa_walk.png-a50bfa260a3f077e56062338992528db.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/terrain/terrain_jungle_top_left.png"
-dest_files=["res://.godot/imported/terrain_jungle_top_left.png-bf7aa1e786d16edeadad1e05ebc1f8d4.ctex"]
+source_file="res://assets/textures/entity/enemy/koopa/koopa_walk.png"
+dest_files=["res://.godot/imported/koopa_walk.png-a50bfa260a3f077e56062338992528db.ctex"]
 
 [params]
 

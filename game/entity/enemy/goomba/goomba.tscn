@@ -94,7 +94,7 @@ metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 atlas = ExtResource("3_hysx3")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_4grvk"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_15o45"]
 diffuse_texture = SubResource("AtlasTexture_n0olq")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kyaey"]
@@ -276,7 +276,7 @@ size = Vector2(17, 7)
 
 [sub_resource type="Resource" id="Resource_onrng"]
 script = ExtResource("26_15o45")
-accepted_hitbox_ids = PackedStringArray("spin", "bobomb")
+accepted_hitbox_ids = PackedStringArray("spin", "bobomb", "koopa_shell")
 override_knockback = true
 override_damage_state = true
 damage_state_name = &"strike"
@@ -329,13 +329,11 @@ __editor_name = &"wander"
 __editor_position = Vector2(200, 260)
 __editor_uuid = &"97212f4c-f576-4616-8814-5379e9dd5a08"
 
-[node name="Patrol" type="Node" parent="StateMachine/Wander" unique_id=392367863 node_paths=PackedStringArray("floor_check_r", "floor_check_l", "wall_check_l", "wall_check_r")]
+[node name="Patrol" type="Node" parent="StateMachine/Wander" unique_id=392367863 node_paths=PackedStringArray("floor_check_r", "floor_check_l")]
 script = ExtResource("5_4grvk")
 displacement = SubResource("Curve_g7wuw")
 floor_check_r = NodePath("../../../FloorCheckR")
 floor_check_l = NodePath("../../../FloorCheckL")
-wall_check_l = NodePath("../../../WallCheckL")
-wall_check_r = NodePath("../../../WallCheckR")
 sprite_animation_name = &"walk"
 sfx_frame = SubResource("Resource_0js5a")
 __editor_name = &"patrol"
@@ -383,11 +381,11 @@ __editor_uuid = &"5f76de65-09f3-4b6f-9847-15c247ae70f1"
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(0, -7)
-texture = SubResource("CanvasTexture_4grvk")
+texture = SubResource("CanvasTexture_15o45")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("4_whnfo")
-canvas_texture = SubResource("CanvasTexture_4grvk")
+canvas_texture = SubResource("CanvasTexture_15o45")
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_x5cu4")

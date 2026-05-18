@@ -6,6 +6,7 @@ extends CPUParticles2D
 @export var high_particle_amount: int
 @export var medium_particle_amount: int
 @export var low_particle_amount: int
+@export var free_on_finish: bool = false
 @export_group("Animated")
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "Animated") var animated: bool:
 	set(a):
@@ -20,6 +21,10 @@ var _elapsed: float = 0.0
 
 
 func _ready() -> void:
+	if one_shot and free_on_finish:
+		finished.connect(func() -> void:
+			queue_free()
+		)
 	amount = high_particle_amount
 
 
@@ -40,5 +45,5 @@ func _process(delta: float) -> void:
 
 
 func _validate_property(property: Dictionary) -> void:
-	if property.get("name") == "texture" and animated:
+	if property.get("name") == "texture" and animated or property.name == "amount":
 		property.set("usage", PROPERTY_USAGE_NO_EDITOR)

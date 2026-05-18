@@ -611,6 +611,7 @@ metadata/_custom_type_script = "uid://cd63gwefr4fp4"
 [sub_resource type="Resource" id="Resource_8odgw"]
 script = ExtResource("7_ioda6")
 playlist = SubResource("Resource_6saf5")
+bus = 3
 metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
 [sub_resource type="Resource" id="Resource_ejgj1"]
@@ -1121,7 +1122,7 @@ damage_state_name = &"strike"
 metadata/_custom_type_script = "uid://drtqc6at2evph"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2swmp"]
-size = Vector2(8, 25)
+size = Vector2(8, 23)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ae0hi"]
 radius = 2.236068
@@ -1191,7 +1192,6 @@ root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(-232.83539, -189.16565)
 __last_editor_zoom = 0.2593743
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
@@ -1833,7 +1833,6 @@ metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
 
 [node name="HealthComponent" type="Node" parent="Components" unique_id=1079797538 node_paths=PackedStringArray("entity")]
 script = ExtResource("4_o0v17")
-max_hp = 8.0
 entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
@@ -1933,6 +1932,7 @@ monitoring = false
 script = ExtResource("19_1wiqr")
 hitbox_ids = Array[String](["player", "ground_pound"])
 hit_expression = "velocity.y > 0"
+damage_type = 2
 metadata/_custom_type_script = "uid://c103bnb5445y3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/GroundPound" unique_id=77720764]
@@ -1941,15 +1941,14 @@ disabled = true
 debug_color = Color(0.7, 0, 0, 0.41960785)
 
 [node name="Base" type="Area2D" parent="Hitboxes" unique_id=2129200040]
-visible = false
 monitorable = false
 script = ExtResource("20_1wiqr")
-ignored_hitbox_ids = PackedStringArray("player")
+ignored_hitbox_ids = PackedStringArray("player", "koopa_shell")
 components = Array[ExtResource("73_ketxm")]([SubResource("Resource_ebtvn")])
 metadata/_custom_type_script = "uid://3ara7t8dqmih"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/Base" unique_id=198873989]
-position = Vector2(2, -2.5)
+position = Vector2(2, -3.5)
 shape = SubResource("RectangleShape2D_2swmp")
 debug_color = Color(0.6901961, 0.7019608, 0, 0.41960785)
 

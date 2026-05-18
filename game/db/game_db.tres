@@ -71,6 +71,8 @@
 [ext_resource type="Resource" uid="uid://bvje86cos0jfb" path="res://game/db/Objects/Polygon/Volumes/water.tres" id="58_j0wnv"]
 [ext_resource type="Resource" uid="uid://gh4knuoeykoi" path="res://game/db/Objects/Polygon/Terrain/terrain_jungle.tres" id="59_ib6pc"]
 [ext_resource type="Resource" uid="uid://c7em3naeyouse" path="res://game/db/Objects/Polygon/Terrain/terrain_snow.tres" id="60_rpot8"]
+[ext_resource type="Resource" uid="uid://cqk0xlceh5hop" path="res://game/db/Objects/Entity/Enemy/parakoopa.tres" id="61_2x7la"]
+[ext_resource type="Resource" uid="uid://rd08kjhcdyie" path="res://game/db/Objects/Entity/Enemy/koopa_shell.tres" id="62_cjg54"]
 
 [resource]
 script = ExtResource("47_j75gy")
@@ -79,6 +81,8 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Entity/Enemy/cheep_cheep": ExtResource("3_avdg2"),
 "Entity/Enemy/goomba": ExtResource("4_c8o3n"),
 "Entity/Enemy/koopa": ExtResource("5_mp4ou"),
+"Entity/Enemy/koopa_shell": ExtResource("62_cjg54"),
+"Entity/Enemy/parakoopa": ExtResource("61_2x7la"),
 "Entity/NPC/toad": ExtResource("50_fvosf"),
 "Entity/Passive/butterfly": ExtResource("50_lugbj"),
 "Entity/Passive/fat_goonie": ExtResource("8_fpxyv"),

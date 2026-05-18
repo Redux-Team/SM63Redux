@@ -1,0 +1,213 @@
+[gd_scene format=3 uid="uid://bcbfi1awkwdyn"]
+
+[ext_resource type="Script" uid="uid://b3g81qdgircts" path="res://game/entity/enemy/parakoopa/parakoopa.gd" id="1_1egjl"]
+[ext_resource type="PackedScene" uid="uid://cobjo5kj7heeo" path="res://game/entity/enemy/koopa/koopa.tscn" id="2_fewty"]
+[ext_resource type="PackedScene" uid="uid://bkmr76girdmrb" path="res://game/entity/enemy/koopa_shell/koopa_shell.tscn" id="3_42bhg"]
+[ext_resource type="Texture2D" uid="uid://cg8hsvx10i5eo" path="res://assets/textures/entity/enemy/koopa/parakoopa_wing_0.png" id="4_42bhg"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_jstjt"]
+[ext_resource type="Texture2D" uid="uid://dhalm6vfgheu4" path="res://assets/textures/entity/enemy/koopa/parakoopa_wing_1.png" id="5_3sn6r"]
+[ext_resource type="Texture2D" uid="uid://d2rb6fcbfwjmo" path="res://assets/textures/entity/enemy/koopa/parakoopa_flap.png" id="5_42bhg"]
+[ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="7_eyqno"]
+[ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="8_drdd5"]
+[ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="9_c5yfi"]
+[ext_resource type="AudioStream" uid="uid://bepvphyfaeuk5" path="res://assets/sfx/entity/koopa/shell_kick.ogg" id="10_fbhtv"]
+[ext_resource type="Script" uid="uid://df10cddrlgnp2" path="res://game/entity/enemy/parakoopa/states/glide.gd" id="11_fewty"]
+[ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="11_vpirj"]
+[ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="15_jwbcl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_12vaq"]
+atlas = ExtResource("5_42bhg")
+region = Rect2(288, 0, 48, 48)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_fewty"]
+diffuse_texture = SubResource("AtlasTexture_12vaq")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3sn6r"]
+atlas = ExtResource("5_42bhg")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l4vrc"]
+atlas = ExtResource("5_42bhg")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tgtr4"]
+atlas = ExtResource("5_42bhg")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jwbcl"]
+atlas = ExtResource("5_42bhg")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fgifx"]
+atlas = ExtResource("5_42bhg")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idiwg"]
+atlas = ExtResource("5_42bhg")
+region = Rect2(240, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5466i"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3sn6r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l4vrc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tgtr4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jwbcl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fgifx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idiwg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_12vaq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="Resource" id="Resource_feb77"]
+script = ExtResource("8_drdd5")
+accepted_hitbox_ids = PackedStringArray("spin")
+override_knockback = true
+knockback = Vector2(350, 50)
+metadata/_custom_type_script = "uid://drtqc6at2evph"
+
+[sub_resource type="Resource" id="Resource_2yeke"]
+script = ExtResource("8_drdd5")
+accepted_hitbox_ids = PackedStringArray("feet", "ground_pound")
+metadata/_custom_type_script = "uid://drtqc6at2evph"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2yeke"]
+size = Vector2(20, 5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fewty"]
+size = Vector2(16, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ot2q4"]
+size = Vector2(20, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rqgyx"]
+size = Vector2(11, 2)
+
+[sub_resource type="Curve" id="Curve_fgifx"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_idiwg"]
+offsets = PackedFloat32Array(0, 0.37425148)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.003921569)
+
+[node name="Parakoopa" type="CharacterBody2D" unique_id=2116805297 node_paths=PackedStringArray("particle_emitter", "sprite")]
+collision_layer = 8
+collision_mask = 514
+script = ExtResource("1_1egjl")
+koopa = ExtResource("2_fewty")
+shell = ExtResource("3_42bhg")
+particle_emitter = NodePath("ParticleEmitter")
+wing_2 = ExtResource("5_3sn6r")
+sprite = NodePath("Sprite")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=858682115]
+texture = SubResource("CanvasTexture_fewty")
+region_enabled = true
+region_rect = Rect2(288, 0, 48, 48)
+script = ExtResource("4_jstjt")
+canvas_texture = SubResource("CanvasTexture_fewty")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_5466i")
+speed_scale = 1.0
+playing = true
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="HurtBox" type="Area2D" parent="." unique_id=1575185437]
+position = Vector2(-2, 6)
+script = ExtResource("7_eyqno")
+components = Array[ExtResource("8_drdd5")]([SubResource("Resource_feb77"), SubResource("Resource_2yeke")])
+metadata/_custom_type_script = "uid://3ara7t8dqmih"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=1041767698]
+position = Vector2(0, -5.5)
+shape = SubResource("RectangleShape2D_2yeke")
+debug_color = Color(0.7, 0.68833333, 0, 0.41960785)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="HurtBox" unique_id=347143412]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_fewty")
+debug_color = Color(0.665, 0.7, 0, 0.41960785)
+
+[node name="HitBox" type="Area2D" parent="." unique_id=2035968098]
+position = Vector2(-2, 7)
+script = ExtResource("9_c5yfi")
+hitbox_ids = Array[String](["enemy", "koopa"])
+damage_amount = 1.0
+damage_type = 1
+has_knockback = true
+metadata/_custom_type_script = "uid://c103bnb5445y3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=600165017]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_ot2q4")
+debug_color = Color(0.7, 0, 0, 0.41960785)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1440193123]
+position = Vector2(-2.5, 15)
+shape = SubResource("RectangleShape2D_rqgyx")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=744182286]
+stream = ExtResource("10_fbhtv")
+
+[node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("initial_state", "sprite", "sfx_root", "__states")]
+script = ExtResource("11_vpirj")
+initial_state = NodePath("Glide")
+root_node = NodePath("..")
+sprite = NodePath("../Sprite")
+sfx_root = NodePath("..")
+__last__editor_position = Vector2(1040.2024, 293.07025)
+__last_editor_zoom = 0.98497385
+__states = {
+&"0012d7e4-f5f1-4b35-b960-089238911775": NodePath("Glide")
+}
+metadata/_custom_type_script = "uid://utibsg6xkllx"
+
+[node name="Glide" type="Node" parent="StateMachine" unique_id=665780062]
+script = ExtResource("11_fewty")
+sprite_animation_name = &"default"
+__editor_name = &"glide"
+__editor_position = Vector2(1366.7354, 374.46564)
+__editor_uuid = &"0012d7e4-f5f1-4b35-b960-089238911775"
+
+[node name="ParticleEmitter" type="CPUParticles2D" parent="." unique_id=992989918]
+show_behind_parent = true
+light_mask = 2
+emitting = false
+amount = 2
+texture = ExtResource("4_42bhg")
+lifetime = 3.0
+one_shot = true
+speed_scale = 1.2
+explosiveness = 1.0
+emission_shape = 2
+emission_sphere_radius = 4.0
+gravity = Vector2(0, 90)
+initial_velocity_min = 40.0
+initial_velocity_max = 75.0
+angle_max = 90.0
+scale_amount_curve = SubResource("Curve_fgifx")
+color_ramp = SubResource("Gradient_idiwg")
+script = ExtResource("15_jwbcl")
+high_particle_amount = 2
+medium_particle_amount = 1
+free_on_finish = true
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[connection signal="damaged" from="HurtBox" to="." method="_on_hurt_box_damaged"]

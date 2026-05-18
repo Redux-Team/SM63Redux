@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://cwhsjhk1kpwp1"]
 
 [ext_resource type="Script" uid="uid://d1vbfhdttehec" path="res://game/object/fludd_box/fludd_box.gd" id="1_scmcn"]
-[ext_resource type="PackedScene" uid="uid://b1bysf6h2qqww" path="res://game/object/fludd_nozzle/fludd_nozzle_hover.tscn" id="2_8x4kl"]
+[ext_resource type="PackedScene" uid="uid://bcbfi1awkwdyn" path="res://game/entity/enemy/parakoopa/parakoopa.tscn" id="2_8x4kl"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_js7x2"]
 [ext_resource type="Texture2D" uid="uid://cvuk603o47gb6" path="res://assets/textures/item/fludd/fludd_box_hover.png" id="3_748og"]
 [ext_resource type="Texture2D" uid="uid://chlxalycii75t" path="res://assets/textures/item/fludd/fludd_box_hover_open.png" id="4_748og"]
 [ext_resource type="AudioStream" uid="uid://dwbia6vwx81o7" path="res://assets/sfx/object/fludd/fludd_box_break.wav" id="5_fkvjd"]
 [ext_resource type="Texture2D" uid="uid://boy5g2xfm5w7k" path="res://assets/textures/item/fludd/fludd_box_hover_stretch.png" id="6_8x4kl"]
+[ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="8_6q8s3"]
+[ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="9_ebuor"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s2tvu"]
 atlas = ExtResource("3_748og")
@@ -122,6 +124,11 @@ animations = [{
 "speed": 29.0
 }]
 
+[sub_resource type="Resource" id="Resource_3c337"]
+script = ExtResource("9_ebuor")
+accepted_hitbox_ids = PackedStringArray("feet")
+metadata/_custom_type_script = "uid://drtqc6at2evph"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_748og"]
 size = Vector2(30, 3)
 
@@ -149,17 +156,23 @@ playing = false
 looping = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
-[node name="PlayerAreaCheck" type="Area2D" parent="." unique_id=1427545082]
-monitorable = false
+[node name="HurtBox" type="Area2D" parent="." unique_id=1846348069]
+script = ExtResource("8_6q8s3")
+components = Array[ExtResource("9_ebuor")]([SubResource("Resource_3c337")])
+metadata/_custom_type_script = "uid://3ara7t8dqmih"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerAreaCheck" unique_id=1909700638]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=1909700638]
 position = Vector2(0, -14.5)
 shape = SubResource("RectangleShape2D_748og")
 one_way_collision_margin = 8.0
+
+[node name="PlayerAreaCheck" type="Area2D" parent="." unique_id=1427545082]
+monitorable = false
 
 [node name="OpenSFX" type="AudioStreamPlayer2D" parent="." unique_id=1747559738]
 stream = ExtResource("5_fkvjd")
 volume_db = 2.0
 bus = &"SFX"
 
+[connection signal="damaged" from="HurtBox" to="." method="_on_hurt_box_damaged"]
 [connection signal="body_entered" from="PlayerAreaCheck" to="." method="_on_area_2d_body_entered"]

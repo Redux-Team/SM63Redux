@@ -1,0 +1,242 @@
+[gd_scene format=4 uid="uid://cobjo5kj7heeo"]
+
+[ext_resource type="Script" uid="uid://s77sl0w730u" path="res://game/entity/enemy/koopa/koopa.gd" id="1_v8hjw"]
+[ext_resource type="PackedScene" uid="uid://bkmr76girdmrb" path="res://game/entity/enemy/koopa_shell/koopa_shell.tscn" id="2_feb77"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_p4wri"]
+[ext_resource type="Texture2D" uid="uid://bh5q4brjmpql0" path="res://assets/textures/entity/enemy/koopa/koopa_walk.png" id="3_4tjfc"]
+[ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="4_0apuc"]
+[ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="5_2yeke"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="7_rqgyx"]
+[ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="8_xhq40"]
+[ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="9_14yj4"]
+[ext_resource type="AudioStream" uid="uid://bepvphyfaeuk5" path="res://assets/sfx/entity/koopa/shell_kick.ogg" id="9_xhq40"]
+[ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="11_ot2q4"]
+[ext_resource type="Script" uid="uid://bd8l4ri83uu5a" path="res://game/entity/enemy/_shared/states/patrol.gd" id="12_4agb1"]
+[ext_resource type="Script" uid="uid://cd63gwefr4fp4" path="res://util/playlist.gd" id="13_lhbc1"]
+[ext_resource type="Script" uid="uid://deiaa5u8esvnc" path="res://addons/redux_dev/components/state_machine/state_sfx_entry.gd" id="14_dk1mx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0apuc"]
+atlas = ExtResource("3_4tjfc")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_lhbc1"]
+diffuse_texture = SubResource("AtlasTexture_0apuc")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2yeke"]
+atlas = ExtResource("3_4tjfc")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_feb77"]
+atlas = ExtResource("3_4tjfc")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_phkym"]
+atlas = ExtResource("3_4tjfc")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rqgyx"]
+atlas = ExtResource("3_4tjfc")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xhq40"]
+atlas = ExtResource("3_4tjfc")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_14yj4"]
+atlas = ExtResource("3_4tjfc")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ot2q4"]
+atlas = ExtResource("3_4tjfc")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4agb1"]
+atlas = ExtResource("3_4tjfc")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oi0oc"]
+atlas = ExtResource("3_4tjfc")
+region = Rect2(288, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4tjfc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0apuc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2yeke")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_feb77")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_phkym")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rqgyx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xhq40")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_14yj4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ot2q4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4agb1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oi0oc")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="Resource" id="Resource_feb77"]
+script = ExtResource("5_2yeke")
+accepted_hitbox_ids = PackedStringArray("spin")
+override_knockback = true
+knockback = Vector2(350, 50)
+metadata/_custom_type_script = "uid://drtqc6at2evph"
+
+[sub_resource type="Resource" id="Resource_2yeke"]
+script = ExtResource("5_2yeke")
+accepted_hitbox_ids = PackedStringArray("feet", "ground_pound")
+metadata/_custom_type_script = "uid://drtqc6at2evph"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2yeke"]
+size = Vector2(20, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lhbc1"]
+size = Vector2(16, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ot2q4"]
+size = Vector2(20, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rqgyx"]
+size = Vector2(11, 2)
+
+[sub_resource type="Curve" id="Curve_4agb1"]
+_limits = [-1.0, 1.0, -1.0, 1.0]
+_data = [Vector2(-1, -1), 0.0, 0.0, 0, 0, Vector2(-0.35, -1), 0.0, 0.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="AudioStreamWAV" id="AudioStreamWAV_dmwm8"]
+data = PackedByteArray("cW9hZgAADbABAH0ADbAFmAAAAAAAAAAAAAAAAOAAQAAA00QU8UwKgwQDACEODwdfDfxYoETED9USQXCgiiQSBRZAAaAAZRIDEVJpOGFIIBoRR3bawEgoChUZC4EKzKPbJphpmDCBgUsiyyQjoImW1TFRbCkUTd7QMJgBiiEjIvk9+UCichWpEzJiX9ZKUstSP1IDotpoPThCCMAwUjzfk0g6I4jKbnUYQwlMM5wtKmxL8SYhUwZXl0RHm5jCZSKIQgN0NB4uBkExEvwFmg0wOE1RjDBrniAMSnVx3ChqxKtEDYACCSX5CTMwLGrldk3KOnY3nNIkvvFGkvlxCyiC3EATDRVGrIKoQwlppuAV5lVJLYROHq8r0UqSBLHQIJRhUVJglNAKtJtEChYeUKYg00VKDelYhYlARruU3QUMWoNE1KYmm1B8O0jKYLTsViefWGkJhBoAkBNPg2bAOEuvkEBKhZsVilZURkGOpElgqgNAYzkCF3mCVkrIIAutEYTVUtON4lMBtAsxrH0yIimQpDppj+mR+n61QEksIFggyeZO0SQkQ4T5OlKYVaDBAATRKcAFDMR/zX5Q0KhxvAAGF02bcApTLwqJRlpVwMIN6hJGSGGGkQWQ3ER8DRsgpCYKVM2CcMFNJhNCJXAmWUIQyE4MrwfgpSQ+UNFUPMkShVJPdw1DA01ROlSrgBJIBZjcUkkAgpNFkgBGgCBRuRRqhELBYMDRKoCrTEfL2EsJBiNAWVRELB0LCjp1YbRFyBfQRuIt4VH4iFlQqXm0LGKiQESVQaBRKZQrQ5kgVHwRhI1CSgI6mUvEwVBb1uBJVCIAQClKlIcm5fBGiuMukvFw0UZDBbmPU4+STze4sS/V5kozWaFq5J7NSEJaTTzbAqhIOF2OuYAMbjc7GkkuE3YJYjLpBTEARqZlMQFAt1hJLt0yCoS2anEAjEALAYKpFJCeKHD5JpVLl98kFD72dIBTXDAUGKDJBJtpJiJJp10CaYMwEkQy6AwAHTLCkTBJIZbZLiYa/9nbEDowCG2WAoXX4zzUYBALZJCSK/+4oII5te0lht2fAijFgzNoAiBJKAYSKC/+7bAEQtwlpH+UMkaQeTAglrZJICJaODJNtgxIFlo4Af7WUGmpAiSptdyhYffhOKAFkkAlggMnOmE0NFsWUzLdLQEaBhZBJJhthJl4Rkgk9S1F7VkUwSZSgf7ASA7sLbeuoAEFBAIog2KUAUESyCDbdZQUWkKAICt1hgFCokkaG2TkkQ5U2zJICQJURbpBIpMIhsqMtEgc67f6vZoptCSaIKAADtZpIEphkxpQAEAlESQ0CyCWWCBJZJJSYsaRFYMMY7f/IJImWRAwWQFCvScWroLSTFSLJGBEtEBkFUMVC/y24oykGhmTjBw2gFTQE3l//FeltbAwWSQi01iiwSTTFSiKEDrbIVklohkssBoZtBkFHEmKmhxDytp/z9ArGtYu/YILbJgdo70yweU6+BcVraCqCT6GIBApEgJDgogm6SgzSElSoRCQ2TT2rFboGt08EgsJFmAUiUAmlES8kxZJdIRTYSf7EpEgKVkRTswYi2klbtHWSBZ7M5uUbYYRJowkEGAUPOUXzs/7gebk3RcRCEMQMCZUENEtm1OuhokYhASUQkCm0xBCIThaABpqFgAFigroNEoUAmBkqFCm0xIdfBLIS6TCFxJFEQsMklASES0SE1K2yBrLQcEiQaKYEhBVkQlsAPsQgwQlBRNK0RDbJLRojVgQIIgppsAFtoAWO5AW1MHFExZKBYDbYKJYFkFNBEAEgIgUCUqQi0BQGBIaJYZLVESCGEoxCp1VlkgSQiAgQSUASAH7z0icr282Bh//t0AbcYYHsgmhanAg0wIaoQCTB3QgAEAgMMEAJoAAg1ZU0AmiCABAAAAAAAAA")
+format = 3
+mix_rate = 32000
+tags = {
+"title": "3W_SeEmKuriboRun"
+}
+
+[sub_resource type="Resource" id="Resource_3b6i3"]
+script = ExtResource("13_lhbc1")
+tracklist = Array[AudioStream]([SubResource("AudioStreamWAV_dmwm8")])
+metadata/_custom_type_script = "uid://cd63gwefr4fp4"
+
+[sub_resource type="Resource" id="Resource_4ii8e"]
+script = ExtResource("14_dk1mx")
+playlist = SubResource("Resource_3b6i3")
+pitch_range = Vector2(0.9, 1.1)
+volume_db = -4.0
+max_distance = 500.0
+sfx_frames = Array[int]([1, 6])
+metadata/_custom_type_script = "uid://deiaa5u8esvnc"
+
+[node name="Koopa" type="CharacterBody2D" unique_id=2116805297 node_paths=PackedStringArray("audio_stream_player_2d", "sprite", "components_root")]
+collision_layer = 8
+collision_mask = 514
+script = ExtResource("1_v8hjw")
+shell = ExtResource("2_feb77")
+audio_stream_player_2d = NodePath("AudioStreamPlayer2D")
+sprite = NodePath("Sprite")
+components_root = NodePath("Components")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=858682115]
+texture = SubResource("CanvasTexture_lhbc1")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
+script = ExtResource("2_p4wri")
+canvas_texture = SubResource("CanvasTexture_lhbc1")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_4tjfc")
+current_animation = "default"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="Components" type="Node" parent="." unique_id=426672620]
+
+[node name="GravityComponent" type="Node" parent="Components" unique_id=556010005]
+script = ExtResource("7_rqgyx")
+metadata/_custom_type_script = "uid://cb672xli6i2ns"
+
+[node name="FrictionComponent" type="Node" parent="Components" unique_id=456094340]
+script = ExtResource("8_xhq40")
+metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
+
+[node name="HurtBox" type="Area2D" parent="." unique_id=1575185437]
+position = Vector2(-2, 6)
+script = ExtResource("4_0apuc")
+components = Array[ExtResource("5_2yeke")]([SubResource("Resource_feb77"), SubResource("Resource_2yeke")])
+metadata/_custom_type_script = "uid://3ara7t8dqmih"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=1041767698]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_2yeke")
+debug_color = Color(0.7, 0.68833333, 0, 0.41960785)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="HurtBox" unique_id=440473434]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_lhbc1")
+debug_color = Color(0.7, 0.68833333, 0, 0.41960785)
+
+[node name="HitBox" type="Area2D" parent="." unique_id=2035968098]
+position = Vector2(-2, 7)
+script = ExtResource("9_14yj4")
+hitbox_ids = Array[String](["enemy", "koopa"])
+damage_amount = 1.0
+damage_type = 1
+has_knockback = true
+metadata/_custom_type_script = "uid://c103bnb5445y3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=600165017]
+position = Vector2(0, 2.5)
+shape = SubResource("RectangleShape2D_ot2q4")
+debug_color = Color(0.7, 0, 0, 0.41960785)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1440193123]
+position = Vector2(-2.5, 15)
+shape = SubResource("RectangleShape2D_rqgyx")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=744182286]
+stream = ExtResource("9_xhq40")
+
+[node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("initial_state", "sprite", "sfx_root", "__states")]
+script = ExtResource("11_ot2q4")
+initial_state = NodePath("Patrol")
+root_node = NodePath("..")
+sprite = NodePath("../Sprite")
+sfx_root = NodePath("..")
+__last__editor_position = Vector2(483.84595, 195.91019)
+__last_editor_zoom = 1.1918185
+__states = {
+&"64278622-8683-413c-bd61-8d4554e35ebc": NodePath("Patrol")
+}
+metadata/_custom_type_script = "uid://utibsg6xkllx"
+
+[node name="Patrol" type="Node" parent="StateMachine" unique_id=530492825]
+script = ExtResource("12_4agb1")
+displacement = SubResource("Curve_4agb1")
+sprite_animation_name = &"default"
+sfx_frame = SubResource("Resource_4ii8e")
+__editor_name = &"patrol"
+__editor_position = Vector2(4309.4546, 1252.7251)
+__editor_uuid = &"64278622-8683-413c-bd61-8d4554e35ebc"
+
+[connection signal="damaged" from="HurtBox" to="." method="_on_hurt_box_damaged"]

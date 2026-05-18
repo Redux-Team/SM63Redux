@@ -3,12 +3,14 @@ extends MarginContainer
 
 
 const DEFAULT_VALUES: Dictionary[String, Variant] = {
+	"mute_player": false,
 	"mute_music": false,
 	"mute_sfx": false,
 }
 const SETTINGS_PATH: String = "res://addons/redux_dev/_local/debug_settings.json"
 
 
+@export var mute_player: CheckBox
 @export var mute_music: CheckBox
 @export var mute_sfx: CheckBox
 
@@ -26,6 +28,7 @@ func _ready() -> void:
 
 func _get_checkbox(key: String) -> CheckBox:
 	match key:
+		"mute_player": return mute_player
 		"mute_music": return mute_music
 		"mute_sfx": return mute_sfx
 	return null

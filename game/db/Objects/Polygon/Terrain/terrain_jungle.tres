@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://ddgf0odq2hide" path="res://game/db/Objects/Polygon/Terrain/terrain_jungle_lvl.tscn" id="1_8irv0"]
 [ext_resource type="PackedScene" uid="uid://dddj0pwrqqg0d" path="res://game/db/Objects/Polygon/Terrain/terrain_jungle_ld.tscn" id="2_8irv0"]
-[ext_resource type="Texture2D" uid="uid://3ja5avblhkr5" path="res://assets/textures/terrain/terrain_jungle_ld.png" id="3_8irv0"]
+[ext_resource type="Texture2D" uid="uid://3ja5avblhkr5" path="res://assets/textures/terrain/jungle/terrain_jungle_ld.png" id="3_8irv0"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_14ujc"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_554h7"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_oa82f"]

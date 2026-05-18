@@ -8,8 +8,6 @@ const AMPLITUDE: float = 35.0
 
 @export var floor_check_r: RayCast2D
 @export var floor_check_l: RayCast2D
-@export var wall_check_l: RayCast2D
-@export var wall_check_r: RayCast2D
 
 var start_position: Vector2
 var phase_shift: float
@@ -20,10 +18,10 @@ func _on_enter() -> void:
 
 
 func _on_physics_tick(_delta: float) -> void:
-	if entity.is_on_floor() and (entity.velocity.x > 0 and not floor_check_r.is_colliding())\
-	or (entity.velocity.x < 0 and not floor_check_l.is_colliding())\
-	or (entity.velocity.x < 0 and wall_check_l.is_colliding())\
-	or (entity.velocity.x > 0 and wall_check_r.is_colliding()):
+	if entity.is_on_floor() and \
+	   (entity.velocity.x > 0 and floor_check_r and not floor_check_r.is_colliding())\
+	or (entity.velocity.x < 0 and floor_check_l and not floor_check_l.is_colliding())\
+	or entity.is_on_wall():
 		phase_shift += PI
 	
 	sprite.flip_h = entity.velocity.x < 0

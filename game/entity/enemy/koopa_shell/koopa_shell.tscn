@@ -1,0 +1,174 @@
+[gd_scene format=3 uid="uid://bkmr76girdmrb"]
+
+[ext_resource type="Script" uid="uid://vugbq813qqhi" path="res://game/entity/enemy/koopa_shell/koopa_shell.gd" id="1_0swk3"]
+[ext_resource type="Texture2D" uid="uid://6xw6a6v37qee" path="res://assets/textures/entity/enemy/koopa/koopa_shell_spin.png" id="2_g53pw"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_ij2to"]
+[ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="4_cmbn5"]
+[ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="4_vlsnu"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="5_rwt43"]
+[ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="6_g5equ"]
+[ext_resource type="AudioStream" uid="uid://bepvphyfaeuk5" path="res://assets/sfx/entity/koopa/shell_kick.ogg" id="8_hhtj8"]
+[ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="8_oary1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2yeke"]
+atlas = ExtResource("2_g53pw")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_oary1"]
+diffuse_texture = SubResource("AtlasTexture_2yeke")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0apuc"]
+atlas = ExtResource("2_g53pw")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_feb77"]
+atlas = ExtResource("2_g53pw")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_phkym"]
+atlas = ExtResource("2_g53pw")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rqgyx"]
+atlas = ExtResource("2_g53pw")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xhq40"]
+atlas = ExtResource("2_g53pw")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_14yj4"]
+atlas = ExtResource("2_g53pw")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ot2q4"]
+atlas = ExtResource("2_g53pw")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4agb1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0apuc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2yeke")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_feb77")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_phkym")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rqgyx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xhq40")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_14yj4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ot2q4")
+}],
+"loop": true,
+"name": &"spin",
+"speed": 10.0
+}]
+
+[sub_resource type="Resource" id="Resource_rwt43"]
+script = ExtResource("6_g5equ")
+accepted_hitbox_ids = PackedStringArray("feet", "spin")
+metadata/_custom_type_script = "uid://drtqc6at2evph"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2yeke"]
+size = Vector2(8, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vlsnu"]
+size = Vector2(8, 12)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xyq51"]
+radius = 9.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rwt43"]
+size = Vector2(16, 9)
+
+[node name="KoopaShell" type="CharacterBody2D" unique_id=77586061 node_paths=PackedStringArray("audio_stream_player_2d", "hurt_box_r", "sprite", "components_root")]
+collision_mask = 514
+safe_margin = 0.001
+script = ExtResource("1_0swk3")
+audio_stream_player_2d = NodePath("AudioStreamPlayer2D")
+hurt_box_r = NodePath("HurtBoxR")
+sprite = NodePath("Sprite")
+components_root = NodePath("Components")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1157867726]
+texture = SubResource("CanvasTexture_oary1")
+region_enabled = true
+region_rect = Rect2(32, 0, 32, 32)
+script = ExtResource("3_ij2to")
+canvas_texture = SubResource("CanvasTexture_oary1")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_4agb1")
+current_animation = "spin"
+current_frame = 1
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="Components" type="Node" parent="." unique_id=1040690684]
+
+[node name="FrictionComponent" type="Node" parent="Components" unique_id=1208675069 node_paths=PackedStringArray("entity")]
+script = ExtResource("4_vlsnu")
+scale_factor = 0.03
+entity = NodePath("../..")
+metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
+
+[node name="GravityComponent" type="Node" parent="Components" unique_id=334973839 node_paths=PackedStringArray("entity")]
+script = ExtResource("5_rwt43")
+entity = NodePath("../..")
+metadata/_custom_type_script = "uid://cb672xli6i2ns"
+
+[node name="HurtBoxL" type="Area2D" parent="." unique_id=650262318]
+script = ExtResource("4_cmbn5")
+components = Array[ExtResource("6_g5equ")]([SubResource("Resource_rwt43")])
+metadata/_custom_type_script = "uid://3ara7t8dqmih"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxL" unique_id=549475783]
+position = Vector2(-4, 3)
+shape = SubResource("RectangleShape2D_2yeke")
+debug_color = Color(0.61833334, 0.7, 0, 0.41960785)
+
+[node name="HurtBoxR" type="Area2D" parent="." unique_id=1366676347]
+script = ExtResource("4_cmbn5")
+components = Array[ExtResource("6_g5equ")]([SubResource("Resource_rwt43")])
+metadata/_custom_type_script = "uid://3ara7t8dqmih"
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="HurtBoxR" unique_id=178473201]
+position = Vector2(4, 3)
+shape = SubResource("RectangleShape2D_vlsnu")
+debug_color = Color(0.61833334, 0.7, 0, 0.41960785)
+
+[node name="HitBox" type="Area2D" parent="." unique_id=2102020649]
+script = ExtResource("8_oary1")
+hitbox_ids = Array[String](["koopa_shell"])
+hit_expression = "abs(velocity.x) > 150"
+damage_type = 1
+has_knockback = true
+metadata/_custom_type_script = "uid://c103bnb5445y3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=692024742]
+shape = SubResource("CircleShape2D_xyq51")
+debug_color = Color(0.7, 0, 0, 0.41960785)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=741987522]
+position = Vector2(0, 4.5)
+shape = SubResource("RectangleShape2D_rwt43")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1895132324]
+stream = ExtResource("8_hhtj8")
+volume_db = 5.0
+
+[connection signal="damaged" from="HurtBoxL" to="." method="_on_hurt_box_damaged" flags=18]
+[connection signal="damaged" from="HurtBoxR" to="." method="_on_hurt_box_damaged" flags=18]

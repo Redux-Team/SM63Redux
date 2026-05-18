@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3ja5avblhkr5"
-path="res://.godot/imported/terrain_jungle_ld.png-3de3b6cbea0dce728358222f6feee55c.ctex"
+uid="uid://dhalm6vfgheu4"
+path="res://.godot/imported/parakoopa_wing_1.png-e606c2ceab1152db5fbdcc2e3b36ec43.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/terrain/terrain_jungle_ld.png"
-dest_files=["res://.godot/imported/terrain_jungle_ld.png-3de3b6cbea0dce728358222f6feee55c.ctex"]
+source_file="res://assets/textures/entity/enemy/koopa/parakoopa_wing_1.png"
+dest_files=["res://.godot/imported/parakoopa_wing_1.png-e606c2ceab1152db5fbdcc2e3b36ec43.ctex"]
 
 [params]
 

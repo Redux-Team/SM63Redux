@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bdy2m11ia2yk7"
-path="res://.godot/imported/terrain_jungle_outline.png-b893df304a75d4cc3fe78d28213a80f0.ctex"
+uid="uid://c51x4jdo8l7c0"
+path="res://.godot/imported/koopa_shell.png-7908113f1354d4fc6a61e005f6d94db1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/terrain/terrain_jungle_outline.png"
-dest_files=["res://.godot/imported/terrain_jungle_outline.png-b893df304a75d4cc3fe78d28213a80f0.ctex"]
+source_file="res://assets/textures/entity/enemy/koopa/koopa_shell.png"
+dest_files=["res://.godot/imported/koopa_shell.png-7908113f1354d4fc6a61e005f6d94db1.ctex"]
 
 [params]
 

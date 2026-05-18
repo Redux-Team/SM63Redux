@@ -8,9 +8,9 @@
 [ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="6_rtor7"]
 [ext_resource type="AudioStream" uid="uid://csqbx8dqh1lgv" path="res://assets/sfx/object/shine_sprite/ambient.wav" id="7_rtor7"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hwq0t"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_gcfvk"]
 atlas = ExtResource("5_ejroc")
-region = Rect2(28, 0, 7, 11)
+region = Rect2(42, 0, 7, 11)
 
 [sub_resource type="Curve" id="Curve_hwq0t"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.529703, 0.9938154), 0.44092438, 0.44092438, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -28,13 +28,13 @@ region = Rect2(14, 0, 7, 11)
 atlas = ExtResource("5_ejroc")
 region = Rect2(21, 0, 7, 11)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_hwq0t"]
+atlas = ExtResource("5_ejroc")
+region = Rect2(28, 0, 7, 11)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_ejroc"]
 atlas = ExtResource("5_ejroc")
 region = Rect2(35, 0, 7, 11)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gcfvk"]
-atlas = ExtResource("5_ejroc")
-region = Rect2(42, 0, 7, 11)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_3nptm"]
 animations = [{
@@ -63,7 +63,7 @@ animations = [{
 atlas = ExtResource("3_rtor7")
 region = Rect2(0, 0, 28, 31)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_b44du"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_rtor7"]
 diffuse_texture = SubResource("AtlasTexture_pj2iy")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_604nk"]
@@ -189,7 +189,7 @@ metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
 show_behind_parent = true
 light_mask = 2
 amount = 32
-texture = SubResource("AtlasTexture_hwq0t")
+texture = SubResource("AtlasTexture_gcfvk")
 lifetime = 3.0
 preprocess = 2.0
 randomness = 1.0
@@ -208,11 +208,11 @@ metadata/_custom_type_script = "uid://c2df6xnsl5aem"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=147452074]
 light_mask = 0
-texture = SubResource("CanvasTexture_b44du")
+texture = SubResource("CanvasTexture_rtor7")
 region_enabled = true
 region_rect = Rect2(0, 0, 28, 31)
 script = ExtResource("4_uiaf0")
-canvas_texture = SubResource("CanvasTexture_b44du")
+canvas_texture = SubResource("CanvasTexture_rtor7")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_vtnyd")
 current_animation = "spin"

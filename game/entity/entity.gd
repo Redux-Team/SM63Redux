@@ -37,9 +37,10 @@ var local_velocity: Vector2:
 
 
 func _ready() -> void:
-	for child: Node in components_root.get_children():
-		if child is EntityComponent:
-			child.entity = self
+	if components_root:
+		for child: Node in components_root.get_children():
+			if child is EntityComponent:
+				child.entity = self
 
 
 func _physics_process(delta: float) -> void:

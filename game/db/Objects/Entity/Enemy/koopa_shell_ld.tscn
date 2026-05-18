@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://bl2xmjl55f5o0"]
+
+[ext_resource type="PackedScene" uid="uid://htsv8nenubat" path="res://game/db/Objects/Entity/Enemy/koopa_ld.tscn" id="1_okr5q"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_bgrff"]
+[ext_resource type="Texture2D" uid="uid://c51x4jdo8l7c0" path="res://assets/textures/entity/enemy/koopa/koopa_shell.png" id="3_okr5q"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_okr5q"]
+resource_local_to_scene = true
+shader = ExtResource("2_bgrff")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_obdge"]
+diffuse_texture = ExtResource("3_okr5q")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bgrff"]
+size = Vector2(19, 18)
+
+[node name="KoopaShellLd" unique_id=1062675200 instance=ExtResource("1_okr5q")]
+
+[node name="Sprite" parent="." index="0" unique_id=1359663804]
+material = SubResource("ShaderMaterial_okr5q")
+texture = SubResource("CanvasTexture_obdge")
+canvas_texture = SubResource("CanvasTexture_obdge")
+diffuse_texture = ExtResource("3_okr5q")
+
+[node name="EditorShape" parent="EditorShapeArea" parent_id_path=PackedInt32Array(18584551) index="0" unique_id=1107797536]
+position = Vector2(0.5, 1)
+shape = SubResource("RectangleShape2D_bgrff")
