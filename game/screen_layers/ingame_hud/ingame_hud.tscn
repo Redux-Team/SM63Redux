@@ -8,6 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://cgms5235nrwsb" path="res://assets/textures/gui/ingame_hud/health_meter_inner.png" id="3_hbyb8"]
 [ext_resource type="Texture2D" uid="uid://dxeele2uos4o5" path="res://assets/textures/gui/ingame_hud/hp_power.png" id="7_2e807"]
 [ext_resource type="Texture2D" uid="uid://bmuhj0qbolft8" path="res://assets/textures/gui/ingame_hud/fludd_tank.png" id="8_37e64"]
+[ext_resource type="Texture2D" uid="uid://d3nl6uavw7mx7" path="res://assets/textures/gui/ingame_hud/fludd_tank_mask.png" id="9_ia5qx"]
+[ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="11_53twl"]
+[ext_resource type="Texture2D" uid="uid://b4pfo0m8fwi2x" path="res://assets/textures/gui/ingame_hud/fludd_tank_top.png" id="11_ia5qx"]
+[ext_resource type="Texture2D" uid="uid://bcsycatrr3xnh" path="res://assets/textures/particle/fludd/fludd_bubble_big.png" id="11_o5xe2"]
+[ext_resource type="Texture2D" uid="uid://bwnnu0gwg2i46" path="res://assets/textures/particle/fludd/fludd_bubble_small.png" id="14_cx53y"]
 
 [sub_resource type="Gradient" id="Gradient_d64ys"]
 offsets = PackedFloat32Array(0, 0.203125, 0.3638393, 0.51339287, 0.7745536, 1)
@@ -24,6 +29,10 @@ shader_parameter/total_slices = 8
 shader_parameter/filled_slices = 8
 shader_parameter/start_angle_degrees = 0.0
 shader_parameter/divider_color = Color(0.6392157, 0.6392157, 0.6392157, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cx53y"]
+atlas = ExtResource("11_o5xe2")
+region = Rect2(0, 0, 16, 16)
 
 [node name="IngameHud" type="CanvasLayer" unique_id=510807687 node_paths=PackedStringArray("inner_hp_texture", "inner_hpbg")]
 script = ExtResource("1_reblr")
@@ -116,7 +125,7 @@ anchor_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="TextureRect" type="TextureRect" parent="FLUDDContainer" unique_id=1095548232]
+[node name="Tank" type="TextureRect" parent="FLUDDContainer" unique_id=1095548232]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -124,9 +133,108 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -52.0
-offset_top = -113.0
+offset_top = -113.5
 offset_right = -8.0
-offset_bottom = -14.0
+offset_bottom = -13.5
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("8_37e64")
+
+[node name="FuelMask" type="TextureRect" parent="FLUDDContainer/Tank" unique_id=2111128244]
+show_behind_parent = true
+clip_children = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_ia5qx")
+expand_mode = 1
+
+[node name="ColorRect" type="ColorRect" parent="FLUDDContainer/Tank/FuelMask" unique_id=2069243308]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 9.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 1)
+color = Color(0, 0.53333336, 1, 0.54901963)
+
+[node name="Node2D" type="Node2D" parent="FLUDDContainer/Tank/FuelMask/ColorRect" unique_id=534224923]
+modulate = Color(1, 1, 1, 0.53333336)
+position = Vector2(52, 104)
+
+[node name="BigBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/ColorRect/Node2D" unique_id=1129601286]
+position = Vector2(-36, -7)
+texture = SubResource("AtlasTexture_cx53y")
+lifetime = 10.0
+preprocess = 30.0
+direction = Vector2(0, -1)
+gravity = Vector2(0, -10)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+script = ExtResource("11_53twl")
+high_particle_amount = 2
+medium_particle_amount = 2
+low_particle_amount = 1
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="MediumBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/ColorRect/Node2D" unique_id=892034371]
+position = Vector2(-36, -7)
+amount = 2
+texture = SubResource("AtlasTexture_cx53y")
+lifetime = 10.0
+preprocess = 30.0
+direction = Vector2(0, -1)
+gravity = Vector2(0, -10)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+script = ExtResource("11_53twl")
+high_particle_amount = 8
+medium_particle_amount = 4
+low_particle_amount = 2
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="SmallBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/ColorRect/Node2D" unique_id=1860666956]
+position = Vector2(-36, -7)
+texture = ExtResource("14_cx53y")
+lifetime = 10.0
+preprocess = 30.0
+direction = Vector2(0, -1)
+gravity = Vector2(0, -10)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+script = ExtResource("11_53twl")
+high_particle_amount = 16
+medium_particle_amount = 8
+low_particle_amount = 4
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="FuelTop" type="TextureRect" parent="FLUDDContainer/Tank/FuelMask/ColorRect" unique_id=2005540370]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -8.5
+offset_right = 33.0
+offset_bottom = 9.5
+texture = ExtResource("11_ia5qx")
+
+[node name="Label" type="Label" parent="FLUDDContainer/Tank" unique_id=333857642]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4090909
+anchor_top = 0.5
+anchor_right = 0.4090909
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -7.5
+offset_right = 20.0
+offset_bottom = 7.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 4
+text = "tmp"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true

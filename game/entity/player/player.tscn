@@ -1833,6 +1833,7 @@ metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
 
 [node name="HealthComponent" type="Node" parent="Components" unique_id=1079797538 node_paths=PackedStringArray("entity")]
 script = ExtResource("4_o0v17")
+max_hp = 8.0
 entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
