@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://gx548aea8dxr" path="res://game/entity/enemy/goomba/goomba.gd" id="1_hysx3"]
 [ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="2_e0p0p"]
+[ext_resource type="PackedScene" uid="uid://tf6mq1quvwdw" path="res://game/object/coin/yellow_coin/yellow_coin_spawn.tscn" id="2_onrng"]
+[ext_resource type="PackedScene" uid="uid://dssc62dfv747q" path="res://game/entity/enemy/_shared/scenes/poof.tscn" id="3_7e3mf"]
 [ext_resource type="Texture2D" uid="uid://djgg3rgm58230" path="res://assets/textures/entity/enemy/goomba/goomba_walk.png" id="3_hysx3"]
 [ext_resource type="Script" uid="uid://3y7t4ymugnxu" path="res://addons/redux_dev/components/state_machine/state_transition.gd" id="3_ios8m"]
 [ext_resource type="Script" uid="uid://dyjrhpdveexsr" path="res://addons/redux_dev/components/state_machine/state.gd" id="3_tx7nd"]
@@ -17,7 +19,7 @@
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="6_prjr3"]
 [ext_resource type="Texture2D" uid="uid://bpp7wgte6dq0l" path="res://assets/textures/entity/enemy/goomba/goomba_squish.png" id="7_phpar"]
 [ext_resource type="AudioStream" uid="uid://y56kvftd2idy" path="res://assets/sfx/entity/goomba/goomba_jump.ogg" id="8_dri63"]
-[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="10_d6enh"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="10_d6enh"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="11_8wobc"]
 [ext_resource type="Script" uid="uid://ptqlxnwadjpm" path="res://game/entity/enemy/goomba/states/chase.gd" id="11_fb4me"]
 [ext_resource type="Script" uid="uid://bu81quiseko6w" path="res://game/entity/enemy/goomba/states/squish.gd" id="12_6f57m"]
@@ -94,7 +96,7 @@ metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 atlas = ExtResource("3_hysx3")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_15o45"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_7e3mf"]
 diffuse_texture = SubResource("AtlasTexture_n0olq")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kyaey"]
@@ -300,6 +302,10 @@ player_check = NodePath("PlayerCheck")
 sprite = NodePath("SmartSprite2D")
 components_root = NodePath("Components")
 state_machine = NodePath("StateMachine")
+exit_objects = Dictionary[PackedScene, int]({
+ExtResource("2_onrng"): 1,
+ExtResource("3_7e3mf"): 1
+})
 
 [node name="StateMachine" type="Node" parent="." unique_id=48097513 node_paths=PackedStringArray("initial_state", "sprite", "animation_player", "sfx_root", "__states")]
 script = ExtResource("2_e0p0p")
@@ -381,11 +387,11 @@ __editor_uuid = &"5f76de65-09f3-4b6f-9847-15c247ae70f1"
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(0, -7)
-texture = SubResource("CanvasTexture_15o45")
+texture = SubResource("CanvasTexture_7e3mf")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("4_whnfo")
-canvas_texture = SubResource("CanvasTexture_15o45")
+canvas_texture = SubResource("CanvasTexture_7e3mf")
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_x5cu4")

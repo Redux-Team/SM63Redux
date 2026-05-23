@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://cgcyu4e3ej8yq"]
+
+[ext_resource type="PackedScene" uid="uid://bbp4k8t4sklg5" path="res://game/db/Objects/Item/Collectible/yellow_coin_ld.tscn" id="1_x2b6i"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_wat4j"]
+[ext_resource type="Texture2D" uid="uid://pramwxowt1cc" path="res://assets/textures/item/collectible/star_coin.png" id="3_6fea1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x2b6i"]
+resource_local_to_scene = true
+shader = ExtResource("2_wat4j")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_ieipg"]
+diffuse_texture = ExtResource("3_6fea1")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wat4j"]
+size = Vector2(30, 30)
+
+[node name="StarCoinLd" unique_id=1568297185 instance=ExtResource("1_x2b6i")]
+
+[node name="Sprite" parent="." index="0" unique_id=361107804]
+material = SubResource("ShaderMaterial_x2b6i")
+texture = SubResource("CanvasTexture_ieipg")
+canvas_texture = SubResource("CanvasTexture_ieipg")
+diffuse_texture = ExtResource("3_6fea1")
+
+[node name="EditorShape" parent="EditorShapeArea" parent_id_path=PackedInt32Array(758870913) index="0" unique_id=1943159570]
+shape = SubResource("RectangleShape2D_wat4j")

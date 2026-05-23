@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://tf6mq1quvwdw"]
+
+[ext_resource type="PackedScene" uid="uid://clo423ijbljko" path="res://game/object/coin/yellow_coin/yellow_coin.tscn" id="1_68ubt"]
+[ext_resource type="Texture2D" uid="uid://b7wqc58gwogb6" path="res://assets/textures/item/collectible/yellow_coin_spin.png" id="2_e8mcq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k3up7"]
+atlas = ExtResource("2_e8mcq")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_lvh7g"]
+diffuse_texture = SubResource("AtlasTexture_k3up7")
+
+[node name="YellowCoin" unique_id=187434736 instance=ExtResource("1_68ubt")]
+explode_on_spawn = true
+
+[node name="Sprite" parent="." index="1" unique_id=1781944590]
+texture = SubResource("CanvasTexture_lvh7g")
+canvas_texture = SubResource("CanvasTexture_lvh7g")

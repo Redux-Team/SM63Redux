@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bb7m3g4mv00m5"]
 
 [ext_resource type="Script" uid="uid://b1quu6mgsgbeb" path="res://game/entity/enemy/bobomb/bobomb.gd" id="1_txf1e"]
+[ext_resource type="PackedScene" uid="uid://tf6mq1quvwdw" path="res://game/object/coin/yellow_coin/yellow_coin_spawn.tscn" id="2_ccar4"]
 [ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="2_wyvl3"]
 [ext_resource type="Texture2D" uid="uid://dxjm81n5gdd4w" path="res://assets/textures/entity/enemy/bobomb/bobomb_walk.png" id="3_x8m5v"]
 [ext_resource type="Texture2D" uid="uid://30eyyko6soks" path="res://assets/textures/entity/enemy/bobomb/bobomb_strike.png" id="4_ap0j0"]
@@ -21,7 +22,7 @@
 [ext_resource type="AudioStream" uid="uid://cnu88x3ta80kk" path="res://assets/sfx/entity/bobomb/explosion_buildup_1.wav" id="20_p1pya"]
 [ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="21_fyph1"]
 [ext_resource type="Script" uid="uid://ciewso6hi85f2" path="res://game/entity/enemy/bobomb/states/kaboom.gd" id="21_hy3hd"]
-[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="22_rkigm"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="22_rkigm"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="23_psol5"]
 [ext_resource type="AudioStream" uid="uid://8ybrcf2gym5t" path="res://assets/sfx/entity/bobomb/knock.wav" id="23_u8txe"]
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="24_4fmyw"]
@@ -440,6 +441,9 @@ sprite = NodePath("Sprite")
 components_root = NodePath("Components")
 collision_shapes = [NodePath("HurtBox/HurtboxShape"), NodePath("ExplosionHitbox/ExplosionShape")]
 state_machine = NodePath("StateMachine")
+exit_objects = Dictionary[PackedScene, int]({
+ExtResource("2_ccar4"): 1
+})
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1859430176 node_paths=PackedStringArray("subsprites")]
 position = Vector2(0, -6)

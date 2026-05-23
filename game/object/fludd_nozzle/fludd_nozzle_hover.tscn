@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bum2yr1b2mck6" path="res://game/object/fludd_nozzle/fludd_nozzle_hover.gd" id="1_saqq8"]
 [ext_resource type="Texture2D" uid="uid://cstnoxk1myead" path="res://assets/textures/item/fludd/fludd_nozzle_hover.png" id="2_ltr0n"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_saqq8"]
-[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="4_ljcff"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="4_ljcff"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_saqq8"]
 diffuse_texture = ExtResource("2_ltr0n")

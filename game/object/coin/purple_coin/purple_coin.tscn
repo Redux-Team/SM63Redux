@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://d2toekox286o0"]
+
+[ext_resource type="PackedScene" uid="uid://clo423ijbljko" path="res://game/object/coin/yellow_coin/yellow_coin.tscn" id="1_2vepf"]
+[ext_resource type="Texture2D" uid="uid://ddp7xjn1b8u0e" path="res://assets/textures/item/collectible/purple_coin_spin.png" id="3_6m3yd"]
+[ext_resource type="Texture2D" uid="uid://ddskkbbouhbyh" path="res://assets/textures/particle/item/purple_coin_particle.png" id="3_fqbf6"]
+[ext_resource type="AudioStream" uid="uid://bvikr8s5ylo76" path="res://assets/sfx/item/purple_coin_collect.ogg" id="4_fqbf6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aixtl"]
+atlas = ExtResource("3_6m3yd")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_6m3yd"]
+diffuse_texture = SubResource("AtlasTexture_aixtl")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q4enj"]
+atlas = ExtResource("3_6m3yd")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l3l6m"]
+atlas = ExtResource("3_6m3yd")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uxu22"]
+atlas = ExtResource("3_6m3yd")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_11hni"]
+atlas = ExtResource("3_6m3yd")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s4nam"]
+atlas = ExtResource("3_6m3yd")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_88nua"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aixtl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q4enj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l3l6m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uxu22")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_11hni")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s4nam")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="PurpleCoin" unique_id=187434736 instance=ExtResource("1_2vepf")]
+
+[node name="Sprite" parent="." index="1" unique_id=1781944590]
+texture = SubResource("CanvasTexture_6m3yd")
+canvas_texture = SubResource("CanvasTexture_6m3yd")
+diffuse_frames = SubResource("SpriteFrames_88nua")
+
+[node name="ParticleEmitter" parent="." index="3" unique_id=1981334313]
+texture = ExtResource("3_fqbf6")
+
+[node name="AudioStreamPlayer2D" parent="." index="4" unique_id=1763400765]
+stream = ExtResource("4_fqbf6")

@@ -1,4 +1,4 @@
-class_name Level
+class_name LevelOld
 extends Node2D
 
 var _areas: Array[Area]

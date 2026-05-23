@@ -16,6 +16,6 @@ func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:
 	if source_hitbox.damage_type == HitBox.DamageType.SQUISH and source_hitbox.owner is Player and not source_hitbox.owner.is_on_floor():
 		source_hitbox.owner.velocity.y = -200
 	
-	koopa_shell.audio_stream_player_2d.play()
+	koopa_shell.audio_stream_player_2d.play.call_deferred()
 	
 	queue_free()

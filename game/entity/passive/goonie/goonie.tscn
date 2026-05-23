@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bph21tonmy3li" path="res://game/entity/passive/goonie/goonie.gd" id="1_jfxkd"]
 [ext_resource type="Texture2D" uid="uid://dcq1kqe3c5wbk" path="res://assets/textures/entity/passive/goonie_flap.png" id="2_dma5t"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_kaxjy"]
-[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="2_pbwgp"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="2_pbwgp"]
 [ext_resource type="Script" uid="uid://3y7t4ymugnxu" path="res://addons/redux_dev/components/state_machine/state_transition.gd" id="3_xtefv"]
 [ext_resource type="Texture2D" uid="uid://di1d8ih6gfgmm" path="res://assets/textures/entity/passive/goonie_glide.png" id="4_1cx3s"]
 [ext_resource type="Script" uid="uid://uyk8qmuneqcb" path="res://game/entity/passive/goonie/state_machine/states/flap.gd" id="4_xtefv"]

@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://c4oq5gr0x5k2g"]
+
+[node name="WorldManager" type="Node" unique_id=1963622060]
+
+[node name="LevelManager" type="Node" parent="." unique_id=1777585377]
+
+[node name="AreaManager" type="Node" parent="LevelManager" unique_id=300326553]
+
+[node name="LayerManager" type="Node" parent="LevelManager/AreaManager" unique_id=1110437777]
+
+[node name="ObjectManager" type="Node" parent="LevelManager/AreaManager/LayerManager" unique_id=2044077027]
+
+[node name="ScenarioManager" type="Node" parent="LevelManager" unique_id=762457019]

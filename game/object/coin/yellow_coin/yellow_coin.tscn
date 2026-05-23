@@ -1,0 +1,158 @@
+[gd_scene format=3 uid="uid://clo423ijbljko"]
+
+[ext_resource type="Script" uid="uid://b8fpm2nqwlk2q" path="res://game/object/coin/yellow_coin/yellow_coin.gd" id="1_k3up7"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_1gmy6"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="2_ijjnc"]
+[ext_resource type="Texture2D" uid="uid://b7wqc58gwogb6" path="res://assets/textures/item/collectible/yellow_coin_spin.png" id="3_aa8gu"]
+[ext_resource type="Script" uid="uid://gqndp1vy8xo2" path="res://game/entity_components/bouncy_component.gd" id="3_vu8ol"]
+[ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="4_8rta1"]
+[ext_resource type="Script" uid="uid://cf0fqotw8gu4p" path="res://core/custom_nodes/2d/player_check_area.gd" id="4_aa8gu"]
+[ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="5_exijk"]
+[ext_resource type="Texture2D" uid="uid://du3uraiotivor" path="res://assets/textures/particle/item/yellow_coin_particle.png" id="5_k3up7"]
+[ext_resource type="AudioStream" uid="uid://0bs3yr3jh6j5" path="res://assets/sfx/item/yellow_coin_collect.wav" id="7_olrdk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k3up7"]
+atlas = ExtResource("3_aa8gu")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_8rta1"]
+diffuse_texture = SubResource("AtlasTexture_k3up7")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_olrdk"]
+atlas = ExtResource("3_aa8gu")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ijjnc"]
+atlas = ExtResource("3_aa8gu")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vu8ol"]
+atlas = ExtResource("3_aa8gu")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8rta1"]
+atlas = ExtResource("3_aa8gu")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2c2xh"]
+atlas = ExtResource("3_aa8gu")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_u2fme"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k3up7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_olrdk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ijjnc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vu8ol")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8rta1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2c2xh")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exijk"]
+size = Vector2(18, 18)
+
+[sub_resource type="Curve" id="Curve_olrdk"]
+_data = [Vector2(0, 1), 0.0, 0.056544237, 0, 0, Vector2(1e-05, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.9214554, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_olrdk"]
+offsets = PackedFloat32Array(0, 0.64874554)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_olrdk"]
+radius = 8.062258
+
+[node name="YellowCoin" type="CharacterBody2D" unique_id=187434736 node_paths=PackedStringArray("particle_emitter", "audio_stream_player_2d", "entity_check_area", "gravity_component", "bouncy_component", "sprite")]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_k3up7")
+particle_emitter = NodePath("ParticleEmitter")
+audio_stream_player_2d = NodePath("AudioStreamPlayer2D")
+entity_check_area = NodePath("EntityCheckArea")
+gravity_component = NodePath("Components/GravityComponent")
+bouncy_component = NodePath("Components/BouncyComponent")
+sprite = NodePath("Sprite")
+
+[node name="Components" type="Node" parent="." unique_id=1587467096]
+
+[node name="GravityComponent" type="Node" parent="Components" unique_id=1077737391 node_paths=PackedStringArray("entity")]
+script = ExtResource("2_ijjnc")
+enabled = false
+entity = NodePath("../..")
+metadata/_custom_type_script = "uid://cb672xli6i2ns"
+
+[node name="BouncyComponent" type="Node" parent="Components" unique_id=1460970716 node_paths=PackedStringArray("entity")]
+script = ExtResource("3_vu8ol")
+min_velocity = 30.0
+entity = NodePath("../..")
+metadata/_custom_type_script = "uid://gqndp1vy8xo2"
+
+[node name="FrictionComponent" type="Node" parent="Components" unique_id=692149622 node_paths=PackedStringArray("entity")]
+script = ExtResource("4_8rta1")
+entity = NodePath("../..")
+metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1781944590]
+texture = SubResource("CanvasTexture_8rta1")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+script = ExtResource("2_1gmy6")
+canvas_texture = SubResource("CanvasTexture_8rta1")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_u2fme")
+current_animation = "default"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="EntityCheckArea" type="Area2D" parent="." unique_id=419717260]
+visible = false
+script = ExtResource("4_aa8gu")
+metadata/_custom_type_script = "uid://cf0fqotw8gu4p"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EntityCheckArea" unique_id=737332630]
+shape = SubResource("RectangleShape2D_exijk")
+
+[node name="ParticleEmitter" type="CPUParticles2D" parent="." unique_id=1981334313]
+emitting = false
+amount = 7
+texture = ExtResource("5_k3up7")
+one_shot = true
+explosiveness = 1.0
+emission_shape = 1
+emission_sphere_radius = 12.0
+spread = 180.0
+gravity = Vector2(0, 1)
+scale_amount_curve = SubResource("Curve_olrdk")
+color_ramp = SubResource("Gradient_olrdk")
+script = ExtResource("5_exijk")
+high_particle_amount = 7
+medium_particle_amount = 4
+low_particle_amount = 2
+free_on_finish = true
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1763400765]
+stream = ExtResource("7_olrdk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1257759074]
+shape = SubResource("CircleShape2D_olrdk")
+
+[connection signal="player_entered" from="EntityCheckArea" to="." method="_on_entity_check_area_player_entered"]

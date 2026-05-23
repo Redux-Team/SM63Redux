@@ -1,9 +1,27 @@
 [gd_scene format=3 uid="uid://bbikt30pixqht"]
 
-[ext_resource type="Script" uid="uid://vlqjxmxsgk8p" path="res://game/db/Objects/level_object_terrain.gd" id="1_s3lwc"]
+[ext_resource type="Script" uid="uid://b7bulkw3s6705" path="res://game/db/Objects/Polygon/Volumes/water_lvl.gd" id="1_7mws3"]
+[ext_resource type="Shader" uid="uid://bff2beuc0xlp4" path="res://core/shader/water_ripple.gdshader" id="2_t8sh6"]
 [ext_resource type="Resource" uid="uid://c1aygscm4h0bo" path="res://game/db/Objects/Polygon/Volumes/water_data.tres" id="2_tmccv"]
 [ext_resource type="Shader" uid="uid://d1bxotfi5tlpl" path="res://core/shader/water.gdshader" id="3_4iu6p"]
+[ext_resource type="Texture2D" uid="uid://blvxwsmqowrbp" path="res://assets/textures/volume/water/water_top.png" id="3_un2em"]
 [ext_resource type="Texture2D" uid="uid://bewe6m204j8b3" path="res://assets/textures/volume/water/water_deform.png" id="4_7mws3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_un2em"]
+shader = ExtResource("2_t8sh6")
+shader_parameter/wave_texture = ExtResource("3_un2em")
+shader_parameter/wave_speed = 5.0
+shader_parameter/wave_amplitude = 2.000000095
+shader_parameter/wave_frequency = 2.0
+shader_parameter/texture_scale = 16.0
+shader_parameter/wave_color = Color(1, 1, 1, 1)
+shader_parameter/outline_length = 1.0
+shader_parameter/splash_count = 0
+shader_parameter/splash_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/splash_ages = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/splash_max_age = 1.2
+shader_parameter/splash_amplitude = 18.0
+shader_parameter/splash_radius = 120.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mws3"]
 shader = ExtResource("3_4iu6p")
@@ -13,8 +31,12 @@ shader_parameter/warp_strength = 0.003
 shader_parameter/wave_speed = 0.06
 shader_parameter/deform_scale = 0.003
 
-[node name="Water" type="Node2D" unique_id=335077795 node_paths=PackedStringArray("_polygon", "_collision", "_outline_container", "_topline_container", "_topline_shadow_container", "_static_body_2d")]
-script = ExtResource("1_s3lwc")
+[node name="Water" type="Node2D" unique_id=335077795 node_paths=PackedStringArray("_water_area", "_water_collision", "_polygon", "_collision", "_outline_container", "_topline_container", "_topline_shadow_container", "_static_body_2d")]
+texture_repeat = 2
+script = ExtResource("1_7mws3")
+_water_area = NodePath("WaterArea")
+_water_collision = NodePath("WaterArea/CollisionPolygon2D")
+_topline_shader = SubResource("ShaderMaterial_un2em")
 polygon_data = ExtResource("2_tmccv")
 _polygon = NodePath("Polygon")
 _collision = NodePath("StaticBody2D/CollisionPolygon2D")
@@ -42,3 +64,8 @@ collision_mask = 0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=714933582]
 metadata/terrain = "grass"
+
+[node name="WaterArea" type="Area2D" parent="." unique_id=1963312499]
+metadata/water = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="WaterArea" unique_id=370269804]

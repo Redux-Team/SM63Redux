@@ -11,6 +11,9 @@ func _on_enter() -> void:
 	explosion.play()
 	entity.disable()
 	explosion_shape.set_deferred(&"disabled", false)
+	
+	entity.spawn_exit_objects()
+	
 	await get_tree().process_frame
 	await get_tree().process_frame
 	explosion_shape.set_deferred(&"disabled", true)

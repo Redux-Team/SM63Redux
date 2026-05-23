@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://02qtng8fdcpv"]
+
+[ext_resource type="PackedScene" uid="uid://bbp4k8t4sklg5" path="res://game/db/Objects/Item/Collectible/yellow_coin_ld.tscn" id="1_q3ll8"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_4fj0x"]
+[ext_resource type="Texture2D" uid="uid://c88dd4ulynree" path="res://assets/textures/item/collectible/purple_coin.png" id="3_q3ll8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q3ll8"]
+resource_local_to_scene = true
+shader = ExtResource("2_4fj0x")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_5558j"]
+diffuse_texture = ExtResource("3_q3ll8")
+
+[node name="PurpleCoinLd" unique_id=1568297185 instance=ExtResource("1_q3ll8")]
+
+[node name="Sprite" parent="." index="0" unique_id=361107804]
+material = SubResource("ShaderMaterial_q3ll8")
+texture = SubResource("CanvasTexture_5558j")
+canvas_texture = SubResource("CanvasTexture_5558j")
+diffuse_texture = ExtResource("3_q3ll8")

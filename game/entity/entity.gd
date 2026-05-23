@@ -8,6 +8,7 @@ extends CharacterBody2D
 @export var components_root: Node
 @export var collision_shapes: Array[CollisionShape2D]
 @export var state_machine: StateMachine
+@export var exit_objects: Dictionary[PackedScene, int]
 
 
 var data: Dictionary
@@ -15,6 +16,7 @@ var properties: Dictionary[StringName, Variant] = {}
 var source_object_id: String = ""
 var components: Array[EntityComponent]
 var _velocity_lock: bool = false
+var _exit_objs_spawned: bool = false
 
 ## Helper variable which takes into account the [member sprite]'s flip_h property.
 var local_velocity: Vector2:
@@ -160,3 +162,19 @@ func move_and_slide_with_gravity() -> void:
 	if sprite:
 		up_direction = Vector2.UP.rotated(angle)
 		rotation = angle
+
+
+func spawn_exit_objects(shared_properties: Array = ["position", "scale", "rotation"]):
+	if _exit_objs_spawned:
+		return
+	
+	for packed: PackedScene in exit_objects:
+		for i: int in exit_objects.get(packed):
+			var node: Node = packed.instantiate().duplicate()
+			Singleton.spawn_sibling(self, node, shared_properties)
+	
+	_exit_objs_spawned = true
+
+
+func _exit_tree() -> void:
+	spawn_exit_objects()

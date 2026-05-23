@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bh5q4brjmpql0" path="res://assets/textures/entity/enemy/koopa/koopa_walk.png" id="3_4tjfc"]
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="4_0apuc"]
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="5_2yeke"]
-[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="7_rqgyx"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="7_rqgyx"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="8_xhq40"]
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="9_14yj4"]
 [ext_resource type="AudioStream" uid="uid://bepvphyfaeuk5" path="res://assets/sfx/entity/koopa/shell_kick.ogg" id="9_xhq40"]

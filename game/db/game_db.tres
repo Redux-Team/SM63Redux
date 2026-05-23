@@ -8,10 +8,10 @@
 [ext_resource type="Resource" uid="uid://ya5iq8bilpi" path="res://game/db/Objects/Entity/Passive/goonie.tres" id="6_3r3ml"]
 [ext_resource type="Resource" uid="uid://qnbrheuia718" path="res://game/db/Objects/Entity/Passive/fat_goonie.tres" id="8_fpxyv"]
 [ext_resource type="Resource" uid="uid://dy8oygc3wj1a5" path="res://game/db/Objects/Entity/Player/player_mario.tres" id="8_i1cw8"]
-[ext_resource type="Resource" uid="uid://enlwdtgbab6g" path="res://game/db/Objects/Item/Collectible/coin.tres" id="9_wp5r6"]
 [ext_resource type="Resource" uid="uid://clfw632lsiowg" path="res://game/db/Objects/Item/Collectible/red_coin.tres" id="11_ojdkd"]
 [ext_resource type="Resource" uid="uid://dp8ylwxcasadn" path="res://game/db/Objects/Item/Collectible/shine_sprite.tres" id="12_0kj6b"]
 [ext_resource type="Resource" uid="uid://ytnyiak6am65" path="res://game/db/Objects/Item/Collectible/star_coin.tres" id="13_mp4qx"]
+[ext_resource type="Resource" uid="uid://enlwdtgbab6g" path="res://game/db/Objects/Item/Collectible/yellow_coin.tres" id="14_q5xve"]
 [ext_resource type="Resource" uid="uid://c58m38fqamx21" path="res://game/db/Objects/Item/Collectible/blue_coin.tres" id="15_j0wnv"]
 [ext_resource type="Resource" uid="uid://cp7abjc4l1sfn" path="res://game/db/Objects/Item/FLUDD/rocket_fludd_box.tres" id="16_naun0"]
 [ext_resource type="Resource" uid="uid://kxexxxdwa4sc" path="res://game/db/Objects/Item/FLUDD/big_water_bottle.tres" id="17_ib6pc"]
@@ -73,6 +73,8 @@
 [ext_resource type="Resource" uid="uid://c7em3naeyouse" path="res://game/db/Objects/Polygon/Terrain/terrain_snow.tres" id="60_rpot8"]
 [ext_resource type="Resource" uid="uid://cqk0xlceh5hop" path="res://game/db/Objects/Entity/Enemy/parakoopa.tres" id="61_2x7la"]
 [ext_resource type="Resource" uid="uid://rd08kjhcdyie" path="res://game/db/Objects/Entity/Enemy/koopa_shell.tres" id="62_cjg54"]
+[ext_resource type="Resource" uid="uid://b1imly6761nhh" path="res://game/db/Objects/Item/Collectible/purple_coin.tres" id="63_cjg54"]
+[ext_resource type="Resource" uid="uid://brym2h03w1ylu" path="res://game/db/Objects/Item/Utility/spinning_heart.tres" id="64_q5xve"]
 
 [resource]
 script = ExtResource("47_j75gy")
@@ -89,15 +91,17 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Entity/Passive/goonie": ExtResource("6_3r3ml"),
 "Entity/Player/player_mario": ExtResource("8_i1cw8"),
 "Item/Collectible/blue_coin": ExtResource("15_j0wnv"),
-"Item/Collectible/coin": ExtResource("9_wp5r6"),
+"Item/Collectible/purple_coin": ExtResource("63_cjg54"),
 "Item/Collectible/red_coin": ExtResource("11_ojdkd"),
 "Item/Collectible/shine_sprite": ExtResource("12_0kj6b"),
 "Item/Collectible/star_coin": ExtResource("13_mp4qx"),
+"Item/Collectible/yellow_coin": ExtResource("14_q5xve"),
 "Item/FLUDD/big_water_bottle": ExtResource("17_ib6pc"),
 "Item/FLUDD/hover_fludd_box": ExtResource("20_cjg54"),
 "Item/FLUDD/rocket_fludd_box": ExtResource("16_naun0"),
 "Item/FLUDD/small_water_bottle": ExtResource("18_rpot8"),
 "Item/FLUDD/turbo_fludd_box": ExtResource("19_2x7la"),
+"Item/Utility/spinning_heart": ExtResource("64_q5xve"),
 "Polygon/Terrain/terrain_grass": ExtResource("45_3w7om"),
 "Polygon/Terrain/terrain_jungle": ExtResource("59_ib6pc"),
 "Polygon/Terrain/terrain_snow": ExtResource("60_rpot8"),

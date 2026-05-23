@@ -15,8 +15,8 @@ func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:
 		sprite.play(&"open")
 		
 		var object: Node2D = spawn.instantiate()
-		get_parent().add_child.call_deferred(object)
-		get_parent().move_child.call_deferred(object, get_index())
+		get_parent().add_child(object)
+		get_parent().move_child(object, get_index())
 		object.position = position
 		
 		await sprite.animation_finished

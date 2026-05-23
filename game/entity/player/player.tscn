@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b4nw5k2oa3ro0"]
 
 [ext_resource type="Script" uid="uid://c7gtlwcfr4qrc" path="res://game/entity/player/player.gd" id="1_oic1i"]
-[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_handler.gd" id="2_51d5m"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="2_51d5m"]
 [ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="2_cawmy"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_cjmyu"]
 [ext_resource type="Texture2D" uid="uid://2gs8g3k5v6ti" path="res://assets/textures/entity/player/mario/crouch.png" id="2_conr4"]
@@ -795,12 +795,12 @@ _data = {
 &"triple_jump": SubResource("Animation_aln35")
 }
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_2swmp"]
-atlas = ExtResource("2_xt77v")
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyrvb"]
+atlas = ExtResource("53_ketxm")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_ketxm"]
-diffuse_texture = SubResource("AtlasTexture_2swmp")
+diffuse_texture = SubResource("AtlasTexture_kyrvb")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d635j"]
 atlas = ExtResource("51_d635j")
@@ -808,10 +808,6 @@ region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j002l"]
 atlas = ExtResource("2_conr4")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kyrvb"]
-atlas = ExtResource("53_ketxm")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kw6gy"]
@@ -844,6 +840,10 @@ region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ndkiv"]
 atlas = ExtResource("60_5ygwk")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2swmp"]
+atlas = ExtResource("2_xt77v")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3h1ly"]
@@ -1105,7 +1105,10 @@ radius = 5.25
 height = 10.5
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fstnu"]
-size = Vector2(40, 18)
+size = Vector2(40, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ketxm"]
+size = Vector2(22, 12.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d635j"]
 size = Vector2(12, 3)
@@ -1124,8 +1127,8 @@ metadata/_custom_type_script = "uid://drtqc6at2evph"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2swmp"]
 size = Vector2(8, 23)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ae0hi"]
-radius = 2.236068
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3h1ly"]
+size = Vector2(12, 23)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i5qpf"]
 size = Vector2(4, 4)
@@ -1182,7 +1185,7 @@ _movement_handler = NodePath("Handlers/MovementHandler")
 _sprite_handler = NodePath("Handlers/SpriteHandler")
 sprite = NodePath("Doll")
 components_root = NodePath("Components")
-collision_shapes = [NodePath("BaseCollision"), NodePath("GroundPoundCollision"), NodePath("DiveCollision"), NodePath("Hitboxes/GroundPound/CollisionShape2D")]
+collision_shapes = [NodePath("BaseCollision"), NodePath("GroundPoundCollision"), NodePath("DiveCollision"), NodePath("Hitboxes/GroundPound/CollisionShape2D"), NodePath("Hitboxes/Dive/CollisionShape2D")]
 state_machine = NodePath("StateMachine")
 
 [node name="StateMachine" type="Node" parent="." unique_id=49398394 node_paths=PackedStringArray("initial_state", "sprite", "animation_player", "sfx_root", "__states")]
@@ -1192,7 +1195,8 @@ root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last_editor_zoom = 0.2593743
+__last__editor_position = Vector2(-970.235, 171.25037)
+__last_editor_zoom = 0.45949748
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),
@@ -1560,12 +1564,13 @@ __editor_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 __editor_superstate_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 __editor_superstate_wire_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 
-[node name="Dive" type="Node" parent="StateMachine/Dry/Airborne" unique_id=2082405443]
+[node name="Dive" type="Node" parent="StateMachine/Dry/Airborne" unique_id=2082405443 node_paths=PackedStringArray("collision_enabled_shapes")]
 script = ExtResource("10_aln35")
 launch_y_boost = 80.0
 rotation_curve = SubResource("Curve_aln35")
 y_velocity_to_rotation_offset_curve = SubResource("Curve_ioda6")
 sprite_animation_name = &"dive"
+collision_enabled_shapes = [NodePath("../../../../DiveCollision"), NodePath("../../../../Hitboxes/Dive/CollisionShape2D")]
 sfx_enter = SubResource("Resource_ndkiv")
 __editor_name = &"dive"
 __editor_position = Vector2(-400, -480)
@@ -1691,7 +1696,7 @@ script = ExtResource("6_y6elw")
 sprite_animation_name = &"floor_slide"
 sprite_offset_enabled = true
 sprite_offset_value = Vector2(0, 4)
-collision_enabled_shapes = [NodePath("../../../DiveCollision")]
+collision_enabled_shapes = [NodePath("../../../DiveCollision"), NodePath("../../../Hitboxes/Dive/CollisionShape2D")]
 __editor_name = &"floorslide"
 __editor_position = Vector2(-1420, -940)
 __editor_uuid = &"56a353ee-c4c2-458c-a018-6302daa71851"
@@ -1847,7 +1852,7 @@ canvas_texture = SubResource("CanvasTexture_ketxm")
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
-current_animation = "spin_loop"
+current_animation = "dive"
 current_frame = 0
 speed_scale = 1.0
 playing = false
@@ -1893,6 +1898,7 @@ disabled = true
 [node name="Hitboxes" type="Node2D" parent="." unique_id=1409973495]
 
 [node name="Spin" type="Area2D" parent="Hitboxes" unique_id=1300299390]
+visible = false
 position = Vector2(2, -10)
 monitoring = false
 script = ExtResource("19_1wiqr")
@@ -1906,6 +1912,24 @@ metadata/_custom_type_script = "uid://c103bnb5445y3"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/Spin" unique_id=1772297716]
 position = Vector2(0, 5)
 shape = SubResource("RectangleShape2D_fstnu")
+disabled = true
+debug_color = Color(0.7, 0, 0, 0.41960785)
+
+[node name="Dive" type="Area2D" parent="Hitboxes" unique_id=1123265507]
+position = Vector2(2, -10)
+monitoring = false
+script = ExtResource("19_1wiqr")
+hitbox_ids = Array[String](["player", "spin"])
+hit_expression = "abs(velocity.x) > 200"
+damage_amount = 1.0
+damage_type = 1
+has_knockback = true
+knockback_vector = Vector2(150, -135)
+metadata/_custom_type_script = "uid://c103bnb5445y3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/Dive" unique_id=385964569]
+position = Vector2(1, 10.25)
+shape = SubResource("RectangleShape2D_ketxm")
 disabled = true
 debug_color = Color(0.7, 0, 0, 0.41960785)
 
@@ -1926,6 +1950,7 @@ shape = SubResource("RectangleShape2D_d635j")
 debug_color = Color(0.7, 0, 0, 0.41960785)
 
 [node name="GroundPound" type="Area2D" parent="Hitboxes" unique_id=677079913]
+visible = false
 position = Vector2(2, 10)
 collision_layer = 0
 collision_mask = 0
@@ -1959,10 +1984,11 @@ debug_color = Color(0.6901961, 0.7019608, 0, 0.41960785)
 collision_mask = 0
 monitoring = false
 metadata/player = true
+metadata/entity_region = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Regions/DetectionShape" unique_id=324087725]
-position = Vector2(2, -2)
-shape = SubResource("CircleShape2D_ae0hi")
+position = Vector2(2, -3.5)
+shape = SubResource("RectangleShape2D_3h1ly")
 
 [node name="WaterCheck" type="Area2D" parent="Regions" unique_id=258307688]
 visible = false
@@ -2048,3 +2074,6 @@ text = "<state>"
 horizontal_alignment = 1
 script = SubResource("GDScript_aln35")
 player = NodePath("..")
+
+[connection signal="area_entered" from="Regions/WaterCheck" to="." method="_on_water_check_area_entered"]
+[connection signal="area_exited" from="Regions/WaterCheck" to="." method="_on_water_check_area_exited"]

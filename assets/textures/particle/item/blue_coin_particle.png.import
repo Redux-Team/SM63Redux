@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bw7x2natxfi0i"
-path="res://.godot/imported/explosion.png-fe4e0f45f8da103bce813fd8ae9da981.ctex"
+uid="uid://c4w3x26qip4ou"
+path="res://.godot/imported/blue_coin_particle.png-582669149d9e58f7680c3ec0ee20c0d3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/particle/entity/explosion.png"
-dest_files=["res://.godot/imported/explosion.png-fe4e0f45f8da103bce813fd8ae9da981.ctex"]
+source_file="res://assets/textures/particle/item/blue_coin_particle.png"
+dest_files=["res://.godot/imported/blue_coin_particle.png-582669149d9e58f7680c3ec0ee20c0d3.ctex"]
 
 [params]
 

@@ -99,6 +99,10 @@ var jump_chain_timer: float = 0.0
 ## lock the sprite flipping
 @export var lock_flipping: bool = false
 
+# The held "coin" value of the power meter for the player
+var power: int = 0
+
+
 var cam: Camera2D
 
 
@@ -251,3 +255,13 @@ func get_terrain() -> String:
 		return floor_slope_raycast.get_collider().get_meta(&"terrain", "generic")
 	
 	return ""
+
+
+func _on_water_check_area_entered(area: Area2D) -> void:
+	if area.has_meta("water"):
+		is_in_water = true
+
+
+func _on_water_check_area_exited(area: Area2D) -> void:
+	if area.has_meta("water"):
+		is_in_water = false

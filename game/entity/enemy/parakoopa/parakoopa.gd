@@ -23,6 +23,9 @@ func _ready() -> void:
 
 
 func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:
+	if is_queued_for_deletion():
+		return
+	
 	if source_hitbox.damage_type == HitBox.DamageType.STRIKE:
 		var shell_node: KoopaShell = shell.instantiate()
 		Singleton.spawn_sibling(self, shell_node, ["position", "scale"])

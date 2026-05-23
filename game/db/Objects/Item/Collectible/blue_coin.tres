@@ -1,7 +1,14 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://c58m38fqamx21"]
 
+[ext_resource type="PackedScene" uid="uid://qv5hjtro13oe" path="res://game/db/Objects/Item/Collectible/blue_coin_ld.tscn" id="1_2dhij"]
+[ext_resource type="Texture2D" uid="uid://22oj4efhkg7d" path="res://assets/textures/item/collectible/blue_coin.png" id="1_5yiej"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_j4fw6"]
+[ext_resource type="PackedScene" uid="uid://bxwafrripj1kp" path="res://game/object/coin/blue_coin/blue_coin.tscn" id="1_p8txe"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_5yiej"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2dhij"]
+atlas = ExtResource("1_5yiej")
+region = Rect2(-15, -15, 48, 48)
 
 [resource]
 script = ExtResource("2_5yiej")
@@ -11,5 +18,8 @@ category_string = "Item"
 subpath = "Collectible/blue_coin"
 group_path = "Collectible"
 ld_object_path = "Item/Collectible/blue_coin"
+ld_entry_texture = SubResource("AtlasTexture_2dhij")
+ld_editor_instance = ExtResource("1_2dhij")
 ld_index_id = "coin_2"
+game_instance = ExtResource("1_p8txe")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

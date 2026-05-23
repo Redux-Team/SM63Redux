@@ -49,8 +49,8 @@ func get_multiplayer_handler() -> MultiplayerHandler:
 
 func spawn_sibling(root_node: Node, node: Node, _shared_properties: PackedStringArray = []) -> void:
 	var index: int = root_node.get_index()
-	root_node.get_parent().add_child(node)
-	root_node.get_parent().move_child(node, index)
+	root_node.get_parent().add_child.call_deferred(node)
+	root_node.get_parent().move_child.call_deferred(node, index)
 	
 	for _prop: String in _shared_properties:
 		node.set(_prop, root_node.get(_prop))
