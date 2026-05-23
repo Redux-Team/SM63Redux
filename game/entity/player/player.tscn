@@ -62,6 +62,10 @@
 [ext_resource type="AudioStream" uid="uid://cfcnya3ow457f" path="res://assets/sfx/player/mario/ground_pound/ground_pound_start.wav" id="34_rlrt6"]
 [ext_resource type="AudioStream" uid="uid://cvwxucpxjv4s2" path="res://assets/sfx/player/mario/damage/ough.ogg" id="37_d635j"]
 [ext_resource type="AudioStream" uid="uid://dly1p4x8t0r70" path="res://assets/sfx/player/mario/ground_pound/ground_pound_generic.wav" id="37_sxdt2"]
+[ext_resource type="Script" uid="uid://oxowxqwt4py6" path="res://game/entity/player/shared/states/submerged.gd" id="38_3h1ly"]
+[ext_resource type="Script" uid="uid://kvimrb1ymehh" path="res://game/entity/player/shared/states/swim_spin.gd" id="39_mjy7s"]
+[ext_resource type="Script" uid="uid://dkr10jumwrvmd" path="res://game/entity/player/shared/states/swim_up.gd" id="39_ohvaq"]
+[ext_resource type="AudioStream" uid="uid://bfd6xls4jjoac" path="res://assets/sfx/player/mario/spin/spin_water_1.wav" id="41_5ygwk"]
 [ext_resource type="Texture2D" uid="uid://bvpu1uexfy52t" path="res://assets/textures/entity/player/mario/bonk.png" id="51_d635j"]
 [ext_resource type="Texture2D" uid="uid://b3fvoxgujojvl" path="res://assets/textures/entity/player/mario/dive_fall.png" id="53_ketxm"]
 [ext_resource type="Texture2D" uid="uid://bw7pv1724v3n4" path="res://assets/textures/entity/player/mario/double_jump_fall.png" id="55_3h1ly"]
@@ -176,6 +180,16 @@ __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "12a4f3c3-9986-4098-a5e8-79b8a8951847"
 __to_node_uuid = "31d0deb8-7915-434d-b931-44f3244dadf5"
 
+[sub_resource type="Resource" id="Resource_mvhnk"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_input_swim"
+__from_uuid = "7c9bf00f-ebfd-4920-b0c8-fe79e3d3ccb7"
+__to_uuid = "b6fb3a09-ab02-4680-8817-4127106f90df"
+__from_node_uuid = "755306f5-bc02-441b-b1f5-312d4f5a9f2f"
+__to_node_uuid = "0131c243-e7b5-4453-a69a-1d95b6e48536"
+
 [sub_resource type="Resource" id="Resource_6wk8s"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
@@ -218,6 +232,16 @@ __to_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
 __from_node_uuid = "9926b8f7-53dc-4adb-a5e1-b7a3daa778e5"
 __to_node_uuid = "0f4b75f7-bfab-489e-abee-b73251d54a97"
 
+[sub_resource type="Resource" id="Resource_3ro4y"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_input_spin"
+__from_uuid = "fac7caf1-9473-4b51-87ce-64f33b12c026"
+__to_uuid = "cb2bce9e-79ca-46c1-9bc1-ab2d16c15822"
+__from_node_uuid = "e60b0bcb-296c-4e8f-9bcb-9ac45efe17bf"
+__to_node_uuid = "8b19d8b2-a53b-48b7-88f0-a29f979c4120"
+
 [sub_resource type="Resource" id="Resource_b6ajd"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
@@ -227,6 +251,16 @@ __from_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __to_uuid = "5ed7fb5d-7e2c-4110-92cb-cf15f641072e"
 __from_node_uuid = "9d91ab68-66a0-4afc-9cc4-11e364931ace"
 __to_node_uuid = "6a55bcd8-ceeb-47a0-857d-a18349c507f5"
+
+[sub_resource type="Resource" id="Resource_5citm"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "swim_buffer_time == 0 && !is_input_swim"
+__from_uuid = "b6fb3a09-ab02-4680-8817-4127106f90df"
+__to_uuid = "fac7caf1-9473-4b51-87ce-64f33b12c026"
+__from_node_uuid = "0131c243-e7b5-4453-a69a-1d95b6e48536"
+__to_node_uuid = "5fa0d8bd-5368-4bd5-9caf-872e395c78e3"
 
 [sub_resource type="Resource" id="Resource_8um7f"]
 resource_local_to_scene = true
@@ -299,6 +333,16 @@ __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "fa056152-beb4-4b59-ac26-920719c61203"
 __to_node_uuid = "7cae40dc-c5e3-454c-b0d0-183d3e1c76a4"
 
+[sub_resource type="Resource" id="Resource_hmgs0"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_input_swim"
+__from_uuid = "fac7caf1-9473-4b51-87ce-64f33b12c026"
+__to_uuid = "b6fb3a09-ab02-4680-8817-4127106f90df"
+__from_node_uuid = "d32145e0-df77-48b9-b77b-2b479ba54b9d"
+__to_node_uuid = "0131c243-e7b5-4453-a69a-1d95b6e48536"
+
 [sub_resource type="Resource" id="Resource_ae0hi"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
@@ -318,6 +362,16 @@ __from_uuid = "54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
 __to_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
 __from_node_uuid = "b3be6cea-eb96-4799-97ff-5f53e7245198"
 __to_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
+
+[sub_resource type="Resource" id="Resource_d041h"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "abs(move_dir) > 0.1 && is_on_floor()"
+__from_uuid = "fac7caf1-9473-4b51-87ce-64f33b12c026"
+__to_uuid = "7c9bf00f-ebfd-4920-b0c8-fe79e3d3ccb7"
+__from_node_uuid = "d32145e0-df77-48b9-b77b-2b479ba54b9d"
+__to_node_uuid = "755306f5-bc02-441b-b1f5-312d4f5a9f2f"
 
 [sub_resource type="Resource" id="Resource_3h1ly"]
 resource_local_to_scene = true
@@ -358,6 +412,16 @@ __from_uuid = "56a353ee-c4c2-458c-a018-6302daa71851"
 __to_uuid = "7a11481f-96a2-4861-99a6-5a97b2628e11"
 __from_node_uuid = "abed3dd4-95f4-45f4-a3a0-32298e7cc932"
 __to_node_uuid = "9926b8f7-53dc-4adb-a5e1-b7a3daa778e5"
+
+[sub_resource type="Resource" id="Resource_ckj6b"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "!is_input_spin && get_active_state_uptime() > 0.6"
+__from_uuid = "cb2bce9e-79ca-46c1-9bc1-ab2d16c15822"
+__to_uuid = "fac7caf1-9473-4b51-87ce-64f33b12c026"
+__from_node_uuid = "8b19d8b2-a53b-48b7-88f0-a29f979c4120"
+__to_node_uuid = "7c620763-2d9a-48d4-92bd-44c0f1f5151c"
 
 [sub_resource type="Resource" id="Resource_icsuc"]
 resource_local_to_scene = true
@@ -408,6 +472,16 @@ __from_uuid = "153c8a33-2d47-4ccc-97e3-9e16b0b05f9c"
 __to_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
 __from_node_uuid = "b5db5b39-5c86-4edb-87c2-91b17ede4ad5"
 __to_node_uuid = "0f4b75f7-bfab-489e-abee-b73251d54a97"
+
+[sub_resource type="Resource" id="Resource_enjxo"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_in_water"
+__from_uuid = "b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
+__to_uuid = "fac7caf1-9473-4b51-87ce-64f33b12c026"
+__from_node_uuid = "10ba8e2b-52bf-45c5-adc7-844eb827c829"
+__to_node_uuid = "05c13521-729c-490b-8643-b76750948b19"
 
 [sub_resource type="Resource" id="Resource_6b4i6"]
 resource_local_to_scene = true
@@ -489,6 +563,16 @@ __to_uuid = "1f487687-d9c8-496b-9be9-7fd09f196b62"
 __from_node_uuid = "1d0315de-ccff-4b38-b5b1-f5ece6941d7b"
 __to_node_uuid = "1c616876-0e1b-4cbc-9519-7fabb4d0d419"
 
+[sub_resource type="Resource" id="Resource_w1bew"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_input_spin"
+__from_uuid = "7c9bf00f-ebfd-4920-b0c8-fe79e3d3ccb7"
+__to_uuid = "cb2bce9e-79ca-46c1-9bc1-ab2d16c15822"
+__from_node_uuid = "2941c16b-ed40-476b-b9c0-3baaee9a1e99"
+__to_node_uuid = "8b19d8b2-a53b-48b7-88f0-a29f979c4120"
+
 [sub_resource type="Resource" id="Resource_yna46"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
@@ -569,6 +653,46 @@ __from_uuid = "b3fdc091-1261-4006-a130-d7a725b6b4cd"
 __to_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __from_node_uuid = "167d2846-17ec-4534-a26e-c582cae80f3a"
 __to_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
+
+[sub_resource type="Resource" id="Resource_42p6x"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "!is_in_water && velocity.y >= 0"
+__from_uuid = "1c0b8823-6179-4117-9b5a-5a7e7c720250"
+__to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+__from_node_uuid = "11a484af-b606-4bd5-9549-d14f87307166"
+__to_node_uuid = "67e7fafe-11fa-4846-94cb-7d569e788cf9"
+
+[sub_resource type="Resource" id="Resource_sj7k7"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "!is_in_water && velocity.y < 0"
+__from_uuid = "1c0b8823-6179-4117-9b5a-5a7e7c720250"
+__to_uuid = "a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+__from_node_uuid = "11a484af-b606-4bd5-9549-d14f87307166"
+__to_node_uuid = "60a68981-ade6-43d5-961f-e3a21bf56433"
+
+[sub_resource type="Resource" id="Resource_sbpf8"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "velocity.y > 50"
+__from_uuid = "a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+__to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+__from_node_uuid = "61dbc363-2b96-44e3-b341-13ef60566d2b"
+__to_node_uuid = "47d80ca0-eba2-4f2f-abe5-5d1a702997a6"
+
+[sub_resource type="Resource" id="Resource_fcy6w"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_on_floor()"
+__from_uuid = "a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
+__from_node_uuid = "61dbc363-2b96-44e3-b341-13ef60566d2b"
+__to_node_uuid = "bee3ecfd-b265-4bfc-b4ea-e7afe4a62675"
 
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
@@ -672,6 +796,20 @@ metadata/_custom_type_script = "uid://cd63gwefr4fp4"
 script = ExtResource("7_ioda6")
 playlist = SubResource("Resource_d3nks")
 bus = 3
+metadata/_custom_type_script = "uid://deiaa5u8esvnc"
+
+[sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_3h1ly"]
+cutoff_hz = 2500.0
+
+[sub_resource type="Resource" id="Resource_gdvj3"]
+script = ExtResource("13_8yq6v")
+tracklist = Array[AudioStream]([ExtResource("41_5ygwk")])
+metadata/_custom_type_script = "uid://cd63gwefr4fp4"
+
+[sub_resource type="Resource" id="Resource_cpfge"]
+script = ExtResource("7_ioda6")
+playlist = SubResource("Resource_gdvj3")
+stop_on_exit = true
 metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
 [sub_resource type="Resource" id="Resource_fstnu"]
@@ -799,7 +937,7 @@ _data = {
 atlas = ExtResource("53_ketxm")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_ketxm"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ohvaq"]
 diffuse_texture = SubResource("AtlasTexture_kyrvb")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d635j"]
@@ -858,17 +996,9 @@ region = Rect2(0, 0, 64, 64)
 atlas = ExtResource("10_j8m7m")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_2mee4"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ohvaq"]
 atlas = ExtResource("10_j8m7m")
-region = Rect2(0, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gk7md"]
-atlas = ExtResource("10_j8m7m")
-region = Rect2(48, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4xud8"]
-atlas = ExtResource("10_j8m7m")
-region = Rect2(96, 0, 48, 48)
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6saf5"]
 atlas = ExtResource("5_0rdsw")
@@ -1022,13 +1152,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_2mee4")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gk7md")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4xud8")
+"texture": SubResource("AtlasTexture_ohvaq")
 }],
 "loop": true,
 "name": &"swim_walk",
@@ -1195,8 +1319,8 @@ root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(-970.235, 171.25037)
-__last_editor_zoom = 0.45949748
+__last__editor_position = Vector2(1154.7086, 547.37695)
+__last_editor_zoom = 0.5559917
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),
@@ -1268,11 +1392,15 @@ __transitions = Dictionary[StringName, ExtResource("3_0jrw7")]({
 &"31d4fe48-f3a7-4bd7-b97b-aec36f09b162": SubResource("Resource_5ygwk"),
 &"33685278-85f2-4ace-834c-47cf977ef188": SubResource("Resource_0vqd7"),
 &"34499073-e207-49f7-a7cf-bd50ab62d9dc": SubResource("Resource_l0vtf"),
+&"3d7a1434-2e3d-413e-9539-1d7837c4a58c": SubResource("Resource_mvhnk"),
 &"3e941e54-3ecf-41eb-a95e-4dde2623e08a": SubResource("Resource_6wk8s"),
 &"40032a9d-9c67-47b1-9e8b-81622c3bcb7d": SubResource("Resource_5jc0j"),
+&"42965cfc-ca0c-4c3f-a535-5707ed81952b": SubResource("Resource_fcy6w"),
 &"43c82f60-4fc3-4632-8322-38f178aeda49": SubResource("Resource_h2xdj"),
 &"44d1e688-3ad7-461d-af69-40d144acadf2": SubResource("Resource_sxdt2"),
+&"47633dc1-fd93-4b35-82eb-4f72db1db0ca": SubResource("Resource_3ro4y"),
 &"492fb513-a7b5-48b9-bd50-6d7021a4d623": SubResource("Resource_b6ajd"),
+&"51b8cbb3-adf2-4aa2-96e4-2d8799482bbc": SubResource("Resource_5citm"),
 &"53bad02f-ca44-42ca-83a1-4599c4b97621": SubResource("Resource_8um7f"),
 &"55583825-433c-48ca-87e8-c8d5193536f0": SubResource("Resource_ioda6"),
 &"5dda3fb4-76b2-4742-87b6-de8f1d2ccb9f": SubResource("Resource_sldje"),
@@ -1280,25 +1408,33 @@ __transitions = Dictionary[StringName, ExtResource("3_0jrw7")]({
 &"666e45d4-ccde-4c42-b835-912a00fe3c4a": SubResource("Resource_6qpfs"),
 &"6885fc21-c43b-4d73-a9fb-c0dde2c6f6e1": SubResource("Resource_6rqdb"),
 &"68d8db76-5810-4df6-a670-45997d6896e2": SubResource("Resource_wsr8k"),
+&"6d0e5321-de0f-4ccb-af92-d9e5a1628b68": SubResource("Resource_42p6x"),
+&"70aac455-f91d-4e81-bc8a-57723e575585": SubResource("Resource_hmgs0"),
 &"77d5df5c-3d1a-4e02-900c-dda32e2dbf64": SubResource("Resource_ae0hi"),
 &"78082638-3d9c-4311-b124-ecbffe25c131": SubResource("Resource_ntea6"),
+&"78190f64-737a-4db5-88d6-34fc310cea98": SubResource("Resource_d041h"),
 &"975c29c6-0eeb-4fda-aae0-13f45fe8e62d": SubResource("Resource_3h1ly"),
 &"984f903a-a3f5-4315-a856-d288e577c772": SubResource("Resource_fx7qh"),
 &"9ad4c11a-cef7-4fa7-851f-98afa9890c5d": SubResource("Resource_mjy7s"),
 &"9b87e1b4-b003-44ab-992d-931b8a965951": SubResource("Resource_8vwb3"),
+&"9caa4b27-86ec-4c29-bfe0-d5141c0f45d7": SubResource("Resource_ckj6b"),
+&"9db22938-a9bc-4c9b-a679-fbcfeec1224f": SubResource("Resource_sbpf8"),
 &"a2eda702-f820-400a-bf52-dd2cfbe3fae8": SubResource("Resource_icsuc"),
 &"a7a93b41-c759-4a33-95eb-b237411e92d9": SubResource("Resource_ria7k"),
 &"a9caf83a-dcf8-42bd-8f8f-37dc6dc3bd97": SubResource("Resource_5mhew"),
 &"ac4793c5-54ff-4f64-bb18-5e2f1f25fe46": SubResource("Resource_001bj"),
 &"ac47bad9-ba1c-4fd9-90a8-19159b6f40f0": SubResource("Resource_3i503"),
+&"ad7a71ac-06a3-46b0-bd2a-88dfc7ea3737": SubResource("Resource_enjxo"),
 &"aeddfb49-d65a-4522-9dd2-00b34df62621": SubResource("Resource_6b4i6"),
 &"b59ae391-76d5-4a68-921b-c00bee5ea921": SubResource("Resource_02rvq"),
 &"b5b8a9f5-e463-4994-8920-28562b0ba3ca": SubResource("Resource_ketxm"),
 &"b797e1f8-f5a9-4489-a064-b962b6e7bfe3": SubResource("Resource_eihrn"),
 &"b8b4b892-5c5c-439f-992f-7893ab7b87aa": SubResource("Resource_tb30q"),
+&"b940fa3f-7e98-47fd-a804-c3df76ca9e29": SubResource("Resource_sj7k7"),
 &"d1fc7046-1e0f-4347-ab02-b9e62e93d7cb": SubResource("Resource_aln35"),
 &"d2a7a244-8db2-4689-9ed8-70c69e56ae18": SubResource("Resource_3grnp"),
 &"d498b371-42f1-4ae5-8eaf-a88df4ac1f66": SubResource("Resource_dtinm"),
+&"d4bde444-752a-4278-b701-3114740f9763": SubResource("Resource_w1bew"),
 &"daa11140-ecd7-4e1b-ae94-be1e232c1421": SubResource("Resource_yna46"),
 &"e3837ee6-54ed-4b81-849f-e43a559a01a6": SubResource("Resource_hi5jf"),
 &"e79a83e6-cd15-4ccf-8f16-74b60b1e9141": SubResource("Resource_h2rmy"),
@@ -1313,6 +1449,14 @@ __aliases = {
 "original_uuid": &"b3fdc091-1261-4006-a130-d7a725b6b4cd",
 "position": Vector2(4680, -520)
 },
+&"0131c243-e7b5-4453-a69a-1d95b6e48536": {
+"original_uuid": &"b6fb3a09-ab02-4680-8817-4127106f90df",
+"position": Vector2(-720, 2180)
+},
+&"05c13521-729c-490b-8643-b76750948b19": {
+"original_uuid": &"fac7caf1-9473-4b51-87ce-64f33b12c026",
+"position": Vector2(-2240, 2420)
+},
 &"0d111c82-e1fd-4f68-b56e-d964632b466d": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
 "position": Vector2(6380, 1940)
@@ -1320,6 +1464,14 @@ __aliases = {
 &"0f4b75f7-bfab-489e-abee-b73251d54a97": {
 "original_uuid": &"0dd74506-66e0-4267-b86b-0572da305c2a",
 "position": Vector2(6580, -640)
+},
+&"10ba8e2b-52bf-45c5-adc7-844eb827c829": {
+"original_uuid": &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3",
+"position": Vector2(-2580, 2420)
+},
+&"11a484af-b606-4bd5-9549-d14f87307166": {
+"original_uuid": &"1c0b8823-6179-4117-9b5a-5a7e7c720250",
+"position": Vector2(-2920, 2760)
 },
 &"12a4f3c3-9986-4098-a5e8-79b8a8951847": {
 "original_uuid": &"5f26c6ee-ee21-44a2-9986-4f30b9f89611",
@@ -1349,6 +1501,10 @@ __aliases = {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
 "position": Vector2(2760, -480)
 },
+&"2941c16b-ed40-476b-b9c0-3baaee9a1e99": {
+"original_uuid": &"7c9bf00f-ebfd-4920-b0c8-fe79e3d3ccb7",
+"position": Vector2(-1620, 2800)
+},
 &"31d0deb8-7915-434d-b931-44f3244dadf5": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
 "position": Vector2(6580, -380)
@@ -1377,6 +1533,22 @@ __aliases = {
 "original_uuid": &"0dd74506-66e0-4267-b86b-0572da305c2a",
 "position": Vector2(6380, 1340)
 },
+&"5fa0d8bd-5368-4bd5-9caf-872e395c78e3": {
+"original_uuid": &"fac7caf1-9473-4b51-87ce-64f33b12c026",
+"position": Vector2(-380, 2180)
+},
+&"60a68981-ade6-43d5-961f-e3a21bf56433": {
+"original_uuid": &"a8371ea8-4f4b-4cdc-8345-14368f1455d3",
+"position": Vector2(-2320, 2700)
+},
+&"61dbc363-2b96-44e3-b341-13ef60566d2b": {
+"original_uuid": &"a8371ea8-4f4b-4cdc-8345-14368f1455d3",
+"position": Vector2(2340, 1880)
+},
+&"67e7fafe-11fa-4846-94cb-7d569e788cf9": {
+"original_uuid": &"d8126d47-03c3-4a9b-abee-8c68263ad4ab",
+"position": Vector2(-2320, 2900)
+},
 &"6874c538-3b2b-4bf6-8eb7-064783902a81": {
 "original_uuid": &"d8126d47-03c3-4a9b-abee-8c68263ad4ab",
 "position": Vector2(6400, 2240)
@@ -1393,6 +1565,10 @@ __aliases = {
 "original_uuid": &"b3fdc091-1261-4006-a130-d7a725b6b4cd",
 "position": Vector2(4560, 960)
 },
+&"755306f5-bc02-441b-b1f5-312d4f5a9f2f": {
+"original_uuid": &"7c9bf00f-ebfd-4920-b0c8-fe79e3d3ccb7",
+"position": Vector2(-1180, 2340)
+},
 &"79751927-f38e-4c65-bf16-966deab6d21a": {
 "original_uuid": &"b3fdc091-1261-4006-a130-d7a725b6b4cd",
 "position": Vector2(3280, -780)
@@ -1405,6 +1581,10 @@ __aliases = {
 "original_uuid": &"fcde7a01-9caf-4d7a-8016-ae92a2e45514",
 "position": Vector2(3160, 500)
 },
+&"7c620763-2d9a-48d4-92bd-44c0f1f5151c": {
+"original_uuid": &"fac7caf1-9473-4b51-87ce-64f33b12c026",
+"position": Vector2(-800, 2700)
+},
 &"7cae40dc-c5e3-454c-b0d0-183d3e1c76a4": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
 "position": Vector2(7840, -520)
@@ -1416,6 +1596,10 @@ __aliases = {
 &"88b67923-0905-4892-96d4-33af90aa9e2d": {
 "original_uuid": &"72d567dd-e3ab-46f9-be2b-c2d0cebb27e8",
 "position": Vector2(3500, -620)
+},
+&"8b19d8b2-a53b-48b7-88f0-a29f979c4120": {
+"original_uuid": &"cb2bce9e-79ca-46c1-9bc1-ab2d16c15822",
+"position": Vector2(-1200, 2700)
 },
 &"8f3ccb62-9749-4b1d-b817-1026a049a6e7": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
@@ -1477,6 +1661,10 @@ __aliases = {
 "original_uuid": &"5f26c6ee-ee21-44a2-9986-4f30b9f89611",
 "position": Vector2(4440, 1800)
 },
+&"d32145e0-df77-48b9-b77b-2b479ba54b9d": {
+"original_uuid": &"fac7caf1-9473-4b51-87ce-64f33b12c026",
+"position": Vector2(-1620, 2180)
+},
 &"d66f50c1-6db3-45f0-900c-3bc04f7b7ff5": {
 "original_uuid": &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c",
 "position": Vector2(3160, 760)
@@ -1488,6 +1676,10 @@ __aliases = {
 "e4af21b2-4317-4459-8d2a-08893f48551a": {
 "original_uuid": "d872f348-fd78-42a4-8af6-93e4baf91db9",
 "position": Vector2(-1780, 960)
+},
+&"e60b0bcb-296c-4e8f-9bcb-9ac45efe17bf": {
+"original_uuid": &"fac7caf1-9473-4b51-87ce-64f33b12c026",
+"position": Vector2(-1620, 2620)
 },
 &"ef17b68d-10e2-4919-8e7d-84844258bfb6": {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
@@ -1515,6 +1707,7 @@ metadata/_custom_type_script = "uid://utibsg6xkllx"
 
 [node name="Dry" type="Node" parent="StateMachine" unique_id=1790975957]
 script = ExtResource("7_je5mu")
+always_transition = true
 __editor_name = &"dry"
 __editor_position = Vector2(-1840, -480)
 __editor_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
@@ -1580,6 +1773,7 @@ __editor_superstate_wire_uuid = &"d8126d47-03c3-4a9b-abee-8c68263ad4ab"
 
 [node name="IdleJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1248860808]
 script = ExtResource("4_4j27x")
+sprite_animation_name = &"jump"
 __editor_name = &"idle_jump"
 __editor_position = Vector2(-400, -200)
 __editor_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
@@ -1716,13 +1910,16 @@ __editor_superstate_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 __editor_superstate_wire_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
 
 [node name="Submerged" type="Node" parent="StateMachine" unique_id=1525831935]
-script = ExtResource("4_4j27x")
+script = ExtResource("38_3h1ly")
+submerged_bus_effects = Array[AudioEffect]([SubResource("AudioEffectLowPassFilter_3h1ly")])
+always_transition = true
 __editor_name = &"Submerged"
 __editor_position = Vector2(-1440, 760)
 __editor_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
 
 [node name="SwimIdle" type="Node" parent="StateMachine/Submerged" unique_id=203521133]
 script = ExtResource("4_4j27x")
+sprite_animation_name = &"swim_idle"
 __editor_name = &"swim_idle"
 __editor_position = Vector2(-840, 740)
 __editor_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
@@ -1730,10 +1927,11 @@ __editor_superstate_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
 __editor_superstate_wire_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
 
 [node name="Swim" type="Node" parent="StateMachine/Submerged" unique_id=235025815]
-script = ExtResource("4_4j27x")
-sprite_animation_name = &"spin_start"
-sprite_stop_on_exit = true
-sprite_chain = Array[StringName]([&"spin_loop"])
+script = ExtResource("39_ohvaq")
+burst_rise_speed = 150.0
+burst_rise_smoothing = 100.0
+neutral_sink_speed = 1000.0
+sprite_animation_name = &"swim"
 __editor_name = &"swim"
 __editor_position = Vector2(-240, 460)
 __editor_uuid = &"b6fb3a09-ab02-4680-8817-4127106f90df"
@@ -1742,14 +1940,19 @@ __editor_superstate_wire_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
 
 [node name="SwimWalk" type="Node" parent="StateMachine/Submerged" unique_id=919158494]
 script = ExtResource("4_4j27x")
+sprite_animation_name = &"swim_walk"
 __editor_name = &"swim_walk"
 __editor_position = Vector2(-240, 740)
 __editor_uuid = &"7c9bf00f-ebfd-4920-b0c8-fe79e3d3ccb7"
 __editor_superstate_uuid = &"1c0b8823-6179-4117-9b5a-5a7e7c720250"
 __editor_superstate_wire_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
 
-[node name="SwimSpin" type="Node" parent="StateMachine/Submerged" unique_id=1905840328]
-script = ExtResource("4_4j27x")
+[node name="SwimSpin" type="Node" parent="StateMachine/Submerged" unique_id=1905840328 node_paths=PackedStringArray("spin_hitbox")]
+script = ExtResource("39_mjy7s")
+spin_hitbox = NodePath("../../../Hitboxes/Spin")
+sprite_animation_name = &"spin_start"
+sprite_chain = Array[StringName]([&"spin_loop"])
+sfx_enter = SubResource("Resource_cpfge")
 __editor_name = &"swim_spin"
 __editor_position = Vector2(-240, 1020)
 __editor_uuid = &"cb2bce9e-79ca-46c1-9bc1-ab2d16c15822"
@@ -1844,11 +2047,11 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_ketxm")
+texture = SubResource("CanvasTexture_ohvaq")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_ketxm")
+canvas_texture = SubResource("CanvasTexture_ohvaq")
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")

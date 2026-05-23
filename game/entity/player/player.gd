@@ -259,9 +259,11 @@ func get_terrain() -> String:
 
 func _on_water_check_area_entered(area: Area2D) -> void:
 	if area.has_meta("water"):
+		print("in water!")
 		is_in_water = true
 
 
 func _on_water_check_area_exited(area: Area2D) -> void:
 	if area.has_meta("water"):
+		print("out water!")
 		is_in_water = false

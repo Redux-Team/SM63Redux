@@ -438,9 +438,6 @@ func _rebuild_add_menu() -> void:
 				break
 			selected_state = node
 	
-	for child: Node in add_node_menu.get_children():
-		child.queue_free()
-	
 	add_node_menu.clear()
 	add_node_menu.add_item("+ State", MenuItem.NEW_STATE)
 	add_node_menu.add_item("+ Annotation", MenuItem.NEW_ANNOTATION)
@@ -598,19 +595,26 @@ func _remap_node(node: EditorStateMachineStateNode, target_uuid: StringName) -> 
 		_sm().__aliases[node.uuid] = data
 		node.alias_of = target_uuid
 	else:
+		var old_uuid: StringName = StringName(node.uuid)
 		node.uuid = target_uuid
-	
-	for tid: StringName in _sm().__transitions:
-		var t: StateTransition = _sm().__transitions.get(tid) as StateTransition
-		if not t:
-			continue
-		if t.__from_node_uuid == node.uuid:
-			t.__from_uuid = target_uuid
-		if t.__to_node_uuid == node.uuid:
-			t.__to_uuid = target_uuid
+		node.name = target_uuid
+		
+		for tid: StringName in _sm().__transitions:
+			var t: StateTransition = _sm().__transitions.get(tid) as StateTransition
+			if not t:
+				continue
+			if t.__from_node_uuid == old_uuid:
+				t.__from_node_uuid = target_uuid
+				t.__from_uuid = target_uuid
+			if t.__to_node_uuid == old_uuid:
+				t.__to_node_uuid = target_uuid
+				t.__to_uuid = target_uuid
 	
 	node.title = target_state.__editor_name
 	node._update_script_button()
+	
+	clear_connections()
+	_restore_connections.call_deferred()
 
 
 func _add_entry_node() -> void:
@@ -791,7 +795,8 @@ func _on_state_node_selected(node: EditorStateMachineStateNode) -> void:
 			connected_uuids[StringName(conn.from_node)] = true
 			connected_uuids[StringName(conn.to_node)] = true
 	
-	for conn: Dictionary in get_connection_list():
+	var conns_snapshot: Array[Dictionary] = get_connection_list()
+	for conn: Dictionary in conns_snapshot:
 		if not connected_uuids.has(StringName(conn.from_node)) and not connected_uuids.has(StringName(conn.to_node)):
 			disconnect_node(conn.from_node, conn.from_port, conn.to_node, conn.to_port)
 	

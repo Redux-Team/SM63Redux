@@ -111,9 +111,12 @@ func load_state_machine(state_machine: StateMachine) -> void:
 func _refresh() -> void:
 	state_machine_graph_edit.clear_connections()
 	
+	var to_free: Array[Node] = []
 	for child: Node in graph_edit.get_children():
 		if child is GraphElement:
-			child.free()
+			to_free.append(child)
+	for child: Node in to_free:
+		child.free()
 	
 	state_machine_graph_edit.scroll_offset = _current_sm.__last__editor_position
 	state_machine_graph_edit.zoom = _current_sm.__last_editor_zoom

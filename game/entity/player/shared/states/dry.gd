@@ -11,8 +11,6 @@ func _on_physics_tick(_delta: float) -> void:
 	_handle_ground_pound()
 
 
-
-
 func _handle_ground_pound() -> void:
 	if not player.is_on_floor() and player.is_input_ground_pound:
 		state_machine.change_state(&"GroundPoundStart")

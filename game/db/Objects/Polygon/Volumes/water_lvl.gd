@@ -14,7 +14,6 @@ const MAX_SPLASHES: int = 8
 
 var _splash_positions: Array[float] = []
 var _splash_ages: Array[float] = []
-var _live_materials: Array[ShaderMaterial] = []
 
 
 func _on_init() -> void:
@@ -199,4 +198,4 @@ func _build_ribbon_mesh(points: PackedVector2Array, ribbon_width: float, mat: Sh
 func _sync_water_collision() -> void:
 	if not _water_collision or _outer_points.size() < 3:
 		return
-	_water_collision.polygon = _outer_points
+	_water_collision.polygon = _polygon.polygon
