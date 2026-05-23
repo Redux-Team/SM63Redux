@@ -16,7 +16,8 @@ func _on_enter() -> void:
 func _on_physics_tick(_delta: float) -> void:
 	if player.is_on_floor():
 		player.lock_flipping = false
-	player.velocity.y = min(player.velocity.y, 0)
+	if not Input.is_action_pressed("swim_down"):
+		player.velocity.y = min(player.velocity.y, 0)
 
 
 func _on_exit() -> void:

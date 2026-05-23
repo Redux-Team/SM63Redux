@@ -151,8 +151,12 @@ func _process(delta: float) -> void:
 			current_jump = 0
 
 
+func get_facing() -> int:
+	return (-1 if sprite.flip_h else 1)
+
+
 func get_facing_velocity() -> float:
-	return velocity.x * (-1.0 if sprite.flip_h else 1.0)
+	return velocity.x * get_facing()
 
 
 func get_local_floor_normal() -> Vector2:
@@ -259,11 +263,9 @@ func get_terrain() -> String:
 
 func _on_water_check_area_entered(area: Area2D) -> void:
 	if area.has_meta("water"):
-		print("in water!")
 		is_in_water = true
 
 
 func _on_water_check_area_exited(area: Area2D) -> void:
 	if area.has_meta("water"):
-		print("out water!")
 		is_in_water = false

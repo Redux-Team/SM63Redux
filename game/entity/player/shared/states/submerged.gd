@@ -62,7 +62,7 @@ func _on_exit() -> void:
 	
 	# little boost for exiting the water
 	if player.velocity.y < 0:
-		player.velocity.y *= 2
+		player.velocity.y *= 2.5
 	
 	for i: int in submerged_bus_effects.size():
 		AudioServer.remove_bus_effect(0, 0)
