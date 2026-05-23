@@ -8,9 +8,9 @@
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_12law"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_jeaq4"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ey3o2"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_0vh6f"]
 atlas = ExtResource("2_0vh6f")
-region = Rect2(-9, -10, 38, 38)
+region = Rect2(-14, -14, 48, 48)
 
 [resource]
 script = ExtResource("1_vilum")
@@ -19,7 +19,7 @@ category_string = "Entity"
 subpath = "Enemy/goomba"
 group_path = "Enemy"
 ld_object_path = "Entity/Enemy/goomba"
-ld_entry_texture = SubResource("AtlasTexture_ey3o2")
+ld_entry_texture = SubResource("AtlasTexture_0vh6f")
 ld_editor_instance = ExtResource("1_4qaqy")
 ld_properties = Array[ExtResource("1_ifcwt")]([ExtResource("4_12law"), ExtResource("5_jeaq4")])
 ld_placement_rules = 2

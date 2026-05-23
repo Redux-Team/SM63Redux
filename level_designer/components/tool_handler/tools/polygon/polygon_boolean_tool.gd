@@ -13,7 +13,7 @@ var _is_valid: bool = false
 var _targets: Array[LDObjectPolygon] = []
 var _overlay: LDSelectionOverlay
 var _draw_node: LDPolygonBooleanDrawNode
-var _preview_instances: Array[LDObjectPolygon] = []
+var _preview_instances: Dictionary = {}
 
 
 func get_cursor_shape() -> Control.CursorShape:
@@ -43,10 +43,7 @@ func _on_disable() -> void:
 		if is_instance_valid(target):
 			target.set_selection_state(LDObject.SelectionState.HIDDEN)
 			target.modulate.a = 1.0
-	for poly: LDObjectPolygon in _preview_instances:
-		if is_instance_valid(poly):
-			poly.queue_free()
-	_preview_instances.clear()
+	_clear_preview_instances()
 	_targets.clear()
 	_points = PackedVector2Array()
 	_is_valid = false
@@ -159,26 +156,28 @@ func _spawn_preview_instances() -> void:
 			continue
 		var poly: LDObjectPolygon = instance as LDObjectPolygon
 		poly.init_properties(game_object)
+		poly.polygon_data = target.polygon_data
 		viewport.add_object(poly)
 		poly.apply_points(target._polygon.polygon.duplicate())
 		poly.position = target.position
 		poly.place()
 		poly.modulate.a = 0.0
-		_preview_instances.append(poly)
+		_preview_instances[target] = [poly]
 
 
 func _update_preview_instances(results: Array[PackedVector2Array], preview: PackedVector2Array) -> void:
-	for poly: LDObjectPolygon in _preview_instances:
-		if is_instance_valid(poly):
-			poly.modulate.a = 0.0
 	for target: LDObjectPolygon in _targets:
-		if is_instance_valid(target):
-			target.modulate.a = 1.0
+		if not is_instance_valid(target):
+			continue
+		var pool: Array = _preview_instances.get(target, [])
+		for poly: LDObjectPolygon in pool:
+			if is_instance_valid(poly):
+				poly.modulate.a = 0.0
+		target.modulate.a = 1.0
 	
 	if results.is_empty():
 		return
 	
-	var poly_idx: int = 0
 	for i: int in _targets.size():
 		var target: LDObjectPolygon = _targets[i]
 		if not is_instance_valid(target):
@@ -191,37 +190,38 @@ func _update_preview_instances(results: Array[PackedVector2Array], preview: Pack
 		
 		target.modulate.a = 0.0
 		
-		var pieces_for_target: Array[PackedVector2Array] = _get_results_for_target(results, 0, target_world)
+		var pieces: Array[PackedVector2Array] = _get_results_for_target(results, 0, target_world)
+		var pool: Array = _preview_instances.get(target, [])
+		var game_object: GameObject = GameDB.get_db().find_game_object(target.source_object_id)
 		
-		for j: int in pieces_for_target.size():
-			while poly_idx >= _preview_instances.size():
-				var game_object: GameObject = GameDB.get_db().find_game_object(target.source_object_id)
-				if not game_object or not game_object.ld_editor_instance:
-					break
-				var inst: LDObject = game_object.ld_editor_instance.instantiate() as LDObject
-				if not inst is LDObjectPolygon:
-					inst.queue_free()
-					break
-				var new_poly: LDObjectPolygon = inst as LDObjectPolygon
-				new_poly.init_properties(game_object)
-				viewport.add_object(new_poly)
-				new_poly.position = target.position
-				new_poly.place()
-				new_poly.modulate.a = 0.0
-				_preview_instances.append(new_poly)
-			
-			if poly_idx >= _preview_instances.size():
+		while pool.size() < pieces.size():
+			if not game_object or not game_object.ld_editor_instance:
 				break
-			if not is_instance_valid(_preview_instances[poly_idx]):
-				poly_idx += 1
+			var inst: LDObject = game_object.ld_editor_instance.instantiate() as LDObject
+			if not inst is LDObjectPolygon:
+				inst.queue_free()
+				break
+			var new_poly: LDObjectPolygon = inst as LDObjectPolygon
+			new_poly.init_properties(game_object)
+			new_poly.polygon_data = target.polygon_data
+			viewport.add_object(new_poly)
+			new_poly.position = target.position
+			new_poly.place()
+			new_poly.modulate.a = 0.0
+			pool.append(new_poly)
+		
+		_preview_instances[target] = pool
+		
+		for j: int in pieces.size():
+			if j >= pool.size() or not is_instance_valid(pool[j]):
 				continue
-			
-			var piece_pts: PackedVector2Array = _world_to_local(target, pieces_for_target[j])
-			var preview_holes: Array[PackedVector2Array] = _compute_preview_holes_for_piece(target, preview, pieces_for_target[j])
-			_preview_instances[poly_idx].position = target.position
-			_preview_instances[poly_idx].apply_points_and_holes(piece_pts, preview_holes)
-			_preview_instances[poly_idx].modulate.a = 1.0
-			poly_idx += 1
+			var piece_pts: PackedVector2Array = _world_to_local(target, pieces[j])
+			var preview_holes: Array[PackedVector2Array] = _compute_preview_holes_for_piece(target, preview, pieces[j])
+			var poly: LDObjectPolygon = pool[j]
+			poly.polygon_data = target.polygon_data
+			poly.position = target.position
+			poly.apply_points_and_holes(piece_pts, preview_holes)
+			poly.modulate.a = 1.0
 
 
 func _compute_preview_holes(_target: LDObjectPolygon, _preview: PackedVector2Array, _piece_index: int) -> Array[PackedVector2Array]:
@@ -233,9 +233,10 @@ func _compute_preview_holes_for_piece(target: LDObjectPolygon, preview: PackedVe
 
 
 func _clear_preview_instances() -> void:
-	for poly: LDObjectPolygon in _preview_instances:
-		if is_instance_valid(poly):
-			poly.queue_free()
+	for target: Variant in _preview_instances:
+		for poly: LDObjectPolygon in (_preview_instances[target] as Array):
+			if is_instance_valid(poly):
+				poly.queue_free()
 	_preview_instances.clear()
 	for target: LDObjectPolygon in _targets:
 		if is_instance_valid(target):

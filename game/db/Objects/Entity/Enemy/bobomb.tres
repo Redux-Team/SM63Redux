@@ -8,9 +8,9 @@
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_mddn3"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_8im0m"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_s0lme"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_mddn3"]
 atlas = ExtResource("1_7nxe1")
-region = Rect2(-3, -3, 38, 38)
+region = Rect2(-8, -8, 48, 48)
 
 [resource]
 script = ExtResource("1_x7ysr")
@@ -20,7 +20,7 @@ subpath = "Enemy/bobomb"
 group_path = "Enemy"
 name_override = "Bob-Omb"
 ld_object_path = "Entity/Enemy/bobomb"
-ld_entry_texture = SubResource("AtlasTexture_s0lme")
+ld_entry_texture = SubResource("AtlasTexture_mddn3")
 ld_editor_instance = ExtResource("1_4j52t")
 ld_properties = Array[ExtResource("1_c4row")]([ExtResource("4_mddn3"), ExtResource("5_8im0m")])
 ld_placement_rules = 2

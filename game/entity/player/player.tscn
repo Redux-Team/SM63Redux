@@ -694,6 +694,16 @@ __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "61dbc363-2b96-44e3-b341-13ef60566d2b"
 __to_node_uuid = "bee3ecfd-b265-4bfc-b4ea-e7afe4a62675"
 
+[sub_resource type="Resource" id="Resource_sa3a5"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_action_just_pressed(\"dive\") && can_dive && get_active_state_uptime() > 0"
+__from_uuid = "a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+__to_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
+__from_node_uuid = "61dbc363-2b96-44e3-b341-13ef60566d2b"
+__to_node_uuid = "1a6db986-d32f-4647-9c61-30a3baed866c"
+
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
 _data = [Vector2(0, -1.3932585), 0.0, 0.9746846, 0, 0, Vector2(1.5965666, -0.05618429), 0.0, 0.0, 0, 0]
@@ -712,6 +722,18 @@ metadata/_custom_type_script = "uid://cd63gwefr4fp4"
 [sub_resource type="Resource" id="Resource_ndkiv"]
 script = ExtResource("7_ioda6")
 playlist = SubResource("Resource_1p630")
+bus = 3
+metadata/_custom_type_script = "uid://deiaa5u8esvnc"
+
+[sub_resource type="Resource" id="Resource_ejgj1"]
+script = ExtResource("13_8yq6v")
+tracklist = Array[AudioStream]([ExtResource("14_lh4k8"), ExtResource("15_ria7k")])
+play_order = 0
+metadata/_custom_type_script = "uid://cd63gwefr4fp4"
+
+[sub_resource type="Resource" id="Resource_k0v5e"]
+script = ExtResource("7_ioda6")
+playlist = SubResource("Resource_ejgj1")
 bus = 3
 metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
@@ -735,18 +757,6 @@ metadata/_custom_type_script = "uid://cd63gwefr4fp4"
 [sub_resource type="Resource" id="Resource_8odgw"]
 script = ExtResource("7_ioda6")
 playlist = SubResource("Resource_6saf5")
-bus = 3
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_ejgj1"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("14_lh4k8"), ExtResource("15_ria7k")])
-play_order = 0
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_k0v5e"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_ejgj1")
 bus = 3
 metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
@@ -1319,8 +1329,8 @@ root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(1154.7086, 547.37695)
-__last_editor_zoom = 0.5559917
+__last__editor_position = Vector2(1079.3224, 406.7126)
+__last_editor_zoom = 0.505447
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),
@@ -1389,6 +1399,7 @@ __transitions = Dictionary[StringName, ExtResource("3_0jrw7")]({
 &"1e635f1c-ff57-4ffd-828a-a34e40b83298": SubResource("Resource_mb70y"),
 &"2225b5e8-713c-4864-8cba-ac5ef93714c7": SubResource("Resource_r4b01"),
 &"26da65d8-bfd5-4841-9713-fd094dcbdcaf": SubResource("Resource_6suq8"),
+&"2c78a054-7f2e-405e-b370-f0b7071c452e": SubResource("Resource_sa3a5"),
 &"31d4fe48-f3a7-4bd7-b97b-aec36f09b162": SubResource("Resource_5ygwk"),
 &"33685278-85f2-4ace-834c-47cf977ef188": SubResource("Resource_0vqd7"),
 &"34499073-e207-49f7-a7cf-bd50ab62d9dc": SubResource("Resource_l0vtf"),
@@ -1774,6 +1785,7 @@ __editor_superstate_wire_uuid = &"d8126d47-03c3-4a9b-abee-8c68263ad4ab"
 [node name="IdleJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1248860808]
 script = ExtResource("4_4j27x")
 sprite_animation_name = &"jump"
+sfx_enter = SubResource("Resource_k0v5e")
 __editor_name = &"idle_jump"
 __editor_position = Vector2(-400, -200)
 __editor_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"

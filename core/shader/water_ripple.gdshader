@@ -19,10 +19,12 @@ varying float v_is_outer;
 varying float v_arc;
 varying vec2 v_normal;
 
+
 void vertex() {
 	v_is_outer = UV.y < 0.5 ? 1.0 : 0.0;
 	v_arc = UV.x;
 	v_normal = vec2(COLOR.r * 2.0 - 1.0, COLOR.g * 2.0 - 1.0);
+	float v_seg_t = COLOR.b;
 
 	float disp = 0.0;
 
@@ -42,6 +44,9 @@ void vertex() {
 			float ripple = sin((arc_dist / max(r, 0.001)) * TAU * 2.0 - t * TAU * 4.0);
 			disp += splash_amplitude * decay * envelope * ripple;
 		}
+
+		float fade = sin(v_seg_t * PI);
+		disp *= fade;
 	}
 
 	VERTEX += v_normal * disp;

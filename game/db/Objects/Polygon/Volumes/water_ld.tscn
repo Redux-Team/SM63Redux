@@ -23,7 +23,6 @@ metadata/_custom_type_script = "uid://cpps8bcdccbtj"
 [node name="Origin" type="Marker2D" parent="." unique_id=1031779291]
 
 [node name="Polygon" type="Polygon2D" parent="." unique_id=955545888]
-self_modulate = Color(1, 1, 1, 0)
 clip_children = 2
 texture_repeat = 2
 

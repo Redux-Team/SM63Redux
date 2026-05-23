@@ -378,23 +378,25 @@ func _update_visuals() -> void:
 				line.points = TerrainPolygon.subdivide_for_line2d(segment, topline_tex)
 				_topline_container.add_child(line)
 				
-				var angle: float = TerrainPolygon.get_segment_angle(segment)
+				if not textured or segment.size() < 2:
+					continue
 				
-				if textured and polygon_data.topline_left_end and segment.size() >= 2:
+				if polygon_data.topline_left_end:
+					var left_dir: Vector2 = (segment[0] - segment[1]).normalized()
 					var left_cap: Sprite2D = Sprite2D.new()
 					left_cap.texture = polygon_data.topline_left_end
-					var left_dir: Vector2 = (segment[0] - segment[1]).normalized()
 					left_cap.position = segment[0] + left_dir * (polygon_data.topline_left_end.get_width() / 2.0)
-					left_cap.rotation = angle
+					left_cap.rotation = left_dir.angle() + PI
 					left_cap.centered = true
 					_topline_container.add_child(left_cap)
 				
-				if textured and polygon_data.topline_right_end and segment.size() >= 2:
+				if polygon_data.topline_right_end:
+					var last: int = segment.size() - 1
+					var right_dir: Vector2 = (segment[last] - segment[last - 1]).normalized()
 					var right_cap: Sprite2D = Sprite2D.new()
 					right_cap.texture = polygon_data.topline_right_end
-					var right_dir: Vector2 = (segment[segment.size() - 1] - segment[segment.size() - 2]).normalized()
-					right_cap.position = segment[segment.size() - 1] + right_dir * (polygon_data.topline_right_end.get_width() / 2.0)
-					right_cap.rotation = angle
+					right_cap.position = segment[last] + right_dir * (polygon_data.topline_right_end.get_width() / 2.0)
+					right_cap.rotation = right_dir.angle()
 					right_cap.centered = true
 					_topline_container.add_child(right_cap)
 		
@@ -409,25 +411,34 @@ func _update_visuals() -> void:
 				_topline_shadow_container.add_child(line)
 	
 	if _outline_container:
+		var outer_pts: PackedVector2Array = TerrainPolygon.reverse_points(TerrainPolygon.ensure_counter_clockwise(_outer_points))
 		var outer_line: Line2D = Line2D.new()
 		TerrainPolygon.setup_line2d(outer_line)
+		outer_line.begin_cap_mode = Line2D.LINE_CAP_NONE
+		outer_line.end_cap_mode = Line2D.LINE_CAP_NONE
 		outer_line.width = outline_w
 		outer_line.texture = outline_tex
 		outer_line.default_color = Color.WHITE if outline_tex else outline_color
-		outer_line.points = TerrainPolygon.subdivide_for_line2d(
-			TerrainPolygon.reverse_points(TerrainPolygon.get_closed_points(TerrainPolygon.ensure_counter_clockwise(_outer_points))), outline_tex)
+		outer_line.points = TerrainPolygon.subdivide_for_line2d(_closed_line2d_points(outer_pts), outline_tex)
 		_outline_container.add_child(outer_line)
 		
 		for hole: PackedVector2Array in _holes:
-			var hole_cw: PackedVector2Array = TerrainPolygon.ensure_clockwise(hole)
+			var hole_pts: PackedVector2Array = TerrainPolygon.reverse_points(TerrainPolygon.ensure_clockwise(hole))
 			var hole_line: Line2D = Line2D.new()
 			TerrainPolygon.setup_line2d(hole_line)
+			hole_line.begin_cap_mode = Line2D.LINE_CAP_NONE
+			hole_line.end_cap_mode = Line2D.LINE_CAP_NONE
 			hole_line.width = outline_w
 			hole_line.texture = outline_tex
 			hole_line.default_color = Color.WHITE if outline_tex else outline_color
-			hole_line.points = TerrainPolygon.subdivide_for_line2d(
-				TerrainPolygon.reverse_points(TerrainPolygon.get_closed_points(hole_cw)), outline_tex)
+			hole_line.points = TerrainPolygon.subdivide_for_line2d(_closed_line2d_points(hole_pts), outline_tex)
 			_outline_container.add_child(hole_line)
+
+
+func _draw_closed_polyline(points: PackedVector2Array, color: Color, width: float, antialiased: bool) -> void:
+	var count: int = points.size()
+	for i: int in count:
+		draw_line(points[i], points[(i + 1) % count], color, width, antialiased)
 
 
 func _draw() -> void:
@@ -445,30 +456,12 @@ func _draw() -> void:
 			else:
 				draw_polyline(draw_points, p_fill)
 		if draw_points.size() >= 2:
-			draw_polyline(TerrainPolygon.get_closed_points(draw_points) if draw_points.size() >= 3 else draw_points, p_border, PREVIEW_BORDER_WIDTH, true)
+			_draw_closed_polyline(draw_points, p_border, PREVIEW_BORDER_WIDTH, true)
 		for hole: PackedVector2Array in _holes:
 			if hole.size() >= 3:
 				draw_colored_polygon(hole, Color(0.0, 0.0, 0.0, 0.4))
-				draw_polyline(TerrainPolygon.get_closed_points(hole), p_border, PREVIEW_BORDER_WIDTH, true)
+				_draw_closed_polyline(hole, p_border, PREVIEW_BORDER_WIDTH, true)
 		return
-	
-	var has_texture: bool = polygon_data != null and polygon_data.textured and polygon_data.base_texture != null
-	if not has_texture:
-		var fill: Color = polygon_data.base_color if polygon_data else FALLBACK_FILL
-		var border: Color = polygon_data.outline_color if polygon_data else FALLBACK_BORDER
-		var border_w: float = polygon_data.border_width if polygon_data else 3.0
-		draw_colored_polygon(draw_points, fill)
-		draw_polyline(TerrainPolygon.get_closed_points(draw_points), border, border_w, true)
-		for hole: PackedVector2Array in _holes:
-			if hole.size() >= 3:
-				draw_colored_polygon(hole, Color(0.0, 0.0, 0.0, 0.5))
-				draw_polyline(TerrainPolygon.get_closed_points(hole), border, border_w, true)
-	
-	for decoration: Dictionary in _decoration_placements:
-		var tex: Texture2D = decoration.get("tex") as Texture2D
-		var pos: Vector2 = decoration.get("pos") as Vector2
-		if tex:
-			draw_texture(tex, pos - Vector2(tex.get_size()) * 0.5)
 	
 	if _selection_state == LDObject.SelectionState.HIDDEN:
 		return
@@ -487,10 +480,17 @@ func _draw() -> void:
 			s_fill = Color(1.0, 1.0, 1.0, alpha * 0.15)
 	
 	draw_colored_polygon(draw_points, s_fill)
-	draw_polyline(TerrainPolygon.get_closed_points(draw_points), s_outline, SELECTION_BORDER_WIDTH, true)
+	_draw_closed_polyline(draw_points, s_outline, SELECTION_BORDER_WIDTH, true)
 	
 	if _selection_state == LDObject.SelectionState.SELECTED:
 		queue_redraw()
+
+
+func _closed_line2d_points(points: PackedVector2Array) -> PackedVector2Array:
+	var closed: PackedVector2Array = points.duplicate()
+	closed.append(points[0])
+	closed.append(points[1])
+	return closed
 
 
 func _get_polygon_bounds() -> Rect2:

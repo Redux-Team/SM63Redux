@@ -30,6 +30,4 @@ ExtResource("3_eppqe"): 2.0,
 ExtResource("4_5tb30"): 1.0,
 ExtResource("5_nml7t"): 0.5
 })
-decoration_density = 20.0
-decoration_seed = null
 metadata/_custom_type_script = "uid://drs86mw0b40vi"

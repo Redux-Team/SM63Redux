@@ -473,7 +473,9 @@ func _commit() -> void:
 					new_poly.apply_points(piece_local)
 					for h: PackedVector2Array in adjusted_holes:
 						new_poly.add_hole(h)
+					new_poly.polygon_data = target.polygon_data
 					new_poly.place()
+					new_poly.set_property("position", centroid)
 					history.add_do(func() -> void:
 						if is_instance_valid(new_poly) and not new_poly.is_inside_tree():
 							parent.add_child(new_poly)
@@ -616,6 +618,8 @@ func _commit() -> void:
 					for h: PackedVector2Array in adjusted_holes:
 						new_poly.add_hole(h)
 					new_poly.place()
+					new_poly.polygon_data = target.polygon_data
+					new_poly.set_property("position", centroid)
 					history.add_do(func() -> void:
 						if is_instance_valid(new_poly) and not new_poly.is_inside_tree():
 							parent.add_child(new_poly)
