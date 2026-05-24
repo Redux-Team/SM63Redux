@@ -42,6 +42,11 @@ enum LineMode { TOPLINE, EDGES_ONLY, NONE }
 		topline_shadow_texture = t
 		update_visuals.emit()
 
+@export var topline_cap_inset: float = 0.0:
+	set(v):
+		topline_cap_inset = v
+		update_visuals.emit()
+
 @export var topline_left_end: Texture2D:
 	set(t):
 		topline_left_end = t
@@ -115,6 +120,7 @@ func _validate_property(property: Dictionary) -> void:
 		&"topline_texture", &"topline_shadow_texture",
 		&"topline_left_end", &"topline_right_end",
 		&"topline_angle_threshold", &"topline_width",
+		&"topline_cap_inset",
 	]
 	var outline_props: Array[StringName] = [
 		&"outline_texture", &"outline_color", &"outline_width",

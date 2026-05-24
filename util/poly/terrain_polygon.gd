@@ -1,6 +1,30 @@
 @abstract class_name TerrainPolygon
 
 
+class LineStyle:
+	var width: float
+	var texture: Texture2D
+	var color: Color
+	var textured: bool
+	
+	func _init(p_width: float, p_texture: Texture2D, p_color: Color, p_textured: bool) -> void:
+		width = p_width
+		texture = p_texture
+		color = p_color
+		textured = p_textured
+
+
+class CapStyle:
+	var left_tex: Texture2D
+	var right_tex: Texture2D
+	var inset: float
+	
+	func _init(p_left: Texture2D, p_right: Texture2D, p_inset: float) -> void:
+		left_tex = p_left
+		right_tex = p_right
+		inset = p_inset
+
+
 static func ensure_clockwise(points: PackedVector2Array) -> PackedVector2Array:
 	var area: float = 0.0
 	var count: int = points.size()
@@ -187,3 +211,86 @@ static func reverse_points(points: PackedVector2Array) -> PackedVector2Array:
 	for i: int in range(points.size() - 1, -1, -1):
 		result.append(points[i])
 	return result
+
+
+static func _inset_segment(segment: PackedVector2Array, left_inset: float, right_inset: float) -> PackedVector2Array:
+	if segment.size() < 2:
+		return segment
+	var result: PackedVector2Array = segment.duplicate()
+	if left_inset != 0.0:
+		var dir: Vector2 = (result[1] - result[0]).normalized()
+		result[0] = result[0] + dir * left_inset
+	var last: int = result.size() - 1
+	if right_inset != 0.0:
+		var dir: Vector2 = (result[last] - result[last - 1]).normalized()
+		result[last] = result[last] + dir * right_inset
+	return result
+
+
+static func add_topline_segment(container: Node2D, segment: PackedVector2Array, style: LineStyle, caps: CapStyle) -> void:
+	if segment.size() < 2:
+		return
+	
+	var left_inset: float = (caps.left_tex.get_width() / 2.0 - caps.inset) if caps.left_tex else 0.0
+	var right_inset: float = (caps.right_tex.get_width() / 2.0 - caps.inset) if caps.right_tex else 0.0
+	var line_segment: PackedVector2Array = _inset_segment(segment, left_inset, right_inset)
+	
+	var line: Line2D = Line2D.new()
+	setup_line2d(line)
+	line.begin_cap_mode = Line2D.LINE_CAP_NONE
+	line.end_cap_mode = Line2D.LINE_CAP_NONE
+	line.width = style.width
+	line.texture = style.texture
+	line.default_color = Color.WHITE if style.texture else style.color
+	line.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST if not style.textured else CanvasItem.TEXTURE_FILTER_PARENT_NODE
+	line.antialiased = not style.textured
+	line.points = subdivide_for_line2d(line_segment, style.texture)
+	container.add_child(line)
+	
+	if not style.textured:
+		return
+	
+	if caps.left_tex:
+		var left_dir: Vector2 = (segment[0] - segment[1]).normalized()
+		var cap: Sprite2D = Sprite2D.new()
+		cap.texture = caps.left_tex
+		cap.position = segment[0] + left_dir * (caps.left_tex.get_width() / 2.0 - caps.inset)
+		cap.rotation = left_dir.angle() + PI
+		cap.centered = true
+		container.add_child(cap)
+	
+	if caps.right_tex:
+		var last: int = segment.size() - 1
+		var right_dir: Vector2 = (segment[last] - segment[last - 1]).normalized()
+		var cap: Sprite2D = Sprite2D.new()
+		cap.texture = caps.right_tex
+		cap.position = segment[last] + right_dir * (caps.right_tex.get_width() / 2.0 - caps.inset)
+		cap.rotation = right_dir.angle()
+		cap.centered = true
+		container.add_child(cap)
+
+
+static func add_topline_shadow(container: Node2D, segment: PackedVector2Array, texture: Texture2D, width: float) -> void:
+	var line: Line2D = Line2D.new()
+	setup_line2d(line)
+	line.begin_cap_mode = Line2D.LINE_CAP_NONE
+	line.end_cap_mode = Line2D.LINE_CAP_NONE
+	line.width = width
+	line.texture = texture
+	line.default_color = Color(1.0, 1.0, 1.0, 0.6)
+	line.points = subdivide_for_line2d(segment, texture)
+	container.add_child(line)
+
+
+static func add_outline(container: Node2D, points: PackedVector2Array, style: LineStyle) -> void:
+	var line: Line2D = Line2D.new()
+	setup_line2d(line)
+	line.begin_cap_mode = Line2D.LINE_CAP_NONE
+	line.end_cap_mode = Line2D.LINE_CAP_NONE
+	line.width = style.width
+	line.texture = style.texture
+	line.default_color = Color.WHITE if style.texture else style.color
+	line.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST if not style.textured else CanvasItem.TEXTURE_FILTER_PARENT_NODE
+	line.antialiased = not style.textured
+	line.points = subdivide_for_line2d(points, style.texture)
+	container.add_child(line)
