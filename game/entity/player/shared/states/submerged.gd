@@ -49,4 +49,4 @@ func _handle_ground_pound() -> void:
 func _on_exit() -> void:
 	# little boost for exiting the water
 	if player.velocity.y < 0:
-		player.velocity.y *= 2.5
+		player.velocity.y = max(player.velocity.y * 2.5, -300)

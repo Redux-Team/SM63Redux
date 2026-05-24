@@ -70,42 +70,39 @@ func _update_visuals() -> void:
 		else:
 			_polygon.texture = null
 			_polygon.color = polygon_data.base_color
-	if _outer_points.size() < 3:
-		_clear_visuals()
-		return
 	_clear_visuals()
+	if _outer_points.size() < 3:
+		return
 	_build_water_outline()
 
 
 func _build_water_outline() -> void:
 	if not _outline_container or not polygon_data:
 		return
-	var outer_pts: PackedVector2Array = TerrainPolygon.reverse_points(TerrainPolygon.ensure_counter_clockwise(_outer_points))
-	_outline_container.add_child(_make_outline_line(outer_pts))
+	var textured: bool = polygon_data.textured
+	var outline_style: TerrainPolygon.LineStyle = TerrainPolygon.LineStyle.new(
+		polygon_data.outline_width,
+		polygon_data.outline_texture if textured else null,
+		polygon_data.outline_color,
+		textured,
+		polygon_data.outline_scroll_speed,
+		polygon_data.outline_ripple_amplitude,
+		polygon_data.outline_ripple_frequency,
+		polygon_data.outline_ripple_speed
+	)
+	TerrainPolygon.add_outline(_outline_container,
+		TerrainPolygon.reverse_points(
+			TerrainPolygon.get_closed_points(TerrainPolygon.ensure_counter_clockwise(_outer_points))
+		),
+		outline_style
+	)
 	for hole: PackedVector2Array in _holes:
-		var hole_pts: PackedVector2Array = TerrainPolygon.reverse_points(TerrainPolygon.ensure_clockwise(hole))
-		_outline_container.add_child(_make_outline_line(hole_pts))
-
-
-func _make_outline_line(points: PackedVector2Array) -> Line2D:
-	var closed: PackedVector2Array = points.duplicate()
-	closed.append(points[0])
-	closed.append(points[1])
-	var line: Line2D = Line2D.new()
-	line.width = polygon_data.outline_width
-	line.texture_mode = Line2D.LINE_TEXTURE_TILE
-	line.joint_mode = Line2D.LINE_JOINT_ROUND
-	line.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	line.begin_cap_mode = Line2D.LINE_CAP_NONE
-	line.end_cap_mode = Line2D.LINE_CAP_NONE
-	line.antialiased = false
-	if polygon_data.textured and polygon_data.outline_texture:
-		line.texture = polygon_data.outline_texture
-		line.default_color = Color.WHITE
-	else:
-		line.default_color = polygon_data.outline_color
-	line.points = TerrainPolygon.subdivide_for_line2d(closed, line.texture)
-	return line
+		TerrainPolygon.add_outline(_outline_container,
+			TerrainPolygon.reverse_points(
+				TerrainPolygon.get_closed_points(TerrainPolygon.ensure_clockwise(hole))
+			),
+			outline_style
+		)
 
 
 func _sync_water_collision() -> void:

@@ -1,5 +1,8 @@
-class_name YellowCoin
+class_name RedCoin
 extends Entity
+
+static var red_max_count: int = 0
+static var count: int = 0
 
 @export var particle_emitter: ParticleEmitter
 @export var audio_stream_player_2d: AudioStreamPlayer2D
@@ -10,6 +13,7 @@ extends Entity
 
 
 func _ready() -> void:
+	red_max_count += 1
 	scale = Vector2.ONE
 	sprite.play(&"default")
 	if explode_on_spawn:
@@ -27,7 +31,11 @@ func _on_entity_check_area_player_entered(_player: Player) -> void:
 	Singleton.spawn_sibling(self, emitter, ["position", "scale", "rotation"])
 	
 	emitter.emitting = true
+	
+	audio_stream_player_2d.pitch_scale = lerpf(1.0, 1.3, float(count) / float(red_max_count))
 	audio_stream_player_2d.play()
+	
+	count += 1
 	
 	sprite.hide()
 	entity_check_area.disable()

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://di4vwkiyscdbh"]
 
 [ext_resource type="PackedScene" uid="uid://clo423ijbljko" path="res://game/object/coin/yellow_coin/yellow_coin.tscn" id="1_qed2w"]
+[ext_resource type="Script" uid="uid://bkgvijdv2dnpe" path="res://game/object/coin/red_coin/red_coin.gd" id="2_c4m15"]
 [ext_resource type="Texture2D" uid="uid://bvoffibtcyve5" path="res://assets/textures/item/collectible/red_coin_spin.png" id="2_y2pdo"]
 [ext_resource type="AudioStream" uid="uid://d3xbvld6puryg" path="res://assets/sfx/item/red_coin_collect.ogg" id="3_c4m15"]
 [ext_resource type="Texture2D" uid="uid://bjx2gx7ao7dgu" path="res://assets/textures/particle/item/red_coin_particle.png" id="3_y2pdo"]
@@ -59,6 +60,7 @@ animations = [{
 }]
 
 [node name="RedCoin" unique_id=187434736 instance=ExtResource("1_qed2w")]
+script = ExtResource("2_c4m15")
 
 [node name="Sprite" parent="." index="1" unique_id=1781944590]
 texture = SubResource("CanvasTexture_p1qeo")
@@ -71,3 +73,4 @@ texture = ExtResource("3_y2pdo")
 [node name="AudioStreamPlayer2D" parent="." index="4" unique_id=1763400765]
 stream = ExtResource("3_c4m15")
 volume_db = -4.0
+pitch_scale = 1.1

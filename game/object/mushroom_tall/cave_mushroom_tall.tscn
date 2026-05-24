@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://djkajknxss5j1" path="res://assets/textures/props/nature/tall_cave_mushroom_stem.png" id="3_d0tlw"]
 [ext_resource type="Texture2D" uid="uid://c7641olkeoexr" path="res://assets/textures/props/nature/tall_cave_mushroom_head.png" id="3_ws8ch"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2dsje"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d0tlw"]
 resource_local_to_scene = true
 shader = ExtResource("2_d0tlw")
 shader_parameter/state = 0
@@ -23,7 +23,7 @@ shader_parameter/pulse_max = 1.0
 shader_parameter/outline_ignore_holes = true
 shader_parameter/outline_enabled = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nsw3d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bfhec"]
 resource_local_to_scene = true
 shader = ExtResource("2_d0tlw")
 shader_parameter/state = 0
@@ -47,11 +47,12 @@ diffuse_texture = ExtResource("3_ws8ch")
 [node name="CaveMushroomTall" unique_id=723103023 instance=ExtResource("1_ws8ch")]
 
 [node name="Stem" parent="." index="0" unique_id=2109082931]
-material = SubResource("ShaderMaterial_2dsje")
+material = SubResource("ShaderMaterial_d0tlw")
+width = 16.0
 texture = ExtResource("3_d0tlw")
 
 [node name="Head" parent="." index="1" unique_id=1496399749]
-material = SubResource("ShaderMaterial_nsw3d")
+material = SubResource("ShaderMaterial_bfhec")
 texture = SubResource("CanvasTexture_cu6mi")
 canvas_texture = SubResource("CanvasTexture_cu6mi")
 diffuse_texture = ExtResource("3_ws8ch")

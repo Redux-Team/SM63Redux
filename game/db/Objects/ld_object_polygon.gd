@@ -331,10 +331,14 @@ func _update_visuals() -> void:
 	
 	var outline_color: Color = polygon_data.outline_color if polygon_data else Color.WHITE
 	var outline_style: TerrainPolygon.LineStyle = TerrainPolygon.LineStyle.new(
-		polygon_data.outline_width if polygon_data else 7.0,
-		polygon_data.outline_texture if (polygon_data and textured) else null,
-		outline_color,
-		textured
+		polygon_data.outline_width,
+		polygon_data.outline_texture if textured else null,
+		polygon_data.outline_color,
+		textured,
+		polygon_data.outline_scroll_speed,
+		polygon_data.outline_ripple_amplitude,
+		polygon_data.outline_ripple_frequency,
+		polygon_data.outline_ripple_speed
 	)
 	
 	if line_mode == PolygonData.LineMode.TOPLINE:
@@ -346,11 +350,17 @@ func _update_visuals() -> void:
 				TerrainPolygon.ensure_counter_clockwise(hole), polygon_data.topline_angle_threshold
 			))
 		
+		#top_segments = TerrainPolygon.merge_adjacent_segments(top_segments)
+		
 		var line_style: TerrainPolygon.LineStyle = TerrainPolygon.LineStyle.new(
 			polygon_data.topline_width,
 			polygon_data.topline_texture if textured else null,
-			outline_color,
-			textured
+			polygon_data.outline_color,
+			textured,
+			polygon_data.topline_scroll_speed,
+			polygon_data.topline_ripple_amplitude,
+			polygon_data.topline_ripple_frequency,
+			polygon_data.topline_ripple_speed
 		)
 		var cap_style: TerrainPolygon.CapStyle = TerrainPolygon.CapStyle.new(
 			polygon_data.topline_left_end if textured else null,

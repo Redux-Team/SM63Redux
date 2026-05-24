@@ -12,7 +12,7 @@
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="5_key8f"]
 [ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="6_po2cq"]
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_4hx1o"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_8nl6k"]
 diffuse_texture = ExtResource("2_qhjox")
 
 [sub_resource type="Resource" id="Resource_4xhut"]
@@ -26,9 +26,9 @@ size = Vector2(30, 30)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3wji2"]
 size = Vector2(32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ipbxf"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_tmrtw"]
 atlas = ExtResource("5_3wji2")
-region = Rect2(0, 25, 11, 8)
+region = Rect2(0, 17, 11, 8)
 
 [sub_resource type="Curve" id="Curve_3wji2"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.052631572, 1), 0.0, 0.0, 0, 0]
@@ -46,9 +46,9 @@ region = Rect2(0, 1, 11, 8)
 atlas = ExtResource("5_3wji2")
 region = Rect2(0, 9, 11, 8)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_tmrtw"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ipbxf"]
 atlas = ExtResource("5_3wji2")
-region = Rect2(0, 17, 11, 8)
+region = Rect2(0, 25, 11, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cir5m"]
 atlas = ExtResource("5_3wji2")
@@ -104,9 +104,9 @@ coin = ExtResource("2_4xhut")
 metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=286401553]
-texture = SubResource("CanvasTexture_4hx1o")
+texture = SubResource("CanvasTexture_8nl6k")
 script = ExtResource("3_prsgq")
-canvas_texture = SubResource("CanvasTexture_4hx1o")
+canvas_texture = SubResource("CanvasTexture_8nl6k")
 diffuse_texture = ExtResource("2_qhjox")
 current_animation = ""
 current_frame = 0
@@ -136,7 +136,7 @@ bus = &"SFX"
 
 [node name="ParticleEmitter" type="CPUParticles2D" parent="." unique_id=1781001774]
 emitting = false
-texture = SubResource("AtlasTexture_ipbxf")
+texture = SubResource("AtlasTexture_tmrtw")
 lifetime = 2.0
 one_shot = true
 explosiveness = 1.0
