@@ -39,7 +39,7 @@ void fragment() {
 			float along = dot(centered, line_dir);
 			
 			if (cross_dist < half_width && along > 0.0 && dist < 0.5) {
-				if (i + 1 < filled_slices + 2) {
+				if ((i + 1 < filled_slices + 2) && (filled_slices > 0)) {
 					tex_color = mix(tex_color, divider_color, divider_color.a);
 				}
 			}

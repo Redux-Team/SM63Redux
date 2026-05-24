@@ -169,6 +169,7 @@ position = Vector2(52, 104)
 
 [node name="BigBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/ColorRect/Node2D" unique_id=1129601286]
 position = Vector2(-36, -7)
+amount = 2
 texture = SubResource("AtlasTexture_cx53y")
 lifetime = 10.0
 preprocess = 30.0
@@ -184,7 +185,6 @@ metadata/_custom_type_script = "uid://c2df6xnsl5aem"
 
 [node name="MediumBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/ColorRect/Node2D" unique_id=892034371]
 position = Vector2(-36, -7)
-amount = 2
 texture = SubResource("AtlasTexture_cx53y")
 lifetime = 10.0
 preprocess = 30.0
@@ -200,6 +200,7 @@ metadata/_custom_type_script = "uid://c2df6xnsl5aem"
 
 [node name="SmallBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/ColorRect/Node2D" unique_id=1860666956]
 position = Vector2(-36, -7)
+amount = 16
 texture = ExtResource("14_cx53y")
 lifetime = 10.0
 preprocess = 30.0
