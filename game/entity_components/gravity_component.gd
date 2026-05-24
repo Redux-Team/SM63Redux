@@ -6,6 +6,7 @@ extends EntityComponent
 @export var scale_factor: float = 1.0
 @export var direction: Vector2 = Vector2(0, 1)
 @export var rotate_root: bool = true
+@export var water_multiplier: float = 0.1
 
 var _locks: int = 0
 var _modifiers: Dictionary[StringName, float] = {}
@@ -57,4 +58,4 @@ func _process(_delta: float) -> void:
 
 func _physics_process(_delta: float) -> void:
 	if enabled and entity:
-		entity.velocity.y += (strength * scale_factor)
+		entity.velocity.y += (strength * scale_factor * (water_multiplier if entity.water_check and entity.is_in_water() else 1.0))

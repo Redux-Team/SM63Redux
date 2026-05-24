@@ -1,16 +1,6 @@
 @tool
 extends State
 
-@export var submerged_bus_effects: Array[AudioEffect]
-
-
-func _on_enter() -> void:
-	var gravity: GravityComponent = player.get_component(GravityComponent)
-	gravity.scale_factor = 0.1
-	
-	for effect: AudioEffect in submerged_bus_effects:
-		AudioServer.add_bus_effect(0, effect)
-
 
 func _on_physics_tick(delta: float) -> void:
 	player.swim_buffer_time = max(player.swim_buffer_time - delta, 0.0)
@@ -57,12 +47,6 @@ func _handle_ground_pound() -> void:
 
 
 func _on_exit() -> void:
-	var gravity: GravityComponent = player.get_component(GravityComponent)
-	gravity.scale_factor = 1.0
-	
 	# little boost for exiting the water
 	if player.velocity.y < 0:
 		player.velocity.y *= 2.5
-	
-	for i: int in submerged_bus_effects.size():
-		AudioServer.remove_bus_effect(0, 0)

@@ -17,7 +17,7 @@ region = Rect2(-7, -7, 48, 48)
 
 [sub_resource type="Resource" id="Resource_tsprs"]
 script = ExtResource("9_mp52l")
-amount = 4
+amount = 8
 key = &"palette"
 label = "Palette"
 type = 1

@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://ok4f1ylmjysp"]
+
+[ext_resource type="PackedScene" uid="uid://bi2r2y2cjsoi8" path="res://game/db/Objects/Props/Nature/medium_jungle_tree_ld.tscn" id="1_78nf5"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_wcqsu"]
+[ext_resource type="Texture2D" uid="uid://b4sajfeqhnpdg" path="res://assets/textures/props/nature/medium_cherry_tree.png" id="3_g1soj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bxiyp"]
+resource_local_to_scene = true
+shader = ExtResource("2_wcqsu")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g1soj"]
+size = Vector2(45, 66)
+
+[node name="CherryTreeMedium" unique_id=30942285 instance=ExtResource("1_78nf5")]
+
+[node name="Sprite" parent="." index="0" unique_id=2104131461]
+material = SubResource("ShaderMaterial_bxiyp")
+diffuse_texture = ExtResource("3_g1soj")
+
+[node name="EditorShape" parent="EditorShapeArea" parent_id_path=PackedInt32Array(1978033632) index="0" unique_id=416735272]
+position = Vector2(0.5, -1)
+shape = SubResource("RectangleShape2D_g1soj")

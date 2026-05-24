@@ -28,12 +28,13 @@
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="24_4fmyw"]
 [ext_resource type="Script" uid="uid://dmjeu88gcicx4" path="res://game/entity/enemy/bobomb/states/strike.gd" id="24_na7jb"]
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="25_whfh4"]
+[ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="29_ekeht"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ap0j0"]
 atlas = ExtResource("3_x8m5v")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_6sje6"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ccar4"]
 diffuse_texture = SubResource("AtlasTexture_ap0j0")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a0onm"]
@@ -112,7 +113,7 @@ animations = [{
 atlas = ExtResource("6_6sje6")
 region = Rect2(0, 0, 4, 4)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_ccar4"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ekeht"]
 diffuse_texture = SubResource("AtlasTexture_jixoj")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nwfm8"]
@@ -156,7 +157,7 @@ animations = [{
 atlas = ExtResource("6_4fxtu")
 region = Rect2(0, 0, 6, 10)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_ekeht"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_glled"]
 diffuse_texture = SubResource("AtlasTexture_6akqm")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_swvkj"]
@@ -430,7 +431,10 @@ script = ExtResource("8_6r7hc")
 playlist = SubResource("Resource_6sje6")
 metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
-[node name="Bobomb" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("fuse", "key", "player_check", "sprite", "components_root", "collision_shapes", "state_machine")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_glled"]
+size = Vector2(16, 18)
+
+[node name="Bobomb" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("fuse", "key", "player_check", "sprite", "components_root", "collision_shapes", "state_machine", "water_check")]
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_txf1e")
@@ -444,14 +448,16 @@ state_machine = NodePath("StateMachine")
 exit_objects = Dictionary[PackedScene, int]({
 ExtResource("2_ccar4"): 1
 })
+water_check = NodePath("WaterCheckArea")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1859430176 node_paths=PackedStringArray("subsprites")]
 position = Vector2(0, -6)
-texture = SubResource("CanvasTexture_6sje6")
+texture = SubResource("CanvasTexture_ccar4")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("17_gjan8")
-canvas_texture = SubResource("CanvasTexture_6sje6")
+canvas_texture = SubResource("CanvasTexture_ccar4")
+flip_with_velocity = false
 subsprites = [NodePath("Offset/Fuse"), NodePath("Offset/Key")]
 animated = true
 diffuse_frames = SubResource("SpriteFrames_ibfi8")
@@ -466,11 +472,11 @@ metadata/_edit_lock_ = true
 
 [node name="Fuse" type="Sprite2D" parent="Sprite/Offset" unique_id=1770779985]
 position = Vector2(0, -4)
-texture = SubResource("CanvasTexture_ccar4")
+texture = SubResource("CanvasTexture_ekeht")
 region_enabled = true
 region_rect = Rect2(0, 0, 4, 4)
 script = ExtResource("17_gjan8")
-canvas_texture = SubResource("CanvasTexture_ccar4")
+canvas_texture = SubResource("CanvasTexture_ekeht")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_jixoj")
 current_animation = "default"
@@ -481,11 +487,11 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="Key" type="Sprite2D" parent="Sprite/Offset" unique_id=990773306]
 position = Vector2(-11, 7)
-texture = SubResource("CanvasTexture_ekeht")
+texture = SubResource("CanvasTexture_glled")
 region_enabled = true
 region_rect = Rect2(0, 0, 6, 10)
 script = ExtResource("17_gjan8")
-canvas_texture = SubResource("CanvasTexture_ekeht")
+canvas_texture = SubResource("CanvasTexture_glled")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_7nkl5")
 current_animation = "spin"
@@ -588,7 +594,6 @@ initial_state = NodePath("Patrol")
 root_node = NodePath("..")
 sprite = NodePath("../Sprite")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(3112.796, 632.03735)
 __last_editor_zoom = 0.6115912
 __states = {
 &"059541e0-002a-4168-8fab-30866425b5b3": NodePath("Strike"),
@@ -648,6 +653,13 @@ sfx_enter = SubResource("Resource_ccar4")
 __editor_name = &"strike"
 __editor_position = Vector2(5740, 1320)
 __editor_uuid = &"059541e0-002a-4168-8fab-30866425b5b3"
+
+[node name="WaterCheckArea" type="Area2D" parent="." unique_id=1408411545]
+script = ExtResource("29_ekeht")
+metadata/_custom_type_script = "uid://bhoysiia8munh"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WaterCheckArea" unique_id=8270833]
+shape = SubResource("RectangleShape2D_glled")
 
 [connection signal="frame_changed" from="Sprite" to="." method="_on_sprite_frame_changed"]
 [connection signal="area_entered" from="PlayerCheck" to="." method="_on_player_check_area_entered"]

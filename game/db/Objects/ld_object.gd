@@ -142,8 +142,8 @@ func get_stamp_size() -> Vector2:
 		return Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE)
 	return (editor_placement_rect.shape as RectangleShape2D).get_rect().size * global_scale
 
-
-func _on_property_changed(_key: StringName, _value: Variant) -> void:
+@warning_ignore("unused_parameter")
+func _on_property_changed(key: StringName, value: Variant) -> void:
 	pass
 
 

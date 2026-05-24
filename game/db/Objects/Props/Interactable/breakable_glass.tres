@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bhsgnm1s34g02"]
+
+[ext_resource type="PackedScene" uid="uid://bppwwwruvw60p" path="res://game/object/breakable_glass/breakable_glass.tscn" id="1_em4cj"]
+[ext_resource type="PackedScene" uid="uid://d337ges7cje64" path="res://game/db/Objects/Props/Interactable/breakable_glass_ld.tscn" id="2_em4cj"]
+[ext_resource type="Texture2D" uid="uid://csab8p3wucepo" path="res://assets/textures/props/interactable/breakable_glass_0.png" id="3_em4cj"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_dwvww"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_cj44p"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_geqob"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="7_cqlmx"]
+[ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="8_yry7t"]
+[ext_resource type="Script" uid="uid://bcykky22g3hbt" path="res://game/db/Properties/breakable_box/coin_amount.gd" id="9_em4cj"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="10_ilki3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_em4cj"]
+atlas = ExtResource("3_em4cj")
+region = Rect2(-7, -7, 48, 48)
+
+[sub_resource type="Resource" id="Resource_rth0s"]
+script = ExtResource("9_em4cj")
+key = &"coin_amount"
+label = "Coin Amount"
+type = 1
+default_value = 0
+metadata/_custom_type_script = "uid://bcykky22g3hbt"
+
+[resource]
+script = ExtResource("10_ilki3")
+id = "breakable_glass"
+category = 4
+category_string = "Props"
+subpath = "Interactable/breakable_glass"
+group_path = "Interactable"
+ld_object_path = "Props/Interactable/breakable_glass"
+ld_entry_texture = SubResource("AtlasTexture_em4cj")
+ld_editor_instance = ExtResource("2_em4cj")
+ld_properties = Array[ExtResource("4_dwvww")]([ExtResource("5_cj44p"), ExtResource("6_geqob"), ExtResource("7_cqlmx"), ExtResource("8_yry7t"), SubResource("Resource_rth0s")])
+game_instance = ExtResource("1_em4cj")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

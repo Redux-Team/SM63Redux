@@ -75,6 +75,20 @@
 [ext_resource type="Resource" uid="uid://rd08kjhcdyie" path="res://game/db/Objects/Entity/Enemy/koopa_shell.tres" id="62_cjg54"]
 [ext_resource type="Resource" uid="uid://b1imly6761nhh" path="res://game/db/Objects/Item/Collectible/purple_coin.tres" id="63_cjg54"]
 [ext_resource type="Resource" uid="uid://brym2h03w1ylu" path="res://game/db/Objects/Item/Utility/spinning_heart.tres" id="64_q5xve"]
+[ext_resource type="Resource" uid="uid://d032lw2v1fs4f" path="res://game/db/Objects/Props/Nature/small_mossy_rock.tres" id="65_gyvu6"]
+[ext_resource type="Resource" uid="uid://bnii6byno6q77" path="res://game/db/Objects/Props/Nature/twisted_tree.tres" id="66_echxs"]
+[ext_resource type="Resource" uid="uid://bhsgnm1s34g02" path="res://game/db/Objects/Props/Interactable/breakable_glass.tres" id="67_mgtur"]
+[ext_resource type="Resource" uid="uid://d0x0aasv07qsw" path="res://game/db/Objects/Props/Nature/medium_jungle_tree.tres" id="68_vw6cs"]
+[ext_resource type="Resource" uid="uid://bfxbwp3n4743t" path="res://game/db/Objects/Props/Nature/big_jungle_tree.tres" id="69_j1xw6"]
+[ext_resource type="Resource" uid="uid://bt5mj0t1uqfp3" path="res://game/db/Objects/Props/Nature/medium_cherry_tree.tres" id="70_jhnxf"]
+[ext_resource type="Resource" uid="uid://dabx63ejft3p6" path="res://game/db/Objects/Props/Nature/big_stem.tres" id="71_j1xw6"]
+[ext_resource type="Resource" uid="uid://cyxo0l1jdatyq" path="res://game/db/Objects/Props/Hints/arrow_invisibility.tres" id="72_0boea"]
+[ext_resource type="Resource" uid="uid://bbjsvaqvicvlc" path="res://game/db/Objects/Props/Hints/arrow_metal.tres" id="73_7vta1"]
+[ext_resource type="Resource" uid="uid://bpq4wtj3swwht" path="res://game/db/Objects/Props/Interactable/snowy_sign.tres" id="74_x5yi0"]
+[ext_resource type="Resource" uid="uid://ohk16n7fhwwd" path="res://game/db/Objects/Props/Hints/snowy_arrow_sign.tres" id="76_rfddy"]
+[ext_resource type="Resource" uid="uid://dygcc5dxccaei" path="res://game/db/Objects/Props/Interactable/snowy_wall_sign.tres" id="76_tk7mk"]
+[ext_resource type="Resource" uid="uid://cv8hbokwkhauv" path="res://game/db/Objects/Props/Interactable/wall_sign.tres" id="77_77m44"]
+[ext_resource type="Resource" uid="uid://boljvdptgk7ul" path="res://game/db/Objects/Props/Nature/tall_cave_mushroom.tres" id="78_77m44"]
 
 [resource]
 script = ExtResource("47_j75gy")
@@ -112,21 +126,35 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Props/Gizmos/spinning_block": ExtResource("47_lugbj"),
 "Props/Gizmos/spinning_block_mono": ExtResource("48_fvosf"),
 "Props/Hints/arrow": ExtResource("24_naun0"),
+"Props/Hints/arrow_invisibility": ExtResource("72_0boea"),
+"Props/Hints/arrow_metal": ExtResource("73_7vta1"),
 "Props/Hints/arrow_sign": ExtResource("47_mp4qx"),
+"Props/Hints/snowy_arrow_sign": ExtResource("76_rfddy"),
 "Props/Interactable/breakable_box": ExtResource("26_rpot8"),
+"Props/Interactable/breakable_glass": ExtResource("67_mgtur"),
 "Props/Interactable/hanging_sign": ExtResource("37_7vta1"),
 "Props/Interactable/sign": ExtResource("27_2x7la"),
+"Props/Interactable/snowy_sign": ExtResource("74_x5yi0"),
+"Props/Interactable/snowy_wall_sign": ExtResource("76_tk7mk"),
+"Props/Interactable/wall_sign": ExtResource("77_77m44"),
+"Props/Nature/big_jungle_tree": ExtResource("69_j1xw6"),
+"Props/Nature/big_stem": ExtResource("71_j1xw6"),
 "Props/Nature/big_tree": ExtResource("29_j1xw6"),
 "Props/Nature/blue_flowers": ExtResource("30_jhnxf"),
 "Props/Nature/large_rock": ExtResource("24_echxs"),
+"Props/Nature/medium_cherry_tree": ExtResource("70_jhnxf"),
+"Props/Nature/medium_jungle_tree": ExtResource("68_vw6cs"),
 "Props/Nature/medium_rock": ExtResource("27_70utn"),
 "Props/Nature/medium_tree": ExtResource("25_mgtur"),
 "Props/Nature/mushroom_pair": ExtResource("32_mgtur"),
 "Props/Nature/pink_flowers": ExtResource("21_q5xve"),
+"Props/Nature/small_mossy_rock": ExtResource("65_gyvu6"),
 "Props/Nature/small_mushroom": ExtResource("26_83qap"),
 "Props/Nature/small_rock": ExtResource("22_gyvu6"),
 "Props/Nature/small_tree": ExtResource("31_0boea"),
+"Props/Nature/tall_cave_mushroom": ExtResource("78_77m44"),
 "Props/Nature/tall_mushroom": ExtResource("28_vw6cs"),
+"Props/Nature/twisted_tree": ExtResource("66_echxs"),
 "Props/Platforms/beaded_platform": ExtResource("50_5ejvw"),
 "Props/Platforms/bone_platform": ExtResource("41_x5yi0"),
 "Props/Platforms/cloud": ExtResource("40_x5yi0"),

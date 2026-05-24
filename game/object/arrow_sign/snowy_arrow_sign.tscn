@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://dm88p4u0ipwt2"]
+
+[ext_resource type="PackedScene" uid="uid://t5m70fv7apwb" path="res://game/object/arrow_sign/arrow_sign.tscn" id="1_hh4kg"]
+[ext_resource type="Texture2D" uid="uid://krx5bevien4e" path="res://assets/textures/props/hints/snowy_arrow_sign_base.png" id="2_hh4kg"]
+[ext_resource type="Texture2D" uid="uid://dhrubc1jqkosf" path="res://assets/textures/props/hints/snowy_arrow_sign_arrow.png" id="3_hh4kg"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_af4dm"]
+diffuse_texture = ExtResource("2_hh4kg")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_mgnuu"]
+diffuse_texture = ExtResource("3_hh4kg")
+
+[node name="SnowyArrowSign" unique_id=272511246 instance=ExtResource("1_hh4kg")]
+
+[node name="Sprite" parent="." index="0" unique_id=2085095849]
+texture = SubResource("CanvasTexture_af4dm")
+canvas_texture = SubResource("CanvasTexture_af4dm")
+diffuse_texture = ExtResource("2_hh4kg")
+
+[node name="Arrow" parent="Sprite" index="0" unique_id=198162551]
+texture = SubResource("CanvasTexture_mgnuu")
+canvas_texture = SubResource("CanvasTexture_mgnuu")
+diffuse_texture = ExtResource("3_hh4kg")

@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://bd8l4ri83uu5a" path="res://game/entity/enemy/_shared/states/patrol.gd" id="12_4agb1"]
 [ext_resource type="Script" uid="uid://cd63gwefr4fp4" path="res://util/playlist.gd" id="13_lhbc1"]
 [ext_resource type="Script" uid="uid://deiaa5u8esvnc" path="res://addons/redux_dev/components/state_machine/state_sfx_entry.gd" id="14_dk1mx"]
+[ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="15_dk1mx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0apuc"]
 atlas = ExtResource("3_4tjfc")
@@ -147,7 +148,11 @@ max_distance = 500.0
 sfx_frames = Array[int]([1, 6])
 metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
-[node name="Koopa" type="CharacterBody2D" unique_id=2116805297 node_paths=PackedStringArray("audio_stream_player_2d", "sprite", "components_root")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dmwm8"]
+resource_local_to_scene = true
+size = Vector2(18, 26)
+
+[node name="Koopa" type="CharacterBody2D" unique_id=2116805297 node_paths=PackedStringArray("audio_stream_player_2d", "sprite", "components_root", "water_check")]
 collision_layer = 8
 collision_mask = 514
 script = ExtResource("1_v8hjw")
@@ -155,6 +160,7 @@ shell = ExtResource("2_feb77")
 audio_stream_player_2d = NodePath("AudioStreamPlayer2D")
 sprite = NodePath("Sprite")
 components_root = NodePath("Components")
+water_check = NodePath("WaterCheckArea")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=858682115]
 texture = SubResource("CanvasTexture_lhbc1")
@@ -238,5 +244,13 @@ sfx_frame = SubResource("Resource_4ii8e")
 __editor_name = &"patrol"
 __editor_position = Vector2(4309.4546, 1252.7251)
 __editor_uuid = &"64278622-8683-413c-bd61-8d4554e35ebc"
+
+[node name="WaterCheckArea" type="Area2D" parent="." unique_id=1539458646]
+script = ExtResource("15_dk1mx")
+metadata/_custom_type_script = "uid://bhoysiia8munh"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WaterCheckArea" unique_id=1072960366]
+position = Vector2(-2, 2)
+shape = SubResource("RectangleShape2D_dmwm8")
 
 [connection signal="damaged" from="HurtBox" to="." method="_on_hurt_box_damaged"]

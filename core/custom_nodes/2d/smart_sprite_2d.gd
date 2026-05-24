@@ -21,6 +21,8 @@ enum {
 		preview = p
 		_update_preview()
 @export var lock_flipping: bool = false
+@export var flip_with_velocity: bool = true
+@export var autoplay: bool = false
 
 ## the rotation but it respects whether the sprite is flipped or not
 @export var local_rotation: float:
@@ -91,6 +93,8 @@ var _playback_time: float = 0.0
 
 
 func _ready() -> void:
+	if autoplay:
+		play()
 	for subsprite: SmartSprite2D in subsprites:
 		subsprite_initial_offsets.set(subsprite, subsprite.position)
 
@@ -157,6 +161,11 @@ func _process(delta: float) -> void:
 				animation_finished.emit()
 	else:
 		current_frame = new_frame
+
+
+func _physics_process(_delta: float) -> void:
+	if flip_with_velocity and rotation_source and rotation_source is Entity and not lock_flipping:
+		flip_h = rotation_source.velocity.x < 0
 
 
 func play(animation_name: StringName = current_animation) -> void:

@@ -10,7 +10,8 @@ resource_local_to_scene = true
 shader = ExtResource("2_jcblw")
 shader_parameter/state = 0
 shader_parameter/palette_index = 0
-shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/fill_color = Color(1, 1, 1, 0.25)
@@ -19,12 +20,14 @@ shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
 shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_4mo3w"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_idrjd"]
 diffuse_texture = ExtResource("3_idrjd")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m03ki"]
-size = Vector2(32, 30)
+size = Vector2(34.25, 31.25)
 
 [node name="Sign" type="Node2D" unique_id=1039791590 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
 script = ExtResource("1_mx0p7")
@@ -36,9 +39,9 @@ metadata/_custom_type_script = "uid://cfx4civm76jwr"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1849251792]
 material = SubResource("ShaderMaterial_sa7u4")
-texture = SubResource("CanvasTexture_4mo3w")
+texture = SubResource("CanvasTexture_idrjd")
 script = ExtResource("4_dicbs")
-canvas_texture = SubResource("CanvasTexture_4mo3w")
+canvas_texture = SubResource("CanvasTexture_idrjd")
 diffuse_texture = ExtResource("3_idrjd")
 current_animation = ""
 current_frame = 0

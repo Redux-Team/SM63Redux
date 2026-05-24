@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b84il0vytjysa"]
+
+[ext_resource type="PackedScene" uid="uid://rq5gwr7tkj2n" path="res://game/object/tree_big/tree_big.tscn" id="1_nwiun"]
+[ext_resource type="Texture2D" uid="uid://lmscs6i6kdly" path="res://assets/textures/props/nature/medium_jungle_tree.png" id="2_v7yob"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_iqg17"]
+diffuse_texture = ExtResource("2_v7yob")
+
+[node name="JungleTreeMedium" unique_id=439743552 instance=ExtResource("1_nwiun")]
+
+[node name="SmartSprite2D" parent="." index="0" unique_id=297195645]
+texture = SubResource("CanvasTexture_iqg17")
+canvas_texture = SubResource("CanvasTexture_iqg17")
+diffuse_texture = ExtResource("2_v7yob")

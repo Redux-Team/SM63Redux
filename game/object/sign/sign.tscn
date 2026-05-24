@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://blnhyb7daxtvq"]
+
+[ext_resource type="Script" uid="uid://bsswcbgcrlwv2" path="res://game/db/Objects/level_object.gd" id="1_sch0f"]
+[ext_resource type="Texture2D" uid="uid://dcoump5mt4pp3" path="res://assets/textures/props/interactable/sign.png" id="2_h7bxs"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_7vtus"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_2pjbv"]
+diffuse_texture = ExtResource("2_h7bxs")
+
+[node name="Sign" type="Node2D" unique_id=272511246]
+script = ExtResource("1_sch0f")
+metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=2085095849]
+texture = SubResource("CanvasTexture_2pjbv")
+script = ExtResource("3_7vtus")
+canvas_texture = SubResource("CanvasTexture_2pjbv")
+diffuse_texture = ExtResource("2_h7bxs")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"

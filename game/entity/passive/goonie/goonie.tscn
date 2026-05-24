@@ -12,6 +12,16 @@
 [ext_resource type="Script" uid="uid://dvxkxevaf2f45" path="res://core/custom_nodes/2d/ride_area.gd" id="6_bslqv"]
 [ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="7_i5hl1"]
 
+[sub_resource type="Resource" id="Resource_khk5a"]
+resource_local_to_scene = true
+script = ExtResource("3_xtefv")
+mode = 3
+expression = "!has_rider()"
+__from_uuid = "060d90ff-934b-4eca-be91-eb3f9732391d"
+__to_uuid = "862ece4c-14a6-4be6-b5cf-a666bc20970a"
+__from_node_uuid = "060d90ff-934b-4eca-be91-eb3f9732391d"
+__to_node_uuid = "792164a0-90ae-416c-bcb1-d978a5372cd8"
+
 [sub_resource type="Resource" id="Resource_ghncf"]
 resource_local_to_scene = true
 script = ExtResource("3_xtefv")
@@ -20,15 +30,6 @@ __from_uuid = "862ece4c-14a6-4be6-b5cf-a666bc20970a"
 __to_uuid = "a8621ec4-1c8c-4a98-86cc-08cb9d00fd82"
 __from_node_uuid = "862ece4c-14a6-4be6-b5cf-a666bc20970a"
 __to_node_uuid = "de5b538b-571a-4cd0-a99f-b83a7a6917c3"
-
-[sub_resource type="Resource" id="Resource_bslqv"]
-resource_local_to_scene = true
-script = ExtResource("3_xtefv")
-mode = 1
-__from_uuid = "a8621ec4-1c8c-4a98-86cc-08cb9d00fd82"
-__to_uuid = "862ece4c-14a6-4be6-b5cf-a666bc20970a"
-__from_node_uuid = "a8621ec4-1c8c-4a98-86cc-08cb9d00fd82"
-__to_node_uuid = "06717605-d064-492f-acf7-5ccfe16f7c57"
 
 [sub_resource type="Resource" id="Resource_bodhv"]
 resource_local_to_scene = true
@@ -50,15 +51,14 @@ __to_uuid = "060d90ff-934b-4eca-be91-eb3f9732391d"
 __from_node_uuid = "a0da23fc-aa00-43fa-9c1a-c8bdb1a30331"
 __to_node_uuid = "060d90ff-934b-4eca-be91-eb3f9732391d"
 
-[sub_resource type="Resource" id="Resource_khk5a"]
+[sub_resource type="Resource" id="Resource_bslqv"]
 resource_local_to_scene = true
 script = ExtResource("3_xtefv")
-mode = 3
-expression = "!has_rider()"
-__from_uuid = "060d90ff-934b-4eca-be91-eb3f9732391d"
+mode = 1
+__from_uuid = "a8621ec4-1c8c-4a98-86cc-08cb9d00fd82"
 __to_uuid = "862ece4c-14a6-4be6-b5cf-a666bc20970a"
-__from_node_uuid = "060d90ff-934b-4eca-be91-eb3f9732391d"
-__to_node_uuid = "792164a0-90ae-416c-bcb1-d978a5372cd8"
+__from_node_uuid = "a8621ec4-1c8c-4a98-86cc-08cb9d00fd82"
+__to_node_uuid = "06717605-d064-492f-acf7-5ccfe16f7c57"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0v6xk"]
 atlas = ExtResource("2_dma5t")
@@ -165,6 +165,7 @@ size = Vector2(32, 3)
 size = Vector2(32, 12)
 
 [node name="Goonie" type="CharacterBody2D" unique_id=459377689 node_paths=PackedStringArray("ride_area", "sprite", "components_root", "state_machine")]
+collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_jfxkd")
 heavy_flap_angle = 45.0

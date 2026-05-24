@@ -47,13 +47,27 @@ func get_multiplayer_handler() -> MultiplayerHandler:
 	return _multiplayer
 
 
-func spawn_sibling(root_node: Node, node: Node, _shared_properties: PackedStringArray = []) -> void:
+func spawn_sibling(root_node: Node, node: Node, _shared_properties: PackedStringArray = ["position", "scale"]) -> void:
 	var index: int = root_node.get_index()
 	root_node.get_parent().add_child.call_deferred(node)
 	root_node.get_parent().move_child.call_deferred(node, index)
 	
 	for _prop: String in _shared_properties:
 		node.set(_prop, root_node.get(_prop))
+
+
+func instantiate_sibling(root_node: Node, scene: PackedScene, count: int = 1, spread: int = 0, _shared_properties: PackedStringArray = ["position", "scale"]) -> void:
+	var index: int = root_node.get_index()
+	for c: int in count:
+		var node: Node = scene.instantiate().duplicate()
+		root_node.get_parent().add_child.call_deferred(node)
+		root_node.get_parent().move_child.call_deferred(node, index)
+		
+		for _prop: String in _shared_properties:
+			node.set(_prop, root_node.get(_prop))
+		
+		node.position.x += randi_range(-spread, spread)
+		node.position.y += randi_range(-spread, spread)
 
 
 func every(interval: float, method: Callable) -> void:

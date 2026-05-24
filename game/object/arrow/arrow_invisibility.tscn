@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://2rl0udburc4b"]
+
+[ext_resource type="PackedScene" uid="uid://cmyi1dmnejyfe" path="res://game/object/arrow/arrow.tscn" id="1_vnxu0"]
+[ext_resource type="Texture2D" uid="uid://cpnx0yn5ps358" path="res://assets/textures/props/hints/arrow_invisibility.png" id="2_von2i"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_7fthw"]
+diffuse_texture = ExtResource("2_von2i")
+
+[node name="ArrowInvisibility" unique_id=272511246 instance=ExtResource("1_vnxu0")]
+
+[node name="Sprite" parent="." index="0" unique_id=2085095849]
+self_modulate = Color(1, 1, 1, 0.54901963)
+texture = SubResource("CanvasTexture_7fthw")
+canvas_texture = SubResource("CanvasTexture_7fthw")
+diffuse_texture = ExtResource("2_von2i")

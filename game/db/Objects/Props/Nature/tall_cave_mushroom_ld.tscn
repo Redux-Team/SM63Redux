@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://eh8f20vlk7u2"]
+
+[ext_resource type="PackedScene" uid="uid://db8w1e2gd8p1i" path="res://game/db/Objects/Props/Nature/tall_mushroom_ld.tscn" id="1_3xkbj"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_8y4bv"]
+[ext_resource type="Texture2D" uid="uid://c7641olkeoexr" path="res://assets/textures/props/nature/tall_cave_mushroom_head.png" id="3_3xkbj"]
+[ext_resource type="Texture2D" uid="uid://djkajknxss5j1" path="res://assets/textures/props/nature/tall_cave_mushroom_stem.png" id="3_8y4bv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4wkd1"]
+resource_local_to_scene = true
+shader = ExtResource("2_8y4bv")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x807v"]
+resource_local_to_scene = true
+shader = ExtResource("2_8y4bv")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_1oxvv"]
+diffuse_texture = ExtResource("3_3xkbj")
+
+[node name="CaveMushroomTall" unique_id=1318691084 instance=ExtResource("1_3xkbj")]
+
+[node name="Stem" parent="." index="0" unique_id=201217882]
+material = SubResource("ShaderMaterial_4wkd1")
+texture = ExtResource("3_8y4bv")
+
+[node name="Head" parent="." index="1" unique_id=1512811414]
+material = SubResource("ShaderMaterial_x807v")
+texture = SubResource("CanvasTexture_1oxvv")
+canvas_texture = SubResource("CanvasTexture_1oxvv")
+diffuse_texture = ExtResource("3_3xkbj")

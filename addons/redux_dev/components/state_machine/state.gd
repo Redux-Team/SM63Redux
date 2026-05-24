@@ -390,9 +390,9 @@ func __collision_enter() -> void:
 		if not shape.disabled:
 			_collision_snapshot.append(shape)
 		if not enabled.is_empty():
-			shape.disabled = shape not in enabled
+			shape.set_deferred("disabled", shape not in enabled)
 		elif shape in disabled:
-			shape.disabled = true
+			shape.set_deferred("disabled", true)
 
 
 func __collision_exit() -> void:
@@ -402,7 +402,7 @@ func __collision_exit() -> void:
 	if not entity_node or entity_node.collision_shapes.is_empty():
 		return
 	for shape: CollisionShape2D in entity_node.collision_shapes:
-		shape.disabled = shape not in _collision_snapshot
+		shape.set_deferred("disabled", shape not in _collision_snapshot)
 	entity_node.collision_mask = _original_collision_mask
 	_collision_snapshot.clear()
 

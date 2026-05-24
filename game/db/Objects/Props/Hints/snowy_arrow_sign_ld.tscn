@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://c7cuc8wyq3vn0"]
+
+[ext_resource type="PackedScene" uid="uid://ctm1hxf5eu8wn" path="res://game/db/Objects/Props/Hints/arrow_sign_ld.tscn" id="1_tasfj"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_mtlg0"]
+[ext_resource type="Texture2D" uid="uid://krx5bevien4e" path="res://assets/textures/props/hints/snowy_arrow_sign_base.png" id="3_tasfj"]
+[ext_resource type="Texture2D" uid="uid://dhrubc1jqkosf" path="res://assets/textures/props/hints/snowy_arrow_sign_arrow.png" id="4_tasfj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r5a8v"]
+resource_local_to_scene = true
+shader = ExtResource("2_mtlg0")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_p1m5n"]
+diffuse_texture = ExtResource("3_tasfj")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_66pe1"]
+diffuse_texture = ExtResource("4_tasfj")
+
+[node name="SnowyArrowSign" unique_id=1562077408 instance=ExtResource("1_tasfj")]
+
+[node name="Sprite" parent="." index="0" unique_id=41563576]
+material = SubResource("ShaderMaterial_r5a8v")
+texture = SubResource("CanvasTexture_p1m5n")
+canvas_texture = SubResource("CanvasTexture_p1m5n")
+diffuse_texture = ExtResource("3_tasfj")
+
+[node name="Arrow" parent="Sprite" index="0" unique_id=160181720]
+texture = SubResource("CanvasTexture_66pe1")
+canvas_texture = SubResource("CanvasTexture_66pe1")
+diffuse_texture = ExtResource("4_tasfj")

@@ -1,8 +1,12 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://kxexxxdwa4sc"]
 
 [ext_resource type="Texture2D" uid="uid://cwf68h6bb26lc" path="res://assets/textures/item/fludd/water_bottle_big.png" id="1_jq6vl"]
+[ext_resource type="PackedScene" uid="uid://bwq3ayay30ykf" path="res://game/db/Objects/Item/FLUDD/big_water_bottle_ld.tscn" id="1_x57wf"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_x57wf"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_kku21"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_kku21"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_7hgj2"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_4vx2r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s4qyk"]
 atlas = ExtResource("1_jq6vl")
@@ -18,5 +22,7 @@ group_path = "FLUDD"
 name_override = "Big Water Bottle"
 ld_object_path = "Item/FLUDD/big_water_bottle"
 ld_entry_texture = SubResource("AtlasTexture_s4qyk")
+ld_editor_instance = ExtResource("1_x57wf")
 ld_index_id = "fludd_bottle"
+ld_properties = Array[ExtResource("2_x57wf")]([ExtResource("4_kku21"), ExtResource("5_7hgj2"), ExtResource("6_4vx2r")])
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

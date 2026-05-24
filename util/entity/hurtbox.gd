@@ -41,7 +41,7 @@ func _on_area_entered(area: Area2D) -> void:
 		return
 	
 	for component: HurtBoxComponent in components:
-		if not component.matches(hitbox):
+		if not component.matches(hitbox, self, owner as Entity if owner is Entity else null):
 			continue
 		if owner is Entity:
 			component.process(hitbox, self, owner as Entity)

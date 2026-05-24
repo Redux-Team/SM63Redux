@@ -1,8 +1,13 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://brym2h03w1ylu"]
 
 [ext_resource type="Texture2D" uid="uid://bc1fog4re0k82" path="res://assets/textures/item/utility/spinning_heart.png" id="1_bkfjh"]
+[ext_resource type="PackedScene" uid="uid://vw7whxnaoda" path="res://game/object/spinning_heart/spinning_heart.tscn" id="1_cs8b8"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_j37ae"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_bkfjh"]
+[ext_resource type="PackedScene" uid="uid://c7y00ivivvcpo" path="res://game/db/Objects/Item/Utility/spinning_heart_ld.tscn" id="2_j705c"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_3ob37"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_inhk5"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_irnmq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cs8b8"]
 atlas = ExtResource("1_bkfjh")
@@ -17,4 +22,7 @@ subpath = "Utility/spinning_heart"
 group_path = "Utility"
 ld_object_path = "Item/Utility/spinning_heart"
 ld_entry_texture = SubResource("AtlasTexture_cs8b8")
+ld_editor_instance = ExtResource("2_j705c")
+ld_properties = Array[ExtResource("1_j37ae")]([ExtResource("4_3ob37"), ExtResource("5_inhk5"), ExtResource("6_irnmq")])
+game_instance = ExtResource("1_cs8b8")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

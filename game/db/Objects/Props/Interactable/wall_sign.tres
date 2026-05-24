@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cv8hbokwkhauv"]
+
+[ext_resource type="PackedScene" uid="uid://j8cljrrmm2e7" path="res://game/db/Objects/Props/Interactable/wall_sign_ld.tscn" id="1_2ebud"]
+[ext_resource type="PackedScene" uid="uid://sal0y8tfe7d7" path="res://game/object/wall_sign/wall_sign.tscn" id="1_nujyi"]
+[ext_resource type="Texture2D" uid="uid://c3ecihb1hf57n" path="res://assets/textures/props/interactable/wall_sign.png" id="2_2ebud"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_3tsrr"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_1kb78"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="5_vbnhs"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_aj0hu"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_b7rff"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nujyi"]
+atlas = ExtResource("2_2ebud")
+region = Rect2(-8, -8, 48, 48)
+
+[resource]
+script = ExtResource("7_b7rff")
+id = "wall_sign"
+category = 4
+category_string = "Props"
+subpath = "Interactable/wall_sign"
+group_path = "Interactable"
+ld_object_path = "Props/Interactable/wall_sign"
+ld_entry_texture = SubResource("AtlasTexture_nujyi")
+ld_editor_instance = ExtResource("1_2ebud")
+ld_index_id = "sign"
+ld_properties = Array[ExtResource("3_3tsrr")]([ExtResource("4_1kb78"), ExtResource("5_vbnhs"), ExtResource("6_aj0hu")])
+game_instance = ExtResource("1_nujyi")
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

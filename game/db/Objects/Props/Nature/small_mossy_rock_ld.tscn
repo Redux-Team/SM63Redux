@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://diq120c4ry8d5"]
+
+[ext_resource type="PackedScene" uid="uid://badbr2p1fbcup" path="res://game/db/Objects/Props/Nature/small_rock_ld.tscn" id="1_u4jwx"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_65eqg"]
+[ext_resource type="Texture2D" uid="uid://c2wigcjbsp4hq" path="res://assets/textures/props/nature/small_mossy_rock.png" id="3_u4jwx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vvm7g"]
+resource_local_to_scene = true
+shader = ExtResource("2_65eqg")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_cvapq"]
+diffuse_texture = ExtResource("3_u4jwx")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u4jwx"]
+size = Vector2(34, 28)
+
+[node name="MossyRockSmall" unique_id=1039791590 instance=ExtResource("1_u4jwx")]
+
+[node name="Sprite" parent="." index="0" unique_id=1849251792]
+material = SubResource("ShaderMaterial_vvm7g")
+texture = SubResource("CanvasTexture_cvapq")
+canvas_texture = SubResource("CanvasTexture_cvapq")
+diffuse_texture = ExtResource("3_u4jwx")
+
+[node name="EditorShape" parent="EditorShapeArea" parent_id_path=PackedInt32Array(1978033632) index="0" unique_id=416735272]
+position = Vector2(1, 2)
+shape = SubResource("RectangleShape2D_u4jwx")

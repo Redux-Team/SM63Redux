@@ -78,6 +78,12 @@
 [ext_resource type="Texture2D" uid="uid://bf02hn0t5hgfy" path="res://assets/textures/entity/player/mario/run3.png" id="67_dhqxs"]
 [ext_resource type="Texture2D" uid="uid://cretlfr32ltey" path="res://assets/textures/entity/player/mario/walk_2.png" id="69_h6qgx"]
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="73_ketxm"]
+[ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="78_fx7qh"]
+[ext_resource type="Texture2D" uid="uid://dnqpe8w1wgck1" path="res://assets/textures/particle/item/heal_particle.png" id="80_k0v5e"]
+[ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="81_dhqxs"]
+
+[sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_3h1ly"]
+cutoff_hz = 2500.0
 
 [sub_resource type="Resource" id="Resource_rlrt6"]
 resource_local_to_scene = true
@@ -94,7 +100,7 @@ resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
 transition_time = 0.3
-expression = "!is_in_water"
+expression = "!is_in_water()"
 __from_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
 __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
@@ -149,6 +155,16 @@ __from_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
 __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "19756cb2-870e-4389-ac45-b7857f943765"
 __to_node_uuid = "ef17b68d-10e2-4919-8e7d-84844258bfb6"
+
+[sub_resource type="Resource" id="Resource_sa3a5"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_action_just_pressed(\"dive\") && can_dive && get_active_state_uptime() > 0"
+__from_uuid = "a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+__to_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
+__from_node_uuid = "61dbc363-2b96-44e3-b341-13ef60566d2b"
+__to_node_uuid = "1a6db986-d32f-4647-9c61-30a3baed866c"
 
 [sub_resource type="Resource" id="Resource_5ygwk"]
 resource_local_to_scene = true
@@ -211,6 +227,16 @@ __from_uuid = "7a11481f-96a2-4861-99a6-5a97b2628e11"
 __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "9926b8f7-53dc-4adb-a5e1-b7a3daa778e5"
 __to_node_uuid = "31d0deb8-7915-434d-b931-44f3244dadf5"
+
+[sub_resource type="Resource" id="Resource_fcy6w"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "is_on_floor()"
+__from_uuid = "a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
+__from_node_uuid = "61dbc363-2b96-44e3-b341-13ef60566d2b"
+__to_node_uuid = "bee3ecfd-b265-4bfc-b4ea-e7afe4a62675"
 
 [sub_resource type="Resource" id="Resource_h2xdj"]
 resource_local_to_scene = true
@@ -333,6 +359,16 @@ __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "fa056152-beb4-4b59-ac26-920719c61203"
 __to_node_uuid = "7cae40dc-c5e3-454c-b0d0-183d3e1c76a4"
 
+[sub_resource type="Resource" id="Resource_42p6x"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "!is_in_water() && velocity.y >= 0"
+__from_uuid = "1c0b8823-6179-4117-9b5a-5a7e7c720250"
+__to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+__from_node_uuid = "11a484af-b606-4bd5-9549-d14f87307166"
+__to_node_uuid = "67e7fafe-11fa-4846-94cb-7d569e788cf9"
+
 [sub_resource type="Resource" id="Resource_hmgs0"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
@@ -423,6 +459,16 @@ __to_uuid = "fac7caf1-9473-4b51-87ce-64f33b12c026"
 __from_node_uuid = "8b19d8b2-a53b-48b7-88f0-a29f979c4120"
 __to_node_uuid = "7c620763-2d9a-48d4-92bd-44c0f1f5151c"
 
+[sub_resource type="Resource" id="Resource_sbpf8"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "velocity.y > 50"
+__from_uuid = "a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+__to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+__from_node_uuid = "61dbc363-2b96-44e3-b341-13ef60566d2b"
+__to_node_uuid = "47d80ca0-eba2-4f2f-abe5-5d1a702997a6"
+
 [sub_resource type="Resource" id="Resource_icsuc"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
@@ -477,7 +523,7 @@ __to_node_uuid = "0f4b75f7-bfab-489e-abee-b73251d54a97"
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
 mode = 3
-expression = "is_in_water"
+expression = "is_in_water()"
 __from_uuid = "b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 __to_uuid = "fac7caf1-9473-4b51-87ce-64f33b12c026"
 __from_node_uuid = "10ba8e2b-52bf-45c5-adc7-844eb827c829"
@@ -532,6 +578,16 @@ __from_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __to_uuid = "b3fdc091-1261-4006-a130-d7a725b6b4cd"
 __from_node_uuid = "f79403a8-db53-422c-94ac-1755c46bddd9"
 __to_node_uuid = "79751927-f38e-4c65-bf16-966deab6d21a"
+
+[sub_resource type="Resource" id="Resource_sj7k7"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "!is_in_water() && velocity.y < 0"
+__from_uuid = "1c0b8823-6179-4117-9b5a-5a7e7c720250"
+__to_uuid = "a8371ea8-4f4b-4cdc-8345-14368f1455d3"
+__from_node_uuid = "11a484af-b606-4bd5-9549-d14f87307166"
+__to_node_uuid = "60a68981-ade6-43d5-961f-e3a21bf56433"
 
 [sub_resource type="Resource" id="Resource_aln35"]
 resource_local_to_scene = true
@@ -654,56 +710,6 @@ __to_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __from_node_uuid = "167d2846-17ec-4534-a26e-c582cae80f3a"
 __to_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 
-[sub_resource type="Resource" id="Resource_42p6x"]
-resource_local_to_scene = true
-script = ExtResource("3_0jrw7")
-mode = 3
-expression = "!is_in_water && velocity.y >= 0"
-__from_uuid = "1c0b8823-6179-4117-9b5a-5a7e7c720250"
-__to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
-__from_node_uuid = "11a484af-b606-4bd5-9549-d14f87307166"
-__to_node_uuid = "67e7fafe-11fa-4846-94cb-7d569e788cf9"
-
-[sub_resource type="Resource" id="Resource_sj7k7"]
-resource_local_to_scene = true
-script = ExtResource("3_0jrw7")
-mode = 3
-expression = "!is_in_water && velocity.y < 0"
-__from_uuid = "1c0b8823-6179-4117-9b5a-5a7e7c720250"
-__to_uuid = "a8371ea8-4f4b-4cdc-8345-14368f1455d3"
-__from_node_uuid = "11a484af-b606-4bd5-9549-d14f87307166"
-__to_node_uuid = "60a68981-ade6-43d5-961f-e3a21bf56433"
-
-[sub_resource type="Resource" id="Resource_sbpf8"]
-resource_local_to_scene = true
-script = ExtResource("3_0jrw7")
-mode = 3
-expression = "velocity.y > 50"
-__from_uuid = "a8371ea8-4f4b-4cdc-8345-14368f1455d3"
-__to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
-__from_node_uuid = "61dbc363-2b96-44e3-b341-13ef60566d2b"
-__to_node_uuid = "47d80ca0-eba2-4f2f-abe5-5d1a702997a6"
-
-[sub_resource type="Resource" id="Resource_fcy6w"]
-resource_local_to_scene = true
-script = ExtResource("3_0jrw7")
-mode = 3
-expression = "is_on_floor()"
-__from_uuid = "a8371ea8-4f4b-4cdc-8345-14368f1455d3"
-__to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
-__from_node_uuid = "61dbc363-2b96-44e3-b341-13ef60566d2b"
-__to_node_uuid = "bee3ecfd-b265-4bfc-b4ea-e7afe4a62675"
-
-[sub_resource type="Resource" id="Resource_sa3a5"]
-resource_local_to_scene = true
-script = ExtResource("3_0jrw7")
-mode = 3
-expression = "is_action_just_pressed(\"dive\") && can_dive && get_active_state_uptime() > 0"
-__from_uuid = "a8371ea8-4f4b-4cdc-8345-14368f1455d3"
-__to_uuid = "0dd74506-66e0-4267-b86b-0572da305c2a"
-__from_node_uuid = "61dbc363-2b96-44e3-b341-13ef60566d2b"
-__to_node_uuid = "1a6db986-d32f-4647-9c61-30a3baed866c"
-
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
 _data = [Vector2(0, -1.3932585), 0.0, 0.9746846, 0, 0, Vector2(1.5965666, -0.05618429), 0.0, 0.0, 0, 0]
@@ -807,9 +813,6 @@ script = ExtResource("7_ioda6")
 playlist = SubResource("Resource_d3nks")
 bus = 3
 metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_3h1ly"]
-cutoff_hz = 2500.0
 
 [sub_resource type="Resource" id="Resource_gdvj3"]
 script = ExtResource("13_8yq6v")
@@ -947,7 +950,7 @@ _data = {
 atlas = ExtResource("53_ketxm")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_ohvaq"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_fx7qh"]
 diffuse_texture = SubResource("AtlasTexture_kyrvb")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d635j"]
@@ -1305,22 +1308,34 @@ func _process(_delta: float) -> void:
 	text = str(player.state_machine.get_current_state())
 "
 
-[node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "_input_handler", "_movement_handler", "_sprite_handler", "sprite", "components_root", "collision_shapes", "state_machine")]
+[sub_resource type="Curve" id="Curve_k0v5e"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.07763975, 1), 0.30232516, 0.30232516, 0, 0, Vector2(1, 0.48322988), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_k0v5e"]
+offsets = PackedFloat32Array(0, 0.13851352, 0.5709459, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0.9459459, 1, 1, 1, 0)
+
+[node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "heal_particles", "_input_handler", "_movement_handler", "_sprite_handler", "sprite", "components_root", "collision_shapes", "state_machine", "water_check")]
 collision_mask = 2
 floor_snap_length = 7.0
 script = ExtResource("1_oic1i")
-midair_turn_speed = 2.5
+run_max_speed = 235.0
+midair_max_speed = 210.0
 debug_container = NodePath("DebugContainer")
 floor_slope_raycast = NodePath("FloorSlopeRaycast")
 spin_area = NodePath("Hitboxes/Spin")
 spin_shape = NodePath("Hitboxes/Spin/CollisionShape2D")
+heal_particles = NodePath("HealParticles")
 _input_handler = NodePath("Handlers/InputHandler")
 _movement_handler = NodePath("Handlers/MovementHandler")
 _sprite_handler = NodePath("Handlers/SpriteHandler")
+submerged_bus_effects = Array[AudioEffect]([SubResource("AudioEffectLowPassFilter_3h1ly")])
 sprite = NodePath("Doll")
 components_root = NodePath("Components")
 collision_shapes = [NodePath("BaseCollision"), NodePath("GroundPoundCollision"), NodePath("DiveCollision"), NodePath("Hitboxes/GroundPound/CollisionShape2D"), NodePath("Hitboxes/Dive/CollisionShape2D")]
 state_machine = NodePath("StateMachine")
+water_check = NodePath("Regions/WaterCheck")
 
 [node name="StateMachine" type="Node" parent="." unique_id=49398394 node_paths=PackedStringArray("initial_state", "sprite", "animation_player", "sfx_root", "__states")]
 script = ExtResource("2_cawmy")
@@ -1329,8 +1344,8 @@ root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(1079.3224, 406.7126)
-__last_editor_zoom = 0.505447
+__last__editor_position = Vector2(-489.3434, 0)
+__last_editor_zoom = 0.45949718
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),
@@ -1923,7 +1938,6 @@ __editor_superstate_wire_uuid = &"c129c1dc-f896-4e20-b678-2a396f143ae9"
 
 [node name="Submerged" type="Node" parent="StateMachine" unique_id=1525831935]
 script = ExtResource("38_3h1ly")
-submerged_bus_effects = Array[AudioEffect]([SubResource("AudioEffectLowPassFilter_3h1ly")])
 always_transition = true
 __editor_name = &"Submerged"
 __editor_position = Vector2(-1440, 760)
@@ -2059,11 +2073,12 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_ohvaq")
+texture = SubResource("CanvasTexture_fx7qh")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_ohvaq")
+canvas_texture = SubResource("CanvasTexture_fx7qh")
+flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
@@ -2110,10 +2125,8 @@ shape = SubResource("CapsuleShape2D_6suq8")
 disabled = true
 
 [node name="Hitboxes" type="Node2D" parent="." unique_id=1409973495]
-visible = false
 
 [node name="Spin" type="Area2D" parent="Hitboxes" unique_id=1300299390]
-visible = false
 position = Vector2(2, -10)
 monitoring = false
 script = ExtResource("19_1wiqr")
@@ -2206,9 +2219,11 @@ metadata/entity_region = true
 position = Vector2(2, -3.5)
 shape = SubResource("RectangleShape2D_3h1ly")
 
-[node name="WaterCheck" type="Area2D" parent="Regions" unique_id=258307688]
+[node name="WaterCheck" type="Area2D" parent="Regions" unique_id=149120467]
 visible = false
 collision_mask = 4
+script = ExtResource("78_fx7qh")
+metadata/_custom_type_script = "uid://bhoysiia8munh"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Regions/WaterCheck" unique_id=1009172898]
 position = Vector2(2, -8)
@@ -2291,5 +2306,29 @@ horizontal_alignment = 1
 script = SubResource("GDScript_aln35")
 player = NodePath("..")
 
-[connection signal="area_entered" from="Regions/WaterCheck" to="." method="_on_water_check_area_entered"]
-[connection signal="area_exited" from="Regions/WaterCheck" to="." method="_on_water_check_area_exited"]
+[node name="HealParticles" type="CPUParticles2D" parent="." unique_id=1970630858]
+position = Vector2(2, 15)
+emitting = false
+texture = ExtResource("80_k0v5e")
+lifetime = 2.0
+one_shot = true
+preprocess = 1.0
+explosiveness = 1.0
+local_coords = true
+emission_shape = 1
+emission_sphere_radius = 14.0
+direction = Vector2(0, -1)
+spread = 0.0
+gravity = Vector2(0, -10)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+scale_amount_curve = SubResource("Curve_k0v5e")
+color_ramp = SubResource("Gradient_k0v5e")
+script = ExtResource("81_dhqxs")
+high_particle_amount = 8
+medium_particle_amount = 8
+low_particle_amount = 8
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[connection signal="water_entered" from="Regions/WaterCheck" to="." method="_on_water_check_water_entered"]
+[connection signal="water_exited" from="Regions/WaterCheck" to="." method="_on_water_check_water_exited"]

@@ -15,6 +15,7 @@ enum KnockbackMode {
 @export var ignored_hitbox_ids: PackedStringArray
 @export var accepted_damage_types: Array[HitBox.DamageType]
 @export var ignored_damage_types: Array[HitBox.DamageType]
+@export_custom(PROPERTY_HINT_EXPRESSION, "") var expression: String
 
 @export_group("Knockback")
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "knockback") var override_knockback: bool = false
@@ -28,7 +29,7 @@ enum KnockbackMode {
 @export var damage_state_name: StringName
 
 
-func matches(hitbox: HitBox) -> bool:
+func matches(hitbox: HitBox, hurtbox: HurtBox = null, entity: Entity = null) -> bool:
 	if accepted_hitbox_ids and not hitbox.hitbox_ids.any(func(id: String) -> bool: return id in accepted_hitbox_ids):
 		return false
 	if hitbox.hitbox_ids.any(func(id: String) -> bool: return id in ignored_hitbox_ids):
@@ -37,6 +38,17 @@ func matches(hitbox: HitBox) -> bool:
 		return false
 	if hitbox.damage_type in ignored_damage_types:
 		return false
+	if not expression.is_empty():
+		var expr: Expression = Expression.new()
+		var err: Error = expr.parse(expression, [&"hitbox", &"hurtbox", &"entity"])
+		if err != OK:
+			push_error("HurtBoxComponent: failed to parse expression: %s" % expr.get_error_text())
+			return false
+		var result: Variant = expr.execute([hitbox, hurtbox, entity])
+		if expr.has_execute_failed():
+			push_error("HurtBoxComponent: failed to execute expression: %s" % expr.get_error_text())
+			return false
+		return result as bool
 	return true
 
 

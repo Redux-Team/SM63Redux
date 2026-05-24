@@ -1,7 +1,12 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dooks7pjmro81"]
 
+[ext_resource type="Texture2D" uid="uid://ck06ti74mhr1p" path="res://assets/textures/entity/npc/toad.png" id="1_j1iht"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_xwlsj"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_j1iht"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c3l2e"]
+atlas = ExtResource("1_j1iht")
+region = Rect2(-7, -7, 48, 48)
 
 [resource]
 script = ExtResource("2_j1iht")
@@ -10,4 +15,5 @@ category_string = "Entity"
 subpath = "NPC/toad"
 group_path = "NPC"
 ld_object_path = "Entity/NPC/toad"
+ld_entry_texture = SubResource("AtlasTexture_c3l2e")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

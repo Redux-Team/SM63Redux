@@ -1,0 +1,195 @@
+[gd_scene format=3 uid="uid://bppwwwruvw60p"]
+
+[ext_resource type="PackedScene" uid="uid://c7ler7lqg61m1" path="res://game/object/breakable_box/breakable_box.tscn" id="1_gb4rt"]
+[ext_resource type="Texture2D" uid="uid://csab8p3wucepo" path="res://assets/textures/props/interactable/breakable_glass_0.png" id="2_q7nns"]
+[ext_resource type="Texture2D" uid="uid://by72j0f1vxmja" path="res://assets/textures/props/interactable/breakable_glass_2.png" id="3_5x1lc"]
+[ext_resource type="AudioStream" uid="uid://csj1dtritxkmf" path="res://assets/sfx/object/breakable_glass/glass_break_1.ogg" id="3_iibrf"]
+[ext_resource type="Texture2D" uid="uid://b6rve2nk74725" path="res://assets/textures/props/interactable/breakable_glass_particles.png" id="3_q7nns"]
+[ext_resource type="AudioStream" uid="uid://tsl83yg44tmp" path="res://assets/sfx/object/breakable_glass/glass_break_2.ogg" id="3_vlmnl"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_71e71"]
+[ext_resource type="AudioStream" uid="uid://dum4iavp1jkui" path="res://assets/sfx/object/breakable_glass/glass_break_3.ogg" id="4_ummfn"]
+[ext_resource type="Texture2D" uid="uid://b7wqc58gwogb6" path="res://assets/textures/item/collectible/yellow_coin_spin.png" id="5_x272f"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_vqqdr"]
+diffuse_texture = ExtResource("2_q7nns")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iibrf"]
+atlas = ExtResource("3_q7nns")
+region = Rect2(0, 8, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x272f"]
+atlas = ExtResource("3_q7nns")
+region = Rect2(0, 0, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vlmnl"]
+atlas = ExtResource("3_q7nns")
+region = Rect2(0, 16, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q0gvo"]
+atlas = ExtResource("3_q7nns")
+region = Rect2(0, 24, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ummfn"]
+atlas = ExtResource("3_q7nns")
+region = Rect2(0, 32, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5x1lc"]
+atlas = ExtResource("3_q7nns")
+region = Rect2(0, 40, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kdg5b"]
+atlas = ExtResource("3_q7nns")
+region = Rect2(0, 48, 16, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_q7nns"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x272f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iibrf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vlmnl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q0gvo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ummfn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5x1lc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kdg5b")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71wue"]
+atlas = ExtResource("5_x272f")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_kdg5b"]
+diffuse_texture = SubResource("AtlasTexture_71wue")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2pf35"]
+atlas = ExtResource("5_x272f")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dx3ld"]
+atlas = ExtResource("5_x272f")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_466xr"]
+atlas = ExtResource("5_x272f")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hpbbt"]
+atlas = ExtResource("5_x272f")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u2kbu"]
+atlas = ExtResource("5_x272f")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ty8x8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_71wue")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2pf35")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dx3ld")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_466xr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hpbbt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u2kbu")
+}],
+"loop": true,
+"name": &"spin",
+"speed": 5.0
+}]
+
+[sub_resource type="GDScript" id="GDScript_x272f"]
+script/source = "extends Node2D
+
+@export var coin_template: SmartSprite2D
+
+var glass: LevelObject:
+	get():
+		return owner as LevelObject
+
+
+func _ready() -> void:
+	await glass.initialized
+	var coin_amount: int = min(glass.get_property(\"coin_amount\"), 5)
+	
+	for i in coin_amount:
+		var coin: SmartSprite2D = coin_template.duplicate()
+		add_child(coin)
+		coin.show()
+		coin.play()
+		coin.position.x += randi_range(-coin_amount + 1, coin_amount - 1)
+		coin.position.y += randi_range(-coin_amount + 1, coin_amount - 1)
+
+
+func _on_hurt_box_damaged(_source_hitbox: HitBox) -> void:
+	print(glass.get_property(\"coin_amount\"))
+	hide()
+	queue_free()
+"
+
+[node name="BreakableGlass" unique_id=1219245977 instance=ExtResource("1_gb4rt")]
+textures = Array[Texture2D]([ExtResource("2_q7nns"), ExtResource("2_q7nns"), ExtResource("3_5x1lc")])
+break_sfx_list = Array[AudioStream]([ExtResource("3_iibrf"), ExtResource("3_vlmnl"), ExtResource("4_ummfn")])
+
+[node name="Sprite" parent="." index="0" unique_id=286401553]
+texture = SubResource("CanvasTexture_vqqdr")
+canvas_texture = SubResource("CanvasTexture_vqqdr")
+diffuse_texture = ExtResource("2_q7nns")
+
+[node name="HurtBox" parent="." index="1" unique_id=920770686]
+visible = false
+
+[node name="BreakSFX" parent="." index="3" unique_id=593496812]
+stream = ExtResource("3_iibrf")
+volume_db = -5.0
+
+[node name="ParticleEmitter" parent="." index="4" unique_id=1781001774]
+texture = SubResource("AtlasTexture_iibrf")
+sprite_frames = SubResource("SpriteFrames_q7nns")
+
+[node name="CoinTemplate" type="Sprite2D" parent="." index="5" unique_id=548014254]
+visible = false
+texture = SubResource("CanvasTexture_kdg5b")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+script = ExtResource("4_71e71")
+canvas_texture = SubResource("CanvasTexture_kdg5b")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_ty8x8")
+current_animation = "spin"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="InsideCoins" type="Node2D" parent="." index="6" unique_id=1661808871 node_paths=PackedStringArray("coin_template")]
+show_behind_parent = true
+script = SubResource("GDScript_x272f")
+coin_template = NodePath("../CoinTemplate")
+
+[connection signal="damaged" from="HurtBox" to="InsideCoins" method="_on_hurt_box_damaged"]

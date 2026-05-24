@@ -28,6 +28,7 @@
 [ext_resource type="AudioStream" uid="uid://dq4csxy68lb4q" path="res://assets/sfx/entity/goomba/goomba_struck.wav" id="15_lgdot"]
 [ext_resource type="Texture2D" uid="uid://djcybawlcos34" path="res://assets/textures/entity/enemy/goomba/goomba_hit.png" id="20_4grvk"]
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="26_15o45"]
+[ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="29_rakc8"]
 
 [sub_resource type="Resource" id="Resource_eqg5w"]
 resource_local_to_scene = true
@@ -96,7 +97,7 @@ metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 atlas = ExtResource("3_hysx3")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_7e3mf"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_a7n3c"]
 diffuse_texture = SubResource("AtlasTexture_n0olq")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kyaey"]
@@ -294,7 +295,10 @@ metadata/_custom_type_script = "uid://drtqc6at2evph"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_whnfo"]
 size = Vector2(21.5, 14)
 
-[node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("player_check", "sprite", "components_root", "state_machine")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_42vey"]
+size = Vector2(16, 16)
+
+[node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("player_check", "sprite", "components_root", "state_machine", "water_check")]
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_hysx3")
@@ -306,6 +310,7 @@ exit_objects = Dictionary[PackedScene, int]({
 ExtResource("2_onrng"): 1,
 ExtResource("3_7e3mf"): 1
 })
+water_check = NodePath("WaterCheckArea")
 
 [node name="StateMachine" type="Node" parent="." unique_id=48097513 node_paths=PackedStringArray("initial_state", "sprite", "animation_player", "sfx_root", "__states")]
 script = ExtResource("2_e0p0p")
@@ -314,8 +319,8 @@ root_node = NodePath("..")
 sprite = NodePath("../SmartSprite2D")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(189.26038, 151.47421)
-__last_editor_zoom = 0.61159116
+__last__editor_position = Vector2(315.122, 21.69278)
+__last_editor_zoom = 0.81402785
 __states = {
 &"53d6d36b-82d5-4959-a868-aff4d9ec2aba": NodePath("Wander/Alert"),
 &"5f76de65-09f3-4b6f-9847-15c247ae70f1": NodePath("Strike"),
@@ -387,11 +392,12 @@ __editor_uuid = &"5f76de65-09f3-4b6f-9847-15c247ae70f1"
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(0, -7)
-texture = SubResource("CanvasTexture_7e3mf")
+texture = SubResource("CanvasTexture_a7n3c")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("4_whnfo")
-canvas_texture = SubResource("CanvasTexture_7e3mf")
+canvas_texture = SubResource("CanvasTexture_a7n3c")
+flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_x5cu4")
@@ -479,6 +485,13 @@ metadata/_custom_type_script = "uid://3ara7t8dqmih"
 position = Vector2(-0.25, -3)
 shape = SubResource("RectangleShape2D_whnfo")
 debug_color = Color(0.7, 0.66499996, 0, 0.41960785)
+
+[node name="WaterCheckArea" type="Area2D" parent="." unique_id=1160325996]
+script = ExtResource("29_rakc8")
+metadata/_custom_type_script = "uid://bhoysiia8munh"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WaterCheckArea" unique_id=749598814]
+shape = SubResource("RectangleShape2D_42vey")
 
 [connection signal="area_entered" from="PlayerCheck" to="." method="_on_area_2d_area_entered"]
 [connection signal="damaged" from="HurtBox" to="." method="_on_hurt_box_damaged"]

@@ -7,6 +7,8 @@ extends Node2D
 @export var terrain_type: String
 @export var palette_objects: Array[CanvasItem]
 
+signal initialized
+
 var data: Dictionary
 var properties: Dictionary = {}
 var source_object_id: String = ""
@@ -24,11 +26,12 @@ func init_from_data(obj_data: Dictionary) -> void:
 	if body:
 		body.set_meta(&"terrain", terrain_type)
 	
+	initialized.emit()
 	_on_init()
 
 
-func get_property(key: StringName) -> Variant:
-	return properties.get(key)
+func get_property(key: StringName, default: Variant = null) -> Variant:
+	return properties.get(key, default)
 
 
 func set_property(key: StringName, value: Variant) -> void:

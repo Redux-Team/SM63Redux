@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://vw7whxnaoda"]
+
+[ext_resource type="Script" uid="uid://dmjutro56pml" path="res://game/object/spinning_heart/spinning_heart.gd" id="1_pu6v3"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_w3f6o"]
+[ext_resource type="Texture2D" uid="uid://b2afmo0hgwqun" path="res://assets/textures/item/utility/spinning_heart_spin.png" id="3_840lj"]
+[ext_resource type="Script" uid="uid://cf0fqotw8gu4p" path="res://core/custom_nodes/2d/entity_check_area.gd" id="4_pqqvm"]
+[ext_resource type="AudioStream" uid="uid://bw8hph2pfm5ij" path="res://assets/sfx/item/spinning_heart_heal.wav" id="5_pqqvm"]
+
+[sub_resource type="Curve" id="Curve_pu6v3"]
+_limits = [0.0, 1.0, 100.0, 300.0]
+_data = [Vector2(100, 0), 0.0, 0.0, 0, 0, Vector2(162.87425, 0), 0.0, 0.0, 0, 0, Vector2(300, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pu6v3"]
+atlas = ExtResource("3_840lj")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_840lj"]
+diffuse_texture = SubResource("AtlasTexture_pu6v3")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pqqvm"]
+atlas = ExtResource("3_840lj")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i4mor"]
+atlas = ExtResource("3_840lj")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qmpe6"]
+atlas = ExtResource("3_840lj")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rrfnr"]
+atlas = ExtResource("3_840lj")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o5fuw"]
+atlas = ExtResource("3_840lj")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2s1uc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pu6v3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pqqvm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i4mor")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qmpe6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rrfnr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o5fuw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pu6v3"]
+
+[node name="SpinningHeart" type="Node2D" unique_id=269226622 node_paths=PackedStringArray("sprite", "heal_sfx")]
+script = ExtResource("1_pu6v3")
+healing_curve = SubResource("Curve_pu6v3")
+sprite = NodePath("Sprite")
+heal_sfx = NodePath("HealSFX")
+metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1852691735]
+self_modulate = Color(1, 1, 1, 0.64705884)
+texture = SubResource("CanvasTexture_840lj")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
+script = ExtResource("2_w3f6o")
+canvas_texture = SubResource("CanvasTexture_840lj")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_2s1uc")
+current_animation = "default"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="EntityCheckArea" type="Area2D" parent="." unique_id=2046366375]
+script = ExtResource("4_pqqvm")
+metadata/_custom_type_script = "uid://cf0fqotw8gu4p"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EntityCheckArea" unique_id=1524380228]
+visible = false
+shape = SubResource("RectangleShape2D_pu6v3")
+
+[node name="HealSFX" type="AudioStreamPlayer2D" parent="." unique_id=1562742216]
+stream = ExtResource("5_pqqvm")
+
+[connection signal="player_entered" from="EntityCheckArea" to="." method="_on_entity_check_area_player_entered"]

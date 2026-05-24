@@ -6,16 +6,17 @@
 [ext_resource type="Texture2D" uid="uid://b7wqc58gwogb6" path="res://assets/textures/item/collectible/yellow_coin_spin.png" id="3_aa8gu"]
 [ext_resource type="Script" uid="uid://gqndp1vy8xo2" path="res://game/entity_components/bouncy_component.gd" id="3_vu8ol"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="4_8rta1"]
-[ext_resource type="Script" uid="uid://cf0fqotw8gu4p" path="res://core/custom_nodes/2d/player_check_area.gd" id="4_aa8gu"]
+[ext_resource type="Script" uid="uid://cf0fqotw8gu4p" path="res://core/custom_nodes/2d/entity_check_area.gd" id="4_aa8gu"]
 [ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="5_exijk"]
 [ext_resource type="Texture2D" uid="uid://du3uraiotivor" path="res://assets/textures/particle/item/yellow_coin_particle.png" id="5_k3up7"]
 [ext_resource type="AudioStream" uid="uid://0bs3yr3jh6j5" path="res://assets/sfx/item/yellow_coin_collect.wav" id="7_olrdk"]
+[ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="11_2c2xh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k3up7"]
 atlas = ExtResource("3_aa8gu")
 region = Rect2(0, 0, 16, 16)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_8rta1"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_2c2xh"]
 diffuse_texture = SubResource("AtlasTexture_k3up7")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_olrdk"]
@@ -78,7 +79,7 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 [sub_resource type="CircleShape2D" id="CircleShape2D_olrdk"]
 radius = 8.062258
 
-[node name="YellowCoin" type="CharacterBody2D" unique_id=187434736 node_paths=PackedStringArray("particle_emitter", "audio_stream_player_2d", "entity_check_area", "gravity_component", "bouncy_component", "sprite")]
+[node name="YellowCoin" type="CharacterBody2D" unique_id=187434736 node_paths=PackedStringArray("particle_emitter", "audio_stream_player_2d", "entity_check_area", "gravity_component", "bouncy_component", "sprite", "water_check")]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_k3up7")
@@ -88,6 +89,7 @@ entity_check_area = NodePath("EntityCheckArea")
 gravity_component = NodePath("Components/GravityComponent")
 bouncy_component = NodePath("Components/BouncyComponent")
 sprite = NodePath("Sprite")
+water_check = NodePath("WaterCheckArea")
 
 [node name="Components" type="Node" parent="." unique_id=1587467096]
 
@@ -109,11 +111,11 @@ entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1781944590]
-texture = SubResource("CanvasTexture_8rta1")
+texture = SubResource("CanvasTexture_2c2xh")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 script = ExtResource("2_1gmy6")
-canvas_texture = SubResource("CanvasTexture_8rta1")
+canvas_texture = SubResource("CanvasTexture_2c2xh")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_u2fme")
 current_animation = "default"
@@ -153,6 +155,13 @@ metadata/_custom_type_script = "uid://c2df6xnsl5aem"
 stream = ExtResource("7_olrdk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1257759074]
+shape = SubResource("CircleShape2D_olrdk")
+
+[node name="WaterCheckArea" type="Area2D" parent="." unique_id=1134460274]
+script = ExtResource("11_2c2xh")
+metadata/_custom_type_script = "uid://bhoysiia8munh"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WaterCheckArea" unique_id=213062493]
 shape = SubResource("CircleShape2D_olrdk")
 
 [connection signal="player_entered" from="EntityCheckArea" to="." method="_on_entity_check_area_player_entered"]

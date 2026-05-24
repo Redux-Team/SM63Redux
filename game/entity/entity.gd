@@ -9,6 +9,7 @@ extends CharacterBody2D
 @export var collision_shapes: Array[CollisionShape2D]
 @export var state_machine: StateMachine
 @export var exit_objects: Dictionary[PackedScene, int]
+@export var water_check: WaterCheckArea
 
 
 var data: Dictionary
@@ -89,6 +90,22 @@ func get_component(type: Script) -> EntityComponent:
 
 func has_component(type: Script) -> bool:
 	return get_component(type) != null
+
+
+func is_in_air() -> bool:
+	return not (is_on_floor() or is_on_wall() or is_on_ceiling())
+
+
+func is_on_anything() -> bool:
+	return is_on_floor() or is_on_wall() or is_on_ceiling()
+
+
+func is_in_water() -> bool:
+	if not water_check:
+		push_error("Tried checking if submerged without water check area!")
+		return false
+	
+	return water_check.is_in_water()
 
 
 func damage(amount: float, type: HitBox.DamageType, source: Node2D = null) -> void:

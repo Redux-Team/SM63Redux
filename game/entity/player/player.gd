@@ -4,9 +4,6 @@
 class_name Player
 extends Entity
 
-signal entered_water
-signal exited_water
-
 const BUFFER_ACTIONS: PackedStringArray = ["jump"]
 var buffer_dictionary: Dictionary[String, float]
 
@@ -17,9 +14,9 @@ var buffer_dictionary: Dictionary[String, float]
 @export var midair_turn_speed: float = 1.0
 @export var air_resistance: float = 1.0
 @export_subgroup("Vertical Movement")
-@export var jump_strength: float = 360.0
-@export var double_jump_strength: float = 460.0
-@export var triple_jump_strength: float = 530.0
+@export var jump_strength: float = 340.0
+@export var double_jump_strength: float = 420.0
+@export var triple_jump_strength: float = 500.0
 @export var jump_chain_time: float = 0.2
 @export_subgroup("Underwater Movement")
 @export var water_resistance: float = 0.6
@@ -30,6 +27,7 @@ var buffer_dictionary: Dictionary[String, float]
 
 @export_group("Speed Limits")
 @export var run_max_speed: float = 250.0
+@export var midair_max_speed: float = 190.0
 @export var terminal_velocity_x: float = 500.0
 @export var terminal_velocity_y: float = 725.0
 @export_group("Internal")
@@ -37,12 +35,13 @@ var buffer_dictionary: Dictionary[String, float]
 @export var floor_slope_raycast: RayCast2D
 @export var spin_area: Area2D
 @export var spin_shape: CollisionShape2D
+@export var heal_particles: ParticleEmitter
 
 
 @export var _input_handler: PlayerInputHandler
 @export var _movement_handler: PlayerMovementHandler
 @export var _sprite_handler: PlayerSpriteHandler
-
+@export var submerged_bus_effects: Array[AudioEffect]
 
 
 var _move_dir_raw: float = 0.0
@@ -68,19 +67,9 @@ var is_swimming: bool = false
 
 var is_using_hover_fludd: bool = false
 
-var is_in_water: bool = false:
-	set(iiw):
-		if iiw == is_in_water:
-			return
-		if iiw:
-			entered_water.emit()
-		else:
-			exited_water.emit()
-		is_in_water = iiw
-
 var is_input_jump: bool = false:
 	get:
-		if not can_jump or is_in_water: 
+		if not can_jump or is_in_water(): 
 			jump_buffer_timer = 0
 			return false
 		return jump_buffer_timer > 0.0
@@ -261,11 +250,11 @@ func get_terrain() -> String:
 	return ""
 
 
-func _on_water_check_area_entered(area: Area2D) -> void:
-	if area.has_meta("water"):
-		is_in_water = true
+func _on_water_check_water_entered() -> void:
+	for effect: AudioEffect in submerged_bus_effects:
+		AudioServer.add_bus_effect(0, effect)
 
 
-func _on_water_check_area_exited(area: Area2D) -> void:
-	if area.has_meta("water"):
-		is_in_water = false
+func _on_water_check_water_exited() -> void:
+	for i: int in submerged_bus_effects.size():
+		AudioServer.remove_bus_effect(0, 0)

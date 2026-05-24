@@ -57,4 +57,7 @@ func _ready() -> void:
 
 func _on_back_button_pressed() -> void:
 	Singleton.get_level_clock().stop()
+	var audio_effect_count: int = AudioServer.get_bus_effect_count(0)
+	for i: int in audio_effect_count:
+		AudioServer.remove_bus_effect(0, 0)
 	get_tree().change_scene_to_file("uid://cf4yw3eqr2qo6")
