@@ -153,6 +153,7 @@ metadata/_custom_type_script = "uid://c2df6xnsl5aem"
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1763400765]
 stream = ExtResource("7_olrdk")
+bus = &"SFX"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1257759074]
 shape = SubResource("CircleShape2D_olrdk")

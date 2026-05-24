@@ -101,7 +101,7 @@ var player: Player:
 			return null
 var _sprite_chain_index: int = 0
 var _pre_entered: bool = false
-var _collision_snapshot: Array[CollisionShape2D] = []
+var _collision_snapshot: Dictionary = {}
 var _original_collision_mask: int
 
 
@@ -387,8 +387,7 @@ func __collision_enter() -> void:
 		_original_collision_mask = entity_node.collision_mask
 		entity_node.collision_mask = collision_mask_override
 	for shape: CollisionShape2D in entity_node.collision_shapes:
-		if not shape.disabled:
-			_collision_snapshot.append(shape)
+		_collision_snapshot[shape] = shape.disabled
 		if not enabled.is_empty():
 			shape.set_deferred("disabled", shape not in enabled)
 		elif shape in disabled:
@@ -401,8 +400,8 @@ func __collision_exit() -> void:
 	var entity_node: Entity = state_machine._root_node as Entity
 	if not entity_node or entity_node.collision_shapes.is_empty():
 		return
-	for shape: CollisionShape2D in entity_node.collision_shapes:
-		shape.set_deferred("disabled", shape not in _collision_snapshot)
+	for shape: CollisionShape2D in _collision_snapshot:
+		shape.disabled = _collision_snapshot.get(shape, false)
 	entity_node.collision_mask = _original_collision_mask
 	_collision_snapshot.clear()
 
