@@ -5,6 +5,7 @@ signal category_changed(category_name: String)
 signal hide_request
 
 const OBJECT_GROUP_SCENE = preload("uid://d11ohrgxcihxx")
+const TOOLTIP_MARGIN: float = 8.0
 
 @export var groups_v_box: VBoxContainer
 @export var category_buttons_container: HBoxContainer
@@ -29,15 +30,27 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not tooltip_label.visible:
 		return
+	
+	var raw_pos: Vector2
 	if _tooltip_anchor:
 		var rect: Rect2 = _tooltip_anchor.get_global_rect()
-		tooltip_label.global_position = Vector2(
+		raw_pos = Vector2(
 			rect.position.x + (rect.size.x - tooltip_label.size.x) / 2.0,
 			rect.position.y + rect.size.y + 4.0
 		)
 	else:
-		var mouse: Vector2 = get_global_mouse_position()
-		tooltip_label.global_position = mouse + Vector2(12.0, 12.0)
+		raw_pos = get_global_mouse_position() + Vector2(12.0, 12.0)
+	
+	tooltip_label.global_position = _clamp_to_window(raw_pos)
+
+
+func _clamp_to_window(pos: Vector2) -> Vector2:
+	var window_size: Vector2 = get_viewport().get_visible_rect().size
+	var tip_size: Vector2 = tooltip_label.size
+	return Vector2(
+		clampf(pos.x, TOOLTIP_MARGIN, window_size.x - tip_size.x - TOOLTIP_MARGIN),
+		clampf(pos.y, TOOLTIP_MARGIN, window_size.y - tip_size.y - TOOLTIP_MARGIN)
+	)
 
 
 func _populate_category_buttons() -> void:
