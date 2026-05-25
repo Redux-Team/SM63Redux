@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://vlqjxmxsgk8p" path="res://game/db/Objects/level_object_terrain.gd" id="1_7585l"]
 [ext_resource type="Resource" uid="uid://dk6i5cghf5cya" path="res://game/db/Objects/Polygon/Terrain/terrain_grass_data.tres" id="2_guwji"]
 [ext_resource type="Texture2D" uid="uid://lwejtx4lbmrb" path="res://assets/textures/terrain/grass/terrain_grass_base.png" id="2_lcvi5"]
+[ext_resource type="Script" uid="uid://bvnbumlxmk7vf" path="res://util/poly/terrain_decoration_handler.gd" id="4_7oqal"]
 
-[node name="Grass" type="Node2D" unique_id=335077795 node_paths=PackedStringArray("_polygon", "_collision", "_outline_container", "_topline_container", "_topline_shadow_container", "_decoration_container", "_static_body_2d")]
+[node name="Grass" type="Node2D" unique_id=335077795 node_paths=PackedStringArray("_polygon", "_collision", "_outline_container", "_topline_container", "_topline_shadow_container", "_static_body_2d", "_decoration_handler")]
 script = ExtResource("1_7585l")
 polygon_data = ExtResource("2_guwji")
 _polygon = NodePath("Polygon")
@@ -12,8 +13,8 @@ _collision = NodePath("StaticBody2D/CollisionPolygon2D")
 _outline_container = NodePath("OutlineContainer")
 _topline_container = NodePath("ToplineContainer")
 _topline_shadow_container = NodePath("Polygon/ToplineShadowContainer")
-_decoration_container = NodePath("DecorationContainer")
 _static_body_2d = NodePath("StaticBody2D")
+_decoration_handler = NodePath("DecorationHandler")
 metadata/_custom_type_script = "uid://vlqjxmxsgk8p"
 
 [node name="Polygon" type="Polygon2D" parent="." unique_id=955545888]
@@ -25,7 +26,9 @@ texture = ExtResource("2_lcvi5")
 [node name="ToplineShadowContainer" type="Node2D" parent="Polygon" unique_id=449835504]
 visible = false
 
-[node name="DecorationContainer" type="Node2D" parent="." unique_id=1196357860]
+[node name="DecorationHandler" type="Node2D" parent="." unique_id=970022210]
+script = ExtResource("4_7oqal")
+metadata/_custom_type_script = "uid://bvnbumlxmk7vf"
 
 [node name="OutlineContainer" type="Node2D" parent="." unique_id=1875783226]
 

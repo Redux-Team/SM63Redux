@@ -17,8 +17,8 @@ const DECORATION_EDGE_BUFFER: float = 32.0
 @export var _outline_container: Node2D
 @export var _topline_container: Node2D
 @export var _topline_shadow_container: Node2D
-@export var _decoration_container: Node2D
 @export var _static_body_2d: StaticBody2D
+@export var _decoration_handler: DecorationHandler
 
 
 var _outer_points: PackedVector2Array = PackedVector2Array()
@@ -83,86 +83,8 @@ func _rebuild_polygon() -> void:
 
 
 func _rebuild_decorations() -> void:
-	if _decoration_container:
-		for child: Node in _decoration_container.get_children():
-			child.queue_free()
-	if not polygon_data or polygon_data.decoration_weightmap.is_empty() or _outer_points.size() < 3:
-		return
-	if not _decoration_container:
-		return
-	
-	var eroded_outer: Array = Geometry2D.offset_polygon(_outer_points, -DECORATION_EDGE_BUFFER)
-	if eroded_outer.is_empty():
-		return
-	var inner_polygon: PackedVector2Array = eroded_outer[0]
-	if inner_polygon.size() < 3:
-		return
-	
-	var eroded_holes: Array[PackedVector2Array] = []
-	for hole: PackedVector2Array in _holes:
-		var eroded_hole: Array = Geometry2D.offset_polygon(hole, DECORATION_EDGE_BUFFER)
-		if not eroded_hole.is_empty() and (eroded_hole[0] as PackedVector2Array).size() >= 3:
-			eroded_holes.append(eroded_hole[0])
-	
-	var bounds: Rect2 = Rect2(_outer_points[0], Vector2.ZERO)
-	for point: Vector2 in _outer_points:
-		bounds = bounds.expand(point)
-	
-	var area: float = bounds.size.x * bounds.size.y
-	var candidate_count: int = int(area / 10000.0 * polygon_data.decoration_density)
-	if candidate_count <= 0:
-		return
-	
-	var cell_size: float = sqrt(area / float(candidate_count))
-	var cols: int = maxi(1, int(ceil(bounds.size.x / cell_size)))
-	var rows: int = maxi(1, int(ceil(bounds.size.y / cell_size)))
-	var placed_rects: Array[Rect2] = []
-	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-	
-	for row: int in rows:
-		for col: int in cols:
-			# 2654435761 and 2246822519 are prime numbers that we are using for hashing
-			# in case this seems random. https://en.wikipedia.org/wiki/Hash_function
-			rng.seed = rng_seed ^ (row * 2654435761) ^ (col * 2246822519)
-			var cell_origin: Vector2 = bounds.position + Vector2(col * cell_size, row * cell_size)
-			var point: Vector2 = cell_origin + Vector2(rng.randf() * cell_size, rng.randf() * cell_size)
-			if not Geometry2D.is_point_in_polygon(point, inner_polygon):
-				continue
-			var in_hole: bool = false
-			for eroded_hole: PackedVector2Array in eroded_holes:
-				if Geometry2D.is_point_in_polygon(point, eroded_hole):
-					in_hole = true
-					break
-			if in_hole:
-				continue
-			var tex_index: int = 0
-			for tex: Texture2D in polygon_data.decoration_weightmap:
-				if not tex:
-					tex_index += 1
-					continue
-				rng.seed = rng_seed ^ (row * 2654435761) ^ (col * 2246822519) ^ (tex_index * 374761393)
-				var chance: float = polygon_data.decoration_weightmap[tex]
-				if rng.randf() * 100.0 > chance:
-					tex_index += 1
-					continue
-				var tex_size: Vector2 = Vector2(tex.get_size())
-				var candidate_rect: Rect2 = Rect2(point - tex_size * 0.5, tex_size)
-				var overlaps: bool = false
-				for placed: Rect2 in placed_rects:
-					if candidate_rect.intersects(placed):
-						overlaps = true
-						break
-				if overlaps:
-					tex_index += 1
-					continue
-				placed_rects.append(candidate_rect)
-				var sprite: Sprite2D = Sprite2D.new()
-				sprite.texture = tex
-				sprite.position = point
-				sprite.centered = true
-				sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-				_decoration_container.add_child(sprite)
-				tex_index += 1
+	if _decoration_handler:
+		_decoration_handler.rebuild(_outer_points, _holes, polygon_data, rng_seed)
 
 
 func _update_visuals() -> void:
