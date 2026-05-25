@@ -66,6 +66,7 @@
 [ext_resource type="Script" uid="uid://kvimrb1ymehh" path="res://game/entity/player/shared/states/swim_spin.gd" id="39_mjy7s"]
 [ext_resource type="Script" uid="uid://dkr10jumwrvmd" path="res://game/entity/player/shared/states/swim_up.gd" id="39_ohvaq"]
 [ext_resource type="AudioStream" uid="uid://bfd6xls4jjoac" path="res://assets/sfx/player/mario/spin/spin_water_1.wav" id="41_5ygwk"]
+[ext_resource type="AudioStream" uid="uid://dfoi0m0cw6fww" path="res://assets/sfx/player/mario/spin/spin_water_end.wav" id="42_dhqxs"]
 [ext_resource type="Texture2D" uid="uid://bvpu1uexfy52t" path="res://assets/textures/entity/player/mario/bonk.png" id="51_d635j"]
 [ext_resource type="Texture2D" uid="uid://b3fvoxgujojvl" path="res://assets/textures/entity/player/mario/dive_fall.png" id="53_ketxm"]
 [ext_resource type="Texture2D" uid="uid://bw7pv1724v3n4" path="res://assets/textures/entity/player/mario/double_jump_fall.png" id="55_3h1ly"]
@@ -825,6 +826,17 @@ playlist = SubResource("Resource_gdvj3")
 stop_on_exit = true
 metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
+[sub_resource type="Resource" id="Resource_krv0b"]
+script = ExtResource("13_8yq6v")
+tracklist = Array[AudioStream]([ExtResource("42_dhqxs")])
+metadata/_custom_type_script = "uid://cd63gwefr4fp4"
+
+[sub_resource type="Resource" id="Resource_3jg1m"]
+script = ExtResource("7_ioda6")
+playlist = SubResource("Resource_krv0b")
+pool_id = &"exit"
+metadata/_custom_type_script = "uid://deiaa5u8esvnc"
+
 [sub_resource type="Resource" id="Resource_fstnu"]
 script = ExtResource("13_8yq6v")
 tracklist = Array[AudioStream]([ExtResource("34_rlrt6")])
@@ -950,7 +962,7 @@ _data = {
 atlas = ExtResource("53_ketxm")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_k0v5e"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_cmrqc"]
 diffuse_texture = SubResource("AtlasTexture_kyrvb")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d635j"]
@@ -1978,6 +1990,7 @@ spin_hitbox = NodePath("../../../Hitboxes/Spin")
 sprite_animation_name = &"spin_start"
 sprite_chain = Array[StringName]([&"spin_loop"])
 sfx_enter = SubResource("Resource_cpfge")
+sfx_exit = SubResource("Resource_3jg1m")
 __editor_name = &"swim_spin"
 __editor_position = Vector2(-240, 1020)
 __editor_uuid = &"cb2bce9e-79ca-46c1-9bc1-ab2d16c15822"
@@ -2072,11 +2085,11 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_k0v5e")
+texture = SubResource("CanvasTexture_cmrqc")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_k0v5e")
+canvas_texture = SubResource("CanvasTexture_cmrqc")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true
