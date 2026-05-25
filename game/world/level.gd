@@ -4,6 +4,8 @@ extends Node2D
 
 static var _inst: Level
 
+var red_coins_max: Dictionary[String, int]
+var red_coins_collected: Dictionary[String, int]
 
 var _active_area: LevelArea
 var _player: Player

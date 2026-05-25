@@ -13,13 +13,17 @@
 [sub_resource type="CanvasTexture" id="CanvasTexture_vqqdr"]
 diffuse_texture = ExtResource("2_q7nns")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_iibrf"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_kdg5b"]
 atlas = ExtResource("3_q7nns")
-region = Rect2(0, 8, 16, 8)
+region = Rect2(0, 48, 16, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x272f"]
 atlas = ExtResource("3_q7nns")
 region = Rect2(0, 0, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iibrf"]
+atlas = ExtResource("3_q7nns")
+region = Rect2(0, 8, 16, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vlmnl"]
 atlas = ExtResource("3_q7nns")
@@ -36,10 +40,6 @@ region = Rect2(0, 32, 16, 8)
 [sub_resource type="AtlasTexture" id="AtlasTexture_5x1lc"]
 atlas = ExtResource("3_q7nns")
 region = Rect2(0, 40, 16, 8)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kdg5b"]
-atlas = ExtResource("3_q7nns")
-region = Rect2(0, 48, 16, 8)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_q7nns"]
 animations = [{
@@ -74,7 +74,7 @@ animations = [{
 atlas = ExtResource("5_x272f")
 region = Rect2(0, 0, 16, 16)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_kdg5b"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_5x1lc"]
 diffuse_texture = SubResource("AtlasTexture_71wue")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2pf35"]
@@ -147,7 +147,6 @@ func _ready() -> void:
 
 
 func _on_hurt_box_damaged(_source_hitbox: HitBox) -> void:
-	print(glass.get_property(\"coin_amount\"))
 	hide()
 	queue_free()
 "
@@ -169,16 +168,16 @@ stream = ExtResource("3_iibrf")
 volume_db = -5.0
 
 [node name="ParticleEmitter" parent="." index="4" unique_id=1781001774]
-texture = SubResource("AtlasTexture_iibrf")
+texture = SubResource("AtlasTexture_kdg5b")
 sprite_frames = SubResource("SpriteFrames_q7nns")
 
 [node name="CoinTemplate" type="Sprite2D" parent="." index="5" unique_id=548014254]
 visible = false
-texture = SubResource("CanvasTexture_kdg5b")
+texture = SubResource("CanvasTexture_5x1lc")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 script = ExtResource("4_71e71")
-canvas_texture = SubResource("CanvasTexture_kdg5b")
+canvas_texture = SubResource("CanvasTexture_5x1lc")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_ty8x8")
 current_animation = "spin"

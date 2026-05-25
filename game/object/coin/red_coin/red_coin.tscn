@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bvoffibtcyve5" path="res://assets/textures/item/collectible/red_coin_spin.png" id="2_y2pdo"]
 [ext_resource type="AudioStream" uid="uid://d3xbvld6puryg" path="res://assets/sfx/item/red_coin_collect.ogg" id="3_c4m15"]
 [ext_resource type="Texture2D" uid="uid://bjx2gx7ao7dgu" path="res://assets/textures/particle/item/red_coin_particle.png" id="3_y2pdo"]
+[ext_resource type="AudioStream" uid="uid://cnrwwp2g17u5y" path="res://assets/sfx/item/red_coin_collect_all.wav" id="6_bfrqi"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1v6jc"]
 atlas = ExtResource("2_y2pdo")
@@ -59,8 +60,11 @@ animations = [{
 "speed": 12.0
 }]
 
-[node name="RedCoin" unique_id=187434736 instance=ExtResource("1_qed2w")]
+[node name="RedCoin" unique_id=187434736 node_paths=PackedStringArray("all_collected", "collect_label") instance=ExtResource("1_qed2w")]
 script = ExtResource("2_c4m15")
+group = "default"
+all_collected = NodePath("AllCollected")
+collect_label = NodePath("CollectLabel")
 
 [node name="Sprite" parent="." index="1" unique_id=1781944590]
 texture = SubResource("CanvasTexture_p1qeo")
@@ -74,3 +78,29 @@ texture = ExtResource("3_y2pdo")
 stream = ExtResource("3_c4m15")
 volume_db = -4.0
 pitch_scale = 1.1
+
+[node name="AllCollected" type="AudioStreamPlayer2D" parent="." index="5" unique_id=2065951676]
+stream = ExtResource("6_bfrqi")
+volume_db = -4.0
+bus = &"SFX"
+
+[node name="CollectLabel" type="Label" parent="." index="8" unique_id=448966562]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+z_index = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -7.5
+offset_right = 20.0
+offset_bottom = 7.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 3
+text = "1/8"
+horizontal_alignment = 1
+vertical_alignment = 1
