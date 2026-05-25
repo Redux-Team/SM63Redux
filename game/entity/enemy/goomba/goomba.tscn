@@ -97,7 +97,7 @@ metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 atlas = ExtResource("3_hysx3")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_a7n3c"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_rakc8"]
 diffuse_texture = SubResource("AtlasTexture_n0olq")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kyaey"]
@@ -392,11 +392,11 @@ __editor_uuid = &"5f76de65-09f3-4b6f-9847-15c247ae70f1"
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(0, -7)
-texture = SubResource("CanvasTexture_a7n3c")
+texture = SubResource("CanvasTexture_rakc8")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("4_whnfo")
-canvas_texture = SubResource("CanvasTexture_a7n3c")
+canvas_texture = SubResource("CanvasTexture_rakc8")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true

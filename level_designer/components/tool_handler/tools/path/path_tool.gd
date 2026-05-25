@@ -122,7 +122,7 @@ func _begin_path(obj: GameObject) -> void:
 	_active_object = instance as LDObjectPath
 	_active_object.is_preview = true
 	_active_object.init_properties(obj)
-	viewport.add_object(_active_object)
+	LD.get_area().add_object(_active_object)
 	_points = PackedVector2Array()
 	_head_placed = false
 	_is_valid = false

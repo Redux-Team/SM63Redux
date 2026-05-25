@@ -126,7 +126,7 @@ func _add_point(pos: Vector2) -> void:
 	if not _active_object:
 		return
 	if _points.is_empty():
-		viewport.add_object(_active_object, Vector2i.ZERO, viewport.get_active_layer())
+		LD.get_area().add_object(_active_object, Vector2i.ZERO)
 	_points.append(pos)
 	_update_preview()
 

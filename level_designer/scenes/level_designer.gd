@@ -4,6 +4,7 @@ extends Node
 
 static var _inst: LD
 
+
 @export_group("Components", "_ld_")
 @export var _ld_input_handler: LDInputHandler
 @export var _ld_object_handler: LDObjectHandler
@@ -51,12 +52,31 @@ static func get_ui() -> LDUI:
 	return get_instance()._ld_ui
 
 
+static func get_level() -> LDLevel:
+	return LDLevel._inst
+
+
+static func get_area() -> LDArea:
+	return LDLevel.get_active_area()
+
+
 static func is_ready() -> bool:
 	return is_instance_valid(_inst)
 
 
 func _init() -> void:
 	_inst = self
+
+
+func _ready() -> void:
+	var level: LDLevel = LDLevel.new()
+	level.name = "Level"
+	get_editor_viewport().get_root().add_child(level)
+	
+	var area: LDArea = LDArea.new()
+	area.name = "Area"
+	level.add_child(area)
+	level._active_area = area
 
 
 func _exit_tree() -> void:

@@ -10,10 +10,22 @@ extends LDComponent
 @export_group("File Dialogs")
 @export var _save_file_dialog: FileDialog
 @export var _load_file_dialog: FileDialog
+@export_group("Layer")
+@export var _layer_spin_box: SpinBox
+
+var parallaxing_enabled: bool = false
+var ghosting_enabled: bool = false
+
+var viewport: LDViewport:
+	get():
+		return LD.get_editor_viewport()
 
 
 func _on_ready() -> void:
 	var browser: LDObjectBrowser = _obj_browser_window.get_content_ref() as LDObjectBrowser
+	
+	_layer_spin_box.value = LD.get_area().get_active_layer_index()
+	
 	browser.category_changed.connect(func(n: String) -> void:
 		_obj_browser_window.title = "Objects - " + (n if n else "All")
 	)
@@ -115,7 +127,7 @@ func _on_move_button_pressed() -> void:
 
 
 func _on_reset_button_pressed() -> void:
-	LD.get_editor_viewport().refocus_camera(Vector2.ZERO, Vector2.ONE)
+	viewport.refocus_camera(Vector2.ZERO, Vector2.ONE)
 
 
 func _on_delete_button_pressed() -> void:
@@ -163,16 +175,33 @@ func _on_poly_cut_pressed() -> void:
 
 
 func _on_move_to_front_button_pressed() -> void:
-	var objs: Array[LDObject] = LD.get_editor_viewport().get_selected_objects()
+	var objs: Array[LDObject] = viewport.get_selected_objects()
 	for obj: LDObject in objs:
 		obj.get_parent().move_child(obj, -1)
 
 
 func _on_move_to_back_button_pressed() -> void:
-	var objs: Array[LDObject] = LD.get_editor_viewport().get_selected_objects()
+	var objs: Array[LDObject] = viewport.get_selected_objects()
 	for obj: LDObject in objs:
 		obj.get_parent().move_child(obj, 0)
 
 
 func _on_layer_spin_box_value_changed(value: float) -> void:
-	LD.get_editor_viewport().set_active_layer(int(value))
+	LD.get_area().set_active_layer(int(value))
+	
+	if viewport.get_selected_objects().size() > 0:
+		var selection: Array[LDObject] = viewport.get_selected_objects()
+		LD.get_area().move_objects_to_layer(selection, int(value))
+
+
+func _on_parallaxing_toggled(toggled_on: bool) -> void:
+	parallaxing_enabled = toggled_on
+	for layer: LDLayer in LD.get_area().layers:
+		layer.is_parallaxing = toggled_on
+	LD.get_area().refresh_layer_visuals()
+	LD.get_editor_viewport().refresh()
+
+
+func _on_ghosting_toggled(toggled_on: bool) -> void:
+	ghosting_enabled = toggled_on
+	LD.get_area().refresh_layer_visuals()

@@ -7,7 +7,6 @@ const SNAPPING_SIZE: int = 4
 const HOLD_THRESHOLD_SEC: float = 0.75
 const MOVE_THRESHOLD: float = 8.0
 const SWIPE_DISMISS_THRESHOLD: float = 6.0
-const LAYER_ALPHA_STEP: float = 0.25
 
 
 signal viewport_moved(pos: Vector2, zoom: Vector2)
@@ -19,25 +18,23 @@ signal touch_tap(pos: Vector2)
 signal touch_swipe_began(pos: Vector2)
 signal touch_swipe_moved(pos: Vector2)
 signal touch_swipe_ended
-signal active_layer_changed(layer_index: int)
-signal layer_visibility_changed(layer_index: int, visible: bool)
-signal preview_mode_changed(enabled: bool)
 
 
 const LINEAR_PAN_SPEED: float = 10.0
 const CAMERA_ZOOM_MIN: Vector2 = Vector2(0.05, 0.05)
 const CAMERA_ZOOM_MAX: Vector2 = Vector2(4.0, 4.0)
 
+
 static var _inst: LDViewport
+
 
 @export var camera: Camera2D
 @export_group("Internal")
-@export var _layers_root: Node2D
-@export var _viewport_bg_root: Node
 @export var _viewport_grid: ColorRect
 @export var _root: LDViewportRoot
 @export var _selection_overlay: LDSelectionOverlay
 @export var _touch_indicator: LDTouchSwipeIndicator
+@export var _background_root: Node2D
 @warning_ignore("unused_private_class_variable") @export var _viewport_input: Control
 
 
@@ -65,11 +62,7 @@ var is_mouse_panning: bool = false:
 			else:
 				_viewport_input.mouse_default_cursor_shape = Control.CURSOR_ARROW
 
-var _preview_mode: bool = false
-var _active_layer: int = 0
-var _hidden_layers: Dictionary[int, bool] = {}
 var _selected_objects: Array[LDObject] = []
-
 var _touch_points: Dictionary[int, Vector2] = {}
 var _hold_timer: float = 0.0
 var _touch_start_pos: Vector2
@@ -84,6 +77,9 @@ func _on_ready() -> void:
 	viewport_moved.connect(_on_viewport_moved)
 	_on_viewport_moved(camera_position, camera_zoom)
 	set_input_priority()
+	
+	LDLevel.get_active_area().layer_created.connect(_on_layer_created)
+	LDLevel.get_active_area().active_layer_changed.connect(_on_active_layer_changed)
 
 
 func _process(delta: float) -> void:
@@ -127,9 +123,9 @@ func _on_viewport_input(event: InputEvent) -> void:
 				MOUSE_BUTTON_MIDDLE when event.is_released():
 					is_mouse_panning = false
 				MOUSE_BUTTON_WHEEL_UP when allow_zooming:
-					_zoom_at(get_root().get_global_mouse_position(), 0.1)
+					_zoom_at(_root.get_global_mouse_position(), 0.1)
 				MOUSE_BUTTON_WHEEL_DOWN when allow_zooming:
-					_zoom_at(get_root().get_global_mouse_position(), -0.1)
+					_zoom_at(_root.get_global_mouse_position(), -0.1)
 		
 		if event is InputEventMouseMotion:
 			if is_mouse_panning and allow_panning:
@@ -181,7 +177,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 					_last_pinch_distance = 0.0
 					if _touch_indicator:
 						_touch_indicator.dismiss()
-
+		
 		if event is InputEventScreenDrag:
 			_touch_points[event.index] = event.position
 			
@@ -190,11 +186,11 @@ func _on_viewport_input(event: InputEvent) -> void:
 					_touch_indicator.dismiss()
 				_touch_mode = 1
 				var points: Array = _touch_points.values()
-				var current_distance: float = (points[0] as Vector2).distance_to(points[1] as Vector2)
+				var current_distance: float = (points.get(0) as Vector2).distance_to(points.get(1) as Vector2)
 				
 				if _last_pinch_distance > 0.0 and allow_zooming:
 					var zoom_delta: float = (current_distance - _last_pinch_distance) * 0.005
-					var center_screen: Vector2 = ((points[0] as Vector2) + (points[1] as Vector2)) * 0.5
+					var center_screen: Vector2 = ((points.get(0) as Vector2) + (points.get(1) as Vector2)) * 0.5
 					var full_transform: Transform2D = get_viewport().get_canvas_transform() * _root.get_global_transform()
 					var center_world: Vector2 = full_transform.affine_inverse() * center_screen
 					_zoom_at(center_world, zoom_delta)
@@ -226,18 +222,27 @@ func _on_viewport_input(event: InputEvent) -> void:
 				touch_swipe_moved.emit(event.position)
 
 
+## Returns the world-space root node used for mouse position and coordinate transforms.
 func get_root() -> LDViewportRoot:
 	return _root
 
 
+## Returns the background root node.
+func get_background_root() -> Node2D:
+	return _background_root
+
+
+## Returns the selection overlay node.
 func get_selection_overlay() -> LDSelectionOverlay:
 	return _selection_overlay
 
 
+## Returns the currently selected objects.
 func get_selected_objects() -> Array[LDObject]:
 	return _selected_objects
 
 
+## Sets the selected objects, filtering out non-selectable ones and updating their visual state.
 func set_selected_objects(objects: Array[LDObject]) -> void:
 	for obj: LDObject in _selected_objects:
 		if obj and not obj.is_queued_for_deletion():
@@ -254,116 +259,17 @@ func set_selected_objects(objects: Array[LDObject]) -> void:
 	selection_changed.emit(_selected_objects)
 
 
-func set_background(node: Node) -> void:
-	for n: Node in _viewport_bg_root.get_children():
-		n.queue_free()
-	_viewport_bg_root.add_child(node)
-
-
+## Clears the current selection.
 func clear_selection() -> void:
 	set_selected_objects([])
 
 
-func get_all_objects() -> Array[LDObject]:
-	var result: Array[LDObject] = []
-	for layer_node: Node in _layers_root.get_children():
-		var layer: LDLayer = layer_node as LDLayer
-		if not layer:
-			continue
-		for child: Node in layer.get_content_root().get_children():
-			var obj: LDObject = child as LDObject
-			if obj:
-				result.append(obj)
-	return result
+## Returns whether the viewport is currently in a panning state.
+func is_panning() -> bool:
+	return is_mouse_panning or _touch_mode == 1
 
 
-func get_all_objects_on_layer(layer_index: int = _active_layer) -> Array[LDObject]:
-	var result: Array[LDObject] = []
-	var layer: LDLayer = _get_layer(layer_index)
-	if not layer:
-		return result
-	for child: Node in layer.get_content_root().get_children():
-		var obj: LDObject = child as LDObject
-		if obj:
-			result.append(obj)
-	return result
-
-
-func find_object_by_id(id: String, layer_index: int = _active_layer) -> LDObject:
-	for object: LDObject in get_all_objects_on_layer(layer_index):
-		if object.source_object_id == id:
-			return object
-	return null
-
-
-func is_layer_selectable(layer_index: int) -> bool:
-	if _preview_mode:
-		return true
-	return layer_index == _active_layer
-
-
-func is_layer_visible(layer_index: int) -> bool:
-	if _preview_mode:
-		return true
-	return not _hidden_layers.get(layer_index, false)
-
-
-func get_active_layer() -> int:
-	return _active_layer
-
-
-func set_active_layer(layer_index: int) -> void:
-	var objects: Array[LDObject] = get_selected_objects()
-	for object: LDObject in objects:
-		move_object_to_layer(object, layer_index)
-	
-	_active_layer = layer_index
-	_refresh_layer_visuals()
-	active_layer_changed.emit(layer_index)
-
-
-func step_active_layer(delta: int) -> void:
-	set_active_layer(_active_layer + delta)
-
-
-func move_object_to_layer(object: LDObject, layer_num: int) -> void:
-	var layer: LDLayer = get_or_create_layer(layer_num)
-	object.reparent(layer.get_content_root())
-
-
-func set_layer_visible(layer_index: int, is_visible: bool) -> void:
-	if is_visible:
-		_hidden_layers.erase(layer_index)
-	else:
-		_hidden_layers[layer_index] = true
-	_refresh_layer_visuals()
-	layer_visibility_changed.emit(layer_index, is_visible)
-
-
-func toggle_layer_visible(layer_index: int) -> void:
-	set_layer_visible(layer_index, not is_layer_visible(layer_index))
-
-
-func set_preview_mode(enabled: bool) -> void:
-	_preview_mode = enabled
-	_refresh_layer_visuals()
-	preview_mode_changed.emit(enabled)
-
-
-func toggle_preview_mode() -> void:
-	set_preview_mode(not _preview_mode)
-
-
-func get_sorted_layer_indices() -> Array[int]:
-	var indices: Array[int] = []
-	for child: Node in _layers_root.get_children():
-		var layer: LDLayer = child as LDLayer
-		if layer:
-			indices.append(layer.layer_index)
-	indices.sort()
-	return indices
-
-
+## Converts a world-space rect to screen-space coordinates.
 func world_rect_to_screen(world_top_left: Vector2, world_size: Vector2) -> Rect2:
 	var full_transform: Transform2D = get_viewport().get_canvas_transform() * _root.get_global_transform()
 	var screen_top_left: Vector2 = full_transform * world_top_left
@@ -371,31 +277,13 @@ func world_rect_to_screen(world_top_left: Vector2, world_size: Vector2) -> Rect2
 	return Rect2(screen_top_left, screen_bottom_right - screen_top_left).abs()
 
 
-func add_object(object: LDObject, pos: Vector2i = Vector2i.ZERO, layer_index: int = _active_layer) -> void:
-	var layer: LDLayer = get_or_create_layer(layer_index)
-	layer.get_content_root().add_child(object)
-	object.position = pos
-	_apply_layer_visual(layer)
+## Refreshes the viewport by slightly moving the camera and emitting a move signal
+func refresh() -> void:
+	viewport_moved.emit(camera_position, camera_zoom)
+	camera.position.x += 0.01
 
 
-func get_or_create_layer(layer_index: int) -> LDLayer:
-	var existing: LDLayer = _get_layer(layer_index)
-	if existing:
-		return existing
-	
-	var layer: LDLayer = LDLayer.new()
-	layer.name = "layer_%d" % layer_index
-	layer.layer_index = layer_index
-	_layers_root.add_child(layer)
-	_sort_layers()
-	_apply_layer_visual(layer)
-	return layer
-
-
-func is_panning() -> bool:
-	return is_mouse_panning or _touch_mode == 1
-
-
+## Smoothly moves the camera to the given position and/or zoom level.
 func refocus_camera(pos: Vector2 = Vector2.INF, zoom: Vector2 = Vector2.INF, enforce_finish: bool = true) -> void:
 	if is_refocusing and enforce_finish:
 		return
@@ -422,55 +310,16 @@ func refocus_camera(pos: Vector2 = Vector2.INF, zoom: Vector2 = Vector2.INF, enf
 	viewport_moved.emit(camera_position, camera_zoom)
 
 
-static func _get_instance() -> LDViewport:
+static func get_instance() -> LDViewport:
 	return _inst
 
 
-func _get_layer(layer_index: int) -> LDLayer:
-	for child: Node in _layers_root.get_children():
-		var layer: LDLayer = child as LDLayer
-		if layer and layer.layer_index == layer_index:
-			return layer
-	return null
+func _on_layer_created(_layer: LDLayer) -> void:
+	LDLevel.get_active_area().refresh_layer_visuals()
 
 
-func _refresh_layer_visuals() -> void:
-	for child: Node in _layers_root.get_children():
-		var layer: LDLayer = child as LDLayer
-		if layer:
-			_apply_layer_visual(layer)
-
-
-func _apply_layer_visual(layer: LDLayer) -> void:
-	if _preview_mode:
-		layer.visible = true
-		layer.visual_modulate = Color(1.0, 1.0, 1.0, 1.0)
-		return
-	
-	if _hidden_layers.get(layer.layer_index, false):
-		layer.visible = false
-		return
-	
-	layer.visible = true
-	var distance: int = layer.layer_index - _active_layer
-	var alpha: float = clampf(1.0 - absi(distance) * LAYER_ALPHA_STEP, 0.0, 1.0)
-	if distance < 0:
-		layer.visual_modulate = Color(0.8, 0.8, 0.8, alpha)
-	else:
-		layer.visual_modulate = Color(1.0, 1.0, 1.0, alpha)
-
-
-func _sort_layers() -> void:
-	var layers: Array[Node] = _layers_root.get_children()
-	layers.sort_custom(func(a: Node, b: Node) -> bool:
-		var la: LDLayer = a as LDLayer
-		var lb: LDLayer = b as LDLayer
-		if not la or not lb:
-			return false
-		return la.layer_index < lb.layer_index
-	)
-	for i: int in layers.size():
-		_layers_root.move_child(layers[i], i)
+func _on_active_layer_changed(_index: int) -> void:
+	LDLevel.get_active_area().refresh_layer_visuals()
 
 
 func _on_viewport_moved(pos: Vector2 = camera_position, zoom: Vector2 = camera_zoom) -> void:
@@ -484,6 +333,6 @@ func _on_viewport_moved(pos: Vector2 = camera_position, zoom: Vector2 = camera_z
 
 func _zoom_at(pos: Vector2, zoom_delta: float) -> void:
 	var old_zoom: Vector2 = camera_zoom
-	camera_zoom = (old_zoom + Vector2(zoom_delta, zoom_delta)).clamp(Vector2(0.1, 0.1), Vector2(10.0, 10.0))
+	camera_zoom = (old_zoom + Vector2(zoom_delta, zoom_delta)).clamp(CAMERA_ZOOM_MIN, CAMERA_ZOOM_MAX)
 	camera_position += (pos - camera_position) * (1.0 - old_zoom.x / camera_zoom.x)
 	viewport_moved.emit(camera_position, camera_zoom)

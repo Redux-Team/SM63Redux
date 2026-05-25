@@ -12,6 +12,7 @@ const PERIODIC_AUTOSAVE_PATH: String = "user://periodic_autosave_ld_session"
 const PERIODIC_AUTOSAVE_ENABLED: bool = true
 const PERIODIC_AUTOSAVE_INTERVAL: float = 60.0
 
+
 var level_file_path: String
 var method: int = -1 # -1 X, 0 Bin, 1 JSON
 var _periodic_autosave_timer: Timer = null
@@ -29,14 +30,14 @@ func _enter_tree() -> void:
 
 
 func _on_ready() -> void:
-	# If we are returning from a playtest, deserialize it immediately 
+	# If we are returning from a playtest, deserialize it immediately
 	# and save the session so the cached state becomes our current baseline
 	if Singleton.has_meta(&"playtest"):
 		_deserialize(Singleton.get_meta(&"playtest"))
 		Singleton.remove_meta(&"playtest")
-		save_session() 
+		save_session()
 		return # bypass standard file loading since we just restored the live session
-
+	
 	if PERIODIC_AUTOSAVE_ENABLED:
 		_periodic_autosave_timer = Timer.new()
 		_periodic_autosave_timer.wait_time = PERIODIC_AUTOSAVE_INTERVAL
@@ -139,7 +140,7 @@ func save_session() -> void:
 	var session_file: FileAccess = FileAccess.open(LAST_SESSION_PATH, FileAccess.WRITE)
 	if not session_file:
 		return
-
+	
 	# If we have an active, real file path were using on disk, save it normally
 	if not level_file_path.is_empty() and FileAccess.file_exists(level_file_path) and level_file_path != AUTOSAVE_PATH:
 		session_file.store_string(JSON.stringify({
@@ -161,25 +162,25 @@ func save_session() -> void:
 
 func _serialize() -> Dictionary:
 	var viewport: LDViewport = LD.get_editor_viewport()
+	var area: LDArea = LDLevel.get_active_area()
 	var layers_data: Array = []
 	
-	for child: Node in viewport._layers_root.get_children():
-		var layer: LDLayer = child as LDLayer
-		if not layer:
-			continue
+	for layer: LDLayer in area.layers:
 		var objects_data: Array = []
-		for obj_node: Node in layer.get_content_root().get_children():
+		for obj_node: Node in layer.get_objects_root().get_children():
 			var obj: LDObject = obj_node as LDObject
 			if not obj or obj.is_preview:
 				continue
 			var obj_data: Dictionary = _serialize_object(obj)
 			if not obj_data.is_empty():
 				objects_data.append(obj_data)
+		if objects_data.is_empty():
+			continue
 		layers_data.append({
-			"layer_index": layer.layer_index,
+			"layer_index": layer.index,
 			"parallax_scale": Packer.vec2_to_array(layer.parallax_scale),
-			"decoration": layer.decoration,
-			"modulation": Packer.color_to_array(layer.base_modulate),
+			"is_decoration": layer.is_decoration,
+			"modulation": Packer.color_to_array(layer.modulation),
 			"objects": objects_data,
 		})
 	
@@ -188,9 +189,12 @@ func _serialize() -> Dictionary:
 		"editor": {
 			"camera_position": Packer.vec2_to_array(viewport.camera_position),
 			"camera_zoom": Packer.vec2_to_array(viewport.camera_zoom),
-			"active_layer": viewport.get_active_layer(),
+			"active_layer": area._active_index,
 		},
-		"layers": layers_data,
+		"areas": [{
+			"name": "default",
+			"layers": layers_data,
+		}],
 	}
 
 
@@ -223,54 +227,81 @@ func _serialize_object(obj: LDObject) -> Dictionary:
 	
 	var props: Dictionary = obj.get_property_values()
 	for key: StringName in props:
-		data["properties"][str(key)] = Packer.serialize_json_variant(props[key])
+		data["properties"][str(key)] = Packer.serialize_json_variant(props.get(key))
 	
 	return data
 
 
 func _deserialize(data: Dictionary) -> Error:
-	if not data.has("version") or not data.has("layers"):
+	if not data.has("version"):
+		_ensure_player_spawn()
+		return ERR_INVALID_DATA
+	
+	var normalized: Dictionary = _normalize(data)
+	if not normalized.has("areas"):
 		_ensure_player_spawn()
 		return ERR_INVALID_DATA
 	
 	var viewport: LDViewport = LD.get_editor_viewport()
+	var area: LDArea = LDLevel.get_active_area()
+	
 	viewport.clear_selection()
 	
-	for child: Node in viewport._layers_root.get_children():
-		viewport._layers_root.remove_child(child)
-		child.free()
+	for layer: LDLayer in area.layers.duplicate():
+		layer.queue_free()
+	area.layers.clear()
 	
 	var db: GameDB = GameDB.get_db()
 	
-	for layer_data: Variant in data["layers"]:
-		if not layer_data is Dictionary:
-			continue
-		var layer_index: int = layer_data.get("layer_index", 0)
-		var layer: LDLayer = viewport.get_or_create_layer(layer_index)
-		var raw_parallax: Variant = layer_data.get("parallax_scale", null)
-		if raw_parallax != null:
-			layer.parallax_scale = Packer.array_to_vec2(raw_parallax)
-		var raw_modulate: Variant = layer_data.get("modulation", null)
-		if raw_modulate != null:
-			layer.base_modulate = Packer.array_to_color(raw_modulate)
-		layer.decoration = layer_data.get("decoration", false)
-		for obj_data: Variant in layer_data.get("objects", []):
-			if not obj_data is Dictionary:
+	var areas: Array = normalized.get("areas", [])
+	var area_data: Variant = areas.get(0)
+	if area_data is Dictionary:
+		for layer_data: Variant in area_data.get("layers", []):
+			if not layer_data is Dictionary:
 				continue
-			_deserialize_object(obj_data, layer_index, db)
+			if (layer_data.get("objects", []) as Array).is_empty():
+				continue
+			var layer_index: int = layer_data.get("layer_index", 0)
+			var layer: LDLayer = area.get_or_create_layer(layer_index)
+			var raw_parallax: Variant = layer_data.get("parallax_scale", null)
+			if raw_parallax != null:
+				layer.parallax_scale = Packer.array_to_vec2(raw_parallax)
+			var raw_modulate: Variant = layer_data.get("modulation", null)
+			if raw_modulate != null:
+				layer.modulation = Packer.array_to_color(raw_modulate)
+			layer.is_decoration = layer_data.get("is_decoration", false)
+			for obj_data: Variant in layer_data.get("objects", []):
+				if not obj_data is Dictionary:
+					continue
+				_deserialize_object(obj_data, layer_index, db)
 	
-	if data.has("editor"):
-		var editor_data: Dictionary = data["editor"]
+	if normalized.has("editor"):
+		var editor_data: Dictionary = normalized.get("editor", {})
 		if editor_data.has("camera_position"):
-			viewport.camera_position = Packer.array_to_vec2(editor_data["camera_position"])
+			viewport.camera_position = Packer.array_to_vec2(editor_data.get("camera_position"))
 		if editor_data.has("camera_zoom"):
-			viewport.camera_zoom = Packer.array_to_vec2(editor_data["camera_zoom"])
+			viewport.camera_zoom = Packer.array_to_vec2(editor_data.get("camera_zoom"))
 		if editor_data.has("active_layer"):
-			viewport.set_active_layer(editor_data["active_layer"])
+			area.set_active_layer(editor_data.get("active_layer"))
 	
 	_ensure_player_spawn()
 	
 	return OK
+
+
+func _normalize(data: Dictionary) -> Dictionary:
+	if data.has("areas"):
+		return data
+	if data.has("layers"):
+		return {
+			"version": data.get("version", 1),
+			"editor": data.get("editor", {}),
+			"areas": [{
+				"name": "default",
+				"layers": data.get("layers", []),
+			}],
+		}
+	return data
 
 
 func _ensure_player_spawn() -> void:
@@ -282,9 +313,9 @@ func _ensure_player_spawn() -> void:
 	if not game_object or not game_object.ld_editor_instance:
 		return
 	
-	var viewport: LDViewport = LD.get_editor_viewport()
+	var area: LDArea = LDLevel.get_active_area()
 	
-	for obj: LDObject in viewport.get_all_objects():
+	for obj: LDObject in area.get_all_objects():
 		if obj and obj.source_object_id == game_object.id:
 			return
 	
@@ -292,7 +323,7 @@ func _ensure_player_spawn() -> void:
 	if not instance:
 		return
 	
-	viewport.add_object(instance, Vector2i.ZERO, 0)
+	area.add_object(instance, Vector2i.ZERO, 0)
 	instance.init_properties(game_object)
 	instance.place()
 
@@ -318,24 +349,24 @@ func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB) -> void
 		return
 	
 	var pos: Vector2 = Packer.array_to_vec2(data.get("position", [0.0, 0.0]))
-	LD.get_editor_viewport().add_object(instance, Vector2i(pos), layer_index)
+	LDLevel.get_active_area().add_object(instance, Vector2i(pos), layer_index)
 	
 	instance.init_properties(game_object)
 	
 	var props: Dictionary = data.get("properties", {})
 	for key: String in props:
-		instance.set_property(StringName(key), Packer.deserialize_json_variant((props[key])))
+		instance.set_property(StringName(key), Packer.deserialize_json_variant(props.get(key)))
 	
 	if instance is LDObjectPolygon and data.has("polygon_points"):
 		var poly_obj: LDObjectPolygon = instance as LDObjectPolygon
 		var points: PackedVector2Array = PackedVector2Array()
-		for p: Variant in data["polygon_points"]:
+		for p: Variant in data.get("polygon_points", []):
 			points.append(Packer.array_to_vec2(p))
 		poly_obj.apply_points(points)
 	
 	if instance is LDObjectPolygon and data.has("polygon_holes"):
 		var poly_obj: LDObjectPolygon = instance as LDObjectPolygon
-		for hole_data: Variant in data["polygon_holes"]:
+		for hole_data: Variant in data.get("polygon_holes", []):
 			if not hole_data is Array:
 				continue
 			var hole_points: PackedVector2Array = PackedVector2Array()

@@ -96,7 +96,7 @@ func _spawn_cursor(obj: GameObject) -> void:
 		_preview_cursor.set_property(&"t_size_x", min_units)
 	if _preview_cursor.is_telescoping_y():
 		_preview_cursor.set_property(&"t_size_y", min_units)
-	viewport.add_object(_preview_cursor)
+	LD.get_area().add_object(_preview_cursor)
 
 
 func _begin_sizing(pos: Vector2) -> void:
@@ -117,7 +117,7 @@ func _begin_sizing(pos: Vector2) -> void:
 		_sizing_object.set_property(&"t_size_x", min_units)
 	if _sizing_object.is_telescoping_y():
 		_sizing_object.set_property(&"t_size_y", min_units)
-	viewport.add_object(_sizing_object, Vector2i(pos))
+	LD.get_area().add_object(_sizing_object, Vector2i(pos))
 	if obj.has_property(&"position"):
 		_sizing_object.set_property(&"position", pos)
 	

@@ -52,6 +52,12 @@ autoscroll = Vector2(-4, 0)
 repeat_times = 5
 follow_viewport = false
 
+[node name="ColorRect" type="ColorRect" parent="Root/Anchor/BottomClouds" unique_id=1975480093]
+offset_left = -9.0
+offset_top = 95.0
+offset_right = 398.0
+offset_bottom = 221.0
+
 [node name="Sprite2D" type="Sprite2D" parent="Root/Anchor/BottomClouds" unique_id=667366939]
 texture = ExtResource("1_ujg0q")
 

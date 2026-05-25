@@ -7,7 +7,6 @@ uniform float warp_strength : hint_range(0.0, 0.05) = 0.003;
 uniform float wave_speed : hint_range(0.0, 5.0) = 0.06;
 uniform float deform_scale : hint_range(0.001, 0.1) = 0.003;
 
-
 void fragment() {
 	vec2 world_uv = VERTEX * deform_scale;
 

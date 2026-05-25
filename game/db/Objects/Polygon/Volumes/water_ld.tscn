@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://cpps8bcdccbtj" path="res://game/db/Objects/ld_object_polygon.gd" id="1_3e43a"]
 [ext_resource type="Resource" uid="uid://c1aygscm4h0bo" path="res://game/db/Objects/Polygon/Volumes/water_data.tres" id="2_trkbc"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_frtg0"]
+
 [node name="Water" type="Node2D" unique_id=642150737 node_paths=PackedStringArray("_polygon", "_topline_container", "_topline_shadow_container", "_outline_container", "editor_polygon", "editor_shape_area", "editor_placement_rect", "origin_marker")]
 script = ExtResource("1_3e43a")
 polygon_data = ExtResource("2_trkbc")
@@ -25,6 +27,7 @@ metadata/_custom_type_script = "uid://cpps8bcdccbtj"
 [node name="Polygon" type="Polygon2D" parent="." unique_id=955545888]
 clip_children = 2
 texture_repeat = 2
+material = SubResource("ShaderMaterial_frtg0")
 
 [node name="ToplineShadowContainer" type="Node2D" parent="Polygon" unique_id=503219557]
 visible = false

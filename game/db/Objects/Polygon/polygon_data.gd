@@ -40,7 +40,7 @@ enum LineMode { TOPLINE, EDGES_ONLY, NONE }
 	set(t):
 		topline_shadow_texture = t
 		update_visuals.emit()
-@export var topline_cap_inset: float = 0.0:
+@export var topline_cap_inset: float = 4.0:
 	set(v):
 		topline_cap_inset = v
 		update_visuals.emit()

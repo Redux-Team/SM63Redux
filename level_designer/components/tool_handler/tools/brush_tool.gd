@@ -133,7 +133,7 @@ func _spawn_cursor(obj: GameObject) -> void:
 	_preview_cursor = obj.ld_editor_instance.instantiate() as LDObject
 	_preview_cursor.is_preview = true
 	_preview_cursor.init_properties(obj)
-	LD.get_editor_viewport().add_object(_preview_cursor)
+	LD.get_area().add_object(_preview_cursor)
 
 
 func _get_stamp_size() -> Vector2:
@@ -177,7 +177,7 @@ func _add_stroke_preview(pos: Vector2) -> void:
 	var preview: LDObject = obj.ld_editor_instance.instantiate() as LDObject
 	preview.is_preview = true
 	preview.source_object_id = obj.id
-	LD.get_editor_viewport().add_object(preview, Vector2i(pos))
+	LD.get_area().add_object(preview, Vector2i(pos))
 	
 	match obj.ld_placement_rules: 
 		GameObject.LDPlacementRules.BEHIND_ALL:
@@ -185,7 +185,7 @@ func _add_stroke_preview(pos: Vector2) -> void:
 		GameObject.LDPlacementRules.FRONT_ALL:
 			preview.move_to_front()
 		_:
-			var player: LDObject = LD.get_editor_viewport().find_object_by_id("player_mario")
+			var player: LDObject = LD.get_area().find_object_by_id("player_mario")
 			if player:
 				var player_index: int = player.get_index()
 				match obj.ld_placement_rules:

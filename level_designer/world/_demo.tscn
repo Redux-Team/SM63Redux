@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://j51rgrsvb8vy"]
+
+[ext_resource type="Script" uid="uid://ciu76hvga4f7n" path="res://level_designer/world/ld_level.gd" id="1_cdicu"]
+[ext_resource type="Script" uid="uid://dx1ujrrjjaovs" path="res://level_designer/world/ld_layer.gd" id="1_igbim"]
+[ext_resource type="Script" uid="uid://bmlubb80evgcg" path="res://level_designer/world/ld_area.gd" id="1_t350r"]
+
+[node name="LDLevel" type="Node2D" unique_id=60989327]
+script = ExtResource("1_cdicu")
+
+[node name="Area" type="Node2D" parent="." unique_id=553166012]
+script = ExtResource("1_t350r")
+
+[node name="Layer1" type="CanvasGroup" parent="Area" unique_id=1168578174]
+script = ExtResource("1_igbim")
+
+[node name="Parallax" type="Parallax2D" parent="Area/Layer1" unique_id=2048271665]
+
+[node name="Objects" type="Node2D" parent="Area/Layer1/Parallax" unique_id=487796884]
+
+[node name="<object>" type="Node2D" parent="Area/Layer1/Parallax/Objects" unique_id=723737988]

@@ -45,7 +45,7 @@ func get_tool_handler() -> LDToolHandler:
 
 
 func get_editor_viewport() -> LDViewport:
-	return LDViewport._get_instance()
+	return LDViewport.get_instance()
 
 
 func is_active() -> bool:
@@ -59,7 +59,7 @@ func spawn_preview(obj: GameObject) -> LDObject:
 	_preview_object = obj.ld_editor_instance.instantiate() as LDObject
 	_preview_object.is_preview = true
 	_preview_object.init_properties(obj)
-	viewport.add_object(_preview_object)
+	LD.get_area().add_object(_preview_object)
 	return _preview_object
 
 

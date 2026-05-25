@@ -468,7 +468,7 @@ func _commit() -> void:
 						for p: Vector2 in hw:
 							adjusted.append(p - centroid)
 						adjusted_holes.append(adjusted)
-					viewport.add_object(new_poly, Vector2i(centroid))
+					LD.get_area().add_object(new_poly, Vector2i(centroid))
 					new_poly.init_properties(game_object)
 					new_poly.apply_points(piece_local)
 					for h: PackedVector2Array in adjusted_holes:
@@ -612,7 +612,7 @@ func _commit() -> void:
 							var world_p: Vector2 = target.get_global_transform() * p
 							adjusted.append(world_p - centroid)
 						adjusted_holes.append(adjusted)
-					viewport.add_object(new_poly, Vector2i(centroid))
+					LD.get_area().add_object(new_poly, Vector2i(centroid))
 					new_poly.init_properties(game_object)
 					new_poly.apply_points(piece_local)
 					for h: PackedVector2Array in adjusted_holes:

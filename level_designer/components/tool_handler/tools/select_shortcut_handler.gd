@@ -65,13 +65,13 @@ func align_horizontal() -> void:
 	history.begin_action("Align Horizontal")
 	history.add_do(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position.y = avg_y
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position.y = avg_y
 	)
 	history.add_undo(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = old_positions[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = old_positions.get(i)
 	)
 	history.commit_action()
 	
@@ -99,25 +99,25 @@ func align_horizontal_spaced() -> void:
 	var old_positions: Array[Vector2] = []
 	var new_positions: Array[Vector2] = []
 	for i: int in objects.size():
-		old_positions.append(objects[i].position)
+		old_positions.append(objects.get(i).position)
 		new_positions.append(Vector2(snappedf(start_x + i * stamp_size, LDViewport.SNAPPING_SIZE), avg_y))
 	
 	var history: LDHistoryHandler = LD.get_history_handler()
 	history.begin_action("Align Horizontal Spaced")
 	history.add_do(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = new_positions[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = new_positions.get(i)
 	)
 	history.add_undo(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = old_positions[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = old_positions.get(i)
 	)
 	history.commit_action()
 	
 	for i: int in objects.size():
-		objects[i].position = new_positions[i]
+		objects.get(i).position = new_positions.get(i)
 
 
 func align_vertical() -> void:
@@ -138,13 +138,13 @@ func align_vertical() -> void:
 	history.begin_action("Align Vertical")
 	history.add_do(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position.x = avg_x
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position.x = avg_x
 	)
 	history.add_undo(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = old_positions[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = old_positions.get(i)
 	)
 	history.commit_action()
 	
@@ -172,25 +172,25 @@ func align_vertical_spaced() -> void:
 	var old_positions: Array[Vector2] = []
 	var new_positions: Array[Vector2] = []
 	for i: int in objects.size():
-		old_positions.append(objects[i].position)
+		old_positions.append(objects.get(i).position)
 		new_positions.append(Vector2(avg_x, snappedf(start_y + i * stamp_size, LDViewport.SNAPPING_SIZE)))
 	
 	var history: LDHistoryHandler = LD.get_history_handler()
 	history.begin_action("Align Vertical Spaced")
 	history.add_do(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = new_positions[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = new_positions.get(i)
 	)
 	history.add_undo(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = old_positions[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = old_positions.get(i)
 	)
 	history.commit_action()
 	
 	for i: int in objects.size():
-		objects[i].position = new_positions[i]
+		objects.get(i).position = new_positions.get(i)
 
 
 func duplicate_selection() -> void:
@@ -198,10 +198,11 @@ func duplicate_selection() -> void:
 	if objects.is_empty():
 		return
 	
+	var area: LDArea = LDLevel.get_active_area()
 	var duplicates: Array[LDObject] = []
 	for obj: LDObject in objects:
 		var dupe: LDObject = obj.duplicate() as LDObject
-		_viewport.add_object(dupe, Vector2i(obj.position + Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE)))
+		area.add_object(dupe, Vector2i(obj.position + Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE)))
 		dupe.place()
 		duplicates.append(dupe)
 	
@@ -242,8 +243,8 @@ func delete_selection() -> void:
 	)
 	history.add_undo(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]) and is_instance_valid(parents[i]):
-				parents[i].add_child(objects[i])
+			if is_instance_valid(objects.get(i)) and is_instance_valid(parents.get(i)):
+				parents.get(i).add_child(objects.get(i))
 	)
 	history.commit_action()
 	
@@ -270,18 +271,18 @@ func snap_to_grid() -> void:
 	history.begin_action("Snap to Grid")
 	history.add_do(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = new_positions[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = new_positions.get(i)
 	)
 	history.add_undo(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = old_positions[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = old_positions.get(i)
 	)
 	history.commit_action()
 	
 	for i: int in objects.size():
-		objects[i].position = new_positions[i]
+		objects.get(i).position = new_positions.get(i)
 
 
 func center_on_centroid() -> void:
@@ -302,13 +303,13 @@ func center_on_centroid() -> void:
 	history.begin_action("Center on Centroid")
 	history.add_do(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = centroid
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = centroid
 	)
 	history.add_undo(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = old_positions[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = old_positions.get(i)
 	)
 	history.commit_action()
 	
@@ -346,18 +347,18 @@ func distribute_centered() -> void:
 	history.begin_action("Distribute Centered")
 	history.add_do(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = new_positions[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = new_positions.get(i)
 	)
 	history.add_undo(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = old_positions[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = old_positions.get(i)
 	)
 	history.commit_action()
 	
 	for i: int in objects.size():
-		objects[i].position = new_positions[i]
+		objects.get(i).position = new_positions.get(i)
 
 
 func flip_horizontal() -> void:
@@ -380,24 +381,24 @@ func flip_horizontal() -> void:
 	history.begin_action("Flip Horizontal")
 	history.add_do(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position.x = snappedf(centroid_x * 2.0 - objects[i].position.x, LDViewport.SNAPPING_SIZE)
-				if objects[i].sprite_ref:
-					objects[i].sprite_ref.flip_h = not old_flips[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position.x = snappedf(centroid_x * 2.0 - objects.get(i).position.x, LDViewport.SNAPPING_SIZE)
+				if objects.get(i).sprite_ref:
+					objects.get(i).sprite_ref.flip_h = not old_flips.get(i)
 	)
 	history.add_undo(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = old_positions[i]
-				if objects[i].sprite_ref:
-					objects[i].sprite_ref.flip_h = old_flips[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = old_positions.get(i)
+				if objects.get(i).sprite_ref:
+					objects.get(i).sprite_ref.flip_h = old_flips.get(i)
 	)
 	history.commit_action()
 	
 	for i: int in objects.size():
-		objects[i].position.x = snappedf(centroid_x * 2.0 - objects[i].position.x, LDViewport.SNAPPING_SIZE)
-		if objects[i].sprite_ref:
-			objects[i].sprite_ref.flip_h = not old_flips[i]
+		objects.get(i).position.x = snappedf(centroid_x * 2.0 - objects.get(i).position.x, LDViewport.SNAPPING_SIZE)
+		if objects.get(i).sprite_ref:
+			objects.get(i).sprite_ref.flip_h = not old_flips.get(i)
 
 
 func flip_vertical() -> void:
@@ -420,21 +421,21 @@ func flip_vertical() -> void:
 	history.begin_action("Flip Vertical")
 	history.add_do(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position.y = snappedf(centroid_y * 2.0 - objects[i].position.y, LDViewport.SNAPPING_SIZE)
-				if objects[i].sprite_ref:
-					objects[i].sprite_ref.flip_v = not old_flips[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position.y = snappedf(centroid_y * 2.0 - objects.get(i).position.y, LDViewport.SNAPPING_SIZE)
+				if objects.get(i).sprite_ref:
+					objects.get(i).sprite_ref.flip_v = not old_flips.get(i)
 	)
 	history.add_undo(func() -> void:
 		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = old_positions[i]
-				if objects[i].sprite_ref:
-					objects[i].sprite_ref.flip_v = old_flips[i]
+			if is_instance_valid(objects.get(i)):
+				objects.get(i).position = old_positions.get(i)
+				if objects.get(i).sprite_ref:
+					objects.get(i).sprite_ref.flip_v = old_flips.get(i)
 	)
 	history.commit_action()
 	
 	for i: int in objects.size():
-		objects[i].position.y = snappedf(centroid_y * 2.0 - objects[i].position.y, LDViewport.SNAPPING_SIZE)
-		if objects[i].sprite_ref:
-			objects[i].sprite_ref.flip_v = not old_flips[i]
+		objects.get(i).position.y = snappedf(centroid_y * 2.0 - objects.get(i).position.y, LDViewport.SNAPPING_SIZE)
+		if objects.get(i).sprite_ref:
+			objects.get(i).sprite_ref.flip_v = not old_flips.get(i)

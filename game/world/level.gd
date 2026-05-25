@@ -1,30 +1,159 @@
 class_name Level
-extends Node
+extends Node2D
 
 
-enum FileFormat {
-	BINARY,
-	JSON
-}
-
-@export var _data: LevelData
-@export var _area_ref: LevelArea
-@warning_ignore("unused_private_class_variable")
-@export var _music_player: AudioStreamPlayer
-@export var _camera: Camera2D
+static var _inst: Level
 
 
-func get_data() -> LevelData:
-	return _data
+var _active_area: LevelArea
+var _player: Player
 
 
-func get_loaded_area() -> LevelArea:
-	return _area_ref
+func _init() -> void:
+	_inst = self
 
 
-func get_camera() -> LevelCamera:
-	return _camera
+static func get_instance() -> Level:
+	return _inst
 
 
-func change_area() -> void:
-	pass
+static func get_active_area() -> LevelArea:
+	return _inst._active_area
+
+
+static func get_player() -> Player:
+	return _inst._player
+
+
+func load_from_dict(data: Dictionary) -> Error:
+	if not data.has("version"):
+		return ERR_INVALID_DATA
+	
+	var normalized: Dictionary = _normalize(data)
+	if not normalized.has("areas"):
+		return ERR_INVALID_DATA
+	
+	_clear()
+	
+	for area_data: Variant in normalized.get("areas", []):
+		if not area_data is Dictionary:
+			continue
+		var current_area: LevelArea = _get_or_create_area(area_data.get("name", "default"))
+		for layer_data: Variant in area_data.get("layers", []):
+			if not layer_data is Dictionary:
+				continue
+			if (layer_data.get("objects", []) as Array).is_empty():
+				continue
+			var layer_index: int = layer_data.get("layer_index", 0)
+			var layer: LevelLayer = current_area.get_or_create_layer(layer_index)
+			var raw_parallax: Variant = layer_data.get("parallax_scale", null)
+			if raw_parallax != null:
+				layer.parallax_scale = Packer.array_to_vec2(raw_parallax)
+			var raw_modulate: Variant = layer_data.get("modulation", null)
+			if raw_modulate != null:
+				layer.modulation = Packer.array_to_color(raw_modulate)
+			layer.is_decoration = layer_data.get("is_decoration", false)
+			for obj_data: Variant in layer_data.get("objects", []):
+				if not obj_data is Dictionary:
+					continue
+				_instantiate_object(obj_data, layer, current_area)
+	
+	return OK
+
+
+func load_from_binary(path: String) -> Error:
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	if not file:
+		return FileAccess.get_open_error()
+	var bytes: PackedByteArray = file.get_buffer(file.get_length())
+	file.close()
+	var data: Variant = bytes_to_var(bytes)
+	if not data is Dictionary:
+		return ERR_INVALID_DATA
+	return load_from_dict(data)
+
+
+func load_from_json(path: String) -> Error:
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	if not file:
+		return FileAccess.get_open_error()
+	var json_string: String = file.get_as_text()
+	file.close()
+	var json: JSON = JSON.new()
+	var err: Error = json.parse(json_string)
+	if err != OK:
+		return err
+	var data: Variant = json.get_data()
+	if not data is Dictionary:
+		return ERR_INVALID_DATA
+	return load_from_dict(data)
+
+
+func _normalize(data: Dictionary) -> Dictionary:
+	if data.has("areas"):
+		return data
+	
+	# auto-convert old format: layers at top level -> wrap in default area
+	if data.has("layers"):
+		return {
+			"version": data.get("version", 1),
+			"areas": [{
+				"name": "default",
+				"layers": data.get("layers", []),
+			}],
+		}
+	
+	return data
+
+
+func _get_or_create_area(area_name: String) -> LevelArea:
+	for child: Node in get_children():
+		var existing: LevelArea = child as LevelArea
+		if existing and existing.area_name == area_name:
+			return existing
+	
+	var new_area: LevelArea = LevelArea.new()
+	new_area.area_name = area_name
+	new_area.name = area_name
+	add_child(new_area)
+	
+	if not is_instance_valid(_active_area):
+		_active_area = new_area
+	
+	return new_area
+
+
+func _instantiate_object(data: Dictionary, layer: LevelLayer, _area: LevelArea) -> void:
+	var object_id: String = data.get("object_id", "")
+	if object_id.is_empty():
+		return
+	
+	var game_object: GameObject = GameDB.get_db().find_game_object(object_id)
+	if not game_object or not game_object.game_instance:
+		return
+	
+	var instance: Node = game_object.game_instance.instantiate()
+	layer.get_objects_root().add_child(instance)
+	
+	if instance is Player:
+		_player = instance
+	
+	var level_object: LevelObject = instance as LevelObject
+	if level_object:
+		level_object.init_from_data(data)
+		return
+	
+	var entity: Entity = instance as Entity
+	if entity:
+		entity.init_from_data(data)
+
+
+func _clear() -> void:
+	for child: Node in get_children():
+		var area: LevelArea = child as LevelArea
+		if area:
+			area.clear()
+			remove_child(area)
+			area.free()
+	_active_area = null
+	_player = null

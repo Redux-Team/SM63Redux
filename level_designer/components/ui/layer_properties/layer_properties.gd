@@ -1,6 +1,7 @@
 class_name LDLayerPropertiesList
 extends MarginContainer
 
+
 @export var top_label: Label
 @export var deco_layer: CheckBox
 @export var parallax_slider_x: HSlider
@@ -18,13 +19,12 @@ func _ready() -> void:
 
 
 func _on_show() -> void:
-	var layer_index: int = LD.get_editor_viewport().get_active_layer()
-	top_label.text = "Layer %s" % layer_index
-	var layer: LDLayer = LD.get_editor_viewport().get_or_create_layer(layer_index)
+	var layer: LDLayer = LDLevel.get_active_area().get_active_layer()
+	top_label.text = "Layer %s" % layer.index
 	
-	modulate_color_picker.color = layer.base_modulate
+	modulate_color_picker.color = layer.modulation
 	
-	deco_layer.button_pressed = layer.decoration
+	deco_layer.button_pressed = layer.is_decoration
 	
 	parallax_slider_x.value = layer.parallax_scale.x
 	parallax_label_x.text = "%.1fx" % layer.parallax_scale.x
@@ -33,13 +33,12 @@ func _on_show() -> void:
 	parallax_label_y.text = "%.1fx" % layer.parallax_scale.y
 
 
-func _on_prop_changed(..._values: Array) -> void:
-	var layer_index: int = LD.get_editor_viewport().get_active_layer()
-	var layer: LDLayer = LD.get_editor_viewport().get_or_create_layer(layer_index)
+func _on_prop_changed(_value: Variant = null) -> void:
+	var layer: LDLayer = LDLevel.get_active_area().get_active_layer()
 	
-	layer.base_modulate = modulate_color_picker.color
+	layer.modulation = modulate_color_picker.color
 	
-	layer.decoration = deco_layer.button_pressed
+	layer.is_decoration = deco_layer.button_pressed
 	
 	layer.parallax_scale.x = parallax_slider_x.value
 	parallax_label_x.text = "%.1fx" % layer.parallax_scale.x
