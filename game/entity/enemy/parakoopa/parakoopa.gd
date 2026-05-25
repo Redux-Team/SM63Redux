@@ -38,7 +38,7 @@ func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:
 		Singleton.spawn_sibling(self, koopa_node, ["position", "scale"])
 		
 		source_hitbox.owner.velocity.y = -200
-		koopa_node.audio_stream_player_2d.play()
+		koopa_node.audio_stream_player_2d.play.call_deferred()
 	
 	Singleton.spawn_sibling(self, wing_emitter_1, ["position", "scale"])
 	Singleton.spawn_sibling(self, wing_emitter_2, ["position", "scale"])
