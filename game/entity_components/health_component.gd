@@ -29,16 +29,19 @@ signal died
 		power_updated.emit(power)
 @export var power_max: int = 5
 var hp_tween: Tween
+var _hp_tween_target: float
+var _hp_tweening: bool = false
 
 var _hp: float:
 	set(hp):
-		# We healed up
 		if roundf(_hp) >= roundf(max_hp) and power > 0:
 			power = 0
 			power_reset.emit()
 		
 		_hp = clamp(hp, 0, max_hp)
-		hp_updated.emit(hp)
+		if not _hp_tweening:
+			_hp_tween_target = _hp
+		hp_updated.emit(_hp)
 
 
 func _ready() -> void:
@@ -63,8 +66,14 @@ func damage(amount: float, type: HitBox.DamageType) -> void:
 
 func heal(amount: float, time: float = 0.0) -> void:
 	if time > 0.0:
-		var tween: Tween = create_tween()
-		tween.tween_property(self, ^"_hp", _hp + amount, time)
+		var target: float = minf(_hp_tween_target + amount, max_hp)
+		if hp_tween != null:
+			hp_tween.kill()
+		_hp_tween_target = target
+		_hp_tweening = true
+		hp_tween = create_tween()
+		hp_tween.tween_property(self, ^"_hp", _hp_tween_target, time)
+		hp_tween.tween_callback(func() -> void: _hp_tweening = false)
 		return
 	
 	_hp += amount
@@ -80,3 +89,4 @@ func heal_percentage(amount: float, time: float = 0.0) -> void:
 
 func set_hp(amount: float) -> void:
 	_hp = amount
+	_hp_tween_target = amount
