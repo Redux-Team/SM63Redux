@@ -2,13 +2,21 @@
 class_name HurtBoxComponent
 extends Resource
 
+
 enum KnockbackMode {
-	PASSTHROUGH, 
+	PASSTHROUGH,
 	SET_RELATIVE,
 	SET_ABSOLUTE,
 	ADD_RELATIVE,
 	ADD_ABSOLUTE,
 }
+
+enum DisableTarget {
+	HURTBOX,
+	HITBOX,
+	BOTH,
+}
+
 
 @export_group("Filters")
 @export var accepted_hitbox_ids: PackedStringArray
@@ -16,13 +24,15 @@ enum KnockbackMode {
 @export var accepted_damage_types: Array[HitBox.DamageType]
 @export var ignored_damage_types: Array[HitBox.DamageType]
 @export_custom(PROPERTY_HINT_EXPRESSION, "") var expression: String
-
 @export_group("Knockback")
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "knockback") var override_knockback: bool = false
 @export var knockback: Vector2 = Vector2(150, 135)
 @export var knockback_mode_x: KnockbackMode = KnockbackMode.SET_RELATIVE
 @export var knockback_mode_y: KnockbackMode = KnockbackMode.SET_ABSOLUTE
-
+@export_group("Disable on Hit")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "disable_on_hit") var disable_on_hit: bool = false
+@export var disable_on_hit_duration: float = 0.0
+@export var disable_on_hit_target: DisableTarget = DisableTarget.HURTBOX
 @export_group("Damage State")
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var override_damage_state: bool = false
 @export var damage_state_map: Dictionary[HitBox.DamageType, StringName]
@@ -67,6 +77,25 @@ func process(hitbox: HitBox, hurtbox: HurtBox, entity: Entity) -> void:
 		var state: StringName = _resolve_damage_state(hitbox, hurtbox)
 		if not state.is_empty() and entity.state_machine:
 			entity.state_machine.change_state(state)
+	
+	if disable_on_hit:
+		var duration: float = hitbox.override_disable_duration if hitbox.override_disable_on_hit else disable_on_hit_duration
+		var target: DisableTarget = hitbox.override_disable_target if hitbox.override_disable_on_hit else disable_on_hit_target
+		match target:
+			DisableTarget.HURTBOX:
+				hurtbox.disable()
+				if duration > 0.0:
+					hurtbox.enable(duration)
+			DisableTarget.HITBOX:
+				hitbox.disable()
+				if duration > 0.0:
+					hitbox.enable(duration)
+			DisableTarget.BOTH:
+				hurtbox.disable()
+				hitbox.disable()
+				if duration > 0.0:
+					hurtbox.enable(duration)
+					hitbox.enable(duration)
 
 
 func _resolve_knockback(hitbox: HitBox, hurtbox: HurtBox, current_velocity: Vector2) -> Vector2:

@@ -21,6 +21,15 @@ signal damaged(source_hitbox: HitBox)
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "disable_on_hit") var disable_on_hit: bool = false
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var disable_on_hit_duration: float = 0.0
 
+@export_group("Blink")
+@export var blink_targets: Array[CanvasItem] = []
+@export_custom(PROPERTY_HINT_NONE, "suffix:s") var blink_interval: float = 0.08
+@export var blink_alpha: float = 0.2
+
+var _disable_timers: Array[SceneTreeTimer] = []
+var _hit_this_frame: bool = false
+var _blink_tween: Tween
+
 
 func _init() -> void:
 	collision_layer = 1 << 5
@@ -29,7 +38,7 @@ func _init() -> void:
 
 
 func _on_area_entered(area: Area2D) -> void:
-	if area is not HitBox:
+	if _hit_this_frame or area is not HitBox:
 		return
 	var hitbox: HitBox = area as HitBox
 	
@@ -45,27 +54,59 @@ func _on_area_entered(area: Area2D) -> void:
 			continue
 		if owner is Entity:
 			component.process(hitbox, self, owner as Entity)
-		if disable_on_hit:
-			disable()
-			if disable_on_hit_duration > 0.0:
-				enable(disable_on_hit_duration)
+		var should_disable: bool = component.disable_on_hit if component.disable_on_hit else disable_on_hit
+		if should_disable:
+			var duration: float = hitbox.override_disable_duration if hitbox.override_disable_on_hit else (component.disable_on_hit_duration if component.disable_on_hit else disable_on_hit_duration)
+			_push_disable_timer(duration)
+		_hit_this_frame = true
 		damaged.emit(hitbox)
 		return
 
 
+func _process(_delta: float) -> void:
+	_hit_this_frame = false
+
+
+func _push_disable_timer(duration: float) -> void:
+	disable()
+	if duration <= 0.0:
+		return
+	var timer: SceneTreeTimer = get_tree().create_timer(duration)
+	_disable_timers.append(timer)
+	timer.timeout.connect(_on_disable_timer_expired.bind(timer))
+
+
+func _on_disable_timer_expired(timer: SceneTreeTimer) -> void:
+	_disable_timers.erase(timer)
+	if _disable_timers.is_empty():
+		enable()
+
+
 func enable(time: float = 0.0) -> void:
-	for c: Node in get_children():
-		if c is CollisionShape2D or c is CollisionPolygon2D:
-			c.set_deferred(&"disabled", false)
-	set_deferred(&"monitorable", true)
-	
-	if time:
-		await get_tree().create_timer(time).timeout
-		disable()
+	set_deferred(&"monitoring", true)
+	_stop_blink()
+	if time > 0.0:
+		_push_disable_timer(time)
 
 
 func disable() -> void:
-	for c: Node in get_children():
-		if c is CollisionShape2D or c is CollisionPolygon2D:
-			c.set_deferred(&"disabled", true)
-	set_deferred(&"monitorable", true)
+	set_deferred(&"monitoring", false)
+	_start_blink()
+
+
+func _start_blink() -> void:
+	if blink_targets.is_empty() or _blink_tween != null:
+		return
+	_blink_tween = create_tween().set_loops()
+	for target: CanvasItem in blink_targets:
+		_blink_tween.tween_property(target, "modulate", Color(1.0, 1.0, 1.0, blink_alpha), blink_interval)
+		_blink_tween.tween_property(target, "modulate", Color.WHITE, blink_interval)
+
+
+func _stop_blink() -> void:
+	if _blink_tween == null:
+		return
+	_blink_tween.kill()
+	_blink_tween = null
+	for target: CanvasItem in blink_targets:
+		target.modulate = Color.WHITE

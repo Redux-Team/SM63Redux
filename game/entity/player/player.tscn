@@ -1269,6 +1269,8 @@ size = Vector2(12, 8)
 script = ExtResource("73_ketxm")
 accepted_hitbox_ids = PackedStringArray("enemy")
 accepted_damage_types = Array[int]([1])
+disable_on_hit = true
+disable_on_hit_duration = 2.0
 override_damage_state = true
 damage_state_name = &"strike"
 metadata/_custom_type_script = "uid://drtqc6at2evph"
@@ -2206,11 +2208,12 @@ shape = SubResource("RectangleShape2D_ae0hi")
 disabled = true
 debug_color = Color(0.7, 0, 0, 0.41960785)
 
-[node name="Base" type="Area2D" parent="Hitboxes" unique_id=2129200040]
+[node name="Base" type="Area2D" parent="Hitboxes" unique_id=2129200040 node_paths=PackedStringArray("blink_targets")]
 monitorable = false
 script = ExtResource("20_1wiqr")
 ignored_hitbox_ids = PackedStringArray("player", "koopa_shell")
 components = Array[ExtResource("73_ketxm")]([SubResource("Resource_ebtvn")])
+blink_targets = [NodePath("../../Doll")]
 metadata/_custom_type_script = "uid://3ara7t8dqmih"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/Base" unique_id=198873989]

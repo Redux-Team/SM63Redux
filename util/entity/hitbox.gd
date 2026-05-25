@@ -2,31 +2,35 @@
 class_name HitBox
 extends Area2D
 
+
 enum DamageType {
 	GENERIC,
 	STRIKE,
 	SQUISH,
 }
 
+
 @export_group("Identity")
 ## Optional, helps specify what [i]kind[/i] of hitbox this is, useful for differentiating
 ## between two different hitboxes of the same [member damage_type].
 @export var hitbox_ids: Array[String]
 @export_custom(PROPERTY_HINT_EXPRESSION, "") var hit_expression: String
-
 @export_group("Damage")
 ## How much HP will be removed from the affected [Entity].
 @export var damage_amount: float
 ## Which type of damage is being inflicted
 @export var damage_type: DamageType
 @export var damage_curve: Curve
-
 @export_group("Knockback")
 ## Whether this hitbox inflicts knockback.
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "knockback") var has_knockback: bool = false
 ## The velocity vector added to the entity upon being hit. Positive values knock away relative from
 ## the source of damage.
 @export var knockback_vector: Vector2 = Vector2(150, 135)
+@export_group("Disable Override")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "override_disable") var override_disable_on_hit: bool = false
+@export var override_disable_duration: float = 0.0
+@export var override_disable_target: HurtBoxComponent.DisableTarget = HurtBoxComponent.DisableTarget.HURTBOX
 
 
 func _init() -> void:
