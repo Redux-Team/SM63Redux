@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_0e7sg"]
 [ext_resource type="Texture2D" uid="uid://cawur2ekoqo4o" path="res://assets/textures/item/fludd/fludd_box_rocket.png" id="3_yq2tw"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_64hxc"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v42fm"]
 resource_local_to_scene = true
 shader = ExtResource("2_0e7sg")
 shader_parameter/state = 0
@@ -25,10 +25,10 @@ shader_parameter/outline_enabled = true
 [sub_resource type="CanvasTexture" id="CanvasTexture_4lxki"]
 diffuse_texture = ExtResource("3_yq2tw")
 
-[node name="FluddBoxHover" unique_id=93239642 instance=ExtResource("1_wbj4c")]
+[node name="FluddBoxRocket" unique_id=93239642 instance=ExtResource("1_wbj4c")]
 
 [node name="Sprite" parent="." index="0" unique_id=97473876]
-material = SubResource("ShaderMaterial_64hxc")
+material = SubResource("ShaderMaterial_v42fm")
 texture = SubResource("CanvasTexture_4lxki")
 canvas_texture = SubResource("CanvasTexture_4lxki")
 diffuse_texture = ExtResource("3_yq2tw")
