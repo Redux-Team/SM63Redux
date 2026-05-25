@@ -88,10 +88,6 @@ var jump_chain_timer: float = 0.0
 ## lock the sprite flipping
 @export var lock_flipping: bool = false
 
-# The held "coin" value of the power meter for the player
-var power: int = 0
-
-
 var cam: Camera2D
 
 
@@ -230,6 +226,11 @@ func set_friction_scale_factor(scale_factor: float) -> void:
 	var friction_component: FrictionComponent = get_component(FrictionComponent)
 	if friction_component:
 		friction_component.scale_factor = scale_factor
+
+
+func add_power(amount: int) -> void:
+	var health_component: HealthComponent = get_component(HealthComponent)
+	health_component.power += amount
 
 
 func resist(val: float, sub: float, div: float) -> float:

@@ -1,7 +1,6 @@
 @tool
 extends Node
 
-
 var _input_handler: InputHandler = InputHandler.new()
 var _tree_hook: TreeHook = TreeHook.new()
 var _level_clock: LevelClock = LevelClock.new()

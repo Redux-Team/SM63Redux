@@ -14,17 +14,21 @@ extends Entity
 
 var _collect_tween: Tween
 
-var Max_coin_amount: int = 0:
+var Max_red_coin_amount: int = 0:
 	get:
-		return Level.get_instance().red_coins_max.get(group, 0)
+		return Level.get_instance().get_red_coin_max(group)
 	set(mca):
-		Level.get_instance().red_coins_max.set(group, mca)
-var Coin_amount: int = 0:
+		Level.get_instance().set_red_coin_max(group, mca)
+var Red_coin_amount: int = 0:
 	get:
-		return Level.get_instance().red_coins_collected.get(group, 0)
+		return Level.get_instance().get_red_coin_count(group)
 	set(ca):
-		Level.get_instance().red_coins_collected.set(group, ca)
-
+		Level.get_instance().set_red_coin_count(group, ca)
+var Yellow_coin_amount: int = 0:
+	get:
+		return Level.get_instance().get_yellow_coin_count()
+	set(ca):
+		Level.get_instance().set_yellow_coin_count(ca)
 
 
 func _ready() -> void:
@@ -33,7 +37,7 @@ func _ready() -> void:
 	if explode_on_spawn:
 		explode(randf_range(-15, 15), 200)
 	
-	Max_coin_amount += 1
+	Max_red_coin_amount += 1
 
 ## Call this function to make the coin go a random direction
 func explode(strength_x: float = 0.0, strength_y: float = 0.0) -> void:
@@ -43,7 +47,7 @@ func explode(strength_x: float = 0.0, strength_y: float = 0.0) -> void:
 
 func animate_text() -> void:
 	collect_label.show()
-	collect_label.text = str(Coin_amount)
+	collect_label.text = str(Red_coin_amount)
 	
 	_collect_tween = create_tween().set_parallel().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	
@@ -58,18 +62,24 @@ func _on_entity_check_area_player_entered(_player: Player) -> void:
 	
 	emitter.emitting = true
 	
-	if Coin_amount + 1 == Max_coin_amount:
+	if Red_coin_amount + 1 == Max_red_coin_amount:
 		all_collected.play()
 	else:
-		audio_stream_player_2d.pitch_scale = lerpf(1.0, 1.3, float(Coin_amount) / float(Max_coin_amount))
+		audio_stream_player_2d.pitch_scale = lerpf(1.0, 1.3, float(Red_coin_amount) / float(Max_red_coin_amount))
 		audio_stream_player_2d.play()
 	
-	Coin_amount += 1
+	Red_coin_amount += 1
+	
+	Level.get_instance().add_yellow_coin(2)
+	Level.get_player().add_power(5)
 	
 	animate_text()
 	
 	sprite.hide()
 	entity_check_area.disable()
 	
-	await audio_stream_player_2d.finished
+	if all_collected.playing:
+		await all_collected.finished
+	else:
+		await audio_stream_player_2d.finished
 	queue_free()

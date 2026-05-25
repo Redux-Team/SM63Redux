@@ -59,6 +59,7 @@ animations = [{
 }]
 
 [node name="PurpleCoin" unique_id=187434736 instance=ExtResource("1_2vepf")]
+purple = true
 
 [node name="Sprite" parent="." index="1" unique_id=1781944590]
 texture = SubResource("CanvasTexture_6m3yd")

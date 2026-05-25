@@ -2,13 +2,27 @@ class_name Level
 extends Node2D
 
 
+signal loaded
+
+signal yellow_coin_count_updated
+signal red_coin_count_updated
+signal purple_coin_count_updated
+
+
 static var _inst: Level
 
-var red_coins_max: Dictionary[String, int]
-var red_coins_collected: Dictionary[String, int]
+var _yellow_coins_collected: int:
+	set(ycc):
+		_yellow_coins_collected = ycc
+		yellow_coin_count_updated.emit()
+var _red_coins_max: Dictionary[String, int]
+var _red_coins_collected: Dictionary[String, int]
+var _purple_coins_max: Dictionary[String, int]
+var _purple_coins_collected: Dictionary[String, int]
 
 var _active_area: LevelArea
 var _player: Player
+var _loaded: bool = false
 
 
 func _init() -> void:
@@ -25,6 +39,69 @@ static func get_active_area() -> LevelArea:
 
 static func get_player() -> Player:
 	return _inst._player
+
+
+func get_yellow_coin_count() -> int:
+	return _yellow_coins_collected
+
+
+func add_yellow_coin(amount: int = 1) -> void:
+	_yellow_coins_collected += amount
+
+
+func set_yellow_coin_count(amount: int) -> void:
+	_yellow_coins_collected = amount
+
+
+func get_red_coin_count(group: String) -> int:
+	return _red_coins_collected.get(group, 0)
+
+
+func set_red_coin_count(group: String, amount: int) -> void:
+	_red_coins_collected.set(group, amount)
+	red_coin_count_updated.emit()
+
+
+func get_red_coin_max(group: String) -> int:
+	return _red_coins_max.get(group, 0)
+
+
+func set_red_coin_max(group: String, amount: int) -> void:
+	_red_coins_max.set(group, amount)
+
+
+func get_purple_coin_count(group: String) -> int:
+	return _purple_coins_collected.get(group, 0)
+
+
+func set_purple_coin_count(group: String, amount: int) -> void:
+	_purple_coins_collected.set(group, amount)
+	purple_coin_count_updated.emit()
+
+
+func add_purple_coin(group: String, amount: int = 1) -> void:
+	_purple_coins_collected.set(group, get_purple_coin_count(group) + amount)
+	purple_coin_count_updated.emit()
+
+
+func get_purple_coin_max(group: String) -> int:
+	return _purple_coins_max.get(group, 0)
+
+
+func add_purple_coin_max(group: String, amount: int = 1) -> void:
+	_purple_coins_max.set(group, get_purple_coin_max(group) + amount)
+
+
+func set_purple_coin_max(group: String, amount: int) -> void:
+	_purple_coins_max.set(group, amount)
+
+## Calls the callable once the level finishes loading, or calls it immediately if it
+## already loaded.
+func on_load(callable: Callable, args: Array = []) -> void:
+	if _loaded:
+		callable.callv(args)
+	else:
+		loaded.connect(func() -> void: callable.callv(args), CONNECT_ONE_SHOT)
 
 
 func load_from_dict(data: Dictionary) -> Error:
@@ -59,6 +136,9 @@ func load_from_dict(data: Dictionary) -> Error:
 				if not obj_data is Dictionary:
 					continue
 				_instantiate_object(obj_data, layer, current_area)
+	
+	_loaded = true
+	loaded.emit()
 	
 	return OK
 
@@ -159,3 +239,4 @@ func _clear() -> void:
 			area.free()
 	_active_area = null
 	_player = null
+	_loaded = false

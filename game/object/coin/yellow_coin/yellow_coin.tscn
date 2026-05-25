@@ -81,7 +81,7 @@ radius = 8.062258
 
 [node name="YellowCoin" type="CharacterBody2D" unique_id=187434736 node_paths=PackedStringArray("particle_emitter", "audio_stream_player_2d", "entity_check_area", "gravity_component", "bouncy_component", "sprite", "water_check")]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 0
 script = ExtResource("1_k3up7")
 particle_emitter = NodePath("ParticleEmitter")
 audio_stream_player_2d = NodePath("AudioStreamPlayer2D")

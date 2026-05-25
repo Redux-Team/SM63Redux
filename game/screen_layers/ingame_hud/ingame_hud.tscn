@@ -2,21 +2,29 @@
 
 [ext_resource type="Texture2D" uid="uid://bpmi17yjeho6o" path="res://assets/textures/gui/ingame_hud/health_meter_base.png" id="1_e2fet"]
 [ext_resource type="Script" uid="uid://bc8rgrn6u3y13" path="res://game/screen_layers/ingame_hud/ingame_hud.gd" id="1_reblr"]
-[ext_resource type="Texture2D" uid="uid://civwwnm7pwii7" path="res://assets/textures/gui/ingame_hud/health_meter_coin_base.png" id="2_w0ism"]
+[ext_resource type="Texture2D" uid="uid://d0eb0xoc0aero" path="res://assets/textures/gui/ingame_hud/health_meter_power.png" id="2_fsh6l"]
+[ext_resource type="Texture2D" uid="uid://ck0mlx7surhlu" path="res://assets/textures/gui/ingame_hud/red_coin_icon.png" id="2_pm01n"]
+[ext_resource type="Texture2D" uid="uid://bvc57sf4613ry" path="res://assets/textures/gui/ingame_hud/yellow_coin_icon.png" id="2_pqwxr"]
 [ext_resource type="Texture2D" uid="uid://ur8gi014rt0d" path="res://assets/textures/gui/ingame_hud/health_meter_inner_bg.png" id="3_0c88u"]
 [ext_resource type="Shader" uid="uid://yfcro43orcr0" path="res://core/shader/hud_health.gdshader" id="3_d64ys"]
 [ext_resource type="Texture2D" uid="uid://cgms5235nrwsb" path="res://assets/textures/gui/ingame_hud/health_meter_inner.png" id="3_hbyb8"]
-[ext_resource type="Texture2D" uid="uid://dxeele2uos4o5" path="res://assets/textures/gui/ingame_hud/hp_power.png" id="7_2e807"]
+[ext_resource type="Texture2D" uid="uid://esu0o3vjd7ve" path="res://assets/textures/gui/ingame_hud/x_icon.png" id="3_pqwxr"]
+[ext_resource type="Texture2D" uid="uid://b2bsul4l4prib" path="res://assets/textures/gui/ingame_hud/purple_coin_icon.png" id="5_sjut3"]
 [ext_resource type="Texture2D" uid="uid://bmuhj0qbolft8" path="res://assets/textures/gui/ingame_hud/fludd_tank.png" id="8_37e64"]
 [ext_resource type="Texture2D" uid="uid://d3nl6uavw7mx7" path="res://assets/textures/gui/ingame_hud/fludd_tank_mask.png" id="9_ia5qx"]
 [ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="11_53twl"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="11_fsh6l"]
 [ext_resource type="Texture2D" uid="uid://b4pfo0m8fwi2x" path="res://assets/textures/gui/ingame_hud/fludd_tank_top.png" id="11_ia5qx"]
 [ext_resource type="Texture2D" uid="uid://bcsycatrr3xnh" path="res://assets/textures/particle/fludd/fludd_bubble_big.png" id="11_o5xe2"]
+[ext_resource type="Texture2D" uid="uid://dtdw3v85xoeih" path="res://assets/textures/gui/ingame_hud/power_coin_meter.png" id="13_erhw5"]
 [ext_resource type="Texture2D" uid="uid://bwnnu0gwg2i46" path="res://assets/textures/particle/fludd/fludd_bubble_small.png" id="14_cx53y"]
 
 [sub_resource type="Gradient" id="Gradient_d64ys"]
 offsets = PackedFloat32Array(0, 0.203125, 0.3638393, 0.51339287, 0.7745536, 1)
 colors = PackedColorArray(0.20784314, 0.49411765, 0.9098039, 1, 0.3567391, 0.62493485, 0.8478261, 1, 0.3137255, 0.81960785, 0.23137255, 1, 0.84, 0.84, 0, 1, 0.98039216, 0.3019608, 0.2, 1, 0.41355386, 0, 0.002178085, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pm01n"]
+content_margin_bottom = 2.0
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_37e64"]
 light_mode = 1
@@ -30,15 +38,330 @@ shader_parameter/filled_slices = 8
 shader_parameter/start_angle_degrees = 0.0
 shader_parameter/divider_color = Color(0.6392157, 0.6392157, 0.6392157, 1)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_1hbjs"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 0, 64, 16)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_erhw5"]
+diffuse_texture = SubResource("AtlasTexture_1hbjs")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nayuj"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 0, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cp6tr"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 16, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lfl17"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 32, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nygxd"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 48, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1f64a"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 64, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6gmi"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 80, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ycetg"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 96, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fsh6l"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 80, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_erhw5"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 96, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rmsoo"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 0, 64, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rmsoo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nayuj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cp6tr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lfl17")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nygxd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1f64a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e6gmi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ycetg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1hbjs")
+}],
+"loop": false,
+"name": &"default",
+"speed": 13.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fsh6l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_erhw5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rmsoo")
+}],
+"loop": false,
+"name": &"heal",
+"speed": 13.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tg085"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(0, 0, 14, 14)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_fsh6l"]
+diffuse_texture = SubResource("AtlasTexture_tg085")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aqq40"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(14, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7nbg5"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(28, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3knew"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(42, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dxgk1"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(56, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kdsxv"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(70, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_snlrm"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(84, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sovob"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(98, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_871rv"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(0, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w14pq"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(84, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hn64l"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(98, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0vmaj"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(0, 0, 14, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_871rv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tg085")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aqq40")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7nbg5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3knew")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dxgk1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kdsxv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_snlrm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sovob")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_871rv")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w14pq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hn64l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0vmaj")
+}],
+"loop": false,
+"name": &"heal",
+"speed": 13.0
+}]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_cx53y"]
 atlas = ExtResource("11_o5xe2")
 region = Rect2(0, 0, 16, 16)
 
-[node name="IngameHud" type="CanvasLayer" unique_id=510807687 node_paths=PackedStringArray("inner_hp_texture", "inner_hpbg")]
+[node name="IngameHud" type="CanvasLayer" unique_id=510807687 node_paths=PackedStringArray("inner_hp_texture", "inner_hpbg", "yellow_coin_label", "red_coin_container", "red_coin_label", "purple_coin_container", "purple_coin_label", "power", "coin_meter", "health_container")]
 script = ExtResource("1_reblr")
 health_gradient = SubResource("Gradient_d64ys")
 inner_hp_texture = NodePath("HealthContainer/Base/InnerHPBG/InnerHPTexture")
 inner_hpbg = NodePath("HealthContainer/Base/InnerHPBG")
+yellow_coin_label = NodePath("CollectibleContainer/VBoxContainer/YellowCoinContainer/YellowCoinLabel")
+red_coin_container = NodePath("CollectibleContainer/VBoxContainer/RedCoinContainer")
+red_coin_label = NodePath("CollectibleContainer/VBoxContainer/RedCoinContainer/RedCoinLabel")
+purple_coin_container = NodePath("CollectibleContainer/VBoxContainer/PurpleCoinContainer")
+purple_coin_label = NodePath("CollectibleContainer/VBoxContainer/PurpleCoinContainer/PurpleCoinLabel")
+power = NodePath("HealthContainer/Base/POWER")
+coin_meter = NodePath("HealthContainer/Base/CoinMeter")
+health_container = NodePath("HealthContainer")
+
+[node name="CollectibleContainer" type="Control" parent="." unique_id=1142767291]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CollectibleContainer" unique_id=2094631082]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 9.0
+offset_right = 55.0
+offset_bottom = 55.0
+theme_override_constants/separation = 0
+
+[node name="YellowCoinContainer" type="HBoxContainer" parent="CollectibleContainer/VBoxContainer" unique_id=1521011646]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="CollectibleContainer/VBoxContainer/YellowCoinContainer" unique_id=784504261]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("2_pqwxr")
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="CollectibleContainer/VBoxContainer/YellowCoinContainer" unique_id=1125386262]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("3_pqwxr")
+stretch_mode = 5
+
+[node name="Control" type="Control" parent="CollectibleContainer/VBoxContainer/YellowCoinContainer" unique_id=791791020]
+custom_minimum_size = Vector2(2, 10)
+layout_mode = 2
+
+[node name="YellowCoinLabel" type="RichTextLabel" parent="CollectibleContainer/VBoxContainer/YellowCoinContainer" unique_id=1851382956]
+clip_contents = false
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_pm01n")
+bbcode_enabled = true
+text = "0"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+metadata/tint_color = Color(0.93333334, 1, 0.65882355, 1)
+
+[node name="RedCoinContainer" type="HBoxContainer" parent="CollectibleContainer/VBoxContainer" unique_id=475931850]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="CollectibleContainer/VBoxContainer/RedCoinContainer" unique_id=1783616628]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("2_pm01n")
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="CollectibleContainer/VBoxContainer/RedCoinContainer" unique_id=1525772908]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("3_pqwxr")
+stretch_mode = 5
+
+[node name="Control" type="Control" parent="CollectibleContainer/VBoxContainer/RedCoinContainer" unique_id=1452182003]
+custom_minimum_size = Vector2(2, 10)
+layout_mode = 2
+
+[node name="RedCoinLabel" type="RichTextLabel" parent="CollectibleContainer/VBoxContainer/RedCoinContainer" unique_id=94653577]
+clip_contents = false
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_pm01n")
+bbcode_enabled = true
+text = "0[font_size=12]/0"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+metadata/tint_color = Color(1, 0.65999997, 0.65999997, 1)
+
+[node name="PurpleCoinContainer" type="HBoxContainer" parent="CollectibleContainer/VBoxContainer" unique_id=579334068]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="CollectibleContainer/VBoxContainer/PurpleCoinContainer" unique_id=118686388]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("5_sjut3")
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="CollectibleContainer/VBoxContainer/PurpleCoinContainer" unique_id=1844994863]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("3_pqwxr")
+stretch_mode = 5
+
+[node name="Control" type="Control" parent="CollectibleContainer/VBoxContainer/PurpleCoinContainer" unique_id=1674258766]
+custom_minimum_size = Vector2(2, 10)
+layout_mode = 2
+
+[node name="PurpleCoinLabel" type="RichTextLabel" parent="CollectibleContainer/VBoxContainer/PurpleCoinContainer" unique_id=360876710]
+clip_contents = false
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_pm01n")
+bbcode_enabled = true
+text = "0[font_size=12]/0"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+metadata/tint_color = Color(0.5899999, 0.39999998, 1, 1)
 
 [node name="HealthContainer" type="Control" parent="." unique_id=1581326594]
 material = SubResource("CanvasItemMaterial_37e64")
@@ -46,9 +369,6 @@ layout_mode = 3
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -20.0
-offset_right = 20.0
-offset_bottom = 40.0
 grow_horizontal = 2
 
 [node name="Base" type="TextureRect" parent="HealthContainer" unique_id=379024076]
@@ -87,32 +407,36 @@ offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Base2" type="TextureRect" parent="HealthContainer/Base" unique_id=1560102088]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -6.0
-offset_top = -7.0
-offset_right = 6.0
-offset_bottom = 5.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_w0ism")
+[node name="POWER" type="Sprite2D" parent="HealthContainer/Base" unique_id=457957822]
+position = Vector2(31.499989, 9)
+scale = Vector2(1.0781246, 1)
+texture = SubResource("CanvasTexture_erhw5")
+region_enabled = true
+region_rect = Rect2(0, 0, 64, 16)
+script = ExtResource("11_fsh6l")
+canvas_texture = SubResource("CanvasTexture_erhw5")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_rmsoo")
+current_animation = "default"
+current_frame = 7
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
-[node name="TextureRect" type="TextureRect" parent="HealthContainer/Base" unique_id=529328457]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -35.0
-offset_top = 1.0
-offset_right = 34.0
-offset_bottom = 17.0
-grow_horizontal = 2
-texture = ExtResource("7_2e807")
+[node name="CoinMeter" type="Sprite2D" parent="HealthContainer/Base" unique_id=281389693]
+position = Vector2(32, 32)
+texture = SubResource("CanvasTexture_fsh6l")
+region_enabled = true
+region_rect = Rect2(0, 0, 14, 14)
+script = ExtResource("11_fsh6l")
+canvas_texture = SubResource("CanvasTexture_fsh6l")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_871rv")
+current_animation = "default"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="FLUDDContainer" type="Control" parent="." unique_id=2013215394]
 material = SubResource("CanvasItemMaterial_37e64")

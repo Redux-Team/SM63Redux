@@ -127,7 +127,8 @@ func _on_move_button_pressed() -> void:
 
 
 func _on_reset_button_pressed() -> void:
-	viewport.refocus_camera(Vector2.ZERO, Vector2.ONE)
+	var player: LDObject = LD.get_area().find_object_by_id("player_mario")
+	viewport.refocus_camera(player.position, Vector2.ONE)
 
 
 func _on_delete_button_pressed() -> void:
