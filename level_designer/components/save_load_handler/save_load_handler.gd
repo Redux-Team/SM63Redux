@@ -61,9 +61,10 @@ func _on_periodic_autosave_timeout() -> void:
 
 
 func save_binary(path: String) -> Error:
+	var binary_path: String = path.get_basename() + ".63r.lvl"
 	var data: Dictionary = _serialize()
 	var bytes: PackedByteArray = var_to_bytes(data)
-	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	var file: FileAccess = FileAccess.open(binary_path, FileAccess.WRITE)
 	if not file:
 		return FileAccess.get_open_error()
 	file.store_buffer(bytes)
