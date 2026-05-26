@@ -137,10 +137,10 @@ func kill() -> void:
 
 
 func _try_step() -> void:
-	if velocity.x == 0.0 or is_in_air():
+	if velocity.x == 0.0 or is_in_air() or not is_on_floor():
 		return
 	
-	var motion: Vector2 = Vector2(velocity.x * get_physics_process_delta_time(), 0.0)
+	var motion: Vector2 = Vector2(1.0 * sign(velocity.x), 0.0)
 	if not test_move(transform, motion):
 		return
 	
