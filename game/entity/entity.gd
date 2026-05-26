@@ -10,6 +10,7 @@ extends CharacterBody2D
 @export var state_machine: StateMachine
 @export var exit_objects: Dictionary[PackedScene, int]
 @export var water_check: WaterCheckArea
+@export var step_height: float = 4.0
 
 
 var data: Dictionary
@@ -53,9 +54,11 @@ func _physics_process(delta: float) -> void:
 	
 	if has_component(GravityComponent):
 		if not _velocity_lock:
+			_try_step()
 			move_and_slide_with_gravity()
 	else:
 		if not _velocity_lock:
+			_try_step()
 			move_and_slide()
 
 
@@ -130,6 +133,19 @@ func kill() -> void:
 		return
 	health.hp = 0.0
 	_on_death(HitBox.DamageType.GENERIC)
+
+
+func _try_step() -> void:
+	if velocity.x == 0.0 or is_in_air():
+		return
+	
+	var motion: Vector2 = Vector2(velocity.x * get_physics_process_delta_time(), 0.0)
+	if not test_move(transform, motion):
+		return
+	
+	var stepped: Transform2D = transform.translated(Vector2(0.0, -step_height))
+	if not test_move(stepped, motion):
+		global_position.y -= step_height
 
 
 func _on_init() -> void:

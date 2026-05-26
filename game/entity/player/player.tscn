@@ -962,7 +962,7 @@ _data = {
 atlas = ExtResource("53_ketxm")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_cmrqc"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_dhqxs"]
 diffuse_texture = SubResource("AtlasTexture_kyrvb")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d635j"]
@@ -1242,9 +1242,8 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kw6gy"]
-radius = 5.0
-height = 28.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dhqxs"]
+size = Vector2(10, 28)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q4egk"]
 size = Vector2(10, 11)
@@ -2087,11 +2086,11 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_cmrqc")
+texture = SubResource("CanvasTexture_dhqxs")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_cmrqc")
+canvas_texture = SubResource("CanvasTexture_dhqxs")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true
@@ -2124,7 +2123,7 @@ doll = NodePath("../Doll")
 
 [node name="BaseCollision" type="CollisionShape2D" parent="." unique_id=159540419]
 position = Vector2(2, -5)
-shape = SubResource("CapsuleShape2D_kw6gy")
+shape = SubResource("RectangleShape2D_dhqxs")
 debug_color = Color(0, 0.59607846, 0.7019608, 0.1764706)
 
 [node name="GroundPoundCollision" type="CollisionShape2D" parent="." unique_id=726160771]
