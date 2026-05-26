@@ -41,6 +41,7 @@ var local_velocity: Vector2:
 
 
 func _ready() -> void:
+	floor_snap_length = 7
 	if components_root:
 		for child: Node in components_root.get_children():
 			if child is EntityComponent:
