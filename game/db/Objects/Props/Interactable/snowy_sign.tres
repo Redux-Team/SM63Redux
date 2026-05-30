@@ -1,7 +1,5 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bpq4wtj3swwht"]
 
-[ext_resource type="PackedScene" uid="uid://bomjfseu2gd0u" path="res://game/object/sign/snowy_sign.tscn" id="1_q6qnh"]
-[ext_resource type="PackedScene" uid="uid://r71j7hnyd1p6" path="res://game/db/Objects/Props/Interactable/snowy_sign_ld.tscn" id="1_qn1qk"]
 [ext_resource type="Texture2D" uid="uid://bcjtripwgyivx" path="res://assets/textures/props/interactable/snowy_sign.png" id="2_qn1qk"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_pgs27"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_cdnf7"]
@@ -14,6 +12,8 @@ atlas = ExtResource("2_qn1qk")
 region = Rect2(-7, -7, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Interactable/snowy_sign.tres"
+resource_scene_unique_id = ""
 script = ExtResource("7_8gek5")
 id = "snowy_sign"
 category = 4
@@ -23,7 +23,8 @@ group_path = "Interactable"
 ld_index_id = "sign_snow"
 ld_entry_texture = SubResource("AtlasTexture_q6qnh")
 ld_properties = Array[ExtResource("3_pgs27")]([ExtResource("4_cdnf7"), ExtResource("5_sqqbl"), ExtResource("6_w3lra")])
-ld_editor_instance = ExtResource("1_qn1qk")
-game_instance = ExtResource("1_q6qnh")
+sprite_texture = ExtResource("2_qn1qk")
 ld_object_path = "Props/Interactable/snowy_sign"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

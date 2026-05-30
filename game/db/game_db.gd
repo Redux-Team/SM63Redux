@@ -101,18 +101,23 @@ static var _inst: GameDB
 					print("  - ", name)
 
 
-@export_tool_button("Migrate all ObjectData") var _migrate_all: Callable:
+@export var migration_dict: Dictionary[String, String]
+
+@export_tool_button("Migrate properties") var _migrate_properties: Callable:
 	get:
 		return func() -> void:
 			var migrated: int = 0
-			var skipped: int = 0
 			for obj: GameObject in objects.values():
-				if not obj.migrate_from_object_data():
-					skipped += 1
-					continue
-				ResourceSaver.save(obj)
-				migrated += 1
-			print("Migration complete: %d migrated, %d skipped." % [migrated, skipped])
+				var has_changed: bool = false
+				for from_key: String in migration_dict.keys():
+					var to_key: String = migration_dict.get(from_key)
+					if not obj.get(from_key) == null:
+						obj.set(to_key, obj.get(from_key))
+						has_changed = true
+				if has_changed:
+					ResourceSaver.save(obj)
+					migrated += 1
+			print("Property migration complete: %d objects updated." % migrated)
 
 
 class GameObjectGroup:

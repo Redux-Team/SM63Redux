@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://u36r15ijlqeb" path="res://assets/textures/props/nature/medium_tree.png" id="3_45qly"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_jpe2n"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_aoe2p"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="6_25f7s"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_cbgnh"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_h0b3g"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_yc0ai"]
@@ -11,11 +10,6 @@
 [sub_resource type="AtlasTexture" id="AtlasTexture_5p1y3"]
 atlas = ExtResource("3_45qly")
 region = Rect2(-3, -1, 48, 48)
-
-[sub_resource type="Resource" id="Resource_ikjd1"]
-script = ExtResource("6_25f7s")
-sprite_texture = ExtResource("3_45qly")
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
 
 [resource]
 script = ExtResource("8_yc0ai")
@@ -25,9 +19,9 @@ category_string = "Props"
 subpath = "Nature/medium_tree"
 group_path = "Nature"
 name_override = "Medium Tree"
-object_data = SubResource("Resource_ikjd1")
-ld_object_path = "Props/Nature/medium_tree"
-ld_entry_texture = SubResource("AtlasTexture_5p1y3")
 ld_index_id = "tree"
 ld_properties = Array[ExtResource("4_jpe2n")]([ExtResource("5_aoe2p"), ExtResource("6_cbgnh"), ExtResource("7_h0b3g")])
+ld_entry_texture = SubResource("AtlasTexture_5p1y3")
+sprite_texture = ExtResource("3_45qly")
+ld_object_path = "Props/Nature/medium_tree"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

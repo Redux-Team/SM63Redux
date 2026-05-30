@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://c51x4jdo8l7c0" path="res://assets/textures/entity/enemy/koopa/koopa_shell.png" id="1_e1wty"]
 [ext_resource type="PackedScene" uid="uid://bkmr76girdmrb" path="res://game/entity/enemy/koopa_shell/koopa_shell.tscn" id="1_gomim"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_jfx5r"]
-[ext_resource type="PackedScene" uid="uid://bl2xmjl55f5o0" path="res://game/db/Objects/Entity/Enemy/koopa_shell_ld.tscn" id="2_b8qua"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_e1wty"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_02f57"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_b8qua"]
@@ -13,15 +12,19 @@ atlas = ExtResource("1_e1wty")
 region = Rect2(-8, -8, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Entity/Enemy/koopa_shell.tres"
+resource_scene_unique_id = ""
 script = ExtResource("2_e1wty")
 id = "koopa_shell"
 category_string = "Entity"
 subpath = "Enemy/koopa_shell"
 group_path = "Enemy"
 ld_index_id = "koopa2"
+game_instance = ExtResource("1_gomim")
 ld_entry_texture = SubResource("AtlasTexture_e1wty")
 ld_properties = Array[ExtResource("1_jfx5r")]([ExtResource("4_02f57"), ExtResource("5_b8qua")])
-ld_editor_instance = ExtResource("2_b8qua")
-game_instance = ExtResource("1_gomim")
+sprite_texture = ExtResource("1_e1wty")
 ld_object_path = "Entity/Enemy/koopa_shell"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

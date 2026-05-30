@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://qnbrheuia718"]
 
 [ext_resource type="PackedScene" uid="uid://dvgipuaxvl4ci" path="res://game/entity/passive/goonie_fat/goonie_fat.tscn" id="1_a0ucj"]
-[ext_resource type="PackedScene" uid="uid://2xq5hettpjm6" path="res://game/db/Objects/Entity/Passive/fat_goonie_ld.tscn" id="2_r0rqo"]
 [ext_resource type="Texture2D" uid="uid://ikxjrstfl432" path="res://assets/textures/entity/passive/fat_goonie.png" id="3_d31ku"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_yogxy"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_l7mie"]
@@ -13,6 +12,8 @@ atlas = ExtResource("3_d31ku")
 region = Rect2(0, 0, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Entity/Passive/fat_goonie.tres"
+resource_scene_unique_id = ""
 script = ExtResource("6_87vn0")
 id = "fat_goonie"
 category_string = "Entity"
@@ -20,10 +21,12 @@ subpath = "Passive/fat_goonie"
 group_path = "Passive"
 name_override = "Fat Goonie"
 ld_index_id = "goonie"
-ld_entry_texture = SubResource("AtlasTexture_6be6k")
 ld_placement_rules = 3
-ld_properties = Array[ExtResource("4_yogxy")]([ExtResource("5_l7mie"), ExtResource("6_r0rqo")])
-ld_editor_instance = ExtResource("2_r0rqo")
 game_instance = ExtResource("1_a0ucj")
+ld_entry_texture = SubResource("AtlasTexture_6be6k")
+ld_properties = Array[ExtResource("4_yogxy")]([ExtResource("5_l7mie"), ExtResource("6_r0rqo")])
+sprite_texture = ExtResource("3_d31ku")
 ld_object_path = "Entity/Passive/fat_goonie"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

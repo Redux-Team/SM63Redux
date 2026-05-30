@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://wfkq6ce52aet" path="res://level_designer/components/ui/object_properties/object_properties.tscn" id="4_4nlpt"]
 [ext_resource type="PackedScene" uid="uid://ckffdp04tglj1" path="res://level_designer/components/ui/layer_properties/layer_properties.tscn" id="5_uannl"]
 
-[node name="LDUI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window", "_layer_properties_window", "_save_file_dialog", "_load_file_dialog", "_layer_spin_box")]
+[node name="LDUI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window", "_layer_properties_window", "_save_file_dialog", "_load_file_dialog", "_layer_spin_box", "_parallaxing_button", "_ghosting_button")]
 script = ExtResource("1_8w51u")
 _canvas_layer = NodePath("ViewportUI")
 _obj_browser_window = NodePath("WindowLayer/ObjectBrowserWindow")
@@ -15,6 +15,8 @@ _layer_properties_window = NodePath("WindowLayer/LayerPropertiesWindow")
 _save_file_dialog = NodePath("WindowLayer/SaveFileDialog")
 _load_file_dialog = NodePath("WindowLayer/LoadFileDialog")
 _layer_spin_box = NodePath("ViewportUI/VBoxContainer/LayerSpinBox")
+_parallaxing_button = NodePath("ViewportUI/VBoxContainer/ParallaxingButton")
+_ghosting_button = NodePath("ViewportUI/VBoxContainer/GhostingButton")
 
 [node name="ViewportUI" type="CanvasLayer" parent="." unique_id=1904926983]
 layer = 2
@@ -226,8 +228,8 @@ use_native_dialog = true
 [connection signal="pressed" from="ViewportUI/VBoxContainer/PropertiesButton" to="." method="_on_properties_button_pressed"]
 [connection signal="value_changed" from="ViewportUI/VBoxContainer/LayerSpinBox" to="." method="_on_layer_spin_box_value_changed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer/LayerProperties" to="." method="_on_layer_properties_pressed"]
-[connection signal="toggled" from="ViewportUI/VBoxContainer/ParallaxingButton" to="." method="_on_parallaxing_toggled"]
-[connection signal="toggled" from="ViewportUI/VBoxContainer/GhostingButton" to="." method="_on_ghosting_toggled"]
+[connection signal="toggled" from="ViewportUI/VBoxContainer/ParallaxingButton" to="." method="set_parallaxing"]
+[connection signal="toggled" from="ViewportUI/VBoxContainer/GhostingButton" to="." method="set_ghosting"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/SelectButton" to="." method="_on_select_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/BrushButton" to="." method="_on_brush_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/MoveButton" to="." method="_on_move_button_pressed"]

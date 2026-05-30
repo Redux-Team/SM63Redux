@@ -4,18 +4,12 @@
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_t0m04"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_y2f52"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_4uu0h"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="6_k47yl"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_50wl4"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_waome"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xm66a"]
 atlas = ExtResource("3_xxb73")
 region = Rect2(-9, -10, 48, 48)
-
-[sub_resource type="Resource" id="Resource_ximk0"]
-script = ExtResource("6_k47yl")
-sprite_texture = ExtResource("3_xxb73")
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
 
 [resource]
 script = ExtResource("8_waome")
@@ -25,9 +19,9 @@ category_string = "Props"
 subpath = "Nature/small_mushroom"
 group_path = "Nature"
 name_override = "Small Mushroom"
-object_data = SubResource("Resource_ximk0")
-ld_object_path = "Props/Nature/small_mushroom"
-ld_entry_texture = SubResource("AtlasTexture_xm66a")
 ld_index_id = "mushroom"
 ld_properties = Array[ExtResource("4_t0m04")]([ExtResource("5_y2f52"), ExtResource("6_4uu0h"), ExtResource("7_50wl4")])
+ld_entry_texture = SubResource("AtlasTexture_xm66a")
+sprite_texture = ExtResource("3_xxb73")
+ld_object_path = "Props/Nature/small_mushroom"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

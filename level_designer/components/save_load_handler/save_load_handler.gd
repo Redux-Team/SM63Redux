@@ -2,7 +2,6 @@ class_name LDSaveLoadHandler
 extends LDComponent
 
 
-const PLAYER_SPAWN_UID: String = "uid://c0fmf7xmrf32i"
 const BINARY_EXTENSION: String = ".63r.lvl"
 const JSON_EXTENSION: String = ".json"
 const FORMAT_VERSION: int = 1
@@ -191,6 +190,8 @@ func _serialize() -> Dictionary:
 			"camera_position": Packer.vec2_to_array(viewport.camera_position),
 			"camera_zoom": Packer.vec2_to_array(viewport.camera_zoom),
 			"active_layer": area._active_index,
+			"parallaxing_enabled": LD.get_ui().parallaxing_enabled,
+			"ghosting_enabled": LD.get_ui().ghosting_enabled,
 		},
 		"areas": [{
 			"name": "default",
@@ -284,6 +285,10 @@ func _deserialize(data: Dictionary) -> Error:
 			viewport.camera_zoom = Packer.array_to_vec2(editor_data.get("camera_zoom"))
 		if editor_data.has("active_layer"):
 			area.set_active_layer(editor_data.get("active_layer"))
+		if editor_data.has("parallaxing_enabled"):
+			LD.get_ui().set_parallaxing(editor_data.get("parallaxing_enabled"))
+		if editor_data.has("ghosting_enabled"):
+			LD.get_ui().set_ghosting(editor_data.get("ghosting_enabled"))
 	
 	_ensure_player_spawn()
 	
@@ -306,12 +311,8 @@ func _normalize(data: Dictionary) -> Dictionary:
 
 
 func _ensure_player_spawn() -> void:
-	var spawn_scene: PackedScene = load(PLAYER_SPAWN_UID)
-	if not spawn_scene:
-		return
-	
-	var game_object: GameObject = _find_game_object_by_scene(spawn_scene)
-	if not game_object or not game_object.get_editor_instance():
+	var game_object: GameObject = GameDB.get_db().find_game_object("player_mario")
+	if not game_object:
 		return
 	
 	var area: LDArea = LDLevel.get_active_area()
@@ -346,7 +347,7 @@ func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB) -> void
 		return
 	
 	var instance: LDObject = game_object.get_editor_instance()
-	if not instance:
+	if not instance or instance is not LDObject:
 		return
 	
 	var pos: Vector2 = Packer.array_to_vec2(data.get("position", [0.0, 0.0]))

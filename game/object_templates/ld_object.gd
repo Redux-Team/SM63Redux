@@ -3,6 +3,8 @@
 class_name LDObject
 extends Node2D
 
+const OBJECT_SHADER: Shader = preload("uid://dxlbj210tsi10")
+
 enum SelectionState {
 	HIDDEN,
 	HOVERED,
@@ -50,6 +52,20 @@ var _property_values: Dictionary[StringName, Variant] = {}
 			origin_marker.name = "Origin"
 			add_child(origin_marker)
 			origin_marker.owner = self
+
+
+static func get_object_shader(local: bool = true) -> ShaderMaterial:
+	var shader_material: ShaderMaterial = ShaderMaterial.new()
+	
+	var shader: Shader = OBJECT_SHADER
+	shader.resource_local_to_scene = local
+	shader_material.shader = shader
+	
+	return shader_material
+
+@warning_ignore("unused_parameter")
+static func from_game_object(game_object: GameObject = null) -> LDObject:
+	return null
 
 
 func _on_preview() -> void:

@@ -8,6 +8,7 @@
 diffuse_texture = ExtResource("2_20wns")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_20wns"]
+resource_local_to_scene = true
 size = Vector2(16, 19)
 
 [node name="StaticLog" type="Node2D" unique_id=155860088]
@@ -29,7 +30,7 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 collision_layer = 514
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=525662602]
-position = Vector2(0, 2.5)
+position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_20wns")
 one_way_collision = true
 one_way_collision_margin = 12.0

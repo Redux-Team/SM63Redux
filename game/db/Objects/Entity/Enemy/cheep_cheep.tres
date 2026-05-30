@@ -6,27 +6,25 @@
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_ybydl"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_b702n"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_7vw3y"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="6_7vw3y"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b702n"]
 atlas = ExtResource("1_k0vy0")
 region = Rect2(-8, -8, 48, 48)
 
-[sub_resource type="Resource" id="Resource_mlo8n"]
-script = ExtResource("6_7vw3y")
-sprite_texture = ExtResource("1_k0vy0")
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
-
 [resource]
+resource_path = "res://game/db/Objects/Entity/Enemy/cheep_cheep.tres"
+resource_scene_unique_id = ""
 script = ExtResource("1_ybydl")
 id = "cheep_cheep"
 category_string = "Entity"
 subpath = "Enemy/cheep_cheep"
 group_path = "Enemy"
 name_override = "Cheep Cheep"
-object_data = SubResource("Resource_mlo8n")
-ld_object_path = "Entity/Enemy/cheep_cheep"
+game_instance = ExtResource("1_7vw3y")
 ld_entry_texture = SubResource("AtlasTexture_b702n")
 ld_properties = Array[ExtResource("1_ae6ea")]([ExtResource("4_b702n"), ExtResource("5_7vw3y")])
-game_instance = ExtResource("1_7vw3y")
+sprite_texture = ExtResource("1_k0vy0")
+ld_object_path = "Entity/Enemy/cheep_cheep"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -93,7 +93,7 @@ var cam: Camera2D
 
 func _ready() -> void:
 	cam = Camera2D.new()
-	cam.zoom = Vector2(1.2, 1.2)
+	cam.zoom = Vector2(1.4, 1.4)
 	cam.position_smoothing_enabled = true
 	cam.position_smoothing_speed = 10
 	cam.ignore_rotation = false

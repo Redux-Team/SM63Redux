@@ -5,17 +5,11 @@
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_ofx5j"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_xan5d"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_yhiyi"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="8_1dkak"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_k3hfd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2b75k"]
 atlas = ExtResource("3_m2bw2")
 region = Rect2(-15, -11, 48, 48)
-
-[sub_resource type="Resource" id="Resource_m2bw2"]
-script = ExtResource("8_1dkak")
-sprite_texture = ExtResource("3_m2bw2")
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
 
 [resource]
 script = ExtResource("8_k3hfd")
@@ -25,9 +19,9 @@ category_string = "Props"
 subpath = "Nature/pink_flowers"
 group_path = "Nature"
 name_override = "Flowers (Pink)"
-object_data = SubResource("Resource_m2bw2")
-ld_object_path = "Props/Nature/pink_flowers"
-ld_entry_texture = SubResource("AtlasTexture_2b75k")
 ld_index_id = "flowers"
 ld_properties = Array[ExtResource("4_0olsp")]([ExtResource("5_ofx5j"), ExtResource("6_xan5d"), ExtResource("7_yhiyi")])
+ld_entry_texture = SubResource("AtlasTexture_2b75k")
+sprite_texture = ExtResource("3_m2bw2")
+ld_object_path = "Props/Nature/pink_flowers"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -16,15 +16,19 @@ atlas = ExtResource("3_5i31p")
 region = Rect2(-7, -7, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Interactable/breakable_box.tres"
+resource_scene_unique_id = ""
 script = ExtResource("2_ysnov")
 id = "breakable_box"
 category = 4
 category_string = "Props"
 subpath = "Interactable/breakable_box"
 group_path = "Interactable"
-ld_object_path = "Props/Interactable/breakable_box"
-ld_entry_texture = SubResource("AtlasTexture_to1ax")
-ld_properties = Array[ExtResource("3_mg75m")]([ExtResource("4_igebl"), ExtResource("5_7ts0u"), ExtResource("5_c708w"), ExtResource("6_7ts0u"), ExtResource("8_lsw20")])
 ld_editor_instance = ExtResource("1_hntms")
 game_instance = ExtResource("1_5i31p")
+ld_entry_texture = SubResource("AtlasTexture_to1ax")
+ld_properties = Array[ExtResource("3_mg75m")]([ExtResource("4_igebl"), ExtResource("5_7ts0u"), ExtResource("5_c708w"), ExtResource("6_7ts0u"), ExtResource("8_lsw20")])
+ld_object_path = "Props/Interactable/breakable_box"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

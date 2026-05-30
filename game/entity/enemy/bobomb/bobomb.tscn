@@ -34,7 +34,7 @@
 atlas = ExtResource("3_x8m5v")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_ccar4"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ekeht"]
 diffuse_texture = SubResource("AtlasTexture_ap0j0")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a0onm"]
@@ -113,7 +113,7 @@ animations = [{
 atlas = ExtResource("6_6sje6")
 region = Rect2(0, 0, 4, 4)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_ekeht"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_glled"]
 diffuse_texture = SubResource("AtlasTexture_jixoj")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nwfm8"]
@@ -157,7 +157,7 @@ animations = [{
 atlas = ExtResource("6_4fxtu")
 region = Rect2(0, 0, 6, 10)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_glled"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_rfasj"]
 diffuse_texture = SubResource("AtlasTexture_6akqm")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_swvkj"]
@@ -334,12 +334,13 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.8418803, 0.14102565)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4fxtu"]
-size = Vector2(8, 3)
+size = Vector2(8, 14)
 
 [sub_resource type="Resource" id="Resource_glled"]
 script = ExtResource("12_200vj")
 accepted_hitbox_ids = PackedStringArray("spin", "ground_pound", "bobomb")
 override_knockback = true
+disable_on_hit = true
 override_damage_state = true
 damage_state_name = &"strike"
 metadata/_custom_type_script = "uid://drtqc6at2evph"
@@ -452,11 +453,11 @@ water_check = NodePath("WaterCheckArea")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1859430176 node_paths=PackedStringArray("subsprites")]
 position = Vector2(0, -6)
-texture = SubResource("CanvasTexture_ccar4")
+texture = SubResource("CanvasTexture_ekeht")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("17_gjan8")
-canvas_texture = SubResource("CanvasTexture_ccar4")
+canvas_texture = SubResource("CanvasTexture_ekeht")
 flip_with_velocity = false
 subsprites = [NodePath("Offset/Fuse"), NodePath("Offset/Key")]
 animated = true
@@ -472,11 +473,11 @@ metadata/_edit_lock_ = true
 
 [node name="Fuse" type="Sprite2D" parent="Sprite/Offset" unique_id=1770779985]
 position = Vector2(0, -4)
-texture = SubResource("CanvasTexture_ekeht")
+texture = SubResource("CanvasTexture_glled")
 region_enabled = true
 region_rect = Rect2(0, 0, 4, 4)
 script = ExtResource("17_gjan8")
-canvas_texture = SubResource("CanvasTexture_ekeht")
+canvas_texture = SubResource("CanvasTexture_glled")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_jixoj")
 current_animation = "default"
@@ -487,11 +488,11 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="Key" type="Sprite2D" parent="Sprite/Offset" unique_id=990773306]
 position = Vector2(-11, 7)
-texture = SubResource("CanvasTexture_glled")
+texture = SubResource("CanvasTexture_rfasj")
 region_enabled = true
 region_rect = Rect2(0, 0, 6, 10)
 script = ExtResource("17_gjan8")
-canvas_texture = SubResource("CanvasTexture_glled")
+canvas_texture = SubResource("CanvasTexture_rfasj")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_7nkl5")
 current_animation = "spin"
@@ -541,7 +542,7 @@ position = Vector2(-112, -3)
 polygon = PackedVector2Array(100.796, 12.128, 100.796, -4.872, 76.796, -19.872, 48.796, -28.872, -25, -37, -25, 37, 51.796, 27.128, 78.796, 22.128)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=77360721]
-position = Vector2(0, 7.5)
+position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_4fxtu")
 
 [node name="WallCheckR" type="RayCast2D" parent="." unique_id=1104641569]

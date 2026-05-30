@@ -1,7 +1,5 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://v3yk2lwwo751"]
 
-[ext_resource type="PackedScene" uid="uid://cdt1c8k3ssy42" path="res://game/db/Objects/Props/Platforms/cloud_ld.tscn" id="1_6e1ic"]
-[ext_resource type="PackedScene" uid="uid://cptpegsjf3l40" path="res://game/object/cloud/cloud.tscn" id="1_7ifo6"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_7janf"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_fbuxj"]
 [ext_resource type="Texture2D" uid="uid://c7s0tisyw4sv7" path="res://assets/textures/props/platform/cloud_ld.png" id="2_i6ukj"]
@@ -9,22 +7,34 @@
 [ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="5_i4ngb"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_7ifo6"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_ibh1c"]
+[ext_resource type="Texture2D" uid="uid://37ek0og0lnq8" path="res://assets/textures/props/platform/cloud.png" id="10_sa1hg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ifo6"]
 atlas = ExtResource("2_i6ukj")
 region = Rect2(-7, -12, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_lprwx"]
+atlas = ExtResource("10_sa1hg")
+region = Rect2(12, 0, 22, 25)
+
 [resource]
+resource_path = "res://game/db/Objects/Props/Platforms/cloud.tres"
+resource_scene_unique_id = ""
 script = ExtResource("2_7janf")
 id = "cloud"
 category = 4
 category_string = "Props"
 subpath = "Platforms/cloud"
 group_path = "Platforms"
-ld_entry_texture = SubResource("AtlasTexture_7ifo6")
 ld_placement_tool_override = "telescoping"
+ld_entry_texture = SubResource("AtlasTexture_7ifo6")
 ld_properties = Array[ExtResource("2_fbuxj")]([ExtResource("4_4qind"), ExtResource("6_7ifo6"), ExtResource("6_ibh1c"), ExtResource("5_i4ngb")])
-ld_editor_instance = ExtResource("1_6e1ic")
-game_instance = ExtResource("1_7ifo6")
+object_type = 1
+telescoping_atlas = SubResource("AtlasTexture_lprwx")
 ld_object_path = "Props/Platforms/cloud"
+collision_enabled = true
+collision_offset = Vector2(0, 6)
+collision_expand = Vector2(-6, 0)
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

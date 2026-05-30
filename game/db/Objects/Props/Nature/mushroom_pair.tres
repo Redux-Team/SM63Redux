@@ -6,16 +6,10 @@
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_4dqcf"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_cbvyc"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_uit3e"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="8_cbvyc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ocmao"]
 atlas = ExtResource("1_ocmao")
 region = Rect2(-6, -14, 48, 48)
-
-[sub_resource type="Resource" id="Resource_uit3e"]
-script = ExtResource("8_cbvyc")
-sprite_texture = ExtResource("1_ocmao")
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
 
 [resource]
 script = ExtResource("3_ofogo")
@@ -24,9 +18,9 @@ category = 4
 category_string = "Props"
 subpath = "Nature/mushroom_pair"
 group_path = "Nature"
-object_data = SubResource("Resource_uit3e")
-ld_object_path = "Props/Nature/mushroom_pair"
-ld_entry_texture = SubResource("AtlasTexture_ocmao")
 ld_index_id = "mushroom"
 ld_properties = Array[ExtResource("2_e4y0g")]([ExtResource("5_4dqcf"), ExtResource("6_cbvyc"), ExtResource("7_uit3e")])
+ld_entry_texture = SubResource("AtlasTexture_ocmao")
+sprite_texture = ExtResource("1_ocmao")
+ld_object_path = "Props/Nature/mushroom_pair"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

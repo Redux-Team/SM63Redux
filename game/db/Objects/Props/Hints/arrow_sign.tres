@@ -15,15 +15,19 @@ atlas = ExtResource("1_87sl6")
 region = Rect2(-4, -3, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Hints/arrow_sign.tres"
+resource_scene_unique_id = ""
 script = ExtResource("3_46csr")
 id = "arrow_sign"
 category = 4
 category_string = "Props"
 subpath = "Hints/arrow_sign"
 group_path = "Hints"
-ld_entry_texture = SubResource("AtlasTexture_j8dcr")
-ld_properties = Array[ExtResource("2_qvn33")]([ExtResource("4_r8jh6"), ExtResource("5_ijjhc"), ExtResource("6_oq1al"), ExtResource("7_jvqy7")])
 ld_editor_instance = ExtResource("1_r8jh6")
 game_instance = ExtResource("1_ijjhc")
+ld_entry_texture = SubResource("AtlasTexture_j8dcr")
+ld_properties = Array[ExtResource("2_qvn33")]([ExtResource("4_r8jh6"), ExtResource("5_ijjhc"), ExtResource("6_oq1al"), ExtResource("7_jvqy7")])
 ld_object_path = "Props/Hints/arrow_sign"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

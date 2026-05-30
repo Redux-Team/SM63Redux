@@ -6,16 +6,10 @@
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="5_fnq80"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_rdbdc"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_06ylb"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="8_su7lx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ky40i"]
 atlas = ExtResource("2_1bmo1")
 region = Rect2(0, -3, 48, 48)
-
-[sub_resource type="Resource" id="Resource_68v55"]
-script = ExtResource("8_su7lx")
-sprite_texture = ExtResource("2_1bmo1")
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
 
 [resource]
 script = ExtResource("7_06ylb")
@@ -26,8 +20,8 @@ subpath = "Nature/big_stem"
 group_path = "Nature"
 name_override = "Big Stem"
 ld_index_id = "tree"
-ld_entry_texture = SubResource("AtlasTexture_ky40i")
 ld_properties = Array[ExtResource("3_su7lx")]([ExtResource("4_68v55"), ExtResource("5_fnq80"), ExtResource("6_rdbdc")])
-object_data = SubResource("Resource_68v55")
+ld_entry_texture = SubResource("AtlasTexture_ky40i")
+sprite_texture = ExtResource("2_1bmo1")
 ld_object_path = "Props/Nature/big_stem"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

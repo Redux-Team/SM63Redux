@@ -25,7 +25,8 @@ func _ready() -> void:
 		finished.connect(func() -> void:
 			queue_free()
 		)
-	amount = high_particle_amount
+	if high_particle_amount > 0:
+		amount = high_particle_amount
 
 
 func _process(delta: float) -> void:

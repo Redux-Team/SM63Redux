@@ -235,7 +235,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hysx3"]
-size = Vector2(9, 2)
+size = Vector2(9, 13)
 
 [sub_resource type="Animation" id="Animation_eqg5w"]
 length = 0.001
@@ -281,6 +281,7 @@ size = Vector2(17, 7)
 script = ExtResource("26_15o45")
 accepted_hitbox_ids = PackedStringArray("spin", "bobomb", "koopa_shell")
 override_knockback = true
+disable_on_hit = true
 override_damage_state = true
 damage_state_name = &"strike"
 metadata/_custom_type_script = "uid://drtqc6at2evph"
@@ -288,6 +289,7 @@ metadata/_custom_type_script = "uid://drtqc6at2evph"
 [sub_resource type="Resource" id="Resource_7e3mf"]
 script = ExtResource("26_15o45")
 accepted_hitbox_ids = PackedStringArray("feet")
+disable_on_hit = true
 override_damage_state = true
 damage_state_name = &"squish"
 metadata/_custom_type_script = "uid://drtqc6at2evph"
@@ -300,7 +302,7 @@ size = Vector2(16, 16)
 
 [node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("player_check", "sprite", "components_root", "state_machine", "water_check")]
 collision_layer = 8
-collision_mask = 2
+collision_mask = 514
 script = ExtResource("1_hysx3")
 player_check = NodePath("PlayerCheck")
 sprite = NodePath("SmartSprite2D")
@@ -408,7 +410,7 @@ playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=757983848]
-position = Vector2(-0.5, 7)
+position = Vector2(-0.5, 1.5)
 shape = SubResource("RectangleShape2D_hysx3")
 
 [node name="WallCheckR" type="RayCast2D" parent="." unique_id=1858743073]

@@ -141,12 +141,32 @@ func _try_step() -> void:
 		return
 	
 	var motion: Vector2 = Vector2(1.0 * sign(velocity.x), 0.0)
+	
 	if not test_move(transform, motion):
 		return
 	
 	var stepped: Transform2D = transform.translated(Vector2(0.0, -step_height))
-	if not test_move(stepped, motion):
-		global_position.y -= step_height
+	
+	if test_move(stepped, motion):
+		return
+	
+	var landed: Transform2D = stepped.translated(motion)
+	var params: PhysicsTestMotionParameters2D = PhysicsTestMotionParameters2D.new()
+	params.from = landed
+	params.motion = Vector2(0.0, step_height)
+	
+	var result: PhysicsTestMotionResult2D = PhysicsTestMotionResult2D.new()
+	
+	if not PhysicsServer2D.body_test_motion(get_rid(), params, result):
+		return
+	
+	var collision_normal: Vector2 = result.get_collision_normal()
+	var slope_angle: float = acos(collision_normal.dot(Vector2.UP))
+	
+	if slope_angle > floor_max_angle:
+		return
+	
+	global_position.y -= step_height
 
 
 func _on_init() -> void:

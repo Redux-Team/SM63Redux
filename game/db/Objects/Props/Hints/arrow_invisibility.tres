@@ -4,18 +4,12 @@
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_oyy3c"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_dyvyh"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_goayr"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="6_jbllh"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_hsaxn"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_5jfno"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6pbe7"]
 atlas = ExtResource("3_4fjkl")
 region = Rect2(-10, -15, 48, 48)
-
-[sub_resource type="Resource" id="Resource_4fjkl"]
-script = ExtResource("6_jbllh")
-sprite_texture = ExtResource("3_4fjkl")
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
 
 [resource]
 script = ExtResource("8_5jfno")
@@ -25,8 +19,8 @@ category_string = "Props"
 subpath = "Hints/arrow_invisibility"
 group_path = "Hints"
 name_override = "Invisibility Arrow"
-object_data = SubResource("Resource_4fjkl")
-ld_object_path = "Props/Hints/arrow_invisibility"
-ld_entry_texture = SubResource("AtlasTexture_6pbe7")
 ld_properties = Array[ExtResource("4_oyy3c")]([ExtResource("5_dyvyh"), ExtResource("6_goayr"), ExtResource("7_hsaxn")])
+ld_entry_texture = SubResource("AtlasTexture_6pbe7")
+sprite_texture = ExtResource("3_4fjkl")
+ld_object_path = "Props/Hints/arrow_invisibility"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

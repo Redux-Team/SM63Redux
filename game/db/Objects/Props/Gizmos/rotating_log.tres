@@ -15,16 +15,24 @@ atlas = ExtResource("3_eau7q")
 region = Rect2(0, 0, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Gizmos/rotating_log.tres"
+resource_scene_unique_id = ""
 script = ExtResource("9_spmo1")
 id = "rotating_log"
 category = 4
 category_string = "Props"
 subpath = "Gizmos/rotating_log"
 group_path = "Gizmos"
-ld_entry_texture = SubResource("AtlasTexture_nheia")
 ld_placement_tool_override = "telescoping"
-ld_properties = Array[ExtResource("4_j70yd")]([ExtResource("5_wxf58"), ExtResource("6_nmijh"), ExtResource("7_sbqid"), ExtResource("8_nr6b5")])
 ld_editor_instance = ExtResource("2_nr6b5")
 game_instance = ExtResource("1_nheia")
+ld_entry_texture = SubResource("AtlasTexture_nheia")
+ld_properties = Array[ExtResource("4_j70yd")]([ExtResource("5_wxf58"), ExtResource("6_nmijh"), ExtResource("7_sbqid"), ExtResource("8_nr6b5")])
+object_type = 1
 ld_object_path = "Props/Gizmos/rotating_log"
+collision_enabled = true
+collision_one_way = false
+collision_collapsed = false
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

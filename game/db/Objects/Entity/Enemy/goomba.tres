@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://w1ly8lgjddne"]
 
 [ext_resource type="PackedScene" uid="uid://bu0cpqsoc43la" path="res://game/entity/enemy/goomba/goomba.tscn" id="1_0vh6f"]
-[ext_resource type="PackedScene" uid="uid://bsedd6nrix2dv" path="res://game/db/Objects/Entity/Enemy/goomba_ld.tscn" id="1_4qaqy"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_ifcwt"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_vilum"]
 [ext_resource type="Texture2D" uid="uid://bvs0fsousuub6" path="res://assets/textures/entity/enemy/goomba/goomba.png" id="2_0vh6f"]
@@ -13,15 +12,19 @@ atlas = ExtResource("2_0vh6f")
 region = Rect2(-14, -14, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Entity/Enemy/goomba.tres"
+resource_scene_unique_id = ""
 script = ExtResource("1_vilum")
 id = "goomba"
 category_string = "Entity"
 subpath = "Enemy/goomba"
 group_path = "Enemy"
-ld_entry_texture = SubResource("AtlasTexture_0vh6f")
 ld_placement_rules = 2
-ld_properties = Array[ExtResource("1_ifcwt")]([ExtResource("4_12law"), ExtResource("5_jeaq4")])
-ld_editor_instance = ExtResource("1_4qaqy")
 game_instance = ExtResource("1_0vh6f")
+ld_entry_texture = SubResource("AtlasTexture_0vh6f")
+ld_properties = Array[ExtResource("1_ifcwt")]([ExtResource("4_12law"), ExtResource("5_jeaq4")])
+sprite_texture = ExtResource("2_0vh6f")
 ld_object_path = "Entity/Enemy/goomba"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

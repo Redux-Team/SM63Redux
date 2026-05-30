@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://bbav62xiuc73i" path="res://assets/textures/props/nature/blue_flowers.png" id="3_ca6wm"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_p1x7i"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_ytlta"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="6_26mp4"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_w1gh6"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_dm3n7"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_wavbg"]
@@ -11,11 +10,6 @@
 [sub_resource type="AtlasTexture" id="AtlasTexture_ea8py"]
 atlas = ExtResource("3_ca6wm")
 region = Rect2(-8, -15, 48, 48)
-
-[sub_resource type="Resource" id="Resource_bm8t4"]
-script = ExtResource("6_26mp4")
-sprite_texture = ExtResource("3_ca6wm")
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
 
 [resource]
 script = ExtResource("8_wavbg")
@@ -26,8 +20,8 @@ subpath = "Nature/blue_flowers"
 group_path = "Nature"
 name_override = "Flowers (Blue)"
 ld_index_id = "flowers"
-ld_entry_texture = SubResource("AtlasTexture_ea8py")
 ld_properties = Array[ExtResource("4_p1x7i")]([ExtResource("5_ytlta"), ExtResource("6_w1gh6"), ExtResource("7_dm3n7")])
-object_data = SubResource("Resource_bm8t4")
+ld_entry_texture = SubResource("AtlasTexture_ea8py")
+sprite_texture = ExtResource("3_ca6wm")
 ld_object_path = "Props/Nature/blue_flowers"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

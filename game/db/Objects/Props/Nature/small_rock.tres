@@ -6,20 +6,14 @@
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_nu1uk"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_203d7"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_3v0dd"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="8_w3t3f"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mjm7j"]
 atlas = ExtResource("3_j4b1t")
 region = Rect2(1, -28, 48, 48)
 
-[sub_resource type="Resource" id="Resource_j4b1t"]
-script = ExtResource("8_w3t3f")
-sprite_texture = ExtResource("3_j4b1t")
-collision_enabled = true
-collision_polygon = PackedVector2Array(-23, 9, -11, -9, -8, -9, -2, -7, 3, -4, 7, -2, 13, -1, 17, 3, 23, 5, 22, 9)
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
-
 [resource]
+resource_path = "res://game/db/Objects/Props/Nature/small_rock.tres"
+resource_scene_unique_id = ""
 script = ExtResource("8_3v0dd")
 id = "small_rock"
 category = 4
@@ -27,9 +21,14 @@ category_string = "Props"
 subpath = "Nature/small_rock"
 group_path = "Nature"
 name_override = "Small Rock"
-object_data = SubResource("Resource_j4b1t")
-ld_object_path = "Props/Nature/small_rock"
-ld_entry_texture = SubResource("AtlasTexture_mjm7j")
 ld_index_id = "rock"
+ld_entry_texture = SubResource("AtlasTexture_mjm7j")
 ld_properties = Array[ExtResource("4_0w6sk")]([ExtResource("5_kmcpr"), ExtResource("6_nu1uk"), ExtResource("7_203d7")])
+sprite_texture = ExtResource("3_j4b1t")
+ld_object_path = "Props/Nature/small_rock"
+collision_enabled = true
+collision_polygon = PackedVector2Array(-23, 9, -11, -9, -8, -9, -2, -7, 3, -4, 7, -2, 13, -1, 17, 3, 23, 5, 22, 9)
+collision_one_way = false
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

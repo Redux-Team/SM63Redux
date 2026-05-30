@@ -5,21 +5,15 @@
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_lgab5"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_ly1tp"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_jchfa"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="8_gdi87"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_t5uk8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gdi87"]
 atlas = ExtResource("3_hkvnp")
 region = Rect2(-7, -15, 48, 48)
 
-[sub_resource type="Resource" id="Resource_15mt0"]
-script = ExtResource("8_gdi87")
-sprite_texture = ExtResource("3_hkvnp")
-collision_enabled = true
-collision_polygon = PackedVector2Array(-12, 7, -10, -3, -5, -7, 3, -10, 6, -9, 14, -2, 14, 6, 16, 16, -14, 16)
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
-
 [resource]
+resource_path = "res://game/db/Objects/Props/Nature/small_mossy_rock.tres"
+resource_scene_unique_id = ""
 script = ExtResource("8_t5uk8")
 id = "small_mossy_rock"
 category = 4
@@ -27,9 +21,14 @@ category_string = "Props"
 subpath = "Nature/small_mossy_rock"
 group_path = "Nature"
 name_override = "Small Mossy Rock"
-object_data = SubResource("Resource_15mt0")
-ld_object_path = "Props/Nature/small_mossy_rock"
-ld_entry_texture = SubResource("AtlasTexture_gdi87")
 ld_index_id = "rock_moss"
+ld_entry_texture = SubResource("AtlasTexture_gdi87")
 ld_properties = Array[ExtResource("4_v7brm")]([ExtResource("5_lgab5"), ExtResource("6_ly1tp"), ExtResource("7_jchfa")])
+sprite_texture = ExtResource("3_hkvnp")
+ld_object_path = "Props/Nature/small_mossy_rock"
+collision_enabled = true
+collision_polygon = PackedVector2Array(-12, 7, -10, -3, -5, -7, 3, -10, 6, -9, 14, -2, 14, 6, 16, 16, -14, 16)
+collision_one_way = false
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

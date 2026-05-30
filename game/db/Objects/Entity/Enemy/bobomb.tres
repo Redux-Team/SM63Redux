@@ -6,33 +6,27 @@
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_x7ysr"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_mddn3"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_8im0m"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="7_8im0m"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mddn3"]
 atlas = ExtResource("1_7nxe1")
 region = Rect2(-8, -8, 48, 48)
 
-[sub_resource type="Resource" id="Resource_2atep"]
-script = ExtResource("7_8im0m")
-sprite_texture = ExtResource("1_7nxe1")
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
-
 [resource]
+resource_path = "res://game/db/Objects/Entity/Enemy/bobomb.tres"
+resource_scene_unique_id = ""
 script = ExtResource("1_x7ysr")
 id = "bobomb"
 category_string = "Entity"
 subpath = "Enemy/bobomb"
 group_path = "Enemy"
 name_override = "Bob-Omb"
-ld_entry_texture = SubResource("AtlasTexture_mddn3")
 ld_placement_rules = 2
-ld_properties = Array[ExtResource("1_c4row")]([ExtResource("4_mddn3"), ExtResource("5_8im0m")])
 game_instance = ExtResource("1_mddn3")
-object_data = SubResource("Resource_2atep")
-object_type = null
+ld_entry_texture = SubResource("AtlasTexture_mddn3")
+ld_properties = Array[ExtResource("1_c4row")]([ExtResource("4_mddn3"), ExtResource("5_8im0m")])
+sprite_texture = ExtResource("1_7nxe1")
 ld_object_path = "Entity/Enemy/bobomb"
-editor_shape_offset = null
-collision_enabled = null
-collision_polygon = null
-collision_offset = null
+collision_enabled = true
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -36,6 +36,23 @@ extends LDObject
 			origin_marker.owner = self
 
 
+static func from_game_object(game_object: GameObject = null) -> LDObject:
+	if not game_object:
+		return null
+	
+	var instance: LDObjectSprite = preload("uid://qn5edo21q3sg").instantiate()
+	instance.sprite_ref.diffuse_texture = game_object.sprite_texture
+	
+	var editor_shape: CollisionShape2D = instance.editor_placement_rect
+	
+	if game_object.editor_shape_shape_override:
+		editor_shape.shape = game_object.editor_shape_shape_override
+	else:
+		editor_shape.shape = Packer.get_texture_as_shape(game_object.sprite_texture)
+	
+	return instance
+
+
 func _on_preview() -> void:
 	set_shader_modulate(Color(1.0, 1.0, 1.0, 0.6))
 

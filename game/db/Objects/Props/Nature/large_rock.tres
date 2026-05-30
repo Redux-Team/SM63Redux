@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://bjkmbxc341wv4" path="res://assets/textures/props/nature/large_rock.png" id="3_xy0sy"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_p2blm"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_qkedg"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="6_mhqyh"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_tu171"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_hpe1x"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_thb8s"]
@@ -12,14 +11,9 @@
 atlas = ExtResource("3_xy0sy")
 region = Rect2(17, -4, 48, 48)
 
-[sub_resource type="Resource" id="Resource_is4fh"]
-script = ExtResource("6_mhqyh")
-sprite_texture = ExtResource("3_xy0sy")
-collision_enabled = true
-collision_polygon = PackedVector2Array(-27, 1, -39, 32, 40, 32, 34, 12, 21, 0, 19, -22, -4, -31, -10, -31, -22, 1)
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
-
 [resource]
+resource_path = "res://game/db/Objects/Props/Nature/large_rock.tres"
+resource_scene_unique_id = ""
 script = ExtResource("8_thb8s")
 id = "large_rock"
 category = 4
@@ -27,9 +21,14 @@ category_string = "Props"
 subpath = "Nature/large_rock"
 group_path = "Nature"
 name_override = "Large Rock"
-object_data = SubResource("Resource_is4fh")
-ld_object_path = "Props/Nature/large_rock"
-ld_entry_texture = SubResource("AtlasTexture_5nxqx")
 ld_index_id = "rock"
+ld_entry_texture = SubResource("AtlasTexture_5nxqx")
 ld_properties = Array[ExtResource("4_p2blm")]([ExtResource("5_qkedg"), ExtResource("6_tu171"), ExtResource("7_hpe1x")])
+sprite_texture = ExtResource("3_xy0sy")
+ld_object_path = "Props/Nature/large_rock"
+collision_enabled = true
+collision_polygon = PackedVector2Array(-27, 1, -39, 32, 40, 32, 34, 12, 21, 0, 19, -22, -4, -31, -10, -31, -22, 1)
+collision_one_way = false
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

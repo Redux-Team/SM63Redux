@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_lcc3i"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_6jc6s"]
 [ext_resource type="Texture2D" uid="uid://qrcu13ixvc5q" path="res://assets/textures/entity/enemy/koopa/parakoopa.png" id="2_7cvp3"]
-[ext_resource type="PackedScene" uid="uid://c8ah0qqgh6pih" path="res://game/db/Objects/Entity/Enemy/parakoopa_ld.tscn" id="2_q37j2"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_3h5v4"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="4_7cvp3"]
 
@@ -13,15 +12,19 @@ atlas = ExtResource("2_7cvp3")
 region = Rect2(0, -2, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Entity/Enemy/parakoopa.tres"
+resource_scene_unique_id = ""
 script = ExtResource("2_6jc6s")
 id = "parakoopa"
 category_string = "Entity"
 subpath = "Enemy/parakoopa"
 group_path = "Enemy"
 ld_index_id = "koopa1"
+game_instance = ExtResource("1_6jc6s")
 ld_entry_texture = SubResource("AtlasTexture_q37j2")
 ld_properties = Array[ExtResource("1_lcc3i")]([ExtResource("3_3h5v4"), ExtResource("4_7cvp3")])
-ld_editor_instance = ExtResource("2_q37j2")
-game_instance = ExtResource("1_6jc6s")
+sprite_texture = ExtResource("2_7cvp3")
 ld_object_path = "Entity/Enemy/parakoopa"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

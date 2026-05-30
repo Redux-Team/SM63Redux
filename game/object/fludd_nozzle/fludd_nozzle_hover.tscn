@@ -10,11 +10,11 @@ diffuse_texture = ExtResource("2_ltr0n")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_saqq8"]
 resource_local_to_scene = true
-size = Vector2(24, 0)
+size = Vector2(10, 3)
 
 [node name="FluddNozzleHover" type="CharacterBody2D" unique_id=762472111 node_paths=PackedStringArray("sprite", "components_root")]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 514
 script = ExtResource("1_saqq8")
 sprite = NodePath("SmartSprite2D")
 components_root = NodePath("Components/GravityComponent")
@@ -38,7 +38,6 @@ entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cb672xli6i2ns"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=79070776]
-position = Vector2(0, 8)
+position = Vector2(0, 6.5)
 shape = SubResource("RectangleShape2D_saqq8")
-one_way_collision = true
 one_way_collision_margin = 8.0

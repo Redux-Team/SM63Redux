@@ -149,7 +149,9 @@ func move_object_to_layer(object: LDObject, index: int) -> void:
 func move_objects_to_layer(objects: Array[LDObject], index: int) -> void:
 	var root: Node2D = get_or_create_layer(index).get_objects_root()
 	for obj: LDObject in objects:
-		obj.reparent(root)
+		var game_object: GameObject = GameDB.get_db().find_game_object(obj.source_object_id)
+		if game_object.ld_flags & GameObject.LD_LAYERABLE:
+			obj.reparent(root)
 
 
 ## Returns whether the layer at the given index is visible.

@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://kkqqt81dw4uf" path="res://assets/textures/props/nature/small_tree.png" id="3_5qdoh"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_n1bef"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_iiesp"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="6_3qmkj"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_ov70q"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_d5xgg"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_yt1w2"]
@@ -11,11 +10,6 @@
 [sub_resource type="AtlasTexture" id="AtlasTexture_gh333"]
 atlas = ExtResource("3_5qdoh")
 region = Rect2(-9, -3, 48, 48)
-
-[sub_resource type="Resource" id="Resource_ae5a2"]
-script = ExtResource("6_3qmkj")
-sprite_texture = ExtResource("3_5qdoh")
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
 
 [resource]
 script = ExtResource("8_yt1w2")
@@ -25,9 +19,9 @@ category_string = "Props"
 subpath = "Nature/small_tree"
 group_path = "Nature"
 name_override = "Small Tree"
-object_data = SubResource("Resource_ae5a2")
-ld_object_path = "Props/Nature/small_tree"
-ld_entry_texture = SubResource("AtlasTexture_gh333")
 ld_index_id = "tree"
 ld_properties = Array[ExtResource("4_n1bef")]([ExtResource("5_iiesp"), ExtResource("6_ov70q"), ExtResource("7_d5xgg")])
+ld_entry_texture = SubResource("AtlasTexture_gh333")
+sprite_texture = ExtResource("3_5qdoh")
+ld_object_path = "Props/Nature/small_tree"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,7 +1,7 @@
+@warning_ignore_start("unused_private_class_variable")
 @tool
 class_name LDObjectTelescoping
 extends LDObjectSprite
-
 
 ## The minimum number of middle segments allowed.
 @export var min_units: int = 0
@@ -15,9 +15,9 @@ extends LDObjectSprite
 @export var safety_net: Area2D
 
 var _selection_state: SelectionState = SelectionState.HIDDEN
+var _initial_nine_patch_size: Vector2
 
 
-@warning_ignore("unused_private_class_variable")
 @export_tool_button("Create Telescoping Props") var _create_telescoping_props: Callable:
 	get: return func() -> void:
 		if not nine_patch:
@@ -52,6 +52,48 @@ var _selection_state: SelectionState = SelectionState.HIDDEN
 			origin_marker.name = "Origin"
 			add_child(origin_marker)
 			origin_marker.owner = self
+
+
+static func from_game_object(game_object: GameObject = null) -> LDObject:
+	if not game_object:
+		return null
+	
+	var instance: LDObjectTelescoping = preload("uid://c618q1hl6by83").instantiate()
+	var atlas: AtlasTexture = game_object.telescoping_atlas
+	
+	if atlas and atlas.atlas:
+		var full_size: Vector2 = atlas.atlas.get_size()
+		var region: Rect2 = atlas.region
+		var margin_left: int = int(region.position.x)
+		var margin_top: int = int(region.position.y)
+		var margin_right: int = int(full_size.x - (region.position.x + region.size.x))
+		var margin_bottom: int = int(full_size.y - (region.position.y + region.size.y))
+		
+		instance.nine_patch.texture = atlas.atlas
+		instance.nine_patch.patch_margin_left = margin_left
+		instance.nine_patch.patch_margin_top = margin_top
+		instance.nine_patch.patch_margin_right = margin_right
+		instance.nine_patch.patch_margin_bottom = margin_bottom
+		
+		var min_x: float = float(margin_left + margin_right) if (margin_left + margin_right) > 0 else full_size.x
+		var min_y: float = float(margin_top + margin_bottom) if (margin_top + margin_bottom) > 0 else full_size.y
+		instance.nine_patch.size = Vector2(min_x, min_y)
+		instance.nine_patch.position = -instance.nine_patch.size / 2.0
+		instance.nine_patch.custom_minimum_size = instance.nine_patch.size
+		instance._initial_nine_patch_size = instance.nine_patch.size
+		
+		var editor_shape: CollisionShape2D = instance.editor_placement_rect
+		if editor_shape:
+			if game_object.editor_shape_shape_override:
+				editor_shape.shape = game_object.editor_shape_shape_override
+			else:
+				var rect: RectangleShape2D = RectangleShape2D.new()
+				rect.size = Vector2(min_x, min_y) + game_object.collision_expand
+				rect.resource_local_to_scene = true
+				editor_shape.shape = rect
+			editor_shape.position = game_object.collision_offset
+	
+	return instance
 
 
 func set_selection_state(state: SelectionState) -> void:
@@ -110,23 +152,25 @@ func get_end_segment_height() -> int:
 
 
 func get_end_collision_width() -> int:
-	if not nine_patch:
+	if not nine_patch or not nine_patch.texture:
 		return 15
-	return nine_patch.patch_margin_left + nine_patch.patch_margin_right
+	var margins: int = nine_patch.patch_margin_left + nine_patch.patch_margin_right
+	return nine_patch.texture.get_width() if margins == 0 else margins
 
 
 func get_end_collision_height() -> int:
-	if not nine_patch:
+	if not nine_patch or not nine_patch.texture:
 		return 15
-	return nine_patch.patch_margin_top + nine_patch.patch_margin_bottom
+	var margins: int = nine_patch.patch_margin_top + nine_patch.patch_margin_bottom
+	return nine_patch.texture.get_height() if margins == 0 else margins
 
 
 func get_total_width(units: int) -> float:
-	return get_middle_segment_width() * units + get_end_collision_width()
+	return float(get_middle_segment_width() * units + get_end_collision_width())
 
 
 func get_total_height(units: int) -> float:
-	return get_middle_segment_height() * units + get_end_collision_height()
+	return float(get_middle_segment_height() * units + get_end_collision_height())
 
 
 func _on_preview() -> void:
@@ -148,11 +192,10 @@ func _on_property_changed(key: StringName, value: Variant) -> void:
 func _apply_width(units: int) -> void:
 	units = clamp_units(units)
 	var total: float = get_total_width(units)
-	var half: float = total / 2.0
 	
 	if nine_patch:
 		nine_patch.size.x = total
-		nine_patch.position.x = -half
+		nine_patch.position.x = -total / 2.0
 	
 	if editor_placement_rect and editor_placement_rect.shape is RectangleShape2D:
 		(editor_placement_rect.shape as RectangleShape2D).size.x = total
@@ -168,11 +211,10 @@ func _apply_width(units: int) -> void:
 func _apply_height(units: int) -> void:
 	units = clamp_units(units)
 	var total: float = get_total_height(units)
-	var half: float = roundi(total / 2.0)
 	
 	if nine_patch:
 		nine_patch.size.y = total
-		nine_patch.position.y = -half
+		nine_patch.position.y = -float(roundi(total / 2.0))
 	
 	if editor_placement_rect and editor_placement_rect.shape is RectangleShape2D:
 		(editor_placement_rect.shape as RectangleShape2D).size.y = total

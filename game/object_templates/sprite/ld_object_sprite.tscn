@@ -1,9 +1,10 @@
-[gd_scene format=3 uid="uid://bfyhrduit8tqm"]
+[gd_scene format=3 uid="uid://qn5edo21q3sg"]
 
 [ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/object_templates/sprite/ld_object_sprite.gd" id="1_btatw"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_tqq22"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_ovufp"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_65a3w"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t7qj3"]
 resource_local_to_scene = true
 shader = ExtResource("2_tqq22")
 shader_parameter/state = 0
@@ -21,11 +22,12 @@ shader_parameter/pulse_max = 1.0
 shader_parameter/outline_ignore_holes = true
 shader_parameter/outline_enabled = true
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_r20jc"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ovufp"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_j2r82"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_64u3k"]
+resource_local_to_scene = true
 
-[node name="LDObjectSprite" type="Node2D" unique_id=1909919491 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "editor_shape_areas", "origin_marker", "shader_objects")]
+[node name="LdObjectSprite" type="Node2D" unique_id=571487910 node_paths=PackedStringArray("sprite_ref", "editor_shape_area", "editor_placement_rect", "editor_shape_areas", "origin_marker", "shader_objects")]
 script = ExtResource("1_btatw")
 sprite_ref = NodePath("Sprite")
 editor_shape_area = NodePath("EditorShapeArea")
@@ -35,13 +37,19 @@ origin_marker = NodePath("Origin")
 shader_objects = [NodePath("Sprite")]
 metadata/_custom_type_script = "uid://cfx4civm76jwr"
 
-[node name="Sprite" type="Sprite2D" parent="." unique_id=745122950]
-material = SubResource("ShaderMaterial_65a3w")
-texture = SubResource("CanvasTexture_r20jc")
+[node name="Sprite" type="Sprite2D" parent="." unique_id=255746746]
+material = SubResource("ShaderMaterial_t7qj3")
+texture = SubResource("CanvasTexture_ovufp")
+script = ExtResource("3_ovufp")
+canvas_texture = SubResource("CanvasTexture_ovufp")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
 
-[node name="EditorShapeArea" type="Area2D" parent="." unique_id=1627966240]
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=831896040]
 
-[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=510880689]
-shape = SubResource("RectangleShape2D_j2r82")
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=1397492267]
+shape = SubResource("RectangleShape2D_64u3k")
 
-[node name="Origin" type="Marker2D" parent="." unique_id=532240489]
+[node name="Origin" type="Marker2D" parent="." unique_id=59022532]

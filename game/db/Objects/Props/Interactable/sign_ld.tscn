@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://dfj8p8qglhiqd"]
+[gd_scene format=3 uid="uid://cgh1hvwpqwrqj"]
 
 [ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/object_templates/sprite/ld_object_sprite.gd" id="1_mx0p7"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_jcblw"]

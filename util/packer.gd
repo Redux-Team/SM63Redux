@@ -1,4 +1,4 @@
-## Helper class to easily handle and pack/unpack different types of data.
+## Helper class to easily handle and pack/unpack/transform different types of data.
 class_name Packer
 
 
@@ -24,6 +24,16 @@ static func generate_uuid() -> String:
 		b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7],
 		b[8], b[9], b[10], b[11], b[12], b[13], b[14], b[15]
 	]
+
+
+static func get_texture_as_shape(texture: Texture2D) -> Shape2D:
+	if not texture:
+		return null
+	
+	var shape: RectangleShape2D = RectangleShape2D.new()
+	shape.size = texture.get_size()
+	shape.resource_local_to_scene = true
+	return shape
 
 
 static func array_to_vec2(array: Variant) -> Vector2:

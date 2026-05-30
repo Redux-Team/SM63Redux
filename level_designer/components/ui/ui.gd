@@ -12,6 +12,9 @@ extends LDComponent
 @export var _load_file_dialog: FileDialog
 @export_group("Layer")
 @export var _layer_spin_box: SpinBox
+@export var _parallaxing_button: Button
+@export var _ghosting_button: Button
+
 
 var parallaxing_enabled: bool = false
 var ghosting_enabled: bool = false
@@ -127,7 +130,7 @@ func _on_move_button_pressed() -> void:
 
 
 func _on_reset_button_pressed() -> void:
-	var player: LDObject = LD.get_area().find_object_by_id("player_mario")
+	var player: LDObject = LD.get_area().find_object_by_id("player_mario", 0)
 	viewport.refocus_camera(player.position, Vector2.ONE)
 
 
@@ -195,14 +198,16 @@ func _on_layer_spin_box_value_changed(value: float) -> void:
 		LD.get_area().move_objects_to_layer(selection, int(value))
 
 
-func _on_parallaxing_toggled(toggled_on: bool) -> void:
+func set_parallaxing(toggled_on: bool) -> void:
 	parallaxing_enabled = toggled_on
+	_parallaxing_button.set_pressed_no_signal(toggled_on)
 	for layer: LDLayer in LD.get_area().layers:
 		layer.is_parallaxing = toggled_on
 	LD.get_area().refresh_layer_visuals()
 	LD.get_editor_viewport().refresh()
 
 
-func _on_ghosting_toggled(toggled_on: bool) -> void:
+func set_ghosting(toggled_on: bool) -> void:
 	ghosting_enabled = toggled_on
+	_ghosting_button.set_pressed_no_signal(toggled_on)
 	LD.get_area().refresh_layer_visuals()

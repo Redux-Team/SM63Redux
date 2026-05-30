@@ -4,18 +4,12 @@
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_nktwh"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_wjl16"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_d4hga"]
-[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="6_qeoen"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_gdpyw"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="8_aphk0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_irnc5"]
 atlas = ExtResource("3_cgfvu")
 region = Rect2(8, 17, 48, 48)
-
-[sub_resource type="Resource" id="Resource_qeoen"]
-script = ExtResource("6_qeoen")
-sprite_texture = ExtResource("3_cgfvu")
-metadata/_custom_type_script = "uid://c3y3fabgc04he"
 
 [resource]
 script = ExtResource("8_aphk0")
@@ -26,8 +20,8 @@ subpath = "Nature/big_jungle_tree"
 group_path = "Nature"
 name_override = "Big Jungle Tree"
 ld_index_id = "tree_jungle"
-ld_entry_texture = SubResource("AtlasTexture_irnc5")
 ld_properties = Array[ExtResource("4_nktwh")]([ExtResource("5_wjl16"), ExtResource("6_d4hga"), ExtResource("7_gdpyw")])
-object_data = SubResource("Resource_qeoen")
+ld_entry_texture = SubResource("AtlasTexture_irnc5")
+sprite_texture = ExtResource("3_cgfvu")
 ld_object_path = "Props/Nature/big_jungle_tree"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

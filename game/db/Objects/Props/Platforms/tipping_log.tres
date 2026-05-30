@@ -16,6 +16,8 @@ region = Rect2(-4, -9, 48, 48)
 margin = Rect2(3, 0, 0, 0)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Platforms/tipping_log.tres"
+resource_scene_unique_id = ""
 script = ExtResource("8_xvy65")
 id = "tipping_log"
 category = 4
@@ -23,10 +25,12 @@ category_string = "Props"
 subpath = "Platforms/tipping_log"
 group_path = "Platforms"
 ld_index_id = "tipping"
-ld_entry_texture = SubResource("AtlasTexture_poit2")
 ld_placement_tool_override = "telescoping"
-ld_properties = Array[ExtResource("3_gajl3")]([ExtResource("4_puidc"), ExtResource("6_ehxpq"), ExtResource("5_02qmg"), ExtResource("7_vt87j")])
 ld_editor_instance = ExtResource("1_hs1pe")
 game_instance = ExtResource("1_kbjqa")
+ld_entry_texture = SubResource("AtlasTexture_poit2")
+ld_properties = Array[ExtResource("3_gajl3")]([ExtResource("4_puidc"), ExtResource("6_ehxpq"), ExtResource("5_02qmg"), ExtResource("7_vt87j")])
 ld_object_path = "Props/Platforms/tipping_log"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

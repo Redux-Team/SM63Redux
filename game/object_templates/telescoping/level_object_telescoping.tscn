@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://dfaru2spj6lmk"]
+
+[ext_resource type="Script" uid="uid://u0c5qwqjxkub" path="res://game/object_templates/telescoping/level_object_telescoping.gd" id="1_f6kf1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vk3wc"]
+resource_local_to_scene = true
+
+[node name="LevelObjectTelescoping" type="Node2D" unique_id=329927831 node_paths=PackedStringArray("nine_patch", "collision_shapes")]
+script = ExtResource("1_f6kf1")
+nine_patch = NodePath("NinePatch")
+collision_shapes = [NodePath("StaticBody2D/CollisionShape2D")]
+metadata/_custom_type_script = "uid://u0c5qwqjxkub"
+
+[node name="NinePatch" type="NinePatchRect" parent="." unique_id=1179581792]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=502531315]
+collision_layer = 514
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=245567031]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_vk3wc")
+one_way_collision = true
+one_way_collision_margin = 7.0

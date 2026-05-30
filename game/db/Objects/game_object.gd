@@ -4,7 +4,8 @@ extends Resource
 
 enum {
 	LD_SELECTABLE,
-	LD_DELETABLE
+	LD_DELETABLE,
+	LD_LAYERABLE,
 }
 
 enum LDPlacementRules {
@@ -26,6 +27,8 @@ enum ObjectCategory {
 
 enum ObjectType {
 	SPRITE,
+	TELESCOPING,
+	TEXTURED_PATH,
 	CUSTOM,
 }
 
@@ -34,13 +37,11 @@ enum AuthorityMode {
 	PEER,
 }
 
-const TEMPLATES: Dictionary = {
-	LD = {
-		SPRITE = "uid://bfyhrduit8tqm",
-	},
-	LEVEL = {
-		SPRITE = "uid://b2vmgflcudxmr",
-	}
+enum CollisionAnchor {
+	TOP,
+	BOTTOM,
+	LEFT,
+	RIGHT,
 }
 
 # These are cached to not have to do string manipulation every time we index a bunch of these resources.
@@ -71,9 +72,8 @@ const TEMPLATES: Dictionary = {
 @export var ld_select_tool_override: String
 @export var ld_placement_tool_override: String
 @export var ld_placement_rules: LDPlacementRules = LDPlacementRules.BEHIND_PLAYER
-@export_flags("Selectable", "Deletable") var ld_flags: int = 3
+@export_flags("Selectable", "Deletable", "Layerable") var ld_flags: int = 7
 @export_subgroup("Instance")
-@export var ld_properties: Array[LDProperty]
 @export var ld_editor_instance: PackedScene:
 	set(ldi):
 		ld_editor_instance = ldi
@@ -88,20 +88,29 @@ const TEMPLATES: Dictionary = {
 		if value is AtlasTexture:
 			ld_entry_texture = value
 		else:
-			ld_entry_texture = _make_atlas_texture(value)
-@export var object_data: ObjectData
+			ld_entry_texture = _make_entry_texture(value)
+@export var ld_properties: Array[LDProperty]
 @export var object_type: ObjectType = ObjectType.SPRITE:
 	set(t):
 		object_type = t
 		notify_property_list_changed()
+
+@export_category("Object Data")
 @export var sprite_texture: Texture2D:
 	set(value):
 		sprite_texture = value
 		if not ld_entry_texture:
 			ld_entry_texture = value
+@export var telescoping_atlas: Texture2D:
+	set(value):
+		if value is AtlasTexture:
+			telescoping_atlas = value
+		else:
+			var atlas: AtlasTexture = AtlasTexture.new()
+			atlas.atlas = value
+			telescoping_atlas = atlas
 
-
-@export_category("Editor")
+@export_category("Editor Data")
 @export_storage var ld_object_path: String:
 	set(p):
 		ld_object_path = p
@@ -111,7 +120,7 @@ const TEMPLATES: Dictionary = {
 @export var editor_shape_shape_override: Shape2D
 @export var editor_shape_offset: Vector2
 
-@export_category("Level ")
+@export_category("Level Data")
 ## Press this button to open the level object scene, useful for doing certain
 ## things like copying a collision shape.
 @export_group("Collision", "collision")
@@ -120,6 +129,15 @@ const TEMPLATES: Dictionary = {
 @export var collision_shape: Shape2D
 @export var collision_polygon: PackedVector2Array
 @export var collision_offset: Vector2
+@export var collision_expand: Vector2 = Vector2.ZERO
+@export var collision_anchor: CollisionAnchor = CollisionAnchor.TOP
+@export_subgroup("One Way", "collision_")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var collision_one_way: bool = true:
+	set(value):
+		collision_one_way = value
+		notify_property_list_changed()
+@export var collision_one_way_margin: float = 1.0
+@export var collision_collapsed: bool = true
 
 
 @export_group("Multiplayer", "game_")
@@ -149,39 +167,48 @@ const TEMPLATES: Dictionary = {
 			)
 
 
-func migrate_from_object_data() -> bool:
-	if not object_data:
-		return false
-	
-	if object_data is SpriteData:
-		var data: SpriteData = object_data as SpriteData
-		sprite_texture = data.sprite_texture
-		collision_enabled = data.collision_enabled
-		collision_shape = data.collision_shape
-		collision_polygon = data.collision_polygon
-		collision_offset = data.collision_offset
-		editor_shape_shape_override = data.editor_shape_shape_override
-		editor_shape_offset = data.editor_shape_offset
-		object_type = ObjectType.SPRITE
-		object_data = null
-		notify_property_list_changed()
-		return true
-	
-	return false
+
+func _get_ignored_properties() -> PackedStringArray:
+	return [
+		"name_override", "ld_index_id", "ld_indexable",
+		"ld_select_tool", "ld_placement_tool", "ld_placement_rules", "ld_flags",
+		"ld_properties", "ld_editor_instance", "game_instance", "ld_entry_texture",
+		"object_type",
+		"game_multiplayer_spawnable",
+		"game_authority_mode",
+	]
+
+
+func _get_allowed_properties() -> PackedStringArray:
+	match object_type:
+		ObjectType.SPRITE:
+			return [
+				"sprite_texture", # Object
+				"editor_shape_shape_override", "editor_offset", # Editor 
+				"collision_enabled", "collision_one_way", "collision_shape", "collision_polygon", "collision_offset" # Level
+			]
+		ObjectType.TELESCOPING:
+			return [
+				"telescoping_atlas",
+				"",
+				"collision_enabled", "collision_anchor", "collision_expand", "collision_offset", "collision_one_way", "collision_one_way_margin"
+			]
+	return []
 
 
 func _validate_property(property: Dictionary) -> void:
-	if _get_type_properties(ObjectType.SPRITE).has(property.get("name", "")):
-		if object_type != ObjectType.SPRITE:
+	if property.usage & (PROPERTY_USAGE_CATEGORY | PROPERTY_USAGE_GROUP | PROPERTY_USAGE_SUBGROUP):
+		return
+	
+	if property.name in ["collision_one_way_margin", "collision_collapsed"]:
+		if not collision_one_way:
 			property.usage = PROPERTY_USAGE_NO_EDITOR
-
-
-func _get_type_properties(type: ObjectType) -> PackedStringArray:
-	match type:
-		ObjectType.SPRITE:
-			return PackedStringArray(["collision_enabled", "collision_shape", "collision_polygon", "collision_offset", "editor_shape_shape_override", "editor_shape_offset"])
-		_:
-			return PackedStringArray()
+		return
+	
+	if property.name in _get_allowed_properties() or property.name in _get_ignored_properties():
+		return
+	
+	property.set("usage", PROPERTY_USAGE_NO_EDITOR)
 
 
 func get_object_name() -> String:
@@ -195,21 +222,23 @@ func get_object_path() -> String:
 
 
 func get_editor_instance() -> LDObject:
-	if object_data:
-		return object_data.setup_ld_object()
-	
 	if ld_editor_instance:
 		return ld_editor_instance.instantiate()
 	
-	return null
+	match object_type:
+		ObjectType.SPRITE: return LDObjectSprite.from_game_object(self)
+		ObjectType.TELESCOPING: return LDObjectTelescoping.from_game_object(self)
+	
+	return LDObject.new()
 
 
 func get_game_instance() -> Node:
-	if object_data:
-		return object_data.setup_level_object()
-	
 	if game_instance:
 		return game_instance.instantiate()
+	
+	match object_type:
+		ObjectType.SPRITE: return LevelObjectSprite.from_game_object(self)
+		ObjectType.TELESCOPING: return LevelObjectTelescoping.from_game_object(self)
 	
 	return null
 
@@ -252,7 +281,7 @@ func _update_subpath() -> void:
 		subpath = get_object_path().trim_prefix(category_string + "/")
 
 
-func _make_atlas_texture(tex: Texture2D) -> Texture2D:
+func _make_entry_texture(tex: Texture2D) -> Texture2D:
 	if tex == null:
 		return null
 	

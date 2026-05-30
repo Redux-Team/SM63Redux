@@ -23,14 +23,18 @@ default_value = 0
 metadata/_custom_type_script = "uid://bsvpspsohskw0"
 
 [resource]
+resource_path = "res://game/db/Objects/Entity/Passive/butterfly.tres"
+resource_scene_unique_id = ""
 script = ExtResource("2_bxlk4")
 id = "butterfly"
 category_string = "Entity"
 subpath = "Passive/butterfly"
 group_path = "Passive"
-ld_entry_texture = SubResource("AtlasTexture_8q3po")
-ld_properties = Array[ExtResource("1_l5p0o")]([ExtResource("5_2tfby"), SubResource("Resource_y777j")])
 ld_editor_instance = ExtResource("1_8q3po")
 game_instance = ExtResource("1_40h3p")
+ld_entry_texture = SubResource("AtlasTexture_8q3po")
+ld_properties = Array[ExtResource("1_l5p0o")]([ExtResource("5_2tfby"), SubResource("Resource_y777j")])
 ld_object_path = "Entity/Passive/butterfly"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

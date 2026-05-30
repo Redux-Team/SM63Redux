@@ -5,24 +5,24 @@
 [ext_resource type="PackedScene" uid="uid://cm52ypeu3i6y0" path="res://game/db/Objects/Item/Collectible/shine_sprite_ld.tscn" id="1_cftkg"]
 [ext_resource type="Texture2D" uid="uid://6x6lxccsh6al" path="res://assets/textures/item/collectible/shine_sprite.png" id="1_hicyr"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_q4ysq"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_usus5"]
-[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_cftkg"]
-[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_5hoxe"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xsgd7"]
 atlas = ExtResource("1_hicyr")
 region = Rect2(-10, -8, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Item/Collectible/shine_sprite.tres"
+resource_scene_unique_id = ""
 script = ExtResource("1_14b87")
 id = "shine_sprite"
 category = 1
 category_string = "Item"
 subpath = "Collectible/shine_sprite"
 group_path = "Collectible"
-ld_entry_texture = SubResource("AtlasTexture_xsgd7")
-ld_properties = Array[ExtResource("1_q4ysq")]([ExtResource("3_usus5"), ExtResource("4_cftkg"), ExtResource("5_5hoxe")])
 ld_editor_instance = ExtResource("1_cftkg")
 game_instance = ExtResource("1_5hoxe")
+ld_entry_texture = SubResource("AtlasTexture_xsgd7")
 ld_object_path = "Item/Collectible/shine_sprite"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
