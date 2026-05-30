@@ -8,6 +8,8 @@
 atlas = ExtResource("1_deeik")
 region = Rect2(-16, -14, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_deeik"]
+
 [resource]
 resource_path = "res://game/db/Objects/Item/FLUDD/small_water_bottle.tres"
 resource_scene_unique_id = ""
@@ -21,6 +23,7 @@ name_override = "Small Water Bottle"
 ld_index_id = "fludd_bottle"
 ld_entry_texture = SubResource("AtlasTexture_octo7")
 sprite_texture = ExtResource("1_deeik")
+telescoping_atlas = SubResource("AtlasTexture_deeik")
 ld_object_path = "Item/FLUDD/small_water_bottle"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

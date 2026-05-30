@@ -13,6 +13,8 @@
 atlas = ExtResource("3_25llk")
 region = Rect2(-15, -7, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_i3ex1"]
+
 [resource]
 resource_path = "res://game/db/Objects/Props/Platforms/falling_log.tres"
 resource_scene_unique_id = ""
@@ -28,6 +30,7 @@ game_instance = ExtResource("1_dbx34")
 ld_entry_texture = SubResource("AtlasTexture_ng04l")
 ld_properties = Array[ExtResource("4_t8vkd")]([ExtResource("5_el0to"), ExtResource("6_ii48g"), ExtResource("7_ltngs"), ExtResource("8_cyee8")])
 sprite_texture = ExtResource("3_25llk")
+telescoping_atlas = SubResource("AtlasTexture_i3ex1")
 ld_object_path = "Props/Platforms/falling_log"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

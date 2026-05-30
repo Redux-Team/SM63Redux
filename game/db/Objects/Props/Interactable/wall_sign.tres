@@ -11,6 +11,8 @@
 atlas = ExtResource("2_2ebud")
 region = Rect2(-8, -8, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_57qcq"]
+
 [resource]
 resource_path = "res://game/db/Objects/Props/Interactable/wall_sign.tres"
 resource_scene_unique_id = ""
@@ -24,6 +26,7 @@ ld_index_id = "sign"
 ld_entry_texture = SubResource("AtlasTexture_nujyi")
 ld_properties = Array[ExtResource("3_3tsrr")]([ExtResource("4_1kb78"), ExtResource("5_vbnhs"), ExtResource("6_aj0hu")])
 sprite_texture = ExtResource("2_2ebud")
+telescoping_atlas = SubResource("AtlasTexture_57qcq")
 ld_object_path = "Props/Interactable/wall_sign"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

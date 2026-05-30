@@ -11,6 +11,8 @@
 atlas = ExtResource("3_am470")
 region = Rect2(-7, -7, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_67n0x"]
+
 [resource]
 resource_path = "res://game/db/Objects/Props/Interactable/snowy_wall_sign.tres"
 resource_scene_unique_id = ""
@@ -24,6 +26,7 @@ ld_index_id = "sign_snow"
 ld_entry_texture = SubResource("AtlasTexture_o68ub")
 ld_properties = Array[ExtResource("4_xlp8d")]([ExtResource("5_3yt38"), ExtResource("6_pfomr"), ExtResource("7_hsee0")])
 sprite_texture = ExtResource("3_am470")
+telescoping_atlas = SubResource("AtlasTexture_67n0x")
 ld_object_path = "Props/Interactable/snowy_wall_sign"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

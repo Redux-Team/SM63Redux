@@ -10,6 +10,8 @@
 atlas = ExtResource("3_gbrsc")
 region = Rect2(-5, -6, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_m8mu8"]
+
 [resource]
 resource_path = "res://game/db/Objects/Item/FLUDD/hover_fludd_box.tres"
 resource_scene_unique_id = ""
@@ -25,6 +27,7 @@ game_instance = ExtResource("1_lpcv0")
 ld_entry_texture = SubResource("AtlasTexture_1ega1")
 ld_properties = Array[ExtResource("4_g6ipd")]([ExtResource("5_78jcy")])
 sprite_texture = ExtResource("3_gbrsc")
+telescoping_atlas = SubResource("AtlasTexture_m8mu8")
 ld_object_path = "Item/FLUDD/hover_fludd_box"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

@@ -7,7 +7,6 @@ extends State
 func _on_enter() -> void:
 	player.set_gravity_scale_factor(0.67)
 	player.is_spinning = true
-	player.jump_chain_timer = 0
 	spin_hitbox.enable(0.3)
 	
 	if not player.is_on_floor():

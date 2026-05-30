@@ -15,6 +15,8 @@ size = Vector2(16, 19)
 atlas = ExtResource("3_tmrr4")
 region = Rect2(-15, -11, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_3wp0g"]
+
 [resource]
 resource_path = "res://game/db/Objects/Props/Platforms/static_log.tres"
 resource_scene_unique_id = ""
@@ -29,6 +31,7 @@ ld_index_id = "log"
 ld_entry_texture = SubResource("AtlasTexture_gnkvx")
 ld_properties = Array[ExtResource("4_20g7l")]([ExtResource("5_uqr3t"), ExtResource("6_wmoer"), ExtResource("7_p37fn")])
 sprite_texture = ExtResource("3_tmrr4")
+telescoping_atlas = SubResource("AtlasTexture_3wp0g")
 ld_object_path = "Props/Platforms/static_log"
 collision_enabled = true
 collision_shape = SubResource("RectangleShape2D_20wns")

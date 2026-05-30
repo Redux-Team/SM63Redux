@@ -11,6 +11,8 @@
 atlas = ExtResource("2_2hwjv")
 region = Rect2(-8, -9, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_dpdej"]
+
 [resource]
 resource_path = "res://game/db/Objects/Props/Interactable/hanging_sign.tres"
 resource_scene_unique_id = ""
@@ -24,6 +26,7 @@ ld_index_id = "sign"
 ld_entry_texture = SubResource("AtlasTexture_vbhlu")
 ld_properties = Array[ExtResource("3_4057p")]([ExtResource("4_wsuir"), ExtResource("5_vjra1"), ExtResource("6_t4dls")])
 sprite_texture = ExtResource("2_2hwjv")
+telescoping_atlas = SubResource("AtlasTexture_dpdej")
 ld_object_path = "Props/Interactable/hanging_sign"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

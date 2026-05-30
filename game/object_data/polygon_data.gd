@@ -1,6 +1,6 @@
 @tool
 class_name PolygonData
-extends ObjectData
+extends Resource
 
 
 signal update_visuals

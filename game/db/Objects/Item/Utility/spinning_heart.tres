@@ -4,10 +4,14 @@
 [ext_resource type="PackedScene" uid="uid://vw7whxnaoda" path="res://game/object/spinning_heart/spinning_heart.tscn" id="1_cs8b8"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_j37ae"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_bkfjh"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_3ob37"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_irnmq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cs8b8"]
 atlas = ExtResource("1_bkfjh")
 region = Rect2(-8, -8, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ob37"]
 
 [resource]
 resource_path = "res://game/db/Objects/Item/Utility/spinning_heart.tres"
@@ -20,7 +24,9 @@ subpath = "Utility/spinning_heart"
 group_path = "Utility"
 game_instance = ExtResource("1_cs8b8")
 ld_entry_texture = SubResource("AtlasTexture_cs8b8")
+ld_properties = Array[ExtResource("1_j37ae")]([ExtResource("4_3ob37"), ExtResource("6_irnmq")])
 sprite_texture = ExtResource("1_bkfjh")
+telescoping_atlas = SubResource("AtlasTexture_3ob37")
 ld_object_path = "Item/Utility/spinning_heart"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

@@ -6,6 +6,10 @@
 [ext_resource type="Script" uid="uid://bbqpe78tlk6yc" path="res://game/db/Properties/position.gd" id="5_1xexh"]
 [ext_resource type="Texture2D" uid="uid://ccsrslfjf3xxe" path="res://assets/textures/entity/player/mario/idle.png" id="5_e20s5"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_e20s5"]
+atlas = ExtResource("5_e20s5")
+region = Rect2(8, 8, 48, 48)
+
 [sub_resource type="Resource" id="Resource_ngb72"]
 script = ExtResource("5_1xexh")
 key = &"position"
@@ -14,6 +18,8 @@ type = 4
 default_value = Vector2(0, 0)
 exclusive = true
 metadata/_custom_type_script = "uid://bbqpe78tlk6yc"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1xexh"]
 
 [resource]
 resource_path = "res://game/db/Objects/Entity/Player/player_mario.tres"
@@ -26,8 +32,10 @@ group_path = "Player"
 ld_indexable = false
 ld_flags = 1
 game_instance = ExtResource("1_7sqcv")
+ld_entry_texture = SubResource("AtlasTexture_e20s5")
 ld_properties = Array[ExtResource("1_r1t5l")]([SubResource("Resource_ngb72")])
 sprite_texture = ExtResource("5_e20s5")
+telescoping_atlas = SubResource("AtlasTexture_1xexh")
 ld_object_path = "Entity/Player/player_mario"
 game_multiplayer_spawnable = true
 _update_internal_info = Callable()

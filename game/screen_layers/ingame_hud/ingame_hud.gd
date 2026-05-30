@@ -96,7 +96,7 @@ func _on_hp_updated(amount: float) -> void:
 	var total: float = health_component.max_hp
 	var pct: float = amount / float(health_component.max_hp)
 	var filled: int = roundi(pct * float(total))
-	var col: Color = health_gradient.sample(1.0 - pct)
+	var col: Color = health_gradient.sample(1.0 - pct) if amount > 1 else health_gradient.sample(0.85)
 	mat.set_shader_parameter("total_slices", int(total))
 	mat.set_shader_parameter("filled_slices", filled)
 	mat.set_shader_parameter("modulate_color", col)

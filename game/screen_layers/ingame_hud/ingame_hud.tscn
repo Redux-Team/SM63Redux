@@ -21,7 +21,7 @@
 
 [sub_resource type="Gradient" id="Gradient_d64ys"]
 offsets = PackedFloat32Array(0, 0.203125, 0.3638393, 0.51339287, 0.7745536, 1)
-colors = PackedColorArray(0.20784314, 0.49411765, 0.9098039, 1, 0.3567391, 0.62493485, 0.8478261, 1, 0.3137255, 0.81960785, 0.23137255, 1, 0.84, 0.84, 0, 1, 0.98039216, 0.3019608, 0.2, 1, 0.41355386, 0, 0.002178085, 1)
+colors = PackedColorArray(0.20784314, 0.49411765, 0.9098039, 1, 0.3567391, 0.62493485, 0.8478261, 1, 0.61632, 0.72, 0.20159999, 1, 0.84, 0.84, 0, 1, 0.98039216, 0.3019608, 0.2, 1, 0.41355386, 0, 0.002178085, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pm01n"]
 content_margin_bottom = 2.0
@@ -42,7 +42,7 @@ shader_parameter/divider_color = Color(0.6392157, 0.6392157, 0.6392157, 1)
 atlas = ExtResource("2_fsh6l")
 region = Rect2(0, 0, 64, 16)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_erhw5"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_fsh6l"]
 diffuse_texture = SubResource("AtlasTexture_1hbjs")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nayuj"]
@@ -135,7 +135,7 @@ animations = [{
 atlas = ExtResource("13_erhw5")
 region = Rect2(0, 0, 14, 14)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_fsh6l"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_erhw5"]
 diffuse_texture = SubResource("AtlasTexture_tg085")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aqq40"]
@@ -410,11 +410,11 @@ grow_vertical = 2
 [node name="POWER" type="Sprite2D" parent="HealthContainer/Base" unique_id=457957822]
 position = Vector2(31.499989, 9)
 scale = Vector2(1.0781246, 1)
-texture = SubResource("CanvasTexture_erhw5")
+texture = SubResource("CanvasTexture_fsh6l")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 16)
 script = ExtResource("11_fsh6l")
-canvas_texture = SubResource("CanvasTexture_erhw5")
+canvas_texture = SubResource("CanvasTexture_fsh6l")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_rmsoo")
 current_animation = "default"
@@ -425,11 +425,11 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="CoinMeter" type="Sprite2D" parent="HealthContainer/Base" unique_id=281389693]
 position = Vector2(32, 32)
-texture = SubResource("CanvasTexture_fsh6l")
+texture = SubResource("CanvasTexture_erhw5")
 region_enabled = true
 region_rect = Rect2(0, 0, 14, 14)
 script = ExtResource("11_fsh6l")
-canvas_texture = SubResource("CanvasTexture_fsh6l")
+canvas_texture = SubResource("CanvasTexture_erhw5")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_871rv")
 current_animation = "default"

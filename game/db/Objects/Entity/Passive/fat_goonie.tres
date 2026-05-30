@@ -11,6 +11,8 @@
 atlas = ExtResource("3_d31ku")
 region = Rect2(0, 0, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_a0ucj"]
+
 [resource]
 resource_path = "res://game/db/Objects/Entity/Passive/fat_goonie.tres"
 resource_scene_unique_id = ""
@@ -26,6 +28,7 @@ game_instance = ExtResource("1_a0ucj")
 ld_entry_texture = SubResource("AtlasTexture_6be6k")
 ld_properties = Array[ExtResource("4_yogxy")]([ExtResource("5_l7mie"), ExtResource("6_r0rqo")])
 sprite_texture = ExtResource("3_d31ku")
+telescoping_atlas = SubResource("AtlasTexture_a0ucj")
 ld_object_path = "Entity/Passive/fat_goonie"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

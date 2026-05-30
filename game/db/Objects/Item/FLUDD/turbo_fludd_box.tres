@@ -10,6 +10,8 @@
 atlas = ExtResource("3_o84mo")
 region = Rect2(-4, -6, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_uomj5"]
+
 [resource]
 resource_path = "res://game/db/Objects/Item/FLUDD/turbo_fludd_box.tres"
 resource_scene_unique_id = ""
@@ -25,6 +27,7 @@ game_instance = ExtResource("1_3appl")
 ld_entry_texture = SubResource("AtlasTexture_uewb1")
 ld_properties = Array[ExtResource("4_ub4l0")]([ExtResource("5_xsqtd")])
 sprite_texture = ExtResource("3_o84mo")
+telescoping_atlas = SubResource("AtlasTexture_uomj5")
 ld_object_path = "Item/FLUDD/turbo_fludd_box"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

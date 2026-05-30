@@ -24,6 +24,8 @@ type = 1
 default_value = 1
 metadata/_custom_type_script = "uid://c74p8giulwgqm"
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_qjrcg"]
+
 [resource]
 resource_path = "res://game/db/Objects/Props/Gizmos/moving_platform.tres"
 resource_scene_unique_id = ""
@@ -37,6 +39,7 @@ ld_editor_instance = ExtResource("1_gr6rl")
 game_instance = ExtResource("1_kh23k")
 ld_entry_texture = SubResource("AtlasTexture_bb6u5")
 ld_properties = Array[ExtResource("2_7ohvu")]([ExtResource("5_qjrcg"), ExtResource("6_qjrcg"), SubResource("Resource_72rtd"), ExtResource("7_nuxwn"), ExtResource("8_ajhpr"), ExtResource("9_7ed3c")])
+telescoping_atlas = SubResource("AtlasTexture_qjrcg")
 ld_object_path = "Props/Gizmos/moving_platform"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

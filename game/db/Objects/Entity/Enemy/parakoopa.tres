@@ -11,6 +11,8 @@
 atlas = ExtResource("2_7cvp3")
 region = Rect2(0, -2, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_7cvp3"]
+
 [resource]
 resource_path = "res://game/db/Objects/Entity/Enemy/parakoopa.tres"
 resource_scene_unique_id = ""
@@ -24,6 +26,7 @@ game_instance = ExtResource("1_6jc6s")
 ld_entry_texture = SubResource("AtlasTexture_q37j2")
 ld_properties = Array[ExtResource("1_lcc3i")]([ExtResource("3_3h5v4"), ExtResource("4_7cvp3")])
 sprite_texture = ExtResource("2_7cvp3")
+telescoping_atlas = SubResource("AtlasTexture_7cvp3")
 ld_object_path = "Entity/Enemy/parakoopa"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

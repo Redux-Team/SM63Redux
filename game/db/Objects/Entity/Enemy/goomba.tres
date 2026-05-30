@@ -11,6 +11,8 @@
 atlas = ExtResource("2_0vh6f")
 region = Rect2(-14, -14, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_4qaqy"]
+
 [resource]
 resource_path = "res://game/db/Objects/Entity/Enemy/goomba.tres"
 resource_scene_unique_id = ""
@@ -24,6 +26,7 @@ game_instance = ExtResource("1_0vh6f")
 ld_entry_texture = SubResource("AtlasTexture_0vh6f")
 ld_properties = Array[ExtResource("1_ifcwt")]([ExtResource("4_12law"), ExtResource("5_jeaq4")])
 sprite_texture = ExtResource("2_0vh6f")
+telescoping_atlas = SubResource("AtlasTexture_4qaqy")
 ld_object_path = "Entity/Enemy/goomba"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

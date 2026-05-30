@@ -1357,8 +1357,8 @@ root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(448.39734, 267.75626)
-__last_editor_zoom = 0.4177247
+__last__editor_position = Vector2(-372.18436, 41.449425)
+__last_editor_zoom = 0.25937414
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),
@@ -2081,7 +2081,6 @@ metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
 
 [node name="HealthComponent" type="Node" parent="Components" unique_id=1079797538 node_paths=PackedStringArray("entity")]
 script = ExtResource("4_o0v17")
-max_hp = 8.0
 entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
@@ -2181,7 +2180,7 @@ position = Vector2(2, -10)
 monitoring = false
 script = ExtResource("19_1wiqr")
 hitbox_ids = Array[String](["player", "feet"])
-hit_expression = "velocity.y > 0"
+hit_expression = "velocity.y > 0 && is_in_air()"
 damage_amount = 1.0
 damage_type = 2
 metadata/_custom_type_script = "uid://c103bnb5445y3"

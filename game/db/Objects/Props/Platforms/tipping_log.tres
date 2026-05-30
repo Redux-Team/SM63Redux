@@ -15,6 +15,8 @@ atlas = ExtResource("2_kbjqa")
 region = Rect2(-4, -9, 48, 48)
 margin = Rect2(3, 0, 0, 0)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_kbjqa"]
+
 [resource]
 resource_path = "res://game/db/Objects/Props/Platforms/tipping_log.tres"
 resource_scene_unique_id = ""
@@ -30,6 +32,7 @@ ld_editor_instance = ExtResource("1_hs1pe")
 game_instance = ExtResource("1_kbjqa")
 ld_entry_texture = SubResource("AtlasTexture_poit2")
 ld_properties = Array[ExtResource("3_gajl3")]([ExtResource("4_puidc"), ExtResource("6_ehxpq"), ExtResource("5_02qmg"), ExtResource("7_vt87j")])
+telescoping_atlas = SubResource("AtlasTexture_kbjqa")
 ld_object_path = "Props/Platforms/tipping_log"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

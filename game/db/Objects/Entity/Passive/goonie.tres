@@ -10,6 +10,8 @@
 atlas = ExtResource("1_spkst")
 region = Rect2(288, -5, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_1tr6h"]
+
 [resource]
 resource_path = "res://game/db/Objects/Entity/Passive/goonie.tres"
 resource_scene_unique_id = ""
@@ -23,6 +25,7 @@ ld_placement_rules = 3
 game_instance = ExtResource("1_1tr6h")
 ld_entry_texture = SubResource("AtlasTexture_podw1")
 sprite_texture = ExtResource("6_2cvt2")
+telescoping_atlas = SubResource("AtlasTexture_1tr6h")
 ld_object_path = "Entity/Passive/goonie"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

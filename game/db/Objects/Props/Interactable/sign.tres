@@ -11,6 +11,8 @@
 atlas = ExtResource("1_c370i")
 region = Rect2(-7, -8, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_lqupp"]
+
 [resource]
 resource_path = "res://game/db/Objects/Props/Interactable/sign.tres"
 resource_scene_unique_id = ""
@@ -24,6 +26,7 @@ ld_index_id = "sign"
 ld_entry_texture = SubResource("AtlasTexture_lv4ed")
 ld_properties = Array[ExtResource("2_784q2")]([ExtResource("3_lv4ed"), ExtResource("4_lqupp"), ExtResource("5_8eyit")])
 sprite_texture = ExtResource("1_c370i")
+telescoping_atlas = SubResource("AtlasTexture_lqupp")
 ld_object_path = "Props/Interactable/sign"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

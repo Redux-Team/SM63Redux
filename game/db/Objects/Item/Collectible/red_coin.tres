@@ -9,6 +9,8 @@
 atlas = ExtResource("1_quace")
 region = Rect2(-15, -15, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_q3ec5"]
+
 [resource]
 resource_path = "res://game/db/Objects/Item/Collectible/red_coin.tres"
 resource_scene_unique_id = ""
@@ -22,6 +24,7 @@ ld_index_id = "coin_1"
 game_instance = ExtResource("1_q3ec5")
 ld_entry_texture = SubResource("AtlasTexture_63mh8")
 sprite_texture = ExtResource("1_quace")
+telescoping_atlas = SubResource("AtlasTexture_q3ec5")
 ld_object_path = "Item/Collectible/red_coin"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

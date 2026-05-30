@@ -22,6 +22,8 @@ type = 1
 default_value = 0
 metadata/_custom_type_script = "uid://bsvpspsohskw0"
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_nqpn7"]
+
 [resource]
 resource_path = "res://game/db/Objects/Entity/Passive/butterfly.tres"
 resource_scene_unique_id = ""
@@ -34,6 +36,7 @@ ld_editor_instance = ExtResource("1_8q3po")
 game_instance = ExtResource("1_40h3p")
 ld_entry_texture = SubResource("AtlasTexture_8q3po")
 ld_properties = Array[ExtResource("1_l5p0o")]([ExtResource("5_2tfby"), SubResource("Resource_y777j")])
+telescoping_atlas = SubResource("AtlasTexture_nqpn7")
 ld_object_path = "Entity/Passive/butterfly"
 _update_internal_info = Callable()
 _print_internal_info = Callable()
