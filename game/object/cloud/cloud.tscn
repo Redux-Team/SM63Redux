@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cptpegsjf3l40"]
 
-[ext_resource type="Script" uid="uid://u0c5qwqjxkub" path="res://game/db/Objects/level_object_telescoping.gd" id="1_kupju"]
+[ext_resource type="Script" uid="uid://u0c5qwqjxkub" path="res://game/object_templates/telescoping/level_object_telescoping.gd" id="1_kupju"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="1_qgg2m"]
 [ext_resource type="Texture2D" uid="uid://37ek0og0lnq8" path="res://assets/textures/props/platform/cloud.png" id="2_kupju"]
 

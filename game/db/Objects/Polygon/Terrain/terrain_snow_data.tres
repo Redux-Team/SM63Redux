@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cp7srf6x5cr38" path="res://assets/textures/terrain/snow/terrain_snow_decoration_4.png" id="2_7waqi"]
 [ext_resource type="Texture2D" uid="uid://llcy8x8hxjgj" path="res://assets/textures/terrain/snow/terrain_snow_outline.png" id="2_mcd0d"]
 [ext_resource type="Texture2D" uid="uid://bcfckryx00bpb" path="res://assets/textures/terrain/snow/terrain_snow_decoration_2.png" id="3_7waqi"]
-[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/db/Objects/Polygon/polygon_data.gd" id="3_vvm51"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="3_vvm51"]
 [ext_resource type="Texture2D" uid="uid://cpchki6mx2brf" path="res://assets/textures/terrain/snow/terrain_snow_top_left.png" id="4_mcd0d"]
 [ext_resource type="Texture2D" uid="uid://dx0qwnwhg1rre" path="res://assets/textures/terrain/snow/terrain_snow_decoration_1.png" id="5_217xw"]
 [ext_resource type="Texture2D" uid="uid://dufdvyfibqn74" path="res://assets/textures/terrain/snow/terrain_snow_top_right.png" id="5_xjh60"]

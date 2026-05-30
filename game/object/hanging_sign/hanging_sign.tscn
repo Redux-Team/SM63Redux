@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://sw7dp3k5wli"]
 
-[ext_resource type="Script" uid="uid://bsswcbgcrlwv2" path="res://game/db/Objects/level_object.gd" id="1_dusha"]
+[ext_resource type="Script" uid="uid://bsswcbgcrlwv2" path="res://game/object_templates/level_object.gd" id="1_dusha"]
 [ext_resource type="Texture2D" uid="uid://brxwoltll0h4e" path="res://assets/textures/props/interactable/hanging_sign.png" id="2_540lq"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_fgbtp"]
 

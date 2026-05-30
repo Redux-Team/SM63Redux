@@ -54,9 +54,9 @@ func is_active() -> bool:
 
 func spawn_preview(obj: GameObject) -> LDObject:
 	_destroy_preview()
-	if not obj or not obj.ld_editor_instance:
+	if not obj or not obj.get_editor_instance():
 		return null
-	_preview_object = obj.ld_editor_instance.instantiate() as LDObject
+	_preview_object = obj.get_editor_instance()
 	_preview_object.is_preview = true
 	_preview_object.init_properties(obj)
 	LD.get_area().add_object(_preview_object)

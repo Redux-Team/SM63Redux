@@ -82,9 +82,9 @@ func _on_object_changed(obj: GameObject) -> void:
 
 
 func _spawn_cursor(obj: GameObject) -> void:
-	if not obj.ld_editor_instance:
+	if not obj.get_editor_instance():
 		return
-	var instance: LDObject = obj.ld_editor_instance.instantiate() as LDObject
+	var instance: LDObject = obj.get_editor_instance()
 	if not instance is LDObjectTelescoping:
 		instance.queue_free()
 		return
@@ -101,10 +101,10 @@ func _spawn_cursor(obj: GameObject) -> void:
 
 func _begin_sizing(pos: Vector2) -> void:
 	var obj: GameObject = LD.get_object_handler().get_selected_object()
-	if not obj or not obj.ld_editor_instance:
+	if not obj or not obj.get_editor_instance():
 		return
 	
-	var instance: LDObject = obj.ld_editor_instance.instantiate() as LDObject
+	var instance: LDObject = obj.get_editor_instance()
 	if not instance is LDObjectTelescoping:
 		instance.queue_free()
 		return

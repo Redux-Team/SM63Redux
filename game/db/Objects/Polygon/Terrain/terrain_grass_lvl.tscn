@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cv8nnea0n101c"]
 
-[ext_resource type="Script" uid="uid://vlqjxmxsgk8p" path="res://game/db/Objects/level_object_terrain.gd" id="1_7585l"]
+[ext_resource type="Script" uid="uid://vlqjxmxsgk8p" path="res://game/object_templates/polygon/level_object_polygon.gd" id="1_7585l"]
 [ext_resource type="Resource" uid="uid://dk6i5cghf5cya" path="res://game/db/Objects/Polygon/Terrain/terrain_grass_data.tres" id="2_guwji"]
 [ext_resource type="Texture2D" uid="uid://lwejtx4lbmrb" path="res://assets/textures/terrain/grass/terrain_grass_base.png" id="2_lcvi5"]
 [ext_resource type="Script" uid="uid://bvnbumlxmk7vf" path="res://util/poly/terrain_decoration_handler.gd" id="4_7oqal"]

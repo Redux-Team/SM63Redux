@@ -1,17 +1,21 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://7xl4vm48exsa"]
 
-[ext_resource type="PackedScene" uid="uid://321574xqxaeg" path="res://game/object/mushroom_pair/mushroom_pair.tscn" id="1_ltveh"]
 [ext_resource type="Texture2D" uid="uid://e2n0xxcniny6" path="res://assets/textures/props/nature/mushroom_pair.png" id="1_ocmao"]
-[ext_resource type="PackedScene" uid="uid://bfiva1nhu1a8f" path="res://game/db/Objects/Props/Nature/mushroom_pair_ld.tscn" id="2_4dqcf"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_e4y0g"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_ofogo"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_4dqcf"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_cbvyc"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_uit3e"]
+[ext_resource type="Script" uid="uid://c3y3fabgc04he" path="res://game/object_data/sprite_data.gd" id="8_cbvyc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ocmao"]
 atlas = ExtResource("1_ocmao")
 region = Rect2(-6, -14, 48, 48)
+
+[sub_resource type="Resource" id="Resource_uit3e"]
+script = ExtResource("8_cbvyc")
+sprite_texture = ExtResource("1_ocmao")
+metadata/_custom_type_script = "uid://c3y3fabgc04he"
 
 [resource]
 script = ExtResource("3_ofogo")
@@ -20,10 +24,9 @@ category = 4
 category_string = "Props"
 subpath = "Nature/mushroom_pair"
 group_path = "Nature"
+object_data = SubResource("Resource_uit3e")
 ld_object_path = "Props/Nature/mushroom_pair"
 ld_entry_texture = SubResource("AtlasTexture_ocmao")
-ld_editor_instance = ExtResource("2_4dqcf")
 ld_index_id = "mushroom"
 ld_properties = Array[ExtResource("2_e4y0g")]([ExtResource("5_4dqcf"), ExtResource("6_cbvyc"), ExtResource("7_uit3e")])
-game_instance = ExtResource("1_ltveh")
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -101,6 +101,20 @@ static var _inst: GameDB
 					print("  - ", name)
 
 
+@export_tool_button("Migrate all ObjectData") var _migrate_all: Callable:
+	get:
+		return func() -> void:
+			var migrated: int = 0
+			var skipped: int = 0
+			for obj: GameObject in objects.values():
+				if not obj.migrate_from_object_data():
+					skipped += 1
+					continue
+				ResourceSaver.save(obj)
+				migrated += 1
+			print("Migration complete: %d migrated, %d skipped." % [migrated, skipped])
+
+
 class GameObjectGroup:
 	var _id: String
 	var _objects: Dictionary[String, GameObject] = {}
@@ -178,12 +192,12 @@ func get_tree() -> Array[GameObjectCategory]:
 			var cat: GameObjectCategory = GameObjectCategory.new()
 			cat._id = cat_id
 			cats[cat_id] = cat
-		var category: GameObjectCategory = cats[cat_id]
+		var category: GameObjectCategory = cats.get(cat_id)
 		if group_id not in category._groups:
 			var group: GameObjectGroup = GameObjectGroup.new()
 			group._id = group_id
 			category._groups[group_id] = group
-		category._groups[group_id]._objects[obj.id] = obj
+		category._groups.get(group_id)._objects[obj.id] = obj
 	var result: Array[GameObjectCategory] = []
 	result.assign(cats.values())
 	return result

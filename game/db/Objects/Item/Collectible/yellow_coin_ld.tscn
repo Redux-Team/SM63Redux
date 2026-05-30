@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bbp4k8t4sklg5"]
 
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="1_vyxvv"]
-[ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="2_8pvie"]
+[ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/object_templates/sprite/ld_object_sprite.gd" id="2_8pvie"]
 [ext_resource type="Texture2D" uid="uid://b0lhe04nh8wld" path="res://assets/textures/item/collectible/yellow_coin.png" id="3_8pvie"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_tcsdj"]
 

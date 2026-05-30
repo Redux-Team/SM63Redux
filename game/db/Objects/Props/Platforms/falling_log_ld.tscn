@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dau7wqu8mh6uk"]
 
-[ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/db/Objects/ld_object_sprite.gd" id="1_s55gt"]
+[ext_resource type="Script" uid="uid://cfx4civm76jwr" path="res://game/object_templates/sprite/ld_object_sprite.gd" id="1_s55gt"]
 [ext_resource type="Texture2D" uid="uid://daac41f3cff3v" path="res://assets/textures/props/platform/falling_log_ld.png" id="2_2tonp"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_s55gt"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_7f3w1"]

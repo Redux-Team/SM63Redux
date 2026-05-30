@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PolygonData" format=3 uid="uid://cpoha60bjm6nr"]
 
-[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/db/Objects/Polygon/polygon_data.gd" id="1_uvmyj"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="1_uvmyj"]
 
 [resource]
 script = ExtResource("1_uvmyj")

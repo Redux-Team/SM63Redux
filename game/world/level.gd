@@ -211,10 +211,10 @@ func _instantiate_object(data: Dictionary, layer: LevelLayer, _area: LevelArea) 
 		return
 	
 	var game_object: GameObject = GameDB.get_db().find_game_object(object_id)
-	if not game_object or not game_object.game_instance:
+	if not game_object or not game_object.get_game_instance():
 		return
 	
-	var instance: Node = game_object.game_instance.instantiate()
+	var instance: Node = game_object.get_game_instance()
 	layer.get_objects_root().add_child(instance)
 	
 	if instance is Player:

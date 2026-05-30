@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bn3f02uv8d5sr" path="res://assets/textures/terrain/grass/terrain_grass_outline.png" id="2_hh1oy"]
 [ext_resource type="Texture2D" uid="uid://be85gi7nl7ugv" path="res://assets/textures/terrain/grass/terrain_grass_decoration_1.png" id="2_ppu1f"]
 [ext_resource type="Texture2D" uid="uid://dovroqootwfhv" path="res://assets/textures/terrain/grass/terrain_grass_decoration_2.png" id="3_eppqe"]
-[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/db/Objects/Polygon/polygon_data.gd" id="3_j4qap"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="3_j4qap"]
 [ext_resource type="Texture2D" uid="uid://cdclscd5eam60" path="res://assets/textures/terrain/grass/terrain_grass_decoration_3.png" id="4_5tb30"]
 [ext_resource type="Texture2D" uid="uid://hsblflmkc6wq" path="res://assets/textures/terrain/grass/terrain_grass_top_left.png" id="4_6y8lx"]
 [ext_resource type="Texture2D" uid="uid://da4iii6wieke3" path="res://assets/textures/terrain/grass/terrain_grass_top_right.png" id="5_7ymwp"]

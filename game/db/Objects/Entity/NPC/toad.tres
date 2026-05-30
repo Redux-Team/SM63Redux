@@ -14,6 +14,6 @@ id = "toad"
 category_string = "Entity"
 subpath = "NPC/toad"
 group_path = "NPC"
-ld_object_path = "Entity/NPC/toad"
 ld_entry_texture = SubResource("AtlasTexture_c3l2e")
+ld_object_path = "Entity/NPC/toad"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

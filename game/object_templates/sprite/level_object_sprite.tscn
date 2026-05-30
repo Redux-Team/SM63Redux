@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://b2vmgflcudxmr"]
+
+[ext_resource type="Script" uid="uid://wiyita5rrc7q" path="res://game/object_templates/sprite/level_object_sprite.gd" id="1_wjf70"]
+
+[node name="LevelObjectSprite" type="Node2D" unique_id=1875114524 node_paths=PackedStringArray("sprite", "collision_shape", "collision_polygon")]
+script = ExtResource("1_wjf70")
+sprite = NodePath("Sprite")
+collision_shape = NodePath("StaticBody2D/CollisionShape2D")
+collision_polygon = NodePath("StaticBody2D/CollisionPolygon2D")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1178069113]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=699699151]
+collision_layer = 514
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1896527840]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1135162344]

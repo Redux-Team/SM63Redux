@@ -311,7 +311,7 @@ func _ensure_player_spawn() -> void:
 		return
 	
 	var game_object: GameObject = _find_game_object_by_scene(spawn_scene)
-	if not game_object or not game_object.ld_editor_instance:
+	if not game_object or not game_object.get_editor_instance():
 		return
 	
 	var area: LDArea = LDLevel.get_active_area()
@@ -320,7 +320,7 @@ func _ensure_player_spawn() -> void:
 		if obj and obj.source_object_id == game_object.id:
 			return
 	
-	var instance: LDObject = game_object.ld_editor_instance.instantiate() as LDObject
+	var instance: LDObject = game_object.get_editor_instance()
 	if not instance:
 		return
 	
@@ -331,7 +331,7 @@ func _ensure_player_spawn() -> void:
 
 func _find_game_object_by_scene(scene: PackedScene) -> GameObject:
 	for game_object: GameObject in GameDB.get_db().objects.values():
-		if game_object.ld_editor_instance == scene:
+		if game_object.get_editor_instance() == scene:
 			return game_object
 	return null
 
@@ -342,10 +342,10 @@ func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB) -> void
 		return
 	
 	var game_object: GameObject = find_game_object_by_id(object_id, db)
-	if not game_object or not game_object.ld_editor_instance:
+	if not game_object or not game_object.get_editor_instance():
 		return
 	
-	var instance: LDObject = game_object.ld_editor_instance.instantiate() as LDObject
+	var instance: LDObject = game_object.get_editor_instance()
 	if not instance:
 		return
 	

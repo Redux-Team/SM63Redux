@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bdy2m11ia2yk7" path="res://assets/textures/terrain/jungle/terrain_jungle_outline.png" id="2_0ywbu"]
 [ext_resource type="Texture2D" uid="uid://cw0t5jwemniys" path="res://assets/textures/terrain/jungle/terrain_jungle_decoration_1.png" id="2_naplo"]
 [ext_resource type="Texture2D" uid="uid://dtxdwmowmg18b" path="res://assets/textures/terrain/jungle/terrain_jungle_decoration_2.png" id="3_oc4pd"]
-[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/db/Objects/Polygon/polygon_data.gd" id="3_xsfim"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="3_xsfim"]
 [ext_resource type="Texture2D" uid="uid://jpjdlq3lc28d" path="res://assets/textures/terrain/jungle/terrain_jungle_top_left.png" id="4_0ywbu"]
 [ext_resource type="Texture2D" uid="uid://sfsbwj8x4y3d" path="res://assets/textures/terrain/jungle/terrain_jungle_decoration_3.png" id="4_no1hk"]
 [ext_resource type="Texture2D" uid="uid://cetpm6bacmf68" path="res://assets/textures/terrain/jungle/terrain_jungle_decoration_4.png" id="5_5plk8"]

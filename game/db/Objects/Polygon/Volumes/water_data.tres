@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="PolygonData" format=3 uid="uid://c1aygscm4h0bo"]
 
 [ext_resource type="Texture2D" uid="uid://blvxwsmqowrbp" path="res://assets/textures/volume/water/water_top.png" id="1_jiy4r"]
-[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/db/Objects/Polygon/polygon_data.gd" id="1_qsl83"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="1_qsl83"]
 
 [resource]
 script = ExtResource("1_qsl83")

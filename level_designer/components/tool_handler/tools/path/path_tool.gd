@@ -113,9 +113,9 @@ func _on_object_changed(obj: GameObject) -> void:
 
 
 func _begin_path(obj: GameObject) -> void:
-	if not obj.ld_editor_instance:
+	if not obj.get_editor_instance():
 		return
-	var instance: LDObject = obj.ld_editor_instance.instantiate() as LDObject
+	var instance: LDObject = obj.get_editor_instance()
 	if not instance is LDObjectPath:
 		instance.queue_free()
 		return
@@ -219,9 +219,9 @@ func _cancel_path() -> void:
 
 
 func _is_path_object(obj: GameObject) -> bool:
-	if not obj or not obj.ld_editor_instance:
+	if not obj or not obj.get_editor_instance():
 		return false
-	var instance: LDObject = obj.ld_editor_instance.instantiate() as LDObject
+	var instance: LDObject = obj.get_editor_instance()
 	var result: bool = instance is LDObjectPath
 	instance.queue_free()
 	return result

@@ -1,6 +1,6 @@
 @tool
 class_name PolygonData
-extends Resource
+extends ObjectData
 
 
 signal update_visuals
@@ -179,3 +179,11 @@ func _validate_property(property: Dictionary) -> void:
 	
 	if not textured and prop == &"base_color":
 		property.usage = PROPERTY_USAGE_DEFAULT
+
+
+func setup_ld_object() -> LDObject:
+	return null
+
+
+func setup_level_object() -> Node:
+	return null

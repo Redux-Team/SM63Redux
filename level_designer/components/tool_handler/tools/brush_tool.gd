@@ -100,9 +100,9 @@ func _on_object_changed(obj: GameObject) -> void:
 
 
 func _is_polygon_object(obj: GameObject) -> bool:
-	if not obj or not obj.ld_editor_instance:
+	if not obj or not obj.get_editor_instance():
 		return false
-	var instance: LDObject = obj.ld_editor_instance.instantiate() as LDObject
+	var instance: LDObject = obj.get_editor_instance()
 	var result: bool = instance is LDObjectPolygon
 	instance.queue_free()
 	return result
@@ -115,10 +115,10 @@ func _is_telescoping_object(obj: GameObject) -> bool:
 
 
 func _cache_stamp_size(obj: GameObject) -> void:
-	if not obj or not obj.ld_editor_instance:
+	if not obj or not obj.get_editor_instance():
 		_cached_stamp_size = Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE)
 		return
-	var temp: LDObject = obj.ld_editor_instance.instantiate() as LDObject
+	var temp: LDObject = obj.get_editor_instance()
 	_cached_stamp_size = temp.get_stamp_size()
 	temp.free()
 
@@ -126,11 +126,11 @@ func _cache_stamp_size(obj: GameObject) -> void:
 func _spawn_cursor(obj: GameObject) -> void:
 	if not obj:
 		return
-	if not obj.ld_editor_instance:
+	if not obj.get_editor_instance():
 		return
 	if Singleton.get_input_handler().is_using_touch():
 		return
-	_preview_cursor = obj.ld_editor_instance.instantiate() as LDObject
+	_preview_cursor = obj.get_editor_instance()
 	_preview_cursor.is_preview = true
 	_preview_cursor.init_properties(obj)
 	LD.get_area().add_object(_preview_cursor)
@@ -171,10 +171,10 @@ func _stamp_line_to(pos: Vector2) -> void:
 
 func _add_stroke_preview(pos: Vector2) -> void:
 	var obj: GameObject = LD.get_object_handler().get_selected_object()
-	if not obj or not obj.ld_editor_instance:
+	if not obj or not obj.get_editor_instance():
 		return
 	
-	var preview: LDObject = obj.ld_editor_instance.instantiate() as LDObject
+	var preview: LDObject = obj.get_editor_instance()
 	preview.is_preview = true
 	preview.source_object_id = obj.id
 	LD.get_area().add_object(preview, Vector2i(pos))

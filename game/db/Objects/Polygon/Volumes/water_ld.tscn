@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://33kgucwy1r6n"]
 
-[ext_resource type="Script" uid="uid://cpps8bcdccbtj" path="res://game/db/Objects/ld_object_polygon.gd" id="1_3e43a"]
+[ext_resource type="Script" uid="uid://cpps8bcdccbtj" path="res://game/object_templates/polygon/ld_object_polygon.gd" id="1_3e43a"]
 [ext_resource type="Resource" uid="uid://c1aygscm4h0bo" path="res://game/db/Objects/Polygon/Volumes/water_data.tres" id="2_trkbc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_frtg0"]

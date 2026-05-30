@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://blnhyb7daxtvq"]
 
-[ext_resource type="Script" uid="uid://bsswcbgcrlwv2" path="res://game/db/Objects/level_object.gd" id="1_sch0f"]
+[ext_resource type="Script" uid="uid://bsswcbgcrlwv2" path="res://game/object_templates/level_object.gd" id="1_sch0f"]
 [ext_resource type="Texture2D" uid="uid://dcoump5mt4pp3" path="res://assets/textures/props/interactable/sign.png" id="2_h7bxs"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_7vtus"]
 
