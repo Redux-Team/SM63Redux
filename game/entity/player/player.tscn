@@ -1248,9 +1248,8 @@ size = Vector2(10, 28)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q4egk"]
 size = Vector2(10, 11)
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6suq8"]
-radius = 5.25
-height = 10.5
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h6qgx"]
+size = Vector2(10, 13)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fstnu"]
 size = Vector2(40, 11)
@@ -2134,8 +2133,8 @@ shape = SubResource("RectangleShape2D_q4egk")
 disabled = true
 
 [node name="DiveCollision" type="CollisionShape2D" parent="." unique_id=1515166672]
-position = Vector2(2, 4)
-shape = SubResource("CapsuleShape2D_6suq8")
+position = Vector2(2, 2.5)
+shape = SubResource("RectangleShape2D_h6qgx")
 disabled = true
 
 [node name="Hitboxes" type="Node2D" parent="." unique_id=1409973495]
