@@ -36,6 +36,8 @@ DebugHandler="*uid://dyw3n7oxqk3vq"
 
 [debug]
 
+gdscript/warnings/untyped_declaration=2
+gdscript/warnings/inferred_declaration=2
 gdscript/warnings/missing_tool=0
 
 [display]

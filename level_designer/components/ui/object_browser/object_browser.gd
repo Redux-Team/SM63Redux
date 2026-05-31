@@ -4,7 +4,7 @@ extends Control
 signal category_changed(category_name: String)
 signal hide_request
 
-const OBJECT_GROUP_SCENE = preload("uid://d11ohrgxcihxx")
+const OBJECT_GROUP_SCENE: PackedScene = preload("uid://d11ohrgxcihxx")
 const TOOLTIP_MARGIN: float = 8.0
 
 @export var groups_v_box: VBoxContainer

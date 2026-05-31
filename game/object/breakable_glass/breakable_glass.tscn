@@ -13,17 +13,13 @@
 [sub_resource type="CanvasTexture" id="CanvasTexture_vqqdr"]
 diffuse_texture = ExtResource("2_q7nns")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_kdg5b"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_iibrf"]
 atlas = ExtResource("3_q7nns")
-region = Rect2(0, 48, 16, 8)
+region = Rect2(0, 8, 16, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x272f"]
 atlas = ExtResource("3_q7nns")
 region = Rect2(0, 0, 16, 8)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_iibrf"]
-atlas = ExtResource("3_q7nns")
-region = Rect2(0, 8, 16, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vlmnl"]
 atlas = ExtResource("3_q7nns")
@@ -40,6 +36,10 @@ region = Rect2(0, 32, 16, 8)
 [sub_resource type="AtlasTexture" id="AtlasTexture_5x1lc"]
 atlas = ExtResource("3_q7nns")
 region = Rect2(0, 40, 16, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kdg5b"]
+atlas = ExtResource("3_q7nns")
+region = Rect2(0, 48, 16, 8)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_q7nns"]
 animations = [{
@@ -137,7 +137,7 @@ func _ready() -> void:
 	await glass.initialized
 	var coin_amount: int = min(glass.get_property(\"coin_amount\"), 5)
 	
-	for i in coin_amount:
+	for i: int in coin_amount:
 		var coin: SmartSprite2D = coin_template.duplicate()
 		add_child(coin)
 		coin.show()
@@ -168,7 +168,7 @@ stream = ExtResource("3_iibrf")
 volume_db = -5.0
 
 [node name="ParticleEmitter" parent="." index="4" unique_id=1781001774]
-texture = SubResource("AtlasTexture_kdg5b")
+texture = SubResource("AtlasTexture_iibrf")
 sprite_frames = SubResource("SpriteFrames_q7nns")
 
 [node name="CoinTemplate" type="Sprite2D" parent="." index="5" unique_id=548014254]

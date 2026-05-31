@@ -143,7 +143,7 @@ class GameObjectGroup:
 		var result: Array[GameObject] = []
 		result.assign(_objects.values())
 		
-		result.sort_custom(func(a, b) -> bool:
+		result.sort_custom(func(a: GameObject, b: GameObject) -> bool:
 			return a.get_index_id() < b.get_index_id()
 		)
 		

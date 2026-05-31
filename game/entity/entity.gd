@@ -218,7 +218,7 @@ func move_and_slide_with_gravity() -> void:
 		rotation = angle
 
 
-func spawn_exit_objects(shared_properties: Array = ["position", "scale", "rotation"]):
+func spawn_exit_objects(shared_properties: Array = ["position", "scale", "rotation"]) -> void:
 	if _exit_objs_spawned:
 		return
 	

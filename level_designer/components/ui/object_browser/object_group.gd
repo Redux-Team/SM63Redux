@@ -10,7 +10,7 @@ signal entry_unfocused
 @export var group_list: HFlowContainer
 @export var toggle_group_button: Button
 
-const ITEM_ENTRY = preload("uid://dwtx65wov5nfl")
+const ITEM_ENTRY: PackedScene = preload("uid://dwtx65wov5nfl")
 
 
 func clear_entries() -> void:

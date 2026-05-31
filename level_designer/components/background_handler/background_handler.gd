@@ -2,7 +2,7 @@ class_name LDBackgroundHandler
 extends LDComponent
 
 
-const HILLS_BG = preload("uid://st4r6o6hqwhj")
+const HILLS_BG: PackedScene = preload("uid://st4r6o6hqwhj")
 
 
 func _on_ready() -> void:
