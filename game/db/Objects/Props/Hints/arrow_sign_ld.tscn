@@ -10,7 +10,9 @@
 resource_local_to_scene = true
 shader = ExtResource("2_hcd1l")
 shader_parameter/state = 0
-shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/fill_color = Color(1, 1, 1, 0.25)
@@ -19,8 +21,10 @@ shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
 shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_t4d8s"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ayl8s"]
 diffuse_texture = ExtResource("3_ayl8s")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_p22a5"]
@@ -29,20 +33,21 @@ diffuse_texture = ExtResource("5_ayl8s")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_buu4o"]
 size = Vector2(38, 39)
 
-[node name="ArrowSign" type="Node2D" unique_id=1562077408 node_paths=PackedStringArray("arrow", "sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+[node name="ArrowSign" type="Node2D" unique_id=1562077408 node_paths=PackedStringArray("arrow", "sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker", "shader_objects")]
 script = ExtResource("1_e4hs1")
 arrow = NodePath("Sprite/Arrow")
 sprite_ref = NodePath("Sprite")
 editor_shape_area = NodePath("EditorShapeArea")
 editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
 origin_marker = NodePath("Origin")
+shader_objects = [NodePath("Sprite/Arrow")]
 metadata/_custom_type_script = "uid://cfx4civm76jwr"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=41563576]
 material = SubResource("ShaderMaterial_ja32v")
-texture = SubResource("CanvasTexture_t4d8s")
+texture = SubResource("CanvasTexture_ayl8s")
 script = ExtResource("4_p22a5")
-canvas_texture = SubResource("CanvasTexture_t4d8s")
+canvas_texture = SubResource("CanvasTexture_ayl8s")
 diffuse_texture = ExtResource("3_ayl8s")
 current_animation = ""
 current_frame = 0

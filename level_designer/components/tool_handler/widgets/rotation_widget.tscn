@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://gtms80khkvap"]
+
+[ext_resource type="Script" uid="uid://ckq48oybpdnyg" path="res://level_designer/components/tool_handler/widgets/rotation_widget.gd" id="1_s4mi5"]
+
+[node name="RotationWidget" type="Control" unique_id=574581918]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_s4mi5")

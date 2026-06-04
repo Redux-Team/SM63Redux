@@ -7,12 +7,21 @@
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_46csr"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_r8jh6"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="5_ijjhc"]
-[ext_resource type="Resource" uid="uid://d2h3b48dglc0v" path="res://game/db/Properties/arrow_sign/arrow_rotation.tres" id="6_oq1al"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="7_jvqy7"]
+[ext_resource type="Script" uid="uid://di3amfykmckcb" path="res://game/db/Properties/rotation.gd" id="7_oq1al"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j8dcr"]
 atlas = ExtResource("1_87sl6")
 region = Rect2(-4, -3, 48, 48)
+
+[sub_resource type="Resource" id="Resource_jvqy7"]
+script = ExtResource("7_oq1al")
+rotation_owner = &"rotation"
+key = &"rotation:arrow"
+label = "Rotation"
+type = 2
+default_value = 0.0
+metadata/_custom_type_script = "uid://di3amfykmckcb"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ijjhc"]
 
@@ -28,7 +37,7 @@ group_path = "Hints"
 ld_editor_instance = ExtResource("1_r8jh6")
 game_instance = ExtResource("1_ijjhc")
 ld_entry_texture = SubResource("AtlasTexture_j8dcr")
-ld_properties = Array[ExtResource("2_qvn33")]([ExtResource("4_r8jh6"), ExtResource("5_ijjhc"), ExtResource("6_oq1al"), ExtResource("7_jvqy7")])
+ld_properties = Array[ExtResource("2_qvn33")]([ExtResource("4_r8jh6"), SubResource("Resource_jvqy7"), ExtResource("5_ijjhc"), ExtResource("7_jvqy7")])
 telescoping_atlas = SubResource("AtlasTexture_ijjhc")
 ld_object_path = "Props/Hints/arrow_sign"
 _update_internal_info = Callable()

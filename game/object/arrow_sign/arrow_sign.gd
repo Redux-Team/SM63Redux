@@ -4,7 +4,7 @@ extends LevelObject
 
 
 func _handle_property(property_name: String, property_value: Variant) -> void:
-	if property_name == "arrow_rotation":
+	if property_name == "rotation:arrow":
 		arrow.rotation_degrees = property_value
 	else:
 		super(property_name, property_value)

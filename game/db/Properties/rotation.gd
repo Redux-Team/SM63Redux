@@ -2,6 +2,7 @@
 class_name LDPropertyRotation
 extends LDProperty
 
+@export var rotation_owner: StringName = &""
 
 func _init() -> void:
 	key = &"rotation"
@@ -11,11 +12,15 @@ func _init() -> void:
 
 
 func apply(obj: LDObject, value: Variant) -> void:
-	obj.rotation_degrees = value
+	var target: Node2D = obj
+	if target and key == &"rotation":
+		target.rotation_degrees = value
+	elif target:
+		target.set_property_no_apply(key, value)
 
 
 func clamp_value(value: Variant) -> Variant:
-	return wrapf(value as float, 0, 360.0)
+	return wrapf(value as float, 0.0, 360.0)
 
 
 func get_range() -> Vector2:
@@ -23,8 +28,8 @@ func get_range() -> Vector2:
 
 
 func get_step() -> float:
-	return 1
+	return 1.0
 
 
 func get_arrow_step() -> float:
-	return 15
+	return 15.0

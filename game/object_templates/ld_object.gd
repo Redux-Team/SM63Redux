@@ -111,8 +111,21 @@ func set_property(key: StringName, value: Variant) -> void:
 	_on_property_changed(key, value)
 
 
+func set_property_no_apply(key: StringName, value: Variant) -> void:
+	for prop: LDProperty in _properties:
+		if prop.key == key:
+			value = prop.clamp_value(value)
+			break
+	_property_values[key] = value
+	_on_property_changed(key, value)
+
+
 func get_property(key: StringName) -> Variant:
 	return _property_values.get(key)
+
+
+func get_properties() -> Array[LDProperty]:
+	return _properties
 
 
 func get_property_values() -> Dictionary[StringName, Variant]:
@@ -141,6 +154,10 @@ func set_shader_parameter(parameter: StringName, value: Variant) -> void:
 	for item: CanvasItem in shader_objects:
 		if item and item.material is ShaderMaterial:
 			(item.material as ShaderMaterial).set_shader_parameter(parameter, value)
+
+
+func get_origin_offset() -> Vector2:
+	return origin_marker.position
 
 
 func get_all_editor_shape_areas() -> Array[Area2D]:
