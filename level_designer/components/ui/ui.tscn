@@ -6,6 +6,95 @@
 [ext_resource type="PackedScene" uid="uid://wfkq6ce52aet" path="res://level_designer/components/ui/object_properties/object_properties.tscn" id="4_4nlpt"]
 [ext_resource type="PackedScene" uid="uid://ckffdp04tglj1" path="res://level_designer/components/ui/layer_properties/layer_properties.tscn" id="5_uannl"]
 
+[sub_resource type="InputEventKey" id="InputEventKey_y8t77"]
+device = -1
+keycode = 32
+unicode = 32
+
+[sub_resource type="Shortcut" id="Shortcut_agrqq"]
+events = [SubResource("InputEventKey_y8t77")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_agrqq"]
+device = -1
+keycode = 80
+unicode = 112
+
+[sub_resource type="Shortcut" id="Shortcut_wp4la"]
+events = [SubResource("InputEventKey_agrqq")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_wp4la"]
+device = -1
+keycode = 49
+unicode = 49
+
+[sub_resource type="Shortcut" id="Shortcut_kp1nf"]
+events = [SubResource("InputEventKey_wp4la")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_11twt"]
+device = -1
+keycode = 50
+unicode = 50
+
+[sub_resource type="Shortcut" id="Shortcut_awha3"]
+events = [SubResource("InputEventKey_11twt")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_uannl"]
+device = -1
+keycode = 81
+unicode = 113
+
+[sub_resource type="Shortcut" id="Shortcut_sdhrq"]
+events = [SubResource("InputEventKey_uannl")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_sdhrq"]
+device = -1
+keycode = 66
+unicode = 98
+
+[sub_resource type="Shortcut" id="Shortcut_7flq5"]
+events = [SubResource("InputEventKey_sdhrq")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_7flq5"]
+device = -1
+keycode = 77
+unicode = 109
+
+[sub_resource type="Shortcut" id="Shortcut_7agmi"]
+events = [SubResource("InputEventKey_7flq5")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_7agmi"]
+device = -1
+keycode = 82
+unicode = 114
+
+[sub_resource type="Shortcut" id="Shortcut_n78f0"]
+events = [SubResource("InputEventKey_7agmi")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_n78f0"]
+device = -1
+keycode = 4194312
+
+[sub_resource type="InputEventKey" id="InputEventKey_45bup"]
+device = -1
+keycode = 4194308
+
+[sub_resource type="Shortcut" id="Shortcut_lff0g"]
+events = [SubResource("InputEventKey_n78f0"), SubResource("InputEventKey_45bup")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_lff0g"]
+device = -1
+keycode = 4194323
+
+[sub_resource type="Shortcut" id="Shortcut_8p5vc"]
+events = [SubResource("InputEventKey_lff0g")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_8p5vc"]
+device = -1
+keycode = 4194324
+
+[sub_resource type="Shortcut" id="Shortcut_y8t77"]
+events = [SubResource("InputEventKey_8p5vc")]
+
 [node name="UI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window", "_layer_properties_window", "_save_file_dialog", "_load_file_dialog", "_reset_level_dialog", "_layer_spin_box", "_parallaxing_button", "_ghosting_button")]
 script = ExtResource("1_8w51u")
 _canvas_layer = NodePath("ViewportUI")
@@ -32,12 +121,14 @@ offset_bottom = 62.0
 layout_mode = 2
 size_flags_horizontal = 0
 focus_mode = 0
+shortcut = SubResource("Shortcut_agrqq")
 text = "Object Browser"
 
 [node name="PropertiesButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=1478737431]
 layout_mode = 2
 size_flags_horizontal = 0
 focus_mode = 0
+shortcut = SubResource("Shortcut_wp4la")
 text = "Properties"
 
 [node name="Control" type="Control" parent="ViewportUI/VBoxContainer" unique_id=1869592936]
@@ -60,12 +151,14 @@ text = "Props"
 layout_mode = 2
 size_flags_horizontal = 0
 toggle_mode = true
+shortcut = SubResource("Shortcut_kp1nf")
 text = "Parallax"
 
 [node name="GhostingButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=22491131]
 layout_mode = 2
 size_flags_horizontal = 0
 toggle_mode = true
+shortcut = SubResource("Shortcut_awha3")
 text = "Ghosting"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="ViewportUI" unique_id=1713123835]
@@ -86,21 +179,25 @@ mouse_filter = 2
 [node name="SelectButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1240001976]
 layout_mode = 2
 focus_mode = 0
+shortcut = SubResource("Shortcut_sdhrq")
 text = "Select"
 
 [node name="BrushButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1759864043]
 layout_mode = 2
 focus_mode = 0
+shortcut = SubResource("Shortcut_7flq5")
 text = "Brush"
 
 [node name="MoveButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1672483253]
 layout_mode = 2
 focus_mode = 0
+shortcut = SubResource("Shortcut_7agmi")
 text = "Move"
 
 [node name="RotateButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1358070352]
 layout_mode = 2
 focus_mode = 0
+shortcut = SubResource("Shortcut_n78f0")
 text = "Rotate"
 
 [node name="PolyEditButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=891112985]
@@ -126,16 +223,19 @@ alignment = 2
 [node name="DeleteButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1153339096]
 layout_mode = 2
 focus_mode = 0
+shortcut = SubResource("Shortcut_lff0g")
 text = "Delete"
 
 [node name="MoveToFrontButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1732178860]
 layout_mode = 2
 focus_mode = 0
+shortcut = SubResource("Shortcut_8p5vc")
 text = "MTF*"
 
 [node name="MoveToBackButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=865471635]
 layout_mode = 2
 focus_mode = 0
+shortcut = SubResource("Shortcut_y8t77")
 text = "MTB*"
 
 [node name="ResetCamButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1951778345]

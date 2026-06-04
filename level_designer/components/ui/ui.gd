@@ -47,18 +47,6 @@ func _on_ready() -> void:
 	])
 
 
-func _input(event: InputEvent) -> void:
-	if not event is InputEventKey or not event.is_pressed() or event.is_echo():
-		return
-	
-	match event.keycode:
-		KEY_SPACE:
-			_toggle_window(_obj_browser_window)
-		KEY_P:
-			if not LD.get_object_handler().get_placed_selection().is_empty():
-				_toggle_window(_object_property_window)
-
-
 func _on_input(_event: InputEvent) -> void:
 	pass
 
