@@ -2,6 +2,7 @@
 @abstract class_name LDTool
 extends Node
 
+
 var viewport: LDViewport:
 	get:
 		return LD.get_editor_viewport()
@@ -16,16 +17,27 @@ var _preview_object: LDObject
 
 func _ready() -> void:
 	LD.get_editor_viewport().viewport_input.connect(_on_viewport_input)
+	if wants_overlay():
+		LD.get_editor_viewport().viewport_moved.connect(_on_overlay_viewport_moved)
+		LD.get_editor_viewport().selection_changed.connect(_on_overlay_selection_changed)
 	_on_ready()
 
 
 func _on_enable() -> void:
 	viewport._viewport_input.mouse_default_cursor_shape = get_cursor_shape()
+	if wants_overlay():
+		viewport.get_selection_overlay().queue_redraw()
 
 
 func _on_disable() -> void:
 	viewport._viewport_input.mouse_default_cursor_shape = Control.CURSOR_ARROW
+	if wants_overlay():
+		viewport.get_selection_overlay().queue_redraw()
 	_destroy_preview()
+
+
+func wants_overlay() -> bool:
+	return false
 
 
 func get_cursor_shape() -> Control.CursorShape:
@@ -36,8 +48,22 @@ func set_cursor_shape(cursor_shape: Control.CursorShape) -> void:
 	viewport._viewport_input.mouse_default_cursor_shape = cursor_shape
 
 
-func _on_viewport_input(event: InputEvent) -> void:
+func draw_overlay(_draw_node: CanvasItem) -> void:
 	pass
+
+
+func _on_viewport_input(_event: InputEvent) -> void:
+	pass
+
+
+func _on_overlay_viewport_moved(_pos: Vector2, _zoom: Vector2) -> void:
+	if is_active():
+		viewport.get_selection_overlay().queue_redraw()
+
+
+func _on_overlay_selection_changed(_objects: Array[LDObject]) -> void:
+	if is_active():
+		viewport.get_selection_overlay().queue_redraw()
 
 
 func get_tool_handler() -> LDToolHandler:

@@ -26,6 +26,6 @@ func _draw() -> void:
 			draw_rect(_box_rect, Color(0.4, 0.7, 1.0, 0.15), true)
 			draw_rect(_box_rect, Color(0.4, 0.7, 1.0, 0.8), false, 1.0)
 	
-	var tool: LDTool = LD.get_tool_handler().get_selected_tool()
-	if tool is LDRotateTool:
-		(tool as LDRotateTool).draw_overlay(self)
+	for tool: LDTool in LD.get_tool_handler().get_tool_list():
+		if tool.wants_overlay() and tool.is_active():
+			tool.draw_overlay(self)

@@ -200,7 +200,13 @@ focus_mode = 0
 shortcut = SubResource("Shortcut_n78f0")
 text = "Rotate"
 
+[node name="ScaleButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1384956283]
+layout_mode = 2
+focus_mode = 0
+text = "Scale"
+
 [node name="PolyEditButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=891112985]
+visible = false
 layout_mode = 2
 focus_mode = 0
 text = "Edit (P)"
@@ -360,6 +366,7 @@ will be lost!"
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/BrushButton" to="." method="_on_brush_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/MoveButton" to="." method="_on_move_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/RotateButton" to="." method="_on_rotate_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/ScaleButton" to="." method="_on_scale_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyEditButton" to="." method="_on_poly_edit_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyAddButton" to="." method="_on_poly_add_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyCutButton" to="." method="_on_poly_cut_pressed"]

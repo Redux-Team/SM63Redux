@@ -1,5 +1,5 @@
 class_name LDRotationWidget
-extends LDWidget
+extends LDToolWidget
 
 
 const BASE_RING_RADIUS: float = 48.0

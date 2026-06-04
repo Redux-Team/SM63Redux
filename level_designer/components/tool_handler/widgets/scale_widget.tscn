@@ -1,0 +1,195 @@
+[gd_scene format=3 uid="uid://d2sw3mtdu35yd"]
+
+[ext_resource type="Script" uid="uid://coo688cpdp4ga" path="res://level_designer/components/tool_handler/widgets/scale_widget.gd" id="1_v6afa"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v6afa"]
+bg_color = Color(1, 1, 1, 1)
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0, 0, 1)
+
+[node name="ScaleWidget" type="Control" unique_id=772322325 node_paths=PackedStringArray("scale_panel", "top_left_button", "top_button", "top_right_button", "left_button", "right_button", "bottom_left_button", "bottom_button", "bottom_right_button", "scale_x_label", "scale_x_label_2", "scale_y_label", "scale_y_label_2")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_v6afa")
+scale_panel = NodePath("ScalePanel")
+top_left_button = NodePath("ScalePanel/TopLeftButton")
+top_button = NodePath("ScalePanel/TopButton")
+top_right_button = NodePath("ScalePanel/TopRightButton")
+left_button = NodePath("ScalePanel/LeftButton")
+right_button = NodePath("ScalePanel/RightButton")
+bottom_left_button = NodePath("ScalePanel/BottomLeftButton")
+bottom_button = NodePath("ScalePanel/BottomButton")
+bottom_right_button = NodePath("ScalePanel/BottomRightButton")
+scale_x_label = NodePath("ScalePanel/ScaleXLabel")
+scale_x_label_2 = NodePath("ScalePanel/ScaleXLabel2")
+scale_y_label = NodePath("ScalePanel/ScaleYLabel")
+scale_y_label_2 = NodePath("ScalePanel/ScaleYLabel2")
+
+[node name="ScalePanel" type="Panel" parent="." unique_id=428028687]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v6afa")
+
+[node name="TopLeftButton" type="Button" parent="ScalePanel" unique_id=1694005467]
+layout_mode = 1
+offset_right = 8.0
+offset_bottom = 8.0
+metadata/_edit_lock_ = true
+
+[node name="TopButton" type="Button" parent="ScalePanel" unique_id=158556206]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -4.0
+offset_right = 4.0
+offset_bottom = 8.0
+grow_horizontal = 2
+metadata/_edit_lock_ = true
+
+[node name="TopRightButton" type="Button" parent="ScalePanel" unique_id=449912253]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -8.0
+offset_bottom = 8.0
+grow_horizontal = 0
+metadata/_edit_lock_ = true
+
+[node name="LeftButton" type="Button" parent="ScalePanel" unique_id=2041640112]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -4.0
+offset_right = 8.0
+offset_bottom = 4.0
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="RightButton" type="Button" parent="ScalePanel" unique_id=318959792]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -4.0
+offset_bottom = 4.0
+grow_horizontal = 0
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="BottomLeftButton" type="Button" parent="ScalePanel" unique_id=869471776]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_right = 8.0
+grow_vertical = 0
+metadata/_edit_lock_ = true
+
+[node name="BottomButton" type="Button" parent="ScalePanel" unique_id=176947069]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -8.0
+offset_right = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+metadata/_edit_lock_ = true
+
+[node name="BottomRightButton" type="Button" parent="ScalePanel" unique_id=590356443]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+metadata/_edit_lock_ = true
+
+[node name="ScaleXLabel" type="Label" parent="ScalePanel" unique_id=1020043207]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = 3.0
+offset_right = 20.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/outline_size = 4
+text = "1.0x"
+horizontal_alignment = 1
+
+[node name="ScaleXLabel2" type="Label" parent="ScalePanel" unique_id=2111432816]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = -19.0
+offset_right = 20.0
+offset_bottom = -4.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 4
+text = "1.0x"
+horizontal_alignment = 1
+
+[node name="ScaleYLabel" type="Label" parent="ScalePanel" unique_id=1544644373]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -46.0
+offset_top = -8.0
+offset_right = -6.0
+offset_bottom = 7.0
+grow_vertical = 2
+theme_override_constants/outline_size = 4
+text = "1.0x"
+horizontal_alignment = 2
+
+[node name="ScaleYLabel2" type="Label" parent="ScalePanel" unique_id=1905504461]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 5.0
+offset_top = -7.0
+offset_right = 45.0
+offset_bottom = 8.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/outline_size = 4
+text = "1.0x"

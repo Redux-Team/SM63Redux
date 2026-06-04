@@ -124,6 +124,13 @@ func get_property(key: StringName) -> Variant:
 	return _property_values.get(key)
 
 
+func get_ld_property(key: StringName) -> LDProperty:
+	for prop: LDProperty in _properties:
+		if prop.key == key:
+			return prop
+	return null
+
+
 func get_properties() -> Array[LDProperty]:
 	return _properties
 

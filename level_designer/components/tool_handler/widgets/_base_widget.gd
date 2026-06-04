@@ -1,4 +1,4 @@
-class_name LDWidget
+class_name LDToolWidget
 extends Control
 
 

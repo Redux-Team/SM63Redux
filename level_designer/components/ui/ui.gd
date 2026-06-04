@@ -212,3 +212,7 @@ func _on_reset_level_dialog_confirmed() -> void:
 
 func _on_deselect_button_pressed() -> void:
 	LD.get_editor_viewport().clear_selection()
+
+
+func _on_scale_button_pressed() -> void:
+	LD.get_tool_handler().select_tool("scale")
