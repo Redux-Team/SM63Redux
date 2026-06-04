@@ -10,6 +10,7 @@ extends LDComponent
 @export_group("File Dialogs")
 @export var _save_file_dialog: FileDialog
 @export var _load_file_dialog: FileDialog
+@export var _reset_level_dialog: ConfirmationDialog
 @export_group("Layer")
 @export var _layer_spin_box: SpinBox
 @export var _parallaxing_button: Button
@@ -129,7 +130,7 @@ func _on_move_button_pressed() -> void:
 	LD.get_tool_handler().select_tool("move")
 
 
-func _on_reset_button_pressed() -> void:
+func _on_reset_cam_button_pressed() -> void:
 	var player: LDObject = LD.get_area().find_object_by_id("player_mario", 0)
 	viewport.refocus_camera(player.position, Vector2.ONE)
 
@@ -144,6 +145,10 @@ func _on_save_button_pressed() -> void:
 
 func _on_load_button_pressed() -> void:
 	_load_file_dialog.popup_centered()
+
+
+func _on_reset_button_pressed() -> void:
+	_reset_level_dialog.popup_centered()
 
 
 func _on_rotate_button_pressed() -> void:
@@ -211,3 +216,7 @@ func set_ghosting(toggled_on: bool) -> void:
 	ghosting_enabled = toggled_on
 	_ghosting_button.set_pressed_no_signal(toggled_on)
 	LD.get_area().refresh_layer_visuals()
+
+
+func _on_reset_level_dialog_confirmed() -> void:
+	LD.get_save_load_handler().reset_level()

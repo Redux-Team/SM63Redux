@@ -96,6 +96,26 @@ func load_raw_data(data: Dictionary) -> void:
 	_deserialize(data)
 
 
+func reset_level() -> void:
+	var viewport: LDViewport = LD.get_editor_viewport()
+	var area: LDArea = LDLevel.get_active_area()
+	
+	viewport.clear_selection()
+	
+	for layer: LDLayer in area.layers.duplicate():
+		layer.queue_free()
+	area.layers.clear()
+	
+	viewport.camera_position = Vector2.ZERO
+	viewport.camera_zoom = Vector2.ONE
+	
+	level_file_path = ""
+	method = -1
+	save_session()
+	
+	_ensure_player_spawn()
+
+
 func save_json(path: String) -> Error:
 	var data: Dictionary = _serialize()
 	var json_string: String = JSON.stringify(data, "\t")
