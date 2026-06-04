@@ -70,17 +70,6 @@ unicode = 114
 [sub_resource type="Shortcut" id="Shortcut_n78f0"]
 events = [SubResource("InputEventKey_7agmi")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_n78f0"]
-device = -1
-keycode = 4194312
-
-[sub_resource type="InputEventKey" id="InputEventKey_45bup"]
-device = -1
-keycode = 4194308
-
-[sub_resource type="Shortcut" id="Shortcut_lff0g"]
-events = [SubResource("InputEventKey_n78f0"), SubResource("InputEventKey_45bup")]
-
 [sub_resource type="InputEventKey" id="InputEventKey_lff0g"]
 device = -1
 keycode = 4194323
@@ -94,6 +83,17 @@ keycode = 4194324
 
 [sub_resource type="Shortcut" id="Shortcut_y8t77"]
 events = [SubResource("InputEventKey_8p5vc")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_n78f0"]
+device = -1
+keycode = 4194312
+
+[sub_resource type="InputEventKey" id="InputEventKey_45bup"]
+device = -1
+keycode = 4194308
+
+[sub_resource type="Shortcut" id="Shortcut_lff0g"]
+events = [SubResource("InputEventKey_n78f0"), SubResource("InputEventKey_45bup")]
 
 [node name="UI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window", "_layer_properties_window", "_save_file_dialog", "_load_file_dialog", "_reset_level_dialog", "_layer_spin_box", "_parallaxing_button", "_ghosting_button")]
 script = ExtResource("1_8w51u")
@@ -220,12 +220,6 @@ layout_mode = 2
 mouse_filter = 2
 alignment = 2
 
-[node name="DeleteButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1153339096]
-layout_mode = 2
-focus_mode = 0
-shortcut = SubResource("Shortcut_lff0g")
-text = "Delete"
-
 [node name="MoveToFrontButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1732178860]
 layout_mode = 2
 focus_mode = 0
@@ -242,6 +236,18 @@ text = "MTB*"
 layout_mode = 2
 focus_mode = 0
 text = "Reset Cam"
+
+[node name="DeleteButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1153339096]
+layout_mode = 2
+focus_mode = 0
+shortcut = SubResource("Shortcut_lff0g")
+text = "Delete"
+
+[node name="DeselectButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=382669193]
+layout_mode = 2
+focus_mode = 0
+shortcut = SubResource("Shortcut_lff0g")
+text = "Deselect All"
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="ViewportUI/VBoxContainer2" unique_id=1197968246]
 layout_mode = 2
@@ -357,10 +363,11 @@ will be lost!"
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyEditButton" to="." method="_on_poly_edit_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyAddButton" to="." method="_on_poly_add_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyCutButton" to="." method="_on_poly_cut_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeleteButton" to="." method="_on_delete_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/MoveToFrontButton" to="." method="_on_move_to_front_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/MoveToBackButton" to="." method="_on_move_to_back_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/ResetCamButton" to="." method="_on_reset_cam_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeleteButton" to="." method="_on_delete_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeselectButton" to="." method="_on_deselect_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/LoadButton" to="." method="_on_load_button_pressed"]

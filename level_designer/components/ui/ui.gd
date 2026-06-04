@@ -208,3 +208,7 @@ func set_ghosting(toggled_on: bool) -> void:
 
 func _on_reset_level_dialog_confirmed() -> void:
 	LD.get_save_load_handler().reset_level()
+
+
+func _on_deselect_button_pressed() -> void:
+	LD.get_editor_viewport().clear_selection()
