@@ -70,6 +70,49 @@ unicode = 114
 [sub_resource type="Shortcut" id="Shortcut_n78f0"]
 events = [SubResource("InputEventKey_7agmi")]
 
+[sub_resource type="InputEventKey" id="InputEventKey_gbgf4"]
+device = -1
+ctrl_pressed = true
+keycode = 88
+unicode = 120
+
+[sub_resource type="Shortcut" id="Shortcut_bt7vf"]
+events = [SubResource("InputEventKey_gbgf4")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_45bup"]
+device = -1
+ctrl_pressed = true
+keycode = 67
+unicode = 99
+
+[sub_resource type="Shortcut" id="Shortcut_11twt"]
+events = [SubResource("InputEventKey_45bup")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_awha3"]
+device = -1
+ctrl_pressed = true
+keycode = 86
+unicode = 118
+
+[sub_resource type="Shortcut" id="Shortcut_45bup"]
+events = [SubResource("InputEventKey_awha3")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_kp1nf"]
+device = -1
+ctrl_pressed = true
+keycode = 68
+unicode = 100
+
+[sub_resource type="Shortcut" id="Shortcut_uannl"]
+events = [SubResource("InputEventKey_kp1nf")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_n78f0"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_lff0g"]
+events = [SubResource("InputEventKey_n78f0")]
+
 [sub_resource type="InputEventKey" id="InputEventKey_lff0g"]
 device = -1
 keycode = 4194323
@@ -83,17 +126,6 @@ keycode = 4194324
 
 [sub_resource type="Shortcut" id="Shortcut_y8t77"]
 events = [SubResource("InputEventKey_8p5vc")]
-
-[sub_resource type="InputEventKey" id="InputEventKey_n78f0"]
-device = -1
-keycode = 4194312
-
-[sub_resource type="InputEventKey" id="InputEventKey_45bup"]
-device = -1
-keycode = 4194308
-
-[sub_resource type="Shortcut" id="Shortcut_lff0g"]
-events = [SubResource("InputEventKey_n78f0"), SubResource("InputEventKey_45bup")]
 
 [node name="UI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window", "_layer_properties_window", "_save_file_dialog", "_load_file_dialog", "_reset_level_dialog", "_layer_spin_box", "_parallaxing_button", "_ghosting_button")]
 script = ExtResource("1_8w51u")
@@ -226,22 +258,29 @@ layout_mode = 2
 mouse_filter = 2
 alignment = 2
 
-[node name="MoveToFrontButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1732178860]
+[node name="CutButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1356009072]
 layout_mode = 2
 focus_mode = 0
-shortcut = SubResource("Shortcut_8p5vc")
-text = "MTF*"
+shortcut = SubResource("Shortcut_bt7vf")
+text = "Cut"
 
-[node name="MoveToBackButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=865471635]
+[node name="CopyButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1530935064]
 layout_mode = 2
 focus_mode = 0
-shortcut = SubResource("Shortcut_y8t77")
-text = "MTB*"
+shortcut = SubResource("Shortcut_11twt")
+text = "Copy"
 
-[node name="ResetCamButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1951778345]
+[node name="PasteButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=658755433]
 layout_mode = 2
 focus_mode = 0
-text = "Reset Cam"
+shortcut = SubResource("Shortcut_45bup")
+text = "Paste"
+
+[node name="DuplicateButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1512356184]
+layout_mode = 2
+focus_mode = 0
+shortcut = SubResource("Shortcut_uannl")
+text = "Duplicate"
 
 [node name="DeleteButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1153339096]
 layout_mode = 2
@@ -259,6 +298,23 @@ text = "Deselect All"
 layout_mode = 2
 mouse_filter = 2
 alignment = 2
+
+[node name="MoveToFrontButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=1732178860]
+layout_mode = 2
+focus_mode = 0
+shortcut = SubResource("Shortcut_8p5vc")
+text = "MTF*"
+
+[node name="MoveToBackButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=865471635]
+layout_mode = 2
+focus_mode = 0
+shortcut = SubResource("Shortcut_y8t77")
+text = "MTB*"
+
+[node name="ResetCamButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=1951778345]
+layout_mode = 2
+focus_mode = 0
+text = "Reset Cam"
 
 [node name="ResetButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=296567184]
 layout_mode = 2
@@ -370,11 +426,15 @@ will be lost!"
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyEditButton" to="." method="_on_poly_edit_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyAddButton" to="." method="_on_poly_add_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyCutButton" to="." method="_on_poly_cut_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/MoveToFrontButton" to="." method="_on_move_to_front_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/MoveToBackButton" to="." method="_on_move_to_back_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/ResetCamButton" to="." method="_on_reset_cam_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/CutButton" to="." method="_on_cut_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/CopyButton" to="." method="_on_copy_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/PasteButton" to="." method="_on_paste_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DuplicateButton" to="." method="_on_duplicate_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeleteButton" to="." method="_on_delete_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeselectButton" to="." method="_on_deselect_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/MoveToFrontButton" to="." method="_on_move_to_front_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/MoveToBackButton" to="." method="_on_move_to_back_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/ResetCamButton" to="." method="_on_reset_cam_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/LoadButton" to="." method="_on_load_button_pressed"]

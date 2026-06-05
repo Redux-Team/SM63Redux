@@ -6,6 +6,7 @@ enum {
 	LD_SELECTABLE,
 	LD_DELETABLE,
 	LD_LAYERABLE,
+	LD_COPYABLE,
 }
 
 enum LDPlacementRules {
@@ -72,7 +73,7 @@ enum CollisionAnchor {
 @export var ld_select_tool_override: String
 @export var ld_placement_tool_override: String
 @export var ld_placement_rules: LDPlacementRules = LDPlacementRules.BEHIND_PLAYER
-@export_flags("Selectable", "Deletable", "Layerable") var ld_flags: int = 7
+@export_flags("Selectable", "Deletable", "Layerable", "Copyable") var ld_flags: int = 15
 @export_subgroup("Instance")
 @export var ld_editor_instance: PackedScene:
 	set(ldi):

@@ -90,8 +90,9 @@ func _process(delta: float) -> void:
 		var pan: Vector2 = Vector2.ZERO
 		pan.x = Input.get_axis(&"editor_pan_left", &"editor_pan_right")
 		pan.y = Input.get_axis(&"editor_pan_up", &"editor_pan_down")
-		camera_position += (pan * LINEAR_PAN_SPEED) / camera_zoom
-		viewport_moved.emit(camera_position, camera_zoom)
+		if not (Input.is_key_pressed(KEY_CTRL) or Input.is_key_pressed(KEY_SHIFT) or Input.is_key_pressed(KEY_ALT)):
+			camera_position += (pan * LINEAR_PAN_SPEED) / camera_zoom
+			viewport_moved.emit(camera_position, camera_zoom)
 		if Input.is_action_just_pressed(&"editor_zoom_in"):
 			refocus_camera(Vector2.INF, camera_zoom * 2, false)
 		if Input.is_action_just_pressed(&"editor_zoom_out"):

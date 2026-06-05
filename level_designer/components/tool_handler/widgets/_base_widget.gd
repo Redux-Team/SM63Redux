@@ -56,6 +56,8 @@ func get_ld_viewport() -> LDViewport:
 
 
 func get_overlay() -> LDSelectionOverlay:
+	if not _tool:
+		return null
 	return _tool.viewport.get_selection_overlay()
 
 

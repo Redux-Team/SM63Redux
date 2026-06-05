@@ -216,3 +216,21 @@ func _on_deselect_button_pressed() -> void:
 
 func _on_scale_button_pressed() -> void:
 	LD.get_tool_handler().select_tool("scale")
+
+
+func _on_cut_button_pressed() -> void:
+	LD.get_clipboard_handler().cut()
+
+
+func _on_copy_button_pressed() -> void:
+	LD.get_clipboard_handler().copy()
+
+
+func _on_paste_button_pressed() -> void:
+	const OFFSET: Vector2 = Vector2(24, -24)
+	var camera_pos: Vector2 = LD.get_editor_viewport().camera_position
+	LD.get_clipboard_handler().paste_absolute(camera_pos + OFFSET)
+
+
+func _on_duplicate_button_pressed() -> void:
+	LD.get_clipboard_handler().duplicate_objects()
