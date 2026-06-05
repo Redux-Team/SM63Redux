@@ -12,14 +12,18 @@ atlas = ExtResource("1_u0w75")
 region = Rect2(-9, -14, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Hints/arrow.tres"
+resource_scene_unique_id = ""
 script = ExtResource("1_nos1b")
 id = "arrow"
 category = 4
 category_string = "Props"
 subpath = "Hints/arrow"
 group_path = "Hints"
-ld_properties = Array[ExtResource("2_7ryrs")]([ExtResource("5_annuh"), ExtResource("6_d2nd5"), ExtResource("7_8na0d")])
 ld_entry_texture = SubResource("AtlasTexture_6y7o3")
+ld_properties = Array[ExtResource("2_7ryrs")]([ExtResource("5_annuh"), ExtResource("6_d2nd5"), ExtResource("7_8na0d")])
 sprite_texture = ExtResource("1_u0w75")
 ld_object_path = "Props/Hints/arrow"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

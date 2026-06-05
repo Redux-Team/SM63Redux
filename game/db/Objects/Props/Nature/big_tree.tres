@@ -12,6 +12,8 @@ atlas = ExtResource("3_xh15k")
 region = Rect2(4, 36, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Nature/big_tree.tres"
+resource_scene_unique_id = ""
 script = ExtResource("8_y5wb8")
 id = "big_tree"
 category = 4
@@ -20,8 +22,10 @@ subpath = "Nature/big_tree"
 group_path = "Nature"
 name_override = "Big Tree"
 ld_index_id = "tree"
-ld_properties = Array[ExtResource("4_8bhx3")]([ExtResource("5_tqspd"), ExtResource("6_fcs18"), ExtResource("7_xidfm")])
 ld_entry_texture = SubResource("AtlasTexture_ounpj")
+ld_properties = Array[ExtResource("4_8bhx3")]([ExtResource("5_tqspd"), ExtResource("6_fcs18"), ExtResource("7_xidfm")])
 sprite_texture = ExtResource("3_xh15k")
 ld_object_path = "Props/Nature/big_tree"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

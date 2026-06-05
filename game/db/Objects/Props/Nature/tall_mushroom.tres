@@ -13,6 +13,8 @@ atlas = ExtResource("3_bl36k")
 region = Rect2(0, 0, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Nature/tall_mushroom.tres"
+resource_scene_unique_id = ""
 script = ExtResource("7_nn1hi")
 id = "tall_mushroom"
 category = 4
@@ -23,9 +25,11 @@ name_override = "Tall Mushroom"
 ld_index_id = "mushroom"
 ld_select_tool_override = "path_edit"
 ld_placement_tool_override = "path"
-ld_properties = Array[ExtResource("4_a2k1m")]([ExtResource("5_6punl"), ExtResource("6_me7si")])
 ld_editor_instance = ExtResource("2_nh86y")
 game_instance = ExtResource("1_wdemp")
 ld_entry_texture = SubResource("AtlasTexture_b0p7m")
+ld_properties = Array[ExtResource("4_a2k1m")]([ExtResource("5_6punl"), ExtResource("6_me7si")])
 ld_object_path = "Props/Nature/tall_mushroom"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

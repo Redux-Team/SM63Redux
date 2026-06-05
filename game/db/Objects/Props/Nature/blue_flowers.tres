@@ -12,6 +12,8 @@ atlas = ExtResource("3_ca6wm")
 region = Rect2(-8, -15, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Nature/blue_flowers.tres"
+resource_scene_unique_id = ""
 script = ExtResource("8_wavbg")
 id = "blue_flowers"
 category = 4
@@ -20,8 +22,10 @@ subpath = "Nature/blue_flowers"
 group_path = "Nature"
 name_override = "Flowers (Blue)"
 ld_index_id = "flowers"
-ld_properties = Array[ExtResource("4_p1x7i")]([ExtResource("5_ytlta"), ExtResource("6_w1gh6"), ExtResource("7_dm3n7")])
 ld_entry_texture = SubResource("AtlasTexture_ea8py")
+ld_properties = Array[ExtResource("4_p1x7i")]([ExtResource("5_ytlta"), ExtResource("6_w1gh6"), ExtResource("7_dm3n7")])
 sprite_texture = ExtResource("3_ca6wm")
 ld_object_path = "Props/Nature/blue_flowers"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

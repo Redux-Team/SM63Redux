@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://dkjnplx3hhp7q"]
+
+[ext_resource type="Script" uid="uid://dtvjt7k3c8dhn" path="res://game/world/level.gd" id="1_0euo3"]
+[ext_resource type="Script" uid="uid://w60fapixf1o5" path="res://game/world/level_camera.gd" id="2_n8vjl"]
+[ext_resource type="Shader" uid="uid://bdjde8udebjtr" path="res://core/shader/camera_zoom_effect.gdshader" id="3_v5b65"]
+
+[sub_resource type="Curve" id="Curve_7lr4m"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7lr4m"]
+size = Vector2(640, 360)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_81ib3"]
+shader = ExtResource("3_v5b65")
+shader_parameter/vignette_strength = 0.3
+shader_parameter/vignette_softness = 0.5
+shader_parameter/fisheye_strength = 0.0
+shader_parameter/zoom_velocity = 0.0
+
+[node name="Level" type="Node2D" unique_id=1909384183 node_paths=PackedStringArray("_level_camera")]
+script = ExtResource("1_0euo3")
+_level_camera = NodePath("LevelCamera")
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="." unique_id=1044394242]
+
+[node name="LevelCamera" type="CharacterBody2D" parent="." unique_id=1904263241 node_paths=PackedStringArray("_camera", "_remote_transform")]
+collision_layer = 0
+collision_mask = 4096
+script = ExtResource("2_n8vjl")
+look_ahead_enabled = true
+look_ahead_distance = 30.0
+look_ahead_smoothing_speed = 3.0
+look_ahead_x_curve = SubResource("Curve_7lr4m")
+look_ahead_y_min_speed = 0.0
+_camera = NodePath("../Camera2D")
+_bounds_shape = SubResource("RectangleShape2D_7lr4m")
+_remote_transform = NodePath("RemoteTransform2D")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelCamera" unique_id=1554381285]
+shape = SubResource("RectangleShape2D_7lr4m")
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="LevelCamera" unique_id=1886553083]
+remote_path = NodePath("../../Camera2D")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1470691944]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1277764924]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1295168910]
+material = SubResource("ShaderMaterial_81ib3")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

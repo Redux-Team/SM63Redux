@@ -8,7 +8,7 @@ var _level: Level
 
 
 func _ready() -> void:
-	_level = Level.new()
+	_level = Level.instantiate()
 	_level.name = "Level"
 	level_root.add_child(_level)
 	_level.load_from_dict(Singleton.get_meta("playtest"))

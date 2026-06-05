@@ -12,6 +12,8 @@ atlas = ExtResource("3_45qly")
 region = Rect2(-3, -1, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Nature/medium_tree.tres"
+resource_scene_unique_id = ""
 script = ExtResource("8_yc0ai")
 id = "medium_tree"
 category = 4
@@ -20,8 +22,10 @@ subpath = "Nature/medium_tree"
 group_path = "Nature"
 name_override = "Medium Tree"
 ld_index_id = "tree"
-ld_properties = Array[ExtResource("4_jpe2n")]([ExtResource("5_aoe2p"), ExtResource("6_cbgnh"), ExtResource("7_h0b3g")])
 ld_entry_texture = SubResource("AtlasTexture_5p1y3")
+ld_properties = Array[ExtResource("4_jpe2n")]([ExtResource("5_aoe2p"), ExtResource("6_cbgnh"), ExtResource("7_h0b3g")])
 sprite_texture = ExtResource("3_45qly")
 ld_object_path = "Props/Nature/medium_tree"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

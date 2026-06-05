@@ -12,6 +12,8 @@ atlas = ExtResource("3_m2bw2")
 region = Rect2(-15, -11, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Nature/pink_flowers.tres"
+resource_scene_unique_id = ""
 script = ExtResource("8_k3hfd")
 id = "pink_flowers"
 category = 4
@@ -20,8 +22,10 @@ subpath = "Nature/pink_flowers"
 group_path = "Nature"
 name_override = "Flowers (Pink)"
 ld_index_id = "flowers"
-ld_properties = Array[ExtResource("4_0olsp")]([ExtResource("5_ofx5j"), ExtResource("6_xan5d"), ExtResource("7_yhiyi")])
 ld_entry_texture = SubResource("AtlasTexture_2b75k")
+ld_properties = Array[ExtResource("4_0olsp")]([ExtResource("5_ofx5j"), ExtResource("6_xan5d"), ExtResource("7_yhiyi")])
 sprite_texture = ExtResource("3_m2bw2")
 ld_object_path = "Props/Nature/pink_flowers"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

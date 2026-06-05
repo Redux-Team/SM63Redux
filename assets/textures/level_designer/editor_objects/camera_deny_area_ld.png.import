@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d3p5x56xfhvko"
-path="res://.godot/imported/camera_area_ld.png-84965bb900c023efd3f15f0a42878a0d.ctex"
+path="res://.godot/imported/camera_deny_area_ld.png-657ac1d480c9aba4bd4b024054b384cf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/level_designer/editor_objects/camera_area_ld.png"
-dest_files=["res://.godot/imported/camera_area_ld.png-84965bb900c023efd3f15f0a42878a0d.ctex"]
+source_file="res://assets/textures/level_designer/editor_objects/camera_deny_area_ld.png"
+dest_files=["res://.godot/imported/camera_deny_area_ld.png-657ac1d480c9aba4bd4b024054b384cf.ctex"]
 
 [params]
 

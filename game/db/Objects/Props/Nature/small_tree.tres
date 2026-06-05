@@ -12,6 +12,8 @@ atlas = ExtResource("3_5qdoh")
 region = Rect2(-9, -3, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Nature/small_tree.tres"
+resource_scene_unique_id = ""
 script = ExtResource("8_yt1w2")
 id = "small_tree"
 category = 4
@@ -20,8 +22,10 @@ subpath = "Nature/small_tree"
 group_path = "Nature"
 name_override = "Small Tree"
 ld_index_id = "tree"
-ld_properties = Array[ExtResource("4_n1bef")]([ExtResource("5_iiesp"), ExtResource("6_ov70q"), ExtResource("7_d5xgg")])
 ld_entry_texture = SubResource("AtlasTexture_gh333")
+ld_properties = Array[ExtResource("4_n1bef")]([ExtResource("5_iiesp"), ExtResource("6_ov70q"), ExtResource("7_d5xgg")])
 sprite_texture = ExtResource("3_5qdoh")
 ld_object_path = "Props/Nature/small_tree"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

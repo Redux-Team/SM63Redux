@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ceb84vl3jrmja"]
 
-[ext_resource type="Script" uid="uid://vlqjxmxsgk8p" path="res://game/object_templates/polygon/level_object_polygon.gd" id="1_13xys"]
+[ext_resource type="Script" uid="uid://vlqjxmxsgk8p" path="res://game/object_templates/polygon/level_object_terrain.gd" id="1_13xys"]
 [ext_resource type="Resource" uid="uid://b2y75a2ickfn3" path="res://game/db/Objects/Polygon/Terrain/terrain_color_solid_data.tres" id="2_85oop"]
 [ext_resource type="Script" uid="uid://bvnbumlxmk7vf" path="res://util/poly/terrain_decoration_handler.gd" id="4_pay21"]
 

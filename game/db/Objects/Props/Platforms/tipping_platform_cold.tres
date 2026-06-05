@@ -16,6 +16,8 @@ region = Rect2(-3, -8, 48, 48)
 filter_clip = true
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Platforms/tipping_platform_cold.tres"
+resource_scene_unique_id = ""
 script = ExtResource("2_8m5ok")
 id = "tipping_platform_cold"
 category = 4
@@ -25,9 +27,11 @@ group_path = "Platforms"
 name_override = "Tipping Platform (Snowy)"
 ld_index_id = "tipping"
 ld_placement_tool_override = "telescoping"
-ld_properties = Array[ExtResource("1_rbw2q")]([ExtResource("3_sj0il"), ExtResource("4_um0mb"), ExtResource("5_js2jd"), ExtResource("6_floos")])
 ld_editor_instance = ExtResource("1_sj0il")
 game_instance = ExtResource("1_um0mb")
 ld_entry_texture = SubResource("AtlasTexture_js2jd")
+ld_properties = Array[ExtResource("1_rbw2q")]([ExtResource("3_sj0il"), ExtResource("4_um0mb"), ExtResource("5_js2jd"), ExtResource("6_floos")])
 ld_object_path = "Props/Platforms/tipping_platform_cold"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

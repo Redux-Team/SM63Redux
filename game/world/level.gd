@@ -1,6 +1,7 @@
 class_name Level
 extends Node2D
 
+const LEVEL: PackedScene = preload("uid://dkjnplx3hhp7q")
 
 signal loaded
 
@@ -24,9 +25,15 @@ var _active_area: LevelArea
 var _player: Player
 var _loaded: bool = false
 
+@export var _level_camera: LevelCamera
+
 
 func _init() -> void:
 	_inst = self
+
+
+static func instantiate() -> Level:
+	return LEVEL.instantiate()
 
 
 static func get_instance() -> Level:
@@ -39,6 +46,10 @@ static func get_active_area() -> LevelArea:
 
 static func get_player() -> Player:
 	return _inst._player
+
+
+static func get_camera() -> LevelCamera:
+	return _inst._level_camera
 
 
 func get_yellow_coin_count() -> int:
@@ -102,6 +113,10 @@ func on_load(callable: Callable, args: Array = []) -> void:
 		callable.callv(args)
 	else:
 		loaded.connect(func() -> void: callable.callv(args), CONNECT_ONE_SHOT)
+
+
+func is_loaded() -> bool:
+	return _loaded
 
 
 func load_from_dict(data: Dictionary) -> Error:

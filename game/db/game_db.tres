@@ -51,7 +51,6 @@
 [ext_resource type="Resource" uid="uid://mupwvevffb1p" path="res://game/db/Objects/Props/Hints/arrow_sign.tres" id="47_mp4qx"]
 [ext_resource type="Resource" uid="uid://caleu4psn324w" path="res://game/db/Objects/Props/Gizmos/spinning_block_mono.tres" id="48_fvosf"]
 [ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="48_i1cw8"]
-[ext_resource type="Resource" uid="uid://d3vfvvtqanxml" path="res://game/db/Objects/Polygon/Volumes/camera_area.tres" id="48_mp4qx"]
 [ext_resource type="Resource" uid="uid://eo78sgsdx7kt" path="res://game/db/Objects/Props/Platforms/tipping_platform_cold.tres" id="49_5oesr"]
 [ext_resource type="Resource" uid="uid://bm4nay80th3nd" path="res://game/db/Objects/Props/Platforms/sandstone_platform.tres" id="49_d7ntl"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="49_wp5r6"]
@@ -88,6 +87,7 @@
 [ext_resource type="Resource" uid="uid://ohk16n7fhwwd" path="res://game/db/Objects/Props/Hints/snowy_arrow_sign.tres" id="76_rfddy"]
 [ext_resource type="Resource" uid="uid://dygcc5dxccaei" path="res://game/db/Objects/Props/Interactable/snowy_wall_sign.tres" id="76_tk7mk"]
 [ext_resource type="Resource" uid="uid://cv8hbokwkhauv" path="res://game/db/Objects/Props/Interactable/wall_sign.tres" id="77_77m44"]
+[ext_resource type="Resource" uid="uid://d3vfvvtqanxml" path="res://game/db/Objects/Polygon/Volumes/camera_deny_area.tres" id="78_76t45"]
 [ext_resource type="Resource" uid="uid://boljvdptgk7ul" path="res://game/db/Objects/Props/Nature/tall_cave_mushroom.tres" id="78_77m44"]
 
 [resource]
@@ -119,7 +119,7 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Polygon/Terrain/terrain_grass": ExtResource("45_3w7om"),
 "Polygon/Terrain/terrain_jungle": ExtResource("59_ib6pc"),
 "Polygon/Terrain/terrain_snow": ExtResource("60_rpot8"),
-"Polygon/Volumes/camera_area": ExtResource("48_mp4qx"),
+"Polygon/Volumes/camera_deny_area": ExtResource("78_76t45"),
 "Polygon/Volumes/water": ExtResource("58_j0wnv"),
 "Props/Gizmos/moving_platform": ExtResource("19_s5833"),
 "Props/Gizmos/rotating_log": ExtResource("57_ojdkd"),

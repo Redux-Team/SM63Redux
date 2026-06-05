@@ -17,6 +17,8 @@ atlas = ExtResource("1_sotey")
 region = Rect2(-3, -3, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Gizmos/spinning_block.tres"
+resource_scene_unique_id = ""
 script = ExtResource("3_j0rw6")
 id = "spinning_block"
 category = 4
@@ -26,9 +28,11 @@ group_path = "Gizmos"
 name_override = "Spinning Block"
 ld_select_tool_override = "block_edit"
 ld_placement_tool_override = "block"
-ld_properties = Array[ExtResource("2_02gsy")]([ExtResource("3_vl6er"), ExtResource("4_81ywn"), ExtResource("5_r2qa1"), ExtResource("6_knbx7"), ExtResource("7_s0rms"), ExtResource("8_47dac")])
 ld_editor_instance = ExtResource("1_81ywn")
 game_instance = ExtResource("1_r2qa1")
 ld_entry_texture = SubResource("AtlasTexture_hmv4i")
+ld_properties = Array[ExtResource("2_02gsy")]([ExtResource("3_vl6er"), ExtResource("4_81ywn"), ExtResource("5_r2qa1"), ExtResource("6_knbx7"), ExtResource("7_s0rms"), ExtResource("8_47dac")])
 ld_object_path = "Props/Gizmos/spinning_block"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -12,6 +12,8 @@ atlas = ExtResource("2_i6k4n")
 region = Rect2(10, 18, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Nature/medium_jungle_tree.tres"
+resource_scene_unique_id = ""
 script = ExtResource("7_2bcej")
 id = "medium_jungle_tree"
 category = 4
@@ -20,8 +22,10 @@ subpath = "Nature/medium_jungle_tree"
 group_path = "Nature"
 name_override = "Medium Jungle Tree"
 ld_index_id = "tree_jungle"
-ld_properties = Array[ExtResource("3_mfwlb")]([ExtResource("4_3okg8"), ExtResource("5_tplu5"), ExtResource("6_xa001")])
 ld_entry_texture = SubResource("AtlasTexture_qjap0")
+ld_properties = Array[ExtResource("3_mfwlb")]([ExtResource("4_3okg8"), ExtResource("5_tplu5"), ExtResource("6_xa001")])
 sprite_texture = ExtResource("2_i6k4n")
 ld_object_path = "Props/Nature/medium_jungle_tree"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

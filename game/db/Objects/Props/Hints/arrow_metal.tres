@@ -12,6 +12,8 @@ atlas = ExtResource("3_i1xkj")
 region = Rect2(-10, -15, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Hints/arrow_metal.tres"
+resource_scene_unique_id = ""
 script = ExtResource("8_0q11g")
 id = "arrow_metal"
 category = 4
@@ -19,8 +21,10 @@ category_string = "Props"
 subpath = "Hints/arrow_metal"
 group_path = "Hints"
 name_override = "Metal Arrow"
-ld_properties = Array[ExtResource("4_j0ux3")]([ExtResource("5_3xtt6"), ExtResource("6_rlbvt"), ExtResource("7_enid8")])
 ld_entry_texture = SubResource("AtlasTexture_423gf")
+ld_properties = Array[ExtResource("4_j0ux3")]([ExtResource("5_3xtt6"), ExtResource("6_rlbvt"), ExtResource("7_enid8")])
 sprite_texture = ExtResource("3_i1xkj")
 ld_object_path = "Props/Hints/arrow_metal"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

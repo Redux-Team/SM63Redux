@@ -12,6 +12,8 @@ atlas = ExtResource("1_qjehh")
 region = Rect2(0, 0, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Polygon/Volumes/water.tres"
+resource_scene_unique_id = ""
 script = ExtResource("2_qjehh")
 id = "water"
 category = 2
@@ -21,9 +23,11 @@ group_path = "Volumes"
 ld_select_tool_override = "polygon_edit"
 ld_placement_tool_override = "polygon"
 ld_placement_rules = 2
-ld_properties = Array[ExtResource("1_0qos6")]([ExtResource("4_7iy10")])
 ld_editor_instance = ExtResource("1_ofgi6")
 game_instance = ExtResource("1_2en0i")
 ld_entry_texture = SubResource("AtlasTexture_ofgi6")
+ld_properties = Array[ExtResource("1_0qos6")]([ExtResource("4_7iy10")])
 ld_object_path = "Polygon/Volumes/water"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

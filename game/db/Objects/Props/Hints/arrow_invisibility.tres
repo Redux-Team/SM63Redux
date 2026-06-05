@@ -12,6 +12,8 @@ atlas = ExtResource("3_4fjkl")
 region = Rect2(-10, -15, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Hints/arrow_invisibility.tres"
+resource_scene_unique_id = ""
 script = ExtResource("8_5jfno")
 id = "arrow_invisibility"
 category = 4
@@ -19,8 +21,10 @@ category_string = "Props"
 subpath = "Hints/arrow_invisibility"
 group_path = "Hints"
 name_override = "Invisibility Arrow"
-ld_properties = Array[ExtResource("4_oyy3c")]([ExtResource("5_dyvyh"), ExtResource("6_goayr"), ExtResource("7_hsaxn")])
 ld_entry_texture = SubResource("AtlasTexture_6pbe7")
+ld_properties = Array[ExtResource("4_oyy3c")]([ExtResource("5_dyvyh"), ExtResource("6_goayr"), ExtResource("7_hsaxn")])
 sprite_texture = ExtResource("3_4fjkl")
 ld_object_path = "Props/Hints/arrow_invisibility"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://dmeenft0pq1ex"]
+
+[ext_resource type="Script" uid="uid://rpjq76ar26xp" path="res://game/object_templates/polygon/level_object_polygon.gd" id="1_r46cm"]
+
+[node name="CameraDenyArea" type="Node2D" unique_id=1724445851 node_paths=PackedStringArray("applied_polygons")]
+texture_repeat = 2
+script = ExtResource("1_r46cm")
+applied_polygons = [NodePath("StaticBody2D/CollisionPolygon2D")]
+metadata/_custom_type_script = "uid://rpjq76ar26xp"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=527070400]
+collision_layer = 4096
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=2012799955]

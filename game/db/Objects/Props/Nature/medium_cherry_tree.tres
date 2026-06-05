@@ -12,6 +12,8 @@ atlas = ExtResource("2_jq3sw")
 region = Rect2(1, 9, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Nature/medium_cherry_tree.tres"
+resource_scene_unique_id = ""
 script = ExtResource("7_5fcfc")
 id = "medium_cherry_tree"
 category = 4
@@ -20,8 +22,10 @@ subpath = "Nature/medium_cherry_tree"
 group_path = "Nature"
 name_override = "Cherry Tree"
 ld_index_id = "tree_cherry"
-ld_properties = Array[ExtResource("3_ibjmv")]([ExtResource("4_8u4rt"), ExtResource("5_j2qs5"), ExtResource("6_all8b")])
 ld_entry_texture = SubResource("AtlasTexture_pvcns")
+ld_properties = Array[ExtResource("3_ibjmv")]([ExtResource("4_8u4rt"), ExtResource("5_j2qs5"), ExtResource("6_all8b")])
 sprite_texture = ExtResource("2_jq3sw")
 ld_object_path = "Props/Nature/medium_cherry_tree"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

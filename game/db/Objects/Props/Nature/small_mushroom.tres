@@ -12,6 +12,8 @@ atlas = ExtResource("3_xxb73")
 region = Rect2(-9, -10, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Nature/small_mushroom.tres"
+resource_scene_unique_id = ""
 script = ExtResource("8_waome")
 id = "small_mushroom"
 category = 4
@@ -20,8 +22,10 @@ subpath = "Nature/small_mushroom"
 group_path = "Nature"
 name_override = "Small Mushroom"
 ld_index_id = "mushroom"
-ld_properties = Array[ExtResource("4_t0m04")]([ExtResource("5_y2f52"), ExtResource("6_4uu0h"), ExtResource("7_50wl4")])
 ld_entry_texture = SubResource("AtlasTexture_xm66a")
+ld_properties = Array[ExtResource("4_t0m04")]([ExtResource("5_y2f52"), ExtResource("6_4uu0h"), ExtResource("7_50wl4")])
 sprite_texture = ExtResource("3_xxb73")
 ld_object_path = "Props/Nature/small_mushroom"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

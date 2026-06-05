@@ -92,18 +92,11 @@ var cam: Camera2D
 
 
 func _ready() -> void:
-	cam = Camera2D.new()
-	cam.zoom = Vector2(1.4, 1.4)
-	cam.position_smoothing_enabled = true
-	cam.position_smoothing_speed = 10
-	cam.ignore_rotation = false
-	cam.rotation_smoothing_enabled = true
-	
-	add_child(cam)
-	
 	var ingame_hud: IngameHUD = preload("uid://deyfsp6xn4e27").instantiate()
 	ingame_hud.bind(self)
 	add_child(ingame_hud)
+	
+	Level.get_camera().anchor_to_object(self)
 
 
 func _process(delta: float) -> void:

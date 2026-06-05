@@ -13,6 +13,8 @@ atlas = ExtResource("1_xxybb")
 region = Rect2(0, 0, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Polygon/Terrain/terrain_snow.tres"
+resource_scene_unique_id = ""
 script = ExtResource("2_xxybb")
 id = "terrain_snow"
 category = 2
@@ -23,9 +25,11 @@ name_override = "Snow"
 ld_select_tool_override = "polygon_edit"
 ld_placement_tool_override = "polygon"
 ld_placement_rules = 2
-ld_properties = Array[ExtResource("1_wrkex")]([ExtResource("5_1narg"), ExtResource("6_swwlr")])
 ld_editor_instance = ExtResource("2_odoqr")
 game_instance = ExtResource("1_odoqr")
 ld_entry_texture = SubResource("AtlasTexture_odoqr")
+ld_properties = Array[ExtResource("1_wrkex")]([ExtResource("5_1narg"), ExtResource("6_swwlr")])
 ld_object_path = "Polygon/Terrain/terrain_snow"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

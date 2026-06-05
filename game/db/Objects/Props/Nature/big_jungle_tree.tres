@@ -12,6 +12,8 @@ atlas = ExtResource("3_cgfvu")
 region = Rect2(8, 17, 48, 48)
 
 [resource]
+resource_path = "res://game/db/Objects/Props/Nature/big_jungle_tree.tres"
+resource_scene_unique_id = ""
 script = ExtResource("8_aphk0")
 id = "big_jungle_tree"
 category = 4
@@ -20,8 +22,10 @@ subpath = "Nature/big_jungle_tree"
 group_path = "Nature"
 name_override = "Big Jungle Tree"
 ld_index_id = "tree_jungle"
-ld_properties = Array[ExtResource("4_nktwh")]([ExtResource("5_wjl16"), ExtResource("6_d4hga"), ExtResource("7_gdpyw")])
 ld_entry_texture = SubResource("AtlasTexture_irnc5")
+ld_properties = Array[ExtResource("4_nktwh")]([ExtResource("5_wjl16"), ExtResource("6_d4hga"), ExtResource("7_gdpyw")])
 sprite_texture = ExtResource("3_cgfvu")
 ld_object_path = "Props/Nature/big_jungle_tree"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
