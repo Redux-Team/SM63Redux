@@ -203,6 +203,7 @@ func set_parallaxing(toggled_on: bool) -> void:
 func set_ghosting(toggled_on: bool) -> void:
 	ghosting_enabled = toggled_on
 	_ghosting_button.set_pressed_no_signal(toggled_on)
+	LD.get_editor_viewport().clear_selection()
 	LD.get_area().refresh_layer_visuals()
 
 
