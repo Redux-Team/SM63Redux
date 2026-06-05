@@ -86,6 +86,7 @@ func spawn_preview(obj: GameObject) -> LDObject:
 	_preview_object.is_preview = true
 	_preview_object.init_properties(obj)
 	LD.get_area().add_object(_preview_object)
+	_preview_object.bind_to_active_layer()
 	return _preview_object
 
 

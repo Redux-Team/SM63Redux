@@ -89,6 +89,12 @@ func place(first: bool = false) -> void:
 			prop._on_first_placement(self, _property_values.get(prop.key, prop.default_value))
 
 
+func bind_to_active_layer() -> void:
+	LDLevel.get_active_area().active_layer_changed.connect(func(index: int) -> void:
+		LD.get_area().move_object_to_layer(self, index)
+	, CONNECT_REFERENCE_COUNTED)
+
+
 func init_properties(obj: GameObject) -> void:
 	source_object_id = obj.id
 	_properties = obj.ld_properties

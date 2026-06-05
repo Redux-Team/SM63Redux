@@ -133,6 +133,7 @@ func _spawn_cursor(obj: GameObject) -> void:
 	_preview_cursor = obj.get_editor_instance()
 	_preview_cursor.is_preview = true
 	_preview_cursor.init_properties(obj)
+	_preview_cursor.bind_to_active_layer()
 	LD.get_area().add_object(_preview_cursor)
 
 
