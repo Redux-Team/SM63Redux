@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dgvhq23sr5a3p" path="res://level_designer/components/ui/ui.gd" id="1_8w51u"]
 [ext_resource type="PackedScene" uid="uid://bbf6gei1bmu46" path="res://level_designer/components/ui/window/window.tscn" id="2_ms7r3"]
+[ext_resource type="Script" uid="uid://bwfxvh2hi1jdb" path="res://level_designer/components/ui/hotbar_button/hotbar_button.gd" id="2_sdhrq"]
 [ext_resource type="PackedScene" uid="uid://bk2iromqs3siv" path="res://level_designer/components/ui/object_browser/object_browser.tscn" id="3_ms7r3"]
 [ext_resource type="PackedScene" uid="uid://wfkq6ce52aet" path="res://level_designer/components/ui/object_properties/object_properties.tscn" id="4_4nlpt"]
 [ext_resource type="PackedScene" uid="uid://ckffdp04tglj1" path="res://level_designer/components/ui/layer_properties/layer_properties.tscn" id="5_uannl"]
@@ -127,7 +128,7 @@ keycode = 4194324
 [sub_resource type="Shortcut" id="Shortcut_y8t77"]
 events = [SubResource("InputEventKey_8p5vc")]
 
-[node name="UI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window", "_layer_properties_window", "_save_file_dialog", "_load_file_dialog", "_reset_level_dialog", "_layer_down", "_layer_num", "_layer_up", "_parallaxing_button", "_ghosting_button")]
+[node name="UI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window", "_layer_properties_window", "_save_file_dialog", "_load_file_dialog", "_reset_level_dialog", "_layer_num", "_parallaxing_button", "_ghosting_button", "_hotbar_buttons")]
 script = ExtResource("1_8w51u")
 _canvas_layer = NodePath("ViewportUI")
 _obj_browser_window = NodePath("WindowLayer/ObjectBrowserWindow")
@@ -136,11 +137,10 @@ _layer_properties_window = NodePath("WindowLayer/LayerPropertiesWindow")
 _save_file_dialog = NodePath("WindowLayer/SaveFileDialog")
 _load_file_dialog = NodePath("WindowLayer/LoadFileDialog")
 _reset_level_dialog = NodePath("WindowLayer/ResetLevelDialog")
-_layer_down = NodePath("ViewportUI/VBoxContainer/HBoxContainer/LayerDown")
 _layer_num = NodePath("ViewportUI/VBoxContainer/HBoxContainer/LayerNum")
-_layer_up = NodePath("ViewportUI/VBoxContainer/HBoxContainer/LayerUp")
 _parallaxing_button = NodePath("ViewportUI/VBoxContainer/ParallaxingButton")
 _ghosting_button = NodePath("ViewportUI/VBoxContainer/GhostingButton")
+_hotbar_buttons = [NodePath("ViewportUI/HBoxContainer/HotbarButton"), NodePath("ViewportUI/HBoxContainer/HotbarButton2"), NodePath("ViewportUI/HBoxContainer/HotbarButton3"), NodePath("ViewportUI/HBoxContainer/HotbarButton4"), NodePath("ViewportUI/HBoxContainer/HotbarButton5"), NodePath("ViewportUI/HBoxContainer/HotbarButton6")]
 
 [node name="ViewportUI" type="CanvasLayer" parent="." unique_id=1904926983]
 layer = 2
@@ -382,6 +382,64 @@ text = "Test (Client)"
 layout_mode = 2
 focus_mode = 0
 text = "Test Level"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ViewportUI" unique_id=245638557]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -20.0
+offset_right = 16.0
+offset_bottom = -12.0
+grow_vertical = 0
+
+[node name="HotbarButton" type="Button" parent="ViewportUI/HBoxContainer" unique_id=1118662531]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+expand_icon = true
+script = ExtResource("2_sdhrq")
+
+[node name="HotbarButton2" type="Button" parent="ViewportUI/HBoxContainer" unique_id=1875689471]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+expand_icon = true
+script = ExtResource("2_sdhrq")
+
+[node name="HotbarButton3" type="Button" parent="ViewportUI/HBoxContainer" unique_id=920297160]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+expand_icon = true
+script = ExtResource("2_sdhrq")
+
+[node name="HotbarButton4" type="Button" parent="ViewportUI/HBoxContainer" unique_id=1179526136]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+expand_icon = true
+script = ExtResource("2_sdhrq")
+
+[node name="HotbarButton5" type="Button" parent="ViewportUI/HBoxContainer" unique_id=1695555152]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+expand_icon = true
+script = ExtResource("2_sdhrq")
+
+[node name="HotbarButton6" type="Button" parent="ViewportUI/HBoxContainer" unique_id=226246494]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+expand_icon = true
+script = ExtResource("2_sdhrq")
 
 [node name="WindowLayer" type="CanvasLayer" parent="." unique_id=783443360]
 layer = 3

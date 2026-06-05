@@ -12,11 +12,11 @@ extends LDComponent
 @export var _load_file_dialog: FileDialog
 @export var _reset_level_dialog: ConfirmationDialog
 @export_group("Layer")
-@export var _layer_down: Button
 @export var _layer_num: Label
-@export var _layer_up: Button
 @export var _parallaxing_button: Button
 @export var _ghosting_button: Button
+@export var _hotbar_buttons: Array[LDHotbarButton]
+var _pending_hotbar_button: LDHotbarButton = null
 
 
 var parallaxing_enabled: bool = false
@@ -35,9 +35,10 @@ func _on_ready() -> void:
 	browser.category_changed.connect(func(n: String) -> void:
 		_obj_browser_window.title = "Objects - " + (n if n else "All")
 	)
-	browser.hide_request.connect(func() -> void:
-		_obj_browser_window.popout()
-	)
+	browser.hide_request.connect(_on_browser_hide_request)
+	
+	for button: LDHotbarButton in _hotbar_buttons:
+		button.new_object_request.connect(_on_hotbar_new_object_request)
 	
 	_save_file_dialog.filters = PackedStringArray([
 		"*.63r.lvl;63 Redux Level",
@@ -47,6 +48,7 @@ func _on_ready() -> void:
 		"*.63r.lvl;63 Redux Level",
 		"*.json;JSON Level"
 	])
+
 
 
 func _on_input(_event: InputEvent) -> void:
@@ -229,6 +231,24 @@ func _on_paste_button_pressed() -> void:
 
 func _on_duplicate_button_pressed() -> void:
 	LD.get_clipboard_handler().duplicate_objects()
+
+
+func _on_hotbar_new_object_request(button: LDHotbarButton) -> void:
+	_pending_hotbar_button = button
+	_toggle_window(_obj_browser_window)
+
+
+func _on_browser_hide_request() -> void:
+	_obj_browser_window.popout()
+	
+	if not _pending_hotbar_button:
+		return
+	
+	var selected: GameObject = LD.get_object_handler().get_selected_object()
+	if selected:
+		_pending_hotbar_button.assign_object(selected)
+	
+	_pending_hotbar_button = null
 
 
 func _on_layer_down_pressed() -> void:

@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://nvsgd7igx3yw"]
+
+[ext_resource type="Script" uid="uid://bwfxvh2hi1jdb" path="res://level_designer/components/ui/hotbar_button/hotbar_button.gd" id="1_qlvxj"]
+
+[node name="HotbarButton" type="Button" unique_id=1358091743]
+custom_minimum_size = Vector2(30, 30)
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("1_qlvxj")
