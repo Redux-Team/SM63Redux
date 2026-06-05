@@ -107,6 +107,17 @@ unicode = 100
 [sub_resource type="Shortcut" id="Shortcut_uannl"]
 events = [SubResource("InputEventKey_kp1nf")]
 
+[sub_resource type="InputEventKey" id="InputEventKey_bt7vf"]
+device = -1
+keycode = 4194312
+
+[sub_resource type="InputEventKey" id="InputEventKey_bntcf"]
+device = -1
+keycode = 4194308
+
+[sub_resource type="Shortcut" id="Shortcut_d84u2"]
+events = [SubResource("InputEventKey_bt7vf"), SubResource("InputEventKey_bntcf")]
+
 [sub_resource type="InputEventKey" id="InputEventKey_n78f0"]
 device = -1
 keycode = 4194305
@@ -302,7 +313,7 @@ text = "Duplicate"
 [node name="DeleteButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1153339096]
 layout_mode = 2
 focus_mode = 0
-shortcut = SubResource("Shortcut_lff0g")
+shortcut = SubResource("Shortcut_d84u2")
 text = "Delete"
 
 [node name="DeselectButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=382669193]
