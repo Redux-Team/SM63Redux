@@ -38,6 +38,10 @@ func _on_viewport_input(event: InputEvent) -> void:
 	_widget.on_input(event)
 
 
+func wants_overlay() -> bool:
+	return true
+
+
 func draw_overlay(draw_node: CanvasItem) -> void:
 	if not is_active():
 		return
