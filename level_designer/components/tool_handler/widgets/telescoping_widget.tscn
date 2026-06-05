@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://7dd3ek12qxdr"]
+
+[ext_resource type="Script" uid="uid://b3ehi1h054nr4" path="res://level_designer/components/tool_handler/widgets/telescoping_widget.gd" id="1_rwo7j"]
+
+[node name="TelescopingWidget" type="Control" unique_id=1832040969 node_paths=PackedStringArray("point_a", "point_b")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_rwo7j")
+point_a = NodePath("PointA")
+point_b = NodePath("PointB")
+
+[node name="PointA" type="Button" parent="." unique_id=1245101449]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PointB" type="Button" parent="." unique_id=901104698]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2

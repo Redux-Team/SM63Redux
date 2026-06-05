@@ -171,7 +171,7 @@ enum CollisionAnchor {
 func _get_ignored_properties() -> PackedStringArray:
 	return [
 		"name_override", "ld_index_id", "ld_indexable",
-		"ld_select_tool", "ld_placement_tool", "ld_placement_rules", "ld_flags",
+		"ld_select_tool_override", "ld_placement_tool_override", "ld_placement_rules", "ld_flags",
 		"ld_properties", "ld_editor_instance", "game_instance", "ld_entry_texture",
 		"object_type",
 		"game_multiplayer_spawnable",
@@ -267,6 +267,27 @@ static func get_category_value(cat_name: String) -> ObjectCategory:
 		"PROPS": return ObjectCategory.PROPS
 		"TRIGGERS": return ObjectCategory.TRIGGER
 	return ObjectCategory.ALL
+
+
+func get_placement_tool() -> String:
+	if not ld_placement_tool_override.is_empty():
+		return ld_placement_tool_override
+	
+	match object_type:
+		ObjectType.TELESCOPING: return "telescoping"
+		ObjectType.TEXTURED_PATH: return "path"
+	return ""
+
+
+func get_select_tool() -> String:
+	if not ld_select_tool_override.is_empty():
+		return ld_select_tool_override
+	
+	match object_type:
+		ObjectType.TELESCOPING: return "telescoping_edit"
+		ObjectType.TEXTURED_PATH: return "path_edit"
+	return ""
+
 
 
 func has_property(key: StringName) -> bool:

@@ -90,8 +90,8 @@ func _on_object_changed(obj: GameObject) -> void:
 		_preview_cursor = null
 	_clear_stroke()
 	
-	if obj and obj.ld_placement_tool_override:
-		get_tool_handler().select_tool(obj.ld_placement_tool_override)
+	if obj and obj.get_placement_tool():
+		get_tool_handler().select_tool(obj.get_placement_tool())
 		return
 	
 	_cache_stamp_size(obj)

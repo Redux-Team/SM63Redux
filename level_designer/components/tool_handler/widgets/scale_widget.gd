@@ -48,6 +48,7 @@ var _drag_start_half_size: Vector2 = Vector2.ZERO
 var _last_click_time: float = 0.0
 var _hovered_handle: int = -1
 var _baseline_scales: Array[Vector2] = []
+var _pending_object_drag: bool = false
 
 
 func _on_activate() -> void:
@@ -85,6 +86,15 @@ func _on_input(event: InputEvent) -> void:
 	
 	if event is InputEventMouseMotion:
 		var mouse_pos: Vector2 = get_screen_mouse_pos()
+		
+		if _pending_object_drag:
+			_pending_object_drag = false
+			var move_tool: LDToolMove = _get_move_tool()
+			if move_tool and move_tool.try_begin_drag(mouse_pos, _bound_objects):
+				move_tool.return_tool = "scale"
+				select_tool("move")
+			return
+		
 		if _is_dragging:
 			_did_drag = true
 			var delta: Vector2 = mouse_pos - _drag_start_mouse
@@ -92,7 +102,7 @@ func _on_input(event: InputEvent) -> void:
 			for i: int in _bound_objects.size():
 				var obj: LDObject = _bound_objects.get(i)
 				var start_scale: Vector2 = _drag_start_scales.get(i)
-				var new_scale: Vector2 = (start_scale * scale_multiplier)
+				var new_scale: Vector2 = start_scale * scale_multiplier
 				
 				var prop: Variant = obj.get_ld_property(&"scale")
 				if prop != null:
@@ -106,7 +116,6 @@ func _on_input(event: InputEvent) -> void:
 				if not SCALE_FROM_CENTER:
 					var dir: Vector2 = _get_handle_direction(_active_handle)
 					var anchor: Vector2 = _drag_anchor_positions.get(i)
-					print(new_scale)
 					obj.set_property(&"position", anchor + dir * _get_object_base_half_size(obj) * new_scale)
 			_sync_panel()
 		else:
@@ -114,10 +123,13 @@ func _on_input(event: InputEvent) -> void:
 			_hovered_handle = _get_handle_at(mouse_pos, center, half)
 			if _hovered_handle != prev:
 				_update_button_states()
+			_update_cursor(center, half)
 	
 	if event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
 		var mb: InputEventMouseButton = event as InputEventMouseButton
 		if mb.pressed:
+			if get_ld_viewport().is_panning():
+				return
 			var hit: int = _get_handle_at(get_screen_mouse_pos(), center, half)
 			if hit >= 0:
 				_is_dragging = true
@@ -139,6 +151,8 @@ func _on_input(event: InputEvent) -> void:
 					_drag_anchor_positions.append(start_pos - dir * _get_object_base_half_size(obj) * start_scale)
 				_hovered_handle = -1
 				_update_button_states()
+			elif _is_mouse_inside_rect(center, half):
+				_pending_object_drag = true
 			else:
 				select_tool("select")
 		else:
@@ -153,6 +167,44 @@ func _on_input(event: InputEvent) -> void:
 				_is_dragging = false
 				_did_drag = false
 				_update_button_states()
+			_pending_object_drag = false
+
+
+func _update_cursor(center: Vector2, half: Vector2) -> void:
+	if _is_dragging:
+		_tool.set_cursor_shape(_get_handle_cursor(_active_handle as int))
+		return
+	if _hovered_handle >= 0:
+		_tool.set_cursor_shape(_get_handle_cursor(_hovered_handle))
+		return
+	if _is_mouse_inside_rect(center, half):
+		_tool.set_cursor_shape(Control.CURSOR_MOVE)
+		return
+	_tool.set_cursor_shape(Control.CURSOR_ARROW)
+
+
+func _get_handle_cursor(handle: int) -> Control.CursorShape:
+	match handle:
+		HandleIndex.TOP_LEFT, HandleIndex.BOTTOM_RIGHT:
+			return Control.CURSOR_FDIAGSIZE
+		HandleIndex.TOP_RIGHT, HandleIndex.BOTTOM_LEFT:
+			return Control.CURSOR_BDIAGSIZE
+		HandleIndex.TOP, HandleIndex.BOTTOM:
+			return Control.CURSOR_VSIZE
+		HandleIndex.LEFT, HandleIndex.RIGHT:
+			return Control.CURSOR_HSIZE
+	return Control.CURSOR_ARROW
+
+
+func _is_mouse_inside_rect(center: Vector2, half: Vector2) -> bool:
+	var mouse: Vector2 = get_screen_mouse_pos()
+	return Rect2(center - half, half * 2.0).has_point(mouse)
+
+
+func _get_move_tool() -> LDToolMove:
+	return _tool.get_tool_handler().get_tool_list().filter(func(t: LDTool) -> bool:
+		return t is LDToolMove
+	).front() as LDToolMove
 
 
 func draw_overlay(_draw_node: CanvasItem) -> void:

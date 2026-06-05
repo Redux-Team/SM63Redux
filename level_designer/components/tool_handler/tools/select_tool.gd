@@ -50,9 +50,9 @@ func _on_viewport_input(event: InputEvent) -> void:
 			var clicked: LDObject = _get_object_at(mouse_pos)
 			if clicked:
 				var game_object: GameObject = GameDB.get_db().find_game_object(clicked.source_object_id)
-				if game_object.ld_select_tool_override:
+				if game_object.get_select_tool():
 					viewport.set_selected_objects([clicked])
-					get_tool_handler().select_tool(game_object.ld_select_tool_override)
+					get_tool_handler().select_tool(game_object.get_select_tool())
 					return
 			
 			_is_box_selecting = true
