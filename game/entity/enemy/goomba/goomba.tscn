@@ -28,6 +28,7 @@
 [ext_resource type="AudioStream" uid="uid://dq4csxy68lb4q" path="res://assets/sfx/entity/goomba/goomba_struck.wav" id="15_lgdot"]
 [ext_resource type="Texture2D" uid="uid://djcybawlcos34" path="res://assets/textures/entity/enemy/goomba/goomba_hit.png" id="20_4grvk"]
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="26_15o45"]
+[ext_resource type="Script" uid="uid://dnsd2a8oriy3" path="res://util/entity/forcebox.gd" id="26_a7n3c"]
 [ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="29_rakc8"]
 
 [sub_resource type="Resource" id="Resource_eqg5w"]
@@ -97,7 +98,7 @@ metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 atlas = ExtResource("3_hysx3")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_rakc8"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_a7n3c"]
 diffuse_texture = SubResource("AtlasTexture_n0olq")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kyaey"]
@@ -297,6 +298,13 @@ metadata/_custom_type_script = "uid://drtqc6at2evph"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_whnfo"]
 size = Vector2(21.5, 14)
 
+[sub_resource type="Curve" id="Curve_a7n3c"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a7n3c"]
+size = Vector2(14, 15)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_42vey"]
 size = Vector2(16, 16)
 
@@ -394,11 +402,11 @@ __editor_uuid = &"5f76de65-09f3-4b6f-9847-15c247ae70f1"
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(0, -7)
-texture = SubResource("CanvasTexture_rakc8")
+texture = SubResource("CanvasTexture_a7n3c")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("4_whnfo")
-canvas_texture = SubResource("CanvasTexture_rakc8")
+canvas_texture = SubResource("CanvasTexture_a7n3c")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true
@@ -410,6 +418,7 @@ playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=757983848]
+visible = false
 position = Vector2(-0.5, 1.5)
 shape = SubResource("RectangleShape2D_hysx3")
 
@@ -488,7 +497,19 @@ position = Vector2(-0.25, -3)
 shape = SubResource("RectangleShape2D_whnfo")
 debug_color = Color(0.7, 0.66499996, 0, 0.41960785)
 
+[node name="ForceBox" type="Area2D" parent="." unique_id=511850477]
+script = ExtResource("26_a7n3c")
+force_ids = Array[String](["goomba"])
+axis_restriction = 1
+force_curve = SubResource("Curve_a7n3c")
+metadata/_custom_type_script = "uid://dnsd2a8oriy3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ForceBox" unique_id=1592173543]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_a7n3c")
+
 [node name="WaterCheckArea" type="Area2D" parent="." unique_id=1160325996]
+visible = false
 script = ExtResource("29_rakc8")
 metadata/_custom_type_script = "uid://bhoysiia8munh"
 

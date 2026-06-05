@@ -28,12 +28,13 @@
 [ext_resource type="Script" uid="uid://deiaa5u8esvnc" path="res://addons/redux_dev/components/state_machine/state_sfx_entry.gd" id="17_i3vhm"]
 [ext_resource type="Script" uid="uid://cf0fqotw8gu4p" path="res://core/custom_nodes/2d/entity_check_area.gd" id="20_b1y5l"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="21_qgp4f"]
+[ext_resource type="Script" uid="uid://dnsd2a8oriy3" path="res://util/entity/forcebox.gd" id="27_bwx7d"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3hxvc"]
 atlas = ExtResource("3_e1qem")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_dbaom"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_pchd4"]
 diffuse_texture = SubResource("AtlasTexture_3hxvc")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6u4ql"]
@@ -299,6 +300,13 @@ size = Vector2(24, 24)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gthq1"]
 size = Vector2(18, 18)
 
+[sub_resource type="Curve" id="Curve_1ojbg"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xao4g"]
+size = Vector2(14, 15)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m5an3"]
 size = Vector2(18, 16)
 
@@ -332,11 +340,11 @@ ExtResource("3_dbaom"): 1
 water_check = NodePath("WaterCheckBody")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=2130051420 node_paths=PackedStringArray("rotation_source")]
-texture = SubResource("CanvasTexture_dbaom")
+texture = SubResource("CanvasTexture_pchd4")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("2_f2p2u")
-canvas_texture = SubResource("CanvasTexture_dbaom")
+canvas_texture = SubResource("CanvasTexture_pchd4")
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6u4ql")
@@ -494,6 +502,17 @@ metadata/_custom_type_script = "uid://c103bnb5445y3"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=2136385049]
 shape = SubResource("RectangleShape2D_gthq1")
 debug_color = Color(0.7, 0, 0, 0.41960785)
+
+[node name="ForceBox" type="Area2D" parent="." unique_id=1932519449]
+script = ExtResource("27_bwx7d")
+force_ids = Array[String](["cheep_cheep"])
+axis_restriction = 1
+force_curve = SubResource("Curve_1ojbg")
+metadata/_custom_type_script = "uid://dnsd2a8oriy3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ForceBox" unique_id=971307710]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_xao4g")
 
 [node name="WaterCheckBody" type="Area2D" parent="." unique_id=1708795813]
 script = ExtResource("16_f1ga4")

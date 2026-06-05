@@ -15,7 +15,7 @@
 atlas = ExtResource("2_g53pw")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_n66mx"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_xyq51"]
 diffuse_texture = SubResource("AtlasTexture_0apuc")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2yeke"]
@@ -93,7 +93,7 @@ size = Vector2(8, 12)
 radius = 9.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rwt43"]
-size = Vector2(16, 9)
+size = Vector2(10, 8)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iob6u"]
 resource_local_to_scene = true
@@ -101,6 +101,7 @@ size = Vector2(16, 17)
 
 [node name="KoopaShell" type="CharacterBody2D" unique_id=77586061 node_paths=PackedStringArray("audio_stream_player_2d", "hurt_box_r", "sprite", "components_root", "water_check")]
 collision_mask = 514
+floor_block_on_wall = false
 script = ExtResource("1_0swk3")
 audio_stream_player_2d = NodePath("AudioStreamPlayer2D")
 hurt_box_r = NodePath("HurtBoxR")
@@ -109,11 +110,11 @@ components_root = NodePath("Components")
 water_check = NodePath("WaterCheckArea")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1157867726]
-texture = SubResource("CanvasTexture_n66mx")
+texture = SubResource("CanvasTexture_xyq51")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("3_ij2to")
-canvas_texture = SubResource("CanvasTexture_n66mx")
+canvas_texture = SubResource("CanvasTexture_xyq51")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_4agb1")
 current_animation = "spin"
@@ -168,7 +169,7 @@ shape = SubResource("CircleShape2D_xyq51")
 debug_color = Color(0.7, 0, 0, 0.41960785)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=741987522]
-position = Vector2(0, 4.5)
+position = Vector2(0, 4)
 shape = SubResource("RectangleShape2D_rwt43")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1895132324]
@@ -176,6 +177,7 @@ stream = ExtResource("8_hhtj8")
 volume_db = 5.0
 
 [node name="WaterCheckArea" type="Area2D" parent="." unique_id=410355434]
+visible = false
 script = ExtResource("10_xyq51")
 metadata/_custom_type_script = "uid://bhoysiia8munh"
 

@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="12_200vj"]
 [ext_resource type="Script" uid="uid://3y7t4ymugnxu" path="res://addons/redux_dev/components/state_machine/state_transition.gd" id="13_i2i30"]
 [ext_resource type="Script" uid="uid://bd8l4ri83uu5a" path="res://game/entity/enemy/_shared/states/patrol.gd" id="14_qw5am"]
+[ext_resource type="Script" uid="uid://dnsd2a8oriy3" path="res://util/entity/forcebox.gd" id="16_glled"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="17_gjan8"]
 [ext_resource type="AudioStream" uid="uid://334xwjirxlct" path="res://assets/sfx/entity/bobomb/fuse.wav" id="19_i2i30"]
 [ext_resource type="Script" uid="uid://w00kyf4l0eer" path="res://game/entity/enemy/bobomb/states/chase.gd" id="19_na7jb"]
@@ -34,7 +35,7 @@
 atlas = ExtResource("3_x8m5v")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_ekeht"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_rfasj"]
 diffuse_texture = SubResource("AtlasTexture_ap0j0")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a0onm"]
@@ -113,7 +114,7 @@ animations = [{
 atlas = ExtResource("6_6sje6")
 region = Rect2(0, 0, 4, 4)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_glled"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_7dm06"]
 diffuse_texture = SubResource("AtlasTexture_jixoj")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nwfm8"]
@@ -157,7 +158,7 @@ animations = [{
 atlas = ExtResource("6_4fxtu")
 region = Rect2(0, 0, 6, 10)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_rfasj"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_qlrxm"]
 diffuse_texture = SubResource("AtlasTexture_6akqm")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_swvkj"]
@@ -356,6 +357,13 @@ point_count = 2
 [sub_resource type="CircleShape2D" id="CircleShape2D_swfb0"]
 radius = 31.0
 
+[sub_resource type="Curve" id="Curve_sr4dc"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5pxke"]
+size = Vector2(14, 15)
+
 [sub_resource type="Resource" id="Resource_p1pya"]
 resource_local_to_scene = true
 script = ExtResource("13_i2i30")
@@ -453,11 +461,11 @@ water_check = NodePath("WaterCheckArea")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1859430176 node_paths=PackedStringArray("subsprites")]
 position = Vector2(0, -6)
-texture = SubResource("CanvasTexture_ekeht")
+texture = SubResource("CanvasTexture_rfasj")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("17_gjan8")
-canvas_texture = SubResource("CanvasTexture_ekeht")
+canvas_texture = SubResource("CanvasTexture_rfasj")
 flip_with_velocity = false
 subsprites = [NodePath("Offset/Fuse"), NodePath("Offset/Key")]
 animated = true
@@ -473,11 +481,11 @@ metadata/_edit_lock_ = true
 
 [node name="Fuse" type="Sprite2D" parent="Sprite/Offset" unique_id=1770779985]
 position = Vector2(0, -4)
-texture = SubResource("CanvasTexture_glled")
+texture = SubResource("CanvasTexture_7dm06")
 region_enabled = true
 region_rect = Rect2(0, 0, 4, 4)
 script = ExtResource("17_gjan8")
-canvas_texture = SubResource("CanvasTexture_glled")
+canvas_texture = SubResource("CanvasTexture_7dm06")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_jixoj")
 current_animation = "default"
@@ -488,11 +496,11 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="Key" type="Sprite2D" parent="Sprite/Offset" unique_id=990773306]
 position = Vector2(-11, 7)
-texture = SubResource("CanvasTexture_rfasj")
+texture = SubResource("CanvasTexture_qlrxm")
 region_enabled = true
 region_rect = Rect2(0, 0, 6, 10)
 script = ExtResource("17_gjan8")
-canvas_texture = SubResource("CanvasTexture_rfasj")
+canvas_texture = SubResource("CanvasTexture_qlrxm")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_7nkl5")
 current_animation = "spin"
@@ -588,6 +596,17 @@ metadata/_custom_type_script = "uid://c103bnb5445y3"
 shape = SubResource("CircleShape2D_swfb0")
 disabled = true
 debug_color = Color(0.7, 0, 0, 0.41960785)
+
+[node name="ForceBox" type="Area2D" parent="." unique_id=639508145]
+script = ExtResource("16_glled")
+force_ids = Array[String](["bobomb"])
+axis_restriction = 1
+force_curve = SubResource("Curve_sr4dc")
+metadata/_custom_type_script = "uid://dnsd2a8oriy3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ForceBox" unique_id=497794903]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_5pxke")
 
 [node name="StateMachine" type="Node" parent="." unique_id=1758739681 node_paths=PackedStringArray("initial_state", "sprite", "sfx_root", "__states")]
 script = ExtResource("2_wyvl3")
