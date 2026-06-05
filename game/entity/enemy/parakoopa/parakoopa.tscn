@@ -165,6 +165,7 @@ shape = SubResource("RectangleShape2D_rqgyx")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=744182286]
 stream = ExtResource("10_fbhtv")
+bus = &"SFX"
 
 [node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("initial_state", "sprite", "sfx_root", "__states")]
 script = ExtResource("11_vpirj")

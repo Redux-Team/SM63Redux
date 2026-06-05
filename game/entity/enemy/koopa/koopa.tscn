@@ -20,7 +20,7 @@
 atlas = ExtResource("3_4tjfc")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_lhbc1"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_dk1mx"]
 diffuse_texture = SubResource("AtlasTexture_0apuc")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2yeke"]
@@ -163,11 +163,11 @@ components_root = NodePath("Components")
 water_check = NodePath("WaterCheckArea")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=858682115]
-texture = SubResource("CanvasTexture_lhbc1")
+texture = SubResource("CanvasTexture_dk1mx")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("2_p4wri")
-canvas_texture = SubResource("CanvasTexture_lhbc1")
+canvas_texture = SubResource("CanvasTexture_dk1mx")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_4tjfc")
 current_animation = "default"
@@ -222,6 +222,7 @@ shape = SubResource("RectangleShape2D_rqgyx")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=744182286]
 stream = ExtResource("9_xhq40")
+bus = &"SFX"
 
 [node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("initial_state", "sprite", "sfx_root", "__states")]
 script = ExtResource("11_ot2q4")
