@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://bmbxmtxdvm3xj" path="res://assets/textures/props/hints/snowy_arrow_sign_ld.png" id="3_cejya"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_id1hn"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_kbebu"]
+[ext_resource type="Script" uid="uid://di3amfykmckcb" path="res://game/db/Properties/rotation.gd" id="6_cejya"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_tuw5m"]
-[ext_resource type="Resource" uid="uid://d2h3b48dglc0v" path="res://game/db/Properties/arrow_sign/arrow_rotation.tres" id="7_l5jpw"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="8_lbkpn"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="9_c4gag"]
 
@@ -14,16 +14,30 @@
 atlas = ExtResource("3_cejya")
 region = Rect2(-4, -3, 48, 48)
 
+[sub_resource type="Resource" id="Resource_jvqy7"]
+script = ExtResource("6_cejya")
+rotation_owner = &"rotation"
+key = &"rotation:arrow"
+label = "Rotation"
+type = 2
+default_value = 0.0
+visible_in_editor = false
+metadata/_custom_type_script = "uid://di3amfykmckcb"
+
 [resource]
+resource_path = "res://game/db/Objects/Props/Hints/snowy_arrow_sign.tres"
+resource_scene_unique_id = ""
 script = ExtResource("9_c4gag")
 id = "snowy_arrow_sign"
 category = 4
 category_string = "Props"
 subpath = "Hints/snowy_arrow_sign"
 group_path = "Hints"
-ld_properties = Array[ExtResource("4_id1hn")]([ExtResource("5_kbebu"), ExtResource("6_tuw5m"), ExtResource("7_l5jpw"), ExtResource("8_lbkpn")])
 ld_editor_instance = ExtResource("2_cejya")
 game_instance = ExtResource("1_cejya")
 ld_entry_texture = SubResource("AtlasTexture_p7uv7")
+ld_properties = Array[ExtResource("4_id1hn")]([ExtResource("5_kbebu"), SubResource("Resource_jvqy7"), ExtResource("6_tuw5m"), ExtResource("8_lbkpn")])
 ld_object_path = "Props/Hints/snowy_arrow_sign"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

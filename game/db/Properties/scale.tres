@@ -8,4 +8,5 @@ key = &"scale"
 label = "Scale"
 type = 4
 default_value = Vector2(1, 1)
+visible_in_editor = false
 metadata/_custom_type_script = "uid://o5m0xxdfdd40"
