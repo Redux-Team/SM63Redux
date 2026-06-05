@@ -12,7 +12,9 @@ extends LDComponent
 @export var _load_file_dialog: FileDialog
 @export var _reset_level_dialog: ConfirmationDialog
 @export_group("Layer")
-@export var _layer_spin_box: SpinBox
+@export var _layer_down: Button
+@export var _layer_num: Label
+@export var _layer_up: Button
 @export var _parallaxing_button: Button
 @export var _ghosting_button: Button
 
@@ -28,7 +30,7 @@ var viewport: LDViewport:
 func _on_ready() -> void:
 	var browser: LDObjectBrowser = _obj_browser_window.get_content_ref() as LDObjectBrowser
 	
-	_layer_spin_box.value = LD.get_area().get_active_layer_index()
+	_layer_num.text = str(LD.get_area().get_active_layer_index())
 	
 	browser.category_changed.connect(func(n: String) -> void:
 		_obj_browser_window.title = "Objects - " + (n if n else "All")
@@ -183,14 +185,6 @@ func _on_move_to_back_button_pressed() -> void:
 		obj.get_parent().move_child(obj, 0)
 
 
-func _on_layer_spin_box_value_changed(value: float) -> void:
-	LD.get_area().set_active_layer(int(value))
-	
-	if viewport.get_selected_objects().size() > 0:
-		var selection: Array[LDObject] = viewport.get_selected_objects()
-		LD.get_area().move_objects_to_layer(selection, int(value))
-
-
 func set_parallaxing(toggled_on: bool) -> void:
 	parallaxing_enabled = toggled_on
 	_parallaxing_button.set_pressed_no_signal(toggled_on)
@@ -235,3 +229,24 @@ func _on_paste_button_pressed() -> void:
 
 func _on_duplicate_button_pressed() -> void:
 	LD.get_clipboard_handler().duplicate_objects()
+
+
+func _on_layer_down_pressed() -> void:
+	_set_layer(-1, true)
+
+
+func _on_layer_up_pressed() -> void:
+	_set_layer(1, true)
+
+
+func _set_layer(index: int, increment: bool = false) -> void:
+	if increment:
+		LD.get_area().set_active_layer(LD.get_area().get_active_layer_index() + index)
+	else:
+		LD.get_area().set_active_layer(index)
+	
+	if viewport.get_selected_objects().size() > 0:
+		var selection: Array[LDObject] = viewport.get_selected_objects()
+		LD.get_area().move_objects_to_layer(selection, index)
+	
+	_layer_num.text = str(LD.get_area().get_active_layer_index())

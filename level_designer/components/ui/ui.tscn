@@ -127,7 +127,7 @@ keycode = 4194324
 [sub_resource type="Shortcut" id="Shortcut_y8t77"]
 events = [SubResource("InputEventKey_8p5vc")]
 
-[node name="UI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window", "_layer_properties_window", "_save_file_dialog", "_load_file_dialog", "_reset_level_dialog", "_layer_spin_box", "_parallaxing_button", "_ghosting_button")]
+[node name="UI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window", "_layer_properties_window", "_save_file_dialog", "_load_file_dialog", "_reset_level_dialog", "_layer_down", "_layer_num", "_layer_up", "_parallaxing_button", "_ghosting_button")]
 script = ExtResource("1_8w51u")
 _canvas_layer = NodePath("ViewportUI")
 _obj_browser_window = NodePath("WindowLayer/ObjectBrowserWindow")
@@ -136,7 +136,9 @@ _layer_properties_window = NodePath("WindowLayer/LayerPropertiesWindow")
 _save_file_dialog = NodePath("WindowLayer/SaveFileDialog")
 _load_file_dialog = NodePath("WindowLayer/LoadFileDialog")
 _reset_level_dialog = NodePath("WindowLayer/ResetLevelDialog")
-_layer_spin_box = NodePath("ViewportUI/VBoxContainer/LayerSpinBox")
+_layer_down = NodePath("ViewportUI/VBoxContainer/HBoxContainer/LayerDown")
+_layer_num = NodePath("ViewportUI/VBoxContainer/HBoxContainer/LayerNum")
+_layer_up = NodePath("ViewportUI/VBoxContainer/HBoxContainer/LayerUp")
 _parallaxing_button = NodePath("ViewportUI/VBoxContainer/ParallaxingButton")
 _ghosting_button = NodePath("ViewportUI/VBoxContainer/GhostingButton")
 
@@ -148,6 +150,7 @@ offset_left = 8.0
 offset_top = 8.0
 offset_right = 123.0
 offset_bottom = 62.0
+mouse_filter = 2
 
 [node name="ObjectBrowserButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=1541290733]
 layout_mode = 2
@@ -167,12 +170,26 @@ text = "Properties"
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="LayerSpinBox" type="SpinBox" parent="ViewportUI/VBoxContainer" unique_id=347890108]
+[node name="HBoxContainer" type="HBoxContainer" parent="ViewportUI/VBoxContainer" unique_id=1923085649]
 layout_mode = 2
-size_flags_horizontal = 0
-min_value = -999.0
-max_value = 999.0
-alignment = 1
+
+[node name="LayerDown" type="Button" parent="ViewportUI/VBoxContainer/HBoxContainer" unique_id=847013967]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+text = "-"
+
+[node name="LayerNum" type="Label" parent="ViewportUI/VBoxContainer/HBoxContainer" unique_id=252050851]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "0"
+horizontal_alignment = 1
+
+[node name="LayerUp" type="Button" parent="ViewportUI/VBoxContainer/HBoxContainer" unique_id=1986875795]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+text = "+"
 
 [node name="LayerProperties" type="Button" parent="ViewportUI/VBoxContainer" unique_id=1864635163]
 layout_mode = 2
@@ -414,7 +431,8 @@ will be lost!"
 
 [connection signal="pressed" from="ViewportUI/VBoxContainer/ObjectBrowserButton" to="." method="_on_object_browser_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer/PropertiesButton" to="." method="_on_properties_button_pressed"]
-[connection signal="value_changed" from="ViewportUI/VBoxContainer/LayerSpinBox" to="." method="_on_layer_spin_box_value_changed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer/HBoxContainer/LayerDown" to="." method="_on_layer_down_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer/HBoxContainer/LayerUp" to="." method="_on_layer_up_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer/LayerProperties" to="." method="_on_layer_properties_pressed"]
 [connection signal="toggled" from="ViewportUI/VBoxContainer/ParallaxingButton" to="." method="set_parallaxing"]
 [connection signal="toggled" from="ViewportUI/VBoxContainer/GhostingButton" to="." method="set_ghosting"]
