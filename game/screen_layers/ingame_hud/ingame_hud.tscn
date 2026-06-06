@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://bcsycatrr3xnh" path="res://assets/textures/particle/fludd/fludd_bubble_big.png" id="11_o5xe2"]
 [ext_resource type="Texture2D" uid="uid://dtdw3v85xoeih" path="res://assets/textures/gui/ingame_hud/power_coin_meter.png" id="13_erhw5"]
 [ext_resource type="Texture2D" uid="uid://bwnnu0gwg2i46" path="res://assets/textures/particle/fludd/fludd_bubble_small.png" id="14_cx53y"]
+[ext_resource type="Texture2D" uid="uid://b2pu5aaosla0d" path="res://assets/textures/gui/ingame_hud/fludd_icon_hover.png" id="19_erhw5"]
 
 [sub_resource type="Gradient" id="Gradient_d64ys"]
 offsets = PackedFloat32Array(0, 0.1829653, 0.3280757, 0.4637224, 0.7745536, 1)
@@ -235,7 +236,7 @@ animations = [{
 atlas = ExtResource("11_o5xe2")
 region = Rect2(0, 0, 16, 16)
 
-[node name="IngameHud" type="CanvasLayer" unique_id=510807687 node_paths=PackedStringArray("inner_hp_texture", "inner_hpbg", "yellow_coin_label", "red_coin_container", "red_coin_label", "purple_coin_container", "purple_coin_label", "power", "coin_meter", "health_container")]
+[node name="IngameHud" type="CanvasLayer" unique_id=510807687 node_paths=PackedStringArray("inner_hp_texture", "inner_hpbg", "yellow_coin_label", "red_coin_container", "red_coin_label", "purple_coin_container", "purple_coin_label", "power", "coin_meter", "health_container", "fuel_rect", "fuel_label", "fludd_nozzle_icon")]
 script = ExtResource("1_reblr")
 health_gradient = SubResource("Gradient_d64ys")
 inner_hp_texture = NodePath("HealthContainer/Base/InnerHPBG/InnerHPTexture")
@@ -248,6 +249,9 @@ purple_coin_label = NodePath("CollectibleContainer/VBoxContainer/PurpleCoinConta
 power = NodePath("HealthContainer/Base/POWER")
 coin_meter = NodePath("HealthContainer/Base/CoinMeter")
 health_container = NodePath("HealthContainer")
+fuel_rect = NodePath("FLUDDContainer/Tank/FuelMask/FuelRect")
+fuel_label = NodePath("FLUDDContainer/Tank/FuelLabel")
+fludd_nozzle_icon = NodePath("FLUDDContainer/Tank/Control/FluddNozzleIcon")
 
 [node name="CollectibleContainer" type="Control" parent="." unique_id=1142767291]
 layout_mode = 3
@@ -476,22 +480,34 @@ grow_vertical = 2
 texture = ExtResource("9_ia5qx")
 expand_mode = 1
 
-[node name="ColorRect" type="ColorRect" parent="FLUDDContainer/Tank/FuelMask" unique_id=2069243308]
+[node name="FuelRect" type="ColorRect" parent="FLUDDContainer/Tank/FuelMask" unique_id=2069243308]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 9.5
+offset_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset_ratio = Vector2(0.5, 1)
 color = Color(0, 0.53333336, 1, 0.54901963)
 
-[node name="Node2D" type="Node2D" parent="FLUDDContainer/Tank/FuelMask/ColorRect" unique_id=534224923]
+[node name="BubblesClip" type="ColorRect" parent="FLUDDContainer/Tank/FuelMask/FuelRect" unique_id=301712093]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+metadata/_edit_lock_ = true
+
+[node name="Node2D" type="Node2D" parent="FLUDDContainer/Tank/FuelMask/FuelRect/BubblesClip" unique_id=534224923]
 modulate = Color(1, 1, 1, 0.53333336)
 position = Vector2(52, 104)
 
-[node name="BigBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/ColorRect/Node2D" unique_id=1129601286]
+[node name="BigBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/FuelRect/BubblesClip/Node2D" unique_id=1129601286]
 position = Vector2(-36, -7)
 amount = 2
 texture = SubResource("AtlasTexture_cx53y")
@@ -507,7 +523,7 @@ medium_particle_amount = 2
 low_particle_amount = 1
 metadata/_custom_type_script = "uid://c2df6xnsl5aem"
 
-[node name="MediumBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/ColorRect/Node2D" unique_id=892034371]
+[node name="MediumBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/FuelRect/BubblesClip/Node2D" unique_id=892034371]
 position = Vector2(-36, -7)
 texture = SubResource("AtlasTexture_cx53y")
 lifetime = 10.0
@@ -522,7 +538,7 @@ medium_particle_amount = 4
 low_particle_amount = 2
 metadata/_custom_type_script = "uid://c2df6xnsl5aem"
 
-[node name="SmallBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/ColorRect/Node2D" unique_id=1860666956]
+[node name="SmallBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/FuelRect/BubblesClip/Node2D" unique_id=1860666956]
 position = Vector2(-36, -7)
 amount = 16
 texture = ExtResource("14_cx53y")
@@ -538,7 +554,7 @@ medium_particle_amount = 8
 low_particle_amount = 4
 metadata/_custom_type_script = "uid://c2df6xnsl5aem"
 
-[node name="FuelTop" type="TextureRect" parent="FLUDDContainer/Tank/FuelMask/ColorRect" unique_id=2005540370]
+[node name="FuelTop" type="TextureRect" parent="FLUDDContainer/Tank/FuelMask/FuelRect" unique_id=2005540370]
 layout_mode = 0
 offset_left = 1.0
 offset_top = -8.5
@@ -546,7 +562,7 @@ offset_right = 33.0
 offset_bottom = 9.5
 texture = ExtResource("11_ia5qx")
 
-[node name="Label" type="Label" parent="FLUDDContainer/Tank" unique_id=333857642]
+[node name="FuelLabel" type="Label" parent="FLUDDContainer/Tank" unique_id=333857642]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.4090909
@@ -563,3 +579,17 @@ theme_override_constants/outline_size = 4
 text = "tmp"
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="FLUDDContainer/Tank" unique_id=327615050]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -5.0
+offset_top = -7.5
+offset_right = -5.0
+offset_bottom = -7.5
+grow_horizontal = 2
+
+[node name="FluddNozzleIcon" type="Sprite2D" parent="FLUDDContainer/Tank/Control" unique_id=1960519657]
+texture = ExtResource("19_erhw5")
