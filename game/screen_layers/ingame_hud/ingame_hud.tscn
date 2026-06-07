@@ -12,11 +12,14 @@
 [ext_resource type="Texture2D" uid="uid://esu0o3vjd7ve" path="res://assets/textures/gui/ingame_hud/x_icon.png" id="3_pqwxr"]
 [ext_resource type="Texture2D" uid="uid://b2bsul4l4prib" path="res://assets/textures/gui/ingame_hud/purple_coin_icon.png" id="5_sjut3"]
 [ext_resource type="Texture2D" uid="uid://bmuhj0qbolft8" path="res://assets/textures/gui/ingame_hud/fludd_tank.png" id="8_37e64"]
+[ext_resource type="FontFile" uid="uid://degbc32nhonbt" path="res://core/theme/fonts/hud/pixel_sm64r_yellow.fnt" id="8_tg085"]
 [ext_resource type="Texture2D" uid="uid://d3nl6uavw7mx7" path="res://assets/textures/gui/ingame_hud/fludd_tank_mask.png" id="9_ia5qx"]
+[ext_resource type="FontFile" uid="uid://7s1xfss77xy0" path="res://core/theme/fonts/hud/pixel_sm64r_red.fnt" id="10_1hbjs"]
 [ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="11_53twl"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="11_fsh6l"]
 [ext_resource type="Texture2D" uid="uid://b4pfo0m8fwi2x" path="res://assets/textures/gui/ingame_hud/fludd_tank_top.png" id="11_ia5qx"]
 [ext_resource type="Texture2D" uid="uid://bcsycatrr3xnh" path="res://assets/textures/particle/fludd/fludd_bubble_big.png" id="11_o5xe2"]
+[ext_resource type="FontFile" uid="uid://dijtgi87u5lr" path="res://core/theme/fonts/hud/pixel_sm64r_purple.fnt" id="12_rmsoo"]
 [ext_resource type="Texture2D" uid="uid://dtdw3v85xoeih" path="res://assets/textures/gui/ingame_hud/power_coin_meter.png" id="13_erhw5"]
 [ext_resource type="Texture2D" uid="uid://bwnnu0gwg2i46" path="res://assets/textures/particle/fludd/fludd_bubble_small.png" id="14_cx53y"]
 [ext_resource type="Texture2D" uid="uid://b2pu5aaosla0d" path="res://assets/textures/gui/ingame_hud/fludd_icon_hover.png" id="19_erhw5"]
@@ -25,6 +28,7 @@
 [ext_resource type="Texture2D" uid="uid://itk76swhtghs" path="res://assets/textures/gui/ingame_hud/fludd_icon_turbo.png" id="21_lfl17"]
 [ext_resource type="Script" uid="uid://dverk2uio5y4a" path="res://core/custom_resources/clipping_texture_2d.gd" id="22_e6gmi"]
 [ext_resource type="Texture2D" uid="uid://bv5dytipq6km8" path="res://assets/textures/gui/ingame_hud/fludd_tank_power.png" id="23_nygxd"]
+[ext_resource type="FontFile" uid="uid://bn7qpulj0pbwv" path="res://core/theme/fonts/hud/pixel_sm64r_blue.fnt" id="26_tg085"]
 
 [sub_resource type="Gradient" id="Gradient_d64ys"]
 offsets = PackedFloat32Array(0, 0.1829653, 0.3280757, 0.4637224, 0.7745536, 1)
@@ -64,7 +68,7 @@ shader_parameter/divider_color = Color(0.6392157, 0.6392157, 0.6392157, 1)
 atlas = ExtResource("2_fsh6l")
 region = Rect2(0, 0, 64, 16)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_nygxd"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_1hbjs"]
 diffuse_texture = SubResource("AtlasTexture_1hbjs")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nayuj"]
@@ -157,7 +161,7 @@ animations = [{
 atlas = ExtResource("13_erhw5")
 region = Rect2(0, 0, 14, 14)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_1f64a"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_rmsoo"]
 diffuse_texture = SubResource("AtlasTexture_tg085")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aqq40"]
@@ -296,6 +300,7 @@ power_max_color = Color(1.5720325, 1.5720325, 1.5720325, 1)
 tank = NodePath("../FLUDDContainer/Tank")
 fuel_rect = NodePath("../FLUDDContainer/Tank/FuelMask/FuelRect")
 fuel_label = NodePath("../FLUDDContainer/Tank/FuelLabel")
+fuel_label_flash = Color(1.5720325, 1.5720325, 1.5720325, 1)
 fludd_nozzle_icon = NodePath("../FLUDDContainer/Tank/Control/FluddNozzleIcon")
 power_meter = NodePath("../FLUDDContainer/Tank/PowerMeter")
 power_scrolling_texture = SubResource("Texture2D_1f64a")
@@ -311,7 +316,7 @@ offset_left = 10.0
 offset_top = 9.0
 offset_right = 55.0
 offset_bottom = 55.0
-theme_override_constants/separation = 0
+theme_override_constants/separation = -10
 
 [node name="YellowCoinContainer" type="HBoxContainer" parent="CollectibleContainer/VBoxContainer" unique_id=1521011646]
 layout_mode = 2
@@ -337,15 +342,16 @@ layout_mode = 2
 clip_contents = false
 layout_mode = 2
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/normal_font_size = 20
+theme_override_fonts/normal_font = ExtResource("8_tg085")
+theme_override_font_sizes/normal_font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxEmpty_pm01n")
 bbcode_enabled = true
-text = "0"
+text = "23"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 shortcut_keys_enabled = false
-metadata/tint_color = Color(0.93333334, 1, 0.65882355, 1)
+metadata/tint_color = Color(1.5720325, 1.5720325, 1.5720325, 1)
 
 [node name="RedCoinContainer" type="HBoxContainer" parent="CollectibleContainer/VBoxContainer" unique_id=475931850]
 layout_mode = 2
@@ -371,15 +377,16 @@ layout_mode = 2
 clip_contents = false
 layout_mode = 2
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/normal_font_size = 20
+theme_override_fonts/normal_font = ExtResource("10_1hbjs")
+theme_override_font_sizes/normal_font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxEmpty_pm01n")
 bbcode_enabled = true
-text = "0[font_size=12]/0"
+text = "0[font_size=24]/0"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 shortcut_keys_enabled = false
-metadata/tint_color = Color(1, 0.65999997, 0.65999997, 1)
+metadata/tint_color = Color(1.9655429, 1.9655429, 1.9655429, 1)
 
 [node name="PurpleCoinContainer" type="HBoxContainer" parent="CollectibleContainer/VBoxContainer" unique_id=579334068]
 layout_mode = 2
@@ -405,15 +412,16 @@ layout_mode = 2
 clip_contents = false
 layout_mode = 2
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/normal_font_size = 20
+theme_override_fonts/normal_font = ExtResource("12_rmsoo")
+theme_override_font_sizes/normal_font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxEmpty_pm01n")
 bbcode_enabled = true
-text = "0[font_size=12]/0"
+text = "0[font_size=24]/0"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 shortcut_keys_enabled = false
-metadata/tint_color = Color(0.5899999, 0.39999998, 1, 1)
+metadata/tint_color = Color(1.361414, 1.361414, 1.361414, 1)
 
 [node name="HealthContainer" type="Control" parent="." unique_id=1581326594]
 material = SubResource("CanvasItemMaterial_37e64")
@@ -462,11 +470,11 @@ grow_vertical = 2
 [node name="POWER" type="Sprite2D" parent="HealthContainer/Base" unique_id=457957822]
 position = Vector2(31.499989, 9)
 scale = Vector2(1.0781246, 1)
-texture = SubResource("CanvasTexture_nygxd")
+texture = SubResource("CanvasTexture_1hbjs")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 16)
 script = ExtResource("11_fsh6l")
-canvas_texture = SubResource("CanvasTexture_nygxd")
+canvas_texture = SubResource("CanvasTexture_1hbjs")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_rmsoo")
 current_animation = "default"
@@ -477,11 +485,11 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="CoinMeter" type="Sprite2D" parent="HealthContainer/Base" unique_id=281389693]
 position = Vector2(32, 32)
-texture = SubResource("CanvasTexture_1f64a")
+texture = SubResource("CanvasTexture_rmsoo")
 region_enabled = true
 region_rect = Rect2(0, 0, 14, 14)
 script = ExtResource("11_fsh6l")
-canvas_texture = SubResource("CanvasTexture_1f64a")
+canvas_texture = SubResource("CanvasTexture_rmsoo")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_871rv")
 current_animation = "default"
@@ -610,24 +618,6 @@ offset_right = 33.0
 offset_bottom = 9.5
 texture = ExtResource("11_ia5qx")
 
-[node name="FuelLabel" type="Label" parent="FLUDDContainer/Tank" unique_id=333857642]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.4090909
-anchor_top = 0.5
-anchor_right = 0.4090909
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -7.5
-offset_right = 20.0
-offset_bottom = 7.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/outline_size = 4
-text = "tmp"
-horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
-
 [node name="PowerMeter" type="TextureRect" parent="FLUDDContainer/Tank" unique_id=261064672]
 light_mask = 4
 texture_repeat = 3
@@ -646,6 +636,27 @@ grow_vertical = 0
 texture = SubResource("Texture2D_ycetg")
 expand_mode = 1
 stretch_mode = 1
+
+[node name="FuelLabel" type="Label" parent="FLUDDContainer/Tank" unique_id=333857642]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4090909
+anchor_top = 0.5
+anchor_right = 0.4090909
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -13.0
+offset_right = 20.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("26_tg085")
+theme_override_font_sizes/font_size = 28
+text = "MAX"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="Control" type="Control" parent="FLUDDContainer/Tank" unique_id=327615050]
 layout_mode = 1

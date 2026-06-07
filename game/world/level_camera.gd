@@ -47,7 +47,6 @@ var _anchor_offset: Vector2 = Vector2.ZERO
 var _target_zoom: float = 1.0
 var _look_ahead_offset: Vector2 = Vector2.ZERO
 var _prev_anchor_position: Vector2 = Vector2.ZERO
-var _prev_zoom: float = 1.0
 
 
 func _init() -> void:
@@ -63,7 +62,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_update_zoom(delta)
 	if rotate_with_object and is_instance_valid(_anchor):
-		_camera.rotation = lerpf(_camera.rotation, _anchor.rotation, rotate_smoothing_speed * delta)
+		_camera.rotation = _anchor.rotation
 
 
 func _physics_process(delta: float) -> void:

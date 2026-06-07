@@ -7,6 +7,7 @@ extends Node
 @export var tank: TextureRect
 @export var fuel_rect: ColorRect
 @export var fuel_label: Label
+@export var fuel_label_flash: Color
 @export var fludd_nozzle_icon: AnimatedSprite2D
 @export var power_meter: TextureRect
 @export var power_scrolling_texture: ScrollingTexture2D
@@ -46,9 +47,12 @@ func _process(delta: float) -> void:
 
 func _on_fuel_changed(percentage: float) -> void:
 	if _fuel <= percentage:
-		fuel_flash_tween = create_tween()
+		fuel_flash_tween = create_tween().set_parallel()
 		fuel_flash_tween.tween_property(fuel_rect, ^"color", fuel_max_color, 0.05)
-		fuel_flash_tween.tween_property(fuel_rect, ^"color", fuel_color, 0.15)
+		fuel_flash_tween.tween_property(fuel_label, ^"modulate", fuel_label_flash, 0.05)
+		
+		fuel_flash_tween.chain().tween_property(fuel_rect, ^"color", fuel_color, 0.15)
+		fuel_flash_tween.tween_property(fuel_label, ^"modulate", Color.WHITE, 0.15)
 	
 	fuel_percent_tween = create_tween()
 	fuel_percent_tween.tween_method(set_fuel_percent, _fuel, percentage, 0.2).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
@@ -75,7 +79,7 @@ func set_fuel_percent(percentage: float) -> void:
 		var height: float = lerpf(MIN_HEIGHT, MAX_HEIGHT, percentage / 100.0)
 		fuel_rect.size.y = height
 		fuel_rect.position.y = 9.5 + (MAX_HEIGHT - height)
-	fuel_label.text = "%s%%" % int(percentage)
+	fuel_label.text = "%s%%" % roundi(percentage)
 	if percentage >= 99.5:
 		fuel_label.text = "MAX"
 	_fuel = percentage

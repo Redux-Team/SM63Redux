@@ -167,7 +167,7 @@ func _can_use_fludd() -> bool:
 	return fludd_power > 0 and \
 		fludd_fuel > 0 and \
 		player.state_machine.get_current_state().get_internal_name() not in [
-			"spin", "strike", "crouch", "rollout_f"
+			"spin", "strike", "crouch", "rollout_f", "ground_pound_fall", "ground_pound_start", "ground_pound_slam"
 		]
 
 

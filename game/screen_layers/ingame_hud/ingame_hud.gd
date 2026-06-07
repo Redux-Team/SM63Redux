@@ -36,7 +36,7 @@ var _red_coin_counter: int = 0:
 		if max_amount == 0:
 			red_coin_container.hide()
 			return
-		red_coin_label.text = "%d[font_size=13]/%d" % [rcc, max_amount]
+		red_coin_label.text = "%d[font_size=24]/%d" % [rcc, max_amount]
 var _purple_coin_counter: int = 0:
 	set(pcc):
 		_purple_coin_counter = pcc
@@ -44,7 +44,7 @@ var _purple_coin_counter: int = 0:
 		if max_amount == 0:
 			purple_coin_container.hide()
 			return
-		purple_coin_label.text = "%d[font_size=12]/%d" % [pcc, max_amount]
+		purple_coin_label.text = "%d[font_size=24]/%d" % [pcc, max_amount]
 var _power_resetting: bool = false
 
 
@@ -168,5 +168,5 @@ func _pulse_label(label: RichTextLabel) -> void:
 	flash_tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	var tint: Color = label.get_meta(&"tint_color", Color.WHITE)
 	flash_tween.tween_property(label, ^"modulate", tint, 0.1)
-	flash_tween.tween_property(label, ^"modulate", Color.WHITE, 0.2)
+	flash_tween.tween_property(label, ^"modulate", Color.WHITE, 0.1)
 	_coin_flash_tweens[label] = flash_tween

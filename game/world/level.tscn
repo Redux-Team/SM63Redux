@@ -27,12 +27,16 @@ _level_camera = NodePath("LevelCamera")
 [node name="LevelCamera" type="CharacterBody2D" parent="." unique_id=1904263241 node_paths=PackedStringArray("_camera", "_remote_transform")]
 collision_layer = 0
 collision_mask = 4096
+wall_min_slide_angle = 0.0
+floor_stop_on_slope = false
+floor_block_on_wall = false
 script = ExtResource("2_n8vjl")
 look_ahead_enabled = true
 look_ahead_distance = 30.0
 look_ahead_smoothing_speed = 3.0
 look_ahead_x_curve = SubResource("Curve_7lr4m")
 look_ahead_y_min_speed = 0.0
+rotate_with_object = true
 _camera = NodePath("../Camera2D")
 _bounds_shape = SubResource("RectangleShape2D_7lr4m")
 _remote_transform = NodePath("RemoteTransform2D")
@@ -44,6 +48,7 @@ shape = SubResource("RectangleShape2D_7lr4m")
 remote_path = NodePath("../../Camera2D")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1470691944]
+ignore_rotation = false
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1277764924]
 visible = false

@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://d3xbvld6puryg" path="res://assets/sfx/item/red_coin_collect.ogg" id="3_c4m15"]
 [ext_resource type="Texture2D" uid="uid://bjx2gx7ao7dgu" path="res://assets/textures/particle/item/red_coin_particle.png" id="3_y2pdo"]
 [ext_resource type="AudioStream" uid="uid://cnrwwp2g17u5y" path="res://assets/sfx/item/red_coin_collect_all.wav" id="6_bfrqi"]
+[ext_resource type="FontFile" uid="uid://7s1xfss77xy0" path="res://core/theme/fonts/hud/pixel_sm64r_red.fnt" id="7_uekj6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1v6jc"]
 atlas = ExtResource("2_y2pdo")
@@ -99,8 +100,10 @@ offset_right = 20.0
 offset_bottom = 7.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 0.68, 0.68, 1)
 theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("7_uekj6")
+theme_override_font_sizes/font_size = 20
 text = "1/8"
 horizontal_alignment = 1
 vertical_alignment = 1

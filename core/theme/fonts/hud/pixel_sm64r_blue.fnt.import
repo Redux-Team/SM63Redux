@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://bn7qpulj0pbwv"
+path="res://.godot/imported/pixel_sm64r_blue.fnt-61347088ed8a5f9e76d0471e889d5a81.fontdata"
+
+[deps]
+
+source_file="res://core/theme/fonts/hud/pixel_sm64r_blue.fnt"
+dest_files=["res://.godot/imported/pixel_sm64r_blue.fnt-61347088ed8a5f9e76d0471e889d5a81.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2

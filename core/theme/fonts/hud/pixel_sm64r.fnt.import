@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://c4fspc7t5o2ac"
+path="res://.godot/imported/pixel_sm64r.fnt-ad347e4d5e26cd2848747639193098bf.fontdata"
+
+[deps]
+
+source_file="res://core/theme/fonts/hud/pixel_sm64r.fnt"
+dest_files=["res://.godot/imported/pixel_sm64r.fnt-ad347e4d5e26cd2848747639193098bf.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2

@@ -316,6 +316,20 @@ __to_uuid = "56a353ee-c4c2-458c-a018-6302daa71851"
 __from_node_uuid = "9d91ab68-66a0-4afc-9cc4-11e364931ace"
 __to_node_uuid = "abed3dd4-95f4-45f4-a3a0-32298e7cc932"
 
+[sub_resource type="Resource" id="Resource_cmrqc"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "velocity.y > 30 && 
+!is_on_floor() && 
+get_active_state_uptime() > 0.3 && 
+is_action_pressed(\"use_fludd\") &&
+get_fludd_handler().equipped_nozzle != 0"
+__from_uuid = "7a11481f-96a2-4861-99a6-5a97b2628e11"
+__to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+__from_node_uuid = "9926b8f7-53dc-4adb-a5e1-b7a3daa778e5"
+__to_node_uuid = "9720cd09-3fa6-4b42-91b8-eef951712732"
+
 [sub_resource type="Resource" id="Resource_sldje"]
 resource_local_to_scene = true
 script = ExtResource("3_0jrw7")
@@ -718,20 +732,6 @@ __to_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __from_node_uuid = "167d2846-17ec-4534-a26e-c582cae80f3a"
 __to_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 
-[sub_resource type="Resource" id="Resource_cmrqc"]
-resource_local_to_scene = true
-script = ExtResource("3_0jrw7")
-mode = 3
-expression = "velocity.y > 30 && 
-!is_on_floor() && 
-get_active_state_uptime() > 0.3 && 
-is_action_pressed(\"use_fludd\") &&
-get_fludd_handler().equipped_nozzle != 0"
-__from_uuid = "7a11481f-96a2-4861-99a6-5a97b2628e11"
-__to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
-__from_node_uuid = "9926b8f7-53dc-4adb-a5e1-b7a3daa778e5"
-__to_node_uuid = "9720cd09-3fa6-4b42-91b8-eef951712732"
-
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
 _data = [Vector2(0, -1.3932585), 0.0, 0.9746846, 0, 0, Vector2(1.5965666, -0.05618429), 0.0, 0.0, 0, 0]
@@ -998,8 +998,8 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.3882353)
 gradient = SubResource("Gradient_kyrvb")
 
 [sub_resource type="Curve" id="Curve_kyrvb"]
-_data = [Vector2(0, 0.49827188), 0.0, 1.6879036, 0, 0, Vector2(0.50145775, 1), 0.0, 0.0, 0, 0]
-point_count = 2
+_data = [Vector2(0, 0.49827188), 0.0, -0.08104746, 0, 0, Vector2(0.50145775, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_kw6gy"]
 width = 64
@@ -1023,7 +1023,7 @@ anim_offset_max = 1.0
 atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_q4egk"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_681d1"]
 diffuse_texture = SubResource("AtlasTexture_1p630")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d635j"]
@@ -2191,11 +2191,11 @@ copy_mode = 0
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_q4egk")
+texture = SubResource("CanvasTexture_681d1")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_q4egk")
+canvas_texture = SubResource("CanvasTexture_681d1")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true
