@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://tb4ypkcr623h" path="res://assets/textures/world/background/title_screen/title_bg_0.png" id="4_yquba"]
 [ext_resource type="Texture2D" uid="uid://c6husbfjatg23" path="res://assets/textures/particle/title_screen/star_medium.png" id="5_1evyh"]
 [ext_resource type="PackedScene" uid="uid://dq7w1sy7hve2s" path="res://game/scenes/title_screen/components/splash_screen.tscn" id="5_wf0s4"]
-[ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/music/01.mp3" id="6_s848f"]
+[ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/music/title_welcome.mp3" id="6_s848f"]
 [ext_resource type="Texture2D" uid="uid://d1w2qtyr1pctd" path="res://assets/textures/particle/title_screen/star_small.png" id="6_y7kqt"]
 [ext_resource type="Texture2D" uid="uid://d1xvycbgjpowc" path="res://assets/textures/particle/title_screen/shooting_star.png" id="7_xjhxk"]
 [ext_resource type="PackedScene" uid="uid://bx2uj1y5lcukv" path="res://game/scenes/title_screen/components/menu_screen.tscn" id="12_7cnuw"]
