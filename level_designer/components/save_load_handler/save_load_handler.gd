@@ -2,7 +2,7 @@ class_name LDSaveLoadHandler
 extends LDComponent
 
 
-const BINARY_EXTENSION: String = ".63r.lvl"
+const BINARY_EXTENSION: String = ".63rl"
 const JSON_EXTENSION: String = ".json"
 const FORMAT_VERSION: int = 1
 const LAST_SESSION_PATH: String = "user://ld_last_session.json"
@@ -60,7 +60,7 @@ func _on_periodic_autosave_timeout() -> void:
 
 
 func save_binary(path: String) -> Error:
-	var binary_path: String = path.get_basename() + ".63r.lvl"
+	var binary_path: String = path.get_basename() + ".63rl"
 	var data: Dictionary = _serialize()
 	var bytes: PackedByteArray = var_to_bytes(data)
 	var file: FileAccess = FileAccess.open(binary_path, FileAccess.WRITE)

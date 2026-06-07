@@ -41,11 +41,11 @@ func _on_ready() -> void:
 		button.new_object_request.connect(_on_hotbar_new_object_request)
 	
 	_save_file_dialog.filters = PackedStringArray([
-		"*.63r.lvl;63 Redux Level",
+		"*.63rl;63 Redux Level",
 		"*.json;JSON Level"
 	])
 	_load_file_dialog.filters = PackedStringArray([
-		"*.63r.lvl;63 Redux Level",
+		"*.63rl;63 Redux Level",
 		"*.json;JSON Level"
 	])
 
