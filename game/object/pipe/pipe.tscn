@@ -19,16 +19,18 @@ shader = ExtResource("3_vkc4e")
 shader_parameter/palette_index = 0
 shader_parameter/palette_texture = ExtResource("4_vkc4e")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vkc4e"]
+size = Vector2(32, 14)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_whkaj"]
 resource_local_to_scene = true
-size = Vector2(32, 25)
+size = Vector2(28, 16)
 
 [node name="Pipe" type="Node2D" unique_id=1818977910 node_paths=PackedStringArray("nine_patch", "collision_shapes", "palette_objects")]
 material = SubResource("ShaderMaterial_vkc4e")
 script = ExtResource("1_4p6u2")
 nine_patch = NodePath("NinePatch")
 collision_shapes = [NodePath("StaticBody2D/CollisionShape2D")]
-expand_direction = 1
 palette_objects = [NodePath("NinePatch")]
 metadata/_custom_type_script = "uid://u0c5qwqjxkub"
 
@@ -51,11 +53,19 @@ patch_margin_bottom = 1
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
+[node name="StaticBody2D2" type="StaticBody2D" parent="NinePatch" unique_id=1000832164]
+position = Vector2(17, 17)
+collision_layer = 514
+collision_mask = 0
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="NinePatch/StaticBody2D2" unique_id=205443346]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_vkc4e")
+
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1107194163]
 collision_layer = 514
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=602091392]
-visible = false
-position = Vector2(0, 1.5)
+position = Vector2(0, 6)
 shape = SubResource("RectangleShape2D_whkaj")

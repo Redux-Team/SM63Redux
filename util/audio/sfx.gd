@@ -67,3 +67,40 @@ static func _play_stream_at(stream: AudioStream, at: Variant, bus: StringName) -
 		Singleton.add_child(player)
 		player.global_position = at as Vector2
 	player.play()
+
+
+static func build(audio_stream: AudioStream = null) -> SFXBuilder:
+	var builder: SFXBuilder = SFXBuilder.new()
+	if audio_stream:
+		builder.set_stream(audio_stream)
+	return builder
+
+
+class SFXBuilder:
+	var _stream: AudioStream
+	var _bus: StringName = &"SFX"
+	var _db: float = 0
+	
+	func set_stream(audio_stream: AudioStream) -> SFXBuilder:
+		_stream = audio_stream
+		return self
+	
+	
+	func set_bus(bus: StringName) -> SFXBuilder:
+		_bus = bus
+		return self
+	
+	
+	func set_db(db: float) -> SFXBuilder:
+		_db = db
+		return self
+	
+	
+	func play() -> void:
+		var player: AudioStreamPlayer = AudioStreamPlayer.new()
+		player.stream = _stream
+		player.bus = _bus
+		player.volume_db = _db
+		player.finished.connect(player.queue_free)
+		Singleton.add_child(player)
+		player.play()

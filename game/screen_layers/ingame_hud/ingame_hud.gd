@@ -13,9 +13,6 @@ extends CanvasLayer
 @export var power: SmartSprite2D
 @export var coin_meter: SmartSprite2D
 @export var health_container: Control
-@export var fuel_rect: ColorRect
-@export var fuel_label: Label
-@export var fludd_nozzle_icon: Sprite2D
 
 
 const HEALTH_HIDE_DELAY: float = 4.0
@@ -63,8 +60,6 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	fludd_nozzle_icon.position = Vector2(0, 3 * sin(Time.get_ticks_msec() / 500.0))
-	
 	if health_component == null:
 		return
 	if health_component.get_hp() >= health_component.max_hp and _health_visible:
@@ -111,20 +106,6 @@ func _on_hp_updated(amount: float) -> void:
 	if amount < health_component.max_hp:
 		_health_hide_timer = 0.0
 		_set_health_visible(true)
-
-
-func _set_fuel_percent(percentage: float) -> void:
-	const MAX_HEIGHT: float = 91.0
-	const MIN_HEIGHT: float = 11.0
-	
-	if percentage < 1.0:
-		fuel_rect.hide()
-	else:
-		fuel_rect.show()
-		var height: float = lerpf(MIN_HEIGHT, MAX_HEIGHT, percentage / 100.0)
-		fuel_rect.size.y = height
-		fuel_rect.position.y = 9.5 + (MAX_HEIGHT - height)
-	fuel_label.text = "%s%%" % int(percentage)
 
 
 func _on_power_updated(amount: int) -> void:

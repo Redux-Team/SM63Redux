@@ -59,6 +59,7 @@ animations = [{
 }]
 
 [node name="PurpleCoin" unique_id=187434736 instance=ExtResource("1_2vepf")]
+fludd_power_amount = 0.0
 purple = true
 
 [node name="Sprite" parent="." index="1" unique_id=1781944590]

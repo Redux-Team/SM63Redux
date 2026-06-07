@@ -68,6 +68,8 @@
 [ext_resource type="AudioStream" uid="uid://bfd6xls4jjoac" path="res://assets/sfx/player/mario/spin/spin_water_1.wav" id="41_5ygwk"]
 [ext_resource type="AudioStream" uid="uid://dfoi0m0cw6fww" path="res://assets/sfx/player/mario/spin/spin_water_end.wav" id="42_dhqxs"]
 [ext_resource type="Texture2D" uid="uid://bvpu1uexfy52t" path="res://assets/textures/entity/player/mario/bonk.png" id="51_d635j"]
+[ext_resource type="Script" uid="uid://dyv4j6akddtwa" path="res://game/entity/player/shared/handlers/fludd_handler.gd" id="51_h6qgx"]
+[ext_resource type="AudioStream" uid="uid://0o8t42w7mec4" path="res://assets/sfx/player/fludd/fludd_switch.wav" id="52_j002l"]
 [ext_resource type="Texture2D" uid="uid://b3fvoxgujojvl" path="res://assets/textures/entity/player/mario/dive_fall.png" id="53_ketxm"]
 [ext_resource type="Texture2D" uid="uid://bw7pv1724v3n4" path="res://assets/textures/entity/player/mario/double_jump_fall.png" id="55_3h1ly"]
 [ext_resource type="Texture2D" uid="uid://kx2d7seigvff" path="res://assets/textures/entity/player/mario/ground_pound_fall.png" id="58_mjy7s"]
@@ -958,12 +960,12 @@ _data = {
 &"triple_jump": SubResource("Animation_aln35")
 }
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_kyrvb"]
-atlas = ExtResource("53_ketxm")
+[sub_resource type="AtlasTexture" id="AtlasTexture_1p630"]
+atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_dhqxs"]
-diffuse_texture = SubResource("AtlasTexture_kyrvb")
+[sub_resource type="CanvasTexture" id="CanvasTexture_j002l"]
+diffuse_texture = SubResource("AtlasTexture_1p630")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d635j"]
 atlas = ExtResource("51_d635j")
@@ -971,6 +973,10 @@ region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j002l"]
 atlas = ExtResource("2_conr4")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyrvb"]
+atlas = ExtResource("53_ketxm")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kw6gy"]
@@ -995,10 +1001,6 @@ region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_563ve"]
 atlas = ExtResource("59_ohvaq")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1p630"]
-atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ndkiv"]
@@ -1328,7 +1330,7 @@ point_count = 3
 offsets = PackedFloat32Array(0, 0.13851352, 0.5709459, 1)
 colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0.9459459, 1, 1, 1, 0)
 
-[node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "heal_particles", "_input_handler", "_movement_handler", "_sprite_handler", "sprite", "components_root", "collision_shapes", "state_machine", "water_check")]
+[node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "heal_particles", "_input_handler", "_movement_handler", "_sprite_handler", "_fludd_handler", "sprite", "components_root", "collision_shapes", "state_machine", "water_check")]
 collision_mask = 2
 floor_snap_length = 7.0
 script = ExtResource("1_oic1i")
@@ -1342,6 +1344,7 @@ heal_particles = NodePath("HealParticles")
 _input_handler = NodePath("Handlers/InputHandler")
 _movement_handler = NodePath("Handlers/MovementHandler")
 _sprite_handler = NodePath("Handlers/SpriteHandler")
+_fludd_handler = NodePath("Handlers/FLUDDHandler")
 submerged_bus_effects = Array[AudioEffect]([SubResource("AudioEffectLowPassFilter_3h1ly")])
 sprite = NodePath("Doll")
 components_root = NodePath("Components")
@@ -2065,6 +2068,11 @@ script = ExtResource("7_tb30q")
 _player = NodePath("../..")
 _doll = NodePath("../../Doll")
 
+[node name="FLUDDHandler" type="Node" parent="Handlers" unique_id=468241504 node_paths=PackedStringArray("player")]
+script = ExtResource("51_h6qgx")
+nozzle_switch_sfx = ExtResource("52_j002l")
+player = NodePath("../..")
+
 [node name="Components" type="Node" parent="." unique_id=958645498]
 
 [node name="GravityComponent" type="Node" parent="Components" unique_id=1687328346 node_paths=PackedStringArray("entity")]
@@ -2086,16 +2094,16 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_dhqxs")
+texture = SubResource("CanvasTexture_j002l")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_dhqxs")
+canvas_texture = SubResource("CanvasTexture_j002l")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
-current_animation = "dive"
+current_animation = "idle"
 current_frame = 0
 speed_scale = 1.0
 playing = false

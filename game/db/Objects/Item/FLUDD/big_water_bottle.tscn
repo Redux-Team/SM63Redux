@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://up0h7h2731q4"]
+
+[ext_resource type="Script" uid="uid://beoij8nparrb8" path="res://game/db/Objects/Item/FLUDD/big_water_bottle.gd" id="1_lg1go"]
+[ext_resource type="Texture2D" uid="uid://cwf68h6bb26lc" path="res://assets/textures/item/fludd/water_bottle_big.png" id="2_4t1ok"]
+[ext_resource type="AudioStream" uid="uid://bv0xjii76r1en" path="res://assets/sfx/object/water_bottle/bottle_big_collect.wav" id="2_hle02"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_lg1go"]
+[ext_resource type="Script" uid="uid://cf0fqotw8gu4p" path="res://core/custom_nodes/2d/entity_check_area.gd" id="4_lg1go"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_hle02"]
+diffuse_texture = ExtResource("2_4t1ok")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hle02"]
+size = Vector2(20, 26)
+
+[node name="BigWaterBottle" type="Node2D" unique_id=854273801 node_paths=PackedStringArray("sprite")]
+script = ExtResource("1_lg1go")
+pickup_sfx = ExtResource("2_hle02")
+sprite = NodePath("SmartSprite2D")
+metadata/_custom_type_script = "uid://wiyita5rrc7q"
+
+[node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=77171285]
+texture = SubResource("CanvasTexture_hle02")
+script = ExtResource("3_lg1go")
+canvas_texture = SubResource("CanvasTexture_hle02")
+diffuse_texture = ExtResource("2_4t1ok")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="EntityCheckArea" type="Area2D" parent="." unique_id=1041962242]
+script = ExtResource("4_lg1go")
+metadata/_custom_type_script = "uid://cf0fqotw8gu4p"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EntityCheckArea" unique_id=1183407697]
+shape = SubResource("RectangleShape2D_hle02")
+
+[connection signal="player_entered" from="EntityCheckArea" to="." method="_on_entity_check_area_player_entered"]

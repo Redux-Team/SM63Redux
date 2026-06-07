@@ -3,6 +3,7 @@ extends Entity
 
 @export var coin_amount: int = 1
 @export var power_amount: int = 1
+@export var fludd_power_amount: float = 10.0
 @export var purple: bool = false
 @export var purple_group: String = "default"
 @export var particle_emitter: ParticleEmitter
@@ -41,6 +42,7 @@ func _on_entity_check_area_player_entered(_player: Player) -> void:
 	else:
 		Level.get_instance().add_yellow_coin(coin_amount)
 		Level.get_player().add_power(power_amount)
+		Level.get_player().add_fludd_power(fludd_power_amount)
 	
 	sprite.hide()
 	entity_check_area.disable()

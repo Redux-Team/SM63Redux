@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://deb7hh0mjcupc"]
+
+[ext_resource type="PackedScene" uid="uid://up0h7h2731q4" path="res://game/db/Objects/Item/FLUDD/big_water_bottle.tscn" id="1_vbv22"]
+[ext_resource type="AudioStream" uid="uid://s8vc28fe1wi8" path="res://assets/sfx/object/water_bottle/bottle_small_collect.wav" id="2_mmf11"]
+[ext_resource type="Texture2D" uid="uid://qleefwqvr0wh" path="res://assets/textures/item/fludd/water_bottle_small.png" id="2_vbv22"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_6b78n"]
+diffuse_texture = ExtResource("2_vbv22")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vbv22"]
+size = Vector2(14, 16)
+
+[node name="SmallWaterBottle" unique_id=854273801 instance=ExtResource("1_vbv22")]
+pickup_sfx = ExtResource("2_mmf11")
+water_amount = 15
+
+[node name="SmartSprite2D" parent="." index="0" unique_id=77171285]
+texture = SubResource("CanvasTexture_6b78n")
+canvas_texture = SubResource("CanvasTexture_6b78n")
+diffuse_texture = ExtResource("2_vbv22")
+
+[node name="CollisionShape2D" parent="EntityCheckArea" parent_id_path=PackedInt32Array(1041962242) index="0" unique_id=1183407697]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_vbv22")

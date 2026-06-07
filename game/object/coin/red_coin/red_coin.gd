@@ -72,6 +72,7 @@ func _on_entity_check_area_player_entered(_player: Player) -> void:
 	
 	Level.get_instance().add_yellow_coin(2)
 	Level.get_player().add_power(5)
+	Level.get_player().add_fludd_power(50)
 	
 	animate_text()
 	

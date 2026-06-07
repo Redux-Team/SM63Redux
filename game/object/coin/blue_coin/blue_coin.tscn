@@ -61,6 +61,7 @@ animations = [{
 [node name="BlueCoin" unique_id=187434736 instance=ExtResource("1_6ekri")]
 coin_amount = 5
 power_amount = 10
+fludd_power_amount = 100.0
 
 [node name="Sprite" parent="." index="1" unique_id=1781944590]
 texture = SubResource("CanvasTexture_t7vuc")

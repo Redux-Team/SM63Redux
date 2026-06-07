@@ -4,25 +4,30 @@
 [ext_resource type="Texture2D" uid="uid://cstnoxk1myead" path="res://assets/textures/item/fludd/fludd_nozzle_hover.png" id="2_ltr0n"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_saqq8"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="4_ljcff"]
+[ext_resource type="Script" uid="uid://cf0fqotw8gu4p" path="res://core/custom_nodes/2d/entity_check_area.gd" id="5_ljcff"]
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_saqq8"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_muw7e"]
 diffuse_texture = ExtResource("2_ltr0n")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_saqq8"]
 resource_local_to_scene = true
 size = Vector2(10, 3)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ljcff"]
+size = Vector2(20, 12)
+
 [node name="FluddNozzleHover" type="CharacterBody2D" unique_id=762472111 node_paths=PackedStringArray("sprite", "components_root")]
 collision_layer = 0
 collision_mask = 514
 script = ExtResource("1_saqq8")
+grant_nozzle = 1
 sprite = NodePath("SmartSprite2D")
 components_root = NodePath("Components/GravityComponent")
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=857828210]
-texture = SubResource("CanvasTexture_saqq8")
+texture = SubResource("CanvasTexture_muw7e")
 script = ExtResource("3_saqq8")
-canvas_texture = SubResource("CanvasTexture_saqq8")
+canvas_texture = SubResource("CanvasTexture_muw7e")
 diffuse_texture = ExtResource("2_ltr0n")
 current_animation = ""
 current_frame = 0
@@ -38,6 +43,15 @@ entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cb672xli6i2ns"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=79070776]
-position = Vector2(0, 6.5)
+position = Vector2(0, 5.5)
 shape = SubResource("RectangleShape2D_saqq8")
 one_way_collision_margin = 8.0
+
+[node name="EntityCheckArea" type="Area2D" parent="." unique_id=230038696]
+script = ExtResource("5_ljcff")
+metadata/_custom_type_script = "uid://cf0fqotw8gu4p"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EntityCheckArea" unique_id=275255749]
+shape = SubResource("RectangleShape2D_ljcff")
+
+[connection signal="player_entered" from="EntityCheckArea" to="." method="_on_entity_check_area_player_entered"]

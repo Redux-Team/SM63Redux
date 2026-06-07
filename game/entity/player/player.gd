@@ -4,6 +4,7 @@
 class_name Player
 extends Entity
 
+
 const BUFFER_ACTIONS: PackedStringArray = ["jump"]
 var buffer_dictionary: Dictionary[String, float]
 
@@ -41,6 +42,7 @@ var buffer_dictionary: Dictionary[String, float]
 @export var _input_handler: PlayerInputHandler
 @export var _movement_handler: PlayerMovementHandler
 @export var _sprite_handler: PlayerSpriteHandler
+@export var _fludd_handler: PlayerFluddHandler
 @export var submerged_bus_effects: Array[AudioEffect]
 
 
@@ -177,6 +179,10 @@ func get_sprite_handler() -> PlayerSpriteHandler:
 	return _sprite_handler
 
 
+func get_fludd_handler() -> PlayerFluddHandler:
+	return _fludd_handler
+
+
 func is_action_pressed(action: String) -> bool:
 	return Input.is_action_pressed(action)
 
@@ -224,6 +230,10 @@ func set_friction_scale_factor(scale_factor: float) -> void:
 func add_power(amount: int) -> void:
 	var health_component: HealthComponent = get_component(HealthComponent)
 	health_component.power += amount
+
+
+func add_fludd_power(amount: float) -> void:
+	get_fludd_handler().fludd_power += amount
 
 
 func resist(val: float, sub: float, div: float) -> float:

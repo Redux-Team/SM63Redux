@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://eipogn3jdakv"]
 
 [ext_resource type="Texture2D" uid="uid://bvhnsfmnwobe3" path="res://assets/textures/props/warps/pipe.png" id="1_thx5c"]
+[ext_resource type="PackedScene" uid="uid://bsr474tp5tovf" path="res://game/object/pipe/pipe.tscn" id="1_wevwc"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_vgd0w"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_phxqm"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_wevwc"]
@@ -36,6 +37,7 @@ category_string = "Props"
 subpath = "Warps/pipe"
 group_path = "Warps"
 ld_placement_tool_override = "telescoping"
+game_instance = ExtResource("1_wevwc")
 ld_entry_texture = SubResource("AtlasTexture_i1eyc")
 ld_properties = Array[ExtResource("2_vgd0w")]([ExtResource("5_wevwc"), ExtResource("6_mp52l"), ExtResource("8_mp52l"), ExtResource("8_tsprs"), SubResource("Resource_tsprs")])
 object_type = 1

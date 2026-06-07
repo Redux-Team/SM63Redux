@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bpmi17yjeho6o" path="res://assets/textures/gui/ingame_hud/health_meter_base.png" id="1_e2fet"]
 [ext_resource type="Script" uid="uid://bc8rgrn6u3y13" path="res://game/screen_layers/ingame_hud/ingame_hud.gd" id="1_reblr"]
 [ext_resource type="Texture2D" uid="uid://d0eb0xoc0aero" path="res://assets/textures/gui/ingame_hud/health_meter_power.png" id="2_fsh6l"]
+[ext_resource type="Script" uid="uid://bhsse3tg5nufa" path="res://game/screen_layers/ingame_hud/fludd_handler.gd" id="2_lfl17"]
 [ext_resource type="Texture2D" uid="uid://ck0mlx7surhlu" path="res://assets/textures/gui/ingame_hud/red_coin_icon.png" id="2_pm01n"]
 [ext_resource type="Texture2D" uid="uid://bvc57sf4613ry" path="res://assets/textures/gui/ingame_hud/yellow_coin_icon.png" id="2_pqwxr"]
 [ext_resource type="Texture2D" uid="uid://ur8gi014rt0d" path="res://assets/textures/gui/ingame_hud/health_meter_inner_bg.png" id="3_0c88u"]
@@ -19,10 +20,30 @@
 [ext_resource type="Texture2D" uid="uid://dtdw3v85xoeih" path="res://assets/textures/gui/ingame_hud/power_coin_meter.png" id="13_erhw5"]
 [ext_resource type="Texture2D" uid="uid://bwnnu0gwg2i46" path="res://assets/textures/particle/fludd/fludd_bubble_small.png" id="14_cx53y"]
 [ext_resource type="Texture2D" uid="uid://b2pu5aaosla0d" path="res://assets/textures/gui/ingame_hud/fludd_icon_hover.png" id="19_erhw5"]
+[ext_resource type="Script" uid="uid://dsrn7qed1dact" path="res://core/custom_resources/scrolling_texture_2d.gd" id="20_1f64a"]
+[ext_resource type="Texture2D" uid="uid://bw7vcunhxsfcg" path="res://assets/textures/gui/ingame_hud/fludd_icon_rocket.png" id="20_cp6tr"]
+[ext_resource type="Texture2D" uid="uid://itk76swhtghs" path="res://assets/textures/gui/ingame_hud/fludd_icon_turbo.png" id="21_lfl17"]
+[ext_resource type="Script" uid="uid://dverk2uio5y4a" path="res://core/custom_resources/clipping_texture_2d.gd" id="22_e6gmi"]
+[ext_resource type="Texture2D" uid="uid://bv5dytipq6km8" path="res://assets/textures/gui/ingame_hud/fludd_tank_power.png" id="23_nygxd"]
 
 [sub_resource type="Gradient" id="Gradient_d64ys"]
 offsets = PackedFloat32Array(0, 0.1829653, 0.3280757, 0.4637224, 0.7745536, 1)
 colors = PackedColorArray(0.20784314, 0.49411765, 0.9098039, 1, 0.3567391, 0.62493485, 0.8478261, 1, 0, 1, 0.14999986, 1, 0.84, 0.84, 0, 1, 0.98039216, 0.3019608, 0.2, 1, 0.41355386, 0, 0.002178085, 1)
+
+[sub_resource type="Texture2D" id="Texture2D_1f64a"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("20_1f64a")
+texture = ExtResource("23_nygxd")
+metadata/_custom_type_script = "uid://dsrn7qed1dact"
+
+[sub_resource type="Texture2D" id="Texture2D_ycetg"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("22_e6gmi")
+texture = SubResource("Texture2D_1f64a")
+clip_origin = Vector2(0, 1)
+metadata/_custom_type_script = "uid://dverk2uio5y4a"
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pm01n"]
 content_margin_bottom = 2.0
@@ -43,7 +64,7 @@ shader_parameter/divider_color = Color(0.6392157, 0.6392157, 0.6392157, 1)
 atlas = ExtResource("2_fsh6l")
 region = Rect2(0, 0, 64, 16)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_fsh6l"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_nygxd"]
 diffuse_texture = SubResource("AtlasTexture_1hbjs")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nayuj"]
@@ -136,7 +157,7 @@ animations = [{
 atlas = ExtResource("13_erhw5")
 region = Rect2(0, 0, 14, 14)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_erhw5"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_1f64a"]
 diffuse_texture = SubResource("AtlasTexture_tg085")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aqq40"]
@@ -236,7 +257,24 @@ animations = [{
 atlas = ExtResource("11_o5xe2")
 region = Rect2(0, 0, 16, 16)
 
-[node name="IngameHud" type="CanvasLayer" unique_id=510807687 node_paths=PackedStringArray("inner_hp_texture", "inner_hpbg", "yellow_coin_label", "red_coin_container", "red_coin_label", "purple_coin_container", "purple_coin_label", "power", "coin_meter", "health_container", "fuel_rect", "fuel_label", "fludd_nozzle_icon")]
+[sub_resource type="SpriteFrames" id="SpriteFrames_nygxd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_erhw5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_cp6tr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_lfl17")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="IngameHud" type="CanvasLayer" unique_id=510807687 node_paths=PackedStringArray("inner_hp_texture", "inner_hpbg", "yellow_coin_label", "red_coin_container", "red_coin_label", "purple_coin_container", "purple_coin_label", "power", "coin_meter", "health_container")]
 script = ExtResource("1_reblr")
 health_gradient = SubResource("Gradient_d64ys")
 inner_hp_texture = NodePath("HealthContainer/Base/InnerHPBG/InnerHPTexture")
@@ -249,9 +287,19 @@ purple_coin_label = NodePath("CollectibleContainer/VBoxContainer/PurpleCoinConta
 power = NodePath("HealthContainer/Base/POWER")
 coin_meter = NodePath("HealthContainer/Base/CoinMeter")
 health_container = NodePath("HealthContainer")
-fuel_rect = NodePath("FLUDDContainer/Tank/FuelMask/FuelRect")
-fuel_label = NodePath("FLUDDContainer/Tank/FuelLabel")
-fludd_nozzle_icon = NodePath("FLUDDContainer/Tank/Control/FluddNozzleIcon")
+
+[node name="FLUDDHandler" type="Node" parent="." unique_id=1421265538 node_paths=PackedStringArray("tank", "fuel_rect", "fuel_label", "fludd_nozzle_icon", "power_meter")]
+script = ExtResource("2_lfl17")
+fuel_color = Color(0, 0.53333336, 1, 0.54901963)
+fuel_max_color = Color(0.26999998, 0.6593333, 1, 1)
+power_max_color = Color(1.5720325, 1.5720325, 1.5720325, 1)
+tank = NodePath("../FLUDDContainer/Tank")
+fuel_rect = NodePath("../FLUDDContainer/Tank/FuelMask/FuelRect")
+fuel_label = NodePath("../FLUDDContainer/Tank/FuelLabel")
+fludd_nozzle_icon = NodePath("../FLUDDContainer/Tank/Control/FluddNozzleIcon")
+power_meter = NodePath("../FLUDDContainer/Tank/PowerMeter")
+power_scrolling_texture = SubResource("Texture2D_1f64a")
+power_clipping_texture = SubResource("Texture2D_ycetg")
 
 [node name="CollectibleContainer" type="Control" parent="." unique_id=1142767291]
 layout_mode = 3
@@ -414,11 +462,11 @@ grow_vertical = 2
 [node name="POWER" type="Sprite2D" parent="HealthContainer/Base" unique_id=457957822]
 position = Vector2(31.499989, 9)
 scale = Vector2(1.0781246, 1)
-texture = SubResource("CanvasTexture_fsh6l")
+texture = SubResource("CanvasTexture_nygxd")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 16)
 script = ExtResource("11_fsh6l")
-canvas_texture = SubResource("CanvasTexture_fsh6l")
+canvas_texture = SubResource("CanvasTexture_nygxd")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_rmsoo")
 current_animation = "default"
@@ -429,11 +477,11 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="CoinMeter" type="Sprite2D" parent="HealthContainer/Base" unique_id=281389693]
 position = Vector2(32, 32)
-texture = SubResource("CanvasTexture_erhw5")
+texture = SubResource("CanvasTexture_1f64a")
 region_enabled = true
 region_rect = Rect2(0, 0, 14, 14)
 script = ExtResource("11_fsh6l")
-canvas_texture = SubResource("CanvasTexture_erhw5")
+canvas_texture = SubResource("CanvasTexture_1f64a")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_871rv")
 current_animation = "default"
@@ -580,6 +628,25 @@ text = "tmp"
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
+[node name="PowerMeter" type="TextureRect" parent="FLUDDContainer/Tank" unique_id=261064672]
+light_mask = 4
+texture_repeat = 3
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = -92.5
+offset_right = 18.0
+offset_bottom = -8.5
+grow_horizontal = 2
+grow_vertical = 0
+texture = SubResource("Texture2D_ycetg")
+expand_mode = 1
+stretch_mode = 1
+
 [node name="Control" type="Control" parent="FLUDDContainer/Tank" unique_id=327615050]
 layout_mode = 1
 anchors_preset = 5
@@ -591,5 +658,5 @@ offset_right = -5.0
 offset_bottom = -7.5
 grow_horizontal = 2
 
-[node name="FluddNozzleIcon" type="Sprite2D" parent="FLUDDContainer/Tank/Control" unique_id=1960519657]
-texture = ExtResource("19_erhw5")
+[node name="FluddNozzleIcon" type="AnimatedSprite2D" parent="FLUDDContainer/Tank/Control" unique_id=381679037]
+sprite_frames = SubResource("SpriteFrames_nygxd")

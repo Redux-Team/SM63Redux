@@ -6,17 +6,26 @@
 [sub_resource type="CanvasTexture" id="CanvasTexture_mq0tm"]
 diffuse_texture = ExtResource("2_pku74")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_pku74"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_unwmf"]
 resource_local_to_scene = true
-size = Vector2(12, 0)
+size = Vector2(10, 3)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5a16i"]
+size = Vector2(12, 20)
 
 [node name="FluddNozzleRocket" unique_id=762472111 instance=ExtResource("1_pku74")]
+grant_nozzle = 2
 
 [node name="SmartSprite2D" parent="." index="0" unique_id=857828210]
 texture = SubResource("CanvasTexture_mq0tm")
+offset = Vector2(0, 2)
 canvas_texture = SubResource("CanvasTexture_mq0tm")
 diffuse_texture = ExtResource("2_pku74")
 
 [node name="CollisionShape2D" parent="." index="2" unique_id=79070776]
 position = Vector2(0, 11)
-shape = SubResource("RectangleShape2D_pku74")
+shape = SubResource("RectangleShape2D_unwmf")
+
+[node name="CollisionShape2D" parent="EntityCheckArea" parent_id_path=PackedInt32Array(230038696) index="0" unique_id=275255749]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_5a16i")
