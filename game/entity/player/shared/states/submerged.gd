@@ -13,7 +13,7 @@ func _on_physics_tick(delta: float) -> void:
 	if abs(player.move_dir) > 0 and not player.is_crouching:
 		speed_up(player.move_dir)
 	
-	if Input.is_action_pressed("swim_down") and player.swim_buffer_time <= 0.0:
+	if Input.is_action_pressed("swim_down") and player.swim_buffer_time <= 0.0 and not player.get_fludd_handler().is_hover_active():
 		player.velocity.y = lerpf(player.velocity.y, 140, 0.2)
 	elif player.swim_buffer_time > 0.0:
 		player.velocity.y = lerpf(player.velocity.y, 0.0, 0.08)

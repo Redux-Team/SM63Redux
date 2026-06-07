@@ -18,7 +18,7 @@ var buffer_dictionary: Dictionary[String, float]
 @export var jump_strength: float = 340.0
 @export var double_jump_strength: float = 420.0
 @export var triple_jump_strength: float = 500.0
-@export var jump_chain_time: float = 0.2
+@export var jump_chain_time: float = 0.15
 @export_subgroup("Underwater Movement")
 @export var water_resistance: float = 0.6
 @export var swim_up_strength: float = 150.0
@@ -46,6 +46,7 @@ var buffer_dictionary: Dictionary[String, float]
 @export var submerged_bus_effects: Array[AudioEffect]
 
 
+var effective_midair_max_speed: float = 0.0
 var _move_dir_raw: float = 0.0
 var move_dir: float:
 	get:
@@ -94,6 +95,7 @@ var cam: Camera2D
 
 
 func _ready() -> void:
+	effective_midair_max_speed = midair_max_speed
 	var ingame_hud: IngameHUD = preload("uid://deyfsp6xn4e27").instantiate()
 	ingame_hud.bind(self)
 	add_child(ingame_hud)
@@ -181,6 +183,10 @@ func get_sprite_handler() -> PlayerSpriteHandler:
 
 func get_fludd_handler() -> PlayerFluddHandler:
 	return _fludd_handler
+
+
+func is_state(state_name: String) -> bool:
+	return state_machine.get_current_state().get_internal_name() == state_name
 
 
 func is_action_pressed(action: String) -> bool:

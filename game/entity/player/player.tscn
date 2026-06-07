@@ -72,6 +72,9 @@
 [ext_resource type="AudioStream" uid="uid://0o8t42w7mec4" path="res://assets/sfx/player/fludd/fludd_switch.wav" id="52_j002l"]
 [ext_resource type="Texture2D" uid="uid://b3fvoxgujojvl" path="res://assets/textures/entity/player/mario/dive_fall.png" id="53_ketxm"]
 [ext_resource type="Texture2D" uid="uid://bw7pv1724v3n4" path="res://assets/textures/entity/player/mario/double_jump_fall.png" id="55_3h1ly"]
+[ext_resource type="Shader" uid="uid://u5nhalc0jfsd" path="res://core/shader/fludd_particle_outlines.gdshader" id="56_681d1"]
+[ext_resource type="Shader" uid="uid://2jfogo5suhia" path="res://core/shader/fludd_particles.gdshader" id="56_fstnu"]
+[ext_resource type="Texture2D" uid="uid://bw4mmc3qtcito" path="res://assets/textures/particle/fludd/fludd_water.png" id="56_kyrvb"]
 [ext_resource type="Texture2D" uid="uid://kx2d7seigvff" path="res://assets/textures/entity/player/mario/ground_pound_fall.png" id="58_mjy7s"]
 [ext_resource type="Texture2D" uid="uid://cbnwad05e1yti" path="res://assets/textures/entity/player/mario/ground_pound_slam.png" id="59_ohvaq"]
 [ext_resource type="Texture2D" uid="uid://dar3mdwnuhg0i" path="res://assets/textures/entity/player/mario/jumpl.png" id="60_5ygwk"]
@@ -84,6 +87,8 @@
 [ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="78_fx7qh"]
 [ext_resource type="Texture2D" uid="uid://dnqpe8w1wgck1" path="res://assets/textures/particle/item/heal_particle.png" id="80_k0v5e"]
 [ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="81_dhqxs"]
+[ext_resource type="AudioStream" uid="uid://bffab71uf61kf" path="res://assets/sfx/player/fludd/hover.mp3" id="81_fstnu"]
+[ext_resource type="AudioStream" uid="uid://dolh40gtancy4" path="res://assets/sfx/player/fludd/hover_loop.mp3" id="82_681d1"]
 
 [sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_3h1ly"]
 cutoff_hz = 2500.0
@@ -713,6 +718,20 @@ __to_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __from_node_uuid = "167d2846-17ec-4534-a26e-c582cae80f3a"
 __to_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 
+[sub_resource type="Resource" id="Resource_cmrqc"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+mode = 3
+expression = "velocity.y > 30 && 
+!is_on_floor() && 
+get_active_state_uptime() > 0.3 && 
+is_action_pressed(\"use_fludd\") &&
+get_fludd_handler().equipped_nozzle != 0"
+__from_uuid = "7a11481f-96a2-4861-99a6-5a97b2628e11"
+__to_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
+__from_node_uuid = "9926b8f7-53dc-4adb-a5e1-b7a3daa778e5"
+__to_node_uuid = "9720cd09-3fa6-4b42-91b8-eef951712732"
+
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
 _data = [Vector2(0, -1.3932585), 0.0, 0.9746846, 0, 0, Vector2(1.5965666, -0.05618429), 0.0, 0.0, 0, 0]
@@ -731,18 +750,6 @@ metadata/_custom_type_script = "uid://cd63gwefr4fp4"
 [sub_resource type="Resource" id="Resource_ndkiv"]
 script = ExtResource("7_ioda6")
 playlist = SubResource("Resource_1p630")
-bus = 3
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_ejgj1"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("14_lh4k8"), ExtResource("15_ria7k")])
-play_order = 0
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_k0v5e"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_ejgj1")
 bus = 3
 metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
@@ -766,6 +773,18 @@ metadata/_custom_type_script = "uid://cd63gwefr4fp4"
 [sub_resource type="Resource" id="Resource_8odgw"]
 script = ExtResource("7_ioda6")
 playlist = SubResource("Resource_6saf5")
+bus = 3
+metadata/_custom_type_script = "uid://deiaa5u8esvnc"
+
+[sub_resource type="Resource" id="Resource_ejgj1"]
+script = ExtResource("13_8yq6v")
+tracklist = Array[AudioStream]([ExtResource("14_lh4k8"), ExtResource("15_ria7k")])
+play_order = 0
+metadata/_custom_type_script = "uid://cd63gwefr4fp4"
+
+[sub_resource type="Resource" id="Resource_k0v5e"]
+script = ExtResource("7_ioda6")
+playlist = SubResource("Resource_ejgj1")
 bus = 3
 metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
@@ -960,11 +979,51 @@ _data = {
 &"triple_jump": SubResource("Animation_aln35")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fstnu"]
+shader = ExtResource("56_681d1")
+shader_parameter/fill_color = Color(0.54, 0.7, 0.83, 0.63)
+shader_parameter/outline_color = Color(0.09019608, 0.2784314, 0.4117647, 0.6313726)
+shader_parameter/outline_width = 1.0000000475
+shader_parameter/outline_softness = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_681d1"]
+shader = ExtResource("56_fstnu")
+shader_parameter/frame_count = Vector2i(2, 2)
+shader_parameter/expand_reduce = 0.25000005937500003
+
+[sub_resource type="Gradient" id="Gradient_kyrvb"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.3882353)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kw6gy"]
+gradient = SubResource("Gradient_kyrvb")
+
+[sub_resource type="Curve" id="Curve_kyrvb"]
+_data = [Vector2(0, 0.49827188), 0.0, 1.6879036, 0, 0, Vector2(0.50145775, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_kw6gy"]
+width = 64
+curve = SubResource("Curve_kyrvb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kyrvb"]
+particle_flag_align_y = true
+particle_flag_disable_z = true
+direction = Vector3(0, 1, 0)
+spread = 7.5
+initial_velocity_min = 300.0
+initial_velocity_max = 450.0
+gravity = Vector3(0, 98, 0)
+scale_min = 1.25
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_kw6gy")
+color_ramp = SubResource("GradientTexture1D_kw6gy")
+anim_offset_max = 1.0
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p630"]
 atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_j002l"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_q4egk"]
 diffuse_texture = SubResource("AtlasTexture_1p630")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d635j"]
@@ -1257,7 +1316,7 @@ size = Vector2(10, 13)
 size = Vector2(40, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ketxm"]
-size = Vector2(22, 12.5)
+size = Vector2(27, 15.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d635j"]
 size = Vector2(12, 3)
@@ -1334,8 +1393,9 @@ colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0.9459459, 1, 1, 1, 0
 collision_mask = 2
 floor_snap_length = 7.0
 script = ExtResource("1_oic1i")
-run_max_speed = 235.0
-midair_max_speed = 210.0
+turn_speed = 2.0
+midair_turn_speed = 15.0
+run_max_speed = 220.0
 debug_container = NodePath("DebugContainer")
 floor_slope_raycast = NodePath("FloorSlopeRaycast")
 spin_area = NodePath("Hitboxes/Spin")
@@ -1359,8 +1419,8 @@ root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(-372.18436, 41.449425)
-__last_editor_zoom = 0.25937414
+__last__editor_position = Vector2(3507.443, -554.83887)
+__last_editor_zoom = 0.6115912
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),
@@ -1444,6 +1504,7 @@ __transitions = Dictionary[StringName, ExtResource("3_0jrw7")]({
 &"51b8cbb3-adf2-4aa2-96e4-2d8799482bbc": SubResource("Resource_5citm"),
 &"53bad02f-ca44-42ca-83a1-4599c4b97621": SubResource("Resource_8um7f"),
 &"55583825-433c-48ca-87e8-c8d5193536f0": SubResource("Resource_ioda6"),
+&"58d31666-701a-4f56-b85a-2ebd419409c2": SubResource("Resource_cmrqc"),
 &"5dda3fb4-76b2-4742-87b6-de8f1d2ccb9f": SubResource("Resource_sldje"),
 &"6600d7f1-50dd-45be-bf05-2ccd1f9c5820": SubResource("Resource_d635j"),
 &"666e45d4-ccde-4c42-b835-912a00fe3c4a": SubResource("Resource_6qpfs"),
@@ -1646,6 +1707,10 @@ __aliases = {
 "original_uuid": &"092ff28f-6a90-40e8-8c49-a55969c526c7",
 "position": Vector2(1940, 960)
 },
+&"9720cd09-3fa6-4b42-91b8-eef951712732": {
+"original_uuid": &"d8126d47-03c3-4a9b-abee-8c68263ad4ab",
+"position": Vector2(6580, -180)
+},
 &"991247db-edd4-43f5-af6f-227cf9aee3db": {
 "original_uuid": &"0dd74506-66e0-4267-b86b-0572da305c2a",
 "position": Vector2(3800, -80)
@@ -1800,6 +1865,7 @@ __editor_superstate_wire_uuid = &"b0bb253d-6d54-4d9a-b24f-2ad6ba7d78a3"
 
 [node name="Dive" type="Node" parent="StateMachine/Dry/Airborne" unique_id=2082405443 node_paths=PackedStringArray("collision_enabled_shapes")]
 script = ExtResource("10_aln35")
+target_speed = 900.0
 launch_y_boost = 80.0
 rotation_curve = SubResource("Curve_aln35")
 y_velocity_to_rotation_offset_curve = SubResource("Curve_ioda6")
@@ -1815,7 +1881,6 @@ __editor_superstate_wire_uuid = &"d8126d47-03c3-4a9b-abee-8c68263ad4ab"
 [node name="IdleJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1248860808]
 script = ExtResource("4_4j27x")
 sprite_animation_name = &"jump"
-sfx_enter = SubResource("Resource_k0v5e")
 __editor_name = &"idle_jump"
 __editor_position = Vector2(-400, -200)
 __editor_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
@@ -2068,10 +2133,21 @@ script = ExtResource("7_tb30q")
 _player = NodePath("../..")
 _doll = NodePath("../../Doll")
 
-[node name="FLUDDHandler" type="Node" parent="Handlers" unique_id=468241504 node_paths=PackedStringArray("player")]
+[node name="FLUDDHandler" type="Node" parent="Handlers" unique_id=468241504 node_paths=PackedStringArray("_spray_particles", "player", "_hover_fludd_particles", "_hover_sfx", "_spray_loop_sfx")]
 script = ExtResource("51_h6qgx")
+fludd_x_speed_cap = 120.0
+dive_fludd_force = 10.0
+dive_fludd_x_factor = 1.0
+dive_fludd_y_factor = 0.0
+slide_fludd_force = 50.0
+submerged_fludd_target_velocity = -1000.0
+submerged_fludd_ease_weight = 0.5
 nozzle_switch_sfx = ExtResource("52_j002l")
+_spray_particles = NodePath("../../CanvasGroup/HoverFluddParticles")
 player = NodePath("../..")
+_hover_fludd_particles = NodePath("../../CanvasGroup/HoverFluddParticles")
+_hover_sfx = NodePath("../../HoverSFX")
+_spray_loop_sfx = NodePath("../../SprayLoopSFX")
 
 [node name="Components" type="Node" parent="." unique_id=958645498]
 
@@ -2092,13 +2168,34 @@ max_hp = 8.0
 entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
+[node name="CanvasGroup" type="CanvasGroup" parent="." unique_id=477917490]
+material = SubResource("ShaderMaterial_fstnu")
+position = Vector2(2, -20)
+fit_margin = 1024.0
+use_mipmaps = true
+
+[node name="HoverFluddParticles" type="GPUParticles2D" parent="CanvasGroup" unique_id=239998492]
+material = SubResource("ShaderMaterial_681d1")
+position = Vector2(0, 13)
+emitting = false
+amount = 50
+texture = ExtResource("56_kyrvb")
+lifetime = 0.5
+fixed_fps = 0
+visibility_rect = Rect2(-14, 0, 26, 211)
+process_material = SubResource("ParticleProcessMaterial_kyrvb")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="CanvasGroup" unique_id=931585958]
+visible = false
+copy_mode = 0
+
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_j002l")
+texture = SubResource("CanvasTexture_q4egk")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_j002l")
+canvas_texture = SubResource("CanvasTexture_q4egk")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true
@@ -2145,6 +2242,18 @@ position = Vector2(2, 2.5)
 shape = SubResource("RectangleShape2D_h6qgx")
 disabled = true
 
+[node name="HoverSFX" type="AudioStreamPlayer2D" parent="." unique_id=135897587]
+position = Vector2(0, 1)
+stream = ExtResource("81_fstnu")
+volume_db = -6.0
+bus = &"Player"
+
+[node name="SprayLoopSFX" type="AudioStreamPlayer2D" parent="." unique_id=1101482200]
+position = Vector2(0, 1)
+stream = ExtResource("82_681d1")
+volume_db = -6.0
+bus = &"Player"
+
 [node name="Hitboxes" type="Node2D" parent="." unique_id=1409973495]
 
 [node name="Spin" type="Area2D" parent="Hitboxes" unique_id=1300299390]
@@ -2169,7 +2278,7 @@ position = Vector2(2, -10)
 monitoring = false
 script = ExtResource("19_1wiqr")
 hitbox_ids = Array[String](["player", "dive"])
-hit_expression = "abs(velocity.x) > 200"
+hit_expression = "abs(velocity.x) > 180"
 damage_amount = 1.0
 damage_type = 1
 has_knockback = true
@@ -2177,7 +2286,7 @@ knockback_vector = Vector2(150, -135)
 metadata/_custom_type_script = "uid://c103bnb5445y3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/Dive" unique_id=385964569]
-position = Vector2(1, 10.25)
+position = Vector2(0.5, 10.25)
 shape = SubResource("RectangleShape2D_ketxm")
 disabled = true
 debug_color = Color(0.7, 0, 0, 0.41960785)
@@ -2285,7 +2394,6 @@ script = ExtResource("4_kn1iv")
 debug_label = NodePath("DebugLabel")
 
 [node name="DebugLabel" type="Label" parent="DebugContainer" unique_id=1388430990]
-visible = false
 layout_mode = 2
 theme_type_variation = &"DebugLabel"
 text = "Current State: Idle"

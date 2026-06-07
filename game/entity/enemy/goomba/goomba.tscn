@@ -280,7 +280,7 @@ size = Vector2(17, 7)
 
 [sub_resource type="Resource" id="Resource_onrng"]
 script = ExtResource("26_15o45")
-accepted_hitbox_ids = PackedStringArray("spin", "bobomb", "koopa_shell")
+accepted_hitbox_ids = PackedStringArray("spin", "bobomb", "koopa_shell", "dive")
 override_knockback = true
 disable_on_hit = true
 override_damage_state = true

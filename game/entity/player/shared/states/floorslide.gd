@@ -39,14 +39,24 @@ func _on_exit() -> void:
 	player.set_friction_scale_factor(1.0)
 	body_rotation = 0.0
 	player.sprite.rotation_degrees = 0.0
+	player.get_fludd_handler().set_dive_rotation(body_rotation, PlayerFluddHandler.FluddContext.NONE)
 
 
 func _on_physics_tick(delta: float) -> void:
+	player.get_fludd_handler().set_dive_rotation(body_rotation, PlayerFluddHandler.FluddContext.FLOOR_SLIDE)
+	
 	if player.is_on_floor():
 		time_since_grounded = 0.0
 	else:
-		player.velocity.y += 1
+		player.velocity.y += 1.0
 		time_since_grounded += delta
+	
+	if not player.is_on_floor():
+		var speed: Vector2 = abs(player.velocity)
+		var vector: Vector2 = sign(player.velocity)
+		player.velocity.x = min(speed.x, player.terminal_velocity_x / 2.0)
+		player.velocity.y = min(speed.y, player.terminal_velocity_y / 1.5)
+		player.velocity *= vector
 
 
 func _on_tick(_delta: float) -> void:

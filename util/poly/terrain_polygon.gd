@@ -281,6 +281,7 @@ static func add_topline_segment(container: Node2D, segment: PackedVector2Array, 
 	line.default_color = Color.WHITE if style.texture else style.color
 	line.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST if not style.textured else CanvasItem.TEXTURE_FILTER_PARENT_NODE
 	line.antialiased = not style.textured
+	line.joint_mode = Line2D.LINE_JOINT_SHARP
 	line.points = subdivide_for_line2d(line_segment, style.texture)
 	_apply_line_material(line, style)
 	container.add_child(line)

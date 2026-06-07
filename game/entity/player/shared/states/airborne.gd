@@ -10,8 +10,8 @@ func _on_physics_tick(_delta: float) -> void:
 
 
 func air_move(move_dir: float) -> void:
-	var accel: float = player.walk_acceleration
-	var max_speed: float = player.midair_max_speed
+	var accel: float = player.midair_turn_speed
+	var max_speed: float = player.effective_midair_max_speed
 	var is_spinning: bool = state_machine.get_current_state().get_internal_name() == "spin"
 	var accel_mult: float = 0.35 if is_spinning and not player.is_on_floor() else 0.85
 	
@@ -22,5 +22,7 @@ func air_move(move_dir: float) -> void:
 	
 	if abs(vx) < max_speed or sign(vx) != sign(move_dir):
 		vx = move_toward(vx, max_speed * move_dir, accel * accel_mult)
+	elif abs(vx) > max_speed and not player.get_fludd_handler().is_hover_active():
+		vx = move_toward(vx, max_speed * sign(vx), accel * accel_mult * 0.1)
 	
 	player.velocity.x = vx

@@ -93,10 +93,13 @@ func _on_physics_tick(delta: float) -> void:
 		update_dive_reset(delta)
 		return
 	
+	player.get_fludd_handler().set_dive_rotation(body_rotation, PlayerFluddHandler.FluddContext.DIVE)
+	
 	if player.is_on_floor():
 		apply_ground_dive_physics(delta)
 	else:
 		apply_air_dive_physics(delta)
+
 
 
 func _on_tick(delta: float) -> void:
