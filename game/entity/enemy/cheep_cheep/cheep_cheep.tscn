@@ -34,7 +34,7 @@
 atlas = ExtResource("3_e1qem")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_pchd4"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_bwx7d"]
 diffuse_texture = SubResource("AtlasTexture_3hxvc")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6u4ql"]
@@ -298,7 +298,7 @@ metadata/_custom_type_script = "uid://drtqc6at2evph"
 size = Vector2(24, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gthq1"]
-size = Vector2(18, 18)
+size = Vector2(14, 14)
 
 [sub_resource type="Curve" id="Curve_1ojbg"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -340,11 +340,11 @@ ExtResource("3_dbaom"): 1
 water_check = NodePath("WaterCheckBody")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=2130051420 node_paths=PackedStringArray("rotation_source")]
-texture = SubResource("CanvasTexture_pchd4")
+texture = SubResource("CanvasTexture_bwx7d")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("2_f2p2u")
-canvas_texture = SubResource("CanvasTexture_pchd4")
+canvas_texture = SubResource("CanvasTexture_bwx7d")
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6u4ql")
@@ -538,6 +538,7 @@ metadata/_custom_type_script = "uid://bhoysiia8munh"
 shape = SubResource("RectangleShape2D_f1ga4")
 
 [node name="EntityCheckAreaWater" type="Area2D" parent="." unique_id=334203952]
+visible = false
 script = ExtResource("20_b1y5l")
 metadata/_custom_type_script = "uid://cf0fqotw8gu4p"
 
@@ -545,6 +546,7 @@ metadata/_custom_type_script = "uid://cf0fqotw8gu4p"
 shape = SubResource("CircleShape2D_66cei")
 
 [node name="EntityCheckAreaClose" type="Area2D" parent="." unique_id=1061201237]
+visible = false
 script = ExtResource("20_b1y5l")
 metadata/_custom_type_script = "uid://cf0fqotw8gu4p"
 
@@ -552,6 +554,7 @@ metadata/_custom_type_script = "uid://cf0fqotw8gu4p"
 shape = SubResource("CircleShape2D_b1y5l")
 
 [node name="EntityCheckAreaLost" type="Area2D" parent="." unique_id=2043313430]
+visible = false
 script = ExtResource("20_b1y5l")
 metadata/_custom_type_script = "uid://cf0fqotw8gu4p"
 
