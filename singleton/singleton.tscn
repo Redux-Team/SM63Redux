@@ -1,6 +1,31 @@
 [gd_scene format=3 uid="uid://brlqbi6c7ea8x"]
 
 [ext_resource type="Script" uid="uid://d3u2r7day6e33" path="res://singleton/singleton.gd" id="1_287bc"]
+[ext_resource type="Shader" uid="uid://dcewkclyl2vjk" path="res://core/shader/screen_transition_center.gdshader" id="2_74ahl"]
 
-[node name="Singleton" type="Node" unique_id=1257631613]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6he5r"]
+shader = ExtResource("2_74ahl")
+shader_parameter/mask_scale = 1.0
+
+[node name="Singleton" type="Node" unique_id=1257631613 node_paths=PackedStringArray("_screen_transition_rect")]
 script = ExtResource("1_287bc")
+_screen_transition_rect = NodePath("TransitionLayer/AspectRatioContainer/ColorRect")
+
+[node name="TransitionLayer" type="CanvasLayer" parent="." unique_id=819180442]
+layer = 99
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="TransitionLayer" unique_id=786831383]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="TransitionLayer/AspectRatioContainer" unique_id=168346916]
+visible = false
+material = SubResource("ShaderMaterial_6he5r")
+layout_mode = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

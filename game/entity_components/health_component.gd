@@ -9,6 +9,7 @@ signal power_reset()
 signal damaged(amount: float, type: HitBox.DamageType)
 signal died
 
+@export var death_state: State
 @export var max_hp: float = 1.0
 ## Rounds to the nearest health point when healing or taking damage.
 @export var round_to_nearest: bool = true
@@ -31,6 +32,7 @@ signal died
 var hp_tween: Tween
 var _hp_tween_target: float
 var _hp_tweening: bool = false
+var _dead: bool = false
 
 var _hp: float:
 	set(hp):
@@ -53,6 +55,9 @@ func get_hp() -> float:
 
 
 func damage(amount: float, type: HitBox.DamageType) -> void:
+	if _dead:
+		return
+	
 	_hp -= amount
 	
 	if round_to_nearest:
@@ -61,7 +66,10 @@ func damage(amount: float, type: HitBox.DamageType) -> void:
 	damaged.emit(amount, type)
 	
 	if _hp <= 0:
+		if entity.state_machine and death_state:
+			entity.state_machine.change_state.call_deferred(death_state.get_internal_name())
 		died.emit()
+		_dead = true
 
 
 func heal(amount: float, time: float = 0.0) -> void:

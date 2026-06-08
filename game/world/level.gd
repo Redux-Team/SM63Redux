@@ -26,6 +26,7 @@ var _player: Player
 var _loaded: bool = false
 
 @export var _level_camera: LevelCamera
+@export var music_player: AudioStreamPlayer
 
 
 func _init() -> void:
@@ -154,6 +155,8 @@ func load_from_dict(data: Dictionary) -> Error:
 	
 	_loaded = true
 	loaded.emit()
+	
+	music_player.play()
 	
 	return OK
 

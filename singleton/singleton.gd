@@ -5,6 +5,9 @@ var _input_handler: InputHandler = InputHandler.new()
 var _tree_hook: TreeHook = TreeHook.new()
 var _level_clock: LevelClock = LevelClock.new()
 var _multiplayer: MultiplayerHandler = MultiplayerHandler.new()
+var _transition_handler: TransitionHandler = TransitionHandler.new()
+
+@export var _screen_transition_rect: ColorRect
 
 
 func _init() -> void:
@@ -44,6 +47,10 @@ func get_level_clock() -> LevelClock:
 
 func get_multiplayer_handler() -> MultiplayerHandler:
 	return _multiplayer
+
+
+func build_screen_transition() -> TransitionBuilder:
+	return _transition_handler.build()
 
 
 func spawn_sibling(root_node: Node, node: Node, _shared_properties: PackedStringArray = ["position", "scale"]) -> void:
@@ -212,6 +219,133 @@ class MultiplayerHandler:
 	
 	func _on_connected_to_server() -> void:
 		client_connected.emit()
+
+
+class TransitionHandler:
+	extends Node
+	
+	func build() -> TransitionBuilder:
+		return TransitionBuilder.new(Singleton._screen_transition_rect)
+
+
+class TransitionBuilder:
+	enum TransitionType { CENTER, WAVE }
+	
+	const SHADER_CENTER: Shader = preload("uid://dcewkclyl2vjk")
+	const SHADER_WAVE: Shader = preload("uid://drycsk0p628ig")
+	
+	var _color_rect: ColorRect
+	var _type: TransitionType = TransitionType.CENTER
+	var _out_duration: float = 0.5
+	var _in_duration: float = 0.8
+	var _block_input: bool = true
+	var _callables: Array[Callable] = []
+	var _texture: Texture2D = null
+	var _out_texture: Texture2D = null
+	var _in_texture: Texture2D = null
+	var _destination: String = ""
+	var _hold_duration: float = 0.5
+	
+	
+	func _init(color_rect: ColorRect) -> void:
+		_color_rect = color_rect
+	
+	
+	func set_type(type: TransitionType) -> TransitionBuilder:
+		_type = type
+		return self
+	
+	
+	func set_out_duration(duration: float) -> TransitionBuilder:
+		_out_duration = duration
+		return self
+	
+	
+	func set_in_duration(duration: float) -> TransitionBuilder:
+		_in_duration = duration
+		return self
+	
+	
+	func set_block_input(block_input: bool) -> TransitionBuilder:
+		_block_input = block_input
+		return self
+	
+	
+	func set_texture(texture: Texture2D) -> TransitionBuilder:
+		_texture = texture
+		return self
+	
+	
+	func set_out_texture(texture: Texture2D) -> TransitionBuilder:
+		_out_texture = texture
+		return self
+	
+	
+	func set_in_texture(texture: Texture2D) -> TransitionBuilder:
+		_in_texture = texture
+		return self
+	
+	
+	func set_destination(path: String) -> TransitionBuilder:
+		_destination = path
+		return self
+	
+	
+	func set_hold_duration(duration: float) -> TransitionBuilder:
+		_hold_duration = duration
+		return self
+	
+	
+	func load(callable: Callable) -> TransitionBuilder:
+		_callables.append(callable)
+		return self
+	
+	
+	func done() -> void:
+		var mat: ShaderMaterial = _color_rect.material as ShaderMaterial
+		match _type:
+			TransitionType.CENTER:
+				mat.shader = SHADER_CENTER
+			TransitionType.WAVE:
+				mat.shader = SHADER_WAVE
+		if is_instance_valid(_texture):
+			mat.set_shader_parameter(&"mask_texture", _texture)
+		
+		_color_rect.show()
+		if _block_input:
+			_color_rect.mouse_filter = Control.MOUSE_FILTER_STOP
+		else:
+			_color_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		
+		var tween_out: Tween = _color_rect.get_tree().create_tween().set_ease(Tween.EASE_OUT)
+		var tween_in: Tween = _color_rect.get_tree().create_tween().set_ease(Tween.EASE_IN)
+		tween_in.pause()
+		
+		match _type:
+			TransitionType.CENTER:
+				tween_out.tween_method(func(t: float) -> void: mat.set_shader_parameter(&"mask_scale", t), 10.0, 0.0, _out_duration)
+				tween_in.tween_method(func(t: float) -> void: mat.set_shader_parameter(&"mask_scale", t), 0.0, 10.0, _in_duration)
+			TransitionType.WAVE:
+				tween_out.tween_method(func(t: float) -> void: mat.set_shader_parameter(&"mask_offset", Vector2(0.0, t)), 1.0, 0.0, _out_duration)
+				tween_in.tween_method(func(t: float) -> void: mat.set_shader_parameter(&"mask_offset", Vector2(0.0, t)), 0.0, 1.0, _in_duration)
+		
+		tween_out.finished.connect(func() -> void:
+			for c: Callable in _callables:
+				c.call()
+			var hold: Tween = _color_rect.get_tree().create_tween()
+			var out_tex: Texture2D = _out_texture if is_instance_valid(_out_texture) else _texture
+			if is_instance_valid(out_tex):
+				mat.set_shader_parameter(&"mask_texture", out_tex)
+			hold.tween_interval(_hold_duration)
+			if _destination:
+				hold.tween_callback(_color_rect.get_tree().change_scene_to_file.bind(_destination))
+			hold.finished.connect(tween_in.play)
+		)
+		
+		tween_in.finished.connect(func() -> void:
+			_color_rect.hide()
+			_color_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		)
 
 
 class env:

@@ -2,8 +2,6 @@
 
 [ext_resource type="Script" uid="uid://7h213kjqdaqn" path="res://level_designer/scenes/level_test.gd" id="1_5nuwi"]
 [ext_resource type="PackedScene" uid="uid://st4r6o6hqwhj" path="res://game/backgrounds/hills.tscn" id="2_1sbsh"]
-[ext_resource type="PackedScene" uid="uid://b4nw5k2oa3ro0" path="res://game/entity/player/player.tscn" id="2_h52q2"]
-[ext_resource type="AudioStream" uid="uid://cmiulmppvmbql" path="res://assets/music/level_tutorial_1.mp3" id="4_h52q2"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_x1m06"]
 device = -1
@@ -12,11 +10,9 @@ keycode = 4194308
 [sub_resource type="Shortcut" id="Shortcut_1sbsh"]
 events = [SubResource("InputEventKey_x1m06")]
 
-[node name="LevelTest" type="Node2D" unique_id=1539087846 node_paths=PackedStringArray("level_root", "multiplayer_spawner")]
+[node name="LevelTest" type="Node2D" unique_id=1539087846 node_paths=PackedStringArray("level_root")]
 script = ExtResource("1_5nuwi")
 level_root = NodePath("LevelRoot")
-multiplayer_spawner = NodePath("MultiplayerSpawner")
-player_scene = ExtResource("2_h52q2")
 
 [node name="HillsBG" parent="." unique_id=1464026582 instance=ExtResource("2_1sbsh")]
 
@@ -38,12 +34,6 @@ grow_horizontal = 0
 grow_vertical = 0
 shortcut = SubResource("Shortcut_1sbsh")
 text = "Back to LD"
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1523917071]
-stream = ExtResource("4_h52q2")
-volume_db = -10.0
-autoplay = true
-bus = &"Music"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=243473474]
 spawn_path = NodePath("../LevelRoot")

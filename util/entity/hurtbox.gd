@@ -84,17 +84,17 @@ func _on_disable_timer_expired(timer: SceneTreeTimer) -> void:
 
 func enable(time: float = 0.0) -> void:
 	set_deferred(&"monitoring", true)
-	_stop_blink()
+	stop_blink()
 	if time > 0.0:
 		_push_disable_timer(time)
 
 
 func disable() -> void:
 	set_deferred(&"monitoring", false)
-	_start_blink()
+	start_blink()
 
 
-func _start_blink() -> void:
+func start_blink() -> void:
 	if blink_targets.is_empty() or _blink_tween != null:
 		return
 	_blink_tween = create_tween().set_loops()
@@ -103,7 +103,7 @@ func _start_blink() -> void:
 		_blink_tween.tween_property(target, "modulate", Color.WHITE, blink_interval)
 
 
-func _stop_blink() -> void:
+func stop_blink() -> void:
 	if _blink_tween == null:
 		return
 	_blink_tween.kill()

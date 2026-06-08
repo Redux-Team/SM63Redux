@@ -47,6 +47,7 @@ var _anchor_offset: Vector2 = Vector2.ZERO
 var _target_zoom: float = 1.0
 var _look_ahead_offset: Vector2 = Vector2.ZERO
 var _prev_anchor_position: Vector2 = Vector2.ZERO
+var _frozen: bool = false
 
 
 func _init() -> void:
@@ -93,6 +94,31 @@ func set_anchor_offset(anchor_offset: Vector2) -> void:
 	_anchor_offset = anchor_offset
 
 
+func shake(strength: float, duration: float) -> void:
+	var base_offset: Vector2 = _anchor_offset
+	var elapsed: float = 0.0
+	while elapsed < duration:
+		var delta: float = get_process_delta_time()
+		elapsed += delta
+		var t: float = elapsed / duration
+		var decay: float = 1.0 - t * t
+		var angle: float = elapsed * 60.0
+		_anchor_offset = base_offset + Vector2(
+			cos(angle * 1.3) * strength * decay,
+			sin(angle) * strength * decay
+		)
+		await get_tree().process_frame
+	_anchor_offset = base_offset
+
+
+func freeze() -> void:
+	_frozen = true
+
+
+func unfreeze() -> void:
+	_frozen = false
+
+
 func _update_zoom(delta: float) -> void:
 	var new_zoom: float = lerpf(_camera.zoom.x, _target_zoom, zoom_smoothing_speed * delta)
 	_camera.zoom = Vector2.ONE * new_zoom
@@ -130,6 +156,9 @@ func _evaluate_look_ahead_axis(speed: float, min_speed: float, max_speed: float,
 
 
 func _apply_anchor_position() -> void:
+	if _frozen:
+		velocity = Vector2.ZERO
+		return
 	if not is_instance_valid(_anchor):
 		velocity = Vector2.ZERO
 		return
