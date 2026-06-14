@@ -131,7 +131,13 @@ func load_from_dict(data: Dictionary) -> Error:
 		return ERR_INVALID_DATA
 	
 	_clear()
-	
+
+	# Apply the COMMON scenario baseline: layers and tagged objects that COMMON disables
+	# are simply not spawned. (Numbered scenarios / "stars" come later.)
+	var disabled_layers: Dictionary[int, bool] = {}
+	var disabled_tags: Dictionary[String, bool] = {}
+	_read_common_scenario(data, disabled_layers, disabled_tags)
+
 	for area_data: Variant in normalized.get("areas", []):
 		if not area_data is Dictionary:
 			continue
@@ -142,6 +148,8 @@ func load_from_dict(data: Dictionary) -> Error:
 			if (layer_data.get("objects", []) as Array).is_empty():
 				continue
 			var layer_index: int = layer_data.get("layer_index", 0)
+			if disabled_layers.has(layer_index):
+				continue
 			var layer: LevelLayer = current_area.get_or_create_layer(layer_index)
 			var raw_parallax: Variant = layer_data.get("parallax_scale", null)
 			if raw_parallax != null:
@@ -153,14 +161,81 @@ func load_from_dict(data: Dictionary) -> Error:
 			for obj_data: Variant in layer_data.get("objects", []):
 				if not obj_data is Dictionary:
 					continue
+				if not _scenario_allows(obj_data, disabled_tags):
+					continue
 				_instantiate_object(obj_data, layer, current_area)
-	
+
+	# Stamps are stored as a definition plus anchors; expand each placement into real
+	# objects so they exist at runtime (the editor rebuilds them from anchors instead).
+	_spawn_stamps(data, disabled_layers, disabled_tags)
+
 	_loaded = true
 	loaded.emit()
-	
+
 	music_player.play()
-	
+
 	return OK
+
+
+## Reads the COMMON scenario from a saved level into "disabled" lookups: a layer index
+## or tag present here was turned off in COMMON and should not spawn.
+func _read_common_scenario(data: Dictionary, out_layers: Dictionary[int, bool], out_tags: Dictionary[String, bool]) -> void:
+	var scenarios: Variant = data.get("scenarios", {})
+	if not scenarios is Dictionary:
+		return
+	var common: Variant = (scenarios as Dictionary).get("common", {})
+	if not common is Dictionary:
+		return
+	for pair: Variant in (common as Dictionary).get("layer_overrides", []):
+		if pair is Array and (pair as Array).size() == 2 and not bool(pair[1]):
+			out_layers[int(pair[0])] = true
+	for pair: Variant in (common as Dictionary).get("tag_overrides", []):
+		if pair is Array and (pair as Array).size() == 2 and not bool(pair[1]):
+			out_tags[str(pair[0])] = true
+
+
+## True if none of the object's tags were disabled by the active scenario.
+func _scenario_allows(obj_data: Dictionary, disabled_tags: Dictionary[String, bool]) -> bool:
+	for tag: Variant in obj_data.get("tags", []):
+		if disabled_tags.has(str(tag)):
+			return false
+	return true
+
+
+## Expands every stamp placement (anchor) into concrete level objects, applying the same
+## scenario filtering as regular objects.
+func _spawn_stamps(data: Dictionary, disabled_layers: Dictionary[int, bool], disabled_tags: Dictionary[String, bool]) -> void:
+	if not is_instance_valid(_active_area):
+		return
+	# "groups" is the pre-rename key; read it so older levels keep their stamps.
+	var stamps: Variant = data.get("stamps", data.get("groups", []))
+	if not stamps is Array:
+		return
+
+	for stamp_data: Variant in stamps:
+		if not stamp_data is Dictionary:
+			continue
+		var entries: Array = (stamp_data as Dictionary).get("objects", [])
+		for anchor: Variant in (stamp_data as Dictionary).get("anchors", []):
+			if not anchor is Dictionary:
+				continue
+			var anchor_pos: Vector2 = Packer.array_to_vec2((anchor as Dictionary).get("position", [0.0, 0.0]))
+			var anchor_layer: int = int((anchor as Dictionary).get("layer_index", 0))
+			for entry: Variant in entries:
+				if not entry is Dictionary:
+					continue
+				var obj_layer: int = int((entry as Dictionary).get("layer_index", anchor_layer))
+				if disabled_layers.has(obj_layer):
+					continue
+				if not _scenario_allows(entry, disabled_tags):
+					continue
+				var world_pos: Vector2 = anchor_pos + Packer.array_to_vec2((entry as Dictionary).get("local_offset", [0.0, 0.0]))
+				var spawn_data: Dictionary = (entry as Dictionary).duplicate(true)
+				spawn_data["position"] = [world_pos.x, world_pos.y]
+				if spawn_data.get("properties") is Dictionary and (spawn_data["properties"] as Dictionary).has("position"):
+					spawn_data["properties"]["position"] = [world_pos.x, world_pos.y]
+				var layer: LevelLayer = _active_area.get_or_create_layer(obj_layer)
+				_instantiate_object(spawn_data, layer, _active_area)
 
 
 func load_from_binary(path: String) -> Error:
