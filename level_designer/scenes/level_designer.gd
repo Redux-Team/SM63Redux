@@ -11,6 +11,7 @@ static var _inst: LD
 @export var _ld_stamp_handler: LDStampHandler
 @export var _ld_tag_handler: LDTagHandler
 @export var _ld_scenario_handler: LDScenarioHandler
+@export var _ld_background_handler: LDBackgroundHandler
 @export var _ld_tool_handler: LDToolHandler
 @export var _ld_music_handler: LDMusicHandler
 @export var _ld_history_handler: LDHistoryHandler
@@ -42,6 +43,10 @@ static func get_tag_handler() -> LDTagHandler:
 
 static func get_scenario_handler() -> LDScenarioHandler:
 	return get_instance()._ld_scenario_handler
+
+
+static func get_background_handler() -> LDBackgroundHandler:
+	return get_instance()._ld_background_handler
 
 
 static func get_tool_handler() -> LDToolHandler:

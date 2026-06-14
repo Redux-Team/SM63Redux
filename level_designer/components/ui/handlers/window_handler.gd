@@ -12,6 +12,7 @@ const LAYER_PROPERTIES: StringName = &"layer_properties"
 const STAMP_EDITOR: StringName = &"stamp_editor"
 const SCENARIO_EDITOR: StringName = &"scenario_editor"
 const TAG_EDITOR: StringName = &"tag_editor"
+const BACKGROUND_EDITOR: StringName = &"background_editor"
 const PICKER: StringName = &"picker"
 
 
@@ -63,6 +64,10 @@ func toggle_scenario_editor() -> LDScenarioEditor:
 
 func toggle_tag_editor() -> LDTagEditor:
 	return toggle(TAG_EDITOR) as LDTagEditor
+
+
+func toggle_background_editor() -> LDBackgroundEditor:
+	return toggle(BACKGROUND_EDITOR) as LDBackgroundEditor
 
 
 #endregion

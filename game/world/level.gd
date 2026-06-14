@@ -132,11 +132,14 @@ func load_from_dict(data: Dictionary) -> Error:
 	
 	_clear()
 
+	_build_background(data)
+
 	# Apply the COMMON scenario baseline: layers and tagged objects that COMMON disables
 	# are simply not spawned. (Numbered scenarios / "stars" come later.)
 	var disabled_layers: Dictionary[int, bool] = {}
 	var disabled_tags: Dictionary[String, bool] = {}
-	_read_common_scenario(data, disabled_layers, disabled_tags)
+	var disabled_stamps: Dictionary[String, bool] = {}
+	_read_common_scenario(data, disabled_layers, disabled_tags, disabled_stamps)
 
 	for area_data: Variant in normalized.get("areas", []):
 		if not area_data is Dictionary:
@@ -167,7 +170,7 @@ func load_from_dict(data: Dictionary) -> Error:
 
 	# Stamps are stored as a definition plus instances; expand each placement into real
 	# objects so they exist at runtime (the editor rebuilds them from instances instead).
-	_spawn_stamps(data, disabled_layers, disabled_tags)
+	_spawn_stamps(data, disabled_layers, disabled_tags, disabled_stamps)
 
 	_loaded = true
 	loaded.emit()
@@ -177,9 +180,30 @@ func load_from_dict(data: Dictionary) -> Error:
 	return OK
 
 
+## Builds the saved background (backdrop + parallax layers) into a CanvasLayer behind the
+## level, using the same LDBackground.build_into() the editor uses.
+func _build_background(data: Dictionary) -> void:
+	var existing: Node = get_node_or_null(^"Background")
+	if existing:
+		existing.free()
+
+	var editor: Variant = data.get("editor", {})
+	if not editor is Dictionary:
+		return
+	var bg_data: Variant = (editor as Dictionary).get("background", {})
+	if not bg_data is Dictionary or (bg_data as Dictionary).is_empty():
+		return
+
+	var layer: CanvasLayer = CanvasLayer.new()
+	layer.name = "Background"
+	layer.layer = -2
+	add_child(layer)
+	LDBackgroundDB.resolve(bg_data).build_into(layer)
+
+
 ## Reads the COMMON scenario from a saved level into "disabled" lookups: a layer index
 ## or tag present here was turned off in COMMON and should not spawn.
-func _read_common_scenario(data: Dictionary, out_layers: Dictionary[int, bool], out_tags: Dictionary[String, bool]) -> void:
+func _read_common_scenario(data: Dictionary, out_layers: Dictionary[int, bool], out_tags: Dictionary[String, bool], out_stamps: Dictionary[String, bool]) -> void:
 	var scenarios: Variant = data.get("scenarios", {})
 	if not scenarios is Dictionary:
 		return
@@ -192,6 +216,9 @@ func _read_common_scenario(data: Dictionary, out_layers: Dictionary[int, bool], 
 	for pair: Variant in (common as Dictionary).get("tag_overrides", []):
 		if pair is Array and (pair as Array).size() == 2 and not bool(pair[1]):
 			out_tags[str(pair[0])] = true
+	for pair: Variant in (common as Dictionary).get("stamp_overrides", []):
+		if pair is Array and (pair as Array).size() == 2 and not bool(pair[1]):
+			out_stamps[str(pair[0])] = true
 
 
 ## True if none of the object's tags were disabled by the active scenario.
@@ -204,7 +231,7 @@ func _scenario_allows(obj_data: Dictionary, disabled_tags: Dictionary[String, bo
 
 ## Expands every stamp placement (instance) into concrete level objects, applying the same
 ## scenario filtering as regular objects.
-func _spawn_stamps(data: Dictionary, disabled_layers: Dictionary[int, bool], disabled_tags: Dictionary[String, bool]) -> void:
+func _spawn_stamps(data: Dictionary, disabled_layers: Dictionary[int, bool], disabled_tags: Dictionary[String, bool], disabled_stamps: Dictionary[String, bool]) -> void:
 	if not is_instance_valid(_active_area):
 		return
 	var stamps: Variant = data.get("stamps", [])
@@ -213,6 +240,8 @@ func _spawn_stamps(data: Dictionary, disabled_layers: Dictionary[int, bool], dis
 
 	for stamp_data: Variant in stamps:
 		if not stamp_data is Dictionary:
+			continue
+		if disabled_stamps.has(str((stamp_data as Dictionary).get("id", ""))):
 			continue
 		var entries: Array = (stamp_data as Dictionary).get("objects", [])
 		for instance: Variant in (stamp_data as Dictionary).get("instances", []):

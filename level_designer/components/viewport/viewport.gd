@@ -34,7 +34,7 @@ static var _inst: LDViewport
 @export var _root: LDViewportRoot
 @export var _selection_overlay: LDSelectionOverlay
 @export var _touch_indicator: LDTouchSwipeIndicator
-@export var _background_root: Node2D
+@export var _background_root: Control
 @export var _global_anchor: LDViewportGlobalAnchor
 @warning_ignore("unused_private_class_variable") @export var _viewport_input: Control
 
@@ -230,7 +230,7 @@ func get_root() -> LDViewportRoot:
 
 
 ## Returns the background root node.
-func get_background_root() -> Node2D:
+func get_background_root() -> Control:
 	return _background_root
 
 

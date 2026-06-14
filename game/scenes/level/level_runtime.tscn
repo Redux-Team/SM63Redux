@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://ctssku6r3gx0a"]
 
 [ext_resource type="Script" uid="uid://7h213kjqdaqn" path="res://game/scenes/level/level_runtime.gd" id="1_b54ka"]
-[ext_resource type="PackedScene" uid="uid://st4r6o6hqwhj" path="res://game/backgrounds/hills.tscn" id="2_yaoed"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_x1m06"]
 device = -1
@@ -13,8 +12,6 @@ events = [SubResource("InputEventKey_x1m06")]
 [node name="LevelRuntime" type="Node2D" unique_id=1539087846 node_paths=PackedStringArray("level_root")]
 script = ExtResource("1_b54ka")
 level_root = NodePath("LevelRoot")
-
-[node name="HillsBG" parent="." unique_id=1464026582 instance=ExtResource("2_yaoed")]
 
 [node name="LevelRoot" type="Node2D" parent="." unique_id=526161922]
 

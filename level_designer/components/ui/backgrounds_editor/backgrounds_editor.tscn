@@ -1,0 +1,250 @@
+[gd_scene format=3 uid="uid://c8bgedit0lds1"]
+
+[ext_resource type="Script" path="res://level_designer/components/ui/backgrounds_editor/backgrounds_editor.gd" id="1_bged"]
+
+[node name="BackgroundsEditor" type="MarginContainer" node_paths=PackedStringArray("preset_option", "type_option", "solid_row", "solid_color", "gradient_rows", "gradient_top", "gradient_bottom", "layer_list", "add_layer_button", "move_up_button", "move_down_button", "remove_layer_button", "layer_placeholder", "layer_fields", "texture_option", "parallax_spin", "modulate_picker", "offset_x", "offset_y", "autoscroll_x", "autoscroll_y")]
+custom_minimum_size = Vector2(440, 0)
+script = ExtResource("1_bged")
+preset_option = NodePath("Body/PresetRow/PresetOption")
+type_option = NodePath("Body/Columns/Main/TypeRow/TypeOption")
+solid_row = NodePath("Body/Columns/Main/SolidRow")
+solid_color = NodePath("Body/Columns/Main/SolidRow/SolidColor")
+gradient_rows = NodePath("Body/Columns/Main/GradientRows")
+gradient_top = NodePath("Body/Columns/Main/GradientRows/TopRow/GradientTop")
+gradient_bottom = NodePath("Body/Columns/Main/GradientRows/BottomRow/GradientBottom")
+layer_list = NodePath("Body/Columns/Main/LayerList")
+add_layer_button = NodePath("Body/Columns/Main/LayersHeader/AddLayerButton")
+move_up_button = NodePath("Body/Columns/Main/LayerButtons/MoveUpButton")
+move_down_button = NodePath("Body/Columns/Main/LayerButtons/MoveDownButton")
+remove_layer_button = NodePath("Body/Columns/Main/LayerButtons/RemoveLayerButton")
+layer_placeholder = NodePath("Body/Columns/Detail/Placeholder")
+layer_fields = NodePath("Body/Columns/Detail/Fields")
+texture_option = NodePath("Body/Columns/Detail/Fields/TextureRow/TextureOption")
+parallax_spin = NodePath("Body/Columns/Detail/Fields/ParallaxRow/ParallaxSpin")
+modulate_picker = NodePath("Body/Columns/Detail/Fields/ModulateRow/ModulatePicker")
+offset_x = NodePath("Body/Columns/Detail/Fields/OffsetRow/OffsetX")
+offset_y = NodePath("Body/Columns/Detail/Fields/OffsetRow/OffsetY")
+autoscroll_x = NodePath("Body/Columns/Detail/Fields/AutoscrollRow/AutoscrollX")
+autoscroll_y = NodePath("Body/Columns/Detail/Fields/AutoscrollRow/AutoscrollY")
+
+[node name="Body" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PresetRow" type="HBoxContainer" parent="Body"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Body/PresetRow"]
+layout_mode = 2
+text = "Preset"
+
+[node name="PresetOption" type="OptionButton" parent="Body/PresetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator" type="HSeparator" parent="Body"]
+layout_mode = 2
+
+[node name="Columns" type="HBoxContainer" parent="Body"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Main" type="VBoxContainer" parent="Body/Columns"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Header" type="Label" parent="Body/Columns/Main"]
+layout_mode = 2
+text = "Backdrop"
+
+[node name="TypeRow" type="HBoxContainer" parent="Body/Columns/Main"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Body/Columns/Main/TypeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Type"
+
+[node name="TypeOption" type="OptionButton" parent="Body/Columns/Main/TypeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SolidRow" type="HBoxContainer" parent="Body/Columns/Main"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Body/Columns/Main/SolidRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Color"
+
+[node name="SolidColor" type="ColorPickerButton" parent="Body/Columns/Main/SolidRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GradientRows" type="VBoxContainer" parent="Body/Columns/Main"]
+layout_mode = 2
+
+[node name="TopRow" type="HBoxContainer" parent="Body/Columns/Main/GradientRows"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Body/Columns/Main/GradientRows/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Top"
+
+[node name="GradientTop" type="ColorPickerButton" parent="Body/Columns/Main/GradientRows/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BottomRow" type="HBoxContainer" parent="Body/Columns/Main/GradientRows"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Body/Columns/Main/GradientRows/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Bottom"
+
+[node name="GradientBottom" type="ColorPickerButton" parent="Body/Columns/Main/GradientRows/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator" type="HSeparator" parent="Body/Columns/Main"]
+layout_mode = 2
+
+[node name="LayersHeader" type="HBoxContainer" parent="Body/Columns/Main"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Body/Columns/Main/LayersHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Layers"
+
+[node name="AddLayerButton" type="Button" parent="Body/Columns/Main/LayersHeader"]
+layout_mode = 2
+text = "+"
+
+[node name="LayerList" type="ItemList" parent="Body/Columns/Main"]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LayerButtons" type="HBoxContainer" parent="Body/Columns/Main"]
+layout_mode = 2
+
+[node name="MoveUpButton" type="Button" parent="Body/Columns/Main/LayerButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Move Up"
+
+[node name="MoveDownButton" type="Button" parent="Body/Columns/Main/LayerButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Move Down"
+
+[node name="RemoveLayerButton" type="Button" parent="Body/Columns/Main/LayerButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Remove"
+
+[node name="Sep" type="VSeparator" parent="Body/Columns"]
+layout_mode = 2
+
+[node name="Detail" type="VBoxContainer" parent="Body/Columns"]
+custom_minimum_size = Vector2(210, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Header" type="Label" parent="Body/Columns/Detail"]
+layout_mode = 2
+text = "Layer"
+
+[node name="Placeholder" type="Label" parent="Body/Columns/Detail"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+text = "Select a background layer"
+
+[node name="Fields" type="VBoxContainer" parent="Body/Columns/Detail"]
+visible = false
+layout_mode = 2
+
+[node name="TextureRow" type="HBoxContainer" parent="Body/Columns/Detail/Fields"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Body/Columns/Detail/Fields/TextureRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Texture"
+
+[node name="TextureOption" type="OptionButton" parent="Body/Columns/Detail/Fields/TextureRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ParallaxRow" type="HBoxContainer" parent="Body/Columns/Detail/Fields"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Body/Columns/Detail/Fields/ParallaxRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Parallax"
+
+[node name="ParallaxSpin" type="SpinBox" parent="Body/Columns/Detail/Fields/ParallaxRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 2.0
+step = 0.01
+
+[node name="ModulateRow" type="HBoxContainer" parent="Body/Columns/Detail/Fields"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Body/Columns/Detail/Fields/ModulateRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Modulate"
+
+[node name="ModulatePicker" type="ColorPickerButton" parent="Body/Columns/Detail/Fields/ModulateRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="OffsetRow" type="HBoxContainer" parent="Body/Columns/Detail/Fields"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Body/Columns/Detail/Fields/OffsetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Offset"
+
+[node name="OffsetX" type="SpinBox" parent="Body/Columns/Detail/Fields/OffsetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -4000.0
+max_value = 4000.0
+
+[node name="OffsetY" type="SpinBox" parent="Body/Columns/Detail/Fields/OffsetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -4000.0
+max_value = 4000.0
+
+[node name="AutoscrollRow" type="HBoxContainer" parent="Body/Columns/Detail/Fields"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Body/Columns/Detail/Fields/AutoscrollRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Autoscroll"
+
+[node name="AutoscrollX" type="SpinBox" parent="Body/Columns/Detail/Fields/AutoscrollRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -500.0
+max_value = 500.0
+
+[node name="AutoscrollY" type="SpinBox" parent="Body/Columns/Detail/Fields/AutoscrollRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -500.0
+max_value = 500.0

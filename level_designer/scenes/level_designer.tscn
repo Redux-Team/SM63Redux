@@ -16,13 +16,14 @@
 [ext_resource type="Script" path="res://level_designer/components/scenario_handler/scenario_handler.gd" id="10_scen0"]
 [ext_resource type="Script" path="res://level_designer/components/tag_handler/tag_handler.gd" id="11_tag00"]
 
-[node name="LevelDesigner" type="Node" unique_id=204056479 node_paths=PackedStringArray("_ld_input_handler", "_ld_object_handler", "_ld_stamp_handler", "_ld_tag_handler", "_ld_scenario_handler", "_ld_tool_handler", "_ld_music_handler", "_ld_history_handler", "_ld_clipboard_handler", "_ld_save_load_handler", "_ld_viewport", "_ld_ui")]
+[node name="LevelDesigner" type="Node" unique_id=204056479 node_paths=PackedStringArray("_ld_input_handler", "_ld_object_handler", "_ld_stamp_handler", "_ld_tag_handler", "_ld_scenario_handler", "_ld_background_handler", "_ld_tool_handler", "_ld_music_handler", "_ld_history_handler", "_ld_clipboard_handler", "_ld_save_load_handler", "_ld_viewport", "_ld_ui")]
 script = ExtResource("1_n6dip")
 _ld_input_handler = NodePath("InputHandler")
 _ld_object_handler = NodePath("ObjectHandler")
 _ld_stamp_handler = NodePath("StampHandler")
 _ld_tag_handler = NodePath("TagHandler")
 _ld_scenario_handler = NodePath("ScenarioHandler")
+_ld_background_handler = NodePath("BackgroundHandler")
 _ld_tool_handler = NodePath("ToolHandler")
 _ld_music_handler = NodePath("MusicHandler")
 _ld_history_handler = NodePath("HistoryHandler")

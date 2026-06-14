@@ -1,0 +1,52 @@
+class_name LDBackgroundLayer
+extends Resource
+
+## One parallax layer of an LDBackground: a texture with its own parallax factor, tint, offset,
+## autoscroll and tiling. `anchor` is an internal placement hint (not exposed in the editor) that
+## pins the layer flush to the top or bottom of the screen.
+
+enum Anchor { BOTTOM, TOP }
+
+
+@export var texture: Texture2D
+@export var parallax: float = 0.5
+@export var modulate: Color = Color.WHITE
+@export var offset: Vector2 = Vector2.ZERO
+@export var autoscroll: Vector2 = Vector2.ZERO
+@export var repeat: bool = false
+@export var anchor: Anchor = Anchor.BOTTOM
+
+
+func serialize() -> Dictionary:
+	return {
+		"texture": _texture_uid(),
+		"parallax": parallax,
+		"modulate": Packer.color_to_array(modulate),
+		"offset": Packer.vec2_to_array(offset),
+		"autoscroll": Packer.vec2_to_array(autoscroll),
+		"repeat": repeat,
+		"anchor": int(anchor),
+	}
+
+
+static func deserialize(data: Dictionary) -> LDBackgroundLayer:
+	var layer: LDBackgroundLayer = LDBackgroundLayer.new()
+	var uid: String = str(data.get("texture", ""))
+	if not uid.is_empty() and ResourceLoader.exists(uid):
+		layer.texture = load(uid) as Texture2D
+	layer.parallax = float(data.get("parallax", 0.5))
+	layer.modulate = Packer.array_to_color(data.get("modulate", [1.0, 1.0, 1.0, 1.0]))
+	layer.offset = Packer.array_to_vec2(data.get("offset", [0.0, 0.0]))
+	layer.autoscroll = Packer.array_to_vec2(data.get("autoscroll", [0.0, 0.0]))
+	layer.repeat = bool(data.get("repeat", false))
+	layer.anchor = int(data.get("anchor", Anchor.BOTTOM)) as Anchor
+	return layer
+
+
+func _texture_uid() -> String:
+	if not texture or texture.resource_path.is_empty():
+		return ""
+	var id: int = ResourceLoader.get_resource_uid(texture.resource_path)
+	if id == ResourceUID.INVALID_ID:
+		return ""
+	return ResourceUID.id_to_text(id)
