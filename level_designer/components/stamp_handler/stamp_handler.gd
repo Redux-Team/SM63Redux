@@ -416,6 +416,9 @@ func _dehydrate_stamp(stamp_id: String) -> void:
 		if get_object_linked_stamp(obj).begins_with(stamp_id + ":"):
 			if obj.get_parent():
 				obj.get_parent().remove_child(obj)
+			# Free it, not just detach: a detached-but-live instance keeps its signal
+			# connections and can resurface, so deletions wouldn't stick.
+			obj.queue_free()
 
 
 ## Spawns one preview (ghost) instance per object in the stamp, positioned relative to
