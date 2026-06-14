@@ -188,6 +188,7 @@ func _hover_fludd_logic() -> void:
 	
 	if player.velocity.y < 0.0 and fludd_power == FLUDD_POWER_MAX and not player.is_on_floor():
 		player.velocity.y *= fludd_impulse
+		player.velocity.y = max(player.velocity.y, -500)
 	elif player.velocity.y < -50.0:
 		var fludd_velocity_factor: float = lerpf(0.3, 0.8, fludd_power / FLUDD_POWER_MAX)
 		player.velocity.y = min(lerpf(player.velocity.y, -fludd_force * fludd_velocity_factor, 0.57), player.velocity.y)
