@@ -26,7 +26,7 @@ func sheen_63() -> void:
 	
 	tween.tween_method(
 		func(y_value: float) -> void:
-			var current = _63_sheen.get_instance_shader_parameter(&"color_offset")
+			var current: Vector2 = _63_sheen.get_instance_shader_parameter(&"color_offset")
 			current.y = y_value
 			_63_sheen.set_instance_shader_parameter(&"color_offset", current),
 		0.0, 1.0, 0.85
@@ -47,7 +47,7 @@ func sheen_redux() -> void:
 	
 	tween.tween_method(
 		func(y_value: float) -> void:
-			var current = _redux_sheen.get_instance_shader_parameter(&"color_offset")
+			var current: Vector2 = _redux_sheen.get_instance_shader_parameter(&"color_offset")
 			current.y = y_value
 			_redux_sheen.set_instance_shader_parameter(&"color_offset", current),
 		0.275, 1.0, 0.65
