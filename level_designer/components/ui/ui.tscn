@@ -423,17 +423,17 @@ alignment = 2
 layout_mode = 2
 focus_mode = 0
 shortcut = SubResource("Shortcut_8p5vc")
-text = "CG"
+text = "CS"
 
 [node name="AddToTagButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=76137015]
 layout_mode = 2
 focus_mode = 0
-text = "ATT"
+text = "AT"
 
 [node name="RemoveFromTagButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=2000666825]
 layout_mode = 2
 focus_mode = 0
-text = "RFT"
+text = "RT"
 
 [node name="MoveToFrontButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=1732178860]
 layout_mode = 2
@@ -468,10 +468,9 @@ focus_mode = 0
 text = "Save"
 
 [node name="SaveNewButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer3" unique_id=244361036]
-visible = false
 layout_mode = 2
 focus_mode = 0
-text = "Save (New)"
+text = "Save As..."
 
 [node name="LoadButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer3" unique_id=1138989682]
 layout_mode = 2
