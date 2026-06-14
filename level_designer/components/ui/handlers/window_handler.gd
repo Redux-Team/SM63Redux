@@ -9,10 +9,10 @@ extends Node
 const OBJECT_BROWSER: StringName = &"object_browser"
 const OBJECT_PROPERTIES: StringName = &"object_properties"
 const LAYER_PROPERTIES: StringName = &"layer_properties"
-const GROUP_EDITOR: StringName = &"group_editor"
+const STAMP_EDITOR: StringName = &"stamp_editor"
 const SCENARIO_EDITOR: StringName = &"scenario_editor"
 const TAG_EDITOR: StringName = &"tag_editor"
-const GROUP_PICKER: StringName = &"group_picker"
+const PICKER: StringName = &"picker"
 
 
 @export var _window: LDWindow
@@ -53,8 +53,8 @@ func toggle_layer_properties() -> Control:
 	return toggle(LAYER_PROPERTIES)
 
 
-func toggle_group_editor() -> LDGroupEditor:
-	return toggle(GROUP_EDITOR) as LDGroupEditor
+func toggle_stamp_editor() -> LDStampEditor:
+	return toggle(STAMP_EDITOR) as LDStampEditor
 
 
 func toggle_scenario_editor() -> LDScenarioEditor:
@@ -111,21 +111,14 @@ func get_object_browser() -> LDObjectBrowser:
 
 # --- Pickers -------------------------------------------------------------------------
 
-func open_group_picker(title: String, on_confirm: Callable) -> void:
-	var picker: LDGroupPickerDialog = _instances[GROUP_PICKER] as LDGroupPickerDialog
-	picker.setup(title, LD.get_group_handler().get_all_groups())
-	_wire_picker(picker, on_confirm)
-	open(GROUP_PICKER)
-
-
 func open_tag_picker(title: String, on_confirm: Callable) -> void:
-	var picker: LDGroupPickerDialog = _instances[GROUP_PICKER] as LDGroupPickerDialog
+	var picker: LDPickerDialog = _instances[PICKER] as LDPickerDialog
 	picker.setup_ids(title, LD.get_tag_handler().get_all_tags())
 	_wire_picker(picker, on_confirm)
-	open(GROUP_PICKER)
+	open(PICKER)
 
 
-func _wire_picker(picker: LDGroupPickerDialog, on_confirm: Callable) -> void:
+func _wire_picker(picker: LDPickerDialog, on_confirm: Callable) -> void:
 	picker.confirmed.connect(func(id: String) -> void:
 		on_confirm.call(id)
 		close()

@@ -211,9 +211,9 @@ func _serialize() -> Dictionary:
 			var obj: LDObject = obj_node as LDObject
 			if not obj or obj.is_preview:
 				continue
-			# Linked-group instances are rebuilt from their group's anchors on load,
+			# Linked-stamp instances are rebuilt from their stamp's anchors on load,
 			# so don't persist them here or they'd be duplicated.
-			if not str(obj.get_meta(&"linked_group", "")).is_empty():
+			if not str(obj.get_meta(&"linked_stamp", "")).is_empty():
 				continue
 			var obj_data: Dictionary = _serialize_object(obj)
 			if not obj_data.is_empty():
@@ -237,7 +237,7 @@ func _serialize() -> Dictionary:
 			"parallaxing_enabled": LD.get_ui().get_viewport_handler().is_parallaxing_enabled(),
 			"ghosting_enabled": LD.get_ui().get_viewport_handler().is_ghosting_enabled(),
 		},
-		"groups": LD.get_group_handler().serialize_all(),
+		"stamps": LD.get_stamp_handler().serialize_all(),
 		"tags": LD.get_tag_handler().serialize_all(),
 		"scenarios": LD.get_scenario_handler().serialize_all(),
 		"areas": [{
@@ -345,10 +345,11 @@ func _deserialize(data: Dictionary) -> Error:
 	if tags_data is Array:
 		LD.get_tag_handler().deserialize_all(tags_data)
 
-	var groups_data: Variant = normalized.get("groups", [])
-	if groups_data is Array:
-		LD.get_group_handler().deserialize_all(groups_data)
-		LD.get_group_handler().rehydrate_all()
+	# "groups" is the pre-rename key; still read it so older levels keep their stamps.
+	var stamps_data: Variant = normalized.get("stamps", normalized.get("groups", []))
+	if stamps_data is Array:
+		LD.get_stamp_handler().deserialize_all(stamps_data)
+		LD.get_stamp_handler().rehydrate_all()
 
 	var scenarios_data: Variant = normalized.get("scenarios", {})
 	if scenarios_data is Dictionary:
@@ -366,7 +367,7 @@ func _normalize(data: Dictionary) -> Dictionary:
 		return {
 			"version": data.get("version", 1),
 			"editor": data.get("editor", {}),
-			"groups": data.get("groups", []),
+			"stamps": data.get("stamps", data.get("groups", [])),
 			"tags": data.get("tags", []),
 			"scenarios": data.get("scenarios", {}),
 			"areas": [{

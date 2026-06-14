@@ -1,4 +1,4 @@
-class_name LDGroup
+class_name LDStamp
 extends Resource
 
 
@@ -54,9 +54,9 @@ func serialize() -> Dictionary:
 	}
 
 
-static func deserialize(data: Dictionary) -> LDGroup:
-	var group: LDGroup = LDGroup.new()
-	group.id = data.get("id", "")
-	group.objects = data.get("objects", []).duplicate(true)
-	group.anchors = data.get("anchors", []).duplicate(true)
-	return group
+static func deserialize(data: Dictionary) -> LDStamp:
+	var stamp: LDStamp = LDStamp.new()
+	stamp.id = data.get("id", "")
+	stamp.objects = data.get("objects", []).duplicate(true)
+	stamp.anchors = data.get("anchors", []).duplicate(true)
+	return stamp

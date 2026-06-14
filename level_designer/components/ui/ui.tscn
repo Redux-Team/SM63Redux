@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bk2iromqs3siv" path="res://level_designer/components/ui/object_browser/object_browser.tscn" id="3_ms7r3"]
 [ext_resource type="PackedScene" uid="uid://wfkq6ce52aet" path="res://level_designer/components/ui/object_properties/object_properties.tscn" id="4_4nlpt"]
 [ext_resource type="PackedScene" uid="uid://ckffdp04tglj1" path="res://level_designer/components/ui/layer_properties/layer_properties.tscn" id="5_uannl"]
-[ext_resource type="PackedScene" uid="uid://bv5681608mo15" path="res://level_designer/components/ui/groups_editor/groups_editor.tscn" id="7_7flq5"]
+[ext_resource type="PackedScene" uid="uid://bv5681608mo15" path="res://level_designer/components/ui/stamps_editor/stamps_editor.tscn" id="7_7flq5"]
 [ext_resource type="PackedScene" uid="uid://dgird3k34e6e4" path="res://level_designer/components/ui/picker_dialog/picker_dialog.tscn" id="8_7agmi"]
 [ext_resource type="PackedScene" uid="uid://bal8u53r7omfw" path="res://level_designer/components/ui/scenarios_editor/scenarios_editor.tscn" id="9_scen0"]
 [ext_resource type="PackedScene" uid="uid://bcntswgx5f1b5" path="res://level_designer/components/ui/tags_editor/tags_editor.tscn" id="10_tagsed"]
@@ -38,11 +38,11 @@ id = &"layer_properties"
 scene = ExtResource("5_uannl")
 title = "Layer Properties"
 
-[sub_resource type="Resource" id="WindowDef_group"]
+[sub_resource type="Resource" id="WindowDef_stamp"]
 script = ExtResource("16_wdef")
-id = &"group_editor"
+id = &"stamp_editor"
 scene = ExtResource("7_7flq5")
-title = "Group Editor"
+title = "Stamp Editor"
 
 [sub_resource type="Resource" id="WindowDef_scenario"]
 script = ExtResource("16_wdef")
@@ -58,9 +58,9 @@ title = "Tag Editor"
 
 [sub_resource type="Resource" id="WindowDef_picker"]
 script = ExtResource("16_wdef")
-id = &"group_picker"
+id = &"picker"
 scene = ExtResource("8_7agmi")
-title = "Select a Group"
+title = "Select"
 
 [sub_resource type="InputEventKey" id="InputEventKey_y8t77"]
 device = -1
@@ -206,7 +206,7 @@ _hotbar_handler = NodePath("HotbarHandler")
 [node name="WindowHandler" type="Node" parent="." unique_id=503310053 node_paths=PackedStringArray("_window")]
 script = ExtResource("11_winh")
 _window = NodePath("../WindowLayer/Window")
-_window_defs = Array[ExtResource("16_wdef")]([SubResource("WindowDef_browser"), SubResource("WindowDef_properties"), SubResource("WindowDef_layer"), SubResource("WindowDef_group"), SubResource("WindowDef_scenario"), SubResource("WindowDef_tag"), SubResource("WindowDef_picker")])
+_window_defs = Array[ExtResource("16_wdef")]([SubResource("WindowDef_browser"), SubResource("WindowDef_properties"), SubResource("WindowDef_layer"), SubResource("WindowDef_stamp"), SubResource("WindowDef_scenario"), SubResource("WindowDef_tag"), SubResource("WindowDef_picker")])
 
 [node name="ViewportHandler" type="Node" parent="." unique_id=503310054 node_paths=PackedStringArray("_parallaxing_button", "_ghosting_button")]
 script = ExtResource("12_vph")
@@ -245,9 +245,9 @@ focus_mode = 0
 shortcut = SubResource("Shortcut_agrqq")
 text = "Object Browser"
 
-[node name="GroupsButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=1478509650]
+[node name="StampsButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=1478509650]
 layout_mode = 2
-text = "Groups"
+text = "Stamps"
 
 [node name="ScenariosButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=1446552238]
 layout_mode = 2
@@ -419,17 +419,11 @@ layout_mode = 2
 mouse_filter = 2
 alignment = 2
 
-[node name="AddToGroupButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=76137014]
+[node name="CreateStampButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=76137014]
 layout_mode = 2
 focus_mode = 0
 shortcut = SubResource("Shortcut_8p5vc")
-text = "ATG"
-
-[node name="RemoveFromGroupButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=2000666824]
-layout_mode = 2
-focus_mode = 0
-shortcut = SubResource("Shortcut_8p5vc")
-text = "RFG"
+text = "CG"
 
 [node name="AddToTagButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=76137015]
 layout_mode = 2
@@ -605,7 +599,7 @@ the level? Any unsaved progress
 will be lost!"
 
 [connection signal="pressed" from="ViewportUI/VBoxContainer/ObjectBrowserButton" to="WindowHandler" method="toggle_object_browser"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer/GroupsButton" to="WindowHandler" method="toggle_group_editor"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer/StampsButton" to="WindowHandler" method="toggle_stamp_editor"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer/ScenariosButton" to="WindowHandler" method="toggle_scenario_editor"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer/TagsButton" to="WindowHandler" method="toggle_tag_editor"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer/HBoxContainer/LayerDown" to="ToolbarHandler" method="_on_layer_down_pressed"]
@@ -629,8 +623,7 @@ will be lost!"
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DuplicateButton" to="ToolbarHandler" method="_on_duplicate_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeleteButton" to="ToolbarHandler" method="_on_delete_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeselectButton" to="ToolbarHandler" method="_on_deselect_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/AddToGroupButton" to="ToolbarHandler" method="_on_add_to_group_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/RemoveFromGroupButton" to="ToolbarHandler" method="_on_remove_from_group_button_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/CreateStampButton" to="ToolbarHandler" method="_on_create_stamp_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/AddToTagButton" to="ToolbarHandler" method="_on_add_to_tag_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/RemoveFromTagButton" to="ToolbarHandler" method="_on_remove_from_tag_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/MoveToFrontButton" to="ToolbarHandler" method="_on_move_to_front_button_pressed"]

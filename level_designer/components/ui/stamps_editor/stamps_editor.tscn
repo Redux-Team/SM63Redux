@@ -1,12 +1,11 @@
 [gd_scene format=3 uid="uid://bv5681608mo15"]
 
-[ext_resource type="Script" uid="uid://g3xdcqgrak3c" path="res://level_designer/components/ui/groups_editor/groups_editor.gd" id="1_nu57e"]
+[ext_resource type="Script" uid="uid://g3xdcqgrak3c" path="res://level_designer/components/ui/stamps_editor/stamps_editor.gd" id="1_nu57e"]
 
-[node name="GroupsEditor" type="MarginContainer" unique_id=2067930121 node_paths=PackedStringArray("group_list", "add_button", "remove_button", "empty_label", "detail_content", "name_edit", "preview_rect", "anchor_section", "anchor_list", "add_anchor_button", "remove_anchor_button")]
+[node name="StampsEditor" type="MarginContainer" unique_id=2067930121 node_paths=PackedStringArray("stamp_list", "remove_button", "empty_label", "detail_content", "name_edit", "preview_rect", "anchor_section", "anchor_list", "add_anchor_button", "remove_anchor_button")]
 custom_minimum_size = Vector2(500, 300)
 script = ExtResource("1_nu57e")
-group_list = NodePath("HBoxContainer/VBoxContainer/GroupList")
-add_button = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/AddButton")
+stamp_list = NodePath("HBoxContainer/VBoxContainer/StampList")
 remove_button = NodePath("HBoxContainer/VBoxContainer/RemoveButton")
 empty_label = NodePath("HBoxContainer/DetailPanel/EmptyLabel")
 detail_content = NodePath("HBoxContainer/DetailPanel/DetailContent")
@@ -31,14 +30,10 @@ layout_mode = 2
 [node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1179941509]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Groups"
+text = "Stamps"
 horizontal_alignment = 1
 
-[node name="AddButton" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1909087201]
-layout_mode = 2
-text = "+"
-
-[node name="GroupList" type="ItemList" parent="HBoxContainer/VBoxContainer" unique_id=307560872]
+[node name="StampList" type="ItemList" parent="HBoxContainer/VBoxContainer" unique_id=307560872]
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -55,7 +50,7 @@ size_flags_horizontal = 3
 
 [node name="EmptyLabel" type="Label" parent="HBoxContainer/DetailPanel" unique_id=42417721]
 layout_mode = 2
-text = "No group selected."
+text = "No stamp selected."
 
 [node name="DetailContent" type="VBoxContainer" parent="HBoxContainer/DetailPanel" unique_id=1168144446]
 layout_mode = 2

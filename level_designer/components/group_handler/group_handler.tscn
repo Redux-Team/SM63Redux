@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://camdcvhxq8t6r"]
-
-[ext_resource type="Script" uid="uid://no6t0wisbvq8" path="res://level_designer/components/group_handler/group_handler.gd" id="1_wrjb0"]
-
-[node name="GroupHandler" type="Node" unique_id=2087002127]
-script = ExtResource("1_wrjb0")

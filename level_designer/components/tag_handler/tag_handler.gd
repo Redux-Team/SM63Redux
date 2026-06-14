@@ -3,7 +3,7 @@ extends LDComponent
 
 ## Owns the level's tags: pure named labels applied to objects via a `tags` meta
 ## (Array[String]). Scenarios target tags to enable/disable the objects carrying them.
-## Unlike groups, tags never spawn or capture objects — they only label existing ones.
+## Unlike stamps, tags never spawn or capture objects - they only label existing ones.
 
 
 signal tag_added(tag: String)

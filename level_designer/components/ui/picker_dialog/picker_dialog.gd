@@ -1,8 +1,8 @@
-class_name LDGroupPickerDialog
+class_name LDPickerDialog
 extends MarginContainer
 
 
-signal confirmed(group_id: String)
+signal confirmed(stamp_id: String)
 signal cancelled
 
 
@@ -16,10 +16,10 @@ func _ready() -> void:
 	cancel_button.pressed.connect(_on_cancel_pressed)
 
 
-func setup(title: String, groups: Array[LDGroup]) -> void:
+func setup(title: String, stamps: Array[LDStamp]) -> void:
 	var ids: Array[String] = []
-	for group: LDGroup in groups:
-		ids.append(group.id)
+	for stamp: LDStamp in stamps:
+		ids.append(stamp.id)
 	setup_ids(title, ids)
 
 

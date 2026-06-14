@@ -84,7 +84,7 @@ func end_drag() -> void:
 
 	var delta: Vector2 = (new_positions[0] - old_positions[0]) if not objects.is_empty() else Vector2.ZERO
 	var anchor_starts: Dictionary[String, Vector2] = _linked_anchor_starts.duplicate()
-	var gh: LDGroupHandler = LD.get_group_handler()
+	var gh: LDStampHandler = LD.get_stamp_handler()
 
 	var history: LDHistoryHandler = LD.get_history_handler()
 	history.begin_action("Move Objects")
@@ -138,7 +138,7 @@ func _try_begin_drag_at(mouse_pos: Vector2) -> bool:
 
 	# Clicking any object of a linked instance grabs the whole instance.
 	var drag_set: Array[LDObject] = [obj]
-	var instance: Array[LDObject] = LD.get_group_handler().get_linked_instance_objects(obj)
+	var instance: Array[LDObject] = LD.get_stamp_handler().get_linked_instance_objects(obj)
 	if not instance.is_empty():
 		drag_set = instance
 	viewport.set_selected_objects(drag_set)
@@ -163,9 +163,9 @@ func _begin_drag(mouse_pos: Vector2, objects: Array[LDObject], return_to_select:
 	# Remember the start position of any linked anchor in the drag set so the move
 	# can be written back to the anchor (linked instances rehydrate from anchors).
 	_linked_anchor_starts.clear()
-	var gh: LDGroupHandler = LD.get_group_handler()
+	var gh: LDStampHandler = LD.get_stamp_handler()
 	for obj: LDObject in _objects:
-		var address: String = gh.get_object_linked_group(obj)
+		var address: String = gh.get_object_linked_stamp(obj)
 		if not address.is_empty() and not _linked_anchor_starts.has(address):
 			_linked_anchor_starts[address] = gh.get_anchor_position_for_object(obj)
 

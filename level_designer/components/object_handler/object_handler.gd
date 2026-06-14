@@ -70,18 +70,14 @@ func delete_placed_selection() -> void:
 			obj.get_parent().remove_child(obj)
 
 
-func add_selection_to_group(group_id: String) -> void:
+## Snapshots the current selection into a stamp. Pass `id` to name it (or to replace an
+## existing stamp of that id); empty `id` auto-names a new one. Returns the stamp (or
+## null if the selection has nothing stampable).
+func create_stamp_from_selection(id: String = "") -> LDStamp:
 	var objects: Array[LDObject] = get_placed_selection()
 	if objects.is_empty():
-		return
-	LD.get_group_handler().add_objects_to_group(group_id, objects)
-
-
-func remove_selection_from_group(group_id: String) -> void:
-	var objects: Array[LDObject] = get_placed_selection()
-	if objects.is_empty():
-		return
-	LD.get_group_handler().remove_objects_from_group(group_id, objects)
+		return null
+	return LD.get_stamp_handler().create_stamp_from_objects(objects, id)
 
 
 func add_selection_to_tag(tag: String) -> void:

@@ -2,7 +2,7 @@ class_name LDUIToolbarHandler
 extends Node
 
 ## Editing toolbar: tool selection, clipboard/selection ops, z-order reordering, layer
-## navigation, camera reset, and the group/tag picker buttons. Reached via
+## navigation, camera reset, and the stamp/tag picker buttons. Reached via
 ## LD.get_ui().get_toolbar_handler(). Button signals connect straight to these methods.
 
 @export var _layer_num: Label
@@ -93,18 +93,59 @@ func _on_move_to_back_button_pressed() -> void:
 		obj.get_parent().move_child(obj, 0)
 
 
-# --- Group / tag pickers -------------------------------------------------------------
+# --- Stamps / tags -------------------------------------------------------------------
 
-func _on_add_to_group_button_pressed() -> void:
-	LD.get_ui().get_window_handler().open_group_picker("Add to Group", func(group_id: String) -> void:
-		LD.get_object_handler().add_selection_to_group(group_id)
+## Opens a small dialog to name the new stamp (prefilled) and, optionally, pick an
+## existing stamp to overwrite, then snapshots the current selection into it.
+func _on_create_stamp_button_pressed() -> void:
+	if LD.get_object_handler().get_placed_selection().is_empty():
+		return
+	var sh: LDStampHandler = LD.get_stamp_handler()
+
+	var dialog: ConfirmationDialog = ConfirmationDialog.new()
+	dialog.title = "Create Stamp"
+	dialog.ok_button_text = "Create"
+
+	var vbox: VBoxContainer = VBoxContainer.new()
+	var name_label: Label = Label.new()
+	name_label.text = "Name:"
+	var name_edit: LineEdit = LineEdit.new()
+	name_edit.text = sh.suggest_stamp_id()
+	var replace_label: Label = Label.new()
+	replace_label.text = "Replace existing:"
+	var replace_opt: OptionButton = OptionButton.new()
+	replace_opt.add_item("(Create new)")
+	replace_opt.set_item_metadata(0, "")
+	for stamp: LDStamp in sh.get_all_stamps():
+		replace_opt.add_item(stamp.id)
+		replace_opt.set_item_metadata(replace_opt.item_count - 1, stamp.id)
+
+	vbox.add_child(name_label)
+	vbox.add_child(name_edit)
+	vbox.add_child(replace_label)
+	vbox.add_child(replace_opt)
+	dialog.add_child(vbox)
+	add_child(dialog)
+	dialog.popup_centered()
+	name_edit.grab_focus()
+	name_edit.select_all()
+
+	# Choosing a replace target fills + locks the name field.
+	replace_opt.item_selected.connect(func(idx: int) -> void:
+		var target: String = str(replace_opt.get_item_metadata(idx))
+		if not target.is_empty():
+			name_edit.text = target
+		name_edit.editable = target.is_empty()
 	)
 
-
-func _on_remove_from_group_button_pressed() -> void:
-	LD.get_ui().get_window_handler().open_group_picker("Remove from Group", func(group_id: String) -> void:
-		LD.get_object_handler().remove_selection_from_group(group_id)
+	dialog.confirmed.connect(func() -> void:
+		var target: String = str(replace_opt.get_item_metadata(replace_opt.selected))
+		var id: String = target if not target.is_empty() else name_edit.text.strip_edges()
+		if not id.is_empty() and not id.contains(":"):
+			LD.get_object_handler().create_stamp_from_selection(id)
+		dialog.queue_free()
 	)
+	dialog.canceled.connect(dialog.queue_free)
 
 
 func _on_add_to_tag_button_pressed() -> void:

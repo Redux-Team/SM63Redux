@@ -2,7 +2,7 @@ class_name LDScenarioHandler
 extends LDComponent
 
 ## Owns the level's scenarios: a single COMMON baseline plus numbered scenarios (1..N)
-## that override which layers / object groups are enabled. Mirrors LDGroupHandler.
+## that override which layers / object stamps are enabled. Mirrors LDStampHandler.
 
 
 signal scenario_added(scenario: LDScenario)

@@ -7,7 +7,7 @@ signal hide_request
 
 
 const OBJECT_GROUP_SCENE: PackedScene = preload("uid://d11ohrgxcihxx")
-const GROUP_ITEM_ENTRY: PackedScene = preload("uid://cmh307lx6bbro")
+const STAMP_ENTRY: PackedScene = preload("uid://cmh307lx6bbro")
 const TOOLTIP_MARGIN: float = 8.0
 
 
@@ -19,8 +19,8 @@ const TOOLTIP_MARGIN: float = 8.0
 
 var _tab_button_group: ButtonGroup = ButtonGroup.new()
 var _tooltip_anchor: Control = null
-var _showing_ld_groups: bool = false
-var _groups_button: Button = null
+var _showing_stamps: bool = false
+var _stamps_button: Button = null
 
 
 func _init() -> void:
@@ -33,14 +33,14 @@ func _ready() -> void:
 	populate_list()
 	tooltip_label.hide()
 	
-	var gh: LDGroupHandler = LD.get_group_handler()
-	gh.group_added.connect(_on_groups_changed)
-	gh.group_removed.connect(_on_groups_changed_by_id)
-	gh.group_changed.connect(_on_groups_changed)
+	var gh: LDStampHandler = LD.get_stamp_handler()
+	gh.stamp_added.connect(_on_stamps_changed)
+	gh.stamp_removed.connect(_on_stamps_changed_by_id)
+	gh.stamp_changed.connect(_on_stamps_changed)
 
 
 func _on_show() -> void:
-	_refresh_groups_tab()
+	_refresh_stamps_tab()
 
 
 func _process(_delta: float) -> void:
@@ -81,61 +81,61 @@ func _populate_category_buttons() -> void:
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		category_buttons_container.add_child(button)
 	
-	var groups_button: Button = Button.new()
-	groups_button.text = "Groups"
-	groups_button.name = "__ld_groups__"
-	groups_button.toggle_mode = true
-	groups_button.button_group = _tab_button_group
-	groups_button.custom_minimum_size.x = 80
-	groups_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	groups_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	category_buttons_container.add_child(groups_button)
-	_groups_button = groups_button
-	_update_groups_tab_visibility()
+	var stamps_button: Button = Button.new()
+	stamps_button.text = "Stamps"
+	stamps_button.name = "__ld_stamps__"
+	stamps_button.toggle_mode = true
+	stamps_button.button_group = _tab_button_group
+	stamps_button.custom_minimum_size.x = 80
+	stamps_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	stamps_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	category_buttons_container.add_child(stamps_button)
+	_stamps_button = stamps_button
+	_update_stamps_tab_visibility()
 
 
 func _on_tab_button_group_pressed(button: BaseButton) -> void:
 	_play_sfx(button != null)
-	_showing_ld_groups = button != null and button.name == "__ld_groups__"
-	if _showing_ld_groups:
-		_populate_groups_list()
-		category_changed.emit("Groups")
+	_showing_stamps = button != null and button.name == "__ld_stamps__"
+	if _showing_stamps:
+		_populate_stamps_list()
+		category_changed.emit("Stamps")
 	else:
 		populate_list()
 
 
 func _on_search_line_edit_text_changed(new_text: String) -> void:
-	if _showing_ld_groups:
+	if _showing_stamps:
 		return
 	populate_list(new_text)
 
 
-func _refresh_groups_tab() -> void:
-	if _showing_ld_groups:
-		_populate_groups_list()
+func _refresh_stamps_tab() -> void:
+	if _showing_stamps:
+		_populate_stamps_list()
 
 
-func _populate_groups_list() -> void:
+func _populate_stamps_list() -> void:
 	for n: Node in groups_v_box.get_children():
 		n.queue_free()
 	
-	var placeable: Array[LDGroup] = LD.get_group_handler().get_all_groups()
+	var placeable: Array[LDStamp] = LD.get_stamp_handler().get_all_stamps()
 
 	if placeable.is_empty():
 		return
 	
 	var group_node: LDObjectBrowserGroup = OBJECT_GROUP_SCENE.instantiate()
-	group_node.set_group_name("Groups")
+	group_node.set_group_name("Stamps")
 	groups_v_box.add_child(group_node)
 	
-	for group: LDGroup in placeable:
-		var entry: LDGroupItemEntry = GROUP_ITEM_ENTRY.instantiate()
-		entry.setup(group)
-		entry.entry_selected.connect(_on_group_entry_selected, CONNECT_REFERENCE_COUNTED)
-		entry.entry_mouse_entered.connect(_on_group_entry_hovered, CONNECT_REFERENCE_COUNTED)
-		entry.entry_mouse_exited.connect(_on_group_entry_unhovered, CONNECT_REFERENCE_COUNTED)
-		entry.entry_focus_entered.connect(_on_group_entry_focused, CONNECT_REFERENCE_COUNTED)
-		entry.entry_focus_exited.connect(_on_group_entry_unhovered, CONNECT_REFERENCE_COUNTED)
+	for stamp: LDStamp in placeable:
+		var entry: LDStampEntry = STAMP_ENTRY.instantiate()
+		entry.setup(stamp)
+		entry.entry_selected.connect(_on_stamp_entry_selected, CONNECT_REFERENCE_COUNTED)
+		entry.entry_mouse_entered.connect(_on_stamp_entry_hovered, CONNECT_REFERENCE_COUNTED)
+		entry.entry_mouse_exited.connect(_on_stamp_entry_unhovered, CONNECT_REFERENCE_COUNTED)
+		entry.entry_focus_entered.connect(_on_stamp_entry_focused, CONNECT_REFERENCE_COUNTED)
+		entry.entry_focus_exited.connect(_on_stamp_entry_unhovered, CONNECT_REFERENCE_COUNTED)
 		group_node.group_list.add_child(entry)
 
 
@@ -149,7 +149,7 @@ func populate_list(search: String = "") -> void:
 	var all_groups: Array[GameDB.GameObjectGroup] = []
 	if query.is_empty():
 		var cat_name: String = pressed.name if pressed else &""
-		if cat_name.is_empty() or cat_name == "__ld_groups__":
+		if cat_name.is_empty() or cat_name == "__ld_stamps__":
 			for cat: GameDB.GameObjectCategory in GameDB.get_db().get_tree():
 				all_groups.append_array(cat.get_groups())
 		else:
@@ -223,57 +223,57 @@ func _fuzzy_score(query: String, text: String) -> int:
 	return 200 + proximity_bonus
 
 
-func _on_group_entry_selected(entry: LDGroupItemEntry) -> void:
-	var group: LDGroup = entry.group_ref
-	LD.get_group_handler().arm_group(group)
+func _on_stamp_entry_selected(entry: LDStampEntry) -> void:
+	var stamp: LDStamp = entry.stamp_ref
+	LD.get_stamp_handler().arm_stamp(stamp)
 	LD.get_tool_handler().select_tool("place")
 	hide_request.emit()
 
 
-func _on_group_entry_hovered(entry: LDGroupItemEntry) -> void:
+func _on_stamp_entry_hovered(entry: LDStampEntry) -> void:
 	_tooltip_anchor = null
-	tooltip_label.text = entry.group_ref.id
+	tooltip_label.text = entry.stamp_ref.id
 	tooltip_label.size = Vector2.ZERO
 	tooltip_label.show()
 
 
-func _on_group_entry_focused(entry: LDGroupItemEntry) -> void:
+func _on_stamp_entry_focused(entry: LDStampEntry) -> void:
 	_tooltip_anchor = entry
-	tooltip_label.text = entry.group_ref.id
+	tooltip_label.text = entry.stamp_ref.id
 	tooltip_label.size = Vector2.ZERO
 	tooltip_label.show()
 
 
-func _on_group_entry_unhovered(_entry: LDGroupItemEntry) -> void:
+func _on_stamp_entry_unhovered(_entry: LDStampEntry) -> void:
 	_tooltip_anchor = null
 	tooltip_label.hide()
 	tooltip_label.size = Vector2.ZERO
 
 
-func _on_groups_changed(_group: LDGroup) -> void:
-	_update_groups_tab_visibility()
-	if _showing_ld_groups:
-		_populate_groups_list()
+func _on_stamps_changed(_group: LDStamp) -> void:
+	_update_stamps_tab_visibility()
+	if _showing_stamps:
+		_populate_stamps_list()
 
 
-func _on_groups_changed_by_id(_group_id: String) -> void:
-	_update_groups_tab_visibility()
-	if _showing_ld_groups:
-		_populate_groups_list()
+func _on_stamps_changed_by_id(_group_id: String) -> void:
+	_update_stamps_tab_visibility()
+	if _showing_stamps:
+		_populate_stamps_list()
 
 
-func _has_placeable_groups() -> bool:
-	return not LD.get_group_handler().get_all_groups().is_empty()
+func _has_placeable_stamps() -> bool:
+	return not LD.get_stamp_handler().get_all_stamps().is_empty()
 
 
-func _update_groups_tab_visibility() -> void:
-	if not is_instance_valid(_groups_button):
+func _update_stamps_tab_visibility() -> void:
+	if not is_instance_valid(_stamps_button):
 		return
-	var has_groups: bool = _has_placeable_groups()
-	_groups_button.visible = has_groups
-	if not has_groups and _showing_ld_groups:
-		_showing_ld_groups = false
-		_groups_button.set_pressed_no_signal(false)
+	var has_stamps: bool = _has_placeable_stamps()
+	_stamps_button.visible = has_stamps
+	if not has_stamps and _showing_stamps:
+		_showing_stamps = false
+		_stamps_button.set_pressed_no_signal(false)
 		populate_list()
 
 

@@ -33,10 +33,10 @@ func load_selection(objects: Array[LDObject]) -> void:
 		_container.add_child(widget)
 
 
-## Linked-group "ghost" copies are read-only; their properties can't be edited.
+## Linked-stamp "ghost" copies are read-only; their properties can't be edited.
 func _selection_is_read_only(objects: Array[LDObject]) -> bool:
 	for obj: LDObject in objects:
-		if LD.get_group_handler().is_linked_readonly(obj):
+		if LD.get_stamp_handler().is_linked_readonly(obj):
 			return true
 	return false
 

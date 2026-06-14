@@ -4,7 +4,7 @@ extends MarginContainer
 ## Editor for the level's scenarios. Left = scenario list (COMMON pinned first, plus
 ## numbered scenarios). Right = per-scenario toggles for every layer and tag.
 ## COMMON rows are Enabled/Disabled (the baseline); numbered scenarios are
-## Inherit/Enabled/Disabled overrides on top of COMMON. Mirrors groups_editor.gd.
+## Inherit/Enabled/Disabled overrides on top of COMMON. Mirrors stamps_editor.gd.
 
 
 @export var scenario_list: ItemList

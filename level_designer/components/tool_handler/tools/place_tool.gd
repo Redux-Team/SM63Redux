@@ -2,12 +2,12 @@ class_name LDPlaceTool
 extends LDTool
 
 
-## Single-placement tool for groups. Like the Brush, it shows a ghost that follows
-## the cursor, but each left-click drops exactly one instance of the armed group
+## Single-placement tool for stamps. Like the Brush, it shows a ghost that follows
+## the cursor, but each left-click drops exactly one instance of the armed stamp
 ## (no drag-painting). Stays armed until another tool is selected or right-click cancels.
 
 
-var _armed_group: LDGroup
+var _armed_stamp: LDStamp
 var _ghost: Array[LDObject] = []
 
 
@@ -17,12 +17,12 @@ func get_tool_name() -> String:
 
 func _on_ready() -> void:
 	get_tool_handler().add_tool(self)
-	LD.get_group_handler().armed_group_changed.connect(_on_armed_group_changed)
+	LD.get_stamp_handler().armed_stamp_changed.connect(_on_armed_stamp_changed)
 
 
 func _on_enable() -> void:
 	super()
-	_armed_group = LD.get_group_handler().get_armed_group()
+	_armed_stamp = LD.get_stamp_handler().get_armed_stamp()
 	_spawn_ghost()
 
 
@@ -31,8 +31,8 @@ func _on_disable() -> void:
 	super()
 
 
-func _on_armed_group_changed(group: LDGroup) -> void:
-	_armed_group = group
+func _on_armed_stamp_changed(stamp: LDStamp) -> void:
+	_armed_stamp = stamp
 	if is_active():
 		_spawn_ghost()
 
@@ -42,7 +42,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 		return
 
 	if event is InputEventMouseMotion:
-		LD.get_group_handler().position_preview(_ghost, _get_snapped_mouse_pos())
+		LD.get_stamp_handler().position_preview(_ghost, _get_snapped_mouse_pos())
 
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
@@ -52,26 +52,26 @@ func _on_viewport_input(event: InputEvent) -> void:
 
 
 func _place_at(pos: Vector2) -> void:
-	if not _armed_group:
+	if not _armed_stamp:
 		get_tool_handler().select_tool("select")
 		return
 
-	var gh: LDGroupHandler = LD.get_group_handler()
-	gh.place_linked(_armed_group.id, _next_anchor_id(_armed_group), pos, LDLevel.get_active_area()._active_index)
+	var gh: LDStampHandler = LD.get_stamp_handler()
+	gh.place_linked(_armed_stamp.id, _next_anchor_id(_armed_stamp), pos, LDLevel.get_active_area()._active_index)
 
 
-func _next_anchor_id(group: LDGroup) -> String:
+func _next_anchor_id(stamp: LDStamp) -> String:
 	var index: int = 0
-	while group.has_anchor("anchor_" + str(index)):
+	while stamp.has_anchor("anchor_" + str(index)):
 		index += 1
 	return "anchor_" + str(index)
 
 
 func _spawn_ghost() -> void:
 	_clear_ghost()
-	if not _armed_group:
+	if not _armed_stamp:
 		return
-	_ghost = LD.get_group_handler().spawn_preview(_armed_group, _get_snapped_mouse_pos())
+	_ghost = LD.get_stamp_handler().spawn_preview(_armed_stamp, _get_snapped_mouse_pos())
 
 
 func _clear_ghost() -> void:

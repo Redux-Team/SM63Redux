@@ -1,7 +1,7 @@
 class_name LDUI
 extends LDComponent
 
-## Facade over the level designer's UI. Holds no logic itself — every concern lives in a
+## Facade over the level designer's UI. Holds no logic itself - every concern lives in a
 ## dedicated handler, reachable via the get_*_handler() accessors (mirrors how the LD
 ## singleton exposes its subsystem handlers).
 

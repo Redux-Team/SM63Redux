@@ -63,7 +63,7 @@ enum CollisionAnchor {
 @export_group("Overrides", "")
 @export_subgroup("Entry")
 @export var name_override: String
-## Override this to group different objects together, if not overriden
+## Override this to stamp different objects together, if not overriden
 ## then the base ID is used.
 @export var ld_index_id: String
 ## The list of properties that this object inherits.
@@ -74,11 +74,11 @@ enum CollisionAnchor {
 @export var ld_placement_tool_override: String
 @export var ld_placement_rules: LDPlacementRules = LDPlacementRules.BEHIND_PLAYER
 @export_flags("Selectable", "Deletable", "Layerable", "Copyable") var ld_flags: int = 15
-## If disabled, this object cannot be captured into a group (e.g. the player spawn),
-## so it never gets duplicated when groups are stamped or placed.
-@export var ld_groupable: bool = true
+## If disabled, this object cannot be captured into a stamp (e.g. the player spawn),
+## so it never gets duplicated when stamps are stamped or placed.
+@export var ld_stampable: bool = true
 ## If enabled, the level designer guarantees only one instance of this object can
-## exist in a level — placing another removes the previous one.
+## exist in a level - placing another removes the previous one.
 @export var ld_unique: bool = false
 @export_subgroup("Instance")
 @export var ld_editor_instance: PackedScene:
@@ -177,7 +177,7 @@ enum CollisionAnchor {
 
 func _get_ignored_properties() -> PackedStringArray:
 	return [
-		"name_override", "ld_index_id", "ld_indexable", "ld_groupable", "ld_unique",
+		"name_override", "ld_index_id", "ld_indexable", "ld_stampable", "ld_unique",
 		"ld_select_tool_override", "ld_placement_tool_override", "ld_placement_rules", "ld_flags",
 		"ld_properties", "ld_editor_instance", "game_instance", "ld_entry_texture",
 		"object_type",

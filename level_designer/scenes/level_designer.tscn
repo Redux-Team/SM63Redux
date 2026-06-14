@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://drwhx30m8d8f7" path="res://level_designer/components/music_handler/music_handler.tscn" id="2_32xam"]
 [ext_resource type="PackedScene" uid="uid://dbampqomd8jud" path="res://level_designer/components/input_handler/input_handler.tscn" id="3_i1rtt"]
 [ext_resource type="PackedScene" uid="uid://ckkp8b1r2e05r" path="res://level_designer/components/ui/ui.tscn" id="3_ihrx4"]
-[ext_resource type="PackedScene" uid="uid://camdcvhxq8t6r" path="res://level_designer/components/group_handler/group_handler.tscn" id="3_m8coh"]
+[ext_resource type="PackedScene" uid="uid://camdcvhxq8t6r" path="res://level_designer/components/stamp_handler/stamp_handler.tscn" id="3_m8coh"]
 [ext_resource type="PackedScene" uid="uid://dkxy8l3msp4nq" path="res://level_designer/components/tool_handler/tool_handler.tscn" id="4_gubma"]
 [ext_resource type="PackedScene" uid="uid://b5g1nlrq28s2j" path="res://level_designer/components/viewport/viewport.tscn" id="4_i1rtt"]
 [ext_resource type="PackedScene" uid="uid://bn3grnflnno82" path="res://level_designer/components/object_handler/object_handler.tscn" id="4_whrr0"]
@@ -16,11 +16,11 @@
 [ext_resource type="Script" path="res://level_designer/components/scenario_handler/scenario_handler.gd" id="10_scen0"]
 [ext_resource type="Script" path="res://level_designer/components/tag_handler/tag_handler.gd" id="11_tag00"]
 
-[node name="LevelDesigner" type="Node" unique_id=204056479 node_paths=PackedStringArray("_ld_input_handler", "_ld_object_handler", "_ld_group_handler", "_ld_tag_handler", "_ld_scenario_handler", "_ld_tool_handler", "_ld_music_handler", "_ld_history_handler", "_ld_clipboard_handler", "_ld_save_load_handler", "_ld_viewport", "_ld_ui")]
+[node name="LevelDesigner" type="Node" unique_id=204056479 node_paths=PackedStringArray("_ld_input_handler", "_ld_object_handler", "_ld_stamp_handler", "_ld_tag_handler", "_ld_scenario_handler", "_ld_tool_handler", "_ld_music_handler", "_ld_history_handler", "_ld_clipboard_handler", "_ld_save_load_handler", "_ld_viewport", "_ld_ui")]
 script = ExtResource("1_n6dip")
 _ld_input_handler = NodePath("InputHandler")
 _ld_object_handler = NodePath("ObjectHandler")
-_ld_group_handler = NodePath("GroupHandler")
+_ld_stamp_handler = NodePath("StampHandler")
 _ld_tag_handler = NodePath("TagHandler")
 _ld_scenario_handler = NodePath("ScenarioHandler")
 _ld_tool_handler = NodePath("ToolHandler")
@@ -33,7 +33,7 @@ _ld_ui = NodePath("LDUI")
 
 [node name="InputHandler" parent="." unique_id=1890064972 instance=ExtResource("3_i1rtt")]
 
-[node name="GroupHandler" parent="." unique_id=2087002127 instance=ExtResource("3_m8coh")]
+[node name="StampHandler" parent="." unique_id=2087002127 instance=ExtResource("3_m8coh")]
 
 [node name="ScenarioHandler" type="Node" parent="." unique_id=2087002128]
 script = ExtResource("10_scen0")

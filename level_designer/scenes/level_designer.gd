@@ -8,7 +8,7 @@ static var _inst: LD
 @export_group("Components", "_ld_")
 @export var _ld_input_handler: LDInputHandler
 @export var _ld_object_handler: LDObjectHandler
-@export var _ld_group_handler: LDGroupHandler
+@export var _ld_stamp_handler: LDStampHandler
 @export var _ld_tag_handler: LDTagHandler
 @export var _ld_scenario_handler: LDScenarioHandler
 @export var _ld_tool_handler: LDToolHandler
@@ -32,8 +32,8 @@ static func get_object_handler() -> LDObjectHandler:
 	return get_instance()._ld_object_handler
 
 
-static func get_group_handler() -> LDGroupHandler:
-	return get_instance()._ld_group_handler
+static func get_stamp_handler() -> LDStampHandler:
+	return get_instance()._ld_stamp_handler
 
 
 static func get_tag_handler() -> LDTagHandler:

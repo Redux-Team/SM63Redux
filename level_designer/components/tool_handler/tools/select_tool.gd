@@ -137,10 +137,10 @@ func _commit_box_select() -> void:
 		viewport.set_selected_objects(_expand_linked_selection(found))
 
 
-## Expands any read-only linked-group "ghost" object to all objects in its anchor
+## Expands any read-only linked-stamp "ghost" object to all objects in its anchor
 ## instance, so a linked placement is selected as a single unit.
 func _expand_linked_selection(objects: Array[LDObject]) -> Array[LDObject]:
-	var gh: LDGroupHandler = LD.get_group_handler()
+	var gh: LDStampHandler = LD.get_stamp_handler()
 	var result: Array[LDObject] = []
 	for obj: LDObject in objects:
 		if gh.is_linked_readonly(obj):
@@ -155,10 +155,10 @@ func _expand_linked_selection(objects: Array[LDObject]) -> Array[LDObject]:
 func _delete_selected() -> void:
 	var to_delete: Array[LDObject] = viewport.get_selected_objects().duplicate()
 	viewport.clear_selection()
-	var gh: LDGroupHandler = LD.get_group_handler()
+	var gh: LDStampHandler = LD.get_stamp_handler()
 	var removed_anchors: Dictionary = {}
 	for obj: LDObject in to_delete:
-		var address: String = gh.get_object_linked_group(obj)
+		var address: String = gh.get_object_linked_stamp(obj)
 		if not address.is_empty():
 			# Deleting any object of a linked instance removes the whole anchor.
 			if not removed_anchors.has(address):
