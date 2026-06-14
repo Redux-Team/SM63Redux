@@ -62,9 +62,9 @@ func _place_at(pos: Vector2) -> void:
 
 func _next_instance_id(stamp: LDStamp) -> String:
 	var index: int = 0
-	while stamp.has_instance("instance_" + str(index)):
+	while stamp.has_instance(str(index)):
 		index += 1
-	return "instance_" + str(index)
+	return str(index)
 
 
 func _spawn_ghost() -> void:
