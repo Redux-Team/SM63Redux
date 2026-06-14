@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://g3xdcqgrak3c" path="res://level_designer/components/ui/stamps_editor/stamps_editor.gd" id="1_nu57e"]
 
-[node name="StampsEditor" type="MarginContainer" unique_id=2067930121 node_paths=PackedStringArray("stamp_list", "remove_button", "empty_label", "detail_content", "name_edit", "preview_rect", "anchor_section", "anchor_list", "add_anchor_button", "remove_anchor_button")]
+[node name="StampsEditor" type="MarginContainer" unique_id=2067930121 node_paths=PackedStringArray("stamp_list", "remove_button", "empty_label", "detail_content", "name_edit", "preview_rect", "anchor_section", "anchor_list", "remove_anchor_button")]
 custom_minimum_size = Vector2(500, 300)
 script = ExtResource("1_nu57e")
 stamp_list = NodePath("HBoxContainer/VBoxContainer/StampList")
@@ -13,7 +13,6 @@ name_edit = NodePath("HBoxContainer/DetailPanel/DetailContent/HBoxContainer/Name
 preview_rect = NodePath("HBoxContainer/DetailPanel/DetailContent/PreviewRect")
 anchor_section = NodePath("HBoxContainer/DetailPanel/DetailContent/AnchorSection")
 anchor_list = NodePath("HBoxContainer/DetailPanel/DetailContent/AnchorSection/AnchorList")
-add_anchor_button = NodePath("HBoxContainer/DetailPanel/DetailContent/AnchorSection/HBoxContainer/AddAnchorButton")
 remove_anchor_button = NodePath("HBoxContainer/DetailPanel/DetailContent/AnchorSection/RemoveAnchorButton")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=756984599]
@@ -70,6 +69,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="PreviewRect" type="TextureRect" parent="HBoxContainer/DetailPanel/DetailContent" unique_id=303615443]
+texture_filter = 1
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -86,10 +86,6 @@ layout_mode = 2
 [node name="Label" type="Label" parent="HBoxContainer/DetailPanel/DetailContent/AnchorSection/HBoxContainer" unique_id=2009022252]
 layout_mode = 2
 text = "Anchors"
-
-[node name="AddAnchorButton" type="Button" parent="HBoxContainer/DetailPanel/DetailContent/AnchorSection/HBoxContainer" unique_id=1418115035]
-layout_mode = 2
-text = "+"
 
 [node name="AnchorList" type="ItemList" parent="HBoxContainer/DetailPanel/DetailContent/AnchorSection" unique_id=1260387657]
 custom_minimum_size = Vector2(0, 80)

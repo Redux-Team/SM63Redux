@@ -14,6 +14,7 @@ preview_rect = NodePath("PreviewTexture")
 stamp_label = NodePath("StampLabel")
 
 [node name="PreviewTexture" type="TextureRect" parent="." unique_id=1698399676]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

@@ -10,7 +10,6 @@ extends MarginContainer
 @export var preview_rect: TextureRect
 @export var anchor_section: VBoxContainer
 @export var anchor_list: ItemList
-@export var add_anchor_button: Button
 @export var remove_anchor_button: Button
 
 
@@ -24,7 +23,6 @@ func _ready() -> void:
 	stamp_list.item_selected.connect(_on_stamp_selected)
 	name_edit.text_submitted.connect(_on_name_submitted)
 	name_edit.focus_exited.connect(_on_name_focus_exited)
-	add_anchor_button.pressed.connect(_on_add_anchor_pressed)
 	remove_anchor_button.pressed.connect(_on_remove_anchor_pressed)
 	anchor_list.item_selected.connect(_on_anchor_selected)
 	anchor_list.item_activated.connect(_on_anchor_activated)
@@ -169,47 +167,6 @@ func _try_rename(new_name: String) -> void:
 
 	if not LD.get_stamp_handler().rename_stamp(_selected_stamp.id, cleaned):
 		name_edit.text = _selected_stamp.id
-
-
-func _on_add_anchor_pressed() -> void:
-	if not _selected_stamp:
-		return
-
-	var default_id: String = "anchor_" + str(_selected_stamp.anchors.size())
-	var dialog: ConfirmationDialog = ConfirmationDialog.new()
-	dialog.title = "New Anchor - " + _selected_stamp.id
-
-	var vbox: VBoxContainer = VBoxContainer.new()
-	var label: Label = Label.new()
-	label.text = "Unique ID (no colons):"
-	var line_edit: LineEdit = LineEdit.new()
-	line_edit.text = default_id
-	line_edit.placeholder_text = "e.g. left_side"
-	vbox.add_child(label)
-	vbox.add_child(line_edit)
-	dialog.add_child(vbox)
-	add_child(dialog)
-	dialog.popup_centered()
-	line_edit.grab_focus()
-	line_edit.select_all()
-
-	dialog.confirmed.connect(func() -> void:
-		var unique_id: String = line_edit.text.strip_edges()
-		if unique_id.is_empty() or unique_id.contains(":") or _selected_stamp.has_anchor(unique_id):
-			dialog.queue_free()
-			return
-		var viewport: LDViewport = LD.get_editor_viewport()
-		LD.get_stamp_handler().place_linked(
-			_selected_stamp.id,
-			unique_id,
-			viewport.camera_position,
-			LDLevel.get_active_area()._active_index
-		)
-		dialog.queue_free()
-	)
-	dialog.canceled.connect(func() -> void:
-		dialog.queue_free()
-	)
 
 
 func _on_remove_anchor_pressed() -> void:
