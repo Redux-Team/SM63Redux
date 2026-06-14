@@ -35,6 +35,7 @@ static var _inst: LDViewport
 @export var _selection_overlay: LDSelectionOverlay
 @export var _touch_indicator: LDTouchSwipeIndicator
 @export var _background_root: Node2D
+@export var _global_anchor: LDViewportGlobalAnchor
 @warning_ignore("unused_private_class_variable") @export var _viewport_input: Control
 
 
@@ -238,6 +239,12 @@ func get_selection_overlay() -> LDSelectionOverlay:
 	return _selection_overlay
 
 
+## Returns the global anchor for the viewport. Useful tool for having nodes be positioned
+## with a consistent size no matter the zoom.
+func get_global_anchor() -> LDViewportGlobalAnchor:
+	return _global_anchor
+
+
 ## Returns the currently selected objects.
 func get_selected_objects() -> Array[LDObject]:
 	return _selected_objects
@@ -327,9 +334,12 @@ func _on_viewport_moved(pos: Vector2 = camera_position, zoom: Vector2 = camera_z
 	var mat: ShaderMaterial = _viewport_grid.material as ShaderMaterial
 	if not mat:
 		return
+	
 	mat.set_shader_parameter("camera_position", pos)
 	mat.set_shader_parameter("camera_zoom", zoom)
 	mat.set_shader_parameter("screen_size", get_viewport().get_visible_rect().size)
+	
+	get_global_anchor().refresh()
 
 
 func _zoom_at(pos: Vector2, zoom_delta: float) -> void:

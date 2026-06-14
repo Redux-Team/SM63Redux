@@ -76,6 +76,7 @@ folder_colors={
 gui_touch=""
 gui_mp_other=""
 gui_mp_host=""
+ld_anchored=""
 
 [gui]
 
