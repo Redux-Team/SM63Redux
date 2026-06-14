@@ -132,11 +132,11 @@ func popin() -> void:
 	_panel.scale = Vector2(0.6, 0.6)
 	_panel.modulate = Color.TRANSPARENT
 	
-	_panel.size = Vector2.ZERO
-	await get_tree().process_frame
-	_panel.size = Vector2.ZERO
-	await get_tree().process_frame
-	
+	# Fit the panel to the active content. Swapping the visible content already invalidated the
+	# minimum-size cache up the tree (only the container re-sort is deferred), so reset_size()
+	# recomputes it synchronously and the panel shrinks back for smaller content right away.
+	_panel.reset_size()
+
 	if pop_in_centered:
 		_center_in_viewport()
 	
