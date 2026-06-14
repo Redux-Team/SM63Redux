@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0rwnbt8w3qel"
-path="res://.godot/imported/Wave.png-706e6c510084ba0ffbd7ec8c1b2e73c2.ctex"
+uid="uid://34v4s1d3h4ag"
+path="res://.godot/imported/mario.png-271d0ff539c84f71593ecb0f192b9d37.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/screen/Wave.png"
-dest_files=["res://.godot/imported/Wave.png-706e6c510084ba0ffbd7ec8c1b2e73c2.ctex"]
+source_file="res://assets/textures/screen/mario.png"
+dest_files=["res://.godot/imported/mario.png-271d0ff539c84f71593ecb0f192b9d37.ctex"]
 
 [params]
 

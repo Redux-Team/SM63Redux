@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://h4d4gf6c7rge"
-path="res://.godot/imported/Star.png-6a82ca19035c5e710eadea3dbc019d98.ctex"
+uid="uid://c0rwnbt8w3qel"
+path="res://.godot/imported/wave.png-eb0463e475c34e5f9d9fad95e39c40eb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/screen/Star.png"
-dest_files=["res://.godot/imported/Star.png-6a82ca19035c5e710eadea3dbc019d98.ctex"]
+source_file="res://assets/textures/screen/wave.png"
+dest_files=["res://.godot/imported/wave.png-eb0463e475c34e5f9d9fad95e39c40eb.ctex"]
 
 [params]
 
