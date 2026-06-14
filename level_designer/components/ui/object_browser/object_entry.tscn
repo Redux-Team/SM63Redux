@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dwtx65wov5nfl"]
 
-[ext_resource type="Script" uid="uid://dje8oykus5t6o" path="res://level_designer/components/ui/object_browser/item_entry.gd" id="1_kvue1"]
+[ext_resource type="Script" uid="uid://dje8oykus5t6o" path="res://level_designer/components/ui/object_browser/object_entry.gd" id="1_0jdeu"]
 
 [node name="ItemEntry" type="Button" unique_id=493092085 node_paths=PackedStringArray("preview_texture_rect", "item_id")]
 custom_minimum_size = Vector2(48, 48)
@@ -9,7 +9,7 @@ offset_bottom = 8.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 mouse_default_cursor_shape = 2
-script = ExtResource("1_kvue1")
+script = ExtResource("1_0jdeu")
 preview_texture_rect = NodePath("PreviewTexture")
 item_id = NodePath("item_id")
 

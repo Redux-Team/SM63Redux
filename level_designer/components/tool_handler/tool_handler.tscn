@@ -20,6 +20,7 @@
 [ext_resource type="Script" uid="uid://bqq10cg8rpyuc" path="res://level_designer/components/tool_handler/tools/block/block_edit.gd" id="15_ila05"]
 [ext_resource type="Script" uid="uid://wuapf74dur2m" path="res://level_designer/components/tool_handler/tools/telescoping/telescoping_edit.gd" id="19_qccsl"]
 [ext_resource type="PackedScene" uid="uid://7dd3ek12qxdr" path="res://level_designer/components/tool_handler/widgets/telescoping_widget.tscn" id="20_ommiu"]
+[ext_resource type="Script" path="res://level_designer/components/tool_handler/tools/place_tool.gd" id="21_place"]
 
 [node name="ToolHandler" type="Node" unique_id=1124731823]
 script = ExtResource("1_0flew")
@@ -84,3 +85,6 @@ _widget = NodePath("TelescopingWidget")
 
 [node name="TelescopingWidget" parent="TelescopingTool/TelescopingEditTool" unique_id=1832040969 instance=ExtResource("20_ommiu")]
 visible = false
+
+[node name="PlaceTool" type="Node" parent="." unique_id=990112233]
+script = ExtResource("21_place")

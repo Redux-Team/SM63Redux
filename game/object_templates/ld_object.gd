@@ -84,9 +84,28 @@ func place(first: bool = false) -> void:
 	is_preview = false
 	for prop: LDProperty in _properties:
 		_apply_property(prop.key, _property_values.get(prop.key, prop.default_value))
-		
+
 		if first:
 			prop._on_first_placement(self, _property_values.get(prop.key, prop.default_value))
+
+	_enforce_uniqueness()
+
+
+## If this object's GameObject is flagged unique, removes any other placed instance
+## of the same object so only this newly-placed one remains in the level.
+func _enforce_uniqueness() -> void:
+	if source_object_id.is_empty() or not LD.is_ready():
+		return
+	var game_object: GameObject = GameDB.get_db().find_game_object(source_object_id)
+	if not game_object or not game_object.ld_unique:
+		return
+	for other: LDObject in LDLevel.get_active_area().get_all_objects():
+		if other == self or other.is_preview:
+			continue
+		if other.source_object_id == source_object_id:
+			if other.get_parent():
+				other.get_parent().remove_child(other)
+			other.queue_free()
 
 
 func bind_to_active_layer() -> void:

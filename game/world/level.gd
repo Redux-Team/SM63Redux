@@ -1,7 +1,9 @@
 class_name Level
 extends Node2D
 
-const LEVEL: PackedScene = preload("uid://dkjnplx3hhp7q")
+const LEVEL_SCENE: PackedScene = preload("uid://dkjnplx3hhp7q")
+const MAX_SCENARIO_COUNT: int = 16
+
 
 signal loaded
 
@@ -34,7 +36,7 @@ func _init() -> void:
 
 
 static func instantiate() -> Level:
-	return LEVEL.instantiate()
+	return LEVEL_SCENE.instantiate()
 
 
 static func get_instance() -> Level:

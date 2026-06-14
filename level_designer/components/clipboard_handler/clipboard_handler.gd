@@ -66,11 +66,12 @@ func _paste_internal(data: Array[Dictionary], offset: Vector2) -> void:
 	
 	var db: GameDB = GameDB.get_db()
 	var area: LDArea = LDLevel.get_active_area()
+	var save_load: LDSaveLoadHandler = LD.get_save_load_handler()
 	var spawned: Array[LDObject] = []
 	
 	for entry: Dictionary in data:
 		var object_id: String = entry.get("object_id", "")
-		var game_object: GameObject = db.find_game_object(object_id)
+		var game_object: GameObject = save_load.find_game_object_by_id(object_id, db)
 		if not game_object or not game_object.ld_flags & (1 << GameObject.LD_COPYABLE):
 			continue
 		var obj: LDObject = _deserialize_object(entry, db, area)
@@ -119,12 +120,8 @@ func _deserialize_object(data: Dictionary, db: GameDB, area: LDArea, offset: Vec
 	if object_id.is_empty():
 		return null
 	
-	var game_object: GameObject = null
-	for go: GameObject in db.objects.values():
-		if go.id == object_id:
-			game_object = go
-			break
-	
+	var save_load: LDSaveLoadHandler = LD.get_save_load_handler()
+	var game_object: GameObject = save_load.find_game_object_by_id(object_id, db)
 	if not game_object or not game_object.get_editor_instance():
 		return null
 	

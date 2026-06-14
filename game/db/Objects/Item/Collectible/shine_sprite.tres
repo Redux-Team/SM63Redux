@@ -5,6 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://cm52ypeu3i6y0" path="res://game/db/Objects/Item/Collectible/shine_sprite_ld.tscn" id="1_cftkg"]
 [ext_resource type="Texture2D" uid="uid://6x6lxccsh6al" path="res://assets/textures/item/collectible/shine_sprite.png" id="1_hicyr"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_q4ysq"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_usus5"]
+[ext_resource type="Resource" uid="uid://ysutd35tfg1i" path="res://game/db/Properties/shine_sprite/scenario_id.tres" id="6_cftkg"]
+[ext_resource type="Resource" uid="uid://bjmqlk5n3fq3u" path="res://game/db/Properties/shine_sprite/is_kickout.tres" id="7_5hoxe"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xsgd7"]
 atlas = ExtResource("1_hicyr")
@@ -24,6 +27,7 @@ group_path = "Collectible"
 ld_editor_instance = ExtResource("1_cftkg")
 game_instance = ExtResource("1_5hoxe")
 ld_entry_texture = SubResource("AtlasTexture_xsgd7")
+ld_properties = Array[ExtResource("1_q4ysq")]([ExtResource("5_usus5"), ExtResource("6_cftkg"), ExtResource("7_5hoxe")])
 telescoping_atlas = SubResource("AtlasTexture_b3ba0")
 ld_object_path = "Item/Collectible/shine_sprite"
 _update_internal_info = Callable()

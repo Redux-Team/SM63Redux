@@ -4,4 +4,3 @@
 
 [node name="ObjectHandler" type="Node" unique_id=2087002127]
 script = ExtResource("1_m8bd4")
-metadata/_custom_type_script = "uid://btbvvqx7hybu5"

@@ -82,7 +82,7 @@ func get_or_create_layer(index: int) -> LDLayer:
 	
 	var new_layer: LDLayer = LDLayer.new()
 	new_layer.index = index
-	new_layer.is_parallaxing = LD.get_ui().parallaxing_enabled
+	new_layer.is_parallaxing = LD.get_ui().get_viewport_handler().is_parallaxing_enabled()
 	add_child(new_layer)
 	
 	var insert_pos: int = 0
@@ -201,7 +201,7 @@ func refresh_layer_visuals() -> void:
 
 
 func _apply_layer_visual(layer: LDLayer) -> void:
-	if not LD.get_ui().ghosting_enabled:
+	if not LD.get_ui().get_viewport_handler().is_ghosting_enabled():
 		layer.visible = true
 		layer._internal_modulation = Color.WHITE
 		return

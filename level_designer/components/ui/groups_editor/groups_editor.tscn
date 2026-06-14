@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://bv5681608mo15"]
+
+[ext_resource type="Script" uid="uid://g3xdcqgrak3c" path="res://level_designer/components/ui/groups_editor/groups_editor.gd" id="1_nu57e"]
+
+[node name="GroupsEditor" type="MarginContainer" unique_id=2067930121 node_paths=PackedStringArray("group_list", "add_button", "remove_button", "empty_label", "detail_content", "name_edit", "preview_rect", "anchor_section", "anchor_list", "add_anchor_button", "remove_anchor_button")]
+custom_minimum_size = Vector2(500, 300)
+script = ExtResource("1_nu57e")
+group_list = NodePath("HBoxContainer/VBoxContainer/GroupList")
+add_button = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/AddButton")
+remove_button = NodePath("HBoxContainer/VBoxContainer/RemoveButton")
+empty_label = NodePath("HBoxContainer/DetailPanel/EmptyLabel")
+detail_content = NodePath("HBoxContainer/DetailPanel/DetailContent")
+name_edit = NodePath("HBoxContainer/DetailPanel/DetailContent/HBoxContainer/NameEdit")
+preview_rect = NodePath("HBoxContainer/DetailPanel/DetailContent/PreviewRect")
+anchor_section = NodePath("HBoxContainer/DetailPanel/DetailContent/AnchorSection")
+anchor_list = NodePath("HBoxContainer/DetailPanel/DetailContent/AnchorSection/AnchorList")
+add_anchor_button = NodePath("HBoxContainer/DetailPanel/DetailContent/AnchorSection/HBoxContainer/AddAnchorButton")
+remove_anchor_button = NodePath("HBoxContainer/DetailPanel/DetailContent/AnchorSection/RemoveAnchorButton")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=756984599]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1932422222]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=1974809788]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1179941509]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Groups"
+horizontal_alignment = 1
+
+[node name="AddButton" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1909087201]
+layout_mode = 2
+text = "+"
+
+[node name="GroupList" type="ItemList" parent="HBoxContainer/VBoxContainer" unique_id=307560872]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RemoveButton" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=1892684887]
+layout_mode = 2
+text = "-"
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer" unique_id=1777151935]
+layout_mode = 2
+
+[node name="DetailPanel" type="VBoxContainer" parent="HBoxContainer" unique_id=1431820404]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EmptyLabel" type="Label" parent="HBoxContainer/DetailPanel" unique_id=42417721]
+layout_mode = 2
+text = "No group selected."
+
+[node name="DetailContent" type="VBoxContainer" parent="HBoxContainer/DetailPanel" unique_id=1168144446]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/DetailPanel/DetailContent" unique_id=1236089744]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/DetailPanel/DetailContent/HBoxContainer" unique_id=1375862307]
+layout_mode = 2
+text = "Name"
+
+[node name="NameEdit" type="LineEdit" parent="HBoxContainer/DetailPanel/DetailContent/HBoxContainer" unique_id=74435820]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/DetailPanel/DetailContent" unique_id=303615442]
+layout_mode = 2
+
+[node name="PreviewRect" type="TextureRect" parent="HBoxContainer/DetailPanel/DetailContent" unique_id=303615443]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnchorSection" type="VBoxContainer" parent="HBoxContainer/DetailPanel/DetailContent" unique_id=1946449209]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/DetailPanel/DetailContent/AnchorSection" unique_id=2104754394]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/DetailPanel/DetailContent/AnchorSection/HBoxContainer" unique_id=2009022252]
+layout_mode = 2
+text = "Anchors"
+
+[node name="AddAnchorButton" type="Button" parent="HBoxContainer/DetailPanel/DetailContent/AnchorSection/HBoxContainer" unique_id=1418115035]
+layout_mode = 2
+text = "+"
+
+[node name="AnchorList" type="ItemList" parent="HBoxContainer/DetailPanel/DetailContent/AnchorSection" unique_id=1260387657]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="RemoveAnchorButton" type="Button" parent="HBoxContainer/DetailPanel/DetailContent/AnchorSection" unique_id=1077950153]
+layout_mode = 2
+text = "Remove Anchor"
+
+[node name="HSeparator2" type="HSeparator" parent="HBoxContainer/DetailPanel/DetailContent" unique_id=404135322]
+layout_mode = 2

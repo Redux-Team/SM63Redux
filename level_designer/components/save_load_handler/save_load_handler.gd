@@ -12,9 +12,27 @@ const PERIODIC_AUTOSAVE_ENABLED: bool = true
 const PERIODIC_AUTOSAVE_INTERVAL: float = 60.0
 
 
+signal file_state_changed
+
+
 var level_file_path: String
 var method: int = -1 # -1 X, 0 Bin, 1 JSON
 var _periodic_autosave_timer: Timer = null
+
+
+## True when a real on-disk level file is currently loaded/saved (so "Save" can write
+## to it directly rather than prompting for a path).
+func has_loaded_file() -> bool:
+	return method != -1 and not level_file_path.is_empty() and level_file_path != AUTOSAVE_PATH
+
+
+## Saves to the currently loaded file using its existing format.
+func save_current() -> Error:
+	if not has_loaded_file():
+		return ERR_UNCONFIGURED
+	if method == 1:
+		return save_json(level_file_path)
+	return save_binary(level_file_path)
 
 
 func _enter_tree() -> void:
@@ -179,6 +197,8 @@ func save_session() -> void:
 			"method": 0, # force binary reading next load to parse the AUTOSAVE_PATH
 		}))
 
+	file_state_changed.emit()
+
 
 func _serialize() -> Dictionary:
 	var viewport: LDViewport = LD.get_editor_viewport()
@@ -190,6 +210,10 @@ func _serialize() -> Dictionary:
 		for obj_node: Node in layer.get_objects_root().get_children():
 			var obj: LDObject = obj_node as LDObject
 			if not obj or obj.is_preview:
+				continue
+			# Linked-group instances are rebuilt from their group's anchors on load,
+			# so don't persist them here or they'd be duplicated.
+			if not str(obj.get_meta(&"linked_group", "")).is_empty():
 				continue
 			var obj_data: Dictionary = _serialize_object(obj)
 			if not obj_data.is_empty():
@@ -210,9 +234,12 @@ func _serialize() -> Dictionary:
 			"camera_position": Packer.vec2_to_array(viewport.camera_position),
 			"camera_zoom": Packer.vec2_to_array(viewport.camera_zoom),
 			"active_layer": area._active_index,
-			"parallaxing_enabled": LD.get_ui().parallaxing_enabled,
-			"ghosting_enabled": LD.get_ui().ghosting_enabled,
+			"parallaxing_enabled": LD.get_ui().get_viewport_handler().is_parallaxing_enabled(),
+			"ghosting_enabled": LD.get_ui().get_viewport_handler().is_ghosting_enabled(),
 		},
+		"groups": LD.get_group_handler().serialize_all(),
+		"tags": LD.get_tag_handler().serialize_all(),
+		"scenarios": LD.get_scenario_handler().serialize_all(),
 		"areas": [{
 			"name": "default",
 			"layers": layers_data,
@@ -250,7 +277,11 @@ func _serialize_object(obj: LDObject) -> Dictionary:
 	var props: Dictionary = obj.get_property_values()
 	for key: StringName in props:
 		data["properties"][str(key)] = Packer.serialize_json_variant(props.get(key))
-	
+
+	var tags: Array[String] = LD.get_tag_handler().get_object_tags(obj)
+	if not tags.is_empty():
+		data["tags"] = tags
+
 	return data
 
 
@@ -306,12 +337,25 @@ func _deserialize(data: Dictionary) -> Error:
 		if editor_data.has("active_layer"):
 			area.set_active_layer(editor_data.get("active_layer"))
 		if editor_data.has("parallaxing_enabled"):
-			LD.get_ui().set_parallaxing(editor_data.get("parallaxing_enabled"))
+			LD.get_ui().get_viewport_handler().set_parallaxing_enabled(editor_data.get("parallaxing_enabled"))
 		if editor_data.has("ghosting_enabled"):
-			LD.get_ui().set_ghosting(editor_data.get("ghosting_enabled"))
+			LD.get_ui().get_viewport_handler().set_ghosting_enabled(editor_data.get("ghosting_enabled"))
 	
+	var tags_data: Variant = normalized.get("tags", [])
+	if tags_data is Array:
+		LD.get_tag_handler().deserialize_all(tags_data)
+
+	var groups_data: Variant = normalized.get("groups", [])
+	if groups_data is Array:
+		LD.get_group_handler().deserialize_all(groups_data)
+		LD.get_group_handler().rehydrate_all()
+
+	var scenarios_data: Variant = normalized.get("scenarios", {})
+	if scenarios_data is Dictionary:
+		LD.get_scenario_handler().deserialize_all(scenarios_data)
+
 	_ensure_player_spawn()
-	
+
 	return OK
 
 
@@ -322,6 +366,9 @@ func _normalize(data: Dictionary) -> Dictionary:
 		return {
 			"version": data.get("version", 1),
 			"editor": data.get("editor", {}),
+			"groups": data.get("groups", []),
+			"tags": data.get("tags", []),
+			"scenarios": data.get("scenarios", {}),
 			"areas": [{
 				"name": "default",
 				"layers": data.get("layers", []),
@@ -398,6 +445,13 @@ func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB) -> void
 				poly_obj.add_hole(hole_points)
 	
 	instance.place()
+
+	if data.has("tags"):
+		var tags: Array[String] = []
+		for tag: Variant in data.get("tags", []):
+			tags.append(str(tag))
+		if not tags.is_empty():
+			instance.set_meta(&"tags", tags)
 
 
 func find_game_object_for(obj: LDObject) -> GameObject:

@@ -16,7 +16,7 @@ func select_object(object: GameObject) -> void:
 	_selected_object = object
 	selected_object_changed.emit(object)
 
-## Returns the first found instance of an object
+
 func find_object(id: String) -> LDObject:
 	var objects: Array[LDObject] = LD.get_area().get_all_objects()
 	
@@ -68,6 +68,38 @@ func delete_placed_selection() -> void:
 	for obj: LDObject in deletable:
 		if obj.get_parent():
 			obj.get_parent().remove_child(obj)
+
+
+func add_selection_to_group(group_id: String) -> void:
+	var objects: Array[LDObject] = get_placed_selection()
+	if objects.is_empty():
+		return
+	LD.get_group_handler().add_objects_to_group(group_id, objects)
+
+
+func remove_selection_from_group(group_id: String) -> void:
+	var objects: Array[LDObject] = get_placed_selection()
+	if objects.is_empty():
+		return
+	LD.get_group_handler().remove_objects_from_group(group_id, objects)
+
+
+func add_selection_to_tag(tag: String) -> void:
+	var objects: Array[LDObject] = get_placed_selection()
+	if objects.is_empty():
+		return
+	LD.get_tag_handler().tag_objects(tag, objects)
+
+
+func remove_selection_from_tag(tag: String) -> void:
+	var objects: Array[LDObject] = get_placed_selection()
+	if objects.is_empty():
+		return
+	LD.get_tag_handler().untag_objects(tag, objects)
+
+
+func get_selection_tags() -> Array[String]:
+	return LD.get_tag_handler().get_selection_tags(get_placed_selection())
 
 
 func get_shared_properties(objects: Array[LDObject]) -> Array[LDProperty]:

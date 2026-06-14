@@ -4,6 +4,7 @@ uniform int palette_index: hint_range(0, 16) = 0;
 uniform sampler2D palette_texture: filter_nearest, repeat_disable;
 uniform vec4 pre_modulate: source_color = vec4(1.0, 1.0, 1.0, 1.0);
 uniform vec4 post_modulate: source_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform float saturation: hint_range(0.0, 1.0) = 1.0;
 uniform float outline_width: hint_range(0.0, 10.0) = 1.0;
 uniform vec4 outline_color: source_color = vec4(1.0, 1.0, 1.0, 1.0);
 uniform vec4 fill_color: source_color = vec4(1.0, 1.0, 1.0, 0.25);
@@ -104,7 +105,10 @@ vec4 apply_selection(sampler2D tex, vec4 tex_color, vec2 uv) {
 void fragment() {
 	vec2 pal_size = vec2(textureSize(palette_texture, 0));
 	vec4 tex = texture(TEXTURE, UV);
-	vec4 pre = vec4(tex.rgb * pre_modulate.rgb, tex.a * pre_modulate.a);
+	vec3 pre_rgb = tex.rgb * pre_modulate.rgb;
+	float luma = dot(pre_rgb, vec3(0.299, 0.587, 0.114));
+	pre_rgb = mix(vec3(luma), pre_rgb, saturation);
+	vec4 pre = vec4(pre_rgb, tex.a * pre_modulate.a);
 	vec4 tex_swapped = vec4(swap_palette(palette_texture, pre.rgb, pal_size), pre.a);
 	vec4 result;
 	if (state != 0) {

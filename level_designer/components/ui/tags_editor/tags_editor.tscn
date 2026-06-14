@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://c8tag5editor01"]
+
+[ext_resource type="Script" path="res://level_designer/components/ui/tags_editor/tags_editor.gd" id="1_tagsed"]
+
+[node name="TagsEditor" type="MarginContainer" node_paths=PackedStringArray("tag_list", "add_button", "remove_button", "empty_label", "detail_content", "name_edit")]
+custom_minimum_size = Vector2(400, 250)
+script = ExtResource("1_tagsed")
+tag_list = NodePath("HBoxContainer/VBoxContainer/TagList")
+add_button = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/AddButton")
+remove_button = NodePath("HBoxContainer/VBoxContainer/RemoveButton")
+empty_label = NodePath("HBoxContainer/DetailPanel/EmptyLabel")
+detail_content = NodePath("HBoxContainer/DetailPanel/DetailContent")
+name_edit = NodePath("HBoxContainer/DetailPanel/DetailContent/HBoxContainer/NameEdit")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tags"
+horizontal_alignment = 1
+
+[node name="AddButton" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "+"
+
+[node name="TagList" type="ItemList" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RemoveButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "-"
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="DetailPanel" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EmptyLabel" type="Label" parent="HBoxContainer/DetailPanel"]
+layout_mode = 2
+text = "No tag selected."
+
+[node name="DetailContent" type="VBoxContainer" parent="HBoxContainer/DetailPanel"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/DetailPanel/DetailContent"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/DetailPanel/DetailContent/HBoxContainer"]
+layout_mode = 2
+text = "Name"
+
+[node name="NameEdit" type="LineEdit" parent="HBoxContainer/DetailPanel/DetailContent/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3

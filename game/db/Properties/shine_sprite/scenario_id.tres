@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LDPropertyScenarioID" format=3 uid="uid://ysutd35tfg1i"]
+
+[ext_resource type="Script" uid="uid://kbbex4wwp4s1" path="res://game/db/Properties/shine_sprite/scenario_id.gd" id="1_3vlgi"]
+
+[resource]
+script = ExtResource("1_3vlgi")
+key = &"scenario_id"
+label = "Scenario ID"
+type = 1
+default_value = 0
+metadata/_custom_type_script = "uid://kbbex4wwp4s1"
