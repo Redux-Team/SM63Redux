@@ -63,7 +63,11 @@ func get_overlay() -> LDSelectionOverlay:
 
 
 func request_redraw() -> void:
-	get_overlay().queue_redraw()
+	# May be called via deactivate() before the widget was ever activated (e.g. selecting
+	# Rotate/Scale with nothing selected, which bounces straight back to Select).
+	var overlay: LDSelectionOverlay = get_overlay()
+	if overlay:
+		overlay.queue_redraw()
 
 
 func select_tool(tool_name: String) -> void:
