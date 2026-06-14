@@ -35,22 +35,35 @@ func delete_placed_selection() -> void:
 	var objects: Array[LDObject] = get_placed_selection()
 	if objects.is_empty():
 		return
-	
-	var deletable: Array[LDObject] = []
+
+	var stamp_handler: LDStampHandler = LD.get_stamp_handler()
+	LD.get_editor_viewport().clear_selection()
+
+	# Stamp instances: drop the whole placement through the handler (which removes the
+	# anchor and persists it), once per unique placement. The rest are loose objects.
+	var removed_addresses: Dictionary = {}
+	var loose: Array[LDObject] = []
 	for obj: LDObject in objects:
+		var address: String = stamp_handler.get_object_linked_stamp(obj)
+		if address.is_empty():
+			loose.append(obj)
+		elif not removed_addresses.has(address):
+			removed_addresses[address] = true
+			stamp_handler.remove_anchor_for_object(obj)
+
+	var deletable: Array[LDObject] = []
+	for obj: LDObject in loose:
 		var game_obj: GameObject = GameDB.get_db().find_game_object(obj.source_object_id)
 		if game_obj and game_obj.ld_flags & (1 << GameObject.LD_DELETABLE):
 			deletable.append(obj)
-	
+
 	if deletable.is_empty():
 		return
-	
-	LD.get_editor_viewport().clear_selection()
-	
+
 	var parents: Array[Node] = []
 	for obj: LDObject in deletable:
 		parents.append(obj.get_parent())
-	
+
 	var history: LDHistoryHandler = LD.get_history_handler()
 	history.begin_action("Delete Objects")
 	history.add_do(func() -> void:

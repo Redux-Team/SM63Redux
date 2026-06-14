@@ -85,7 +85,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="HBoxContainer/DetailPanel/DetailContent/AnchorSection/HBoxContainer" unique_id=2009022252]
 layout_mode = 2
-text = "Anchors"
+text = "Instances"
 
 [node name="AnchorList" type="ItemList" parent="HBoxContainer/DetailPanel/DetailContent/AnchorSection" unique_id=1260387657]
 custom_minimum_size = Vector2(0, 80)
@@ -93,7 +93,7 @@ layout_mode = 2
 
 [node name="RemoveAnchorButton" type="Button" parent="HBoxContainer/DetailPanel/DetailContent/AnchorSection" unique_id=1077950153]
 layout_mode = 2
-text = "Remove Anchor"
+text = "Remove Instance"
 
 [node name="HSeparator2" type="HSeparator" parent="HBoxContainer/DetailPanel/DetailContent" unique_id=404135322]
 layout_mode = 2

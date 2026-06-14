@@ -153,19 +153,7 @@ func _expand_linked_selection(objects: Array[LDObject]) -> Array[LDObject]:
 
 
 func _delete_selected() -> void:
-	var to_delete: Array[LDObject] = viewport.get_selected_objects().duplicate()
-	viewport.clear_selection()
-	var gh: LDStampHandler = LD.get_stamp_handler()
-	var removed_anchors: Dictionary = {}
-	for obj: LDObject in to_delete:
-		var address: String = gh.get_object_linked_stamp(obj)
-		if not address.is_empty():
-			# Deleting any object of a linked instance removes the whole anchor.
-			if not removed_anchors.has(address):
-				removed_anchors[address] = true
-				gh.remove_anchor_for_object(obj)
-		else:
-			obj.queue_free()
+	LD.get_object_handler().delete_placed_selection()
 
 
 func _get_shape_screen_points(shape: CollisionShape2D) -> PackedVector2Array:
