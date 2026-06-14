@@ -8,8 +8,8 @@ const PREVIEW_PADDING: float = 8.0
 signal stamp_added(stamp: LDStamp)
 signal stamp_removed(stamp_id: String)
 signal stamp_changed(stamp: LDStamp)
-signal anchor_placed(stamp: LDStamp, unique_id: String)
-signal anchor_removed(stamp: LDStamp, unique_id: String)
+signal instance_placed(stamp: LDStamp, unique_id: String)
+signal instance_removed(stamp: LDStamp, unique_id: String)
 signal armed_stamp_changed(stamp: LDStamp)
 
 
@@ -23,8 +23,8 @@ func _on_ready() -> void:
 	stamp_added.connect(_persist_session.unbind(1))
 	stamp_removed.connect(_persist_session.unbind(1))
 	stamp_changed.connect(_persist_session.unbind(1))
-	anchor_placed.connect(_persist_session.unbind(2))
-	anchor_removed.connect(_persist_session.unbind(2))
+	instance_placed.connect(_persist_session.unbind(2))
+	instance_removed.connect(_persist_session.unbind(2))
 
 
 func _persist_session() -> void:
@@ -108,10 +108,10 @@ func create_stamp_from_objects(objects: Array[LDObject], id: String = "") -> LDS
 	if stampable.is_empty():
 		return null
 
-	var anchor_pos: Vector2 = Vector2.ZERO
+	var instance_pos: Vector2 = Vector2.ZERO
 	for obj: LDObject in stampable:
-		anchor_pos += obj.position
-	anchor_pos /= float(stampable.size())
+		instance_pos += obj.position
+	instance_pos /= float(stampable.size())
 
 	# Layers are captured relative to the stamp's lowest layer, so placing the stamp on
 	# layer N puts its objects on N, N+1, ... preserving their layer spacing.
@@ -124,7 +124,7 @@ func create_stamp_from_objects(objects: Array[LDObject], id: String = "") -> LDS
 		var data: Dictionary = save_load._serialize_object(obj)
 		if data.is_empty():
 			continue
-		data["local_offset"] = Packer.vec2_to_array(obj.position - anchor_pos)
+		data["local_offset"] = Packer.vec2_to_array(obj.position - instance_pos)
 		data["layer_offset"] = _get_object_layer_index(obj) - base_layer
 		entries.append(data)
 	if entries.is_empty():
@@ -182,10 +182,10 @@ func place_linked(stamp_id: String, unique_id: String, position: Vector2, layer_
 	if not stamp:
 		return false
 
-	if stamp.has_anchor(unique_id):
+	if stamp.has_instance(unique_id):
 		return false
 
-	var anchor: Dictionary = stamp.add_anchor(unique_id, position, layer_index)
+	var instance: Dictionary = stamp.add_instance(unique_id, position, layer_index)
 	var spawned: Array[LDObject] = _spawn_stamp_objects(stamp, position, layer_index)
 
 	for obj: LDObject in spawned:
@@ -195,68 +195,68 @@ func place_linked(stamp_id: String, unique_id: String, position: Vector2, layer_
 	var history: LDHistoryHandler = LD.get_history_handler()
 	history.begin_action("Place Stamp: " + stamp_id + ":" + unique_id)
 	history.add_do(func() -> void:
-		if not stamp.has_anchor(unique_id):
-			stamp.anchors.append(anchor)
+		if not stamp.has_instance(unique_id):
+			stamp.instances.append(instance)
 		for obj: LDObject in spawned:
 			if is_instance_valid(obj) and not obj.get_parent():
 				var obj_layer: int = obj.get_meta(&"spawn_layer", layer_index)
 				area.add_object(obj, Vector2i(obj.position), obj_layer)
-		anchor_placed.emit(stamp, unique_id)
+		instance_placed.emit(stamp, unique_id)
 	)
 	history.add_undo(func() -> void:
-		stamp.remove_anchor(unique_id)
+		stamp.remove_instance(unique_id)
 		for obj: LDObject in spawned:
 			if is_instance_valid(obj) and obj.get_parent():
 				obj.get_parent().remove_child(obj)
-		anchor_removed.emit(stamp, unique_id)
+		instance_removed.emit(stamp, unique_id)
 	)
 	history.commit_action()
 
-	anchor_placed.emit(stamp, unique_id)
+	instance_placed.emit(stamp, unique_id)
 	return true
 
 
-func remove_anchor(stamp_id: String, unique_id: String) -> void:
+func remove_instance(stamp_id: String, unique_id: String) -> void:
 	var stamp: LDStamp = get_stamp(stamp_id)
 	if not stamp:
 		return
 
 	var address: String = stamp.get_full_address(unique_id)
-	var to_remove: Array[LDObject] = _get_objects_at_anchor(address)
+	var to_remove: Array[LDObject] = _get_objects_at_address(address)
 
 	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Remove Anchor: " + address)
+	history.begin_action("Remove Instance: " + address)
 	history.add_do(func() -> void:
-		stamp.remove_anchor(unique_id)
+		stamp.remove_instance(unique_id)
 		for obj: LDObject in to_remove:
 			if is_instance_valid(obj) and obj.get_parent():
 				obj.get_parent().remove_child(obj)
-		anchor_removed.emit(stamp, unique_id)
+		instance_removed.emit(stamp, unique_id)
 	)
 	history.add_undo(func() -> void:
 		var area: LDArea = LDLevel.get_active_area()
-		stamp.add_anchor(unique_id, Vector2.ZERO, 0)
+		stamp.add_instance(unique_id, Vector2.ZERO, 0)
 		for obj: LDObject in to_remove:
 			if is_instance_valid(obj) and not obj.get_parent():
 				var obj_layer: int = obj.get_meta(&"spawn_layer", 0)
 				area.add_object(obj, Vector2i(obj.position), obj_layer)
-		anchor_placed.emit(stamp, unique_id)
+		instance_placed.emit(stamp, unique_id)
 	)
 	history.commit_action()
 
-	stamp.remove_anchor(unique_id)
+	stamp.remove_instance(unique_id)
 	for obj: LDObject in to_remove:
 		if is_instance_valid(obj) and obj.get_parent():
 			obj.get_parent().remove_child(obj)
 
-	anchor_removed.emit(stamp, unique_id)
+	instance_removed.emit(stamp, unique_id)
 
 
 func get_object_linked_stamp(obj: LDObject) -> String:
 	return str(obj.get_meta(&"linked_stamp", ""))
 
 
-## Tags a spawned stamp object with its anchor address. Every instance is a grayscale,
+## Tags a spawned stamp object with its instance address. Every instance is a grayscale,
 ## read-only snapshot copy - a stamp is an immutable snapshot, so there is no editable
 ## "primary".
 func _mark_linked_object(obj: LDObject, address: String) -> void:
@@ -270,50 +270,50 @@ func is_linked_readonly(obj: LDObject) -> bool:
 	return bool(obj.get_meta(&"linked_readonly", false))
 
 
-## All placed objects belonging to the same stamp anchor instance as obj (used to
+## All placed objects belonging to the same stamp instance as obj (used to
 ## select/move/delete a stamp placement as a single unit).
 func get_linked_instance_objects(obj: LDObject) -> Array[LDObject]:
 	var address: String = get_object_linked_stamp(obj)
 	if address.is_empty():
 		return []
-	return _get_objects_at_anchor(address)
+	return _get_objects_at_address(address)
 
 
-## Removes the entire stamp anchor instance that obj belongs to (and its objects).
-func remove_anchor_for_object(obj: LDObject) -> void:
+## Removes the entire stamp instance that obj belongs to (and its objects).
+func remove_instance_for_object(obj: LDObject) -> void:
 	var address: String = get_object_linked_stamp(obj)
 	var parts: PackedStringArray = address.split(":")
 	if parts.size() < 2:
 		return
-	remove_anchor(parts[0], parts[1])
+	remove_instance(parts[0], parts[1])
 
 
-## World position of the anchor that obj's stamp instance is placed at.
-func get_anchor_position_for_object(obj: LDObject) -> Vector2:
+## World position of the instance that obj's stamp instance is placed at.
+func get_instance_position_for_object(obj: LDObject) -> Vector2:
 	var parts: PackedStringArray = get_object_linked_stamp(obj).split(":")
 	if parts.size() < 2:
 		return Vector2.ZERO
 	var stamp: LDStamp = get_stamp(parts[0])
 	if not stamp:
 		return Vector2.ZERO
-	var anchor: Dictionary = stamp.get_anchor(parts[1])
-	if anchor.is_empty():
+	var instance: Dictionary = stamp.get_instance(parts[1])
+	if instance.is_empty():
 		return Vector2.ZERO
-	return Packer.array_to_vec2(anchor.get("position", [0.0, 0.0]))
+	return Packer.array_to_vec2(instance.get("position", [0.0, 0.0]))
 
 
-## Updates the stored position of a stamp anchor (so a moved instance persists/rehydrates
+## Updates the stored position of a stamp instance (so a moved instance persists/rehydrates
 ## in its new spot). Address is "stamp_id:unique_id".
-func set_anchor_position_by_address(address: String, pos: Vector2) -> void:
+func set_instance_position_by_address(address: String, pos: Vector2) -> void:
 	var parts: PackedStringArray = address.split(":")
 	if parts.size() < 2:
 		return
 	var stamp: LDStamp = get_stamp(parts[0])
 	if not stamp:
 		return
-	var anchor: Dictionary = stamp.get_anchor(parts[1])
-	if not anchor.is_empty():
-		anchor["position"] = [pos.x, pos.y]
+	var instance: Dictionary = stamp.get_instance(parts[1])
+	if not instance.is_empty():
+		instance["position"] = [pos.x, pos.y]
 
 
 func serialize_all() -> Array[Dictionary]:
@@ -406,12 +406,12 @@ func rehydrate_all() -> void:
 func _rehydrate_stamp(stamp: LDStamp) -> void:
 	_dehydrate_stamp(stamp.id)
 
-	for anchor: Dictionary in stamp.anchors:
-		var unique_id: String = anchor.get("unique_id", "")
-		var anchor_pos: Vector2 = Packer.array_to_vec2(anchor.get("position", [0.0, 0.0]))
-		var anchor_layer: int = anchor.get("layer_index", 0)
+	for instance: Dictionary in stamp.instances:
+		var unique_id: String = instance.get("unique_id", "")
+		var instance_pos: Vector2 = Packer.array_to_vec2(instance.get("position", [0.0, 0.0]))
+		var instance_layer: int = instance.get("layer_index", 0)
 		var address: String = stamp.get_full_address(unique_id)
-		var spawned: Array[LDObject] = _spawn_stamp_objects(stamp, anchor_pos, anchor_layer)
+		var spawned: Array[LDObject] = _spawn_stamp_objects(stamp, instance_pos, instance_layer)
 
 		for obj: LDObject in spawned:
 			_mark_linked_object(obj, address)
@@ -428,23 +428,23 @@ func _dehydrate_stamp(stamp_id: String) -> void:
 
 
 ## Spawns one preview (ghost) instance per object in the stamp, positioned relative to
-## anchor_pos. The instances are flagged as previews and are NOT committed to history;
+## instance_pos. The instances are flagged as previews and are NOT committed to history;
 ## the caller owns them and should free them. Reposition with position_preview().
-func spawn_preview(stamp: LDStamp, anchor_pos: Vector2) -> Array[LDObject]:
+func spawn_preview(stamp: LDStamp, instance_pos: Vector2) -> Array[LDObject]:
 	if not stamp:
 		return []
-	return _spawn_stamp_objects(stamp, anchor_pos, LDLevel.get_active_area()._active_index, true)
+	return _spawn_stamp_objects(stamp, instance_pos, LDLevel.get_active_area()._active_index, true)
 
 
-## Moves a set of preview instances (from spawn_preview) so the stamp is anchored at anchor_pos.
-func position_preview(instances: Array[LDObject], anchor_pos: Vector2) -> void:
+## Moves a set of preview instances (from spawn_preview) so the stamp sits at instance_pos.
+func position_preview(instances: Array[LDObject], instance_pos: Vector2) -> void:
 	for instance: LDObject in instances:
 		if not is_instance_valid(instance):
 			continue
-		instance.position = anchor_pos + instance.get_meta(&"preview_offset", Vector2.ZERO)
+		instance.position = instance_pos + instance.get_meta(&"preview_offset", Vector2.ZERO)
 
 
-func _spawn_stamp_objects(stamp: LDStamp, anchor_pos: Vector2, default_layer: int = 0, as_preview: bool = false) -> Array[LDObject]:
+func _spawn_stamp_objects(stamp: LDStamp, instance_pos: Vector2, default_layer: int = 0, as_preview: bool = false) -> Array[LDObject]:
 	var result: Array[LDObject] = []
 	var db: GameDB = GameDB.get_db()
 	var area: LDArea = LDLevel.get_active_area()
@@ -462,7 +462,7 @@ func _spawn_stamp_objects(stamp: LDStamp, anchor_pos: Vector2, default_layer: in
 		instance.is_preview = as_preview
 		var local_offset: Vector2 = Packer.array_to_vec2(entry.get("local_offset", [0.0, 0.0]))
 		var obj_layer: int = default_layer + int(entry.get("layer_offset", 0))
-		var world_pos: Vector2 = anchor_pos + local_offset
+		var world_pos: Vector2 = instance_pos + local_offset
 
 		area.add_object(instance, Vector2i(world_pos), obj_layer)
 		instance.init_properties(game_object)
@@ -470,7 +470,7 @@ func _spawn_stamp_objects(stamp: LDStamp, anchor_pos: Vector2, default_layer: in
 		var props: Dictionary = entry.get("properties", {})
 		for key: String in props:
 			# The captured "position" is the object's original absolute position; the
-			# spawn position comes from anchor + local_offset, so don't restore it here.
+			# spawn position comes from instance + local_offset, so don't restore it here.
 			if key == "position":
 				continue
 			instance.set_property(StringName(key), Packer.deserialize_json_variant(props.get(key)))
@@ -507,7 +507,7 @@ func _spawn_stamp_objects(stamp: LDStamp, anchor_pos: Vector2, default_layer: in
 	return result
 
 
-func _get_objects_at_anchor(address: String) -> Array[LDObject]:
+func _get_objects_at_address(address: String) -> Array[LDObject]:
 	var result: Array[LDObject] = []
 	for obj: LDObject in LDLevel.get_active_area().get_all_objects():
 		if get_object_linked_stamp(obj) == address:

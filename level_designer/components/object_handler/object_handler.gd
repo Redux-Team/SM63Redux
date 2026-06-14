@@ -40,7 +40,7 @@ func delete_placed_selection() -> void:
 	LD.get_editor_viewport().clear_selection()
 
 	# Stamp instances: drop the whole placement through the handler (which removes the
-	# anchor and persists it), once per unique placement. The rest are loose objects.
+	# instance and persists it), once per unique placement. The rest are loose objects.
 	var removed_addresses: Dictionary = {}
 	var loose: Array[LDObject] = []
 	for obj: LDObject in objects:
@@ -49,7 +49,7 @@ func delete_placed_selection() -> void:
 			loose.append(obj)
 		elif not removed_addresses.has(address):
 			removed_addresses[address] = true
-			stamp_handler.remove_anchor_for_object(obj)
+			stamp_handler.remove_instance_for_object(obj)
 
 	var deletable: Array[LDObject] = []
 	for obj: LDObject in loose:

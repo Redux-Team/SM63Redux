@@ -4,37 +4,37 @@ extends Resource
 
 @export var id: String = ""
 @export var objects: Array[Dictionary] = []
-@export var anchors: Array[Dictionary] = []
+@export var instances: Array[Dictionary] = []
 
 var preview_texture: ImageTexture = null
 
 
-func get_anchor(unique_id: String) -> Dictionary:
-	for anchor: Dictionary in anchors:
-		if anchor.get("unique_id", "") == unique_id:
-			return anchor
+func get_instance(unique_id: String) -> Dictionary:
+	for instance: Dictionary in instances:
+		if instance.get("unique_id", "") == unique_id:
+			return instance
 	return {}
 
 
-func has_anchor(unique_id: String) -> bool:
-	return not get_anchor(unique_id).is_empty()
+func has_instance(unique_id: String) -> bool:
+	return not get_instance(unique_id).is_empty()
 
 
-func add_anchor(unique_id: String, position: Vector2, layer_index: int) -> Dictionary:
-	var anchor: Dictionary = {
+func add_instance(unique_id: String, position: Vector2, layer_index: int) -> Dictionary:
+	var instance: Dictionary = {
 		"unique_id": unique_id,
 		"position": [position.x, position.y],
 		"layer_index": layer_index,
 		"overrides": {},
 	}
-	anchors.append(anchor)
-	return anchor
+	instances.append(instance)
+	return instance
 
 
-func remove_anchor(unique_id: String) -> void:
-	for i: int in anchors.size():
-		if anchors[i].get("unique_id", "") == unique_id:
-			anchors.remove_at(i)
+func remove_instance(unique_id: String) -> void:
+	for i: int in instances.size():
+		if instances[i].get("unique_id", "") == unique_id:
+			instances.remove_at(i)
 			return
 
 
@@ -42,7 +42,7 @@ func get_full_address(unique_id: String) -> String:
 	return id + ":" + unique_id
 
 
-func is_anchor_address(address: String) -> bool:
+func is_instance_address(address: String) -> bool:
 	return address.contains(":")
 
 
@@ -50,7 +50,7 @@ func serialize() -> Dictionary:
 	return {
 		"id": id,
 		"objects": objects.duplicate(true),
-		"anchors": anchors.duplicate(true),
+		"instances": instances.duplicate(true),
 	}
 
 
@@ -58,5 +58,6 @@ static func deserialize(data: Dictionary) -> LDStamp:
 	var stamp: LDStamp = LDStamp.new()
 	stamp.id = data.get("id", "")
 	stamp.objects = data.get("objects", []).duplicate(true)
-	stamp.anchors = data.get("anchors", []).duplicate(true)
+	# "anchors" is the pre-rename key; still read it so older levels keep their instances.
+	stamp.instances = data.get("instances", data.get("anchors", [])).duplicate(true)
 	return stamp

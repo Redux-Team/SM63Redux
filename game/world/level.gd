@@ -165,8 +165,8 @@ func load_from_dict(data: Dictionary) -> Error:
 					continue
 				_instantiate_object(obj_data, layer, current_area)
 
-	# Stamps are stored as a definition plus anchors; expand each placement into real
-	# objects so they exist at runtime (the editor rebuilds them from anchors instead).
+	# Stamps are stored as a definition plus instances; expand each placement into real
+	# objects so they exist at runtime (the editor rebuilds them from instances instead).
 	_spawn_stamps(data, disabled_layers, disabled_tags)
 
 	_loaded = true
@@ -202,7 +202,7 @@ func _scenario_allows(obj_data: Dictionary, disabled_tags: Dictionary[String, bo
 	return true
 
 
-## Expands every stamp placement (anchor) into concrete level objects, applying the same
+## Expands every stamp placement (instance) into concrete level objects, applying the same
 ## scenario filtering as regular objects.
 func _spawn_stamps(data: Dictionary, disabled_layers: Dictionary[int, bool], disabled_tags: Dictionary[String, bool]) -> void:
 	if not is_instance_valid(_active_area):
@@ -216,20 +216,21 @@ func _spawn_stamps(data: Dictionary, disabled_layers: Dictionary[int, bool], dis
 		if not stamp_data is Dictionary:
 			continue
 		var entries: Array = (stamp_data as Dictionary).get("objects", [])
-		for anchor: Variant in (stamp_data as Dictionary).get("anchors", []):
-			if not anchor is Dictionary:
+		# "anchors" is the pre-rename key for placed instances.
+		for instance: Variant in (stamp_data as Dictionary).get("instances", (stamp_data as Dictionary).get("anchors", [])):
+			if not instance is Dictionary:
 				continue
-			var anchor_pos: Vector2 = Packer.array_to_vec2((anchor as Dictionary).get("position", [0.0, 0.0]))
-			var anchor_layer: int = int((anchor as Dictionary).get("layer_index", 0))
+			var instance_pos: Vector2 = Packer.array_to_vec2((instance as Dictionary).get("position", [0.0, 0.0]))
+			var instance_layer: int = int((instance as Dictionary).get("layer_index", 0))
 			for entry: Variant in entries:
 				if not entry is Dictionary:
 					continue
-				var obj_layer: int = anchor_layer + int((entry as Dictionary).get("layer_offset", 0))
+				var obj_layer: int = instance_layer + int((entry as Dictionary).get("layer_offset", 0))
 				if disabled_layers.has(obj_layer):
 					continue
 				if not _scenario_allows(entry, disabled_tags):
 					continue
-				var world_pos: Vector2 = anchor_pos + Packer.array_to_vec2((entry as Dictionary).get("local_offset", [0.0, 0.0]))
+				var world_pos: Vector2 = instance_pos + Packer.array_to_vec2((entry as Dictionary).get("local_offset", [0.0, 0.0]))
 				var spawn_data: Dictionary = (entry as Dictionary).duplicate(true)
 				spawn_data["position"] = [world_pos.x, world_pos.y]
 				if spawn_data.get("properties") is Dictionary and (spawn_data["properties"] as Dictionary).has("position"):

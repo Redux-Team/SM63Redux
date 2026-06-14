@@ -137,7 +137,7 @@ func _commit_box_select() -> void:
 		viewport.set_selected_objects(_expand_linked_selection(found))
 
 
-## Expands any read-only linked-stamp "ghost" object to all objects in its anchor
+## Expands any read-only linked-stamp "ghost" object to all objects in its instance
 ## instance, so a linked placement is selected as a single unit.
 func _expand_linked_selection(objects: Array[LDObject]) -> Array[LDObject]:
 	var gh: LDStampHandler = LD.get_stamp_handler()

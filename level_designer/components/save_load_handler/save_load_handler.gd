@@ -211,7 +211,7 @@ func _serialize() -> Dictionary:
 			var obj: LDObject = obj_node as LDObject
 			if not obj or obj.is_preview:
 				continue
-			# Linked-stamp instances are rebuilt from their stamp's anchors on load,
+			# Linked-stamp instances are rebuilt from their stamp's instances on load,
 			# so don't persist them here or they'd be duplicated.
 			if not str(obj.get_meta(&"linked_stamp", "")).is_empty():
 				continue

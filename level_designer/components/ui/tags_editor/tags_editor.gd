@@ -3,7 +3,7 @@ extends MarginContainer
 
 ## Simple editor for the level's tags: a list on the left plus an add / rename / remove
 ## flow. Tags are pure labels - scenarios target them to enable/disable objects. Unlike
-## stamps there are no anchors, previews, or captured objects.
+## stamps there are no instances, previews, or captured objects.
 
 
 @export var tag_list: ItemList
