@@ -224,7 +224,7 @@ func _spawn_stamps(data: Dictionary, disabled_layers: Dictionary[int, bool], dis
 			for entry: Variant in entries:
 				if not entry is Dictionary:
 					continue
-				var obj_layer: int = int((entry as Dictionary).get("layer_index", anchor_layer))
+				var obj_layer: int = anchor_layer + int((entry as Dictionary).get("layer_offset", 0))
 				if disabled_layers.has(obj_layer):
 					continue
 				if not _scenario_allows(entry, disabled_tags):

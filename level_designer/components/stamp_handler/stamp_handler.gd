@@ -113,13 +113,19 @@ func create_stamp_from_objects(objects: Array[LDObject], id: String = "") -> LDS
 		anchor_pos += obj.position
 	anchor_pos /= float(stampable.size())
 
+	# Layers are captured relative to the stamp's lowest layer, so placing the stamp on
+	# layer N puts its objects on N, N+1, ... preserving their layer spacing.
+	var base_layer: int = _get_object_layer_index(stampable[0])
+	for obj: LDObject in stampable:
+		base_layer = mini(base_layer, _get_object_layer_index(obj))
+
 	var entries: Array[Dictionary] = []
 	for obj: LDObject in stampable:
 		var data: Dictionary = save_load._serialize_object(obj)
 		if data.is_empty():
 			continue
 		data["local_offset"] = Packer.vec2_to_array(obj.position - anchor_pos)
-		data["layer_index"] = _get_object_layer_index(obj)
+		data["layer_offset"] = _get_object_layer_index(obj) - base_layer
 		entries.append(data)
 	if entries.is_empty():
 		return null
@@ -455,7 +461,7 @@ func _spawn_stamp_objects(stamp: LDStamp, anchor_pos: Vector2, default_layer: in
 			continue
 		instance.is_preview = as_preview
 		var local_offset: Vector2 = Packer.array_to_vec2(entry.get("local_offset", [0.0, 0.0]))
-		var obj_layer: int = entry.get("layer_index", default_layer)
+		var obj_layer: int = default_layer + int(entry.get("layer_offset", 0))
 		var world_pos: Vector2 = anchor_pos + local_offset
 
 		area.add_object(instance, Vector2i(world_pos), obj_layer)
