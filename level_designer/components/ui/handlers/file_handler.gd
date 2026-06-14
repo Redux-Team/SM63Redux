@@ -2,7 +2,7 @@ class_name LDUIFileHandler
 extends Node
 
 ## Level-level actions: save / save-as / load / reset, plus launching a playtest. Owns
-## the save/load/reset dialogs and keeps the "Save (New)" button's visibility in sync.
+## the save/load/reset dialogs and keeps the "Save As..." button's visibility in sync.
 ## Reached via LD.get_ui().get_file_handler().
 
 @export var _save_file_dialog: FileDialog
@@ -26,7 +26,7 @@ func setup() -> void:
 	_update_save_buttons()
 
 
-# --- Buttons -------------------------------------------------------------------------
+#region Buttons
 
 func _on_save_button_pressed() -> void:
 	var handler: LDSaveLoadHandler = LD.get_save_load_handler()
@@ -61,7 +61,10 @@ func _on_test_client_button_pressed() -> void:
 	get_tree().change_scene_to_file("uid://ctssku6r3gx0a")
 
 
-# --- Dialog results ------------------------------------------------------------------
+#endregion
+
+
+#region Dialog results
 
 func _on_save_file_selected(path: String) -> void:
 	var handler: LDSaveLoadHandler = LD.get_save_load_handler()
@@ -92,3 +95,6 @@ func _on_reset_level_dialog_confirmed() -> void:
 func _update_save_buttons() -> void:
 	if is_instance_valid(_save_new_button):
 		_save_new_button.visible = LD.get_save_load_handler().has_loaded_file()
+
+
+#endregion

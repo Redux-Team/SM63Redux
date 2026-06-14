@@ -39,7 +39,7 @@ func _ready() -> void:
 		browser.category_changed.connect(_on_browser_category_changed)
 
 
-# --- Typed toggles (return the bound content) ----------------------------------------
+#region Typed toggles (return the bound content)
 
 func toggle_object_browser() -> LDObjectBrowser:
 	return toggle(OBJECT_BROWSER) as LDObjectBrowser
@@ -65,7 +65,10 @@ func toggle_tag_editor() -> LDTagEditor:
 	return toggle(TAG_EDITOR) as LDTagEditor
 
 
-# --- Generic window control ----------------------------------------------------------
+#endregion
+
+
+#region Generic window control
 
 ## Opens the window bound to `id`, or closes it if it's already the active one. Returns
 ## the content node (null if another window is already open and blocks this one).
@@ -109,7 +112,10 @@ func get_object_browser() -> LDObjectBrowser:
 	return _instances.get(OBJECT_BROWSER) as LDObjectBrowser
 
 
-# --- Pickers -------------------------------------------------------------------------
+#endregion
+
+
+#region Pickers
 
 func open_tag_picker(title: String, on_confirm: Callable) -> void:
 	var picker: LDPickerDialog = _instances[PICKER] as LDPickerDialog
@@ -126,7 +132,10 @@ func _wire_picker(picker: LDPickerDialog, on_confirm: Callable) -> void:
 	picker.cancelled.connect(close, CONNECT_ONE_SHOT)
 
 
-# --- Internal ------------------------------------------------------------------------
+#endregion
+
+
+#region Internal
 
 func _on_browser_category_changed(category_name: String) -> void:
 	if _active_id == OBJECT_BROWSER:
@@ -137,3 +146,6 @@ func _on_window_popped_out() -> void:
 	if _active_id != &"":
 		LD.get_input_handler().remove_input_priority(LD.get_ui())
 		_active_id = &""
+
+
+#endregion
