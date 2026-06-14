@@ -88,6 +88,14 @@ func set_tag_override(index: int, tag: String, state: Variant) -> void:
 	scenario_changed.emit(scenario)
 
 
+func set_stamp_override(index: int, stamp_id: String, state: Variant) -> void:
+	var scenario: LDScenario = get_scenario(index)
+	if not scenario:
+		return
+	scenario.set_stamp(stamp_id, state)
+	scenario_changed.emit(scenario)
+
+
 ## Effective enabled state of a layer under scenario `index`: start all-enabled, apply
 ## COMMON's override, then (for numbered scenarios) this scenario's own override.
 func is_layer_enabled(index: int, layer_index: int) -> bool:
@@ -113,6 +121,20 @@ func is_tag_enabled(index: int, tag: String) -> bool:
 		var scenario: LDScenario = get_scenario(index)
 		if scenario:
 			var override: Variant = scenario.get_tag_override(tag)
+			if override != null:
+				enabled = bool(override)
+	return enabled
+
+
+func is_stamp_enabled(index: int, stamp_id: String) -> bool:
+	var enabled: bool = true
+	var common_override: Variant = get_common().get_stamp_override(stamp_id)
+	if common_override != null:
+		enabled = bool(common_override)
+	if index != LDScenario.COMMON_INDEX:
+		var scenario: LDScenario = get_scenario(index)
+		if scenario:
+			var override: Variant = scenario.get_stamp_override(stamp_id)
 			if override != null:
 				enabled = bool(override)
 	return enabled
@@ -161,6 +183,13 @@ func apply_to_editor(index: int) -> void:
 					if not is_tag_enabled(index, tag):
 						vis = false
 						break
+			if vis:
+				# Stamp instances carry their stamp id; hide them when that stamp is disabled.
+				var stamp_address: String = str(obj.get_meta(&"linked_stamp", ""))
+				if not stamp_address.is_empty():
+					var stamp_id: String = stamp_address.get_slice(":", 0)
+					if not is_stamp_enabled(index, stamp_id):
+						vis = false
 			obj.visible = vis
 
 

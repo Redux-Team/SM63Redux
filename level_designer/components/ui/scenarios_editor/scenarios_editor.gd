@@ -14,6 +14,7 @@ extends MarginContainer
 @export var detail_content: Control
 @export var layers_container: VBoxContainer
 @export var tags_container: VBoxContainer
+@export var stamps_container: VBoxContainer
 
 
 var _selected_index: int = -1
@@ -102,6 +103,8 @@ func _build_rows() -> void:
 		child.queue_free()
 	for child: Node in tags_container.get_children():
 		child.queue_free()
+	for child: Node in stamps_container.get_children():
+		child.queue_free()
 
 	var sh: LDScenarioHandler = LD.get_scenario_handler()
 	var scenario: LDScenario = sh.get_scenario(_selected_index)
@@ -121,6 +124,14 @@ func _build_rows() -> void:
 		var opt2: OptionButton = _make_row(tags_container, tag, is_common, scenario.get_tag_override(tag))
 		opt2.item_selected.connect(func(sel: int) -> void:
 			sh.set_tag_override(_selected_index, tag, _state_from_id(opt2.get_item_id(sel)))
+			sh.apply_to_editor(_selected_index)
+		)
+
+	for stamp: LDStamp in LD.get_stamp_handler().get_all_stamps():
+		var stamp_id: String = stamp.id
+		var opt3: OptionButton = _make_row(stamps_container, stamp_id, is_common, scenario.get_stamp_override(stamp_id))
+		opt3.item_selected.connect(func(sel: int) -> void:
+			sh.set_stamp_override(_selected_index, stamp_id, _state_from_id(opt3.get_item_id(sel)))
 			sh.apply_to_editor(_selected_index)
 		)
 

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cm0wgakqfv4qa" path="res://level_designer/components/ui/scenarios_editor/scenarios_editor.gd" id="1_m0tjn"]
 
-[node name="LDScenariosEditor" type="MarginContainer" unique_id=1341334410 node_paths=PackedStringArray("scenario_list", "add_button", "remove_button", "empty_label", "detail_content", "layers_container", "tags_container")]
+[node name="LDScenariosEditor" type="MarginContainer" unique_id=1341334410 node_paths=PackedStringArray("scenario_list", "add_button", "remove_button", "empty_label", "detail_content", "layers_container", "tags_container", "stamps_container")]
 custom_minimum_size = Vector2(500, 320)
 script = ExtResource("1_m0tjn")
 scenario_list = NodePath("HBoxContainer/VBoxContainer/ScenarioList")
@@ -12,6 +12,7 @@ empty_label = NodePath("HBoxContainer/DetailPanel/EmptyLabel")
 detail_content = NodePath("HBoxContainer/DetailPanel/DetailTabs")
 layers_container = NodePath("HBoxContainer/DetailPanel/DetailTabs/Layers/LayersContainer")
 tags_container = NodePath("HBoxContainer/DetailPanel/DetailTabs/Tags/TagsContainer")
+stamps_container = NodePath("HBoxContainer/DetailPanel/DetailTabs/Stamps/StampsContainer")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=756984600]
 layout_mode = 2
@@ -69,5 +70,13 @@ visible = false
 layout_mode = 2
 
 [node name="TagsContainer" type="VBoxContainer" parent="HBoxContainer/DetailPanel/DetailTabs/Tags" unique_id=1946449210]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Stamps" type="ScrollContainer" parent="HBoxContainer/DetailPanel/DetailTabs"]
+visible = false
+layout_mode = 2
+
+[node name="StampsContainer" type="VBoxContainer" parent="HBoxContainer/DetailPanel/DetailTabs/Stamps"]
 layout_mode = 2
 size_flags_horizontal = 3
