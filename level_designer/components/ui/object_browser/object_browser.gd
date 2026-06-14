@@ -105,7 +105,10 @@ func _on_tab_button_group_pressed(button: BaseButton) -> void:
 
 
 func _on_search_line_edit_text_changed(new_text: String) -> void:
-	if _showing_stamps:
+	# An empty search just restores whatever tab is active; a query searches everything
+	# (objects and stamps), regardless of the current tab.
+	if new_text.strip_edges().is_empty() and _showing_stamps:
+		_populate_stamps_list()
 		return
 	populate_list(new_text)
 
@@ -118,17 +121,19 @@ func _refresh_stamps_tab() -> void:
 func _populate_stamps_list() -> void:
 	for n: Node in groups_v_box.get_children():
 		n.queue_free()
-	
-	var placeable: Array[LDStamp] = LD.get_stamp_handler().get_all_stamps()
+	_add_stamps_group(LD.get_stamp_handler().get_all_stamps())
 
-	if placeable.is_empty():
+
+## Builds a "Stamps" browser group from the given stamps (no-op if empty).
+func _add_stamps_group(stamps: Array[LDStamp]) -> void:
+	if stamps.is_empty():
 		return
-	
+
 	var group_node: LDObjectBrowserGroup = OBJECT_GROUP_SCENE.instantiate()
 	group_node.set_group_name("Stamps")
 	groups_v_box.add_child(group_node)
-	
-	for stamp: LDStamp in placeable:
+
+	for stamp: LDStamp in stamps:
 		var entry: LDStampEntry = STAMP_ENTRY.instantiate()
 		entry.setup(stamp)
 		entry.entry_selected.connect(_on_stamp_entry_selected, CONNECT_REFERENCE_COUNTED)
@@ -145,7 +150,15 @@ func populate_list(search: String = "") -> void:
 	
 	var query: String = search.to_lower().strip_edges()
 	var pressed: BaseButton = _tab_button_group.get_pressed_button()
-	
+
+	# When searching, surface matching stamps at the top alongside the object results.
+	if not query.is_empty():
+		var matching_stamps: Array[LDStamp] = []
+		for stamp: LDStamp in LD.get_stamp_handler().get_all_stamps():
+			if _fuzzy_score(query, stamp.id.to_lower()) > 0:
+				matching_stamps.append(stamp)
+		_add_stamps_group(matching_stamps)
+
 	var all_groups: Array[GameDB.GameObjectGroup] = []
 	if query.is_empty():
 		var cat_name: String = pressed.name if pressed else &""
