@@ -1,11 +1,14 @@
 class_name LDUIToolbarHandler
 extends Node
 
-## Editing toolbar: tool selection, clipboard/selection ops, z-order reordering, layer
-## navigation, camera reset, and the stamp/tag buttons. Reached via
-## LD.get_ui().get_toolbar_handler(). Button signals connect straight to these methods.
+## Editing toolbar: tool selection, clipboard/selection ops, z-order reordering, camera reset,
+## active-layer navigation, and the stamp/tag buttons. Layers are created/renamed/reordered in the
+## Layers window. Reached via LD.get_ui().get_toolbar_handler(). Button signals connect to these.
 
-@export var _layer_num: Label
+## Shows the active layer's name (or "Layer <index>") between the prev/next buttons.
+@export var _layer_name_label: Label
+@export var _prev_layer_button: Button
+@export var _next_layer_button: Button
 
 
 var _viewport: LDViewport:
@@ -15,7 +18,10 @@ var _viewport: LDViewport:
 
 ## Called by LDUI once the level designer is fully ready.
 func setup() -> void:
-	_refresh_layer_num()
+	var area: LDArea = LD.get_area()
+	area.active_layer_changed.connect(func(_index: int) -> void: _refresh_layer_label())
+	area.layers_changed.connect(_refresh_layer_label)
+	_refresh_layer_label()
 
 
 #region Tools
@@ -207,22 +213,38 @@ func _on_reset_cam_button_pressed() -> void:
 	_viewport.refocus_camera(player.position, Vector2.ONE)
 
 
-func _on_layer_down_pressed() -> void:
-	_set_layer(-1)
+func _on_prev_layer_pressed() -> void:
+	_step_existing_layer(-1)
 
 
-func _on_layer_up_pressed() -> void:
-	_set_layer(1)
+func _on_next_layer_pressed() -> void:
+	_step_existing_layer(1)
 
 
-func _set_layer(index: int) -> void:
-	LD.get_area().set_active_layer(LD.get_area().get_active_layer_index() + index)
-	if _viewport.get_selected_objects().size() > 0:
-		LD.get_area().move_objects_to_layer(_viewport.get_selected_objects(), index)
-	_refresh_layer_num()
+## Moves the active layer to the previous/next existing layer (without creating new ones).
+func _step_existing_layer(delta: int) -> void:
+	var area: LDArea = LD.get_area()
+	var pos: int = -1
+	for i: int in area.layers.size():
+		if area.layers[i].index == area.get_active_layer_index():
+			pos = i
+			break
+	var target: int = clampi(pos + delta, 0, area.layers.size() - 1)
+	if target != pos:
+		area.set_active_layer(area.layers[target].index)
 
 
-func _refresh_layer_num() -> void:
-	_layer_num.text = str(LD.get_area().get_active_layer_index())
+func _refresh_layer_label() -> void:
+	var area: LDArea = LD.get_area()
+	var active: int = area.get_active_layer_index()
+	var anchor: int = area.get_player_layer_index()
+	var pos: int = -1
+	for i: int in area.layers.size():
+		if area.layers[i].index == active:
+			pos = i
+			var layer: LDLayer = area.layers[i]
+			_layer_name_label.text = layer.layer_name if not layer.layer_name.is_empty() else "Layer %d" % (layer.index - anchor)
+	_prev_layer_button.disabled = pos <= 0
+	_next_layer_button.disabled = pos < 0 or pos >= area.layers.size() - 1
 
 #endregion

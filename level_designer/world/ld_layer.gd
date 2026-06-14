@@ -4,6 +4,8 @@ extends CanvasGroup
 
 @export_group("Layer")
 @export var index: int = 0
+## Optional user-facing name; when empty the layer is shown as "Layer <index> (<n> objects)".
+@export var layer_name: String = ""
 @export var is_decoration: bool = false
 ## The scroll scale of the layer
 @export var parallax_scale: Vector2 = Vector2.ONE:

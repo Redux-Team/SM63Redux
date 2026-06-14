@@ -218,10 +218,12 @@ func _serialize() -> Dictionary:
 			var obj_data: Dictionary = _serialize_object(obj)
 			if not obj_data.is_empty():
 				objects_data.append(obj_data)
-		if objects_data.is_empty():
+		# Drop throwaway empty layers, but keep named ones so the user's layer setup survives.
+		if objects_data.is_empty() and layer.layer_name.is_empty():
 			continue
 		layers_data.append({
 			"layer_index": layer.index,
+			"layer_name": layer.layer_name,
 			"parallax_scale": Packer.vec2_to_array(layer.parallax_scale),
 			"is_decoration": layer.is_decoration,
 			"modulation": Packer.color_to_array(layer.modulation),
@@ -237,6 +239,7 @@ func _serialize() -> Dictionary:
 			"parallaxing_enabled": LD.get_ui().get_viewport_handler().is_parallaxing_enabled(),
 			"ghosting_enabled": LD.get_ui().get_viewport_handler().is_ghosting_enabled(),
 			"hotbar": LD.get_ui().get_hotbar_handler().serialize_slots(),
+			"background": LD.get_background_handler().serialize(),
 		},
 		"stamps": LD.get_stamp_handler().serialize_all(),
 		"tags": LD.get_tag_handler().serialize_all(),
@@ -313,10 +316,12 @@ func _deserialize(data: Dictionary) -> Error:
 		for layer_data: Variant in area_data.get("layers", []):
 			if not layer_data is Dictionary:
 				continue
-			if (layer_data.get("objects", []) as Array).is_empty():
+			var layer_name: String = str(layer_data.get("layer_name", ""))
+			if (layer_data.get("objects", []) as Array).is_empty() and layer_name.is_empty():
 				continue
 			var layer_index: int = layer_data.get("layer_index", 0)
 			var layer: LDLayer = area.get_or_create_layer(layer_index)
+			layer.layer_name = layer_name
 			var raw_parallax: Variant = layer_data.get("parallax_scale", null)
 			if raw_parallax != null:
 				layer.parallax_scale = Packer.array_to_vec2(raw_parallax)
@@ -341,6 +346,8 @@ func _deserialize(data: Dictionary) -> Error:
 			LD.get_ui().get_viewport_handler().set_parallaxing_enabled(editor_data.get("parallaxing_enabled"))
 		if editor_data.has("ghosting_enabled"):
 			LD.get_ui().get_viewport_handler().set_ghosting_enabled(editor_data.get("ghosting_enabled"))
+		if editor_data.has("background"):
+			LD.get_background_handler().deserialize(editor_data.get("background"))
 	
 	var tags_data: Variant = normalized.get("tags", [])
 	if tags_data is Array:

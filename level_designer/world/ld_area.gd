@@ -4,6 +4,7 @@ extends Node2D
 
 signal layer_created(layer: LDLayer)
 signal active_layer_changed(index: int)
+signal layers_changed
 signal preview_mode_changed(enabled: bool)
 
 
@@ -49,12 +50,8 @@ func set_active_layer(index: int) -> void:
 			break
 	
 	if previous:
-		if previous.is_empty():
-			layers.erase(previous)
-			previous.queue_free()
-		else:
-			previous.is_active = false
-	
+		previous.is_active = false
+
 	var next: LDLayer = get_or_create_layer(index)
 	next.is_active = true
 	_active_index = index
@@ -65,6 +62,95 @@ func set_active_layer(index: int) -> void:
 ## Steps the active layer by a relative amount.
 func step_active_layer(delta: int) -> void:
 	set_active_layer(_active_index + delta)
+
+
+## Renames a layer, notifying listeners (e.g. the toolbar's active-layer label).
+func set_layer_name(layer: LDLayer, layer_name: String) -> void:
+	layer.layer_name = layer_name
+	layers_changed.emit()
+
+
+## Creates a fresh layer above the current topmost one and makes it active.
+func add_layer() -> LDLayer:
+	var top_index: int = 0
+	for layer: LDLayer in layers:
+		top_index = maxi(top_index, layer.index + 1)
+	var layer: LDLayer = get_or_create_layer(top_index)
+	set_active_layer(top_index)
+	return layer
+
+
+## Inserts a fresh layer directly below `reference` (shifting the layers above it up) and makes it
+## active.
+func add_layer_below(reference: LDLayer) -> LDLayer:
+	return _insert_layer(reference.index + 1)
+
+
+## Inserts a fresh layer directly above `reference` (shifting it and the layers above up) and makes
+## it active.
+func add_layer_above(reference: LDLayer) -> LDLayer:
+	return _insert_layer(reference.index)
+
+
+func _insert_layer(at_index: int) -> LDLayer:
+	for layer: LDLayer in layers:
+		if layer.index >= at_index:
+			layer.index += 1
+	var layer: LDLayer = get_or_create_layer(at_index)
+	_reorder_children()
+	set_active_layer(at_index)
+	layers_changed.emit()
+	return layer
+
+
+## Removes a layer (and any objects on it), picking a new active layer if needed.
+func remove_layer(layer: LDLayer) -> void:
+	if not layers.has(layer):
+		return
+	var was_active: bool = layer.index == _active_index
+	layers.erase(layer)
+	layer.queue_free()
+	if was_active:
+		_active_index = layers[0].index if not layers.is_empty() else 0
+		if not layers.is_empty():
+			layers[0].is_active = true
+	refresh_layer_visuals()
+	layers_changed.emit()
+	active_layer_changed.emit(_active_index)
+
+
+## Swaps a layer's render depth with its neighbour `delta` away (its objects move with it).
+func move_layer_order(layer: LDLayer, delta: int) -> void:
+	var pos: int = layers.find(layer)
+	var target: int = pos + delta
+	if pos < 0 or target < 0 or target >= layers.size():
+		return
+	var other: LDLayer = layers[target]
+	var active_layer: LDLayer = null
+	for candidate: LDLayer in layers:
+		if candidate.index == _active_index:
+			active_layer = candidate
+			break
+
+	var swapped_index: int = layer.index
+	layer.index = other.index
+	other.index = swapped_index
+	_reorder_children()
+
+	if active_layer:
+		_active_index = active_layer.index
+	refresh_layer_visuals()
+	layers_changed.emit()
+	active_layer_changed.emit(_active_index)
+
+
+## Sorts layers by index and matches the scene-tree order so the CanvasGroups render in order.
+func _reorder_children() -> void:
+	layers.sort_custom(func(a: LDLayer, b: LDLayer) -> bool:
+		return a.index < b.index
+	)
+	for i: int in layers.size():
+		move_child(layers[i], _background_root.get_index() + 1 + i)
 
 
 ## Sets the background of this area into the given root, replacing any existing background.
@@ -130,6 +216,17 @@ func find_object_by_id(id: String, index: int = _active_index) -> LDObject:
 		if obj.source_object_id == id:
 			return obj
 	return null
+
+
+## Index of the layer the player is on. Layer numbering is shown relative to this so the
+## player's layer reads as "Layer 0". Falls back to 0 when no player has been placed.
+func get_player_layer_index() -> int:
+	for layer: LDLayer in layers:
+		for child: Node in layer.get_objects_root().get_children():
+			var obj: LDObject = child as LDObject
+			if obj and obj.source_object_id == "player_mario":
+				return layer.index
+	return 0
 
 
 ## Adds an object to the layer at the given index, defaulting to the active layer.

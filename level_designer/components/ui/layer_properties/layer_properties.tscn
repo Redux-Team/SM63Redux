@@ -2,141 +2,167 @@
 
 [ext_resource type="Script" uid="uid://wvt4fr8yabn8" path="res://level_designer/components/ui/layer_properties/layer_properties.gd" id="1_e2re5"]
 
-[node name="LayerProperties" type="MarginContainer" unique_id=899359989 node_paths=PackedStringArray("top_label", "deco_layer", "parallax_slider_x", "parallax_slider_y", "parallax_label_x", "parallax_label_y", "modulate_color_picker")]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_vertical = 0
+[node name="LayerProperties" type="MarginContainer" unique_id=899359989 node_paths=PackedStringArray("layer_list", "add_above_button", "add_below_button", "move_up_button", "move_down_button", "remove_button", "detail", "name_edit", "deco_layer", "parallax_slider_x", "parallax_slider_y", "parallax_label_x", "parallax_label_y", "modulate_color_picker")]
+custom_minimum_size = Vector2(470, 0)
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 script = ExtResource("1_e2re5")
-top_label = NodePath("VBoxContainer/TopLabel")
-deco_layer = NodePath("VBoxContainer/HBoxContainer/Names/HBoxContainer/DecoLayer")
-parallax_slider_x = NodePath("VBoxContainer/HBoxContainer/Names/HBoxContainer3/HBoxContainer/VBoxContainer/ParallaxSliderX")
-parallax_slider_y = NodePath("VBoxContainer/HBoxContainer/Names/HBoxContainer3/HBoxContainer/VBoxContainer/ParallaxSliderY")
-parallax_label_x = NodePath("VBoxContainer/HBoxContainer/Names/HBoxContainer3/HBoxContainer/VBoxContainer/ParallaxSliderX/ParallaxLabelX")
-parallax_label_y = NodePath("VBoxContainer/HBoxContainer/Names/HBoxContainer3/HBoxContainer/VBoxContainer/ParallaxSliderY/ParallaxLabelY")
-modulate_color_picker = NodePath("VBoxContainer/HBoxContainer/Names/HBoxContainer2/ModulateColorPicker")
+layer_list = NodePath("Columns/List/LayerList")
+add_above_button = NodePath("Columns/List/AddButtons/AddAboveButton")
+add_below_button = NodePath("Columns/List/AddButtons/AddBelowButton")
+move_up_button = NodePath("Columns/List/Buttons/MoveUpButton")
+move_down_button = NodePath("Columns/List/Buttons/MoveDownButton")
+remove_button = NodePath("Columns/List/Buttons/RemoveButton")
+detail = NodePath("Columns/Detail")
+name_edit = NodePath("Columns/Detail/NameRow/NameEdit")
+deco_layer = NodePath("Columns/Detail/DecoRow/DecoLayer")
+parallax_slider_x = NodePath("Columns/Detail/PXRow/ParallaxSliderX")
+parallax_slider_y = NodePath("Columns/Detail/PYRow/ParallaxSliderY")
+parallax_label_x = NodePath("Columns/Detail/PXRow/ParallaxLabelX")
+parallax_label_y = NodePath("Columns/Detail/PYRow/ParallaxLabelY")
+modulate_color_picker = NodePath("Columns/Detail/ModRow/ModulateColorPicker")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1453832203]
+[node name="Columns" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="List" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 0
 
-[node name="TopLabel" type="Label" parent="VBoxContainer" unique_id=1221090421]
+[node name="Header" type="Label" parent="Columns/List"]
 layout_mode = 2
-text = "Layer 0"
-horizontal_alignment = 1
+text = "Layers"
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=992264586]
+[node name="LayerList" type="ItemList" parent="Columns/List"]
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=158772568]
-layout_mode = 2
-
-[node name="Names" type="VBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=1229254419]
+[node name="AddButtons" type="HBoxContainer" parent="Columns/List"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Names" unique_id=402773172]
+[node name="AddAboveButton" type="Button" parent="Columns/List/AddButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Add Above"
+
+[node name="AddBelowButton" type="Button" parent="Columns/List/AddButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Add Below"
+
+[node name="Buttons" type="HBoxContainer" parent="Columns/List"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer" unique_id=874285998]
+[node name="MoveUpButton" type="Button" parent="Columns/List/Buttons"]
 layout_mode = 2
-text = "Decoration Layer"
+size_flags_horizontal = 3
+text = "Move Up"
 
-[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer" unique_id=1708593805]
+[node name="MoveDownButton" type="Button" parent="Columns/List/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Move Down"
+
+[node name="RemoveButton" type="Button" parent="Columns/List/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Remove"
+
+[node name="Sep" type="VSeparator" parent="Columns"]
 layout_mode = 2
 
-[node name="DecoLayer" type="CheckBox" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer" unique_id=1216228984]
-custom_minimum_size = Vector2(24, 24)
+[node name="Detail" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Header" type="Label" parent="Columns/Detail"]
+layout_mode = 2
+text = "Layer"
+
+[node name="NameRow" type="HBoxContainer" parent="Columns/Detail"]
 layout_mode = 2
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Names" unique_id=1242356582]
+[node name="Label" type="Label" parent="Columns/Detail/NameRow"]
+layout_mode = 2
+text = "Name"
+
+[node name="NameEdit" type="LineEdit" parent="Columns/Detail/NameRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Unnamed"
+
+[node name="DecoRow" type="HBoxContainer" parent="Columns/Detail"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer3" unique_id=1331472771]
+[node name="Label" type="Label" parent="Columns/Detail/DecoRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Decoration"
+
+[node name="DecoLayer" type="CheckButton" parent="Columns/Detail/DecoRow"]
+layout_mode = 2
+
+[node name="ParallaxHeader" type="Label" parent="Columns/Detail"]
 layout_mode = 2
 text = "Parallax"
 
-[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer3" unique_id=475322659]
+[node name="PXRow" type="HBoxContainer" parent="Columns/Detail"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer3" unique_id=472129751]
-layout_mode = 2
-
-[node name="XYLabels" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer3/HBoxContainer" unique_id=178184734]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer3/HBoxContainer/XYLabels" unique_id=1031965474]
+[node name="Label" type="Label" parent="Columns/Detail/PXRow"]
 layout_mode = 2
 text = "X"
 
-[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer3/HBoxContainer/XYLabels" unique_id=320633708]
+[node name="ParallaxSliderX" type="HSlider" parent="Columns/Detail/PXRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+max_value = 4.0
+step = 0.1
+value = 1.0
+
+[node name="ParallaxLabelX" type="Label" parent="Columns/Detail/PXRow"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "1.0x"
+horizontal_alignment = 2
+
+[node name="PYRow" type="HBoxContainer" parent="Columns/Detail"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Columns/Detail/PYRow"]
 layout_mode = 2
 text = "Y"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer3/HBoxContainer" unique_id=1287492908]
+[node name="ParallaxSliderY" type="HSlider" parent="Columns/Detail/PYRow"]
 layout_mode = 2
-
-[node name="ParallaxSliderX" type="HSlider" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer3/HBoxContainer/VBoxContainer" unique_id=628298786]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
 max_value = 4.0
 step = 0.1
 value = 1.0
 
-[node name="ParallaxLabelX" type="Label" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer3/HBoxContainer/VBoxContainer/ParallaxSliderX" unique_id=1057551598]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 2.0
-offset_top = -7.5
-offset_right = 42.0
-offset_bottom = 7.5
-grow_horizontal = 0
-grow_vertical = 2
+[node name="ParallaxLabelY" type="Label" parent="Columns/Detail/PYRow"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
 text = "1.0x"
+horizontal_alignment = 2
 
-[node name="ParallaxSliderY" type="HSlider" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer3/HBoxContainer/VBoxContainer" unique_id=210431361]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-max_value = 4.0
-step = 0.1
-value = 1.0
-
-[node name="ParallaxLabelY" type="Label" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer3/HBoxContainer/VBoxContainer/ParallaxSliderY" unique_id=276472697]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 2.0
-offset_top = -7.5
-offset_right = 42.0
-offset_bottom = 7.5
-grow_horizontal = 0
-grow_vertical = 2
-text = "1.0x"
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Names" unique_id=456995206]
+[node name="ModRow" type="HBoxContainer" parent="Columns/Detail"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer2" unique_id=1893592734]
+[node name="Label" type="Label" parent="Columns/Detail/ModRow"]
 layout_mode = 2
-text = "Modulation"
+size_flags_horizontal = 3
+text = "Modulate"
 
-[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer2" unique_id=1726666423]
-layout_mode = 2
-
-[node name="ModulateColorPicker" type="ColorPickerButton" parent="VBoxContainer/HBoxContainer/Names/HBoxContainer2" unique_id=809414790]
-custom_minimum_size = Vector2(48, 32)
+[node name="ModulateColorPicker" type="ColorPickerButton" parent="Columns/Detail/ModRow"]
+custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
 color = Color(1, 1, 1, 1)

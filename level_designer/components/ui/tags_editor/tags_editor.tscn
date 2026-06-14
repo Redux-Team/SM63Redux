@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://c8tag5editor01"]
+[gd_scene format=3 uid="uid://bcntswgx5f1b5"]
 
-[ext_resource type="Script" path="res://level_designer/components/ui/tags_editor/tags_editor.gd" id="1_tagsed"]
+[ext_resource type="Script" uid="uid://c56pqdaxp553r" path="res://level_designer/components/ui/tags_editor/tags_editor.gd" id="1_tagsed"]
 
-[node name="TagsEditor" type="MarginContainer" node_paths=PackedStringArray("tag_list", "add_button", "remove_button", "empty_label", "detail_content", "name_edit")]
+[node name="TagsEditor" type="MarginContainer" unique_id=2033930522 node_paths=PackedStringArray("tag_list", "add_button", "remove_button", "empty_label", "detail_content", "name_edit")]
 custom_minimum_size = Vector2(400, 250)
 script = ExtResource("1_tagsed")
 tag_list = NodePath("HBoxContainer/VBoxContainer/TagList")
@@ -12,56 +12,56 @@ empty_label = NodePath("HBoxContainer/DetailPanel/EmptyLabel")
 detail_content = NodePath("HBoxContainer/DetailPanel/DetailContent")
 name_edit = NodePath("HBoxContainer/DetailPanel/DetailContent/HBoxContainer/NameEdit")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=447594915]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1002537541]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=669401634]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1004679189]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Tags"
 horizontal_alignment = 1
 
-[node name="AddButton" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="AddButton" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1017057465]
 layout_mode = 2
 text = "+"
 
-[node name="TagList" type="ItemList" parent="HBoxContainer/VBoxContainer"]
+[node name="TagList" type="ItemList" parent="HBoxContainer/VBoxContainer" unique_id=510696336]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="RemoveButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="RemoveButton" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=187158985]
 layout_mode = 2
-text = "-"
+text = "Remove"
 
-[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer" unique_id=44783701]
 layout_mode = 2
 
-[node name="DetailPanel" type="VBoxContainer" parent="HBoxContainer"]
+[node name="DetailPanel" type="VBoxContainer" parent="HBoxContainer" unique_id=2087717948]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="EmptyLabel" type="Label" parent="HBoxContainer/DetailPanel"]
+[node name="EmptyLabel" type="Label" parent="HBoxContainer/DetailPanel" unique_id=1529770478]
 layout_mode = 2
 text = "No tag selected."
 
-[node name="DetailContent" type="VBoxContainer" parent="HBoxContainer/DetailPanel"]
+[node name="DetailContent" type="VBoxContainer" parent="HBoxContainer/DetailPanel" unique_id=1690783476]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/DetailPanel/DetailContent"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/DetailPanel/DetailContent" unique_id=1234423197]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/DetailPanel/DetailContent/HBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/DetailPanel/DetailContent/HBoxContainer" unique_id=1957042452]
 layout_mode = 2
 text = "Name"
 
-[node name="NameEdit" type="LineEdit" parent="HBoxContainer/DetailPanel/DetailContent/HBoxContainer"]
+[node name="NameEdit" type="LineEdit" parent="HBoxContainer/DetailPanel/DetailContent/HBoxContainer" unique_id=1917230829]
 layout_mode = 2
 size_flags_horizontal = 3
