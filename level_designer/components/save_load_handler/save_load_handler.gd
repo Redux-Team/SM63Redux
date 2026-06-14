@@ -236,6 +236,7 @@ func _serialize() -> Dictionary:
 			"active_layer": area._active_index,
 			"parallaxing_enabled": LD.get_ui().get_viewport_handler().is_parallaxing_enabled(),
 			"ghosting_enabled": LD.get_ui().get_viewport_handler().is_ghosting_enabled(),
+			"hotbar": LD.get_ui().get_hotbar_handler().serialize_slots(),
 		},
 		"stamps": LD.get_stamp_handler().serialize_all(),
 		"tags": LD.get_tag_handler().serialize_all(),
@@ -350,6 +351,11 @@ func _deserialize(data: Dictionary) -> Error:
 	if stamps_data is Array:
 		LD.get_stamp_handler().deserialize_all(stamps_data)
 		LD.get_stamp_handler().rehydrate_all()
+
+	# Restore hotbar slots after stamps exist, so stamp slots resolve their preview icons.
+	var hotbar_data: Variant = normalized.get("editor", {}).get("hotbar", [])
+	if hotbar_data is Array:
+		LD.get_ui().get_hotbar_handler().deserialize_slots(hotbar_data)
 
 	var scenarios_data: Variant = normalized.get("scenarios", {})
 	if scenarios_data is Dictionary:

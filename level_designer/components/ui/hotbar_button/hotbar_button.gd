@@ -71,6 +71,28 @@ func assign_stamp(stamp_id: String) -> void:
 	_update_icon()
 
 
+## Re-resolves the slot icon (e.g. after a stamp's preview finishes generating).
+func refresh_icon() -> void:
+	_update_icon()
+
+
+func serialize() -> Dictionary:
+	return {
+		"stamp_id": _stamp_id,
+		"slot_data": _slot_data.duplicate(true),
+	}
+
+
+func deserialize(data: Dictionary) -> void:
+	_stamp_id = str(data.get("stamp_id", ""))
+	var slots: Array[Dictionary] = []
+	for entry: Variant in data.get("slot_data", []):
+		if entry is Dictionary:
+			slots.append(entry)
+	_slot_data = slots
+	_update_icon()
+
+
 func _on_click() -> void:
 	if not _stamp_id.is_empty():
 		var stamp: LDStamp = LD.get_stamp_handler().get_stamp(_stamp_id)

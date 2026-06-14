@@ -20,6 +20,29 @@ func setup() -> void:
 	if browser:
 		browser.hide_request.connect(_on_browser_hide_request)
 
+	# Stamp previews generate asynchronously, so refresh stamp-slot icons when they change.
+	var sh: LDStampHandler = LD.get_stamp_handler()
+	sh.stamp_changed.connect(_on_stamps_changed.unbind(1))
+	sh.stamp_removed.connect(_on_stamps_changed.unbind(1))
+
+
+func _on_stamps_changed() -> void:
+	for button: LDHotbarButton in _hotbar_buttons:
+		button.refresh_icon()
+
+
+func serialize_slots() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for button: LDHotbarButton in _hotbar_buttons:
+		result.append(button.serialize())
+	return result
+
+
+func deserialize_slots(data: Array) -> void:
+	for i: int in mini(data.size(), _hotbar_buttons.size()):
+		if data[i] is Dictionary:
+			_hotbar_buttons[i].deserialize(data[i])
+
 
 func _on_new_object_request(button: LDHotbarButton) -> void:
 	_pending_button = button
