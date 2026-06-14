@@ -102,6 +102,12 @@ func _on_move_to_back_button_pressed() -> void:
 ## Snapshots the selection into a stamp. The name field is prefilled; picking an existing
 ## stamp instead overwrites it.
 func _on_create_stamp_button_pressed() -> void:
+	open_create_stamp_dialog()
+
+
+## Opens the "Create Stamp" name dialog for the current selection. Public so the stamp
+## editor's "Create from Selection" button can reuse it. No-op if nothing is selected.
+func open_create_stamp_dialog() -> void:
 	if LD.get_object_handler().get_placed_selection().is_empty():
 		return
 	var existing: Array[String] = []
@@ -182,10 +188,13 @@ func _open_name_dialog(title: String, ok_text: String, default_name: String, exi
 ## name field) can't drive the viewport. Priority is released when the dialog leaves.
 func _open_input_locked_dialog(dialog: Window) -> void:
 	add_child(dialog)
-	LD.get_input_handler().set_input_priority(LD.get_ui())
-	dialog.tree_exited.connect(func() -> void:
-		LD.get_input_handler().remove_input_priority(LD.get_ui())
-	)
+	# Only take/release priority if the UI doesn't already hold it (e.g. a window is open),
+	# otherwise closing this dialog would hand input back to the viewport too early.
+	if not LD.get_input_handler().has_input_priority(LD.get_ui()):
+		LD.get_input_handler().set_input_priority(LD.get_ui())
+		dialog.tree_exited.connect(func() -> void:
+			LD.get_input_handler().remove_input_priority(LD.get_ui())
+		)
 	dialog.popup_centered()
 
 #endregion

@@ -2,11 +2,12 @@
 
 [ext_resource type="Script" uid="uid://g3xdcqgrak3c" path="res://level_designer/components/ui/stamps_editor/stamps_editor.gd" id="1_nu57e"]
 
-[node name="StampsEditor" type="MarginContainer" unique_id=2067930121 node_paths=PackedStringArray("stamp_list", "remove_button", "empty_label", "detail_content", "name_edit", "preview_rect", "instance_section", "instance_list", "remove_instance_button")]
+[node name="StampsEditor" type="MarginContainer" unique_id=2067930121 node_paths=PackedStringArray("stamp_list", "remove_button", "create_button", "empty_label", "detail_content", "name_edit", "preview_rect", "instance_section", "instance_list", "remove_instance_button")]
 custom_minimum_size = Vector2(500, 300)
 script = ExtResource("1_nu57e")
 stamp_list = NodePath("HBoxContainer/VBoxContainer/StampList")
 remove_button = NodePath("HBoxContainer/VBoxContainer/RemoveButton")
+create_button = NodePath("HBoxContainer/VBoxContainer/CreateButton")
 empty_label = NodePath("HBoxContainer/DetailPanel/EmptyLabel")
 detail_content = NodePath("HBoxContainer/DetailPanel/DetailContent")
 name_edit = NodePath("HBoxContainer/DetailPanel/DetailContent/HBoxContainer/NameEdit")
@@ -39,6 +40,10 @@ size_flags_vertical = 3
 [node name="RemoveButton" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=1892684887]
 layout_mode = 2
 text = "-"
+
+[node name="CreateButton" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=1892684888]
+layout_mode = 2
+text = "Create from Selection"
 
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer" unique_id=1777151935]
 layout_mode = 2

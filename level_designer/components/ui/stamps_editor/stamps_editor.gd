@@ -4,6 +4,7 @@ extends MarginContainer
 
 @export var stamp_list: ItemList
 @export var remove_button: Button
+@export var create_button: Button
 @export var empty_label: Label
 @export var detail_content: VBoxContainer
 @export var name_edit: LineEdit
@@ -20,6 +21,7 @@ var _setting_fields: bool = false
 
 func _ready() -> void:
 	remove_button.pressed.connect(_on_remove_pressed)
+	create_button.pressed.connect(_on_create_pressed)
 	stamp_list.item_selected.connect(_on_stamp_selected)
 	name_edit.text_submitted.connect(_on_name_submitted)
 	name_edit.focus_exited.connect(_on_name_focus_exited)
@@ -107,6 +109,10 @@ func _refresh_instance_list() -> void:
 		instance_list.set_item_metadata(instance_list.item_count - 1, unique_id)
 
 
+func _on_create_pressed() -> void:
+	LD.get_ui().get_toolbar_handler().open_create_stamp_dialog()
+
+
 func _on_remove_pressed() -> void:
 	if not _selected_stamp:
 		return
@@ -187,7 +193,8 @@ func _on_instance_activated(index: int) -> void:
 	var instance: Dictionary = _selected_stamp.get_instance(unique_id)
 	if instance.is_empty():
 		return
-	LD.get_editor_viewport().camera_position = Packer.array_to_vec2(instance.get("position", [0.0, 0.0]))
+	# refocus_camera (not a raw camera_position set) so the grid shader and anchors refresh.
+	LD.get_editor_viewport().refocus_camera(Packer.array_to_vec2(instance.get("position", [0.0, 0.0])))
 
 
 func _on_stamp_event_added(_stamp: LDStamp) -> void:
