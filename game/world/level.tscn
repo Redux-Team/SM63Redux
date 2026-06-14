@@ -27,6 +27,7 @@ music_player = NodePath("MusicPlayer")
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="." unique_id=1044394242]
 stream = ExtResource("2_81ib3")
 volume_db = -10.0
+bus = &"Music"
 
 [node name="LevelCamera" type="CharacterBody2D" parent="." unique_id=1904263241 node_paths=PackedStringArray("_camera", "_remote_transform")]
 collision_layer = 0
