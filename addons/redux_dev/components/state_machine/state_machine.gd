@@ -18,6 +18,9 @@ extends Node
 
 signal state_changed(from: State, to: State)
 
+## When enabled, the state machine logic is handled in _physics_process instead of _process. This is
+## recommended for more consistent and predictable behavior.
+@export var physics_bound: bool = true
 @export var initial_state: State
 @export var root_node: NodePath
 @export var sprite: SmartSprite2D
@@ -85,6 +88,9 @@ func _process(delta: float) -> void:
 	if Engine.is_editor_hint() or not _running or not _current_state:
 		return
 	
+	if physics_bound:
+		return
+	
 	if _pending_transition:
 		_pending_transition_timer -= delta
 		if _pending_transition_timer <= 0.0:
@@ -137,7 +143,6 @@ func _process(delta: float) -> void:
 		max_cascade -= 1
 
 
-# Physics tick forwarded to all active states and inactive states.
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint() or not _running or not _current_state:
 		return
@@ -152,6 +157,60 @@ func _physics_process(delta: float) -> void:
 		var state: State = __states.get(uuid) as State
 		if state and not _is_state_in_stack(state):
 			state._on_physics_tick_inactive(delta)
+	
+	if not physics_bound:
+		return
+	
+	if _pending_transition:
+		_pending_transition_timer -= delta
+		if _pending_transition_timer <= 0.0:
+			var t: StateTransition = _pending_transition
+			var target: State = _pending_transition_target
+			_pending_transition = null
+			_pending_transition_target = null
+			_pending_transition_timer = 0.0
+			_transition_to(t, target)
+		return
+	
+	if _state_buffer > 0.0:
+		_state_buffer = max(_state_buffer - delta, 0.0)
+	else:
+		_can_consume_buffer = false
+	
+	_elapsed_time += delta
+	_elapsed_frames += 1
+	
+	for state: State in _active_superstates:
+		state._sprite_rules()
+		state._on_tick(delta)
+		if sfx_root and state.sfx_tick:
+			_play_sfx_entry(state.sfx_tick, state)
+		if sfx_root and state.sfx_frame and sprite:
+			if state.sfx_frame.check_frame_trigger(sprite.current_frame):
+				_play_sfx_entry(state.sfx_frame, state)
+	
+	_current_state._sprite_rules()
+	_current_state._on_tick(delta)
+	if sfx_root and _current_state.sfx_tick:
+		_play_sfx_entry(_current_state.sfx_tick, _current_state)
+	if sfx_root and _current_state.sfx_frame and sprite:
+		if _current_state.sfx_frame.check_frame_trigger(sprite.current_frame):
+			_play_sfx_entry(_current_state.sfx_frame, _current_state)
+	
+	for uuid: StringName in __states:
+		var state: State = __states.get(uuid) as State
+		if state and not _is_state_in_stack(state):
+			state._on_tick_inactive(delta)
+	
+	var max_cascade: int = 8
+	while max_cascade > 0:
+		var before: State = _current_state
+		_evaluate_transitions()
+		if _current_state == before or _pending_transition:
+			break
+		if not _has_immediate_outgoing_transition():
+			break
+		max_cascade -= 1
 
 
 # Forwards input events to all active states in the superstate stack.
