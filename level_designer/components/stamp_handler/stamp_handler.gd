@@ -42,6 +42,20 @@ func get_all_stamps() -> Array[LDStamp]:
 	return result
 
 
+## Stamps marked indexable, i.e. the ones the object browser lists for placement.
+func get_indexable_stamps() -> Array[LDStamp]:
+	return get_all_stamps().filter(func(stamp: LDStamp) -> bool: return stamp.indexable)
+
+
+## Toggles whether a stamp shows up in the object browser.
+func set_indexable(id: String, value: bool) -> void:
+	var stamp: LDStamp = get_stamp(id)
+	if not stamp or stamp.indexable == value:
+		return
+	stamp.indexable = value
+	stamp_changed.emit(stamp)
+
+
 func has_stamp(id: String) -> bool:
 	return _stamps.has(id)
 

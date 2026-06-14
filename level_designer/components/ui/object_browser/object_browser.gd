@@ -121,7 +121,7 @@ func _refresh_stamps_tab() -> void:
 func _populate_stamps_list() -> void:
 	for n: Node in groups_v_box.get_children():
 		n.queue_free()
-	_add_stamps_group(LD.get_stamp_handler().get_all_stamps())
+	_add_stamps_group(LD.get_stamp_handler().get_indexable_stamps())
 
 
 ## Builds a "Stamps" browser group from the given stamps (no-op if empty).
@@ -154,7 +154,7 @@ func populate_list(search: String = "") -> void:
 	# When searching, surface matching stamps at the top alongside the object results.
 	if not query.is_empty():
 		var matching_stamps: Array[LDStamp] = []
-		for stamp: LDStamp in LD.get_stamp_handler().get_all_stamps():
+		for stamp: LDStamp in LD.get_stamp_handler().get_indexable_stamps():
 			if _fuzzy_score(query, stamp.id.to_lower()) > 0:
 				matching_stamps.append(stamp)
 		_add_stamps_group(matching_stamps)
@@ -276,7 +276,7 @@ func _on_stamps_changed_by_id(_group_id: String) -> void:
 
 
 func _has_placeable_stamps() -> bool:
-	return not LD.get_stamp_handler().get_all_stamps().is_empty()
+	return not LD.get_stamp_handler().get_indexable_stamps().is_empty()
 
 
 func _update_stamps_tab_visibility() -> void:

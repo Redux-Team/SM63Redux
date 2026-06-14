@@ -3,6 +3,8 @@ extends Resource
 
 
 @export var id: String = ""
+## When true, the stamp is listed in the object browser so it can be placed like an object.
+@export var indexable: bool = true
 @export var objects: Array[Dictionary] = []
 @export var instances: Array[Dictionary] = []
 
@@ -49,6 +51,7 @@ func is_instance_address(address: String) -> bool:
 func serialize() -> Dictionary:
 	return {
 		"id": id,
+		"indexable": indexable,
 		"objects": objects.duplicate(true),
 		"instances": instances.duplicate(true),
 	}
@@ -57,6 +60,7 @@ func serialize() -> Dictionary:
 static func deserialize(data: Dictionary) -> LDStamp:
 	var stamp: LDStamp = LDStamp.new()
 	stamp.id = data.get("id", "")
+	stamp.indexable = bool(data.get("indexable", true))
 	# assign() (not =) so untyped source arrays (e.g. parsed from JSON) convert into the
 	# typed Array[Dictionary] properties instead of erroring.
 	stamp.objects.assign(data.get("objects", []).duplicate(true))

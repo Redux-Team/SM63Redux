@@ -8,6 +8,7 @@ extends MarginContainer
 @export var empty_label: Label
 @export var detail_content: VBoxContainer
 @export var name_edit: LineEdit
+@export var indexable_check: CheckButton
 @export var preview_rect: TextureRect
 @export var instance_section: VBoxContainer
 @export var instance_list: ItemList
@@ -25,6 +26,7 @@ func _ready() -> void:
 	stamp_list.item_selected.connect(_on_stamp_selected)
 	name_edit.text_submitted.connect(_on_name_submitted)
 	name_edit.focus_exited.connect(_on_name_focus_exited)
+	indexable_check.toggled.connect(_on_indexable_toggled)
 	remove_instance_button.pressed.connect(_on_remove_instance_pressed)
 	instance_list.item_selected.connect(_on_instance_selected)
 	instance_list.item_activated.connect(_on_instance_activated)
@@ -82,6 +84,7 @@ func _show_detail(stamp: LDStamp) -> void:
 
 	_setting_fields = true
 	name_edit.text = stamp.id
+	indexable_check.button_pressed = stamp.indexable
 	_setting_fields = false
 
 	_refresh_detail()
@@ -173,6 +176,12 @@ func _try_rename(new_name: String) -> void:
 
 	if not LD.get_stamp_handler().rename_stamp(_selected_stamp.id, cleaned):
 		name_edit.text = _selected_stamp.id
+
+
+func _on_indexable_toggled(pressed: bool) -> void:
+	if _setting_fields or not _selected_stamp:
+		return
+	LD.get_stamp_handler().set_indexable(_selected_stamp.id, pressed)
 
 
 func _on_remove_instance_pressed() -> void:
