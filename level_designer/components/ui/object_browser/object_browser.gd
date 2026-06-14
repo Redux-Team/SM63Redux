@@ -291,6 +291,9 @@ func _update_stamps_tab_visibility() -> void:
 
 
 func _on_entry_selected(obj: GameObject) -> void:
+	# Picking an object clears any armed stamp, so they stay mutually exclusive (the hotbar
+	# uses this to tell which kind was picked).
+	LD.get_stamp_handler().arm_stamp(null)
 	LD.get_object_handler().select_object(obj)
 	LD.get_tool_handler().select_tool("Brush")
 	hide_request.emit()

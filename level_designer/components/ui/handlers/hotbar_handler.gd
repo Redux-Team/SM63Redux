@@ -31,9 +31,15 @@ func _on_browser_hide_request() -> void:
 
 	if not _pending_button:
 		return
+	var button: LDHotbarButton = _pending_button
+	_pending_button = null
+
+	# A stamp pick arms a stamp; an object pick clears it. Check the stamp first.
+	var stamp: LDStamp = LD.get_stamp_handler().get_armed_stamp()
+	if stamp:
+		button.assign_stamp(stamp.id)
+		return
 
 	var selected: GameObject = LD.get_object_handler().get_selected_object()
 	if selected:
-		_pending_button.assign_object(selected)
-
-	_pending_button = null
+		button.assign_object(selected)
