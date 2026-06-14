@@ -57,7 +57,8 @@ func serialize() -> Dictionary:
 static func deserialize(data: Dictionary) -> LDStamp:
 	var stamp: LDStamp = LDStamp.new()
 	stamp.id = data.get("id", "")
-	stamp.objects = data.get("objects", []).duplicate(true)
-	# "anchors" is the pre-rename key; still read it so older levels keep their instances.
-	stamp.instances = data.get("instances", data.get("anchors", [])).duplicate(true)
+	# assign() (not =) so untyped source arrays (e.g. parsed from JSON) convert into the
+	# typed Array[Dictionary] properties instead of erroring.
+	stamp.objects.assign(data.get("objects", []).duplicate(true))
+	stamp.instances.assign(data.get("instances", []).duplicate(true))
 	return stamp

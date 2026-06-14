@@ -207,8 +207,7 @@ func _scenario_allows(obj_data: Dictionary, disabled_tags: Dictionary[String, bo
 func _spawn_stamps(data: Dictionary, disabled_layers: Dictionary[int, bool], disabled_tags: Dictionary[String, bool]) -> void:
 	if not is_instance_valid(_active_area):
 		return
-	# "groups" is the pre-rename key; read it so older levels keep their stamps.
-	var stamps: Variant = data.get("stamps", data.get("groups", []))
+	var stamps: Variant = data.get("stamps", [])
 	if not stamps is Array:
 		return
 
@@ -216,8 +215,7 @@ func _spawn_stamps(data: Dictionary, disabled_layers: Dictionary[int, bool], dis
 		if not stamp_data is Dictionary:
 			continue
 		var entries: Array = (stamp_data as Dictionary).get("objects", [])
-		# "anchors" is the pre-rename key for placed instances.
-		for instance: Variant in (stamp_data as Dictionary).get("instances", (stamp_data as Dictionary).get("anchors", [])):
+		for instance: Variant in (stamp_data as Dictionary).get("instances", []):
 			if not instance is Dictionary:
 				continue
 			var instance_pos: Vector2 = Packer.array_to_vec2((instance as Dictionary).get("position", [0.0, 0.0]))

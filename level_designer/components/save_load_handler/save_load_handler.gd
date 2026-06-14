@@ -346,8 +346,7 @@ func _deserialize(data: Dictionary) -> Error:
 	if tags_data is Array:
 		LD.get_tag_handler().deserialize_all(tags_data)
 
-	# "groups" is the pre-rename key; still read it so older levels keep their stamps.
-	var stamps_data: Variant = normalized.get("stamps", normalized.get("groups", []))
+	var stamps_data: Variant = normalized.get("stamps", [])
 	if stamps_data is Array:
 		LD.get_stamp_handler().deserialize_all(stamps_data)
 		LD.get_stamp_handler().rehydrate_all()
@@ -373,7 +372,7 @@ func _normalize(data: Dictionary) -> Dictionary:
 		return {
 			"version": data.get("version", 1),
 			"editor": data.get("editor", {}),
-			"stamps": data.get("stamps", data.get("groups", [])),
+			"stamps": data.get("stamps", []),
 			"tags": data.get("tags", []),
 			"scenarios": data.get("scenarios", {}),
 			"areas": [{
