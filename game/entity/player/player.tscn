@@ -71,7 +71,7 @@
 [ext_resource type="AudioStream" uid="uid://b04rk3ffi85np" path="res://assets/sfx/player/death_hit.mp3" id="48_o4bil"]
 [ext_resource type="AudioStream" uid="uid://pga7av4xfjtv" path="res://assets/music/player_death.mp3" id="50_1p630"]
 [ext_resource type="Script" uid="uid://bwatknd7uh7kd" path="res://game/entity/player/shared/states/death_fall.gd" id="50_ndkiv"]
-[ext_resource type="Texture2D" uid="uid://ba0kx63gegu07" path="res://assets/textures/screen/Bowser.png" id="51_26jgh"]
+[ext_resource type="Texture2D" uid="uid://ba0kx63gegu07" path="res://assets/textures/screen/bowser.png" id="51_26jgh"]
 [ext_resource type="Texture2D" uid="uid://bvpu1uexfy52t" path="res://assets/textures/entity/player/mario/bonk.png" id="51_d635j"]
 [ext_resource type="Script" uid="uid://dyv4j6akddtwa" path="res://game/entity/player/shared/handlers/fludd_handler.gd" id="51_h6qgx"]
 [ext_resource type="AudioStream" uid="uid://0o8t42w7mec4" path="res://assets/sfx/player/fludd/fludd_switch.wav" id="52_j002l"]
@@ -168,6 +168,15 @@ __from_uuid = "d8126d47-03c3-4a9b-abee-8c68263ad4ab"
 __to_uuid = "092ff28f-6a90-40e8-8c49-a55969c526c7"
 __from_node_uuid = "19756cb2-870e-4389-ac45-b7857f943765"
 __to_node_uuid = "ef17b68d-10e2-4919-8e7d-84844258bfb6"
+
+[sub_resource type="Resource" id="Resource_4y1e6"]
+resource_local_to_scene = true
+script = ExtResource("3_0jrw7")
+transition_time = 1.0
+__from_uuid = "b7d0f81a-a153-40a0-b0f5-e4d82aa9e8bc"
+__to_uuid = "a7c6437f-db86-4f7b-9bc9-3d0b9200da2e"
+__from_node_uuid = "b7d0f81a-a153-40a0-b0f5-e4d82aa9e8bc"
+__to_node_uuid = "a7c6437f-db86-4f7b-9bc9-3d0b9200da2e"
 
 [sub_resource type="Resource" id="Resource_sa3a5"]
 resource_local_to_scene = true
@@ -737,15 +746,6 @@ __to_uuid = "4e77d567-5fca-48cf-9e61-dbb6250ef625"
 __from_node_uuid = "167d2846-17ec-4534-a26e-c582cae80f3a"
 __to_node_uuid = "bbac0708-891f-40b0-84ff-f90c3e883463"
 
-[sub_resource type="Resource" id="Resource_4y1e6"]
-resource_local_to_scene = true
-script = ExtResource("3_0jrw7")
-transition_time = 1.0
-__from_uuid = "b7d0f81a-a153-40a0-b0f5-e4d82aa9e8bc"
-__to_uuid = "a7c6437f-db86-4f7b-9bc9-3d0b9200da2e"
-__from_node_uuid = "b7d0f81a-a153-40a0-b0f5-e4d82aa9e8bc"
-__to_node_uuid = "a7c6437f-db86-4f7b-9bc9-3d0b9200da2e"
-
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
 _data = [Vector2(0, -1.3932585), 0.0, 0.9746846, 0, 0, Vector2(1.5965666, -0.05618429), 0.0, 0.0, 0, 0]
@@ -1091,7 +1091,7 @@ anim_offset_max = 1.0
 atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_681d1"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_26jgh"]
 diffuse_texture = SubResource("AtlasTexture_1p630")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d635j"]
@@ -1488,8 +1488,8 @@ root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(-1542.6763, -1313.1051)
-__last_editor_zoom = 0.7400254
+__last__editor_position = Vector2(1269.4768, 251.82452)
+__last_editor_zoom = 0.6115912
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),
@@ -2286,11 +2286,11 @@ copy_mode = 0
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_681d1")
+texture = SubResource("CanvasTexture_26jgh")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_681d1")
+canvas_texture = SubResource("CanvasTexture_26jgh")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true
@@ -2477,7 +2477,6 @@ target_position = Vector2(0, 27)
 collision_mask = 515
 
 [node name="DebugContainer" type="VBoxContainer" parent="." unique_id=1243358989 node_paths=PackedStringArray("debug_label")]
-visible = false
 z_index = 1
 offset_left = -47.0
 offset_top = -32.0
@@ -2516,7 +2515,6 @@ vertical_alignment = 2
 
 [node name="StateLabel" type="Label" parent="." unique_id=287046668 node_paths=PackedStringArray("player")]
 process_mode = 4
-visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
