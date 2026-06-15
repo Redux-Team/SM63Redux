@@ -11,6 +11,12 @@ signal yellow_coin_count_updated
 signal red_coin_count_updated
 signal purple_coin_count_updated
 
+## A shine sprite was collected; carries the shine's scenario id (0 = common).
+signal shine_collected(scenario_id: int)
+## The player should be removed from the level (e.g. after collecting a kickout shine). The runtime
+## decides how (transition out, results screen, ...).
+signal kickout_requested
+
 
 static var _inst: Level
 
@@ -26,6 +32,7 @@ var _purple_coins_collected: Dictionary[String, int]
 var _active_area: LevelArea
 var _player: Player
 var _loaded: bool = false
+var _progress: LevelProgress = LevelProgress.new()
 
 @export var _level_camera: LevelCamera
 @export var music_player: AudioStreamPlayer
@@ -109,6 +116,23 @@ func add_purple_coin_max(group: String, amount: int = 1) -> void:
 func set_purple_coin_max(group: String, amount: int) -> void:
 	_purple_coins_max.set(group, amount)
 
+## The per-run collectible record (shines, star coins, ...) for this level.
+func get_progress() -> LevelProgress:
+	return _progress
+
+
+## Records a shine collection in the level progress and notifies listeners. [param scenario_id] is
+## the shine's scenario id (0 = common). Re-collecting an already-recorded shine is a no-op.
+func collect_shine(scenario_id: int) -> void:
+	if _progress.collect(LevelProgress.CATEGORY_SHINE, scenario_id):
+		shine_collected.emit(scenario_id)
+
+
+## Asks the runtime to remove the player from the level (e.g. after a kickout shine).
+func request_kickout() -> void:
+	kickout_requested.emit()
+
+
 ## Calls the callable once the level finishes loading, or calls it immediately if it
 ## already loaded.
 func on_load(callable: Callable, args: Array = []) -> void:
@@ -180,13 +204,8 @@ func load_from_dict(data: Dictionary, scenario_index: int = 0) -> Error:
 	return OK
 
 
-## Holds the level music until the screen transition revealing the level has finished, plus a short
-## buffer, so it starts with the visible level instead of behind the still-covered transition.
 func _play_music_when_visible() -> void:
-	while Singleton.is_transitioning():
-		await get_tree().process_frame
-	await get_tree().create_timer(0.2).timeout
-	music_player.play()
+	create_tween().tween_callback(music_player.play).set_delay(0.5)
 
 
 ## Builds the saved background (backdrop + parallax layers) into a CanvasLayer behind the
@@ -392,3 +411,4 @@ func _clear() -> void:
 	_active_area = null
 	_player = null
 	_loaded = false
+	_progress.clear()

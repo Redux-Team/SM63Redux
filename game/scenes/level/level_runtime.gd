@@ -63,8 +63,22 @@ func _start_level(scenario_index: int) -> void:
 	_level = Level.instantiate()
 	_level.name = "Level"
 	level_root.add_child(_level)
+	_level.kickout_requested.connect(_on_kickout_requested)
 	_level.load_from_dict(_data, scenario_index)
 	Singleton.get_level_clock().start()
+
+
+## Collecting a kickout shine removes the player from the level. In a playtest that means covering
+## with the shine mask and returning to the level designer.
+func _on_kickout_requested() -> void:
+	Singleton.get_level_clock().stop()
+	_reset_audio_effects()
+	Singleton.build_screen_transition() \
+		.set_center() \
+		.set_out_texture(SHINE_MASK) \
+		.set_in_texture(MARIO_MASK) \
+		.set_destination(LEVEL_DESIGNER_SCENE) \
+		.done()
 
 
 func _on_back_button_pressed() -> void:
