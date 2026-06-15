@@ -5,6 +5,10 @@ extends Node
 ## the save/load/reset dialogs and keeps the "Save As..." button's visibility in sync.
 ## Reached via LD.get_ui().get_file_handler().
 
+const PLAYTEST_SCENE: String = "uid://ctssku6r3gx0a"
+const WAVE_MASK: Texture2D = preload("uid://c0rwnbt8w3qel")
+
+
 @export var _save_file_dialog: FileDialog
 @export var _load_file_dialog: FileDialog
 @export var _reset_level_dialog: ConfirmationDialog
@@ -52,7 +56,13 @@ func _on_test_server_button_pressed() -> void:
 	#Singleton.get_multiplayer_handler().start_server()
 	Singleton.set_meta("playtest", LD.get_save_load_handler().get_level_data())
 	LD.get_save_load_handler().save_session()
-	get_tree().change_scene_to_file("uid://ctssku6r3gx0a")
+	# Wave-in: cover the editor, switch to the playtest, then reveal it (the shine select or level).
+	Singleton.build_screen_transition() \
+		.set_wave() \
+		.set_texture(WAVE_MASK) \
+		.set_wave_scale(4.0) \
+		.set_destination(PLAYTEST_SCENE) \
+		.done()
 
 
 func _on_test_client_button_pressed() -> void:

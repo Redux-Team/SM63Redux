@@ -47,7 +47,6 @@ func _show_shine_select(shines: Array[Dictionary]) -> void:
 	var screen: ShineSelect = SHINE_SELECT_SCENE.instantiate()
 	add_child(screen)
 	screen.scenario_chosen.connect(func(index: int) -> void:
-		# Shine-out: cover the screen with the shine mask, swap in the level, then reveal.
 		Singleton.build_screen_transition() \
 		.set_in_texture(MARIO_MASK) \
 		.set_out_texture(SHINE_MASK) \

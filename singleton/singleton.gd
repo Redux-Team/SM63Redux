@@ -53,6 +53,11 @@ func build_screen_transition() -> TransitionBuilder:
 	return _transition_handler.build()
 
 
+## True while a screen transition is covering/revealing (the transition rect is shown).
+func is_transitioning() -> bool:
+	return is_instance_valid(_screen_transition_rect) and _screen_transition_rect.visible
+
+
 func spawn_sibling(root_node: Node, node: Node, _shared_properties: PackedStringArray = ["position", "scale"]) -> void:
 	var index: int = root_node.get_index()
 	root_node.get_parent().add_child.call_deferred(node)
@@ -229,11 +234,12 @@ class TransitionHandler:
 
 
 class TransitionBuilder:
-	enum TransitionType { CENTER, WAVE }
-	
+	enum TransitionType { CENTER, WAVE, FADE }
+
 	const SHADER_CENTER: Shader = preload("uid://dcewkclyl2vjk")
 	const SHADER_WAVE: Shader = preload("uid://drycsk0p628ig")
-	
+	const SHADER_FADE: Shader = preload("res://core/shader/screen_transition_fade.gdshader")
+
 	var _color_rect: ColorRect
 	var _type: TransitionType = TransitionType.CENTER
 	var _out_duration: float = 0.5
@@ -245,6 +251,7 @@ class TransitionBuilder:
 	var _in_texture: Texture2D = null
 	var _destination: String = ""
 	var _hold_duration: float = 0.5
+	var _wave_scale: float = 1.0
 	
 	
 	func _init(color_rect: ColorRect) -> void:
@@ -254,8 +261,32 @@ class TransitionBuilder:
 	func set_type(type: TransitionType) -> TransitionBuilder:
 		_type = type
 		return self
-	
-	
+
+
+	## Wave-shaped transition (e.g. entering the shine select).
+	func set_wave() -> TransitionBuilder:
+		_type = TransitionType.WAVE
+		return self
+
+
+	## Mask-shaped center transition (e.g. the shine-out reveal).
+	func set_center() -> TransitionBuilder:
+		_type = TransitionType.CENTER
+		return self
+
+
+	## Plain fade to/from a solid color.
+	func set_fade() -> TransitionBuilder:
+		_type = TransitionType.FADE
+		return self
+
+
+	## Horizontal tiling count for the wave mask (higher = smaller, more repeated waves).
+	func set_wave_scale(scale: float) -> TransitionBuilder:
+		_wave_scale = scale
+		return self
+
+
 	func set_out_duration(duration: float) -> TransitionBuilder:
 		_out_duration = duration
 		return self
@@ -303,14 +334,27 @@ class TransitionBuilder:
 	
 	func done() -> void:
 		var mat: ShaderMaterial = _color_rect.material as ShaderMaterial
+		var wave_aspect: float = 1.0
 		match _type:
 			TransitionType.CENTER:
 				mat.shader = SHADER_CENTER
 			TransitionType.WAVE:
 				mat.shader = SHADER_WAVE
-		if is_instance_valid(_texture):
-			mat.set_shader_parameter(&"mask_texture", _texture)
-		
+				mat.set_shader_parameter(&"wave_scale", _wave_scale)
+				var vp_size: Vector2 = _color_rect.get_viewport_rect().size
+				wave_aspect = vp_size.x / vp_size.y if vp_size.y > 0.0 else 1.0
+				mat.set_shader_parameter(&"aspect", wave_aspect)
+				# Cover with the wave flipped so it sweeps in from the opposite side; the reveal
+				# unflips it (see the WAVE tween below).
+				mat.set_shader_parameter(&"flip", true)
+			TransitionType.FADE:
+				mat.shader = SHADER_FADE
+		# Cover with the out mask (falling back to the shared mask); the reveal swaps to the in
+		# mask once the screen is fully covered (see tween_out.finished below).
+		var cover_tex: Texture2D = _out_texture if is_instance_valid(_out_texture) else _texture
+		if is_instance_valid(cover_tex):
+			mat.set_shader_parameter(&"mask_texture", cover_tex)
+
 		_color_rect.show()
 		if _block_input:
 			_color_rect.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -326,19 +370,37 @@ class TransitionBuilder:
 				tween_out.tween_method(func(t: float) -> void: mat.set_shader_parameter(&"mask_scale", t), 10.0, 0.0, _out_duration)
 				tween_in.tween_method(func(t: float) -> void: mat.set_shader_parameter(&"mask_scale", t), 0.0, 10.0, _in_duration)
 			TransitionType.WAVE:
-				tween_out.tween_method(func(t: float) -> void: mat.set_shader_parameter(&"mask_offset", Vector2(0.0, t)), 1.0, 0.0, _out_duration)
-				tween_in.tween_method(func(t: float) -> void: mat.set_shader_parameter(&"mask_offset", Vector2(0.0, t)), 0.0, 1.0, _in_duration)
+				# +1 = revealed; the covered offset matches the vertical scale (wave_scale / aspect)
+				# so the sweep fully covers. Out covers (flipped), then the reveal unflips and sweeps
+				# back. Durations scale with the (shorter) range so the on-screen speed stays constant.
+				var scale_y: float = _wave_scale / wave_aspect
+				var covered: float = -1.0 / scale_y
+				var range_factor: float = (1.0 - covered) / 2.0
+				tween_out.tween_method(func(t: float) -> void: mat.set_shader_parameter(&"mask_offset_y", t), 1.0, covered, _out_duration * range_factor)
+				tween_in.tween_callback(func() -> void: mat.set_shader_parameter(&"flip", false))
+				tween_in.tween_method(func(t: float) -> void: mat.set_shader_parameter(&"mask_offset_y", t), covered, 1.0, _in_duration * range_factor)
+			TransitionType.FADE:
+				tween_out.tween_method(func(t: float) -> void: mat.set_shader_parameter(&"fade", t), 0.0, 1.0, _out_duration)
+				tween_in.tween_method(func(t: float) -> void: mat.set_shader_parameter(&"fade", t), 1.0, 0.0, _in_duration)
 		
 		tween_out.finished.connect(func() -> void:
+			var tree: SceneTree = _color_rect.get_tree()
+			# Present a couple of fully-covered frames before running the (possibly heavy) callbacks
+			# and again afterwards, so a load hitch hides behind the covered screen instead of
+			# freezing on a half-drawn mask.
+			await tree.process_frame
+			await tree.process_frame
 			for c: Callable in _callables:
 				c.call()
-			var hold: Tween = _color_rect.get_tree().create_tween()
-			var out_tex: Texture2D = _out_texture if is_instance_valid(_out_texture) else _texture
-			if is_instance_valid(out_tex):
-				mat.set_shader_parameter(&"mask_texture", out_tex)
+			await tree.process_frame
+			await tree.process_frame
+			var hold: Tween = tree.create_tween()
+			var reveal_tex: Texture2D = _in_texture if is_instance_valid(_in_texture) else _texture
+			if is_instance_valid(reveal_tex):
+				mat.set_shader_parameter(&"mask_texture", reveal_tex)
 			hold.tween_interval(_hold_duration)
 			if _destination:
-				hold.tween_callback(_color_rect.get_tree().change_scene_to_file.bind(_destination))
+				hold.tween_callback(tree.change_scene_to_file.bind(_destination))
 			hold.finished.connect(tween_in.play)
 		)
 		
