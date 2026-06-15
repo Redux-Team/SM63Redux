@@ -10,6 +10,12 @@ var _transition_handler: TransitionHandler = TransitionHandler.new()
 @export var _screen_transition_rect: ColorRect
 
 
+## Optional callback consulted before the app closes. It should return true if it handled the
+## request (e.g. opened a "save before quitting?" prompt) so the quit is held off; false to let
+## the app close normally. The active scene registers/clears it via set_quit_guard/clear_quit_guard.
+var _quit_guard: Callable = Callable()
+
+
 func _init() -> void:
 	add_child(_input_handler)
 	add_child(_tree_hook)
@@ -18,6 +24,8 @@ func _init() -> void:
 
 
 func _ready() -> void:
+	if not Engine.is_editor_hint():
+		get_tree().set_auto_accept_quit(false)
 	every(1, func() -> void:
 		if get_multiplayer_handler().is_server():
 			for n: CanvasItem in get_tree().get_nodes_in_group(&"gui_mp_host"):
@@ -26,6 +34,25 @@ func _ready() -> void:
 			for n: CanvasItem in get_tree().get_nodes_in_group(&"gui_mp_client"):
 				n.show()
 	)
+
+
+func _notification(what: int) -> void:
+	if what != NOTIFICATION_WM_CLOSE_REQUEST or Engine.is_editor_hint():
+		return
+	if _quit_guard.is_valid() and _quit_guard.call():
+		return
+	get_tree().quit()
+
+
+## Registers a callback to intercept app-close requests (see _quit_guard).
+func set_quit_guard(guard: Callable) -> void:
+	_quit_guard = guard
+
+
+## Clears the quit guard if it still matches the given callback (so a scene only removes its own).
+func clear_quit_guard(guard: Callable) -> void:
+	if _quit_guard == guard:
+		_quit_guard = Callable()
 
 
 func get_version() -> String:

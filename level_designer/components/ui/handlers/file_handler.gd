@@ -15,6 +15,11 @@ const WAVE_MASK: Texture2D = preload("uid://c0rwnbt8w3qel")
 @export var _save_new_button: Button
 
 
+## Set while a save-as is being routed through the file dialog on the way to quitting, so the app
+## closes once the file has actually been written (or stays put if the dialog is dismissed).
+var _quitting: bool = false
+
+
 func _ready() -> void:
 	var filters: PackedStringArray = PackedStringArray([
 		"*.63rl;63 Redux Level",
@@ -27,7 +32,52 @@ func _ready() -> void:
 ## Called by LDUI once the level designer is fully ready.
 func setup() -> void:
 	LD.get_save_load_handler().file_state_changed.connect(_update_save_buttons)
+	_save_file_dialog.canceled.connect(_on_save_dialog_canceled)
+	Singleton.set_quit_guard(_on_quit_requested)
 	_update_save_buttons()
+
+
+func _exit_tree() -> void:
+	Singleton.clear_quit_guard(_on_quit_requested)
+
+
+## Intercepts an app-close request: with unsaved changes, prompt to save first and report that the
+## quit is being handled; otherwise let it proceed.
+func _on_quit_requested() -> bool:
+	if not LD.get_save_load_handler().is_dirty():
+		return false
+	var dialog: ConfirmationDialog = ConfirmationDialog.new()
+	dialog.title = "Unsaved Changes"
+	dialog.dialog_text = "You have unsaved changes. Save before quitting?"
+	dialog.ok_button_text = "Save"
+	var dont_save: Button = dialog.add_button("Don't Save", true, "dont_save")
+	dont_save.pressed.connect(func() -> void:
+		dialog.queue_free()
+		get_tree().quit()
+	)
+	dialog.confirmed.connect(func() -> void:
+		dialog.queue_free()
+		_save_then_quit()
+	)
+	dialog.canceled.connect(dialog.queue_free)
+	add_child(dialog)
+	dialog.popup_centered()
+	return true
+
+
+## Saves and then quits; with no file yet, routes through the save dialog (quitting once written).
+func _save_then_quit() -> void:
+	var handler: LDSaveLoadHandler = LD.get_save_load_handler()
+	if handler.has_loaded_file():
+		handler.save_current()
+		get_tree().quit()
+	else:
+		_quitting = true
+		_save_file_dialog.popup_centered()
+
+
+func _on_save_dialog_canceled() -> void:
+	_quitting = false
 
 
 #region Buttons
@@ -86,6 +136,11 @@ func _on_save_file_selected(path: String) -> void:
 		err = handler.save_binary(path)
 	if err != OK:
 		push_error("Failed to save level: " + error_string(err))
+		_quitting = false
+		return
+	if _quitting:
+		_quitting = false
+		get_tree().quit()
 
 
 func _on_load_file_selected(path: String) -> void:

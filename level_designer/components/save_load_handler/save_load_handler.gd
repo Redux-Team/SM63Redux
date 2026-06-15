@@ -10,6 +10,14 @@ const AUTOSAVE_PATH: String = "user://autosave_ld_session"
 const PERIODIC_AUTOSAVE_PATH: String = "user://periodic_autosave_ld_session"
 const PERIODIC_AUTOSAVE_ENABLED: bool = true
 const PERIODIC_AUTOSAVE_INTERVAL: float = 60.0
+## Singleton meta holding the content hash of the level as last written to disk, so the unsaved-
+## changes check survives a playtest (which unloads this handler) and is readable from the runtime.
+const SAVED_HASH_META: StringName = &"ld_saved_level_hash"
+## Editor view state that gets serialized but shouldn't count as a meaningful change, so merely
+## panning, zooming or toggling the view doesn't make the level look "unsaved".
+const VOLATILE_EDITOR_KEYS: Array[String] = [
+	"camera_position", "camera_zoom", "active_layer", "parallaxing_enabled", "ghosting_enabled",
+]
 
 
 signal file_state_changed
@@ -24,6 +32,67 @@ var _periodic_autosave_timer: Timer = null
 ## to it directly rather than prompting for a path).
 func has_loaded_file() -> bool:
 	return method != -1 and not level_file_path.is_empty() and level_file_path != AUTOSAVE_PATH
+
+
+## True when the live level differs from the version last written to disk (or was never saved).
+func is_dirty() -> bool:
+	if not Singleton.has_meta(SAVED_HASH_META):
+		return true
+	return content_hash(_serialize()) != Singleton.get_meta(SAVED_HASH_META)
+
+
+## Records the current level as the saved baseline, so it reads as up-to-date until the next edit.
+func _mark_clean() -> void:
+	Singleton.set_meta(SAVED_HASH_META, content_hash(_serialize()))
+
+
+## Hashes a level dict while ignoring volatile editor view state, so the unsaved-changes check only
+## reacts to real content edits. Static so the runtime can compare a playtested level the same way.
+static func content_hash(data: Dictionary) -> int:
+	var copy: Dictionary = data.duplicate(true)
+	var editor: Variant = copy.get("editor")
+	if editor is Dictionary:
+		for key: String in VOLATILE_EDITOR_KEYS:
+			(editor as Dictionary).erase(key)
+	return hash(copy)
+
+
+static func write_binary(path: String, data: Dictionary) -> Error:
+	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if not file:
+		return FileAccess.get_open_error()
+	file.store_buffer(var_to_bytes(data))
+	file.close()
+	return OK
+
+
+static func write_json(path: String, data: Dictionary) -> Error:
+	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if not file:
+		return FileAccess.get_open_error()
+	file.store_string(JSON.stringify(data, "\t"))
+	file.close()
+	return OK
+
+
+## Writes a level dict back to the on-disk file recorded in the last session, marking it clean.
+## Returns false when there is no real file to write to (e.g. the level was never saved), so the
+## caller can fall back to prompting for a path. Static so a playtest can save without the editor.
+static func save_to_session_file(data: Dictionary) -> bool:
+	if not FileAccess.file_exists(LAST_SESSION_PATH):
+		return false
+	var raw: String = FileAccess.open(LAST_SESSION_PATH, FileAccess.READ).get_as_text()
+	var session: Variant = JSON.parse_string(raw) if raw else null
+	if not session is Dictionary:
+		return false
+	var path: String = str((session as Dictionary).get("level_file_path", ""))
+	var saved_method: int = int((session as Dictionary).get("method", -1))
+	if path.is_empty() or path == AUTOSAVE_PATH or saved_method == -1:
+		return false
+	var err: Error = write_json(path, data) if saved_method == 1 else write_binary(path, data)
+	if err == OK:
+		Singleton.set_meta(SAVED_HASH_META, content_hash(data))
+	return err == OK
 
 
 ## Saves to the currently loaded file using its existing format.
@@ -65,7 +134,9 @@ func _on_ready() -> void:
 	match method:
 		0: load_binary(level_file_path)
 		1: load_json(level_file_path)
-		_: _ensure_player_spawn()
+		_:
+			_ensure_player_spawn()
+			_mark_clean()
 
 
 func _on_periodic_autosave_timeout() -> void:
@@ -79,16 +150,13 @@ func _on_periodic_autosave_timeout() -> void:
 
 func save_binary(path: String) -> Error:
 	var binary_path: String = path.get_basename() + ".63rl"
-	var data: Dictionary = _serialize()
-	var bytes: PackedByteArray = var_to_bytes(data)
-	var file: FileAccess = FileAccess.open(binary_path, FileAccess.WRITE)
-	if not file:
-		return FileAccess.get_open_error()
-	file.store_buffer(bytes)
-	file.close()
+	var err: Error = write_binary(binary_path, _serialize())
+	if err != OK:
+		return err
 	level_file_path = path
 	method = 0
 	save_session()
+	_mark_clean()
 	return OK
 
 
@@ -106,6 +174,7 @@ func load_binary(path: String) -> Error:
 		level_file_path = path
 		method = 0
 		save_session()
+		_mark_clean()
 		LD.get_tool_handler().select_tool("select")
 	return err
 
@@ -138,19 +207,17 @@ func reset_level() -> void:
 	save_session()
 
 	_ensure_player_spawn()
+	_mark_clean()
 
 
 func save_json(path: String) -> Error:
-	var data: Dictionary = _serialize()
-	var json_string: String = JSON.stringify(data, "\t")
-	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
-	if not file:
-		return FileAccess.get_open_error()
-	file.store_string(json_string)
-	file.close()
+	var err: Error = write_json(path, _serialize())
+	if err != OK:
+		return err
 	level_file_path = path
 	method = 1
 	save_session()
+	_mark_clean()
 	return OK
 
 
@@ -173,6 +240,7 @@ func load_json(path: String) -> Error:
 		LD.get_tool_handler().select_tool("select")
 		method = 1
 		save_session()
+		_mark_clean()
 	return deserialize_err
 
 

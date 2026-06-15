@@ -17,6 +17,7 @@ var _data: Dictionary
 
 
 func _ready() -> void:
+	Singleton.set_quit_guard(_on_quit_requested)
 	_data = Singleton.get_meta("playtest")
 	# Offer the shine select when the level has selectable shine scenarios; otherwise (only the
 	# COMMON baseline, or no scenario flagged as a shine) jump straight into the level.
@@ -85,6 +86,50 @@ func _on_back_button_pressed() -> void:
 	Singleton.get_level_clock().stop()
 	_reset_audio_effects()
 	get_tree().change_scene_to_file(LEVEL_DESIGNER_SCENE)
+
+
+func _exit_tree() -> void:
+	Singleton.clear_quit_guard(_on_quit_requested)
+
+
+## Intercepts an app-close request during a playtest: if the level being tested has unsaved edits,
+## prompt to save first; otherwise let the app close.
+func _on_quit_requested() -> bool:
+	if not _is_dirty():
+		return false
+	var dialog: ConfirmationDialog = ConfirmationDialog.new()
+	dialog.title = "Unsaved Changes"
+	dialog.dialog_text = "The level has unsaved changes. Save before quitting?"
+	dialog.ok_button_text = "Save"
+	var dont_save: Button = dialog.add_button("Don't Save", true, "dont_save")
+	dont_save.pressed.connect(func() -> void:
+		dialog.queue_free()
+		get_tree().quit()
+	)
+	dialog.confirmed.connect(func() -> void:
+		dialog.queue_free()
+		_save_then_quit()
+	)
+	dialog.canceled.connect(dialog.queue_free)
+	add_child(dialog)
+	dialog.popup_centered()
+	return true
+
+
+## True when the level played here differs from the version last written to disk.
+func _is_dirty() -> bool:
+	if not Singleton.has_meta(LDSaveLoadHandler.SAVED_HASH_META):
+		return true
+	return LDSaveLoadHandler.content_hash(_data) != Singleton.get_meta(LDSaveLoadHandler.SAVED_HASH_META)
+
+
+## Writes the playtested level back to its file and quits; if it was never saved to a real file,
+## returns to the editor so the user can choose where to save instead.
+func _save_then_quit() -> void:
+	if LDSaveLoadHandler.save_to_session_file(_data):
+		get_tree().quit()
+	else:
+		_on_back_button_pressed()
 
 
 ## Strips any runtime-added master-bus effects (e.g. underwater filtering) so they don't
