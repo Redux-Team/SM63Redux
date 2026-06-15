@@ -61,6 +61,7 @@ func _on_test_server_button_pressed() -> void:
 		.set_wave() \
 		.set_texture(WAVE_MASK) \
 		.set_wave_scale(4.0) \
+		.set_in_duration(0.5) \
 		.set_destination(PLAYTEST_SCENE) \
 		.done()
 

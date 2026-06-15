@@ -131,9 +131,7 @@ func _update_editability() -> void:
 	gradient_top.disabled = not custom
 	gradient_bottom.disabled = not custom
 	add_layer_button.disabled = not custom
-	remove_layer_button.disabled = not custom or _selected_layer < 0
-	move_up_button.disabled = not custom or _selected_layer <= 0
-	move_down_button.disabled = not custom or _selected_layer < 0 or _selected_layer >= _handler().get_background().layers.size() - 1
+	_update_layer_buttons()
 	texture_option.disabled = not custom
 	parallax_spin.editable = custom
 	custom_color_check.disabled = not custom
@@ -256,6 +254,16 @@ func _on_layer_selected(index: int) -> void:
 	_show_layer_detail(index)
 
 
+## Enables the move/remove buttons against the current selection and custom state. Kept separate from
+## _update_editability so selecting a layer (which doesn't rerun it) still updates them.
+func _update_layer_buttons() -> void:
+	var custom: bool = _handler().is_custom()
+	var count: int = _handler().get_background().layers.size()
+	remove_layer_button.disabled = not custom or _selected_layer < 0
+	move_up_button.disabled = not custom or _selected_layer <= 0
+	move_down_button.disabled = not custom or _selected_layer < 0 or _selected_layer >= count - 1
+
+
 func _show_layer_detail(index: int) -> void:
 	_selected_layer = index
 	var has_layer: bool = index >= 0
@@ -263,7 +271,7 @@ func _show_layer_detail(index: int) -> void:
 	layer_fields.visible = has_layer
 	layer_preview.visible = has_layer
 	layer_placeholder.visible = not has_layer
-	remove_layer_button.disabled = not has_layer or not _handler().is_custom()
+	_update_layer_buttons()
 	if not has_layer:
 		return
 
