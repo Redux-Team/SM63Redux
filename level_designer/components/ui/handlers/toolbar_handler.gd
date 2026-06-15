@@ -125,22 +125,6 @@ func open_create_stamp_dialog() -> void:
 	)
 
 
-## Tags the selection. Type a new tag name or pick an existing one.
-func _on_add_to_tag_button_pressed() -> void:
-	if LD.get_object_handler().get_placed_selection().is_empty():
-		return
-	_open_name_dialog("Add Tag", "Add", "", LD.get_tag_handler().get_all_tags(),
-		"Or pick existing:", func(name: String) -> void:
-			LD.get_object_handler().add_selection_to_tag(name)
-	)
-
-
-func _on_remove_from_tag_button_pressed() -> void:
-	LD.get_ui().get_window_handler().open_tag_picker("Remove from Tag", func(tag: String) -> void:
-		LD.get_object_handler().remove_selection_from_tag(tag)
-	)
-
-
 ## Shared "name or pick existing" dialog used by Create Stamp / Add Tag. Calls on_confirm
 ## with the chosen name. Holds editor input while open so typing can't pan the viewport.
 func _open_name_dialog(title: String, ok_text: String, default_name: String, existing: Array[String], pick_label_text: String, on_confirm: Callable) -> void:

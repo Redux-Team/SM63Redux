@@ -42,6 +42,13 @@ func _apply_default() -> void:
 		_active_preset = LDBackgroundDB.CUSTOM
 
 
+## Restores the default background (used when a level is reset or loaded without one).
+func reset() -> void:
+	_apply_default()
+	_rebuild()
+	background_changed.emit()
+
+
 func _persist_session() -> void:
 	LD.get_save_load_handler().save_session()
 

@@ -123,14 +123,20 @@ func reset_level() -> void:
 	for layer: LDLayer in area.layers.duplicate():
 		layer.queue_free()
 	area.layers.clear()
-	
+
+	# Clear the rest of the level state too, otherwise stamps/tags/scenarios/background linger.
+	LD.get_tag_handler().deserialize_all([])
+	LD.get_stamp_handler().deserialize_all([])
+	LD.get_scenario_handler().deserialize_all({})
+	LD.get_background_handler().reset()
+
 	viewport.camera_position = Vector2.ZERO
 	viewport.camera_zoom = Vector2.ONE
-	
+
 	level_file_path = ""
 	method = -1
 	save_session()
-	
+
 	_ensure_player_spawn()
 
 
@@ -348,15 +354,17 @@ func _deserialize(data: Dictionary) -> Error:
 			LD.get_ui().get_viewport_handler().set_ghosting_enabled(editor_data.get("ghosting_enabled"))
 		if editor_data.has("background"):
 			LD.get_background_handler().deserialize(editor_data.get("background"))
-	
+		else:
+			LD.get_background_handler().reset()
+
+	# Always restore these, even when the loaded level omits the key, so stale tags/stamps/
+	# scenarios from the previous level don't carry over.
 	var tags_data: Variant = normalized.get("tags", [])
-	if tags_data is Array:
-		LD.get_tag_handler().deserialize_all(tags_data)
+	LD.get_tag_handler().deserialize_all(tags_data if tags_data is Array else [])
 
 	var stamps_data: Variant = normalized.get("stamps", [])
-	if stamps_data is Array:
-		LD.get_stamp_handler().deserialize_all(stamps_data)
-		LD.get_stamp_handler().rehydrate_all()
+	LD.get_stamp_handler().deserialize_all(stamps_data if stamps_data is Array else [])
+	LD.get_stamp_handler().rehydrate_all()
 
 	# Restore hotbar slots after stamps exist, so stamp slots resolve their preview icons.
 	var hotbar_data: Variant = normalized.get("editor", {}).get("hotbar", [])
@@ -364,8 +372,7 @@ func _deserialize(data: Dictionary) -> Error:
 		LD.get_ui().get_hotbar_handler().deserialize_slots(hotbar_data)
 
 	var scenarios_data: Variant = normalized.get("scenarios", {})
-	if scenarios_data is Dictionary:
-		LD.get_scenario_handler().deserialize_all(scenarios_data)
+	LD.get_scenario_handler().deserialize_all(scenarios_data if scenarios_data is Dictionary else {})
 
 	_ensure_player_spawn()
 

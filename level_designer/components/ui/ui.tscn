@@ -453,16 +453,6 @@ focus_mode = 0
 shortcut = SubResource("Shortcut_8p5vc")
 text = "CS"
 
-[node name="AddToTagButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=76137015]
-layout_mode = 2
-focus_mode = 0
-text = "AT"
-
-[node name="RemoveFromTagButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=2000666825]
-layout_mode = 2
-focus_mode = 0
-text = "RT"
-
 [node name="MoveToFrontButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=1732178860]
 layout_mode = 2
 focus_mode = 0
@@ -652,8 +642,6 @@ will be lost!"
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeleteButton" to="ToolbarHandler" method="_on_delete_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeselectButton" to="ToolbarHandler" method="_on_deselect_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/CreateStampButton" to="ToolbarHandler" method="_on_create_stamp_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/AddToTagButton" to="ToolbarHandler" method="_on_add_to_tag_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/RemoveFromTagButton" to="ToolbarHandler" method="_on_remove_from_tag_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/MoveToFrontButton" to="ToolbarHandler" method="_on_move_to_front_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/MoveToBackButton" to="ToolbarHandler" method="_on_move_to_back_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/ResetCamButton" to="ToolbarHandler" method="_on_reset_cam_button_pressed"]

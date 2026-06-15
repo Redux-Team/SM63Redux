@@ -1,123 +1,131 @@
 class_name LDTagEditor
 extends MarginContainer
 
-## Simple editor for the level's tags: a list on the left plus an add / rename / remove
-## flow. Tags are pure labels - scenarios target them to enable/disable objects. Unlike
-## stamps there are no instances, previews, or captured objects.
+## Tags the current selection. The list shows the selection's tags - tags shared by every selected
+## object plainly, and partially-applied ones with a "(count)" suffix (e.g. "Purple Coins (5)").
+## Type a name to add a tag to the whole selection, or pick one and remove it. With nothing
+## selected it just lists every tag in the level and how many objects use it.
 
 
+@export var selection_label: Label
 @export var tag_list: ItemList
+@export var name_edit: LineEdit
 @export var add_button: Button
 @export var remove_button: Button
-@export var empty_label: Label
-@export var detail_content: VBoxContainer
-@export var name_edit: LineEdit
-
-
-var _selected_tag: String = ""
-var _setting_fields: bool = false
 
 
 func _ready() -> void:
-	add_button.pressed.connect(_on_add_pressed)
-	remove_button.pressed.connect(_on_remove_pressed)
-	tag_list.item_selected.connect(_on_tag_selected)
-	name_edit.text_submitted.connect(_on_name_submitted)
-	name_edit.focus_exited.connect(_on_name_focus_exited)
+	add_button.pressed.connect(_on_add)
+	name_edit.text_submitted.connect(func(_text: String) -> void: _on_add())
+	remove_button.pressed.connect(_on_remove)
+	tag_list.item_selected.connect(func(_index: int) -> void: _update_buttons())
+	name_edit.text_changed.connect(func(_text: String) -> void: _update_buttons())
 
 	var th: LDTagHandler = LD.get_tag_handler()
-	th.tag_added.connect(_on_tags_changed.unbind(1))
-	th.tag_removed.connect(_on_tags_changed.unbind(1))
-	th.tag_changed.connect(_on_tags_changed.unbind(1))
+	th.tag_added.connect(_refresh.unbind(1))
+	th.tag_removed.connect(_refresh.unbind(1))
+	th.tag_changed.connect(_refresh.unbind(1))
 
-	_refresh_list()
+	_refresh()
 
 
 func _on_show() -> void:
-	_refresh_list()
+	_refresh()
 
 
-func _on_tags_changed() -> void:
-	_refresh_list()
+func _selection() -> Array[LDObject]:
+	return LD.get_object_handler().get_placed_selection()
 
 
-func _refresh_list() -> void:
-	var prev: String = _selected_tag
-	tag_list.clear()
-	for tag: String in LD.get_tag_handler().get_all_tags():
-		tag_list.add_item(tag)
-		tag_list.set_item_metadata(tag_list.item_count - 1, tag)
-
-	if not prev.is_empty():
-		for i: int in tag_list.item_count:
-			if str(tag_list.get_item_metadata(i)) == prev:
-				tag_list.select(i)
-				_show_detail(prev)
-				return
-	_show_detail("")
-
-
-func _show_detail(tag: String) -> void:
-	_selected_tag = tag
-	var has_tag: bool = not tag.is_empty()
-	empty_label.visible = not has_tag
-	detail_content.visible = has_tag
-	remove_button.disabled = not has_tag
-	if not has_tag:
-		return
-	_setting_fields = true
-	name_edit.text = tag
-	_setting_fields = false
-
-
-func _on_tag_selected(index: int) -> void:
-	_show_detail(str(tag_list.get_item_metadata(index)))
-
-
-func _on_add_pressed() -> void:
+func _refresh() -> void:
 	var th: LDTagHandler = LD.get_tag_handler()
-	var id: String = "new_tag"
-	var counter: int = 1
-	while th.has_tag(id):
-		id = "new_tag_" + str(counter)
-		counter += 1
+	var selection: Array[LDObject] = _selection()
+	tag_list.clear()
 
-	th.create_tag(id)
+	var has_selection: bool = not selection.is_empty()
+	remove_button.text = "Remove from Selection" if has_selection else "Delete Tag"
 
-	for i: int in tag_list.item_count:
-		if str(tag_list.get_item_metadata(i)) == id:
-			tag_list.select(i)
-			_show_detail(id)
-			name_edit.grab_focus()
-			name_edit.select_all()
-			return
-
-
-func _on_remove_pressed() -> void:
-	if _selected_tag.is_empty():
-		return
-	LD.get_tag_handler().remove_tag(_selected_tag)
-	_selected_tag = ""
-
-
-func _on_name_submitted(new_text: String) -> void:
-	_try_rename(new_text)
-	name_edit.release_focus()
-
-
-func _on_name_focus_exited() -> void:
-	if not _setting_fields:
-		_try_rename(name_edit.text)
-
-
-func _try_rename(new_name: String) -> void:
-	if _selected_tag.is_empty():
-		return
-	var cleaned: String = new_name.strip_edges()
-	if cleaned.is_empty() or cleaned == _selected_tag:
-		name_edit.text = _selected_tag
-		return
-	if LD.get_tag_handler().rename_tag(_selected_tag, cleaned):
-		_selected_tag = cleaned
+	if selection.is_empty():
+		selection_label.text = "No selection - all tags"
+		for tag: String in th.get_all_tags():
+			_add_item(tag, th.get_objects_with_tag(tag).size(), -1)
 	else:
-		name_edit.text = _selected_tag
+		selection_label.text = "%d object%s selected" % [selection.size(), "" if selection.size() == 1 else "s"]
+		# Count how many selected objects carry each tag.
+		var counts: Dictionary[String, int] = {}
+		for obj: LDObject in selection:
+			for tag: String in th.get_object_tags(obj):
+				counts[tag] = counts.get(tag, 0) + 1
+		var tags: Array = counts.keys()
+		tags.sort()
+		# Tags shared by the whole selection first (shown plainly), then the partial ones.
+		for tag: String in tags:
+			if counts[tag] == selection.size():
+				_add_item(tag, counts[tag], selection.size())
+		for tag: String in tags:
+			if counts[tag] < selection.size():
+				_add_item(tag, counts[tag], selection.size())
+
+	_update_buttons()
+
+
+## Adds a list row: plain when it covers the whole selection, otherwise suffixed with the count.
+func _add_item(tag: String, count: int, selection_size: int) -> void:
+	var label: String = tag if (selection_size > 0 and count == selection_size) else "%s (%d)" % [tag, count]
+	tag_list.add_item(label)
+	tag_list.set_item_metadata(tag_list.item_count - 1, tag)
+
+
+func _update_buttons() -> void:
+	# Add/remove always work: with a selection they (un)tag those objects, otherwise they create or
+	# delete the tag for the whole level.
+	remove_button.disabled = tag_list.get_selected_items().is_empty()
+	# Label the add action by what it'll do: type a name to make a new tag, or leave it empty and
+	# pick a tag from the list to apply that existing one.
+	if _selection().is_empty():
+		add_button.text = "Create Tag"
+	elif not name_edit.text.strip_edges().is_empty():
+		add_button.text = "Create & Add Selection"
+	elif not tag_list.get_selected_items().is_empty():
+		add_button.text = "Add from Selection"
+	else:
+		add_button.text = "Add to Selection"
+
+
+func _on_add() -> void:
+	var selection: Array[LDObject] = _selection()
+	var typed: String = name_edit.text.strip_edges()
+	if selection.is_empty():
+		if typed.is_empty() or typed.contains(":"):
+			return
+		LD.get_tag_handler().create_tag(typed)
+		name_edit.clear()
+		_refresh()
+		return
+
+	# With objects selected: a typed name creates and applies a tag, otherwise the picked list tag
+	# is applied to the selection.
+	var tag: String = typed
+	if tag.is_empty():
+		var selected_items: PackedInt32Array = tag_list.get_selected_items()
+		if selected_items.is_empty():
+			return
+		tag = str(tag_list.get_item_metadata(selected_items[0]))
+	elif tag.contains(":"):
+		return
+	LD.get_tag_handler().tag_objects(tag, selection)
+	name_edit.clear()
+	_refresh()
+
+
+func _on_remove() -> void:
+	var selected_items: PackedInt32Array = tag_list.get_selected_items()
+	if selected_items.is_empty():
+		return
+	var tag: String = str(tag_list.get_item_metadata(selected_items[0]))
+	var selection: Array[LDObject] = _selection()
+	if selection.is_empty():
+		LD.get_tag_handler().remove_tag(tag)
+	else:
+		LD.get_tag_handler().untag_objects(tag, selection)
+	_refresh()

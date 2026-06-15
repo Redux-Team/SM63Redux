@@ -32,6 +32,8 @@ var _burst_timer: float = 0.0
 func _on_enter() -> void:
 	_burst_timer = burst_duration
 	player.swim_buffer_time = swim_input_buffer_time
+	# Consume the buffered swim press so it can't immediately re-trigger another swim.
+	player.swim_input_timer = 0.0
 
 
 func _on_physics_tick(delta: float) -> void:
