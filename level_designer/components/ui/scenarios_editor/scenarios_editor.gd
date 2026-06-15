@@ -12,6 +12,9 @@ extends MarginContainer
 @export var remove_button: Button
 @export var empty_label: Label
 @export var detail_content: Control
+@export var shine_row: HBoxContainer
+@export var name_edit: LineEdit
+@export var shine_check: CheckButton
 @export var layers_container: VBoxContainer
 @export var tags_container: VBoxContainer
 @export var stamps_container: VBoxContainer
@@ -25,11 +28,24 @@ func _ready() -> void:
 	remove_button.pressed.connect(_on_remove_pressed)
 	scenario_list.item_selected.connect(_on_scenario_selected)
 
+	name_edit.text_changed.connect(_on_name_changed)
+	shine_check.toggled.connect(_on_shine_toggled)
+
 	var sh: LDScenarioHandler = LD.get_scenario_handler()
 	sh.scenario_added.connect(_on_scenarios_changed.unbind(1))
 	sh.scenario_removed.connect(_on_scenarios_changed.unbind(1))
 
 	_refresh_list()
+
+
+func _on_name_changed(text: String) -> void:
+	if _selected_index > LDScenario.COMMON_INDEX:
+		LD.get_scenario_handler().set_display_name(_selected_index, text)
+
+
+func _on_shine_toggled(pressed: bool) -> void:
+	if _selected_index > LDScenario.COMMON_INDEX:
+		LD.get_scenario_handler().set_show_in_shine_select(_selected_index, pressed)
 
 
 func _on_show() -> void:
@@ -91,6 +107,13 @@ func _show_detail(index: int) -> void:
 	empty_label.visible = not has_scenario
 	detail_content.visible = has_scenario
 	remove_button.disabled = index <= LDScenario.COMMON_INDEX
+	# Name / shine-select only apply to numbered scenarios, not the COMMON baseline.
+	var is_numbered: bool = index > LDScenario.COMMON_INDEX
+	shine_row.visible = is_numbered
+	if is_numbered:
+		var scenario: LDScenario = LD.get_scenario_handler().get_scenario(index)
+		name_edit.text = scenario.display_name if scenario else ""
+		shine_check.button_pressed = scenario.show_in_shine_select if scenario else true
 	if has_scenario:
 		_build_rows()
 		LD.get_scenario_handler().apply_to_editor(index)

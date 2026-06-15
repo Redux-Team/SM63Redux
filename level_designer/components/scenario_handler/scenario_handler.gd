@@ -72,6 +72,31 @@ func remove_scenario(index: int) -> void:
 		scenario_removed.emit(index)
 
 
+## Numbered scenarios flagged to appear as shines on the shine select screen, sorted by index.
+func get_shine_scenarios() -> Array[LDScenario]:
+	var result: Array[LDScenario] = []
+	for scenario: LDScenario in get_numbered_scenarios():
+		if scenario.show_in_shine_select:
+			result.append(scenario)
+	return result
+
+
+func set_display_name(index: int, display_name: String) -> void:
+	var scenario: LDScenario = get_scenario(index)
+	if not scenario:
+		return
+	scenario.display_name = display_name
+	scenario_changed.emit(scenario)
+
+
+func set_show_in_shine_select(index: int, value: bool) -> void:
+	var scenario: LDScenario = get_scenario(index)
+	if not scenario:
+		return
+	scenario.show_in_shine_select = value
+	scenario_changed.emit(scenario)
+
+
 func set_layer_override(index: int, layer_index: int, state: Variant) -> void:
 	var scenario: LDScenario = get_scenario(index)
 	if not scenario:

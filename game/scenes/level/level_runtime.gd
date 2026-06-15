@@ -5,18 +5,66 @@ extends Node2D
 ## level designer before switching scenes). Returns to the editor via the back button.
 
 const LEVEL_DESIGNER_SCENE: String = "uid://cf4yw3eqr2qo6"
+const SHINE_SELECT_SCENE: PackedScene = preload("res://game/scenes/shine_select/shine_select.tscn")
+const SHINE_MASK: Texture2D = preload("uid://daf1pd02jpku1")
+const MARIO_MASK: Texture2D = preload("uid://34v4s1d3h4ag")
 
 @export var level_root: Node2D
 
 
 var _level: Level
+var _data: Dictionary
 
 
 func _ready() -> void:
+	_data = Singleton.get_meta("playtest")
+	# Offer the shine select when the level has selectable shine scenarios; otherwise (only the
+	# COMMON baseline, or no scenario flagged as a shine) jump straight into the level.
+	var shines: Array[Dictionary] = _get_shine_scenarios()
+	if shines.is_empty():
+		_start_level(0)
+	else:
+		_show_shine_select(shines)
+
+
+## Numbered scenarios (index >= 1) flagged to appear on the shine select, sorted by index.
+func _get_shine_scenarios() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var scenarios: Variant = _data.get("scenarios", {})
+	if not scenarios is Dictionary:
+		return result
+	for entry: Variant in (scenarios as Dictionary).get("scenarios", []):
+		if not entry is Dictionary:
+			continue
+		var index: int = int((entry as Dictionary).get("index", 0))
+		if index >= 1 and bool((entry as Dictionary).get("show_in_shine_select", true)):
+			result.append({"index": index, "name": str((entry as Dictionary).get("display_name", ""))})
+	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.get("index", 0)) < int(b.get("index", 0)))
+	return result
+
+
+func _show_shine_select(shines: Array[Dictionary]) -> void:
+	var screen: ShineSelect = SHINE_SELECT_SCENE.instantiate()
+	add_child(screen)
+	screen.scenario_chosen.connect(func(index: int) -> void:
+		# Shine-out: cover the screen with the shine mask, swap in the level, then reveal.
+		Singleton.build_screen_transition() \
+		.set_in_texture(MARIO_MASK) \
+		.set_out_texture(SHINE_MASK) \
+		.set_center() \
+		.load(func() -> void:
+			screen.queue_free()
+			_start_level(index)
+		).done()
+	)
+	screen.setup(_data, shines)
+
+
+func _start_level(scenario_index: int) -> void:
 	_level = Level.instantiate()
 	_level.name = "Level"
 	level_root.add_child(_level)
-	_level.load_from_dict(Singleton.get_meta("playtest"))
+	_level.load_from_dict(_data, scenario_index)
 	Singleton.get_level_clock().start()
 
 

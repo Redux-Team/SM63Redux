@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cm0wgakqfv4qa" path="res://level_designer/components/ui/scenarios_editor/scenarios_editor.gd" id="1_m0tjn"]
 
-[node name="LDScenariosEditor" type="MarginContainer" unique_id=1341334410 node_paths=PackedStringArray("scenario_list", "add_button", "remove_button", "empty_label", "detail_content", "layers_container", "tags_container", "stamps_container")]
+[node name="LDScenariosEditor" type="MarginContainer" unique_id=1341334410 node_paths=PackedStringArray("scenario_list", "add_button", "remove_button", "empty_label", "detail_content", "shine_row", "name_edit", "shine_check", "layers_container", "tags_container", "stamps_container")]
 custom_minimum_size = Vector2(500, 320)
 script = ExtResource("1_m0tjn")
 scenario_list = NodePath("HBoxContainer/VBoxContainer/ScenarioList")
@@ -10,6 +10,9 @@ add_button = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/AddButton")
 remove_button = NodePath("HBoxContainer/VBoxContainer/RemoveButton")
 empty_label = NodePath("HBoxContainer/DetailPanel/EmptyLabel")
 detail_content = NodePath("HBoxContainer/DetailPanel/DetailTabs")
+shine_row = NodePath("HBoxContainer/DetailPanel/ShineRow")
+name_edit = NodePath("HBoxContainer/DetailPanel/ShineRow/NameEdit")
+shine_check = NodePath("HBoxContainer/DetailPanel/ShineRow/ShineCheck")
 layers_container = NodePath("HBoxContainer/DetailPanel/DetailTabs/Layers/LayersContainer")
 tags_container = NodePath("HBoxContainer/DetailPanel/DetailTabs/Tags/TagsContainer")
 stamps_container = NodePath("HBoxContainer/DetailPanel/DetailTabs/Stamps/StampsContainer")
@@ -53,6 +56,22 @@ size_flags_horizontal = 3
 [node name="EmptyLabel" type="Label" parent="HBoxContainer/DetailPanel" unique_id=42417722]
 layout_mode = 2
 text = "No scenario selected."
+
+[node name="ShineRow" type="HBoxContainer" parent="HBoxContainer/DetailPanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/DetailPanel/ShineRow"]
+layout_mode = 2
+text = "Name"
+
+[node name="NameEdit" type="LineEdit" parent="HBoxContainer/DetailPanel/ShineRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Unnamed"
+
+[node name="ShineCheck" type="CheckButton" parent="HBoxContainer/DetailPanel/ShineRow"]
+layout_mode = 2
+text = "Shine"
 
 [node name="DetailTabs" type="TabContainer" parent="HBoxContainer/DetailPanel" unique_id=42417723]
 layout_mode = 2

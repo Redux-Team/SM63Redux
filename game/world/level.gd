@@ -122,24 +122,24 @@ func is_loaded() -> bool:
 	return _loaded
 
 
-func load_from_dict(data: Dictionary) -> Error:
+func load_from_dict(data: Dictionary, scenario_index: int = 0) -> Error:
 	if not data.has("version"):
 		return ERR_INVALID_DATA
-	
+
 	var normalized: Dictionary = _normalize(data)
 	if not normalized.has("areas"):
 		return ERR_INVALID_DATA
-	
+
 	_clear()
 
 	_build_background(data)
 
-	# Apply the COMMON scenario baseline: layers and tagged objects that COMMON disables
-	# are simply not spawned. (Numbered scenarios / "stars" come later.)
+	# Apply the COMMON baseline, then the chosen numbered scenario's overrides on top: layers,
+	# tags and stamps left disabled are simply not spawned.
 	var disabled_layers: Dictionary[int, bool] = {}
 	var disabled_tags: Dictionary[String, bool] = {}
 	var disabled_stamps: Dictionary[String, bool] = {}
-	_read_common_scenario(data, disabled_layers, disabled_tags, disabled_stamps)
+	_read_scenario(data, scenario_index, disabled_layers, disabled_tags, disabled_stamps)
 
 	for area_data: Variant in normalized.get("areas", []):
 		if not area_data is Dictionary:
@@ -175,9 +175,18 @@ func load_from_dict(data: Dictionary) -> Error:
 	_loaded = true
 	loaded.emit()
 
-	music_player.play()
+	_play_music_when_visible()
 
 	return OK
+
+
+## Holds the level music until the screen transition revealing the level has finished, plus a short
+## buffer, so it starts with the visible level instead of behind the still-covered transition.
+func _play_music_when_visible() -> void:
+	while Singleton.is_transitioning():
+		await get_tree().process_frame
+	await get_tree().create_timer(0.2).timeout
+	music_player.play()
 
 
 ## Builds the saved background (backdrop + parallax layers) into a CanvasLayer behind the
@@ -201,24 +210,44 @@ func _build_background(data: Dictionary) -> void:
 	LDBackgroundDB.resolve(bg_data).build_into(layer)
 
 
-## Reads the COMMON scenario from a saved level into "disabled" lookups: a layer index
-## or tag present here was turned off in COMMON and should not spawn.
-func _read_common_scenario(data: Dictionary, out_layers: Dictionary[int, bool], out_tags: Dictionary[String, bool], out_stamps: Dictionary[String, bool]) -> void:
+## Reads the COMMON baseline plus the chosen numbered scenario into "disabled" lookups: a layer,
+## tag or stamp left off (by COMMON, then overridden by the scenario) should not spawn.
+func _read_scenario(data: Dictionary, scenario_index: int, out_layers: Dictionary[int, bool], out_tags: Dictionary[String, bool], out_stamps: Dictionary[String, bool]) -> void:
 	var scenarios: Variant = data.get("scenarios", {})
 	if not scenarios is Dictionary:
 		return
-	var common: Variant = (scenarios as Dictionary).get("common", {})
-	if not common is Dictionary:
+	_apply_scenario_overrides((scenarios as Dictionary).get("common", {}), out_layers, out_tags, out_stamps)
+	if scenario_index <= 0:
 		return
-	for pair: Variant in (common as Dictionary).get("layer_overrides", []):
-		if pair is Array and (pair as Array).size() == 2 and not bool(pair[1]):
-			out_layers[int(pair[0])] = true
-	for pair: Variant in (common as Dictionary).get("tag_overrides", []):
-		if pair is Array and (pair as Array).size() == 2 and not bool(pair[1]):
-			out_tags[str(pair[0])] = true
-	for pair: Variant in (common as Dictionary).get("stamp_overrides", []):
-		if pair is Array and (pair as Array).size() == 2 and not bool(pair[1]):
-			out_stamps[str(pair[0])] = true
+	for entry: Variant in (scenarios as Dictionary).get("scenarios", []):
+		if entry is Dictionary and int((entry as Dictionary).get("index", 0)) == scenario_index:
+			_apply_scenario_overrides(entry, out_layers, out_tags, out_stamps)
+			return
+
+
+## Folds one scenario's overrides into the disabled lookups: value false disables (adds), value
+## true re-enables (removes), mirroring the editor's layered COMMON + scenario evaluation.
+func _apply_scenario_overrides(scenario: Variant, out_layers: Dictionary[int, bool], out_tags: Dictionary[String, bool], out_stamps: Dictionary[String, bool]) -> void:
+	if not scenario is Dictionary:
+		return
+	for pair: Variant in (scenario as Dictionary).get("layer_overrides", []):
+		if pair is Array and (pair as Array).size() == 2:
+			if bool(pair[1]):
+				out_layers.erase(int(pair[0]))
+			else:
+				out_layers[int(pair[0])] = true
+	for pair: Variant in (scenario as Dictionary).get("tag_overrides", []):
+		if pair is Array and (pair as Array).size() == 2:
+			if bool(pair[1]):
+				out_tags.erase(str(pair[0]))
+			else:
+				out_tags[str(pair[0])] = true
+	for pair: Variant in (scenario as Dictionary).get("stamp_overrides", []):
+		if pair is Array and (pair as Array).size() == 2:
+			if bool(pair[1]):
+				out_stamps.erase(str(pair[0]))
+			else:
+				out_stamps[str(pair[0])] = true
 
 
 ## True if none of the object's tags were disabled by the active scenario.

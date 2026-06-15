@@ -12,6 +12,10 @@ const COMMON_INDEX: int = 0
 
 
 @export var index: int = 0
+## Player-facing name shown on the shine select screen (the editor still lists scenarios by number).
+@export var display_name: String = ""
+## Whether this scenario shows up as a selectable shine on the shine select screen.
+@export var show_in_shine_select: bool = true
 @export var layer_overrides: Dictionary[int, bool] = {}
 @export var tag_overrides: Dictionary[String, bool] = {}
 @export var stamp_overrides: Dictionary[String, bool] = {}
@@ -67,6 +71,8 @@ func serialize() -> Dictionary:
 		stamps.append([k, stamp_overrides[k]])
 	return {
 		"index": index,
+		"display_name": display_name,
+		"show_in_shine_select": show_in_shine_select,
 		"layer_overrides": layers,
 		"tag_overrides": tags,
 		"stamp_overrides": stamps,
@@ -76,6 +82,8 @@ func serialize() -> Dictionary:
 static func deserialize(data: Dictionary) -> LDScenario:
 	var scenario: LDScenario = LDScenario.new()
 	scenario.index = int(data.get("index", 0))
+	scenario.display_name = str(data.get("display_name", ""))
+	scenario.show_in_shine_select = bool(data.get("show_in_shine_select", true))
 	for pair: Variant in data.get("layer_overrides", []):
 		if pair is Array and (pair as Array).size() == 2:
 			scenario.layer_overrides[int(pair[0])] = bool(pair[1])
