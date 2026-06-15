@@ -14,6 +14,7 @@ extends MarginContainer
 @export var gradient_rows: VBoxContainer
 @export var gradient_top: ColorPickerButton
 @export var gradient_bottom: ColorPickerButton
+@export var backdrop_preview: TextureRect
 
 @export var layer_list: ItemList
 @export var add_layer_button: Button
@@ -21,10 +22,12 @@ extends MarginContainer
 @export var move_down_button: Button
 @export var remove_layer_button: Button
 @export var layer_placeholder: Label
+@export var layer_preview: TextureRect
 @export var layer_fields: VBoxContainer
 @export var texture_option: OptionButton
 @export var parallax_spin: SpinBox
-@export var modulate_picker: ColorPickerButton
+@export var custom_color_check: CheckButton
+@export var color_picker: ColorPickerButton
 @export var offset_x: SpinBox
 @export var offset_y: SpinBox
 @export var autoscroll_x: SpinBox
@@ -42,9 +45,18 @@ func _ready() -> void:
 	type_option.add_item("Gradient", LDBackground.Backdrop.GRADIENT)
 	type_option.item_selected.connect(_on_type_selected)
 
-	solid_color.color_changed.connect(func(c: Color) -> void: _commit(_handler().set_solid_color.bind(c)))
-	gradient_top.color_changed.connect(func(c: Color) -> void: _commit(_handler().set_gradient_top.bind(c)))
-	gradient_bottom.color_changed.connect(func(c: Color) -> void: _commit(_handler().set_gradient_bottom.bind(c)))
+	solid_color.color_changed.connect(func(c: Color) -> void:
+		_commit(_handler().set_solid_color.bind(c))
+		_update_backdrop_preview()
+	)
+	gradient_top.color_changed.connect(func(c: Color) -> void:
+		_commit(_handler().set_gradient_top.bind(c))
+		_update_backdrop_preview()
+	)
+	gradient_bottom.color_changed.connect(func(c: Color) -> void:
+		_commit(_handler().set_gradient_bottom.bind(c))
+		_update_backdrop_preview()
+	)
 
 	add_layer_button.pressed.connect(_on_add_layer)
 	move_up_button.pressed.connect(_on_move_layer.bind(-1))
@@ -54,7 +66,10 @@ func _ready() -> void:
 
 	texture_option.item_selected.connect(_on_texture_selected)
 	parallax_spin.value_changed.connect(func(v: float) -> void: _set_field("parallax", v))
-	modulate_picker.color_changed.connect(func(c: Color) -> void: _set_field("modulate", c))
+	custom_color_check.toggled.connect(_on_custom_color_toggled)
+	# Both pickers edit the layer's modulate; in custom-color mode it is the grayscale tint, otherwise
+	# a plain multiply.
+	color_picker.color_changed.connect(func(c: Color) -> void: _set_field("modulate", c))
 	# Offset Y is shown flipped (negative = down) so it reads intuitively; storage keeps Godot's
 	# +y-down convention, so negate on the way in and out.
 	offset_x.value_changed.connect(func(_v: float) -> void: _set_field("offset", Vector2(offset_x.value, -offset_y.value)))
@@ -121,7 +136,8 @@ func _update_editability() -> void:
 	move_down_button.disabled = not custom or _selected_layer < 0 or _selected_layer >= _handler().get_background().layers.size() - 1
 	texture_option.disabled = not custom
 	parallax_spin.editable = custom
-	modulate_picker.disabled = not custom
+	custom_color_check.disabled = not custom
+	color_picker.disabled = not custom
 	offset_x.editable = custom
 	offset_y.editable = custom
 	autoscroll_x.editable = custom
@@ -157,6 +173,27 @@ func _on_type_selected(index: int) -> void:
 func _update_backdrop_rows(type: int) -> void:
 	solid_row.visible = type == LDBackground.Backdrop.SOLID
 	gradient_rows.visible = type == LDBackground.Backdrop.GRADIENT
+	_update_backdrop_preview()
+
+
+## Shows the current backdrop in the preview, mirroring LDBackground._build_backdrop(): a vertical
+## gradient, or a flat fill for a solid color (both gradient stops set to it).
+func _update_backdrop_preview() -> void:
+	var bg: LDBackground = _handler().get_background()
+	var gradient: Gradient = Gradient.new()
+	if bg.backdrop_type == LDBackground.Backdrop.GRADIENT:
+		gradient.set_color(0, bg.gradient_bottom)
+		gradient.set_color(1, bg.gradient_top)
+	else:
+		gradient.set_color(0, bg.solid_color)
+		gradient.set_color(1, bg.solid_color)
+	var tex: GradientTexture2D = GradientTexture2D.new()
+	tex.gradient = gradient
+	tex.width = 1
+	tex.height = 128
+	tex.fill_from = Vector2(0.0, 1.0)
+	tex.fill_to = Vector2(0.0, 0.0)
+	backdrop_preview.texture = tex
 
 #endregion
 
@@ -222,8 +259,9 @@ func _on_layer_selected(index: int) -> void:
 func _show_layer_detail(index: int) -> void:
 	_selected_layer = index
 	var has_layer: bool = index >= 0
-	# The detail column stays visible; swap between the fields and a "select a layer" prompt.
+	# The detail column stays visible; swap between the preview + fields and a "select a layer" prompt.
 	layer_fields.visible = has_layer
+	layer_preview.visible = has_layer
 	layer_placeholder.visible = not has_layer
 	remove_layer_button.disabled = not has_layer or not _handler().is_custom()
 	if not has_layer:
@@ -235,12 +273,52 @@ func _show_layer_detail(index: int) -> void:
 		if texture_option.get_item_metadata(i) == layer.texture:
 			texture_option.select(i)
 	parallax_spin.value = layer.parallax
-	modulate_picker.color = layer.modulate
+	custom_color_check.button_pressed = layer.custom_color
+	# The same modulate drives both pickers; only one row is shown at a time.
+	color_picker.color = layer.modulate
 	offset_x.value = layer.offset.x
 	offset_y.value = -layer.offset.y
 	autoscroll_x.value = layer.autoscroll.x
 	autoscroll_y.value = layer.autoscroll.y
 	_setting_fields = false
+	_update_color_rows()
+	_update_preview()
+
+
+## Mirrors build_into()'s per-layer look in the detail preview: a plain modulate, or the grayscale
+## tint shader when custom color is on.
+func _update_preview() -> void:
+	if _selected_layer < 0:
+		layer_preview.visible = false
+		return
+	var layer: LDBackgroundLayer = _handler().get_background().layers[_selected_layer]
+	layer_preview.texture = layer.texture
+	if not layer.texture:
+		layer_preview.material = null
+		return
+	if layer.custom_color:
+		var mat: ShaderMaterial = layer_preview.material as ShaderMaterial
+		if not mat:
+			mat = ShaderMaterial.new()
+			mat.shader = LDBackground.TINT_SHADER
+			layer_preview.material = mat
+		mat.set_shader_parameter(&"tint_color", layer.modulate)
+		layer_preview.modulate = Color.WHITE
+	else:
+		layer_preview.material = null
+		layer_preview.modulate = layer.modulate
+
+
+## When custom color is on, the texture is grayscaled and tinted by the Color picker, so the plain
+## Modulate row is hidden in favor of the Color row (and vice versa).
+func _on_custom_color_toggled(on: bool) -> void:
+	_set_field("custom_color", on)
+	_update_color_rows()
+
+
+func _update_color_rows() -> void:
+	var custom: bool = custom_color_check.button_pressed
+	color_picker.visible = custom
 
 
 func _on_texture_selected(index: int) -> void:
@@ -251,5 +329,6 @@ func _set_field(key: String, value: Variant) -> void:
 	if _setting_fields or _selected_layer < 0:
 		return
 	_handler().set_layer_field(_selected_layer, key, value)
+	_update_preview()
 
 #endregion

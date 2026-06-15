@@ -8,6 +8,9 @@ extends Resource
 
 enum Backdrop { SOLID, GRADIENT }
 
+## Grayscale-tint shader applied to a layer whose `custom_color` is enabled.
+const TINT_SHADER: Shader = preload("res://core/shader/background_tint.gdshader")
+
 
 ## Display name when this resource is a preset (empty for the working copy / custom backgrounds).
 @export var preset_name: String = ""
@@ -81,7 +84,15 @@ func build_into(root: Node) -> void:
 
 		var sprite: Sprite2D = Sprite2D.new()
 		sprite.texture = layer.texture
-		sprite.modulate = layer.modulate
+		if layer.custom_color:
+			# Desaturate the layer and recolor it by the modulate via the tint shader, leaving the
+			# node modulate white so the color isn't applied twice.
+			var mat: ShaderMaterial = ShaderMaterial.new()
+			mat.shader = TINT_SHADER
+			mat.set_shader_parameter(&"tint_color", layer.modulate)
+			sprite.material = mat
+		else:
+			sprite.modulate = layer.modulate
 		# Sit the sprite flush against its anchored edge: top edge on a top anchor, bottom edge on
 		# a bottom anchor. The layer's offset then nudges from there.
 		if layer.texture:

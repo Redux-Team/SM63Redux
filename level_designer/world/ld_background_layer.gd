@@ -11,6 +11,9 @@ enum Anchor { BOTTOM, TOP }
 @export var texture: Texture2D
 @export var parallax: float = 0.5
 @export var modulate: Color = Color.WHITE
+## When true, `modulate` is applied as a grayscale tint (the layer is desaturated, then colored)
+## instead of a plain multiply, so a single color restyles the whole layer.
+@export var custom_color: bool = false
 @export var offset: Vector2 = Vector2.ZERO
 @export var autoscroll: Vector2 = Vector2.ZERO
 @export var repeat: bool = false
@@ -22,6 +25,7 @@ func serialize() -> Dictionary:
 		"texture": _texture_uid(),
 		"parallax": parallax,
 		"modulate": Packer.color_to_array(modulate),
+		"custom_color": custom_color,
 		"offset": Packer.vec2_to_array(offset),
 		"autoscroll": Packer.vec2_to_array(autoscroll),
 		"repeat": repeat,
@@ -36,6 +40,7 @@ static func deserialize(data: Dictionary) -> LDBackgroundLayer:
 		layer.texture = load(uid) as Texture2D
 	layer.parallax = float(data.get("parallax", 0.5))
 	layer.modulate = Packer.array_to_color(data.get("modulate", [1.0, 1.0, 1.0, 1.0]))
+	layer.custom_color = bool(data.get("custom_color", false))
 	layer.offset = Packer.array_to_vec2(data.get("offset", [0.0, 0.0]))
 	layer.autoscroll = Packer.array_to_vec2(data.get("autoscroll", [0.0, 0.0]))
 	layer.repeat = bool(data.get("repeat", false))
