@@ -7,12 +7,15 @@ extends Node
 @export var _parallaxing_button: Button
 @export var _ghosting_button: Button
 @export var _modulation_button: Button
+@export var _follow_button: Button
 
 
 var _parallaxing_enabled: bool = false
 var _ghosting_enabled: bool = false
 ## Layer modulation tints are applied by default; the toggle turns them off to show true colors.
 var _modulation_enabled: bool = true
+## When on, the current selection is carried along (relative to the active layer) as you switch layers.
+var _follow_enabled: bool = false
 
 
 func is_parallaxing_enabled() -> bool:
@@ -25,6 +28,10 @@ func is_ghosting_enabled() -> bool:
 
 func is_modulation_enabled() -> bool:
 	return _modulation_enabled
+
+
+func is_follow_enabled() -> bool:
+	return _follow_enabled
 
 
 func set_parallaxing_enabled(enabled: bool) -> void:
@@ -49,3 +56,8 @@ func set_modulation_enabled(enabled: bool) -> void:
 	for layer: LDLayer in LD.get_area().layers:
 		layer.set_modulating(enabled)
 	LD.get_editor_viewport().refresh()
+
+
+func set_follow_enabled(enabled: bool) -> void:
+	_follow_enabled = enabled
+	_follow_button.set_pressed_no_signal(enabled)

@@ -284,6 +284,30 @@ func clear_selection() -> void:
 	set_selected_objects([])
 
 
+## Switches the active layer to `target_index`. With "Follow" on, every selected layerable object
+## is shifted by the same delta as the active layer (creating layers at the ends as needed), so the
+## selection travels relative to where you move.
+func navigate_active_layer(target_index: int) -> void:
+	var area: LDArea = LDLevel.get_active_area()
+	var delta: int = target_index - area.get_active_layer_index()
+	var following: Array[LDObject] = []
+	if delta != 0 and LD.get_ui().get_viewport_handler().is_follow_enabled():
+		following = get_selected_objects().duplicate()
+
+	area.set_active_layer(target_index)
+
+	for obj: LDObject in following:
+		if not is_instance_valid(obj):
+			continue
+		var game_object: GameObject = GameDB.get_db().find_game_object(obj.source_object_id)
+		if not game_object or not (game_object.ld_flags & (1 << GameObject.LD_LAYERABLE)):
+			continue
+		area.move_object_to_layer(obj, obj.get_layer_index() + delta)
+
+	if not following.is_empty():
+		area.refresh_layer_visuals()
+
+
 ## Returns whether the viewport is currently in a panning state.
 func is_panning() -> bool:
 	return is_mouse_panning or _touch_mode == 1

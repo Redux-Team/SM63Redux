@@ -87,7 +87,7 @@ func _on_layer_selected(pos: int) -> void:
 		return
 	# Read the target before switching: set_active_layer may drop the previous (empty, unnamed) one.
 	var target: int = _area().layers[pos].index
-	_area().set_active_layer(target)
+	LD.get_editor_viewport().navigate_active_layer(target)
 	_refresh()
 
 

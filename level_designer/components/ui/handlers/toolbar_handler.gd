@@ -272,7 +272,7 @@ func _step_existing_layer(delta: int) -> void:
 			break
 	var target: int = clampi(pos + delta, 0, area.layers.size() - 1)
 	if target != pos:
-		area.set_active_layer(area.layers[target].index)
+		LD.get_editor_viewport().navigate_active_layer(area.layers[target].index)
 
 
 func _refresh_layer_label() -> void:

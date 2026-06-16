@@ -119,6 +119,15 @@ func _owning_area() -> LDArea:
 	return node as LDArea
 
 
+## The index of the LDLayer this object currently lives on (objects sit under layer → objects_root).
+func get_layer_index() -> int:
+	var node: Node = get_parent()
+	while node and node is not LDLayer:
+		node = node.get_parent()
+	var layer: LDLayer = node as LDLayer
+	return layer.index if layer else 0
+
+
 func bind_to_active_layer() -> void:
 	LDLevel.get_active_area().active_layer_changed.connect(func(index: int) -> void:
 		LD.get_area().move_object_to_layer(self, index)

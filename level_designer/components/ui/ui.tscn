@@ -222,11 +222,12 @@ script = ExtResource("11_winh")
 _window = NodePath("../WindowLayer/Window")
 _window_defs = Array[ExtResource("16_wdef")]([SubResource("WindowDef_browser"), SubResource("WindowDef_properties"), SubResource("WindowDef_layer"), SubResource("WindowDef_area"), SubResource("WindowDef_stamp"), SubResource("WindowDef_scenario"), SubResource("WindowDef_tag"), SubResource("WindowDef_background"), SubResource("WindowDef_picker")])
 
-[node name="ViewportHandler" type="Node" parent="." unique_id=503310054 node_paths=PackedStringArray("_parallaxing_button", "_ghosting_button", "_modulation_button")]
+[node name="ViewportHandler" type="Node" parent="." unique_id=503310054 node_paths=PackedStringArray("_parallaxing_button", "_ghosting_button", "_modulation_button", "_follow_button")]
 script = ExtResource("12_vph")
 _parallaxing_button = NodePath("../ViewportUI/VBoxContainer4/ParallaxingButton")
 _ghosting_button = NodePath("../ViewportUI/VBoxContainer4/GhostingButton")
 _modulation_button = NodePath("../ViewportUI/VBoxContainer4/ModulationButton")
+_follow_button = NodePath("../ViewportUI/VBoxContainer4/FollowButton")
 
 [node name="ToolbarHandler" type="Node" parent="." unique_id=503310055 node_paths=PackedStringArray("_layer_name_label", "_prev_layer_button", "_next_layer_button", "_area_name_label", "_prev_area_button", "_next_area_button")]
 script = ExtResource("13_tbh")
@@ -372,6 +373,12 @@ size_flags_horizontal = 8
 toggle_mode = true
 button_pressed = true
 text = "Modulate"
+
+[node name="FollowButton" type="Button" parent="ViewportUI/VBoxContainer4" unique_id=1284945160]
+layout_mode = 2
+size_flags_horizontal = 8
+toggle_mode = true
+text = "Follow"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="ViewportUI" unique_id=1713123835]
 anchors_preset = 1
@@ -673,6 +680,7 @@ will be lost!"
 [connection signal="toggled" from="ViewportUI/VBoxContainer4/ParallaxingButton" to="ViewportHandler" method="set_parallaxing_enabled"]
 [connection signal="toggled" from="ViewportUI/VBoxContainer4/GhostingButton" to="ViewportHandler" method="set_ghosting_enabled"]
 [connection signal="toggled" from="ViewportUI/VBoxContainer4/ModulationButton" to="ViewportHandler" method="set_modulation_enabled"]
+[connection signal="toggled" from="ViewportUI/VBoxContainer4/FollowButton" to="ViewportHandler" method="set_follow_enabled"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/SelectButton" to="ToolbarHandler" method="_on_select_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/BrushButton" to="ToolbarHandler" method="_on_brush_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/MoveButton" to="ToolbarHandler" method="_on_move_button_pressed"]
