@@ -5,7 +5,7 @@ extends State
 func _on_physics_tick(_delta: float) -> void:
 	if abs(player.move_dir) == 0 and not player.is_diving:
 		var friction: FrictionComponent = player.get_component(FrictionComponent)
-		friction.apply(0.4)
+		friction.apply(player.get_movement_handler().friction_factor)
 	
 	player.is_falling = player.velocity.y > 0
 	_handle_ground_pound()
