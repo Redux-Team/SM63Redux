@@ -65,6 +65,32 @@ func create_scenario() -> LDScenario:
 	return scenario
 
 
+## Reorders a numbered scenario by swapping its index number with its neighbour `delta` away (the
+## list, and the shine select, are ordered by index). Returns the scenario's new index.
+func move_scenario(index: int, delta: int) -> int:
+	if index == LDScenario.COMMON_INDEX:
+		return index
+	var ordered: Array[LDScenario] = get_numbered_scenarios()
+	var pos: int = -1
+	for i: int in ordered.size():
+		if ordered[i].index == index:
+			pos = i
+			break
+	var target: int = pos + delta
+	if pos < 0 or target < 0 or target >= ordered.size():
+		return index
+	var a: LDScenario = ordered[pos]
+	var b: LDScenario = ordered[target]
+	var ai: int = a.index
+	var bi: int = b.index
+	a.index = bi
+	b.index = ai
+	_scenarios[bi] = a
+	_scenarios[ai] = b
+	scenario_changed.emit(a)
+	return bi
+
+
 func remove_scenario(index: int) -> void:
 	if index == LDScenario.COMMON_INDEX:
 		return
@@ -95,6 +121,23 @@ func set_show_in_shine_select(index: int, value: bool) -> void:
 		return
 	scenario.show_in_shine_select = value
 	scenario_changed.emit(scenario)
+
+
+func set_area(index: int, area_name: String) -> void:
+	var scenario: LDScenario = get_scenario(index)
+	if not scenario:
+		return
+	scenario.area_name = area_name
+	scenario_changed.emit(scenario)
+
+
+## Repoints scenarios linked to a renamed area so their area reference keeps resolving.
+func rename_area_references(old_name: String, new_name: String) -> void:
+	if get_common().area_name == old_name:
+		get_common().area_name = new_name
+	for scenario: LDScenario in _scenarios.values():
+		if scenario.area_name == old_name:
+			scenario.area_name = new_name
 
 
 func set_layer_override(index: int, layer_index: int, state: Variant) -> void:

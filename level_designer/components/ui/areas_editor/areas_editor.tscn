@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://bar3aedit0r7x"]
+
+[ext_resource type="Script" path="res://level_designer/components/ui/areas_editor/areas_editor.gd" id="1_aedit"]
+
+[node name="AreaEditor" type="MarginContainer" node_paths=PackedStringArray("area_list", "add_button", "move_up_button", "move_down_button", "remove_button", "detail", "name_edit", "switch_button")]
+custom_minimum_size = Vector2(470, 0)
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+script = ExtResource("1_aedit")
+area_list = NodePath("Columns/List/AreaList")
+add_button = NodePath("Columns/List/AddButton")
+move_up_button = NodePath("Columns/List/Buttons/MoveUpButton")
+move_down_button = NodePath("Columns/List/Buttons/MoveDownButton")
+remove_button = NodePath("Columns/List/Buttons/RemoveButton")
+detail = NodePath("Columns/Detail")
+name_edit = NodePath("Columns/Detail/NameRow/NameEdit")
+switch_button = NodePath("Columns/Detail/SwitchButton")
+
+[node name="Columns" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="List" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Header" type="Label" parent="Columns/List"]
+layout_mode = 2
+text = "Areas"
+
+[node name="AreaList" type="ItemList" parent="Columns/List"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AddButton" type="Button" parent="Columns/List"]
+layout_mode = 2
+text = "Add Area"
+
+[node name="Buttons" type="HBoxContainer" parent="Columns/List"]
+layout_mode = 2
+
+[node name="MoveUpButton" type="Button" parent="Columns/List/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Move Up"
+
+[node name="MoveDownButton" type="Button" parent="Columns/List/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Move Down"
+
+[node name="RemoveButton" type="Button" parent="Columns/List/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Remove"
+
+[node name="Sep" type="VSeparator" parent="Columns"]
+layout_mode = 2
+
+[node name="Detail" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Header" type="Label" parent="Columns/Detail"]
+layout_mode = 2
+text = "Area"
+
+[node name="NameRow" type="HBoxContainer" parent="Columns/Detail"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Columns/Detail/NameRow"]
+layout_mode = 2
+text = "Name"
+
+[node name="NameEdit" type="LineEdit" parent="Columns/Detail/NameRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Unnamed"
+
+[node name="SwitchButton" type="Button" parent="Columns/Detail"]
+layout_mode = 2
+text = "Switch to This Area"
+
+[node name="Hint" type="Label" parent="Columns/Detail"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "Each area has its own layers and background. Switch areas to edit them; scenarios choose which area loads."
+autowrap_mode = 2

@@ -94,7 +94,7 @@ func _update_buttons() -> void:
 
 func _on_add() -> void:
 	var selection: Array[LDObject] = _selection()
-	var typed: String = name_edit.text.strip_edges()
+	var typed: String = LDText.sanitize_name(name_edit.text).strip_edges()
 	if selection.is_empty():
 		if typed.is_empty() or typed.contains(":"):
 			return

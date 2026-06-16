@@ -39,7 +39,11 @@ func _get_shine_scenarios() -> Array[Dictionary]:
 			continue
 		var index: int = int((entry as Dictionary).get("index", 0))
 		if index >= 1 and bool((entry as Dictionary).get("show_in_shine_select", true)):
-			result.append({"index": index, "name": str((entry as Dictionary).get("display_name", ""))})
+			result.append({
+				"index": index,
+				"name": str((entry as Dictionary).get("display_name", "")),
+				"area_name": str((entry as Dictionary).get("area_name", "")),
+			})
 	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.get("index", 0)) < int(b.get("index", 0)))
 	return result
 

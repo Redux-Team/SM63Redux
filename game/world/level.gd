@@ -156,8 +156,6 @@ func load_from_dict(data: Dictionary, scenario_index: int = 0) -> Error:
 
 	_clear()
 
-	_build_background(data)
-
 	# Apply the COMMON baseline, then the chosen numbered scenario's overrides on top: layers,
 	# tags and stamps left disabled are simply not spawned.
 	var disabled_layers: Dictionary[int, bool] = {}
@@ -165,10 +163,20 @@ func load_from_dict(data: Dictionary, scenario_index: int = 0) -> Error:
 	var disabled_stamps: Dictionary[String, bool] = {}
 	_read_scenario(data, scenario_index, disabled_layers, disabled_tags, disabled_stamps)
 
-	for area_data: Variant in normalized.get("areas", []):
-		if not area_data is Dictionary:
+	# Only one area loads at a time: the one the chosen scenario links to (defaulting to the first).
+	var areas_list: Array = normalized.get("areas", [])
+	var target_name: String = _resolve_area_name(data, scenario_index)
+	if target_name.is_empty() and not areas_list.is_empty() and areas_list[0] is Dictionary:
+		target_name = str((areas_list[0] as Dictionary).get("name", "default"))
+
+	for area_variant: Variant in areas_list:
+		if not area_variant is Dictionary:
 			continue
-		var current_area: LevelArea = _get_or_create_area(area_data.get("name", "default"))
+		var area_data: Dictionary = area_variant
+		if str(area_data.get("name", "default")) != target_name:
+			continue
+		_build_background(area_data, data)
+		var current_area: LevelArea = _get_or_create_area(str(area_data.get("name", "default")))
 		for layer_data: Variant in area_data.get("layers", []):
 			if not layer_data is Dictionary:
 				continue
@@ -191,10 +199,12 @@ func load_from_dict(data: Dictionary, scenario_index: int = 0) -> Error:
 				if not _scenario_allows(obj_data, disabled_tags):
 					continue
 				_instantiate_object(obj_data, layer, current_area)
+		break
 
 	# Stamps are stored as a definition plus instances; expand each placement into real
-	# objects so they exist at runtime (the editor rebuilds them from instances instead).
-	_spawn_stamps(data, disabled_layers, disabled_tags, disabled_stamps)
+	# objects so they exist at runtime (the editor rebuilds them from instances instead). Only
+	# instances belonging to the loaded area are spawned.
+	_spawn_stamps(data, target_name, disabled_layers, disabled_tags, disabled_stamps)
 
 	_loaded = true
 	loaded.emit()
@@ -208,17 +218,19 @@ func _play_music_when_visible() -> void:
 	create_tween().tween_callback(music_player.play).set_delay(0.5)
 
 
-## Builds the saved background (backdrop + parallax layers) into a CanvasLayer behind the
-## level, using the same LDBackground.build_into() the editor uses.
-func _build_background(data: Dictionary) -> void:
+## Builds the loaded area's background (backdrop + parallax layers) into a CanvasLayer behind the
+## level, using the same LDBackground.build_into() the editor uses. Legacy levels stored a single
+## background under editor.background, so fall back to that when the area has none.
+func _build_background(area_data: Dictionary, data: Dictionary) -> void:
 	var existing: Node = get_node_or_null(^"Background")
 	if existing:
 		existing.free()
 
-	var editor: Variant = data.get("editor", {})
-	if not editor is Dictionary:
-		return
-	var bg_data: Variant = (editor as Dictionary).get("background", {})
+	var bg_data: Variant = area_data.get("background", null)
+	if not bg_data is Dictionary or (bg_data as Dictionary).is_empty():
+		var editor: Variant = data.get("editor", {})
+		if editor is Dictionary:
+			bg_data = (editor as Dictionary).get("background", {})
 	if not bg_data is Dictionary or (bg_data as Dictionary).is_empty():
 		return
 
@@ -227,6 +239,25 @@ func _build_background(data: Dictionary) -> void:
 	layer.layer = -2
 	add_child(layer)
 	LDBackgroundDB.resolve(bg_data).build_into(layer)
+
+
+## The name of the area the chosen scenario loads: the numbered scenario's area_name, else COMMON's,
+## else empty (meaning the first area).
+func _resolve_area_name(data: Dictionary, scenario_index: int) -> String:
+	var scenarios: Variant = data.get("scenarios", {})
+	if not scenarios is Dictionary:
+		return ""
+	if scenario_index > 0:
+		for entry: Variant in (scenarios as Dictionary).get("scenarios", []):
+			if entry is Dictionary and int((entry as Dictionary).get("index", 0)) == scenario_index:
+				var scenario_area: String = str((entry as Dictionary).get("area_name", ""))
+				if not scenario_area.is_empty():
+					return scenario_area
+				break
+	var common: Variant = (scenarios as Dictionary).get("common", {})
+	if common is Dictionary:
+		return str((common as Dictionary).get("area_name", ""))
+	return ""
 
 
 ## Reads the COMMON baseline plus the chosen numbered scenario into "disabled" lookups: a layer,
@@ -279,7 +310,23 @@ func _scenario_allows(obj_data: Dictionary, disabled_tags: Dictionary[String, bo
 
 ## Expands every stamp placement (instance) into concrete level objects, applying the same
 ## scenario filtering as regular objects.
-func _spawn_stamps(data: Dictionary, disabled_layers: Dictionary[int, bool], disabled_tags: Dictionary[String, bool], disabled_stamps: Dictionary[String, bool]) -> void:
+## The stamp instances placed in the loaded area: the per-area dict's entry for this area, or (for
+## legacy saves) the flat array filtered by each instance's area_name.
+func _stamp_area_instances(instances: Variant, area_name: String) -> Array:
+	if instances is Dictionary:
+		var area_list: Variant = (instances as Dictionary).get(area_name, [])
+		return area_list if area_list is Array else []
+	var result: Array = []
+	if instances is Array:
+		for instance: Variant in instances:
+			if instance is Dictionary:
+				var inst_area: String = str((instance as Dictionary).get("area_name", ""))
+				if inst_area.is_empty() or inst_area == area_name:
+					result.append(instance)
+	return result
+
+
+func _spawn_stamps(data: Dictionary, area_name: String, disabled_layers: Dictionary[int, bool], disabled_tags: Dictionary[String, bool], disabled_stamps: Dictionary[String, bool]) -> void:
 	if not is_instance_valid(_active_area):
 		return
 	var stamps: Variant = data.get("stamps", [])
@@ -292,7 +339,7 @@ func _spawn_stamps(data: Dictionary, disabled_layers: Dictionary[int, bool], dis
 		if disabled_stamps.has(str((stamp_data as Dictionary).get("id", ""))):
 			continue
 		var entries: Array = (stamp_data as Dictionary).get("objects", [])
-		for instance: Variant in (stamp_data as Dictionary).get("instances", []):
+		for instance: Variant in _stamp_area_instances((stamp_data as Dictionary).get("instances", {}), area_name):
 			if not instance is Dictionary:
 				continue
 			var instance_pos: Vector2 = Packer.array_to_vec2((instance as Dictionary).get("position", [0.0, 0.0]))
@@ -351,7 +398,7 @@ func _normalize(data: Dictionary) -> Dictionary:
 		return {
 			"version": data.get("version", 1),
 			"areas": [{
-				"name": "default",
+				"name": "Area 1",
 				"layers": data.get("layers", []),
 			}],
 		}

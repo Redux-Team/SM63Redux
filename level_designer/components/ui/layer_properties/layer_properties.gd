@@ -162,14 +162,14 @@ func _show_detail(pos: int) -> void:
 	_setting_fields = false
 
 
-func _on_name_changed(text: String) -> void:
+func _on_name_changed(_text: String) -> void:
 	if _setting_fields:
 		return
 	var sel: PackedInt32Array = layer_list.get_selected_items()
 	if sel.is_empty():
 		return
 	var layer: LDLayer = _area().layers[sel[0]]
-	_area().set_layer_name(layer, text)
+	_area().set_layer_name(layer, LDText.sanitize_edit(name_edit))
 	layer_list.set_item_text(sel[0], _label(layer, _area().get_player_layer_index()))
 
 

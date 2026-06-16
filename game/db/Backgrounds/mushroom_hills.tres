@@ -1,34 +1,12 @@
 [gd_resource type="Resource" script_class="LDBackground" format=3 uid="uid://282cjlyv8o6q"]
 
 [ext_resource type="Script" uid="uid://pix2reyi4xnf" path="res://level_designer/world/ld_background_layer.gd" id="1_vndor"]
-[ext_resource type="Texture2D" uid="uid://psk8ih50fovd" path="res://assets/textures/world/background/clouds_0/bg_clouds_01.png" id="2_i0qra"]
-[ext_resource type="Texture2D" uid="uid://cg0354brx4x1h" path="res://assets/textures/world/background/clouds_0/bg_clouds_02.png" id="3_jkj5r"]
-[ext_resource type="Texture2D" uid="uid://dp3i27o4vk7jm" path="res://assets/textures/world/background/hills_0/bg_hills_0.png" id="4_620hh"]
+[ext_resource type="Resource" uid="uid://gt4pctkxmaay" path="res://game/db/Backgrounds/Layers/bottom_clouds.tres" id="2_vndor"]
+[ext_resource type="Resource" uid="uid://crhta8lkeg71e" path="res://game/db/Backgrounds/Layers/upper_clouds.tres" id="3_vndor"]
+[ext_resource type="Resource" uid="uid://gt4q5s2tf0iy" path="res://game/db/Backgrounds/Layers/distant_hills.tres" id="4_vndor"]
 [ext_resource type="Texture2D" uid="uid://dumcbic4y5b4i" path="res://assets/textures/world/background/hills_0/bg_hills_1.png" id="5_i2rl5"]
 [ext_resource type="Texture2D" uid="uid://nryk3t4ejhvh" path="res://assets/textures/world/background/hills_0/bg_hills_2.png" id="6_2bga0"]
 [ext_resource type="Script" uid="uid://cj24lefunqvhu" path="res://level_designer/world/ld_background.gd" id="7_lj48c"]
-
-[sub_resource type="Resource" id="Resource_ylwbb"]
-script = ExtResource("1_vndor")
-texture = ExtResource("2_i0qra")
-parallax = 0.0
-offset = Vector2(0, 28)
-autoscroll = Vector2(-4, 0)
-repeat = true
-
-[sub_resource type="Resource" id="Resource_1gv22"]
-script = ExtResource("1_vndor")
-texture = ExtResource("3_jkj5r")
-parallax = 0.0
-autoscroll = Vector2(-4, 0)
-repeat = true
-anchor = 1
-
-[sub_resource type="Resource" id="Resource_0q6ah"]
-script = ExtResource("1_vndor")
-texture = ExtResource("4_620hh")
-parallax = 0.03
-repeat = true
 
 [sub_resource type="Resource" id="Resource_vhkm8"]
 script = ExtResource("1_vndor")
@@ -47,4 +25,4 @@ script = ExtResource("7_lj48c")
 preset_name = "Mushroom Hills"
 gradient_top = Color(0.4, 0.6313726, 1, 1)
 gradient_bottom = Color(0.30980393, 0.49019608, 0.8352941, 1)
-layers = Array[ExtResource("1_vndor")]([SubResource("Resource_ylwbb"), SubResource("Resource_1gv22"), SubResource("Resource_0q6ah"), SubResource("Resource_vhkm8"), SubResource("Resource_ykiyx")])
+layers = Array[ExtResource("1_vndor")]([ExtResource("2_vndor"), ExtResource("3_vndor"), ExtResource("4_vndor"), SubResource("Resource_vhkm8"), SubResource("Resource_ykiyx")])

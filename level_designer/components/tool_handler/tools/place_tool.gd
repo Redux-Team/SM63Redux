@@ -57,14 +57,8 @@ func _place_at(pos: Vector2) -> void:
 		return
 
 	var gh: LDStampHandler = LD.get_stamp_handler()
-	gh.place_linked(_armed_stamp.id, _next_instance_id(_armed_stamp), pos, LDLevel.get_active_area()._active_index)
-
-
-func _next_instance_id(stamp: LDStamp) -> String:
-	var index: int = 0
-	while stamp.has_instance(str(index)):
-		index += 1
-	return str(index)
+	var area_name: String = LDLevel.get_active_area().area_name
+	gh.place_linked(_armed_stamp.id, _armed_stamp.next_instance_id(area_name), pos, LDLevel.get_active_area()._active_index)
 
 
 func _spawn_ghost() -> void:

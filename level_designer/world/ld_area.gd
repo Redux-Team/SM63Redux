@@ -17,6 +17,17 @@ static var _inst: LDArea
 @export var layers: Array[LDLayer]
 
 
+## Player-facing name shown in the Areas list and used to link scenarios to this area.
+var area_name: String = ""
+## This area's own background (each area renders its own backdrop + parallax layers).
+var background: LDBackground
+## Preset name driving the background, or LDBackgroundDB.CUSTOM once it has been edited.
+var background_preset: String = ""
+## Per-area editor view: each area pans/zooms independently, like a separate level. Stripped on
+## export, so it only matters in the editor.
+var camera_position: Vector2 = Vector2.ZERO
+var camera_zoom: Vector2 = Vector2.ONE
+
 var _active_index: int = 0
 var _preview_mode: bool = false
 var _hidden_layers: Dictionary[int, bool] = {}
@@ -153,6 +164,37 @@ func _reorder_children() -> void:
 		move_child(layers[i], _background_root.get_index() + 1 + i)
 
 
+## Gives this area a fresh copy of the default background preset (used for new/blank areas).
+func apply_default_background() -> void:
+	var preset: LDBackground = LDBackgroundDB.get_preset(LDBackgroundHandler.DEFAULT_PRESET)
+	if not preset and not LDBackgroundDB.get_presets().is_empty():
+		preset = LDBackgroundDB.get_presets()[0]
+	if preset:
+		background = preset.duplicate(true) as LDBackground
+		background_preset = preset.preset_name
+	else:
+		background = LDBackground.new()
+		background_preset = LDBackgroundDB.CUSTOM
+
+
+## Saves the current editor viewport view into this area (called when leaving it).
+func store_view() -> void:
+	var viewport: LDViewport = LD.get_editor_viewport()
+	if not is_instance_valid(viewport):
+		return
+	camera_position = viewport.camera_position
+	camera_zoom = viewport.camera_zoom
+
+
+## Applies this area's saved view to the editor viewport (called when entering it).
+func restore_view() -> void:
+	var viewport: LDViewport = LD.get_editor_viewport()
+	if not is_instance_valid(viewport):
+		return
+	viewport.camera_position = camera_position
+	viewport.camera_zoom = camera_zoom
+
+
 ## Sets the background of this area into the given root, replacing any existing background.
 func set_background(root: Node2D, node: Node) -> void:
 	for child: Node in root.get_children():
@@ -169,6 +211,7 @@ func get_or_create_layer(index: int) -> LDLayer:
 	var new_layer: LDLayer = LDLayer.new()
 	new_layer.index = index
 	new_layer.is_parallaxing = LD.get_ui().get_viewport_handler().is_parallaxing_enabled()
+	new_layer.set_modulating(LD.get_ui().get_viewport_handler().is_modulation_enabled())
 	add_child(new_layer)
 	
 	var insert_pos: int = 0

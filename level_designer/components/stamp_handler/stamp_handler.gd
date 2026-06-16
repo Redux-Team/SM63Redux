@@ -31,6 +31,40 @@ func _persist_session() -> void:
 	LD.get_save_load_handler().save_session()
 
 
+## The area a stamp instance lives in, by name (falls back to the active area for legacy instances
+## saved before stamps were area-aware).
+func _area_for_name(area_name: String) -> LDArea:
+	for area: LDArea in LDLevel._inst.get_areas():
+		if area.area_name == area_name:
+			return area
+	return LDLevel.get_active_area()
+
+
+## Repoints stamp instances placed in a renamed area (the per-area key and each placed object's
+## address) so they still rehydrate into it.
+func rename_area_references(old_name: String, new_name: String) -> void:
+	for stamp: LDStamp in _stamps.values():
+		if stamp.instances.has(old_name):
+			var arr: Array = stamp.instances[old_name]
+			stamp.instances.erase(old_name)
+			if stamp.instances.has(new_name):
+				(stamp.instances[new_name] as Array).append_array(arr)
+			else:
+				stamp.instances[new_name] = arr
+	for obj: LDObject in _all_objects():
+		var parts: PackedStringArray = get_object_linked_stamp(obj).split(":")
+		if parts.size() == 3 and parts[1] == old_name:
+			obj.set_meta(&"linked_stamp", parts[0] + ":" + new_name + ":" + parts[2])
+
+
+## Every object across every area (stamp instances can live in any area, not just the active one).
+func _all_objects() -> Array[LDObject]:
+	var result: Array[LDObject] = []
+	for area: LDArea in LDLevel._inst.get_areas():
+		result.append_array(area.get_all_objects())
+	return result
+
+
 func get_stamp(id: String) -> LDStamp:
 	return _stamps.get(id, null)
 
@@ -42,7 +76,8 @@ func get_all_stamps() -> Array[LDStamp]:
 	return result
 
 
-## Stamps marked indexable, i.e. the ones the object browser lists for placement.
+## Stamps marked indexable, i.e. the ones the object browser lists for placement. Stamp definitions
+## are shared across all areas (only their placed instances are per-area).
 func get_indexable_stamps() -> Array[LDStamp]:
 	return get_all_stamps().filter(func(stamp: LDStamp) -> bool: return stamp.indexable)
 
@@ -96,8 +131,8 @@ func rename_stamp(old_id: String, new_id: String) -> bool:
 	_stamps[new_id] = stamp
 	_stamps.erase(old_id)
 
-	# Re-point placed instances ("old_id:unique" -> "new_id:unique").
-	for obj: LDObject in LDLevel.get_active_area().get_all_objects():
+	# Re-point placed instances ("old_id:unique" -> "new_id:unique") across every area.
+	for obj: LDObject in _all_objects():
 		var linked: String = get_object_linked_stamp(obj)
 		if linked.begins_with(old_id + ":"):
 			obj.set_meta(&"linked_stamp", new_id + linked.substr(old_id.length()))
@@ -169,7 +204,7 @@ func create_stamp_from_objects(objects: Array[LDObject], id: String = "") -> LDS
 
 ## True if any of the stamp's instances are currently placed in the level.
 func has_instances(stamp_id: String) -> bool:
-	for obj: LDObject in LDLevel.get_active_area().get_all_objects():
+	for obj: LDObject in _all_objects():
 		if get_object_linked_stamp(obj).begins_with(stamp_id + ":"):
 			return true
 	return false
@@ -180,7 +215,7 @@ func has_instances(stamp_id: String) -> bool:
 func bake_stamp(stamp_id: String) -> void:
 	if not has_stamp(stamp_id):
 		return
-	for obj: LDObject in LDLevel.get_active_area().get_all_objects():
+	for obj: LDObject in _all_objects():
 		if not get_object_linked_stamp(obj).begins_with(stamp_id + ":"):
 			continue
 		obj.remove_meta(&"linked_stamp")
@@ -196,21 +231,26 @@ func place_linked(stamp_id: String, unique_id: String, position: Vector2, layer_
 	if not stamp:
 		return false
 
-	if stamp.has_instance(unique_id):
+	# A placed stamp belongs to whichever area is active at placement time, indexed within it.
+	var area: LDArea = LDLevel.get_active_area()
+	var area_name: String = area.area_name
+	if stamp.has_instance(area_name, unique_id):
 		return false
 
-	var instance: Dictionary = stamp.add_instance(unique_id, position, layer_index)
-	var spawned: Array[LDObject] = _spawn_stamp_objects(stamp, position, layer_index)
+	var instance: Dictionary = stamp.add_instance(area_name, unique_id, position, layer_index)
+	var spawned: Array[LDObject] = _spawn_stamp_objects(stamp, position, layer_index, false, area)
 
+	var address: String = stamp.get_full_address(area_name, unique_id)
 	for obj: LDObject in spawned:
-		_mark_linked_object(obj, stamp.get_full_address(unique_id))
+		_mark_linked_object(obj, address)
 
-	var area: LDArea = LDLevel.get_active_area()
 	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Place Stamp: " + stamp_id + ":" + unique_id)
+	history.begin_action("Place Stamp: " + address)
 	history.add_do(func() -> void:
-		if not stamp.has_instance(unique_id):
-			stamp.instances.append(instance)
+		if not stamp.has_instance(area_name, unique_id):
+			if not stamp.instances.has(area_name):
+				stamp.instances[area_name] = []
+			stamp.instances[area_name].append(instance)
 		for obj: LDObject in spawned:
 			if is_instance_valid(obj) and not obj.get_parent():
 				var obj_layer: int = obj.get_meta(&"spawn_layer", layer_index)
@@ -218,7 +258,7 @@ func place_linked(stamp_id: String, unique_id: String, position: Vector2, layer_
 		instance_placed.emit(stamp, unique_id)
 	)
 	history.add_undo(func() -> void:
-		stamp.remove_instance(unique_id)
+		stamp.remove_instance(area_name, unique_id)
 		for obj: LDObject in spawned:
 			if is_instance_valid(obj) and obj.get_parent():
 				obj.get_parent().remove_child(obj)
@@ -230,35 +270,38 @@ func place_linked(stamp_id: String, unique_id: String, position: Vector2, layer_
 	return true
 
 
-func remove_instance(stamp_id: String, unique_id: String) -> void:
+func remove_instance(stamp_id: String, area_name: String, unique_id: String) -> void:
 	var stamp: LDStamp = get_stamp(stamp_id)
 	if not stamp:
 		return
 
-	var address: String = stamp.get_full_address(unique_id)
+	var address: String = stamp.get_full_address(area_name, unique_id)
+	var existing: Dictionary = stamp.get_instance(area_name, unique_id)
+	var inst_pos: Vector2 = Packer.array_to_vec2(existing.get("position", [0.0, 0.0]))
+	var inst_layer: int = int(existing.get("layer_index", 0))
+	var area: LDArea = _area_for_name(area_name)
 	var to_remove: Array[LDObject] = _get_objects_at_address(address)
 
 	var history: LDHistoryHandler = LD.get_history_handler()
 	history.begin_action("Remove Instance: " + address)
 	history.add_do(func() -> void:
-		stamp.remove_instance(unique_id)
+		stamp.remove_instance(area_name, unique_id)
 		for obj: LDObject in to_remove:
 			if is_instance_valid(obj) and obj.get_parent():
 				obj.get_parent().remove_child(obj)
 		instance_removed.emit(stamp, unique_id)
 	)
 	history.add_undo(func() -> void:
-		var area: LDArea = LDLevel.get_active_area()
-		stamp.add_instance(unique_id, Vector2.ZERO, 0)
+		stamp.add_instance(area_name, unique_id, inst_pos, inst_layer)
 		for obj: LDObject in to_remove:
 			if is_instance_valid(obj) and not obj.get_parent():
-				var obj_layer: int = obj.get_meta(&"spawn_layer", 0)
+				var obj_layer: int = obj.get_meta(&"spawn_layer", inst_layer)
 				area.add_object(obj, Vector2i(obj.position), obj_layer)
 		instance_placed.emit(stamp, unique_id)
 	)
 	history.commit_action()
 
-	stamp.remove_instance(unique_id)
+	stamp.remove_instance(area_name, unique_id)
 	for obj: LDObject in to_remove:
 		if is_instance_valid(obj) and obj.get_parent():
 			obj.get_parent().remove_child(obj)
@@ -295,37 +338,36 @@ func get_linked_instance_objects(obj: LDObject) -> Array[LDObject]:
 
 ## Removes the entire stamp instance that obj belongs to (and its objects).
 func remove_instance_for_object(obj: LDObject) -> void:
-	var address: String = get_object_linked_stamp(obj)
-	var parts: PackedStringArray = address.split(":")
-	if parts.size() < 2:
+	var parts: PackedStringArray = get_object_linked_stamp(obj).split(":")
+	if parts.size() < 3:
 		return
-	remove_instance(parts[0], parts[1])
+	remove_instance(parts[0], parts[1], parts[2])
 
 
 ## World position of the instance that obj's stamp instance is placed at.
 func get_instance_position_for_object(obj: LDObject) -> Vector2:
 	var parts: PackedStringArray = get_object_linked_stamp(obj).split(":")
-	if parts.size() < 2:
+	if parts.size() < 3:
 		return Vector2.ZERO
 	var stamp: LDStamp = get_stamp(parts[0])
 	if not stamp:
 		return Vector2.ZERO
-	var instance: Dictionary = stamp.get_instance(parts[1])
+	var instance: Dictionary = stamp.get_instance(parts[1], parts[2])
 	if instance.is_empty():
 		return Vector2.ZERO
 	return Packer.array_to_vec2(instance.get("position", [0.0, 0.0]))
 
 
 ## Updates the stored position of a stamp instance (so a moved instance persists/rehydrates
-## in its new spot). Address is "stamp_id:unique_id".
+## in its new spot). Address is "stamp_id:area_name:unique_id".
 func set_instance_position_by_address(address: String, pos: Vector2) -> void:
 	var parts: PackedStringArray = address.split(":")
-	if parts.size() < 2:
+	if parts.size() < 3:
 		return
 	var stamp: LDStamp = get_stamp(parts[0])
 	if not stamp:
 		return
-	var instance: Dictionary = stamp.get_instance(parts[1])
+	var instance: Dictionary = stamp.get_instance(parts[1], parts[2])
 	if not instance.is_empty():
 		instance["position"] = [pos.x, pos.y]
 
@@ -420,19 +462,21 @@ func rehydrate_all() -> void:
 func _rehydrate_stamp(stamp: LDStamp) -> void:
 	_dehydrate_stamp(stamp.id)
 
-	for instance: Dictionary in stamp.instances:
-		var unique_id: String = instance.get("unique_id", "")
-		var instance_pos: Vector2 = Packer.array_to_vec2(instance.get("position", [0.0, 0.0]))
-		var instance_layer: int = instance.get("layer_index", 0)
-		var address: String = stamp.get_full_address(unique_id)
-		var spawned: Array[LDObject] = _spawn_stamp_objects(stamp, instance_pos, instance_layer)
+	for area_name: String in stamp.instances:
+		var area: LDArea = _area_for_name(area_name)
+		for instance: Dictionary in stamp.get_area_instances(area_name):
+			var unique_id: String = str(instance.get("unique_id", ""))
+			var instance_pos: Vector2 = Packer.array_to_vec2(instance.get("position", [0.0, 0.0]))
+			var instance_layer: int = instance.get("layer_index", 0)
+			var address: String = stamp.get_full_address(area_name, unique_id)
+			var spawned: Array[LDObject] = _spawn_stamp_objects(stamp, instance_pos, instance_layer, false, area)
 
-		for obj: LDObject in spawned:
-			_mark_linked_object(obj, address)
+			for obj: LDObject in spawned:
+				_mark_linked_object(obj, address)
 
 
 func _dehydrate_stamp(stamp_id: String) -> void:
-	for obj: LDObject in LDLevel.get_active_area().get_all_objects():
+	for obj: LDObject in _all_objects():
 		if get_object_linked_stamp(obj).begins_with(stamp_id + ":"):
 			if obj.get_parent():
 				obj.get_parent().remove_child(obj)
@@ -447,7 +491,8 @@ func _dehydrate_stamp(stamp_id: String) -> void:
 func spawn_preview(stamp: LDStamp, instance_pos: Vector2) -> Array[LDObject]:
 	if not stamp:
 		return []
-	return _spawn_stamp_objects(stamp, instance_pos, LDLevel.get_active_area()._active_index, true)
+	var area: LDArea = LDLevel.get_active_area()
+	return _spawn_stamp_objects(stamp, instance_pos, area._active_index, true, area)
 
 
 ## Moves a set of preview instances (from spawn_preview) so the stamp sits at instance_pos.
@@ -458,10 +503,11 @@ func position_preview(instances: Array[LDObject], instance_pos: Vector2) -> void
 		instance.position = instance_pos + instance.get_meta(&"preview_offset", Vector2.ZERO)
 
 
-func _spawn_stamp_objects(stamp: LDStamp, instance_pos: Vector2, default_layer: int = 0, as_preview: bool = false) -> Array[LDObject]:
+func _spawn_stamp_objects(stamp: LDStamp, instance_pos: Vector2, default_layer: int = 0, as_preview: bool = false, area: LDArea = null) -> Array[LDObject]:
 	var result: Array[LDObject] = []
 	var db: GameDB = GameDB.get_db()
-	var area: LDArea = LDLevel.get_active_area()
+	if not area:
+		area = LDLevel.get_active_area()
 	var save_load: LDSaveLoadHandler = LD.get_save_load_handler()
 
 	for entry: Dictionary in stamp.objects:
@@ -523,14 +569,15 @@ func _spawn_stamp_objects(stamp: LDStamp, instance_pos: Vector2, default_layer: 
 
 func _get_objects_at_address(address: String) -> Array[LDObject]:
 	var result: Array[LDObject] = []
-	for obj: LDObject in LDLevel.get_active_area().get_all_objects():
+	for obj: LDObject in _all_objects():
 		if get_object_linked_stamp(obj) == address:
 			result.append(obj)
 	return result
 
 
 func _get_object_layer_index(obj: LDObject) -> int:
-	for layer: LDLayer in LDLevel.get_active_area().layers:
-		if obj.get_parent() == layer.get_objects_root():
-			return layer.index
+	for area: LDArea in LDLevel._inst.get_areas():
+		for layer: LDLayer in area.layers:
+			if obj.get_parent() == layer.get_objects_root():
+				return layer.index
 	return LDLevel.get_active_area()._active_index

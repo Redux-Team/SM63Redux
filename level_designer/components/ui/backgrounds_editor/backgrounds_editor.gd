@@ -77,8 +77,9 @@ func _ready() -> void:
 	autoscroll_x.value_changed.connect(func(_v: float) -> void: _set_field("autoscroll", Vector2(autoscroll_x.value, autoscroll_y.value)))
 	autoscroll_y.value_changed.connect(func(_v: float) -> void: _set_field("autoscroll", Vector2(autoscroll_x.value, autoscroll_y.value)))
 
+	# The active area (and its background) only exists once the level is built, which is after this
+	# content is instantiated. _on_show() refreshes when the window is actually opened.
 	_populate_texture_option()
-	_refresh()
 
 
 func _on_show() -> void:
@@ -200,9 +201,9 @@ func _update_backdrop_preview() -> void:
 
 func _populate_texture_option() -> void:
 	texture_option.clear()
-	for tex: Texture2D in _handler().get_available_textures():
-		texture_option.add_item(tex.resource_path.get_file().get_basename())
-		texture_option.set_item_metadata(texture_option.item_count - 1, tex)
+	for preset: LDBackgroundLayer in _handler().get_available_layers():
+		texture_option.add_item(preset.display_name)
+		texture_option.set_item_metadata(texture_option.item_count - 1, preset)
 
 
 func _refresh_layer_list() -> void:
@@ -218,10 +219,18 @@ func _refresh_layer_list() -> void:
 		_show_layer_detail(-1)
 
 
-## Names a layer by its texture (multiple layers may share a name); falls back to its index.
+## Names a layer by its preset's display name (multiple layers may share one). When the layer has no
+## stored name (e.g. it came from a preset background), match a layer preset by texture; falls back
+## to the texture file name, then the index.
 func _layer_label(layer: LDBackgroundLayer, index: int) -> String:
-	if layer.texture and not layer.texture.resource_path.is_empty():
-		return layer.texture.resource_path.get_file().get_basename()
+	if not layer.display_name.is_empty():
+		return layer.display_name
+	if layer.texture:
+		for preset: LDBackgroundLayer in _handler().get_available_layers():
+			if preset.texture == layer.texture:
+				return preset.display_name
+		if not layer.texture.resource_path.is_empty():
+			return layer.texture.resource_path.get_file().get_basename()
 	return "Layer %d" % index
 
 
@@ -278,7 +287,8 @@ func _show_layer_detail(index: int) -> void:
 	var layer: LDBackgroundLayer = _handler().get_background().layers[index]
 	_setting_fields = true
 	for i: int in texture_option.item_count:
-		if texture_option.get_item_metadata(i) == layer.texture:
+		var preset: LDBackgroundLayer = texture_option.get_item_metadata(i)
+		if preset and preset.id == layer.id:
 			texture_option.select(i)
 	parallax_spin.value = layer.parallax
 	custom_color_check.button_pressed = layer.custom_color
@@ -329,8 +339,13 @@ func _update_color_rows() -> void:
 	color_picker.visible = custom
 
 
+## Picking a layer preset swaps the layer to that preset's texture + defaults (incl. the correct
+## anchor), keeping the user's colour. Refreshes the detail so the fields reflect the new defaults.
 func _on_texture_selected(index: int) -> void:
-	_set_field("texture", texture_option.get_item_metadata(index))
+	if _setting_fields or _selected_layer < 0:
+		return
+	_handler().set_layer_preset(_selected_layer, texture_option.get_item_metadata(index))
+	_refresh_layer_list()
 
 
 func _set_field(key: String, value: Variant) -> void:

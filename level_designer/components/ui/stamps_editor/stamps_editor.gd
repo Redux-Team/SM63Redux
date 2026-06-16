@@ -42,7 +42,15 @@ func _ready() -> void:
 
 
 func _on_show() -> void:
+	# Connect here (not _ready): this content is instantiated before the level exists. The instance
+	# list is per-area, so refresh it when the active area changes (e.g. via the area spinbox).
+	if LDLevel._inst and not LDLevel._inst.active_area_changed.is_connected(_on_active_area_changed):
+		LDLevel._inst.active_area_changed.connect(_on_active_area_changed)
 	_refresh_stamp_list()
+
+
+func _on_active_area_changed(_area: LDArea) -> void:
+	_refresh_instance_list()
 
 
 func _refresh_stamp_list() -> void:
@@ -99,14 +107,18 @@ func _refresh_detail() -> void:
 	_refresh_instance_list()
 
 
+## Lists only the active area's instances of the selected stamp - each area's placements are
+## independent.
 func _refresh_instance_list() -> void:
 	instance_list.clear()
 	remove_instance_button.disabled = true
 	_selected_instance_id = ""
+	if not _selected_stamp:
+		return
 
-	for i: int in _selected_stamp.instances.size():
-		var instance: Dictionary = _selected_stamp.instances[i]
-		var unique_id: String = instance.get("unique_id", "")
+	var area_name: String = LDLevel.get_active_area().area_name
+	for instance: Dictionary in _selected_stamp.get_area_instances(area_name):
+		var unique_id: String = str(instance.get("unique_id", ""))
 		var pos: Vector2 = Packer.array_to_vec2(instance.get("position", [0.0, 0.0]))
 		instance_list.add_item("%s  (%d, %d)" % [unique_id, int(pos.x), int(pos.y)])
 		instance_list.set_item_metadata(instance_list.item_count - 1, unique_id)
@@ -169,8 +181,8 @@ func _try_rename(new_name: String) -> void:
 	if not _selected_stamp:
 		return
 
-	var cleaned: String = new_name.strip_edges()
-	if cleaned.is_empty() or cleaned.contains(":") or cleaned == _selected_stamp.id:
+	var cleaned: String = LDText.sanitize_name(new_name).strip_edges()
+	if cleaned.is_empty() or cleaned == _selected_stamp.id:
 		name_edit.text = _selected_stamp.id
 		return
 
@@ -187,7 +199,7 @@ func _on_indexable_toggled(pressed: bool) -> void:
 func _on_remove_instance_pressed() -> void:
 	if not _selected_stamp or _selected_instance_id.is_empty():
 		return
-	LD.get_stamp_handler().remove_instance(_selected_stamp.id, _selected_instance_id)
+	LD.get_stamp_handler().remove_instance(_selected_stamp.id, LDLevel.get_active_area().area_name, _selected_instance_id)
 	_selected_instance_id = ""
 	remove_instance_button.disabled = true
 
@@ -197,9 +209,11 @@ func _on_instance_selected(index: int) -> void:
 	remove_instance_button.disabled = false
 
 
+## Double-clicking an instance focuses the editor camera on it (it's always in the active area, since
+## the list only shows this area's instances).
 func _on_instance_activated(index: int) -> void:
 	var unique_id: String = instance_list.get_item_metadata(index)
-	var instance: Dictionary = _selected_stamp.get_instance(unique_id)
+	var instance: Dictionary = _selected_stamp.get_instance(LDLevel.get_active_area().area_name, unique_id)
 	if instance.is_empty():
 		return
 	# refocus_camera (not a raw camera_position set) so the grid shader and anchors refresh.

@@ -97,11 +97,9 @@ func _ready() -> void:
 	var level: LDLevel = LDLevel.new()
 	level.name = "Level"
 	get_editor_viewport().get_root().add_child(level)
-	
-	var area: LDArea = LDArea.new()
-	area.name = "Area"
-	level.add_child(area)
-	level._active_area = area
+
+	level.add_area("Area 1")
+	level.set_active_area_index(0)
 
 
 func _exit_tree() -> void:

@@ -9,6 +9,7 @@ extends Node
 const OBJECT_BROWSER: StringName = &"object_browser"
 const OBJECT_PROPERTIES: StringName = &"object_properties"
 const LAYER_PROPERTIES: StringName = &"layer_properties"
+const AREA_EDITOR: StringName = &"area_editor"
 const STAMP_EDITOR: StringName = &"stamp_editor"
 const SCENARIO_EDITOR: StringName = &"scenario_editor"
 const TAG_EDITOR: StringName = &"tag_editor"
@@ -52,6 +53,10 @@ func toggle_object_properties() -> LDObjectPropertyList:
 
 func toggle_layer_properties() -> Control:
 	return toggle(LAYER_PROPERTIES)
+
+
+func toggle_area_editor() -> LDAreaEditor:
+	return toggle(AREA_EDITOR) as LDAreaEditor
 
 
 func toggle_stamp_editor() -> LDStampEditor:

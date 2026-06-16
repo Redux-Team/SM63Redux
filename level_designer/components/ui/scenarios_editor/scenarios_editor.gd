@@ -10,11 +10,15 @@ extends MarginContainer
 @export var scenario_list: ItemList
 @export var add_button: Button
 @export var remove_button: Button
+@export var move_up_button: Button
+@export var move_down_button: Button
 @export var empty_label: Label
 @export var detail_content: Control
 @export var shine_row: HBoxContainer
 @export var name_edit: LineEdit
 @export var shine_check: CheckButton
+@export var area_row: HBoxContainer
+@export var area_option: OptionButton
 @export var layers_container: VBoxContainer
 @export var tags_container: VBoxContainer
 @export var stamps_container: VBoxContainer
@@ -26,10 +30,13 @@ var _selected_index: int = -1
 func _ready() -> void:
 	add_button.pressed.connect(_on_add_pressed)
 	remove_button.pressed.connect(_on_remove_pressed)
+	move_up_button.pressed.connect(_on_move_pressed.bind(-1))
+	move_down_button.pressed.connect(_on_move_pressed.bind(1))
 	scenario_list.item_selected.connect(_on_scenario_selected)
 
 	name_edit.text_changed.connect(_on_name_changed)
 	shine_check.toggled.connect(_on_shine_toggled)
+	area_option.item_selected.connect(_on_area_option_selected)
 
 	var sh: LDScenarioHandler = LD.get_scenario_handler()
 	sh.scenario_added.connect(_on_scenarios_changed.unbind(1))
@@ -38,14 +45,20 @@ func _ready() -> void:
 	_refresh_list()
 
 
-func _on_name_changed(text: String) -> void:
+func _on_name_changed(_text: String) -> void:
 	if _selected_index > LDScenario.COMMON_INDEX:
-		LD.get_scenario_handler().set_display_name(_selected_index, text)
+		LD.get_scenario_handler().set_display_name(_selected_index, LDText.sanitize_edit(name_edit))
 
 
 func _on_shine_toggled(pressed: bool) -> void:
 	if _selected_index > LDScenario.COMMON_INDEX:
 		LD.get_scenario_handler().set_show_in_shine_select(_selected_index, pressed)
+
+
+func _on_area_option_selected(sel: int) -> void:
+	if _selected_index < 0:
+		return
+	LD.get_scenario_handler().set_area(_selected_index, str(area_option.get_item_metadata(sel)))
 
 
 func _on_show() -> void:
@@ -93,6 +106,14 @@ func _on_remove_pressed() -> void:
 		LD.get_scenario_handler().remove_scenario(_selected_index)
 
 
+func _on_move_pressed(delta: int) -> void:
+	if _selected_index <= LDScenario.COMMON_INDEX:
+		return
+	var new_index: int = LD.get_scenario_handler().move_scenario(_selected_index, delta)
+	_refresh_list()
+	_select_index(new_index)
+
+
 func _select_index(index: int) -> void:
 	for i: int in scenario_list.item_count:
 		if int(scenario_list.get_item_metadata(i)) == index:
@@ -109,16 +130,46 @@ func _show_detail(index: int) -> void:
 	remove_button.disabled = index <= LDScenario.COMMON_INDEX
 	# Name / shine-select only apply to numbered scenarios, not the COMMON baseline.
 	var is_numbered: bool = index > LDScenario.COMMON_INDEX
+	var ordered: Array[LDScenario] = LD.get_scenario_handler().get_numbered_scenarios()
+	var order_pos: int = -1
+	for i: int in ordered.size():
+		if ordered[i].index == index:
+			order_pos = i
+			break
+	move_up_button.disabled = not is_numbered or order_pos <= 0
+	move_down_button.disabled = not is_numbered or order_pos < 0 or order_pos >= ordered.size() - 1
 	shine_row.visible = is_numbered
 	if is_numbered:
 		var scenario: LDScenario = LD.get_scenario_handler().get_scenario(index)
 		name_edit.text = scenario.display_name if scenario else ""
 		shine_check.button_pressed = scenario.show_in_shine_select if scenario else true
+	# Every scenario (including COMMON, which sets the default loaded area) picks an area.
+	area_row.visible = has_scenario
 	if has_scenario:
+		_populate_area_options(LD.get_scenario_handler().get_scenario(index))
 		_build_rows()
 		LD.get_scenario_handler().apply_to_editor(index)
 	else:
 		LD.get_scenario_handler().clear_editor_preview()
+
+
+## Fills the area dropdown with the level's areas and selects the scenario's linked one (defaulting
+## to the first area when the scenario has no link yet).
+func _populate_area_options(scenario: LDScenario) -> void:
+	area_option.clear()
+	var areas: Array[LDArea] = LD.get_level().get_areas()
+	var selected: int = 0
+	for i: int in areas.size():
+		area_option.add_item(_area_label(areas[i], i))
+		area_option.set_item_metadata(i, areas[i].area_name)
+		if scenario and not scenario.area_name.is_empty() and scenario.area_name == areas[i].area_name:
+			selected = i
+	if area_option.item_count > 0:
+		area_option.select(selected)
+
+
+func _area_label(area: LDArea, index: int) -> String:
+	return area.area_name if not area.area_name.is_empty() else "Area %d" % (index + 1)
 
 
 func _build_rows() -> void:

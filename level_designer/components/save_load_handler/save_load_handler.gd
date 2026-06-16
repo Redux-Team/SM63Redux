@@ -16,8 +16,10 @@ const SAVED_HASH_META: StringName = &"ld_saved_level_hash"
 ## Editor view state that gets serialized but shouldn't count as a meaningful change, so merely
 ## panning, zooming or toggling the view doesn't make the level look "unsaved".
 const VOLATILE_EDITOR_KEYS: Array[String] = [
-	"camera_position", "camera_zoom", "active_layer", "parallaxing_enabled", "ghosting_enabled",
+	"active_area", "parallaxing_enabled", "ghosting_enabled", "modulation_enabled",
 ]
+## Per-area view state (now stored on each area) that is likewise volatile for dirty detection.
+const VOLATILE_AREA_KEYS: Array[String] = ["camera_position", "camera_zoom", "active_layer"]
 
 
 signal file_state_changed
@@ -54,6 +56,12 @@ static func content_hash(data: Dictionary) -> int:
 	if editor is Dictionary:
 		for key: String in VOLATILE_EDITOR_KEYS:
 			(editor as Dictionary).erase(key)
+	var areas: Variant = copy.get("areas")
+	if areas is Array:
+		for area_entry: Variant in areas:
+			if area_entry is Dictionary:
+				for key: String in VOLATILE_AREA_KEYS:
+					(area_entry as Dictionary).erase(key)
 	return hash(copy)
 
 
@@ -116,6 +124,10 @@ func _enter_tree() -> void:
 
 
 func _on_ready() -> void:
+	# Every area should be independently playable, so guarantee a player spawn whenever one becomes
+	# active (covers areas added/loaded without one).
+	LDLevel._inst.active_area_changed.connect(_ensure_player_spawn)
+
 	# If we are returning from a playtest, deserialize it immediately
 	# and save the session so the cached state becomes our current baseline
 	if Singleton.has_meta(&"playtest"):
@@ -185,19 +197,19 @@ func load_raw_data(data: Dictionary) -> void:
 
 func reset_level() -> void:
 	var viewport: LDViewport = LD.get_editor_viewport()
-	var area: LDArea = LDLevel.get_active_area()
-	
-	viewport.clear_selection()
-	
-	for layer: LDLayer in area.layers.duplicate():
-		layer.queue_free()
-	area.layers.clear()
+	var level: LDLevel = LD.get_level()
 
-	# Clear the rest of the level state too, otherwise stamps/tags/scenarios/background linger.
+	viewport.clear_selection()
+
+	# Back to a single fresh area (its default background comes with it).
+	level.clear_areas()
+	level.add_area("Area 1")
+	level.set_active_area_index(0, false)
+
+	# Clear the rest of the level state too, otherwise stamps/tags/scenarios linger.
 	LD.get_tag_handler().deserialize_all([])
 	LD.get_stamp_handler().deserialize_all([])
 	LD.get_scenario_handler().deserialize_all({})
-	LD.get_background_handler().reset()
 
 	viewport.camera_position = Vector2.ZERO
 	viewport.camera_zoom = Vector2.ONE
@@ -275,10 +287,43 @@ func save_session() -> void:
 
 
 func _serialize() -> Dictionary:
-	var viewport: LDViewport = LD.get_editor_viewport()
-	var area: LDArea = LDLevel.get_active_area()
+	var level: LDLevel = LD.get_level()
+	var bg_handler: LDBackgroundHandler = LD.get_background_handler()
+	var areas_data: Array = []
+
+	# Sync the active area's stored view from the live viewport before serializing.
+	if is_instance_valid(LDLevel.get_active_area()):
+		LDLevel.get_active_area().store_view()
+
+	for area: LDArea in level.get_areas():
+		areas_data.append({
+			"name": area.area_name,
+			"background": bg_handler.serialize_area(area),
+			"camera_position": Packer.vec2_to_array(area.camera_position),
+			"camera_zoom": Packer.vec2_to_array(area.camera_zoom),
+			"active_layer": area._active_index,
+			"layers": _serialize_area_layers(area),
+		})
+
+	return {
+		"version": FORMAT_VERSION,
+		"editor": {
+			"active_area": level.get_active_index(),
+			"parallaxing_enabled": LD.get_ui().get_viewport_handler().is_parallaxing_enabled(),
+			"ghosting_enabled": LD.get_ui().get_viewport_handler().is_ghosting_enabled(),
+			"modulation_enabled": LD.get_ui().get_viewport_handler().is_modulation_enabled(),
+			"hotbar": LD.get_ui().get_hotbar_handler().serialize_slots(),
+		},
+		"stamps": LD.get_stamp_handler().serialize_all(),
+		"tags": LD.get_tag_handler().serialize_all(),
+		"scenarios": LD.get_scenario_handler().serialize_all(),
+		"areas": areas_data,
+	}
+
+
+## Serializes one area's non-empty layers (dropping throwaway empty/unnamed ones).
+func _serialize_area_layers(area: LDArea) -> Array:
 	var layers_data: Array = []
-	
 	for layer: LDLayer in area.layers:
 		var objects_data: Array = []
 		for obj_node: Node in layer.get_objects_root().get_children():
@@ -303,26 +348,7 @@ func _serialize() -> Dictionary:
 			"modulation": Packer.color_to_array(layer.modulation),
 			"objects": objects_data,
 		})
-	
-	return {
-		"version": FORMAT_VERSION,
-		"editor": {
-			"camera_position": Packer.vec2_to_array(viewport.camera_position),
-			"camera_zoom": Packer.vec2_to_array(viewport.camera_zoom),
-			"active_layer": area._active_index,
-			"parallaxing_enabled": LD.get_ui().get_viewport_handler().is_parallaxing_enabled(),
-			"ghosting_enabled": LD.get_ui().get_viewport_handler().is_ghosting_enabled(),
-			"hotbar": LD.get_ui().get_hotbar_handler().serialize_slots(),
-			"background": LD.get_background_handler().serialize(),
-		},
-		"stamps": LD.get_stamp_handler().serialize_all(),
-		"tags": LD.get_tag_handler().serialize_all(),
-		"scenarios": LD.get_scenario_handler().serialize_all(),
-		"areas": [{
-			"name": "default",
-			"layers": layers_data,
-		}],
-	}
+	return layers_data
 
 
 func _serialize_object(obj: LDObject) -> Dictionary:
@@ -374,56 +400,58 @@ func _deserialize(data: Dictionary) -> Error:
 		return ERR_INVALID_DATA
 	
 	var viewport: LDViewport = LD.get_editor_viewport()
-	var area: LDArea = LDLevel.get_active_area()
-	
+	var level: LDLevel = LD.get_level()
+
 	viewport.clear_selection()
-	
-	for layer: LDLayer in area.layers.duplicate():
-		layer.queue_free()
-	area.layers.clear()
-	
+	level.clear_areas()
+
 	var db: GameDB = GameDB.get_db()
-	
-	var areas: Array = normalized.get("areas", [])
-	var area_data: Variant = areas.get(0)
-	if area_data is Dictionary:
-		for layer_data: Variant in area_data.get("layers", []):
-			if not layer_data is Dictionary:
-				continue
-			var layer_name: String = str(layer_data.get("layer_name", ""))
-			if (layer_data.get("objects", []) as Array).is_empty() and layer_name.is_empty():
-				continue
-			var layer_index: int = layer_data.get("layer_index", 0)
-			var layer: LDLayer = area.get_or_create_layer(layer_index)
-			layer.layer_name = layer_name
-			var raw_parallax: Variant = layer_data.get("parallax_scale", null)
-			if raw_parallax != null:
-				layer.parallax_scale = Packer.array_to_vec2(raw_parallax)
-			var raw_modulate: Variant = layer_data.get("modulation", null)
-			if raw_modulate != null:
-				layer.modulation = Packer.array_to_color(raw_modulate)
-			layer.is_decoration = layer_data.get("is_decoration", false)
-			for obj_data: Variant in layer_data.get("objects", []):
-				if not obj_data is Dictionary:
-					continue
-				_deserialize_object(obj_data, layer_index, db)
-	
+
+	# Backgrounds used to live globally under editor.background; fall back to it for areas that
+	# predate per-area backgrounds.
+	var editor_data: Dictionary = normalized.get("editor", {}) if normalized.get("editor", {}) is Dictionary else {}
+	var legacy_bg: Variant = editor_data.get("background", null)
+
+	for area_entry: Variant in normalized.get("areas", []):
+		if not area_entry is Dictionary:
+			continue
+		var entry: Dictionary = area_entry
+		var area: LDArea = level.add_area(str(entry.get("name", "Area")))
+		if entry.has("background"):
+			LD.get_background_handler().apply_to_area(area, entry.get("background"))
+		elif legacy_bg is Dictionary:
+			LD.get_background_handler().apply_to_area(area, legacy_bg)
+		else:
+			area.apply_default_background()
+		# Per-area editor view (defaults to a fresh ZERO/ONE view for areas that predate it).
+		area.camera_position = Packer.array_to_vec2(entry.get("camera_position", [0.0, 0.0]))
+		area.camera_zoom = Packer.array_to_vec2(entry.get("camera_zoom", [1.0, 1.0]))
+		area._active_index = int(entry.get("active_layer", 0))
+		_deserialize_area(entry, area, db)
+		_ensure_player_spawn(area)
+
+	# A level always has at least one area to edit.
+	if level.get_areas().is_empty():
+		level.add_area("Area 1")
+
+	var active_area_index: int = clampi(int(editor_data.get("active_area", 0)), 0, level.get_areas().size() - 1)
+	# Legacy single-area levels stored the view globally; apply it to the active area.
+	var active_area: LDArea = level.get_areas()[active_area_index]
+	if editor_data.has("camera_position"):
+		active_area.camera_position = Packer.array_to_vec2(editor_data.get("camera_position"))
+	if editor_data.has("camera_zoom"):
+		active_area.camera_zoom = Packer.array_to_vec2(editor_data.get("camera_zoom"))
+	if editor_data.has("active_layer"):
+		active_area._active_index = int(editor_data.get("active_layer"))
+	# Don't store the (irrelevant) live view into the area being left while loading.
+	level.set_active_area_index(active_area_index, false)
+
 	if normalized.has("editor"):
-		var editor_data: Dictionary = normalized.get("editor", {})
-		if editor_data.has("camera_position"):
-			viewport.camera_position = Packer.array_to_vec2(editor_data.get("camera_position"))
-		if editor_data.has("camera_zoom"):
-			viewport.camera_zoom = Packer.array_to_vec2(editor_data.get("camera_zoom"))
-		if editor_data.has("active_layer"):
-			area.set_active_layer(editor_data.get("active_layer"))
 		if editor_data.has("parallaxing_enabled"):
 			LD.get_ui().get_viewport_handler().set_parallaxing_enabled(editor_data.get("parallaxing_enabled"))
 		if editor_data.has("ghosting_enabled"):
 			LD.get_ui().get_viewport_handler().set_ghosting_enabled(editor_data.get("ghosting_enabled"))
-		if editor_data.has("background"):
-			LD.get_background_handler().deserialize(editor_data.get("background"))
-		else:
-			LD.get_background_handler().reset()
+		LD.get_ui().get_viewport_handler().set_modulation_enabled(bool(editor_data.get("modulation_enabled", true)))
 
 	# Always restore these, even when the loaded level omits the key, so stale tags/stamps/
 	# scenarios from the previous level don't carry over.
@@ -447,6 +475,30 @@ func _deserialize(data: Dictionary) -> Error:
 	return OK
 
 
+## Loads one area entry's layers + objects into the given (already-created) area.
+func _deserialize_area(entry: Dictionary, area: LDArea, db: GameDB) -> void:
+	for layer_data: Variant in entry.get("layers", []):
+		if not layer_data is Dictionary:
+			continue
+		var layer_name: String = str(layer_data.get("layer_name", ""))
+		if (layer_data.get("objects", []) as Array).is_empty() and layer_name.is_empty():
+			continue
+		var layer_index: int = layer_data.get("layer_index", 0)
+		var layer: LDLayer = area.get_or_create_layer(layer_index)
+		layer.layer_name = layer_name
+		var raw_parallax: Variant = layer_data.get("parallax_scale", null)
+		if raw_parallax != null:
+			layer.parallax_scale = Packer.array_to_vec2(raw_parallax)
+		var raw_modulate: Variant = layer_data.get("modulation", null)
+		if raw_modulate != null:
+			layer.modulation = Packer.array_to_color(raw_modulate)
+		layer.is_decoration = layer_data.get("is_decoration", false)
+		for obj_data: Variant in layer_data.get("objects", []):
+			if not obj_data is Dictionary:
+				continue
+			_deserialize_object(obj_data, layer_index, db, area)
+
+
 func _normalize(data: Dictionary) -> Dictionary:
 	if data.has("areas"):
 		return data
@@ -458,20 +510,21 @@ func _normalize(data: Dictionary) -> Dictionary:
 			"tags": data.get("tags", []),
 			"scenarios": data.get("scenarios", {}),
 			"areas": [{
-				"name": "default",
+				"name": "Area 1",
 				"layers": data.get("layers", []),
 			}],
 		}
 	return data
 
 
-func _ensure_player_spawn() -> void:
+func _ensure_player_spawn(area: LDArea = null) -> void:
 	var game_object: GameObject = GameDB.get_db().find_game_object("player_mario")
 	if not game_object:
 		return
-	
-	var area: LDArea = LDLevel.get_active_area()
-	
+
+	if not area:
+		area = LDLevel.get_active_area()
+
 	for obj: LDObject in area.get_all_objects():
 		if obj and obj.source_object_id == game_object.id:
 			return
@@ -492,21 +545,21 @@ func _find_game_object_by_scene(scene: PackedScene) -> GameObject:
 	return null
 
 
-func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB) -> void:
+func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB, area: LDArea) -> void:
 	var object_id: String = data.get("object_id", "")
 	if object_id.is_empty():
 		return
-	
+
 	var game_object: GameObject = find_game_object_by_id(object_id, db)
 	if not game_object or not game_object.get_editor_instance():
 		return
-	
+
 	var instance: LDObject = game_object.get_editor_instance()
 	if not instance or instance is not LDObject:
 		return
-	
+
 	var pos: Vector2 = Packer.array_to_vec2(data.get("position", [0.0, 0.0]))
-	LDLevel.get_active_area().add_object(instance, Vector2i(pos), layer_index)
+	area.add_object(instance, Vector2i(pos), layer_index)
 	
 	instance.init_properties(game_object)
 	

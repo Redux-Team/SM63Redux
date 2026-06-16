@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://dk5mqfpnm77cy" path="res://level_designer/components/ui/handlers/hotbar_handler.gd" id="15_hbh"]
 [ext_resource type="Script" uid="uid://d38wd86ydwydo" path="res://level_designer/components/ui/window/window_def.gd" id="16_wdef"]
 [ext_resource type="PackedScene" uid="uid://c8bgedit0lds1" path="res://level_designer/components/ui/backgrounds_editor/backgrounds_editor.tscn" id="17_bged"]
+[ext_resource type="PackedScene" uid="uid://bar3aedit0r7x" path="res://level_designer/components/ui/areas_editor/areas_editor.tscn" id="18_aread"]
 
 [sub_resource type="Resource" id="WindowDef_browser"]
 script = ExtResource("16_wdef")
@@ -38,6 +39,12 @@ script = ExtResource("16_wdef")
 id = &"layer_properties"
 scene = ExtResource("5_uannl")
 title = "Layers"
+
+[sub_resource type="Resource" id="WindowDef_area"]
+script = ExtResource("16_wdef")
+id = &"area_editor"
+scene = ExtResource("18_aread")
+title = "Areas"
 
 [sub_resource type="Resource" id="WindowDef_stamp"]
 script = ExtResource("16_wdef")
@@ -213,18 +220,22 @@ _hotbar_handler = NodePath("HotbarHandler")
 [node name="WindowHandler" type="Node" parent="." unique_id=503310053 node_paths=PackedStringArray("_window")]
 script = ExtResource("11_winh")
 _window = NodePath("../WindowLayer/Window")
-_window_defs = Array[ExtResource("16_wdef")]([SubResource("WindowDef_browser"), SubResource("WindowDef_properties"), SubResource("WindowDef_layer"), SubResource("WindowDef_stamp"), SubResource("WindowDef_scenario"), SubResource("WindowDef_tag"), SubResource("WindowDef_background"), SubResource("WindowDef_picker")])
+_window_defs = Array[ExtResource("16_wdef")]([SubResource("WindowDef_browser"), SubResource("WindowDef_properties"), SubResource("WindowDef_layer"), SubResource("WindowDef_area"), SubResource("WindowDef_stamp"), SubResource("WindowDef_scenario"), SubResource("WindowDef_tag"), SubResource("WindowDef_background"), SubResource("WindowDef_picker")])
 
-[node name="ViewportHandler" type="Node" parent="." unique_id=503310054 node_paths=PackedStringArray("_parallaxing_button", "_ghosting_button")]
+[node name="ViewportHandler" type="Node" parent="." unique_id=503310054 node_paths=PackedStringArray("_parallaxing_button", "_ghosting_button", "_modulation_button")]
 script = ExtResource("12_vph")
 _parallaxing_button = NodePath("../ViewportUI/VBoxContainer4/ParallaxingButton")
 _ghosting_button = NodePath("../ViewportUI/VBoxContainer4/GhostingButton")
+_modulation_button = NodePath("../ViewportUI/VBoxContainer4/ModulationButton")
 
-[node name="ToolbarHandler" type="Node" parent="." unique_id=503310055 node_paths=PackedStringArray("_layer_name_label", "_prev_layer_button", "_next_layer_button")]
+[node name="ToolbarHandler" type="Node" parent="." unique_id=503310055 node_paths=PackedStringArray("_layer_name_label", "_prev_layer_button", "_next_layer_button", "_area_name_label", "_prev_area_button", "_next_area_button")]
 script = ExtResource("13_tbh")
 _layer_name_label = NodePath("../ViewportUI/VBoxContainer4/LayerNav/LayerName")
 _prev_layer_button = NodePath("../ViewportUI/VBoxContainer4/LayerNav/PrevLayer")
 _next_layer_button = NodePath("../ViewportUI/VBoxContainer4/LayerNav/NextLayer")
+_area_name_label = NodePath("../ViewportUI/VBoxContainer4/AreaNav/AreaName")
+_prev_area_button = NodePath("../ViewportUI/VBoxContainer4/AreaNav/PrevArea")
+_next_area_button = NodePath("../ViewportUI/VBoxContainer4/AreaNav/NextArea")
 
 [node name="FileHandler" type="Node" parent="." unique_id=503310056 node_paths=PackedStringArray("_save_file_dialog", "_load_file_dialog", "_reset_level_dialog", "_save_new_button")]
 script = ExtResource("14_flh")
@@ -262,6 +273,10 @@ text = "Object Browser"
 layout_mode = 2
 text = "Layers"
 
+[node name="AreasButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=1135402787]
+layout_mode = 2
+text = "Areas"
+
 [node name="TagsButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=1446552239]
 layout_mode = 2
 text = "Tags"
@@ -284,14 +299,36 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -105.0
-offset_top = -41.0
+offset_left = -120.0
+offset_top = -49.0
 offset_right = -4.0
-offset_bottom = 42.0
+offset_bottom = 92.0
 grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
 alignment = 1
+
+[node name="AreaNav" type="HBoxContainer" parent="ViewportUI/VBoxContainer4" unique_id=687446335]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="PrevArea" type="Button" parent="ViewportUI/VBoxContainer4/AreaNav" unique_id=872346826]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+text = "<"
+
+[node name="AreaName" type="Label" parent="ViewportUI/VBoxContainer4/AreaNav" unique_id=641133044]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/outline_size = 4
+text = "Area 1"
+horizontal_alignment = 1
+
+[node name="NextArea" type="Button" parent="ViewportUI/VBoxContainer4/AreaNav" unique_id=1937989543]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+text = ">"
 
 [node name="LayerNav" type="HBoxContainer" parent="ViewportUI/VBoxContainer4" unique_id=336067586]
 layout_mode = 2
@@ -328,6 +365,13 @@ size_flags_horizontal = 8
 toggle_mode = true
 shortcut = SubResource("Shortcut_awha3")
 text = "Ghosting"
+
+[node name="ModulationButton" type="Button" parent="ViewportUI/VBoxContainer4" unique_id=1284945159]
+layout_mode = 2
+size_flags_horizontal = 8
+toggle_mode = true
+button_pressed = true
+text = "Modulate"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="ViewportUI" unique_id=1713123835]
 anchors_preset = 1
@@ -387,7 +431,7 @@ text = "Edit (P)"
 [node name="PolyAddButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=472817273]
 layout_mode = 2
 focus_mode = 0
-text = "Add (P)"
+text = "Append (P)"
 
 [node name="PolyCutButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1121572227]
 layout_mode = 2
@@ -617,14 +661,18 @@ will be lost!"
 
 [connection signal="pressed" from="ViewportUI/VBoxContainer/ObjectBrowserButton" to="WindowHandler" method="toggle_object_browser"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer/LayerProperties" to="WindowHandler" method="toggle_layer_properties"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer/AreasButton" to="WindowHandler" method="toggle_area_editor"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer/TagsButton" to="WindowHandler" method="toggle_tag_editor"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer/StampsButton" to="WindowHandler" method="toggle_stamp_editor"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer/ScenariosButton" to="WindowHandler" method="toggle_scenario_editor"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer/BackgroundButton" to="WindowHandler" method="toggle_background_editor"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer4/AreaNav/PrevArea" to="ToolbarHandler" method="_on_prev_area_pressed"]
+[connection signal="pressed" from="ViewportUI/VBoxContainer4/AreaNav/NextArea" to="ToolbarHandler" method="_on_next_area_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer4/LayerNav/PrevLayer" to="ToolbarHandler" method="_on_prev_layer_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer4/LayerNav/NextLayer" to="ToolbarHandler" method="_on_next_layer_pressed"]
 [connection signal="toggled" from="ViewportUI/VBoxContainer4/ParallaxingButton" to="ViewportHandler" method="set_parallaxing_enabled"]
 [connection signal="toggled" from="ViewportUI/VBoxContainer4/GhostingButton" to="ViewportHandler" method="set_ghosting_enabled"]
+[connection signal="toggled" from="ViewportUI/VBoxContainer4/ModulationButton" to="ViewportHandler" method="set_modulation_enabled"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/SelectButton" to="ToolbarHandler" method="_on_select_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/BrushButton" to="ToolbarHandler" method="_on_brush_button_pressed"]
 [connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/MoveButton" to="ToolbarHandler" method="_on_move_button_pressed"]

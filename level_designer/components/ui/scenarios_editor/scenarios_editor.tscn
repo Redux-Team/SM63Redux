@@ -2,17 +2,21 @@
 
 [ext_resource type="Script" uid="uid://cm0wgakqfv4qa" path="res://level_designer/components/ui/scenarios_editor/scenarios_editor.gd" id="1_m0tjn"]
 
-[node name="LDScenariosEditor" type="MarginContainer" unique_id=1341334410 node_paths=PackedStringArray("scenario_list", "add_button", "remove_button", "empty_label", "detail_content", "shine_row", "name_edit", "shine_check", "layers_container", "tags_container", "stamps_container")]
+[node name="LDScenariosEditor" type="MarginContainer" unique_id=1341334410 node_paths=PackedStringArray("scenario_list", "add_button", "remove_button", "move_up_button", "move_down_button", "empty_label", "detail_content", "shine_row", "name_edit", "shine_check", "area_row", "area_option", "layers_container", "tags_container", "stamps_container")]
 custom_minimum_size = Vector2(500, 320)
 script = ExtResource("1_m0tjn")
 scenario_list = NodePath("HBoxContainer/VBoxContainer/ScenarioList")
 add_button = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/AddButton")
 remove_button = NodePath("HBoxContainer/VBoxContainer/RemoveButton")
+move_up_button = NodePath("HBoxContainer/VBoxContainer/MoveButtons/MoveUpButton")
+move_down_button = NodePath("HBoxContainer/VBoxContainer/MoveButtons/MoveDownButton")
 empty_label = NodePath("HBoxContainer/DetailPanel/EmptyLabel")
 detail_content = NodePath("HBoxContainer/DetailPanel/DetailTabs")
 shine_row = NodePath("HBoxContainer/DetailPanel/ShineRow")
 name_edit = NodePath("HBoxContainer/DetailPanel/ShineRow/NameEdit")
 shine_check = NodePath("HBoxContainer/DetailPanel/ShineRow/ShineCheck")
+area_row = NodePath("HBoxContainer/DetailPanel/AreaRow")
+area_option = NodePath("HBoxContainer/DetailPanel/AreaRow/AreaOption")
 layers_container = NodePath("HBoxContainer/DetailPanel/DetailTabs/Layers/LayersContainer")
 tags_container = NodePath("HBoxContainer/DetailPanel/DetailTabs/Tags/TagsContainer")
 stamps_container = NodePath("HBoxContainer/DetailPanel/DetailTabs/Stamps/StampsContainer")
@@ -41,6 +45,19 @@ text = "+"
 [node name="ScenarioList" type="ItemList" parent="HBoxContainer/VBoxContainer" unique_id=307560873]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="MoveButtons" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MoveUpButton" type="Button" parent="HBoxContainer/VBoxContainer/MoveButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Up"
+
+[node name="MoveDownButton" type="Button" parent="HBoxContainer/VBoxContainer/MoveButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Down"
 
 [node name="RemoveButton" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=1892684888]
 layout_mode = 2
@@ -72,6 +89,17 @@ placeholder_text = "Unnamed"
 [node name="ShineCheck" type="CheckButton" parent="HBoxContainer/DetailPanel/ShineRow"]
 layout_mode = 2
 text = "Shine"
+
+[node name="AreaRow" type="HBoxContainer" parent="HBoxContainer/DetailPanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/DetailPanel/AreaRow"]
+layout_mode = 2
+text = "Area"
+
+[node name="AreaOption" type="OptionButton" parent="HBoxContainer/DetailPanel/AreaRow"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="DetailTabs" type="TabContainer" parent="HBoxContainer/DetailPanel" unique_id=42417723]
 layout_mode = 2

@@ -2,11 +2,17 @@ class_name LDBackgroundLayer
 extends Resource
 
 ## One parallax layer of an LDBackground: a texture with its own parallax factor, tint, offset,
-## autoscroll and tiling. `anchor` is an internal placement hint (not exposed in the editor) that
-## pins the layer flush to the top or bottom of the screen.
+## autoscroll, tiling and edge anchor. The curated layer presets in db/Backgrounds/Layers are
+## LDBackgroundLayer resources too: each carries a texture plus sensible defaults (including the
+## right `anchor`), so adding/swapping a layer in the editor places it correctly.
 
 enum Anchor { BOTTOM, TOP }
 
+
+## Identifies which layer preset (db/Backgrounds/Layers) this came from, and its friendly name.
+## Both are empty for hand-made layers.
+@export var id: String = ""
+@export var display_name: String = ""
 
 @export var texture: Texture2D
 @export var parallax: float = 0.5
@@ -17,11 +23,15 @@ enum Anchor { BOTTOM, TOP }
 @export var offset: Vector2 = Vector2.ZERO
 @export var autoscroll: Vector2 = Vector2.ZERO
 @export var repeat: bool = false
+## Pins the layer flush to the top or bottom edge of the screen (clouds sit at the top, hills at the
+## bottom). Comes from the layer preset, so swapping textures re-anchors correctly.
 @export var anchor: Anchor = Anchor.BOTTOM
 
 
 func serialize() -> Dictionary:
 	return {
+		"id": id,
+		"display_name": display_name,
 		"texture": _texture_uid(),
 		"parallax": parallax,
 		"modulate": Packer.color_to_array(modulate),
@@ -35,6 +45,8 @@ func serialize() -> Dictionary:
 
 static func deserialize(data: Dictionary) -> LDBackgroundLayer:
 	var layer: LDBackgroundLayer = LDBackgroundLayer.new()
+	layer.id = str(data.get("id", ""))
+	layer.display_name = str(data.get("display_name", ""))
 	var uid: String = str(data.get("texture", ""))
 	if not uid.is_empty() and ResourceLoader.exists(uid):
 		layer.texture = load(uid) as Texture2D
@@ -51,7 +63,7 @@ static func deserialize(data: Dictionary) -> LDBackgroundLayer:
 func _texture_uid() -> String:
 	if not texture or texture.resource_path.is_empty():
 		return ""
-	var id: int = ResourceLoader.get_resource_uid(texture.resource_path)
-	if id == ResourceUID.INVALID_ID:
+	var uid_id: int = ResourceLoader.get_resource_uid(texture.resource_path)
+	if uid_id == ResourceUID.INVALID_ID:
 		return ""
-	return ResourceUID.id_to_text(id)
+	return ResourceUID.id_to_text(uid_id)

@@ -5,10 +5,10 @@
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_m6is0"]
 [ext_resource type="Texture2D" uid="uid://dmiqbt6l0n065" path="res://assets/textures/props/hints/arrow_sign_arrow.png" id="4_khtv6"]
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_dctr8"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_stryq"]
 diffuse_texture = ExtResource("2_stryq")
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_182sn"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_khtv6"]
 diffuse_texture = ExtResource("4_khtv6")
 
 [node name="ArrowSign" type="Node2D" unique_id=272511246 node_paths=PackedStringArray("arrow")]
@@ -17,9 +17,9 @@ arrow = NodePath("Sprite/Arrow")
 metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=2085095849]
-texture = SubResource("CanvasTexture_dctr8")
+texture = SubResource("CanvasTexture_stryq")
 script = ExtResource("3_m6is0")
-canvas_texture = SubResource("CanvasTexture_dctr8")
+canvas_texture = SubResource("CanvasTexture_stryq")
 diffuse_texture = ExtResource("2_stryq")
 current_animation = ""
 current_frame = 0
@@ -29,9 +29,9 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="Arrow" type="Sprite2D" parent="Sprite" unique_id=198162551]
 position = Vector2(0, -3)
-texture = SubResource("CanvasTexture_182sn")
+texture = SubResource("CanvasTexture_khtv6")
 script = ExtResource("3_m6is0")
-canvas_texture = SubResource("CanvasTexture_182sn")
+canvas_texture = SubResource("CanvasTexture_khtv6")
 diffuse_texture = ExtResource("4_khtv6")
 current_animation = ""
 current_frame = 0

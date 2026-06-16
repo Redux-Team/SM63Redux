@@ -1,9 +1,10 @@
 class_name LDBackgroundHandler
 extends LDComponent
 
-## Owns the level's live LDBackground, renders it into the viewport background root and persists it.
-## A background is either one of the presets in LDBackgroundDB or "Custom" (a freely edited copy);
-## editing the backdrop or layers switches it to Custom. Reached via LD.get_background_handler().
+## Edits the active area's background and renders it into the viewport background root. Each area
+## owns its own LDBackground (either one of the LDBackgroundDB presets or a freely edited "Custom"
+## copy); editing the backdrop or layers switches that area to Custom. Switching the active area
+## rebuilds the view from the new area's background. Reached via LD.get_background_handler().
 
 
 signal background_changed
@@ -12,53 +13,37 @@ signal background_changed
 const DEFAULT_PRESET: String = "Mushroom Hills"
 
 
-## Curated textures the layer picker offers when editing a custom background (set in the scene).
-@export var _available_textures: Array[Texture2D] = []
-
-
-var _background: LDBackground = LDBackground.new()
-var _active_preset: String = LDBackgroundDB.CUSTOM
-## True once a saved background has been restored, so _on_ready doesn't clobber it with the
-## default if the load happened first.
-var _restored: bool = false
 
 
 func _on_ready() -> void:
-	if not _restored:
-		_apply_default()
 	background_changed.connect(_persist_session)
+	LDLevel._inst.active_area_changed.connect(_on_active_area_changed)
 	_rebuild()
 
 
-func _apply_default() -> void:
-	var preset: LDBackground = LDBackgroundDB.get_preset(DEFAULT_PRESET)
-	if not preset and not LDBackgroundDB.get_presets().is_empty():
-		preset = LDBackgroundDB.get_presets()[0]
-	if preset:
-		_background = preset.duplicate(true) as LDBackground
-		_active_preset = preset.preset_name
-	else:
-		_background = LDBackground.new()
-		_active_preset = LDBackgroundDB.CUSTOM
-
-
-## Restores the default background (used when a level is reset or loaded without one).
-func reset() -> void:
-	_apply_default()
+func _on_active_area_changed(_area: LDArea) -> void:
 	_rebuild()
 	background_changed.emit()
+
+
+## Restores the active area's default background (used when a level is reset).
+func reset() -> void:
+	LD.get_area().apply_default_background()
+	_changed()
 
 
 func _persist_session() -> void:
 	LD.get_save_load_handler().save_session()
 
 
+## The background currently being edited (the active area's).
 func get_background() -> LDBackground:
-	return _background
+	return LD.get_area().background
 
 
-func get_available_textures() -> Array[Texture2D]:
-	return _available_textures
+## The curated layer presets the layer picker offers (and uses as add/swap defaults).
+func get_available_layers() -> Array[LDBackgroundLayer]:
+	return LDBackgroundDB.get_layer_presets()
 
 
 func get_preset_names() -> Array[String]:
@@ -66,81 +51,99 @@ func get_preset_names() -> Array[String]:
 
 
 func get_active_preset() -> String:
-	return _active_preset
+	return LD.get_area().background_preset
 
 
 func is_custom() -> bool:
-	return _active_preset == LDBackgroundDB.CUSTOM
+	return LD.get_area().background_preset == LDBackgroundDB.CUSTOM
 
 
-## Applies a preset by name (replacing the working background with a fresh copy), or unlocks editing
-## when given "Custom" (keeping the current background so the user can tweak from where they were).
+## Applies a preset by name (replacing the active area's background with a fresh copy), or unlocks
+## editing when given "Custom" (keeping the current background so the user can tweak from where they
+## were).
 func select_preset(preset_name: String) -> void:
+	var area: LDArea = LD.get_area()
 	if preset_name == LDBackgroundDB.CUSTOM:
-		_active_preset = LDBackgroundDB.CUSTOM
+		area.background_preset = LDBackgroundDB.CUSTOM
 		background_changed.emit()
 		return
 	var preset: LDBackground = LDBackgroundDB.get_preset(preset_name)
 	if not preset:
 		return
-	_background = preset.duplicate(true) as LDBackground
-	_active_preset = preset_name
+	area.background = preset.duplicate(true) as LDBackground
+	area.background_preset = preset_name
 	_changed()
 
 
 #region Mutators (custom only)
 
 func set_backdrop_type(type: int) -> void:
-	_background.backdrop_type = type
+	get_background().backdrop_type = type
 	_mark_custom()
 
 
 func set_solid_color(color: Color) -> void:
-	_background.solid_color = color
+	get_background().solid_color = color
 	_mark_custom()
 
 
 func set_gradient_top(color: Color) -> void:
-	_background.gradient_top = color
+	get_background().gradient_top = color
 	_mark_custom()
 
 
 func set_gradient_bottom(color: Color) -> void:
-	_background.gradient_bottom = color
+	get_background().gradient_bottom = color
 	_mark_custom()
 
 
 func add_layer() -> void:
-	var layer: LDBackgroundLayer = LDBackgroundLayer.new()
-	if not _available_textures.is_empty():
-		layer.texture = _available_textures[0]
-	_background.layers.append(layer)
+	var presets: Array[LDBackgroundLayer] = LDBackgroundDB.get_layer_presets()
+	var layer: LDBackgroundLayer = presets[0].duplicate(true) as LDBackgroundLayer if not presets.is_empty() else LDBackgroundLayer.new()
+	get_background().layers.append(layer)
+	_mark_custom()
+
+
+## Replaces the layer at `index` with a copy of the given preset (texture + defaults + correct
+## anchor), keeping the user's colour styling so swapping textures doesn't lose a tint.
+func set_layer_preset(index: int, preset: LDBackgroundLayer) -> void:
+	var layers: Array[LDBackgroundLayer] = get_background().layers
+	if index < 0 or index >= layers.size() or not preset:
+		return
+	var current: LDBackgroundLayer = layers[index]
+	var fresh: LDBackgroundLayer = preset.duplicate(true) as LDBackgroundLayer
+	fresh.modulate = current.modulate
+	fresh.custom_color = current.custom_color
+	layers[index] = fresh
 	_mark_custom()
 
 
 func remove_layer(index: int) -> void:
-	if index < 0 or index >= _background.layers.size():
+	var layers: Array[LDBackgroundLayer] = get_background().layers
+	if index < 0 or index >= layers.size():
 		return
-	_background.layers.remove_at(index)
+	layers.remove_at(index)
 	_mark_custom()
 
 
 ## Swaps the layer with its neighbour `delta` away, returning the layer's new index.
 func move_layer(index: int, delta: int) -> int:
+	var layers: Array[LDBackgroundLayer] = get_background().layers
 	var target: int = index + delta
-	if index < 0 or index >= _background.layers.size() or target < 0 or target >= _background.layers.size():
+	if index < 0 or index >= layers.size() or target < 0 or target >= layers.size():
 		return index
-	var moved: LDBackgroundLayer = _background.layers[index]
-	_background.layers[index] = _background.layers[target]
-	_background.layers[target] = moved
+	var moved: LDBackgroundLayer = layers[index]
+	layers[index] = layers[target]
+	layers[target] = moved
 	_mark_custom()
 	return target
 
 
 func set_layer_field(index: int, key: String, value: Variant) -> void:
-	if index < 0 or index >= _background.layers.size():
+	var layers: Array[LDBackgroundLayer] = get_background().layers
+	if index < 0 or index >= layers.size():
 		return
-	_background.layers[index].set(key, value)
+	layers[index].set(key, value)
 	_mark_custom()
 
 #endregion
@@ -148,30 +151,39 @@ func set_layer_field(index: int, key: String, value: Variant) -> void:
 
 #region Serialization
 
-func serialize() -> Dictionary:
-	var data: Dictionary = {"preset": _active_preset}
-	if is_custom():
-		data["data"] = _background.serialize()
+## Serializes one area's background: just the preset name, plus the full data when it's custom.
+func serialize_area(area: LDArea) -> Dictionary:
+	var data: Dictionary = {"preset": area.background_preset}
+	if area.background_preset == LDBackgroundDB.CUSTOM:
+		data["data"] = area.background.serialize()
 	return data
 
 
-func deserialize(data: Dictionary) -> void:
-	_restored = true
+## Restores an area's background from a saved dict (resolving preset vs custom data).
+func apply_to_area(area: LDArea, data: Dictionary) -> void:
 	var preset_name: String = str(data.get("preset", ""))
 	if preset_name != LDBackgroundDB.CUSTOM and LDBackgroundDB.has_preset(preset_name):
-		_active_preset = preset_name
+		area.background_preset = preset_name
 	else:
-		_active_preset = LDBackgroundDB.CUSTOM
-	_background = LDBackgroundDB.resolve(data)
+		area.background_preset = LDBackgroundDB.CUSTOM
+	area.background = LDBackgroundDB.resolve(data)
+
+
+func serialize() -> Dictionary:
+	return serialize_area(LD.get_area())
+
+
+func deserialize(data: Dictionary) -> void:
+	apply_to_area(LD.get_area(), data)
 	_rebuild()
 	background_changed.emit()
 
 #endregion
 
 
-## Any edit turns the background into a custom one.
+## Any edit turns the active area's background into a custom one.
 func _mark_custom() -> void:
-	_active_preset = LDBackgroundDB.CUSTOM
+	LD.get_area().background_preset = LDBackgroundDB.CUSTOM
 	_changed()
 
 
@@ -183,6 +195,9 @@ func _changed() -> void:
 func _rebuild() -> void:
 	if not is_instance_valid(LD.get_editor_viewport()):
 		return
+	var area: LDArea = LD.get_area()
+	if not area or not area.background:
+		return
 	var root: Control = LD.get_editor_viewport().get_background_root()
 	if root:
-		_background.build_into(root)
+		area.background.build_into(root)

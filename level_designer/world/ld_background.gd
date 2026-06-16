@@ -61,51 +61,58 @@ func build_into(root: Node) -> void:
 
 	root.add_child(_build_backdrop())
 
-	# Each layer hangs off its own zero-size control pinned to the top or bottom edge of the
-	# screen. Anchors are added in list order so the draw order follows the layer order, instead
-	# of all top-anchored layers stacking above all bottom-anchored ones.
+	# Anchors are added in list order so the draw order follows the layer order, instead of all
+	# top-anchored layers stacking above all bottom-anchored ones.
 	for layer: LDBackgroundLayer in layers:
-		var at_top: bool = layer.anchor == LDBackgroundLayer.Anchor.TOP
-		var anchor: Control = _build_anchor(at_top)
-		root.add_child(anchor)
+		root.add_child(build_layer_node(layer))
 
-		var parallax: Parallax2D = Parallax2D.new()
-		parallax.scroll_scale = Vector2(layer.parallax, layer.parallax)
-		parallax.scroll_offset = layer.offset
-		parallax.autoscroll = layer.autoscroll
-		parallax.follow_viewport = false
-		# Cap the downward limit at y = 0 so the camera can't scroll past the bottom of the
-		# parallax (mirrors hills.tscn).
-		parallax.limit_end = Vector2(parallax.limit_end.x, 0.0)
 
-		if layer.repeat and layer.texture:
-			parallax.repeat_size = Vector2(layer.texture.get_width(), 0.0)
-			parallax.repeat_times = 5
+## Builds one parallax layer: a zero-size anchor pinned to the top or bottom edge of the screen,
+## holding a Parallax2D + Sprite2D. Returned so callers (e.g. the shine select's per-layer
+## transition) can add/remove individual layers, not just the whole background.
+static func build_layer_node(layer: LDBackgroundLayer) -> Control:
+	var at_top: bool = layer.anchor == LDBackgroundLayer.Anchor.TOP
+	var anchor: Control = _build_anchor(at_top)
 
-		var sprite: Sprite2D = Sprite2D.new()
-		sprite.texture = layer.texture
-		if layer.custom_color:
-			# Desaturate the layer and recolor it by the modulate via the tint shader, leaving the
-			# node modulate white so the color isn't applied twice.
-			var mat: ShaderMaterial = ShaderMaterial.new()
-			mat.shader = TINT_SHADER
-			mat.set_shader_parameter(&"tint_color", layer.modulate)
-			sprite.material = mat
-		else:
-			sprite.modulate = layer.modulate
-		# Sit the sprite flush against its anchored edge: top edge on a top anchor, bottom edge on
-		# a bottom anchor. The layer's offset then nudges from there.
-		if layer.texture:
-			var half_height: float = layer.texture.get_height() / 2.0
-			sprite.position.y = half_height if at_top else -half_height
-		parallax.add_child(sprite)
+	var parallax: Parallax2D = Parallax2D.new()
+	parallax.scroll_scale = Vector2(layer.parallax, layer.parallax)
+	parallax.scroll_offset = layer.offset
+	parallax.autoscroll = layer.autoscroll
+	parallax.follow_viewport = false
+	# Cap the downward limit at y = 0 so the camera can't scroll past the bottom of the
+	# parallax (mirrors hills.tscn).
+	parallax.limit_end = Vector2(parallax.limit_end.x, 0.0)
 
-		anchor.add_child(parallax)
+	if layer.repeat and layer.texture:
+		parallax.repeat_size = Vector2(layer.texture.get_width(), 0.0)
+		parallax.repeat_times = 5
+
+	var sprite: Sprite2D = Sprite2D.new()
+	sprite.texture = layer.texture
+	if layer.custom_color:
+		# Desaturate the layer and recolor it by the modulate via the tint shader, leaving the
+		# node modulate white so the color isn't applied twice.
+		var mat: ShaderMaterial = ShaderMaterial.new()
+		mat.shader = TINT_SHADER
+		mat.set_shader_parameter(&"tint_color", layer.modulate)
+		sprite.material = mat
+	else:
+		sprite.modulate = layer.modulate
+	# Sit the sprite flush against its anchored edge: top edge on a top anchor, bottom edge on
+	# a bottom anchor. The layer's offset then nudges from there.
+	if layer.texture:
+		var half_height: float = layer.texture.get_height() / 2.0
+		sprite.position.y = half_height if at_top else -half_height
+
+	parallax.add_child(sprite)
+
+	anchor.add_child(parallax)
+	return anchor
 
 
 ## A zero-size control pinned to the top-center or bottom-center of the parent, used as the origin
 ## for the parallax layers anchored to that edge.
-func _build_anchor(at_top: bool) -> Control:
+static func _build_anchor(at_top: bool) -> Control:
 	var anchor: Control = Control.new()
 	anchor.anchor_left = 0.5
 	anchor.anchor_right = 0.5

@@ -63,6 +63,7 @@ var is_mouse_panning: bool = false:
 			else:
 				_viewport_input.mouse_default_cursor_shape = Control.CURSOR_ARROW
 
+var _bound_area: LDArea
 var _selected_objects: Array[LDObject] = []
 var _touch_points: Dictionary[int, Vector2] = {}
 var _hold_timer: float = 0.0
@@ -79,8 +80,19 @@ func _on_ready() -> void:
 	_on_viewport_moved(camera_position, camera_zoom)
 	set_input_priority()
 	
-	LDLevel.get_active_area().layer_created.connect(_on_layer_created)
-	LDLevel.get_active_area().active_layer_changed.connect(_on_active_layer_changed)
+	LDLevel._inst.active_area_changed.connect(_bind_area)
+	_bind_area(LDLevel.get_active_area())
+
+
+## Tracks the active area's layer signals, rebinding when the active area changes so the viewport
+## follows whichever area is being edited.
+func _bind_area(area: LDArea) -> void:
+	_bound_area = area
+	if not area.layer_created.is_connected(_on_layer_created):
+		area.layer_created.connect(_on_layer_created)
+	if not area.active_layer_changed.is_connected(_on_active_layer_changed):
+		area.active_layer_changed.connect(_on_active_layer_changed)
+	area.refresh_layer_visuals()
 
 
 func _process(delta: float) -> void:

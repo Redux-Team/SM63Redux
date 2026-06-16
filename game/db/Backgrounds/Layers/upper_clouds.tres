@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="LDBackgroundLayer" format=3 uid="uid://crhta8lkeg71e"]
+
+[ext_resource type="Script" uid="uid://pix2reyi4xnf" path="res://level_designer/world/ld_background_layer.gd" id="1_layer"]
+[ext_resource type="Texture2D" uid="uid://cg0354brx4x1h" path="res://assets/textures/world/background/clouds_0/bg_clouds_02.png" id="2_tex"]
+
+[resource]
+script = ExtResource("1_layer")
+id = "upper_clouds"
+display_name = "Upper Clouds"
+texture = ExtResource("2_tex")
+parallax = 0.0
+autoscroll = Vector2(-4, 0)
+repeat = true
+anchor = 1
