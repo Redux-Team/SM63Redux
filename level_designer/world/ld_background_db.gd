@@ -45,7 +45,7 @@ static func has_preset(preset_name: String) -> bool:
 static func resolve(data: Dictionary) -> LDBackground:
 	var preset_name: String = str(data.get("preset", ""))
 	if preset_name != CUSTOM and has_preset(preset_name):
-		return get_preset(preset_name).duplicate(true) as LDBackground
+		return get_preset(preset_name).working_copy()
 	return LDBackground.deserialize(data.get("data", {}))
 
 

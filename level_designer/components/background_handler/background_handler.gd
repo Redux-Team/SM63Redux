@@ -70,7 +70,7 @@ func select_preset(preset_name: String) -> void:
 	var preset: LDBackground = LDBackgroundDB.get_preset(preset_name)
 	if not preset:
 		return
-	area.background = preset.duplicate(true) as LDBackground
+	area.background = preset.working_copy()
 	area.background_preset = preset_name
 	_changed()
 

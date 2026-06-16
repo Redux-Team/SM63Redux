@@ -51,6 +51,18 @@ static func deserialize(data: Dictionary) -> LDBackground:
 	return bg
 
 
+## Returns an independent working copy: the background plus fresh duplicates of every layer.
+## Plain duplicate(true) aliases layers that are external .tres preset references (it only deep-
+## copies embedded sub-resources), so editing one would mutate the shared preset on disk/in cache.
+func working_copy() -> LDBackground:
+	var copy: LDBackground = duplicate(true) as LDBackground
+	var fresh_layers: Array[LDBackgroundLayer] = []
+	for layer: LDBackgroundLayer in copy.layers:
+		fresh_layers.append(layer.duplicate(true) as LDBackgroundLayer)
+	copy.layers = fresh_layers
+	return copy
+
+
 ## (Re)builds the background nodes into `root`, clearing it first. `root` should be a full-rect
 ## Control (editor) or a CanvasLayer (runtime); both let the backdrop and anchors fill the screen.
 func build_into(root: Node) -> void:

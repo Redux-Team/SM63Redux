@@ -170,7 +170,7 @@ func apply_default_background() -> void:
 	if not preset and not LDBackgroundDB.get_presets().is_empty():
 		preset = LDBackgroundDB.get_presets()[0]
 	if preset:
-		background = preset.duplicate(true) as LDBackground
+		background = preset.working_copy()
 		background_preset = preset.preset_name
 	else:
 		background = LDBackground.new()
