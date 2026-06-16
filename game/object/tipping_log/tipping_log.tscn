@@ -41,9 +41,9 @@ offset_bottom = 9.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("CanvasTexture_7e0u6")
-region_rect = Rect2(0, 0, 70, 18)
-patch_margin_left = 21
-patch_margin_right = 19
+region_rect = Rect2(0, 0, 66, 18)
+patch_margin_left = 17
+patch_margin_right = 17
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 

@@ -11,7 +11,9 @@ resource_local_to_scene = true
 shader = ExtResource("2_utg06")
 shader_parameter/state = 0
 shader_parameter/palette_index = 0
-shader_parameter/custom_modulate = Color(1, 1, 1, 1)
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/saturation = 1.0
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/fill_color = Color(1, 1, 1, 0.25)
@@ -20,6 +22,8 @@ shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
 shader_parameter/pulse_speed = 0.5
 shader_parameter/pulse_min = 0.3
 shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_guk28"]
 diffuse_texture = ExtResource("3_mu7ru")
@@ -54,9 +58,9 @@ offset_bottom = 9.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("CanvasTexture_guk28")
-region_rect = Rect2(0, 0, 70, 18)
-patch_margin_left = 21
-patch_margin_right = 19
+region_rect = Rect2(0, 0, 66, 18)
+patch_margin_left = 17
+patch_margin_right = 17
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 

@@ -1,29 +1,10 @@
 [gd_scene format=3 uid="uid://bmdiui1tdgn3f"]
 
 [ext_resource type="Script" uid="uid://dhylcwhc7lj0p" path="res://game/object/tipping_log/tipping_log.gd" id="1_qngg4"]
-[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_wp00r"]
 [ext_resource type="Texture2D" uid="uid://cmerha3f3rw7u" path="res://assets/textures/props/platform/tipping_platform_cold.png" id="3_lyych"]
 [ext_resource type="Texture2D" uid="uid://bqb6yhetauu1e" path="res://assets/textures/props/platform/tipping_platform_cold_center.png" id="3_wp00r"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_2kyx3"]
 [ext_resource type="Script" uid="uid://dvxkxevaf2f45" path="res://core/custom_nodes/2d/ride_area.gd" id="5_em453"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_34jw4"]
-resource_local_to_scene = true
-shader = ExtResource("2_wp00r")
-shader_parameter/state = 0
-shader_parameter/palette_index = 0
-shader_parameter/pre_modulate = Color(1, 1, 1, 1)
-shader_parameter/post_modulate = Color(1, 1, 1, 1)
-shader_parameter/outline_width = 1.0
-shader_parameter/outline_color = Color(1, 1, 1, 1)
-shader_parameter/fill_color = Color(1, 1, 1, 0.25)
-shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
-shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
-shader_parameter/pulse_speed = 0.5
-shader_parameter/pulse_min = 0.3
-shader_parameter/pulse_max = 1.0
-shader_parameter/outline_ignore_holes = true
-shader_parameter/outline_enabled = true
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_wp00r"]
 diffuse_texture = ExtResource("3_wp00r")
@@ -45,7 +26,6 @@ collision_shapes = [NodePath("StaticBody2D/CollisionShape2D"), NodePath("RideAre
 metadata/_custom_type_script = "uid://u0c5qwqjxkub"
 
 [node name="NinePatch" type="NinePatchRect" parent="." unique_id=289572106]
-material = SubResource("ShaderMaterial_34jw4")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -58,9 +38,9 @@ offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_lyych")
-region_rect = Rect2(0, 0, 72, 15)
-patch_margin_left = 6
-patch_margin_right = 6
+region_rect = Rect2(0, 0, 66, 16)
+patch_margin_left = 17
+patch_margin_right = 17
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
