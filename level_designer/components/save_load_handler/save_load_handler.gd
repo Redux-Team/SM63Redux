@@ -565,7 +565,13 @@ func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB, area: L
 	
 	var props: Dictionary = data.get("properties", {})
 	for key: String in props:
+		# The node position (set above via add_object) is authoritative; a stale "position"
+		# property would otherwise snap the object back to its default origin.
+		if key == "position":
+			continue
 		instance.set_property(StringName(key), Packer.deserialize_json_variant(props.get(key)))
+	if instance.has_property("position"):
+		instance.set_property_no_apply(&"position", pos)
 	
 	if instance is LDObjectPolygon and data.has("polygon_points"):
 		var poly_obj: LDObjectPolygon = instance as LDObjectPolygon

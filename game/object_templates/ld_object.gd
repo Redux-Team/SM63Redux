@@ -91,21 +91,32 @@ func place(first: bool = false) -> void:
 	_enforce_uniqueness()
 
 
-## If this object's GameObject is flagged unique, removes any other placed instance
-## of the same object so only this newly-placed one remains in the level.
+## If this object's GameObject is flagged unique, removes any other placed instance of the same
+## object in this object's own area, so each area keeps exactly one (e.g. its own player spawn).
 func _enforce_uniqueness() -> void:
 	if source_object_id.is_empty() or not LD.is_ready():
 		return
 	var game_object: GameObject = GameDB.get_db().find_game_object(source_object_id)
 	if not game_object or not game_object.ld_unique:
 		return
-	for other: LDObject in LDLevel.get_active_area().get_all_objects():
+	var area: LDArea = _owning_area()
+	if not area:
+		return
+	for other: LDObject in area.get_all_objects():
 		if other == self or other.is_preview:
 			continue
 		if other.source_object_id == source_object_id:
 			if other.get_parent():
 				other.get_parent().remove_child(other)
 			other.queue_free()
+
+
+## Walks up the scene tree to the LDArea this object lives in (objects sit under layer → area).
+func _owning_area() -> LDArea:
+	var node: Node = get_parent()
+	while node and node is not LDArea:
+		node = node.get_parent()
+	return node as LDArea
 
 
 func bind_to_active_layer() -> void:

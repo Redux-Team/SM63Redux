@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bar3aedit0r7x"]
 
-[ext_resource type="Script" path="res://level_designer/components/ui/areas_editor/areas_editor.gd" id="1_aedit"]
+[ext_resource type="Script" uid="uid://bu1fvn4nulvi" path="res://level_designer/components/ui/areas_editor/areas_editor.gd" id="1_aedit"]
 
-[node name="AreaEditor" type="MarginContainer" node_paths=PackedStringArray("area_list", "add_button", "move_up_button", "move_down_button", "remove_button", "detail", "name_edit", "switch_button")]
+[node name="AreaEditor" type="MarginContainer" unique_id=82214833 node_paths=PackedStringArray("area_list", "add_button", "move_up_button", "move_down_button", "remove_button", "detail", "name_edit", "switch_button")]
 custom_minimum_size = Vector2(470, 0)
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
@@ -18,76 +18,70 @@ detail = NodePath("Columns/Detail")
 name_edit = NodePath("Columns/Detail/NameRow/NameEdit")
 switch_button = NodePath("Columns/Detail/SwitchButton")
 
-[node name="Columns" type="HBoxContainer" parent="."]
+[node name="Columns" type="HBoxContainer" parent="." unique_id=566939268]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="List" type="VBoxContainer" parent="Columns"]
+[node name="List" type="VBoxContainer" parent="Columns" unique_id=1863094101]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Header" type="Label" parent="Columns/List"]
+[node name="Header" type="Label" parent="Columns/List" unique_id=1937833247]
 layout_mode = 2
 text = "Areas"
 
-[node name="AreaList" type="ItemList" parent="Columns/List"]
+[node name="AreaList" type="ItemList" parent="Columns/List" unique_id=113882517]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="AddButton" type="Button" parent="Columns/List"]
+[node name="AddButton" type="Button" parent="Columns/List" unique_id=1944469911]
 layout_mode = 2
 text = "Add Area"
 
-[node name="Buttons" type="HBoxContainer" parent="Columns/List"]
+[node name="Buttons" type="HBoxContainer" parent="Columns/List" unique_id=453110640]
 layout_mode = 2
 
-[node name="MoveUpButton" type="Button" parent="Columns/List/Buttons"]
+[node name="MoveUpButton" type="Button" parent="Columns/List/Buttons" unique_id=1825310185]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Move Up"
 
-[node name="MoveDownButton" type="Button" parent="Columns/List/Buttons"]
+[node name="MoveDownButton" type="Button" parent="Columns/List/Buttons" unique_id=982684448]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Move Down"
 
-[node name="RemoveButton" type="Button" parent="Columns/List/Buttons"]
+[node name="RemoveButton" type="Button" parent="Columns/List/Buttons" unique_id=1884038661]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Remove"
 
-[node name="Sep" type="VSeparator" parent="Columns"]
+[node name="Sep" type="VSeparator" parent="Columns" unique_id=748212104]
 layout_mode = 2
 
-[node name="Detail" type="VBoxContainer" parent="Columns"]
+[node name="Detail" type="VBoxContainer" parent="Columns" unique_id=752866187]
 custom_minimum_size = Vector2(230, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Header" type="Label" parent="Columns/Detail"]
+[node name="Header" type="Label" parent="Columns/Detail" unique_id=1732863376]
 layout_mode = 2
 text = "Area"
 
-[node name="NameRow" type="HBoxContainer" parent="Columns/Detail"]
+[node name="NameRow" type="HBoxContainer" parent="Columns/Detail" unique_id=1515709576]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Columns/Detail/NameRow"]
+[node name="Label" type="Label" parent="Columns/Detail/NameRow" unique_id=1237783482]
 layout_mode = 2
 text = "Name"
 
-[node name="NameEdit" type="LineEdit" parent="Columns/Detail/NameRow"]
+[node name="NameEdit" type="LineEdit" parent="Columns/Detail/NameRow" unique_id=1502816977]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Unnamed"
 
-[node name="SwitchButton" type="Button" parent="Columns/Detail"]
+[node name="SwitchButton" type="Button" parent="Columns/Detail" unique_id=524295920]
 layout_mode = 2
 text = "Switch to This Area"
-
-[node name="Hint" type="Label" parent="Columns/Detail"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
-text = "Each area has its own layers and background. Switch areas to edit them; scenarios choose which area loads."
-autowrap_mode = 2
