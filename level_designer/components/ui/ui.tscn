@@ -100,13 +100,13 @@ unicode = 50
 [sub_resource type="Shortcut" id="Shortcut_awha3"]
 events = [SubResource("InputEventKey_11twt")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_uannl"]
+[sub_resource type="InputEventKey" id="InputEventKey_d84u2"]
 device = -1
-keycode = 81
-unicode = 113
+physical_keycode = 81
+unicode = 97
 
 [sub_resource type="Shortcut" id="Shortcut_sdhrq"]
-events = [SubResource("InputEventKey_uannl")]
+events = [SubResource("InputEventKey_d84u2")]
 
 [sub_resource type="InputEventKey" id="InputEventKey_sdhrq"]
 device = -1
@@ -207,6 +207,43 @@ keycode = 4194324
 
 [sub_resource type="Shortcut" id="Shortcut_y8t77"]
 events = [SubResource("InputEventKey_8p5vc")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_jswlc"]
+device = -1
+ctrl_pressed = true
+keycode = 83
+
+[sub_resource type="Shortcut" id="Shortcut_8wigk"]
+events = [SubResource("InputEventKey_jswlc")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_nm1lm"]
+device = -1
+shift_pressed = true
+ctrl_pressed = true
+keycode = 83
+
+[sub_resource type="Shortcut" id="Shortcut_4kay6"]
+events = [SubResource("InputEventKey_nm1lm")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_d0brl"]
+device = -1
+ctrl_pressed = true
+keycode = 79
+
+[sub_resource type="InputEventKey" id="InputEventKey_llbru"]
+device = -1
+ctrl_pressed = true
+keycode = 76
+
+[sub_resource type="Shortcut" id="Shortcut_00vlk"]
+events = [SubResource("InputEventKey_d0brl"), SubResource("InputEventKey_llbru")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_8wigk"]
+device = -1
+physical_keycode = 4194309
+
+[sub_resource type="Shortcut" id="Shortcut_nm1lm"]
+events = [SubResource("InputEventKey_8wigk")]
 
 [node name="UI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_window_handler", "_viewport_handler", "_toolbar_handler", "_file_handler", "_hotbar_handler")]
 script = ExtResource("1_8w51u")
@@ -534,16 +571,19 @@ alignment = 2
 [node name="SaveButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer3" unique_id=244361035]
 layout_mode = 2
 focus_mode = 0
+shortcut = SubResource("Shortcut_8wigk")
 text = "Save"
 
 [node name="SaveNewButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer3" unique_id=244361036]
 layout_mode = 2
 focus_mode = 0
+shortcut = SubResource("Shortcut_4kay6")
 text = "Save As..."
 
 [node name="LoadButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer3" unique_id=1138989682]
 layout_mode = 2
 focus_mode = 0
+shortcut = SubResource("Shortcut_00vlk")
 text = "Load"
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="ViewportUI" unique_id=2052051468]
@@ -574,6 +614,7 @@ text = "Test (Client)"
 [node name="TestServerButton" type="Button" parent="ViewportUI/VBoxContainer3/HBoxContainer" unique_id=700489393]
 layout_mode = 2
 focus_mode = 0
+shortcut = SubResource("Shortcut_nm1lm")
 text = "Test Level"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ViewportUI" unique_id=245638557]
