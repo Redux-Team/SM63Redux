@@ -1998,7 +1998,6 @@ __editor_superstate_wire_uuid = &"1a672940-36b6-42fb-9579-e3e44c1736ad"
 
 [node name="RolloutF" type="Node" parent="StateMachine/Dry/Airborne" unique_id=393936851]
 script = ExtResource("12_02rvq")
-rollout_jump_strength = null
 sprite_animation_name = &"jump"
 sprite_restart_if_playing = false
 sprite_loop = false
@@ -2012,7 +2011,6 @@ __editor_superstate_wire_uuid = &"0dd74506-66e0-4267-b86b-0572da305c2a"
 
 [node name="BaseJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1477404521]
 script = ExtResource("15_5mhew")
-triple_jump_threshold = null
 always_transition = true
 sprite_restart_if_playing = false
 sprite_loop = false
@@ -2151,7 +2149,6 @@ __editor_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
 
 [node name="GroundPoundStart" type="Node" parent="StateMachine/GroundPound" unique_id=1889846081]
 script = ExtResource("15_eihrn")
-ground_pound_start_velocity = null
 runtime = 0.3
 sprite_animation_name = &"ground_pound_start"
 sprite_restart_if_playing = false
@@ -2169,7 +2166,6 @@ __editor_superstate_wire_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
 
 [node name="GroundPoundFall" type="Node" parent="StateMachine/GroundPound" unique_id=2058012596 node_paths=PackedStringArray("collision_enabled_shapes")]
 script = ExtResource("16_eihrn")
-ground_pound_velocity = 100.0
 sprite_animation_name = &"ground_pound_fall"
 sprite_restart_if_playing = false
 sprite_lock_flipping = true
