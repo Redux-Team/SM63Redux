@@ -2149,6 +2149,7 @@ __editor_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
 
 [node name="GroundPoundStart" type="Node" parent="StateMachine/GroundPound" unique_id=1889846081]
 script = ExtResource("15_eihrn")
+ground_pound_start_velocity = Vector2(0, -38)
 runtime = 0.3
 sprite_animation_name = &"ground_pound_start"
 sprite_restart_if_playing = false
