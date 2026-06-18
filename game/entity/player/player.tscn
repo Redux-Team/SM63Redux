@@ -1488,8 +1488,8 @@ root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(-89.457886, -62.97766)
-__last_editor_zoom = 0.2357948
+__last__editor_position = Vector2(278.59717, 17.056503)
+__last_editor_zoom = 1.0
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),
@@ -2128,6 +2128,7 @@ __editor_superstate_wire_uuid = &"fac7caf1-9473-4b51-87ce-64f33b12c026"
 [node name="SwimSpin" type="Node" parent="StateMachine/Submerged" unique_id=1905840328 node_paths=PackedStringArray("spin_hitbox")]
 script = ExtResource("39_mjy7s")
 spin_hitbox = NodePath("../../../Hitboxes/Spin")
+spin_hitbox_timer = null
 sprite_animation_name = &"spin_start"
 sprite_chain = Array[StringName]([&"spin_loop"])
 sfx_enter = SubResource("Resource_cpfge")
@@ -2149,7 +2150,6 @@ __editor_uuid = &"74d37025-c0e7-44f3-9562-5d9cae8dab86"
 
 [node name="GroundPoundStart" type="Node" parent="StateMachine/GroundPound" unique_id=1889846081]
 script = ExtResource("15_eihrn")
-ground_pound_start_velocity = Vector2(0, -38)
 runtime = 0.3
 sprite_animation_name = &"ground_pound_start"
 sprite_restart_if_playing = false

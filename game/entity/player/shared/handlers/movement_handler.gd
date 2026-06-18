@@ -6,7 +6,7 @@ extends Node
 @export_subgroup("Grounded")
 @export var walk_acceleration: float = 20.0
 @export var turn_speed: float = 2.5
-@export var friction_factor: float = 0.4
+@export var damping_factor: float = 0.4
 @export_subgroup("Airborne")
 @export var air_resistance: float = 1.0
 @export var midair_turn_speed: float = 1.0

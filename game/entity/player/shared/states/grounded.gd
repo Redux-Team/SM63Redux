@@ -2,6 +2,9 @@
 extends State
 
 
+@export var friction_speed_subtract: float = 0.3
+@export var friction_speed_divide: float = 1.15
+
 func _on_physics_tick(_delta: float) -> void:
 	if abs(player.move_dir) > 0.0 and not state_machine.get_current_state().get_internal_name() == "crouch":
 		_speed_up(player.move_dir)
@@ -25,7 +28,10 @@ func _speed_up(dir: float) -> void:
  
  
 func _apply_friction() -> void:
-	var speed: float = abs(player.velocity.x)
-	speed = max(0.0, speed - 0.3)
-	speed /= 1.15
-	player.velocity.x = speed * sign(player.velocity.x)
+	#var speed: float = abs(player.velocity.x)
+	#speed = max(0.0, speed - 0.3)
+	#speed /= 1.15
+	#player.velocity.x = speed * sign(player.velocity.x)
+	
+	player.velocity.move_toward(Vector2.ZERO, friction_speed_subtract)
+	player.velocity /= friction_speed_divide
