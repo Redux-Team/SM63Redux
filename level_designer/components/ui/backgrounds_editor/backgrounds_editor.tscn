@@ -1,13 +1,15 @@
-[gd_scene format=3 uid="uid://c8bgedit0lds1"]
+[gd_scene load_steps=4 format=3 uid="uid://c8bgedit0lds1"]
 
 [ext_resource type="Script" uid="uid://doxcls30t26e" path="res://level_designer/components/ui/backgrounds_editor/backgrounds_editor.gd" id="1_bged"]
+[ext_resource type="Texture2D" uid="uid://boi5n5utdpqmj" path="res://assets/textures/level_designer/ui_icons/add.svg" id="ic_add"]
+[ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="ic_remove"]
 
 [node name="BackgroundsEditor" type="MarginContainer" unique_id=534413008 node_paths=PackedStringArray("preset_option", "type_option", "solid_row", "solid_color", "gradient_rows", "gradient_top", "gradient_bottom", "backdrop_preview", "layer_list", "add_layer_button", "move_up_button", "move_down_button", "remove_layer_button", "layer_placeholder", "layer_preview", "layer_fields", "texture_option", "parallax_spin", "custom_color_check", "color_picker", "offset_x", "offset_y", "autoscroll_x", "autoscroll_y")]
 custom_minimum_size = Vector2(505, 360)
-scale = Vector2(0.8, 0.8)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_bged")
+metadata/gdss_mode = 1
 preset_option = NodePath("Body/PresetRow/PresetOption")
 type_option = NodePath("Body/Tabs/Backdrop/VBoxContainer/TypeRow/TypeOption")
 solid_row = NodePath("Body/Tabs/Backdrop/VBoxContainer/SolidRow")
@@ -122,6 +124,7 @@ custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
 size_flags_vertical = 3
 expand_mode = 1
+metadata/gdss_classes = PackedStringArray("Inset")
 
 [node name="Layers" type="MarginContainer" parent="Body/Tabs" unique_id=118970384]
 layout_mode = 2
@@ -149,7 +152,10 @@ text = "Layers"
 
 [node name="AddLayerButton" type="Button" parent="Body/Tabs/Layers/HBoxContainer/Main/LayersHeader" unique_id=1337213103]
 layout_mode = 2
-text = "+"
+tooltip_text = "Add layer"
+icon = ExtResource("ic_add")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="LayerList" type="ItemList" parent="Body/Tabs/Layers/HBoxContainer/Main" unique_id=243729061]
 custom_minimum_size = Vector2(0, 90)
@@ -172,7 +178,10 @@ text = "Move Down"
 [node name="RemoveLayerButton" type="Button" parent="Body/Tabs/Layers/HBoxContainer/Main/LayerButtons" unique_id=1569352731]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Remove"
+tooltip_text = "Remove layer"
+icon = ExtResource("ic_remove")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton", "Danger")
 
 [node name="Sep" type="VSeparator" parent="Body/Tabs/Layers/HBoxContainer" unique_id=1196054632]
 layout_mode = 2
@@ -188,6 +197,7 @@ custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
+metadata/gdss_classes = PackedStringArray("Inset")
 
 [node name="Placeholder" type="Label" parent="Body/Tabs/Layers/HBoxContainer/Detail" unique_id=780336242]
 layout_mode = 2
@@ -196,6 +206,7 @@ text = "Select a background layer"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+metadata/gdss_classes = PackedStringArray("Mute")
 
 [node name="Fields" type="VBoxContainer" parent="Body/Tabs/Layers/HBoxContainer/Detail" unique_id=957191827]
 layout_mode = 2

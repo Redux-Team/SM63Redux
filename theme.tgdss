@@ -1,0 +1,619 @@
+# @chunk Meta
+# ============================================================================
+#  SM63 Redux — Level Designer theme (GDSS)
+#  Chunky pixel-art editor: cool blue-tinted dark, sky-blue accent. HARD edges
+#  (anti-aliasing off), small 2px corners, solid 2px borders, subtle gradients
+#  for depth (not flat). Font (bylight) + body font_size come from
+#  res://level_designer/ld_editor_theme.tres (assigned to UI roots) — GDSS can't
+#  set fonts, and font_size lives there so it can be scaled up for mobile.
+#  Icon size is driven by expand_icon (fills the button), so it scales with the
+#  device. Palette globals are the single source of truth; the in-viewport
+#  Node2D gizmos read the same globals via GDSS.get_global_var().
+# ============================================================================
+@meta {
+	name: "LD Pixel"
+	description: "SM63 Redux level designer — chunky pixel-art editor, cool dark + sky-blue."
+	default_scheme: dark
+}
+
+# @chunk Palette
+# ---- Brand / accent -------------------------------------------------------
+@global var accent: "#3da4ff"
+@global var accent_hi: "#62b6ff"
+@global var accent_press: "#2c82d6"
+@global var on_accent: "#06101f"
+@global var accent_20: "#3da4ff36"
+@global var accent_40: "#3da4ff6e"
+
+# ---- Cool blue-tinted dark surfaces (more color than neutral gray) --------
+@global var bg: "#141a26"
+@global var surface: "#1c2332"
+@global var surface_2: "#252e41"
+@global var surface_3: "#333e57"
+@global var surface_4: "#42506e"
+
+# ---- Text -----------------------------------------------------------------
+@global var text: "#eaeef5"
+@global var text_dim: "#9fa9bd"
+@global var text_mute: "#6a7488"
+
+# ---- Lines / borders (solid, blue-tinted — gives the chrome colored edges) -
+@global var line: "#3c4a63"
+@global var line_hi: "#54658c"
+
+# ---- Semantic -------------------------------------------------------------
+@global var danger: "#f25a4f"
+@global var danger_hi: "#ff7066"
+@global var danger_press: "#cf4339"
+@global var danger_20: "#f25a4f33"
+@global var add: "#54d07a"
+@global var warn: "#ffb454"
+
+# ---- Viewport gizmo palette (read by Node2D _draw via GDSS.get_global_var) -
+@global var vertex_fill: "#f2f5f8"
+@global var vertex_border: "#3da4ff"
+@global var gizmo_edge: "#ffffff66"
+@global var gizmo_disabled: "#7a818c"
+@global var selection: "#3da4ff"
+@global var selection_fill: "#3da4ff20"
+@global var scrim: "#0a0d12c0"
+
+# ---- Misc -----------------------------------------------------------------
+@global var tt: 0.06
+
+@scheme dark {
+}
+
+# @chunk Buttons
+# Base button = chunky gradient tile with a hard 2px border. Icon buttons are
+# transparent until interacted; the filled look is for text CTAs.
+Button {
+	bg_color: linear_gradient($surface_3, $surface_2, 90)
+	border_color: $line_hi
+	border: 2 2 2 2
+	corner_radius: 2 2 2 2
+	anti_aliasing: false
+	font_color: $text
+	icon_color: $text
+	padding: 11 11 6 6
+	cursor: POINTING
+	transition_time: $tt
+	transition_type: EASE_OUT
+	transition_func: QUAD
+
+	:hover {
+		bg_color: linear_gradient($surface_4, $surface_3, 90)
+		border_color: $accent_40
+	}
+	:pressed {
+		bg_color: linear_gradient($accent_hi, $accent, 90)
+		border_color: $accent_hi
+		font_color: $on_accent
+		icon_color: $on_accent
+	}
+	:hover_pressed {
+		bg_color: linear_gradient($accent_hi, $accent, 90)
+		border_color: $accent_hi
+		font_color: $on_accent
+		icon_color: $on_accent
+	}
+	:disabled {
+		bg_color: $surface
+		border_color: $line
+		font_color: $text_mute
+		icon_color: $text_mute
+		cursor: ARROW
+	}
+	:focus {
+		border_color: $accent
+	}
+
+	# ---- Square icon button (toolbar tiles) — icon fills via expand_icon ---
+	IconButton {
+		bg_color: rgba(0, 0, 0, 0)
+		border_color: rgba(0, 0, 0, 0)
+		border: 0 0 0 0
+		padding: 4 4 4 4
+		icon_color: $text_dim
+		:hover {
+			bg_color: $surface_3
+			border_color: rgba(0, 0, 0, 0)
+			icon_color: $text
+		}
+		:pressed {
+			bg_color: linear_gradient($accent_hi, $accent, 90)
+			icon_color: $on_accent
+		}
+		:disabled {
+			bg_color: rgba(0, 0, 0, 0)
+			icon_color: $text_mute
+		}
+	}
+
+	# ---- Tool-rail tile ----------------------------------------------------
+	ToolButton {
+		bg_color: rgba(0, 0, 0, 0)
+		border_color: rgba(0, 0, 0, 0)
+		border: 0 0 0 0
+		padding: 5 5 5 5
+		icon_color: $text_dim
+		:hover {
+			bg_color: $surface_3
+			icon_color: $text
+		}
+		:pressed {
+			bg_color: linear_gradient($accent_hi, $accent, 90)
+			icon_color: $on_accent
+		}
+	}
+
+	# ---- Active state (added in code to the selected tool / open panel) ----
+	Active {
+		bg_color: linear_gradient($accent_hi, $accent, 90)
+		border_color: $accent_hi
+		border: 2 2 2 2
+		icon_color: $on_accent
+		font_color: $on_accent
+		:hover {
+			bg_color: linear_gradient($accent_hi, $accent_hi, 90)
+			border_color: "#9bd0ff"
+			icon_color: $on_accent
+		}
+		:pressed {
+			bg_color: $accent_press
+			icon_color: $on_accent
+		}
+	}
+
+	# ---- Filled accent CTA (Test Level, dialog confirm) — icon + text ------
+	Primary {
+		bg_color: linear_gradient($accent_hi, $accent, 90)
+		border_color: $accent_hi
+		border: 2 2 2 2
+		font_color: $on_accent
+		icon_color: $on_accent
+		icon_max_width: 18
+		padding: 12 12 6 6
+		:hover {
+			bg_color: linear_gradient("#7cc2ff", $accent_hi, 90)
+			border_color: "#9bd0ff"
+			font_color: $on_accent
+			icon_color: $on_accent
+		}
+		:pressed {
+			bg_color: $accent_press
+			icon_color: $on_accent
+		}
+	}
+
+	# ---- Destructive (Delete / Reset / Remove) ----------------------------
+	Danger {
+		bg_color: rgba(0, 0, 0, 0)
+		border_color: rgba(0, 0, 0, 0)
+		border: 0 0 0 0
+		icon_color: $text_dim
+		font_color: $text_dim
+		padding: 4 4 4 4
+		:hover {
+			bg_color: $danger_20
+			icon_color: $danger_hi
+			font_color: $danger_hi
+		}
+		:pressed {
+			bg_color: linear_gradient($danger_hi, $danger, 90)
+			icon_color: "#ffffff"
+			font_color: "#ffffff"
+		}
+	}
+
+	# ---- Outline / secondary ----------------------------------------------
+	Ghost {
+		bg_color: rgba(0, 0, 0, 0)
+		border_color: $line_hi
+		border: 2 2 2 2
+		font_color: $text
+		icon_color: $text
+		:hover {
+			bg_color: $surface_3
+			border_color: $accent
+		}
+		:pressed {
+			bg_color: $surface_4
+		}
+	}
+
+	# ---- Borderless minimal (group headers, inline list buttons) ----------
+	Flat {
+		bg_color: rgba(0, 0, 0, 0)
+		border_color: rgba(0, 0, 0, 0)
+		border: 0 0 0 0
+		font_color: $text_dim
+		icon_color: $text_dim
+		padding: 8 8 5 5
+		:hover {
+			bg_color: $surface_3
+			font_color: $text
+			icon_color: $text
+		}
+		:pressed {
+			bg_color: $surface_3
+			font_color: $accent
+			icon_color: $accent
+		}
+	}
+
+	# ---- View-option toggle (toggle_mode; :pressed = ON) -------------------
+	ViewportToggle {
+		bg_color: linear_gradient($surface_3, $surface_2, 90)
+		border_color: $line_hi
+		border: 2 2 2 2
+		padding: 4 4 4 4
+		icon_color: $text_dim
+		:hover {
+			bg_color: linear_gradient($surface_4, $surface_3, 90)
+			border_color: $accent_40
+			icon_color: $text
+		}
+		:pressed {
+			bg_color: linear_gradient($accent_hi, $accent, 90)
+			border_color: $accent_hi
+			icon_color: $on_accent
+		}
+		:hover_pressed {
+			bg_color: linear_gradient($accent_hi, $accent, 90)
+			icon_color: $on_accent
+		}
+	}
+
+	# ---- Window close (X) — visible chunky red-on-hover square -------------
+	Close {
+		bg_color: linear_gradient($surface_3, $surface_2, 90)
+		border_color: $line_hi
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+		icon_color: $text
+		padding: 5 5 5 5
+		:hover {
+			bg_color: linear_gradient($danger_hi, $danger, 90)
+			border_color: $danger_hi
+			icon_color: "#ffffff"
+		}
+		:pressed {
+			bg_color: $danger_press
+			icon_color: "#ffffff"
+		}
+	}
+
+	# ---- Object/stamp tile (object browser) — preview fills ----------------
+	Tile {
+		bg_color: linear_gradient($surface_3, $surface_2, 90)
+		border_color: $line
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+		padding: 3 3 3 3
+		:hover {
+			bg_color: linear_gradient($surface_4, $surface_3, 90)
+			border_color: $accent
+		}
+		:pressed {
+			bg_color: $accent_20
+			border_color: $accent
+		}
+		:focus {
+			border_color: $accent
+		}
+	}
+
+	# ---- Hotbar slot — preview fills ---------------------------------------
+	Hotbar {
+		bg_color: linear_gradient($surface_3, $surface_2, 90)
+		border_color: $line_hi
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+		padding: 3 3 3 3
+		:hover {
+			bg_color: linear_gradient($surface_4, $surface_3, 90)
+			border_color: $accent
+		}
+		:focus {
+			border_color: $accent
+		}
+	}
+
+	# ---- Viewport handle chips — small sharp squares -----------------------
+	Vertex {
+		bg_color: $vertex_fill
+		border_color: $accent
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+		padding: 0 0 0 0
+		:hover {
+			bg_color: $accent
+			border_color: $accent_hi
+		}
+		:pressed {
+			bg_color: $accent_press
+			border_color: "#ffffff"
+		}
+	}
+	VertexHead {
+		bg_color: $accent
+		border_color: "#ffffff"
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+		:hover {
+			bg_color: $accent_hi
+		}
+	}
+	VertexHole {
+		bg_color: $surface
+		border_color: $accent
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+		:hover {
+			bg_color: $accent_20
+		}
+	}
+	VertexPreview {
+		bg_color: $accent_20
+		border_color: $accent_40
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+	}
+}
+
+# @chunk Panels
+# Hard-edged gradient cards with a solid 2px blue-tinted border. No soft shadows.
+Panel, PanelContainer {
+	bg_color: linear_gradient($surface_2, $surface, 90)
+	border_color: $line_hi
+	border: 2 2 2 2
+	corner_radius: 2 2 2 2
+	anti_aliasing: false
+
+	Bar {
+		bg_color: linear_gradient($surface_2, $surface, 90)
+		border_color: $line_hi
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+		padding: 4 4 4 4
+	}
+
+	Card {
+		bg_color: linear_gradient($surface_2, $surface, 90)
+		border_color: $accent_40
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+	}
+
+	Inset {
+		bg_color: $bg
+		border_color: $line
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+		padding: 6 6 6 6
+	}
+
+	Group {
+		bg_color: $surface_2
+		border_color: $line
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+		padding: 5 5 5 5
+	}
+
+	Tooltip {
+		bg_color: "#0e1422f2"
+		border_color: $accent_40
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+		padding: 6 6 5 5
+	}
+}
+
+# @chunk Inputs
+LineEdit {
+	bg_color: $bg
+	border_color: $line
+	border: 2 2 2 2
+	corner_radius: 2 2 2 2
+	anti_aliasing: false
+	font_color: $text
+	caret_color: $accent
+	selection_color: $accent_40
+	padding: 8 8 6 6
+	cursor: IBEAM
+	transition_time: $tt
+	:focus {
+		border_color: $accent
+	}
+	:read_only {
+		bg_color: $surface
+		font_color: $text_mute
+	}
+}
+
+OptionButton {
+	bg_color: linear_gradient($surface_3, $surface_2, 90)
+	border_color: $line_hi
+	border: 2 2 2 2
+	corner_radius: 2 2 2 2
+	anti_aliasing: false
+	font_color: $text
+	padding: 10 10 6 6
+	cursor: POINTING
+	transition_time: $tt
+	:hover {
+		bg_color: linear_gradient($surface_4, $surface_3, 90)
+		border_color: $accent_40
+	}
+	:pressed {
+		bg_color: $surface_3
+	}
+	:focus {
+		border_color: $accent
+	}
+}
+
+SpinBox {
+	bg_color: $surface_2
+	border_color: $line
+	border: 2 2 2 2
+	corner_radius: 2 2 2 2
+	anti_aliasing: false
+	font_color: $text
+	:focus {
+		border_color: $accent
+	}
+}
+
+CheckBox, CheckButton {
+	font_color: $text_dim
+	cursor: POINTING
+	transition_time: $tt
+	:hover {
+		font_color: $text
+	}
+	:pressed {
+		font_color: $accent
+	}
+}
+
+HSlider, VSlider {
+	bg_color: $surface_2
+	border_color: $line
+	corner_radius: 2 2 2 2
+	anti_aliasing: false
+}
+
+# @chunk Lists & containers
+ItemList {
+	bg_color: $bg
+	border_color: $line
+	border: 2 2 2 2
+	corner_radius: 2 2 2 2
+	anti_aliasing: false
+	font_color: $text
+	:hovered {
+		bg_color: $surface_3
+		corner_radius: 2 2 2 2
+	}
+	:selected {
+		bg_color: $accent_20
+		border_color: $accent_40
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+	}
+	:selected_focus {
+		bg_color: $accent_20
+		border_color: $accent
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+	}
+	:cursor {
+		bg_color: rgba(0, 0, 0, 0)
+		border_color: $accent_40
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+	}
+	:cursor_unfocused {
+		bg_color: rgba(0, 0, 0, 0)
+		border_color: $line
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+	}
+}
+
+Tree {
+	bg_color: $bg
+	border_color: $line
+	border: 2 2 2 2
+	corner_radius: 2 2 2 2
+	anti_aliasing: false
+	font_color: $text
+	:selected {
+		bg_color: $accent_20
+		corner_radius: 2 2 2 2
+	}
+	:selected_focus {
+		bg_color: $accent_20
+		corner_radius: 2 2 2 2
+	}
+}
+
+TabContainer, TabBar {
+	bg_color: $surface
+	anti_aliasing: false
+	font_color: $text_dim
+	:tab_selected {
+		bg_color: linear_gradient($surface_3, $surface_2, 90)
+		font_color: $text
+	}
+	:tab_hovered {
+		bg_color: $surface_3
+	}
+	:tab_unselected {
+		bg_color: rgba(0, 0, 0, 0)
+		font_color: $text_mute
+	}
+}
+
+ScrollContainer {
+	bg_color: rgba(0, 0, 0, 0)
+}
+
+VScrollBar, HScrollBar {
+	bg_color: rgba(0, 0, 0, 0)
+	anti_aliasing: false
+	:scroll {
+		bg_color: rgba(0, 0, 0, 0)
+	}
+	:grabber {
+		bg_color: $surface_4
+		corner_radius: 2 2 2 2
+	}
+	:grabber_highlight {
+		bg_color: $accent_40
+		corner_radius: 2 2 2 2
+	}
+	:grabber_pressed {
+		bg_color: $accent
+		corner_radius: 2 2 2 2
+	}
+}
+
+# @chunk Text
+# font_size lives in the editor Theme (scalable for mobile); these keep the
+# type hierarchy via explicit overrides.
+Label {
+	font_color: $text
+
+	Title {
+		font_color: $text
+		font_size: 17
+	}
+	Subtitle {
+		font_color: $text_dim
+		font_size: 13
+	}
+	Dim {
+		font_color: $text_dim
+	}
+	Mute {
+		font_color: $text_mute
+		font_size: 12
+	}
+	Status {
+		font_color: $text
+		font_outline_color: "#0a0d12"
+		outline_size: 4
+	}
+	SectionHeader {
+		font_color: $text_dim
+		font_size: 12
+	}
+}
+
+RichTextLabel {
+	font_color: $text
+}

@@ -263,6 +263,8 @@ func _rebuild_handle_buttons() -> void:
 	for i: int in 4:
 		var btn: Button = Button.new()
 		btn.theme_type_variation = &"PolyVertex"
+		btn.set_meta(&"gdss_mode", 1)
+		btn.set_meta(&"gdss_classes", PackedStringArray(["Vertex"]))
 		btn.custom_minimum_size = Vector2(HANDLE_BUTTON_SIZE, HANDLE_BUTTON_SIZE)
 		btn.size = Vector2(HANDLE_BUTTON_SIZE, HANDLE_BUTTON_SIZE)
 		btn.focus_mode = Control.FOCUS_NONE

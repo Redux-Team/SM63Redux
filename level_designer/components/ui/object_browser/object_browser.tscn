@@ -1,14 +1,8 @@
-[gd_scene format=3 uid="uid://bk2iromqs3siv"]
+[gd_scene load_steps=4 format=3 uid="uid://bk2iromqs3siv"]
 
 [ext_resource type="Script" uid="uid://iuigahxwdcr1" path="res://level_designer/components/ui/object_browser/object_browser.gd" id="1_3hax8"]
 [ext_resource type="PackedScene" uid="uid://d11ohrgxcihxx" path="res://level_designer/components/ui/object_browser/object_group.tscn" id="2_5hwe3"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5hwe3"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0, 0, 0, 0.42352942)
+[ext_resource type="Texture2D" uid="uid://b1yoaqtnb6le5" path="res://assets/textures/level_designer/ui_icons/search.svg" id="ic_search"]
 
 [node name="LDObjectBrowser" type="Control" unique_id=2001061774 node_paths=PackedStringArray("groups_v_box", "category_buttons_container", "tooltip_label", "search_line_edit")]
 custom_minimum_size = Vector2(500, 320)
@@ -19,6 +13,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3hax8")
+metadata/gdss_mode = 1
 groups_v_box = NodePath("MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/GroupsVBox")
 category_buttons_container = NodePath("MarginContainer/VBoxContainer/HBoxContainer")
 tooltip_label = NodePath("Tooltip")
@@ -47,6 +42,7 @@ alignment = 1
 [node name="SearchLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer" unique_id=244860177]
 layout_mode = 2
 placeholder_text = "Search..."
+right_icon = ExtResource("ic_search")
 
 [node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=1525210317]
 layout_mode = 2
@@ -75,12 +71,12 @@ top_level = true
 layout_mode = 1
 offset_right = 64.0
 offset_bottom = 23.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_5hwe3")
 bbcode_enabled = true
 text = "<Object>"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 horizontal_alignment = 1
+metadata/gdss_classes = PackedStringArray("Tooltip")
 
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/SearchLineEdit" to="." method="_on_search_line_edit_text_changed"]

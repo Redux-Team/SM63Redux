@@ -1,10 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://bal8u53r7omfw"]
+[gd_scene load_steps=4 format=3 uid="uid://bal8u53r7omfw"]
 
 [ext_resource type="Script" uid="uid://cm0wgakqfv4qa" path="res://level_designer/components/ui/scenarios_editor/scenarios_editor.gd" id="1_m0tjn"]
+[ext_resource type="Texture2D" uid="uid://boi5n5utdpqmj" path="res://assets/textures/level_designer/ui_icons/add.svg" id="ic_add"]
+[ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="ic_remove"]
 
 [node name="LDScenariosEditor" type="MarginContainer" unique_id=1341334410 node_paths=PackedStringArray("scenario_list", "add_button", "remove_button", "move_up_button", "move_down_button", "empty_label", "detail_content", "shine_row", "name_edit", "shine_check", "area_row", "area_option", "layers_container", "tags_container", "stamps_container")]
 custom_minimum_size = Vector2(500, 320)
 script = ExtResource("1_m0tjn")
+metadata/gdss_mode = 1
 scenario_list = NodePath("HBoxContainer/VBoxContainer/ScenarioList")
 add_button = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/AddButton")
 remove_button = NodePath("HBoxContainer/VBoxContainer/RemoveButton")
@@ -40,7 +43,10 @@ horizontal_alignment = 1
 
 [node name="AddButton" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1909087202]
 layout_mode = 2
-text = "+"
+tooltip_text = "Add scenario"
+icon = ExtResource("ic_add")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="ScenarioList" type="ItemList" parent="HBoxContainer/VBoxContainer" unique_id=307560873]
 layout_mode = 2
@@ -61,7 +67,10 @@ text = "Down"
 
 [node name="RemoveButton" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=1892684888]
 layout_mode = 2
-text = "-"
+tooltip_text = "Remove scenario"
+icon = ExtResource("ic_remove")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton", "Danger")
 
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer" unique_id=1777151936]
 layout_mode = 2
@@ -73,6 +82,7 @@ size_flags_horizontal = 3
 [node name="EmptyLabel" type="Label" parent="HBoxContainer/DetailPanel" unique_id=42417722]
 layout_mode = 2
 text = "No scenario selected."
+metadata/gdss_classes = PackedStringArray("Mute")
 
 [node name="ShineRow" type="HBoxContainer" parent="HBoxContainer/DetailPanel"]
 layout_mode = 2

@@ -10,6 +10,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 mouse_default_cursor_shape = 2
 script = ExtResource("1_uthr8")
+metadata/gdss_classes = PackedStringArray("Tile")
 preview_rect = NodePath("PreviewTexture")
 stamp_label = NodePath("StampLabel")
 

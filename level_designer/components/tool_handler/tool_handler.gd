@@ -1,6 +1,11 @@
 class_name LDToolHandler
 extends LDComponent
 
+## Emitted whenever the active tool changes. Carries the new tool's get_tool_name()
+## (empty string if nothing is selected). The UI chrome listens to this to highlight
+## the active tool button.
+signal tool_changed(tool_name: String)
+
 var _selected_tool: LDTool
 var _bound_tools: Dictionary[String, LDTool]
 
@@ -25,9 +30,11 @@ func select_tool(tool_name_or_ref: Variant) -> void:
 		_selected_tool = _bound_tools.get(tool_name_or_ref.to_lower().remove_char(95))
 	elif tool_name_or_ref is LDTool and tool_name_or_ref in _bound_tools.values():
 		_selected_tool = tool_name_or_ref
-	
+
 	if _selected_tool:
 		_selected_tool._on_enable()
+
+	tool_changed.emit(_selected_tool.get_tool_name() if _selected_tool else "")
 
 
 func add_tool(tool: LDTool) -> void:

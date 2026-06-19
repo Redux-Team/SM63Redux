@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bcntswgx5f1b5"]
+[gd_scene load_steps=4 format=3 uid="uid://bcntswgx5f1b5"]
 
 [ext_resource type="Script" uid="uid://c56pqdaxp553r" path="res://level_designer/components/ui/tags_editor/tags_editor.gd" id="1_tagsed"]
+[ext_resource type="Texture2D" uid="uid://boi5n5utdpqmj" path="res://assets/textures/level_designer/ui_icons/add.svg" id="ic_add"]
+[ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="ic_remove"]
 
 [node name="TagsEditor" type="MarginContainer" node_paths=PackedStringArray("selection_label", "tag_list", "name_edit", "add_button", "remove_button")]
 custom_minimum_size = Vector2(320, 320)
@@ -9,6 +11,7 @@ theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 script = ExtResource("1_tagsed")
+metadata/gdss_mode = 1
 selection_label = NodePath("VBox/SelectionLabel")
 tag_list = NodePath("VBox/TagList")
 name_edit = NodePath("VBox/AddRow/NameEdit")
@@ -37,8 +40,14 @@ placeholder_text = "Tag name..."
 
 [node name="AddButton" type="Button" parent="VBox/AddRow"]
 layout_mode = 2
-text = "Add to Selection"
+tooltip_text = "Add to Selection"
+icon = ExtResource("ic_add")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="RemoveButton" type="Button" parent="VBox"]
 layout_mode = 2
-text = "Remove from Selection"
+tooltip_text = "Remove from Selection"
+icon = ExtResource("ic_remove")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton", "Danger")

@@ -5,9 +5,6 @@ extends LDToolWidget
 const BASE_RING_RADIUS: float = 48.0
 const RING_SPACING: float = 28.0
 const HANDLE_RADIUS: float = 6.0
-const RING_COLOR: Color = Color(1.0, 1.0, 1.0, 0.6)
-const HANDLE_COLOR: Color = Color(1.0, 1.0, 1.0, 1.0)
-const HANDLE_HOVER_COLOR: Color = Color(0.4, 0.8, 1.0, 1.0)
 const DOUBLE_CLICK_THRESHOLD: float = 0.3
 
 
@@ -126,14 +123,15 @@ func draw_overlay(draw_node: CanvasItem) -> void:
 		return
 	
 	var center: Vector2 = _get_center_screen(objects)
+	var ring_color: Color = LDPalette.gizmo_edge()
 	for ring: RingState in _rings:
 		var current_angle: float = _get_display_angle(objects, ring)
 		var handle_pos: Vector2 = _get_handle_pos(center, current_angle, ring)
-		var handle_color: Color = HANDLE_HOVER_COLOR if ring.is_handle_hovered or ring.is_dragging else HANDLE_COLOR
-		
-		draw_node.draw_arc(center, ring.radius, 0.0, TAU, 64, RING_COLOR, 1.0)
+		var handle_color: Color = LDPalette.accent() if ring.is_handle_hovered or ring.is_dragging else LDPalette.vertex_fill()
+
+		draw_node.draw_arc(center, ring.radius, 0.0, TAU, 64, ring_color, 1.0)
 		draw_node.draw_circle(handle_pos, HANDLE_RADIUS, handle_color)
-		draw_node.draw_line(center, handle_pos, RING_COLOR, 1.0)
+		draw_node.draw_line(center, handle_pos, ring_color, 1.0)
 
 
 func _reset_rotation(objects: Array[LDObject], ring: RingState) -> void:

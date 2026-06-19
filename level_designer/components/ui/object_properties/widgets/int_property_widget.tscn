@@ -1,11 +1,13 @@
-[gd_scene format=3 uid="uid://dnry2u8uye886"]
+[gd_scene load_steps=3 format=3 uid="uid://dnry2u8uye886"]
 
 [ext_resource type="Script" uid="uid://dy01h8vj6uwm2" path="res://level_designer/components/ui/object_properties/widgets/int_property_widget.gd" id="1_42tfc"]
+[ext_resource type="Texture2D" uid="uid://0o252anyb2n6" path="res://assets/textures/level_designer/ui_icons/reset_level.svg" id="ic_reset_level"]
 
 [node name="IntPropertyWidget" type="PanelContainer" unique_id=581750635 node_paths=PackedStringArray("property_label", "spin_box", "reset_button")]
 offset_right = 168.0
 offset_bottom = 40.0
 script = ExtResource("1_42tfc")
+metadata/gdss_classes = PackedStringArray("Inset")
 property_label = NodePath("MarginContainer/HBoxContainer/PropertyLabel")
 spin_box = NodePath("MarginContainer/HBoxContainer/SpinBox")
 reset_button = NodePath("MarginContainer/HBoxContainer/ResetBase/ResetButton")
@@ -23,6 +25,7 @@ layout_mode = 2
 [node name="PropertyLabel" type="Label" parent="MarginContainer/HBoxContainer" unique_id=2101677513]
 layout_mode = 2
 text = "Property Name"
+metadata/gdss_classes = PackedStringArray("Subtitle")
 
 [node name="ResetBase" type="Control" parent="MarginContainer/HBoxContainer" unique_id=1755250185]
 custom_minimum_size = Vector2(24, 0)
@@ -43,7 +46,11 @@ offset_bottom = 12.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 4
-text = "R"
+text = ""
+tooltip_text = "Reset to default"
+icon = ExtResource("ic_reset_level")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="Control2" type="Control" parent="MarginContainer/HBoxContainer" unique_id=926188989]
 custom_minimum_size = Vector2(4, 0)

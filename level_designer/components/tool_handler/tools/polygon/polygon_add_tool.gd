@@ -7,8 +7,8 @@ func get_tool_name() -> String:
 
 
 func _setup_draw_node(node: LDPolygonBooleanDrawNode) -> void:
-	node.fill_color = Color(0.2, 0.8, 0.4, 0.2)
-	node.border_color = Color(0.2, 0.9, 0.4, 0.9)
+	node.fill_color = Color(LDPalette.add_color(), 0.18)
+	node.border_color = Color(LDPalette.add_color(), 0.9)
 
 
 func _compute_preview_results(points: PackedVector2Array) -> Array[PackedVector2Array]:

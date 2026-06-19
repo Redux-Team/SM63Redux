@@ -1,6 +1,10 @@
-[gd_scene format=3 uid="uid://ckffdp04tglj1"]
+[gd_scene load_steps=6 format=3 uid="uid://ckffdp04tglj1"]
 
 [ext_resource type="Script" uid="uid://wvt4fr8yabn8" path="res://level_designer/components/ui/layer_properties/layer_properties.gd" id="1_e2re5"]
+[ext_resource type="Texture2D" uid="uid://boi5n5utdpqmj" path="res://assets/textures/level_designer/ui_icons/add.svg" id="ic_add"]
+[ext_resource type="Texture2D" uid="uid://cyjlsmgjeixte" path="res://assets/textures/level_designer/ui_icons/up.svg" id="ic_up"]
+[ext_resource type="Texture2D" uid="uid://dtcx7p5e7ovqf" path="res://assets/textures/level_designer/ui_icons/down.svg" id="ic_down"]
+[ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="ic_remove"]
 
 [node name="LayerProperties" type="MarginContainer" unique_id=899359989 node_paths=PackedStringArray("layer_list", "add_above_button", "add_below_button", "move_up_button", "move_down_button", "remove_button", "detail", "name_edit", "deco_layer", "parallax_slider_x", "parallax_slider_y", "parallax_label_x", "parallax_label_y", "modulate_color_picker")]
 custom_minimum_size = Vector2(470, 0)
@@ -8,6 +12,7 @@ theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
+metadata/gdss_mode = 1
 script = ExtResource("1_e2re5")
 layer_list = NodePath("Columns/List/LayerList")
 add_above_button = NodePath("Columns/List/AddButtons/AddAboveButton")
@@ -48,12 +53,18 @@ layout_mode = 2
 [node name="AddAboveButton" type="Button" parent="Columns/List/AddButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Add Above"
+tooltip_text = "Add Layer Above"
+icon = ExtResource("ic_add")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="AddBelowButton" type="Button" parent="Columns/List/AddButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Add Below"
+tooltip_text = "Add Layer Below"
+icon = ExtResource("ic_add")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="Buttons" type="HBoxContainer" parent="Columns/List"]
 layout_mode = 2
@@ -61,17 +72,26 @@ layout_mode = 2
 [node name="MoveUpButton" type="Button" parent="Columns/List/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Move Up"
+tooltip_text = "Move Layer Up"
+icon = ExtResource("ic_up")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="MoveDownButton" type="Button" parent="Columns/List/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Move Down"
+tooltip_text = "Move Layer Down"
+icon = ExtResource("ic_down")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="RemoveButton" type="Button" parent="Columns/List/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Remove"
+tooltip_text = "Remove Layer"
+icon = ExtResource("ic_remove")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton", "Danger")
 
 [node name="Sep" type="VSeparator" parent="Columns"]
 layout_mode = 2

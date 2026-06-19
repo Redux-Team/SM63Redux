@@ -499,6 +499,8 @@ func _rebuild_vertex_buttons() -> void:
 		var btn: Button = Button.new()
 		var is_hole: bool = _point_sources[i] == PointSource.HOLE
 		btn.theme_type_variation = &"PolyVertexHole" if is_hole else &"PolyVertex"
+		btn.set_meta(&"gdss_mode", 1)
+		btn.set_meta(&"gdss_classes", PackedStringArray(["VertexHole" if is_hole else "Vertex"]))
 		btn.custom_minimum_size = Vector2(VERTEX_BUTTON_SIZE, VERTEX_BUTTON_SIZE)
 		btn.size = Vector2(VERTEX_BUTTON_SIZE, VERTEX_BUTTON_SIZE)
 		btn.focus_mode = Control.FOCUS_NONE
@@ -539,6 +541,8 @@ func _create_edge_preview_button() -> void:
 	var overlay: Control = viewport.get_selection_overlay()
 	_edge_preview_button = Button.new()
 	_edge_preview_button.theme_type_variation = &"PolyVertexPreview"
+	_edge_preview_button.set_meta(&"gdss_mode", 1)
+	_edge_preview_button.set_meta(&"gdss_classes", PackedStringArray(["VertexPreview"]))
 	_edge_preview_button.custom_minimum_size = Vector2(VERTEX_BUTTON_SIZE, VERTEX_BUTTON_SIZE)
 	_edge_preview_button.size = Vector2(VERTEX_BUTTON_SIZE, VERTEX_BUTTON_SIZE)
 	_edge_preview_button.focus_mode = Control.FOCUS_NONE

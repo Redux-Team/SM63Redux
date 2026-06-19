@@ -15,6 +15,7 @@ theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 script = ExtResource("1_g4i0d")
+metadata/gdss_mode = 1
 _container = NodePath("VBoxContainer")
 _bool_widget_scene = ExtResource("2_c3mal")
 _vector2_widget_scene = ExtResource("3_c3mal")

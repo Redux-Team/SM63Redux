@@ -17,6 +17,11 @@ const BACKGROUND_EDITOR: StringName = &"background_editor"
 const PICKER: StringName = &"picker"
 
 
+## Emitted when the active window changes: the opened window's id, or &"" when the
+## window closes. The UI chrome listens to this to highlight the matching panel button.
+signal active_changed(id: StringName)
+
+
 @export var _window: LDWindow
 @export var _window_defs: Array[LDWindowDef]
 
@@ -102,6 +107,7 @@ func open(id: StringName) -> Control:
 	_active_id = id
 	LD.get_input_handler().set_input_priority(LD.get_ui())
 	_window.popin()
+	active_changed.emit(id)
 	return content
 
 
@@ -156,6 +162,7 @@ func _on_window_popped_out() -> void:
 	if _active_id != &"":
 		LD.get_input_handler().remove_input_priority(LD.get_ui())
 		_active_id = &""
+		active_changed.emit(&"")
 
 
 #endregion

@@ -1,12 +1,14 @@
-[gd_scene format=3 uid="uid://bu47thabn7ope"]
+[gd_scene load_steps=3 format=3 uid="uid://bu47thabn7ope"]
 
 [ext_resource type="Script" uid="uid://b4wio1vbsnnq0" path="res://level_designer/components/ui/scenarios_editor/scenario_button.gd" id="1_sni6a"]
+[ext_resource type="Texture2D" uid="uid://b2mhv8xfkj2ge" path="res://assets/textures/level_designer/ui_icons/close.svg" id="ic_close"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_sni6a"]
 resource_local_to_scene = false
 
 [node name="ScenarioButton" type="HBoxContainer" unique_id=651227833 node_paths=PackedStringArray("select_button", "delete_button")]
 script = ExtResource("1_sni6a")
+metadata/gdss_mode = 1
 select_button = NodePath("SelectButton")
 delete_button = NodePath("DeleteButton")
 
@@ -15,10 +17,14 @@ layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_sni6a")
 text = "Scenario Button"
+metadata/gdss_classes = PackedStringArray("Flat")
 
 [node name="DeleteButton" type="Button" parent="." unique_id=1363901231]
 layout_mode = 2
-text = "X"
+tooltip_text = "Delete scenario"
+icon = ExtResource("ic_close")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton", "Danger")
 
 [connection signal="toggled" from="SelectButton" to="." method="_on_select_button_toggled"]
 [connection signal="pressed" from="DeleteButton" to="." method="_on_delete_button_pressed"]

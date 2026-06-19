@@ -1,7 +1,9 @@
-[gd_scene format=3 uid="uid://bbf6gei1bmu46"]
+[gd_scene load_steps=6 format=3 uid="uid://bbf6gei1bmu46"]
 
 [ext_resource type="Script" uid="uid://xsj22tgidlld" path="res://level_designer/components/ui/window/window.gd" id="1_pd0vu"]
 [ext_resource type="Shader" uid="uid://dbldxfaveqoao" path="res://core/shader/ld_window_backdrop.gdshader" id="1_y8b6h"]
+[ext_resource type="Texture2D" uid="uid://b2mhv8xfkj2ge" path="res://assets/textures/level_designer/ui_icons/close.svg" id="ic_close"]
+[ext_resource type="Theme" uid="uid://b6ld3d1tor8em" path="res://level_designer/ld_editor_theme.tres" id="4_ldtheme"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hd74k"]
 shader = ExtResource("1_y8b6h")
@@ -35,6 +37,9 @@ grow_vertical = 2
 pivot_offset_ratio = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme = ExtResource("4_ldtheme")
+metadata/gdss_mode = 1
+metadata/gdss_classes = PackedStringArray("Card")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Content" unique_id=551025918]
 clip_contents = true
@@ -57,6 +62,7 @@ size_flags_vertical = 4
 layout_mode = 2
 text = "Window Title"
 horizontal_alignment = 1
+metadata/gdss_classes = PackedStringArray("Title")
 
 [node name="ContentContainer" type="PanelContainer" parent="Content/VBoxContainer/MarginContainer/VBoxContainer" unique_id=329307729]
 layout_mode = 2
@@ -67,15 +73,21 @@ layout_mode = 2
 mouse_filter = 2
 
 [node name="CloseButton" type="Button" parent="Content/Control" unique_id=1205102099]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -12.5
-offset_top = -12.0
-offset_right = 10.5
-offset_bottom = 13.0
+offset_left = -32.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 32.0
 grow_horizontal = 0
-text = "X"
+focus_mode = 0
+text = ""
+tooltip_text = "Close"
+icon = ExtResource("ic_close")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("Close")
 
 [connection signal="pressed" from="Content/Control/CloseButton" to="." method="_on_close_button_pressed"]
