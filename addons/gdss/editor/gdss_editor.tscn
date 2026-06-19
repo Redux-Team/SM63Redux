@@ -1,0 +1,172 @@
+[gd_scene format=3 uid="uid://bh4sv3ta53fmk"]
+
+[ext_resource type="Script" uid="uid://c8ecxj182iey" path="res://addons/gdss/editor/gdss_editor.gd" id="1_52mtl"]
+[ext_resource type="Script" uid="uid://ct5gmahfbd0cc" path="res://addons/gdss/editor/handlers/gdss_completion_handler.gd" id="2_vh56t"]
+[ext_resource type="Script" uid="uid://b8vfgh1l41n0a" path="res://addons/gdss/editor/handlers/gdss_highlight_handler.gd" id="2_wia40"]
+[ext_resource type="Script" uid="uid://d243kyxgy1fcy" path="res://addons/gdss/editor/handlers/gdss_interpreter.gd" id="4_squo2"]
+[ext_resource type="Texture2D" uid="uid://ceogrxr1lg3up" path="res://addons/gdss/editor/Map.svg" id="5_50ht1"]
+[ext_resource type="Texture2D" uid="uid://85s2m2sx1kkb" path="res://addons/gdss/editor/ActionCopy.svg" id="5_by7tt"]
+[ext_resource type="Texture2D" uid="uid://c55pmw55mh1ut" path="res://addons/gdss/editor/Doc.svg" id="5_djuub"]
+[ext_resource type="Script" uid="uid://b6selo2ptljhh" path="res://addons/gdss/editor/gdss_outline.gd" id="9_outln"]
+
+[sub_resource type="GDScript" id="GDScript_rjngg"]
+
+[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_718be"]
+script = SubResource("GDScript_rjngg")
+
+[node name="GDSS" type="Control" unique_id=212107563 node_paths=PackedStringArray("code_edit", "error_label", "title_label", "copy_button", "toggle_map_button", "caret_pos_label", "zoom_percentage", "outline")]
+clip_contents = true
+custom_minimum_size = Vector2(550, 400)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_52mtl")
+code_edit = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/CodeEdit")
+error_label = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/ErrorLabel")
+title_label = NodePath("VBoxContainer/TitleLabel")
+copy_button = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/CopyButton")
+toggle_map_button = NodePath("VBoxContainer/TitleLabel/HBoxContainer/ToggleMapButton")
+caret_pos_label = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/CaretPosLabel")
+zoom_percentage = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/ZoomPercentage")
+outline = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/GdssOutline")
+
+[node name="GdssHighlightHandler" type="Node" parent="." unique_id=766305843 node_paths=PackedStringArray("editor", "interpreter")]
+script = ExtResource("2_wia40")
+editor = NodePath("../VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/CodeEdit")
+interpreter = NodePath("../GdssInterpreter")
+
+[node name="GdssCompletionHandler" type="Node" parent="." unique_id=1313950794 node_paths=PackedStringArray("editor")]
+script = ExtResource("2_vh56t")
+editor = NodePath("../VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/CodeEdit")
+
+[node name="GdssInterpreter" type="Node" parent="." unique_id=1840043936 node_paths=PackedStringArray("editor")]
+script = ExtResource("4_squo2")
+editor = NodePath("..")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1783720769]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=401104886]
+layout_mode = 2
+text = "theme.gdss"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TitleLabel" unique_id=1437369522]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control3" type="Control" parent="VBoxContainer/TitleLabel/HBoxContainer" unique_id=2142818464]
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="VBoxContainer/TitleLabel/HBoxContainer" unique_id=822744024]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ToggleMapButton" type="Button" parent="VBoxContainer/TitleLabel/HBoxContainer" unique_id=1759196038]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+toggle_mode = true
+icon = ExtResource("5_50ht1")
+
+[node name="DocButton" type="Button" parent="VBoxContainer/TitleLabel/HBoxContainer" unique_id=1864495565]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+icon = ExtResource("5_djuub")
+
+[node name="Control2" type="Control" parent="VBoxContainer/TitleLabel/HBoxContainer" unique_id=1429785962]
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1354428952]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=834145104]
+layout_mode = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=225068908]
+layout_mode = 2
+size_flags_vertical = 3
+split_offsets = PackedInt32Array(160)
+split_offset = 160
+
+[node name="GdssOutline" type="VBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer" unique_id=2056757957 node_paths=PackedStringArray("code_edit")]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+script = ExtResource("9_outln")
+code_edit = NodePath("../CodeEdit")
+
+[node name="CodeEdit" type="CodeEdit" parent="VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer" unique_id=1444390585]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_smooth = true
+minimap_draw = true
+minimap_width = 100
+syntax_highlighter = SubResource("SyntaxHighlighter_718be")
+highlight_current_line = true
+draw_tabs = true
+symbol_lookup_on_click = true
+line_folding = true
+line_length_guidelines = Array[int]([80, 100])
+gutters_draw_line_numbers = true
+code_completion_enabled = true
+code_completion_prefixes = Array[String](["@", ":", "	", "$", "B", "s", "a", "b", "c", "e", "f", "p", "t", "o", "h", "i", "C", "u", "r", "l", "w", "m", "F", "v", "G", "z", "g", "H", "d", "I", "L", "M", "O", "P", "R", "n", "S", "T", "V"])
+indent_automatic = true
+auto_brace_completion_enabled = true
+auto_brace_completion_highlight_matching = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=841529498]
+layout_mode = 2
+
+[node name="ErrorLabel" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1776208991]
+layout_mode = 2
+size_flags_horizontal = 3
+text_overrun_behavior = 3
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=2015744822]
+visible = false
+layout_mode = 2
+
+[node name="CopyButton" type="Button" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1841896851]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+disabled = true
+icon = ExtResource("5_by7tt")
+
+[node name="VSeparator3" type="VSeparator" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=638451549]
+layout_mode = 2
+
+[node name="ZoomPercentage" type="Button" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=2002086943]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+text = "100%"
+
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=238645893]
+layout_mode = 2
+
+[node name="CaretPosLabel" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=932937793]
+layout_mode = 2
+text = "0:0"
+
+[connection signal="toggled" from="VBoxContainer/TitleLabel/HBoxContainer/ToggleMapButton" to="." method="_on_toggle_map_button_toggled"]
+[connection signal="pressed" from="VBoxContainer/TitleLabel/HBoxContainer/DocButton" to="." method="_on_doc_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/CopyButton" to="." method="_on_copy_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/ZoomPercentage" to="." method="_on_zoom_percentage_pressed"]
