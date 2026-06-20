@@ -85,7 +85,7 @@ func _show_detail(stamp: LDStamp) -> void:
 	var has_stamp: bool = stamp != null
 	empty_label.visible = not has_stamp
 	detail_content.visible = has_stamp
-	remove_button.disabled = not has_stamp
+	GDSS.set_disabled(remove_button, not has_stamp)
 
 	if not has_stamp:
 		return
@@ -111,7 +111,7 @@ func _refresh_detail() -> void:
 ## independent.
 func _refresh_instance_list() -> void:
 	instance_list.clear()
-	remove_instance_button.disabled = true
+	GDSS.set_disabled(remove_instance_button, true)
 	_selected_instance_id = ""
 	if not _selected_stamp:
 		return
@@ -201,12 +201,12 @@ func _on_remove_instance_pressed() -> void:
 		return
 	LD.get_stamp_handler().remove_instance(_selected_stamp.id, LDLevel.get_active_area().area_name, _selected_instance_id)
 	_selected_instance_id = ""
-	remove_instance_button.disabled = true
+	GDSS.set_disabled(remove_instance_button, true)
 
 
 func _on_instance_selected(index: int) -> void:
 	_selected_instance_id = instance_list.get_item_metadata(index)
-	remove_instance_button.disabled = false
+	GDSS.set_disabled(remove_instance_button, false)
 
 
 ## Double-clicking an instance focuses the editor camera on it (it's always in the active area, since

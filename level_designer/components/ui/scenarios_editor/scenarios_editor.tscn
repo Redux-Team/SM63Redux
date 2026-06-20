@@ -42,6 +42,7 @@ text = "Scenarios"
 horizontal_alignment = 1
 
 [node name="AddButton" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1909087202]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Add scenario"
 icon = ExtResource("ic_add")
@@ -66,6 +67,7 @@ size_flags_horizontal = 3
 text = "Down"
 
 [node name="RemoveButton" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=1892684888]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Remove scenario"
 icon = ExtResource("ic_remove")

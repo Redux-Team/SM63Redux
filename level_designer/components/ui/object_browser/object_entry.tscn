@@ -10,15 +10,19 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 mouse_default_cursor_shape = 2
 script = ExtResource("1_0jdeu")
-metadata/gdss_classes = PackedStringArray("Tile")
 preview_texture_rect = NodePath("PreviewTexture")
 item_id = NodePath("item_id")
+metadata/gdss_classes = PackedStringArray("Tile")
 
 [node name="PreviewTexture" type="TextureRect" parent="." unique_id=1698399676]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2

@@ -51,6 +51,7 @@ size_flags_vertical = 3
 layout_mode = 2
 
 [node name="AddAboveButton" type="Button" parent="Columns/List/AddButtons"]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Add Layer Above"
@@ -59,6 +60,7 @@ expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="AddBelowButton" type="Button" parent="Columns/List/AddButtons"]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Add Layer Below"
@@ -70,6 +72,7 @@ metadata/gdss_classes = PackedStringArray("IconButton")
 layout_mode = 2
 
 [node name="MoveUpButton" type="Button" parent="Columns/List/Buttons"]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Move Layer Up"
@@ -78,6 +81,7 @@ expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="MoveDownButton" type="Button" parent="Columns/List/Buttons"]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Move Layer Down"
@@ -86,6 +90,7 @@ expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="RemoveButton" type="Button" parent="Columns/List/Buttons"]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Remove Layer"

@@ -79,7 +79,7 @@ func _populate_category_buttons() -> void:
 		button.custom_minimum_size.x = 80
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.set_meta(&"gdss_classes", PackedStringArray(["Flat"]))
+		GDSS.add_class(button, "FlatTab")
 		category_buttons_container.add_child(button)
 	
 	var stamps_button: Button = Button.new()
@@ -90,7 +90,7 @@ func _populate_category_buttons() -> void:
 	stamps_button.custom_minimum_size.x = 80
 	stamps_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	stamps_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	stamps_button.set_meta(&"gdss_classes", PackedStringArray(["Flat"]))
+	GDSS.add_class(stamps_button, "FlatTab")
 	category_buttons_container.add_child(stamps_button)
 	_stamps_button = stamps_button
 	_update_stamps_tab_visibility()

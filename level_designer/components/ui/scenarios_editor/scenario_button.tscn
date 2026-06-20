@@ -20,6 +20,7 @@ text = "Scenario Button"
 metadata/gdss_classes = PackedStringArray("Flat")
 
 [node name="DeleteButton" type="Button" parent="." unique_id=1363901231]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Delete scenario"
 icon = ExtResource("ic_close")

@@ -66,8 +66,8 @@ func _refresh_area_label() -> void:
 	if idx >= 0 and idx < areas.size():
 		var area: LDArea = areas[idx]
 		_area_name_label.text = area.area_name if not area.area_name.is_empty() else "Area %d" % (idx + 1)
-	_prev_area_button.disabled = idx <= 0
-	_next_area_button.disabled = idx < 0 or idx >= areas.size() - 1
+	GDSS.set_disabled(_prev_area_button, idx <= 0)
+	GDSS.set_disabled(_next_area_button, idx < 0 or idx >= areas.size() - 1)
 
 
 func _on_active_layer_changed(_index: int) -> void:
@@ -81,7 +81,9 @@ func _on_select_button_pressed() -> void:
 
 
 func _on_brush_button_pressed() -> void:
-	LD.get_tool_handler().select_tool("brush")
+	var obj: GameObject = LD.get_object_handler().get_selected_object()
+	var tool_name: String = obj.get_placement_tool() if obj else ""
+	LD.get_tool_handler().select_tool(tool_name if not tool_name.is_empty() else "brush")
 
 
 func _on_move_button_pressed() -> void:
@@ -110,6 +112,18 @@ func _on_poly_add_pressed() -> void:
 
 func _on_poly_cut_pressed() -> void:
 	LD.get_tool_handler().select_tool("polygon_cut")
+
+#endregion
+
+
+#region History
+
+func _on_undo_button_pressed() -> void:
+	LD.get_history_handler().undo()
+
+
+func _on_redo_button_pressed() -> void:
+	LD.get_history_handler().redo()
 
 #endregion
 
@@ -285,7 +299,7 @@ func _refresh_layer_label() -> void:
 			pos = i
 			var layer: LDLayer = area.layers[i]
 			_layer_name_label.text = layer.layer_name if not layer.layer_name.is_empty() else "Layer %d" % (layer.index - anchor)
-	_prev_layer_button.disabled = pos <= 0
-	_next_layer_button.disabled = pos < 0 or pos >= area.layers.size() - 1
+	GDSS.set_disabled(_prev_layer_button, pos <= 0)
+	GDSS.set_disabled(_next_layer_button, pos < 0 or pos >= area.layers.size() - 1)
 
 #endregion

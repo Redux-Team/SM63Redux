@@ -1,11 +1,17 @@
 class_name LDClipboardHandler
 extends LDComponent
 
+signal clipboard_changed
+
 
 const COPY_TO_SYSTEM_CLIPBOARD: bool = false
 
 
 var _clipboard: Array[Dictionary] = []
+
+
+func has_content() -> bool:
+	return not _clipboard.is_empty()
 
 
 func cut() -> void:
@@ -29,6 +35,7 @@ func copy() -> void:
 	
 	if COPY_TO_SYSTEM_CLIPBOARD and not _clipboard.is_empty():
 		DisplayServer.clipboard_set(JSON.stringify(_clipboard, "\t"))
+	clipboard_changed.emit()
 
 
 func paste() -> void:

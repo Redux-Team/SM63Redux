@@ -151,10 +151,10 @@ func _show_detail(index: int) -> void:
 	var count: int = _level().get_areas().size()
 	var has_area: bool = index >= 0 and index < count
 	detail.visible = has_area
-	move_up_button.disabled = not has_area or index == 0
-	move_down_button.disabled = not has_area or index >= count - 1
-	remove_button.disabled = not has_area or count <= 1
-	switch_button.disabled = not has_area or index == _level().get_active_index()
+	GDSS.set_disabled(move_up_button, not has_area or index == 0)
+	GDSS.set_disabled(move_down_button, not has_area or index >= count - 1)
+	GDSS.set_disabled(remove_button, not has_area or count <= 1)
+	GDSS.set_disabled(switch_button, not has_area or index == _level().get_active_index())
 	if not has_area:
 		return
 	_setting_fields = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bk2iromqs3siv"]
+[gd_scene format=3 uid="uid://bk2iromqs3siv"]
 
 [ext_resource type="Script" uid="uid://iuigahxwdcr1" path="res://level_designer/components/ui/object_browser/object_browser.gd" id="1_3hax8"]
 [ext_resource type="PackedScene" uid="uid://d11ohrgxcihxx" path="res://level_designer/components/ui/object_browser/object_group.tscn" id="2_5hwe3"]
@@ -13,11 +13,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3hax8")
-metadata/gdss_mode = 1
 groups_v_box = NodePath("MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/GroupsVBox")
 category_buttons_container = NodePath("MarginContainer/VBoxContainer/HBoxContainer")
 tooltip_label = NodePath("Tooltip")
 search_line_edit = NodePath("MarginContainer/VBoxContainer/SearchLineEdit")
+metadata/gdss_mode = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1077961562]
 layout_mode = 1

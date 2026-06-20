@@ -143,13 +143,13 @@ func _remove(layer: LDLayer) -> void:
 func _show_detail(pos: int) -> void:
 	var has_layer: bool = pos >= 0
 	detail.visible = has_layer
-	move_up_button.disabled = not has_layer or pos == 0
-	move_down_button.disabled = not has_layer or pos >= _area().layers.size() - 1
+	GDSS.set_disabled(move_up_button, not has_layer or pos == 0)
+	GDSS.set_disabled(move_down_button, not has_layer or pos >= _area().layers.size() - 1)
 	if not has_layer:
-		remove_button.disabled = true
+		GDSS.set_disabled(remove_button, true)
 		return
 
-	remove_button.disabled = false
+	GDSS.set_disabled(remove_button, false)
 	var layer: LDLayer = _area().layers[pos]
 	_setting_fields = true
 	name_edit.text = layer.layer_name

@@ -41,6 +41,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="RemoveButton" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=1892684887]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Remove"
 icon = ExtResource("ic_remove")
@@ -116,6 +117,7 @@ custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 
 [node name="RemoveInstanceButton" type="Button" parent="HBoxContainer/DetailPanel/DetailContent/InstanceSection" unique_id=1077950153]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Remove Instance"
 icon = ExtResource("ic_remove")

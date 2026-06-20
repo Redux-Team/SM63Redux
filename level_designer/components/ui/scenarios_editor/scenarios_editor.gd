@@ -127,7 +127,7 @@ func _show_detail(index: int) -> void:
 	var has_scenario: bool = index >= 0
 	empty_label.visible = not has_scenario
 	detail_content.visible = has_scenario
-	remove_button.disabled = index <= LDScenario.COMMON_INDEX
+	GDSS.set_disabled(remove_button, index <= LDScenario.COMMON_INDEX)
 	# Name / shine-select only apply to numbered scenarios, not the COMMON baseline.
 	var is_numbered: bool = index > LDScenario.COMMON_INDEX
 	var ordered: Array[LDScenario] = LD.get_scenario_handler().get_numbered_scenarios()
@@ -136,8 +136,8 @@ func _show_detail(index: int) -> void:
 		if ordered[i].index == index:
 			order_pos = i
 			break
-	move_up_button.disabled = not is_numbered or order_pos <= 0
-	move_down_button.disabled = not is_numbered or order_pos < 0 or order_pos >= ordered.size() - 1
+	GDSS.set_disabled(move_up_button, not is_numbered or order_pos <= 0)
+	GDSS.set_disabled(move_down_button, not is_numbered or order_pos < 0 or order_pos >= ordered.size() - 1)
 	shine_row.visible = is_numbered
 	if is_numbered:
 		var scenario: LDScenario = LD.get_scenario_handler().get_scenario(index)

@@ -480,6 +480,36 @@ static func clear_classes(node: Node) -> void:
 	set_classes(node, PackedStringArray())
 
 
+## Recomputes [param node]'s active visual state (hover / pressed / disabled / …)
+## and restyles it. Call this after changing a property GDSS can't observe through
+## a signal — most notably setting [code]disabled[/code] from code — otherwise the
+## node keeps its old styling until the next mouse/focus event.
+## [codeblock]
+## my_button.disabled = true
+## GDSS.sync_state(my_button)
+## [/codeblock]
+static func sync_state(node: Node) -> void:
+	if not node is CanvasItem:
+		return
+	var gdss_node: GdssNode = _get_gdss_nodes().get(node.get_class())
+	if gdss_node != null:
+		gdss_node.update_state(node as CanvasItem)
+
+
+## Sets a button's [code]disabled[/code] state and restyles it immediately via
+## [method sync_state]. Use this instead of assigning [code]disabled[/code] directly
+## so the button doesn't keep its old look until the next mouse/focus event. Safe to
+## call with a null/freed/non-button node (it no-ops).
+static func set_disabled(node: Node, value: bool) -> void:
+	if not is_instance_valid(node) or not node is BaseButton:
+		return
+	var button: BaseButton = node as BaseButton
+	if button.disabled == value:
+		return
+	button.disabled = value
+	sync_state(button)
+
+
 ## Returns [code]true[/code] if GDSS styling resolves to enabled on [param node],
 ## taking its [enum GdssMode] and that of its ancestors into account.
 static func is_gdss_enabled(node: Node) -> bool:

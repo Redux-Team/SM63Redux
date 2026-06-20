@@ -6,10 +6,11 @@
 
 [node name="BackgroundsEditor" type="MarginContainer" unique_id=534413008 node_paths=PackedStringArray("preset_option", "type_option", "solid_row", "solid_color", "gradient_rows", "gradient_top", "gradient_bottom", "backdrop_preview", "layer_list", "add_layer_button", "move_up_button", "move_down_button", "remove_layer_button", "layer_placeholder", "layer_preview", "layer_fields", "texture_option", "parallax_spin", "custom_color_check", "color_picker", "offset_x", "offset_y", "autoscroll_x", "autoscroll_y")]
 custom_minimum_size = Vector2(505, 360)
+scale = Vector2(0.8, 0.8)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_bged")
-metadata/gdss_mode = 1
+metadata/gdss_mode = 2
 preset_option = NodePath("Body/PresetRow/PresetOption")
 type_option = NodePath("Body/Tabs/Backdrop/VBoxContainer/TypeRow/TypeOption")
 solid_row = NodePath("Body/Tabs/Backdrop/VBoxContainer/SolidRow")
@@ -151,6 +152,7 @@ size_flags_horizontal = 3
 text = "Layers"
 
 [node name="AddLayerButton" type="Button" parent="Body/Tabs/Layers/HBoxContainer/Main/LayersHeader" unique_id=1337213103]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Add layer"
 icon = ExtResource("ic_add")
@@ -176,6 +178,7 @@ size_flags_horizontal = 3
 text = "Move Down"
 
 [node name="RemoveLayerButton" type="Button" parent="Body/Tabs/Layers/HBoxContainer/Main/LayerButtons" unique_id=1569352731]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Remove layer"

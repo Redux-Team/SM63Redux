@@ -138,6 +138,16 @@ func get_shared_properties(objects: Array[LDObject]) -> Array[LDProperty]:
 	return result
 
 
+func has_editable_properties(objects: Array[LDObject]) -> bool:
+	for prop: LDProperty in get_shared_properties(objects):
+		if not prop.visible_in_editor:
+			continue
+		match prop.type:
+			LDProperty.Type.BOOL, LDProperty.Type.INT, LDProperty.Type.FLOAT, LDProperty.Type.VECTOR2:
+				return true
+	return false
+
+
 func get_property_value(objects: Array[LDObject], key: StringName) -> Variant:
 	if objects.is_empty():
 		return null

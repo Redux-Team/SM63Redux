@@ -42,6 +42,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="AddButton" type="Button" parent="Columns/List" unique_id=1944469911]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Add Area"
 icon = ExtResource("ic_add")
@@ -52,6 +53,7 @@ metadata/gdss_classes = PackedStringArray("IconButton")
 layout_mode = 2
 
 [node name="MoveUpButton" type="Button" parent="Columns/List/Buttons" unique_id=1825310185]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Move Area Up"
@@ -60,6 +62,7 @@ expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="MoveDownButton" type="Button" parent="Columns/List/Buttons" unique_id=982684448]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Move Area Down"
@@ -68,6 +71,7 @@ expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="RemoveButton" type="Button" parent="Columns/List/Buttons" unique_id=1884038661]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Remove Area"

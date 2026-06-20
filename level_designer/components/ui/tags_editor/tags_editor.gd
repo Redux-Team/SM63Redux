@@ -79,7 +79,7 @@ func _add_item(tag: String, count: int, selection_size: int) -> void:
 func _update_buttons() -> void:
 	# Add/remove always work: with a selection they (un)tag those objects, otherwise they create or
 	# delete the tag for the whole level.
-	remove_button.disabled = tag_list.get_selected_items().is_empty()
+	GDSS.set_disabled(remove_button, tag_list.get_selected_items().is_empty())
 	# Label the add action by what it'll do: type a name to make a new tag, or leave it empty and
 	# pick a tag from the list to apply that existing one.
 	if _selection().is_empty():

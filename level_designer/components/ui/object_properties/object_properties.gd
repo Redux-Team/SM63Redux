@@ -49,7 +49,7 @@ func _make_read_only(widget: Control) -> void:
 		elif node is LineEdit:
 			(node as LineEdit).editable = false
 		elif node is BaseButton:
-			(node as BaseButton).disabled = true
+			GDSS.set_disabled(node, true)
 
 
 func _on_show() -> void:
