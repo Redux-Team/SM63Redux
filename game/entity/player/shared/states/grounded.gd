@@ -33,5 +33,5 @@ func _apply_friction() -> void:
 	#speed /= 1.15
 	#player.velocity.x = speed * sign(player.velocity.x)
 	
-	player.velocity.move_toward(Vector2.ZERO, friction_speed_subtract)
-	player.velocity /= friction_speed_divide
+	player.velocity.x = move_toward(player.velocity.x, 0, friction_speed_subtract)
+	player.velocity.x /= friction_speed_divide

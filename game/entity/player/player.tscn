@@ -2010,7 +2010,6 @@ __editor_superstate_wire_uuid = &"0dd74506-66e0-4267-b86b-0572da305c2a"
 
 [node name="BaseJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1477404521]
 script = ExtResource("15_5mhew")
-triple_jump_threshold = 120.0
 always_transition = true
 sprite_restart_if_playing = false
 sprite_loop = false

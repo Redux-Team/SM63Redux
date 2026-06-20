@@ -2,10 +2,11 @@
 extends State
 
 @export var jump_strength: float = 400
+@export var backwards_speed: float = 280
 
 func _on_enter() -> void:
 	player.lock_flipping = true
-	player.velocity.x += 280 * (int(player.sprite.flip_h) * 2 - 1)
+	player.velocity.x += backwards_speed * (1 if player.sprite.flip_h else -1)
 	player.velocity.y = -jump_strength
 
 
