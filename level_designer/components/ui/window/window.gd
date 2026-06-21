@@ -9,6 +9,7 @@ signal popped_out
 		title = t
 		if _title_label:
 			_title_label.text = t
+			_title_label.visible = not t.is_empty()
 
 @export var content: PackedScene
 

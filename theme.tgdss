@@ -85,8 +85,8 @@ Button {
 		icon_color: $on_accent
 	}
 	:disabled {
-		bg_color: alpha($surface, 0.92)
-		border_color: $line
+		bg_color: alpha($surface, 0.3)
+		border_color: alpha($line, 0.4)
 		font_color: $text_mute
 		icon_color: $text_mute
 		cursor: ARROW
@@ -137,20 +137,41 @@ Button {
 	}
 
 	Active {
-		bg_color: linear_gradient($accent_hi, $accent, 90)
+		bg_color: liquid_blur(2, $accent, 0.85, 1, 0.3)
 		border_color: $accent_hi
 		border: 1 1 1 1
 		padding: 5 5 5 5
-		icon_color: $on_accent
-		font_color: $on_accent
+		icon_color: WHITE
+		font_color: WHITE
 		:hover {
-			bg_color: linear_gradient($accent_hi, $accent_hi, 90)
+			bg_color: liquid_blur(2, $accent_hi, 0.9, 1, 0.32)
 			border_color: "#9bd0ff"
-			icon_color: $on_accent
+			icon_color: WHITE
 		}
 		:pressed {
 			bg_color: $accent_press
-			icon_color: $on_accent
+			icon_color: WHITE
+		}
+	}
+
+	ListRow {
+		bg_color: TRANSPARENT
+		border_color: rgba(0, 0, 0, 0)
+		border: 0 0 0 0
+		corner_radius: 6 6 6 6
+		font_color: $text
+		padding: 11 11 7 7
+		transition_time: 0.14
+		:hover {
+			bg_color: liquid_blur(3, $surface_3, 0.42, 1, 0.32)
+		}
+		:pressed {
+			bg_color: liquid_blur(2, $accent, 0.85, 1, 0.3)
+			font_color: WHITE
+		}
+		:hover_pressed {
+			bg_color: liquid_blur(2, $accent_hi, 0.9, 1, 0.32)
+			font_color: WHITE
 		}
 	}
 
@@ -160,20 +181,28 @@ Button {
 		border_color: $accent_hi
 		border: 1 1 1 1
 		corner_radius: 8 8 8 8
-		icon_color: $on_accent
+		icon_color: WHITE
 		icon_max_width: 18
 		padding: 12 12 6 6
-		shadow: 6 6 6 6
-		shadow_color: alpha("#000", 0.25)
+		shadow: 3 3 3 3
+		shadow_color: alpha("#000", 0.15)
 		:hover {
 			bg_color: linear_gradient("#7cc2ff", $accent_hi, 90)
 			border_color: "#9bd0ff"
-			font_color: $on_accent
-			icon_color: $on_accent
+			font_color: WHITE
+			icon_color: WHITE
 		}
 		:pressed {
 			bg_color: $accent_press
-			icon_color: $on_accent
+			border_color: $accent_hi
+			font_color: WHITE
+			icon_color: WHITE
+		}
+		:hover_pressed {
+			bg_color: $accent_press
+			border_color: $accent_hi
+			font_color: WHITE
+			icon_color: WHITE
 		}
 	}
 
@@ -209,14 +238,14 @@ Button {
 		font_color: $text
 		padding: 5 5 5 5
 		:hover {
-			bg_color: alpha($danger, 0.2)
-			icon_color: $danger_hi
-			font_color: $danger_hi
+			bg_color: linear_gradient($danger_hi, $danger, 90)
+			icon_color: WHITE
+			font_color: WHITE
 		}
 		:pressed {
-			bg_color: linear_gradient($danger_hi, $danger, 90)
-			icon_color: "#ffffff"
-			font_color: "#ffffff"
+			bg_color: $danger_press
+			icon_color: WHITE
+			font_color: WHITE
 		}
 		:disabled {
 			bg_color: rgba(0, 0, 0, 0)
@@ -326,8 +355,8 @@ Button {
 	}
 
 	Close {
-		bg_color: alpha(WHITE, 0.08)
-		border_color: alpha(WHITE, 0.12)
+		bg_color: TRANSPARENT
+		border_color: alpha(WHITE, 0.18)
 		border: 1 1 1 1
 		corner_radius: 8 8 8 8
 		icon_color: $text
@@ -463,8 +492,7 @@ Panel, PanelContainer {
 	}
 
 	Card {
-		bg_color: alpha(WHITE, 0.06)
-		border_color: alpha(WHITE, 0.1)
+		bg_color: liquid_blur(3, $surface_2, 0.85, 1, 0.1)
 		border: 0 0 0 0
 		corner_radius: 10 10 10 10
 		padding: 8 8 8 8
@@ -476,6 +504,13 @@ Panel, PanelContainer {
 		border: 0 0 0 0
 		corner_radius: 8 8 8 8
 		padding: 6 6 6 6
+	}
+
+	SliderKnob {
+		bg_color: "#f2f5f8"
+		border_color: alpha("#0a0d12", 0.5)
+		border: 1 1 1 1
+		corner_radius: 99 99 99 99
 	}
 
 	Group {
@@ -508,7 +543,7 @@ HSeparator {
 
 # @chunk Inputs
 LineEdit {
-	bg_color: blur(8, $surface_glass, 0.8)
+	bg_color: blur(11, $glass, 0.85)
 	border_color: alpha(WHITE, 0.12)
 	border: 1 1 1 1
 	corner_radius: 6 6 6 6
@@ -576,10 +611,22 @@ CheckBox, CheckButton {
 }
 
 HSlider, VSlider {
-	bg_color: alpha("#000", 0.22)
-	border_color: alpha(WHITE, 0.1)
-	corner_radius: 6 6 6 6
+	bg_color: alpha(WHITE, 0.12)
+	border_color: alpha(WHITE, 0.16)
+	border: 1 1 1 1
+	corner_radius: 4 4 4 4
+	padding: 2 2 3 3
 	anti_aliasing: true
+	:grabber_area {
+		bg_color: linear_gradient($accent_hi, $accent, 90)
+		corner_radius: 4 4 4 4
+		padding: 2 2 3 3
+	}
+	:grabber_area_highlight {
+		bg_color: linear_gradient("#7cc2ff", $accent_hi, 90)
+		corner_radius: 4 4 4 4
+		padding: 2 2 3 3
+	}
 }
 
 # @chunk Lists

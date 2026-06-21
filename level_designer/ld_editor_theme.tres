@@ -1,7 +1,15 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://b6ld3d1tor8em"]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://b6ld3d1tor8em"]
 
 [ext_resource type="FontFile" uid="uid://hhy8cxtk1xcx" path="res://core/theme/fonts/bylight/bylight.otf" id="1_font"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/slider_grabber.svg" id="2_grab"]
 
 [resource]
 default_font = ExtResource("1_font")
 default_font_size = 14
+HSlider/icons/grabber = ExtResource("2_grab")
+HSlider/icons/grabber_highlight = ExtResource("2_grab")
+HSlider/icons/grabber_disabled = ExtResource("2_grab")
+VSlider/icons/grabber = ExtResource("2_grab")
+VSlider/icons/grabber_highlight = ExtResource("2_grab")
+VSlider/icons/grabber_disabled = ExtResource("2_grab")
+ItemList/constants/v_separation = 4
