@@ -1,10 +1,9 @@
 [gd_scene format=3 uid="uid://bk2iromqs3siv"]
 
 [ext_resource type="Script" uid="uid://iuigahxwdcr1" path="res://level_designer/components/ui/object_browser/object_browser.gd" id="1_3hax8"]
-[ext_resource type="PackedScene" uid="uid://d11ohrgxcihxx" path="res://level_designer/components/ui/object_browser/object_group.tscn" id="2_5hwe3"]
 [ext_resource type="Texture2D" uid="uid://b1yoaqtnb6le5" path="res://assets/textures/level_designer/ui_icons/search.svg" id="ic_search"]
 
-[node name="LDObjectBrowser" type="Control" unique_id=2001061774 node_paths=PackedStringArray("groups_v_box", "category_buttons_container", "tooltip_label", "search_line_edit")]
+[node name="LDObjectBrowser" type="Control" node_paths=PackedStringArray("groups_v_box", "category_buttons_container", "tooltip_label", "search_line_edit")]
 custom_minimum_size = Vector2(500, 320)
 layout_mode = 3
 anchors_preset = 15
@@ -13,60 +12,71 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3hax8")
-groups_v_box = NodePath("MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/GroupsVBox")
-category_buttons_container = NodePath("MarginContainer/VBoxContainer/HBoxContainer")
+groups_v_box = NodePath("MarginContainer/VBoxContainer/ContentScroll/GroupsVBox")
+category_buttons_container = NodePath("MarginContainer/VBoxContainer/CategoryScroll/CategoryBar")
 tooltip_label = NodePath("Tooltip")
-search_line_edit = NodePath("MarginContainer/VBoxContainer/SearchLineEdit")
+search_line_edit = NodePath("MarginContainer/VBoxContainer/SearchRow/SearchLineEdit")
 metadata/gdss_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1077961562]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=288570383]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=929413553]
+[node name="SearchRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 0
-alignment = 1
+theme_override_constants/separation = 8
 
-[node name="SearchLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer" unique_id=244860177]
+[node name="SearchIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/SearchRow"]
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
-placeholder_text = "Search..."
-right_icon = ExtResource("ic_search")
+size_flags_vertical = 4
+texture = ExtResource("ic_search")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
 
-[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=1525210317]
+[node name="SearchLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/SearchRow"]
 layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search objects..."
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer" unique_id=772767020]
+[node name="CategoryScroll" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 0
+horizontal_scroll_mode = 1
+vertical_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer" unique_id=652421619]
+[node name="CategoryBar" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CategoryScroll"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 6
+
+[node name="ContentScroll" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
-[node name="GroupsVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" unique_id=1976992627]
+[node name="GroupsVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ContentScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/separation = 8
 
-[node name="ObjectGroup" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/GroupsVBox" unique_id=380333878 instance=ExtResource("2_5hwe3")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-
-[node name="Tooltip" type="RichTextLabel" parent="." unique_id=220684113]
+[node name="Tooltip" type="RichTextLabel" parent="."]
 top_level = true
 layout_mode = 1
 offset_right = 64.0
@@ -79,4 +89,4 @@ autowrap_mode = 0
 horizontal_alignment = 1
 metadata/gdss_classes = PackedStringArray("Tooltip")
 
-[connection signal="text_changed" from="MarginContainer/VBoxContainer/SearchLineEdit" to="." method="_on_search_line_edit_text_changed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/SearchRow/SearchLineEdit" to="." method="_on_search_line_edit_text_changed"]

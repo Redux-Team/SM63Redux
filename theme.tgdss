@@ -17,6 +17,7 @@
 @global var surface_2: "#252e41"
 @global var surface_3: "#333e57"
 @global var surface_4: "#42506e"
+@global var surface_glass: "#1c2332e6"
 
 # Text
 @global var text: "#eaeef5"
@@ -84,7 +85,7 @@ Button {
 		icon_color: $on_accent
 	}
 	:disabled {
-		bg_color: $surface
+		bg_color: alpha($surface, 0.92)
 		border_color: $line
 		font_color: $text_mute
 		icon_color: $text_mute
@@ -245,7 +246,7 @@ Button {
 		bg_color: TRANSPARENT
 		border_color: TRANSPARENT
 		border: 0 0 0 0
-		font_color: $text_dim
+		font_color: alpha($text_dim, 0.3)
 		icon_color: $text_dim
 		padding: 8 8 5 5
 		:hover {
@@ -255,11 +256,11 @@ Button {
 		}
 		:pressed {
 			bg_color: alpha(WHITE, 0.14)
-			font_color: $accent
-			icon_color: $accent
+			font_color: $text
+			icon_color: $text
 		}
 		:hover_pressed {
-			font_color: $text
+			font_color: $accent
 		}
 
 		FlatTab {
@@ -270,6 +271,29 @@ Button {
 			:hover, :pressed, :hover_pressed {
 				border: 0 0 0 0
 			}
+		}
+	}
+
+	Chip {
+		bg_color: alpha(WHITE, 0.05)
+		border_color: alpha(WHITE, 0.1)
+		border: 1 1 1 1
+		corner_radius: 99 99 99 99
+		font_color: $text_dim
+		padding: 14 14 6 6
+		:hover {
+			bg_color: alpha(WHITE, 0.12)
+			font_color: $text
+		}
+		:pressed {
+			bg_color: linear_gradient($accent_hi, $accent, 90)
+			border_color: $accent_hi
+			font_color: $on_accent
+		}
+		:hover_pressed {
+			bg_color: linear_gradient($accent_hi, $accent, 90)
+			border_color: $accent_hi
+			font_color: $on_accent
 		}
 	}
 
@@ -385,7 +409,7 @@ Button {
 		}
 	}
 	VertexHole {
-		bg_color: $surface
+		bg_color: alpha($surface, 0.92)
 		border_color: $accent
 		border: 2 2 2 2
 		corner_radius: 2 2 2 2
@@ -410,8 +434,8 @@ Panel, PanelContainer {
 	anti_aliasing: true
 	
 	Window {
-		bg_color: alpha($glass, 0.5)
-		border_color: alpha(WHITE, 0.2)
+		bg_color: $surface_glass
+		border_color: $line_hi
 		border: 1 1 1 1
 		corner_radius: 14 14 14 14
 		shadow: 28 28 28 28
@@ -455,7 +479,7 @@ Panel, PanelContainer {
 	}
 
 	Group {
-		bg_color: alpha(WHITE, 0.04)
+		bg_color: liquid_blur(8, $surface_glass, 0.85)
 		border_color: alpha(WHITE, 0.08)
 		border: 1 1 1 1
 		corner_radius: 8 8 8 8
@@ -484,7 +508,7 @@ HSeparator {
 
 # @chunk Inputs
 LineEdit {
-	bg_color: alpha("#000", 0.22)
+	bg_color: blur(8, $surface_glass, 0.8)
 	border_color: alpha(WHITE, 0.12)
 	border: 1 1 1 1
 	corner_radius: 6 6 6 6
@@ -682,6 +706,10 @@ Label {
 	SectionHeader {
 		font_color: $text_dim
 		font_size: 12
+	}
+	TileCaption {
+		font_color: $text_dim
+		font_size: 9
 	}
 }
 

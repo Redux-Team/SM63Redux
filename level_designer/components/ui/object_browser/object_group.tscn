@@ -7,9 +7,9 @@ offset_right = 63.0
 offset_bottom = 45.0
 size_flags_vertical = 0
 script = ExtResource("1_w41nc")
-metadata/gdss_classes = PackedStringArray("Group")
 group_list = NodePath("MarginContainer/VBoxContainer/GroupList")
 toggle_group_button = NodePath("MarginContainer/VBoxContainer/ToggleGroupButton")
+metadata/gdss_classes = PackedStringArray("Group")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=2030229878]
 layout_mode = 2
@@ -36,8 +36,7 @@ metadata/gdss_classes = PackedStringArray("Flat")
 
 [node name="GroupList" type="HFlowContainer" parent="MarginContainer/VBoxContainer" unique_id=1278476276]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
 
 [connection signal="toggled" from="MarginContainer/VBoxContainer/ToggleGroupButton" to="." method="_on_toggle_group_button_toggled"]
