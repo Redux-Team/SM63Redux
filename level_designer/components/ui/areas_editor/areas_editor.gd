@@ -7,25 +7,27 @@ extends MarginContainer
 
 
 const WAVE_MASK: Texture2D = preload("uid://c0rwnbt8w3qel")
+const ROW_CLASS: StringName = &"ListRow"
 
 
-@export var area_list: ItemList
+@export var row_container: VBoxContainer
 @export var add_button: Button
 @export var move_up_button: Button
 @export var move_down_button: Button
 @export var remove_button: Button
+@export var count_label: Label
 
 @export var detail: VBoxContainer
 @export var name_edit: LineEdit
 @export var switch_button: Button
 
 
+var _rows: Array[Button] = []
+var _row_group: ButtonGroup = ButtonGroup.new()
 var _setting_fields: bool = false
 
 
 func _ready() -> void:
-	area_list.item_selected.connect(_on_area_selected)
-	area_list.item_activated.connect(_switch_to)
 	add_button.pressed.connect(_on_add)
 	move_up_button.pressed.connect(_on_move.bind(-1))
 	move_down_button.pressed.connect(_on_move.bind(1))
@@ -49,41 +51,67 @@ func _level() -> LDLevel:
 
 func _refresh() -> void:
 	var level: LDLevel = _level()
+	var areas: Array[LDArea] = level.get_areas()
 	_setting_fields = true
-	area_list.clear()
-	for i: int in level.get_areas().size():
-		area_list.add_item(_label(level.get_areas()[i], i))
+	_clear_rows()
+	for i: int in areas.size():
+		var row: Button = _make_row(_label(areas[i], i))
+		row_container.add_child(row)
+		row.pressed.connect(_on_row_pressed.bind(i))
+		_rows.append(row)
 	var active: int = level.get_active_index()
-	if active >= 0 and active < area_list.item_count:
-		area_list.select(active)
+	if active >= 0 and active < _rows.size():
+		_rows[active].button_pressed = true
 	_setting_fields = false
 	_show_detail(active)
+
+
+func _make_row(text: String) -> Button:
+	var row: Button = Button.new()
+	row.text = text
+	row.toggle_mode = true
+	row.button_group = _row_group
+	row.focus_mode = Control.FOCUS_NONE
+	row.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	row.set_meta(&"gdss_classes", PackedStringArray([ROW_CLASS]))
+	return row
+
+
+func _clear_rows() -> void:
+	for row: Button in _rows:
+		row.button_group = null
+		row.queue_free()
+	_rows.clear()
 
 
 func _label(area: LDArea, index: int) -> String:
 	return area.area_name if not area.area_name.is_empty() else "Area %d" % (index + 1)
 
 
+func _selected_index() -> int:
+	for i: int in _rows.size():
+		if _rows[i].button_pressed:
+			return i
+	return -1
+
+
 func _selected_area() -> LDArea:
-	var sel: PackedInt32Array = area_list.get_selected_items()
-	if sel.is_empty():
+	var idx: int = _selected_index()
+	if idx < 0:
 		return null
-	return _level().get_areas()[sel[0]]
+	return _level().get_areas()[idx]
 
 
-## Selecting an area only shows its detail. Switching to it is deliberate: double-click the list
-## (item_activated) or press the Switch button.
-func _on_area_selected(index: int) -> void:
+## Selecting an area only shows its detail. Switching to it is deliberate: press the Switch button.
+func _on_row_pressed(pos: int) -> void:
 	if _setting_fields:
 		return
-	_show_detail(index)
+	_show_detail(pos)
 
 
 func _on_switch_pressed() -> void:
-	var sel: PackedInt32Array = area_list.get_selected_items()
-	if sel.is_empty():
-		return
-	_switch_to(sel[0])
+	_switch_to(_selected_index())
 
 
 ## Switches the visible area, covering the swap with a wave transition.
@@ -103,8 +131,10 @@ func _on_add() -> void:
 	LD.get_save_load_handler()._ensure_player_spawn(area)
 	LD.get_save_load_handler().save_session()
 	_refresh()
-	area_list.select(level.get_areas().size() - 1)
-	_show_detail(level.get_areas().size() - 1)
+	var last: int = level.get_areas().size() - 1
+	if last >= 0 and last < _rows.size():
+		_rows[last].button_pressed = true
+		_show_detail(last)
 
 
 func _on_move(delta: int) -> void:
@@ -148,35 +178,46 @@ func _remove(area: LDArea) -> void:
 #region Detail
 
 func _show_detail(index: int) -> void:
-	var count: int = _level().get_areas().size()
+	var areas: Array[LDArea] = _level().get_areas()
+	var count: int = areas.size()
 	var has_area: bool = index >= 0 and index < count
 	detail.visible = has_area
-	GDSS.set_disabled(move_up_button, not has_area or index == 0)
-	GDSS.set_disabled(move_down_button, not has_area or index >= count - 1)
-	GDSS.set_disabled(remove_button, not has_area or count <= 1)
-	GDSS.set_disabled(switch_button, not has_area or index == _level().get_active_index())
+	if has_area:
+		var objects: int = areas[index].get_all_objects().size()
+		var noun: String = "object" if objects == 1 else "objects"
+		count_label.text = "%d %s" % [objects, noun]
+	else:
+		count_label.text = ""
+	move_up_button.disabled = not has_area or index == 0
+	GDSS.refresh(move_up_button)
+	move_down_button.disabled = not has_area or index >= count - 1
+	GDSS.refresh(move_down_button)
+	remove_button.disabled = not has_area or count <= 1
+	GDSS.refresh(remove_button)
+	switch_button.disabled = not has_area or index == _level().get_active_index()
+	GDSS.refresh(switch_button)
 	if not has_area:
 		return
 	_setting_fields = true
-	name_edit.text = _level().get_areas()[index].area_name
+	name_edit.text = areas[index].area_name
 	_setting_fields = false
 
 
 func _resync_name() -> void:
-	var sel: PackedInt32Array = area_list.get_selected_items()
-	if not sel.is_empty():
-		name_edit.text = _level().get_areas()[sel[0]].area_name
+	var idx: int = _selected_index()
+	if idx >= 0:
+		name_edit.text = _level().get_areas()[idx].area_name
 
 
 func _on_name_changed(_text: String) -> void:
 	if _setting_fields:
 		return
-	var sel: PackedInt32Array = area_list.get_selected_items()
-	if sel.is_empty():
+	var idx: int = _selected_index()
+	if idx < 0:
 		return
-	var area: LDArea = _level().get_areas()[sel[0]]
+	var area: LDArea = _level().get_areas()[idx]
 	_level().rename_area(area, LDText.sanitize_edit(name_edit))
 	LD.get_save_load_handler().save_session()
-	area_list.set_item_text(sel[0], _label(area, sel[0]))
+	_rows[idx].text = _label(area, idx)
 
 #endregion

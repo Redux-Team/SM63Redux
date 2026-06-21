@@ -6,104 +6,136 @@
 [ext_resource type="Texture2D" uid="uid://dtcx7p5e7ovqf" path="res://assets/textures/level_designer/ui_icons/down.svg" id="ic_down"]
 [ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="ic_remove"]
 
-[node name="AreaEditor" type="MarginContainer" unique_id=82214833 node_paths=PackedStringArray("area_list", "add_button", "move_up_button", "move_down_button", "remove_button", "detail", "name_edit", "switch_button")]
+[node name="AreaEditor" type="MarginContainer" unique_id=82214833 node_paths=PackedStringArray("row_container", "add_button", "move_up_button", "move_down_button", "remove_button", "count_label", "detail", "name_edit", "switch_button")]
 custom_minimum_size = Vector2(470, 0)
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
 metadata/gdss_mode = 1
 script = ExtResource("1_aedit")
-area_list = NodePath("Columns/List/AreaList")
-add_button = NodePath("Columns/List/AddButton")
-move_up_button = NodePath("Columns/List/Buttons/MoveUpButton")
-move_down_button = NodePath("Columns/List/Buttons/MoveDownButton")
-remove_button = NodePath("Columns/List/Buttons/RemoveButton")
+row_container = NodePath("Columns/ListColumn/ListInset/ListScroll/RowList")
+add_button = NodePath("Columns/ListColumn/Toolbar/AddButton")
+move_up_button = NodePath("Columns/ListColumn/Toolbar/MoveUpButton")
+move_down_button = NodePath("Columns/ListColumn/Toolbar/MoveDownButton")
+remove_button = NodePath("Columns/ListColumn/Toolbar/RemoveButton")
+count_label = NodePath("Columns/ListColumn/CountLabel")
 detail = NodePath("Columns/Detail")
-name_edit = NodePath("Columns/Detail/NameRow/NameEdit")
-switch_button = NodePath("Columns/Detail/SwitchButton")
+name_edit = NodePath("Columns/Detail/DetailInset/Rows/NameRow/NameEdit")
+switch_button = NodePath("Columns/Detail/DetailInset/Rows/SwitchButton")
 
-[node name="Columns" type="HBoxContainer" parent="." unique_id=566939268]
+[node name="Columns" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="ListColumn" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="ListInset" type="PanelContainer" parent="Columns/ListColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="ListScroll" type="ScrollContainer" parent="Columns/ListColumn/ListInset"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="RowList" type="VBoxContainer" parent="Columns/ListColumn/ListInset/ListScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="CountLabel" type="Label" parent="Columns/ListColumn"]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0.55)
+horizontal_alignment = 1
+metadata/gdss_classes = PackedStringArray("Mute")
+
+[node name="Toolbar" type="HBoxContainer" parent="Columns/ListColumn"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="List" type="VBoxContainer" parent="Columns" unique_id=1863094101]
-custom_minimum_size = Vector2(180, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Header" type="Label" parent="Columns/List" unique_id=1937833247]
-layout_mode = 2
-text = "Areas"
-
-[node name="AreaList" type="ItemList" parent="Columns/List" unique_id=113882517]
-custom_minimum_size = Vector2(0, 150)
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="AddButton" type="Button" parent="Columns/List" unique_id=1944469911]
-custom_minimum_size = Vector2(28, 28)
+[node name="AddButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
 tooltip_text = "Add Area"
 icon = ExtResource("ic_add")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="Buttons" type="HBoxContainer" parent="Columns/List" unique_id=453110640]
+[node name="MoveUpButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
-
-[node name="MoveUpButton" type="Button" parent="Columns/List/Buttons" unique_id=1825310185]
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-size_flags_horizontal = 3
 tooltip_text = "Move Area Up"
 icon = ExtResource("ic_up")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="MoveDownButton" type="Button" parent="Columns/List/Buttons" unique_id=982684448]
-custom_minimum_size = Vector2(28, 28)
+[node name="MoveDownButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
-size_flags_horizontal = 3
 tooltip_text = "Move Area Down"
 icon = ExtResource("ic_down")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="RemoveButton" type="Button" parent="Columns/List/Buttons" unique_id=1884038661]
-custom_minimum_size = Vector2(28, 28)
+[node name="Spacer" type="Control" parent="Columns/ListColumn/Toolbar"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="RemoveButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
 tooltip_text = "Remove Area"
 icon = ExtResource("ic_remove")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton", "Danger")
 
-[node name="Sep" type="VSeparator" parent="Columns" unique_id=748212104]
-layout_mode = 2
-
-[node name="Detail" type="VBoxContainer" parent="Columns" unique_id=752866187]
-custom_minimum_size = Vector2(230, 0)
+[node name="Detail" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Header" type="Label" parent="Columns/Detail" unique_id=1732863376]
+[node name="DetailInset" type="PanelContainer" parent="Columns/Detail"]
 layout_mode = 2
-text = "Area"
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Card")
 
-[node name="NameRow" type="HBoxContainer" parent="Columns/Detail" unique_id=1515709576]
+[node name="Rows" type="VBoxContainer" parent="Columns/Detail/DetailInset"]
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 14
 
-[node name="Label" type="Label" parent="Columns/Detail/NameRow" unique_id=1237783482]
+[node name="NameRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows"]
 layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/NameRow"]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+size_flags_vertical = 1
+vertical_alignment = 1
 text = "Name"
+metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="NameEdit" type="LineEdit" parent="Columns/Detail/NameRow" unique_id=1502816977]
+[node name="NameEdit" type="LineEdit" parent="Columns/Detail/DetailInset/Rows/NameRow"]
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Unnamed"
 
-[node name="SwitchButton" type="Button" parent="Columns/Detail" unique_id=524295920]
+[node name="Spacer" type="Control" parent="Columns/Detail/DetailInset/Rows"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="SwitchButton" type="Button" parent="Columns/Detail/DetailInset/Rows"]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 text = "Switch to This Area"
 metadata/gdss_classes = PackedStringArray("Primary")
