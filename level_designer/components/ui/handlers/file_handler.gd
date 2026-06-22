@@ -19,6 +19,7 @@ const WAVE_MASK: Texture2D = preload("uid://c0rwnbt8w3qel")
 ## Set while a save-as is being routed through the file dialog on the way to quitting, so the app
 ## closes once the file has actually been written (or stays put if the dialog is dismissed).
 var _quitting: bool = false
+var _save_buttons_update_queued: bool = false
 
 
 func _ready() -> void:
@@ -32,10 +33,10 @@ func _ready() -> void:
 
 ## Called by LDUI once the level designer is fully ready.
 func setup() -> void:
-	LD.get_save_load_handler().file_state_changed.connect(_update_save_buttons)
+	LD.get_save_load_handler().file_state_changed.connect(_queue_save_buttons_update)
 	var history: LDHistoryHandler = LD.get_history_handler()
-	if history and not history.history_changed.is_connected(_update_save_buttons):
-		history.history_changed.connect(_update_save_buttons)
+	if history and not history.history_changed.is_connected(_queue_save_buttons_update):
+		history.history_changed.connect(_queue_save_buttons_update)
 	_save_file_dialog.canceled.connect(_on_save_dialog_canceled)
 	Singleton.set_quit_guard(_on_quit_requested)
 	_update_save_buttons()
@@ -162,11 +163,21 @@ func _on_reset_level_dialog_confirmed() -> void:
 	LD.get_save_load_handler().reset_level()
 
 
+func _queue_save_buttons_update() -> void:
+	if _save_buttons_update_queued:
+		return
+	_save_buttons_update_queued = true
+	_update_save_buttons.call_deferred()
+
+
 func _update_save_buttons() -> void:
+	_save_buttons_update_queued = false
 	var handler: LDSaveLoadHandler = LD.get_save_load_handler()
 	if is_instance_valid(_save_new_button):
 		_save_new_button.visible = handler.has_loaded_file()
-	GDSS.set_disabled(_save_button, handler.has_loaded_file() and not handler.is_dirty())
+	if is_instance_valid(_save_button):
+		_save_button.disabled = handler.has_loaded_file() and not handler.is_dirty()
+		GDSS.refresh(_save_button)
 
 
 #endregion

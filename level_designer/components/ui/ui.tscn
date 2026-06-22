@@ -329,14 +329,11 @@ _parallaxing_button = NodePath("../ViewportUI/LayerVisualsHBox/ParallaxingButton
 _ghosting_button = NodePath("../ViewportUI/LayerVisualsHBox/GhostingButton")
 _modulation_button = NodePath("../ViewportUI/LayerVisualsHBox/ModulationButton")
 
-[node name="ToolbarHandler" type="Node" parent="." unique_id=1552504920 node_paths=PackedStringArray("_layer_name_label", "_prev_layer_button", "_next_layer_button", "_area_name_label", "_prev_area_button", "_next_area_button")]
+[node name="ToolbarHandler" type="Node" parent="." unique_id=1552504920 node_paths=PackedStringArray("_layer_name_label", "_prev_layer_button", "_next_layer_button")]
 script = ExtResource("13_tbh")
 _layer_name_label = NodePath("../ViewportUI/BottomBar/Row/NavGroup/LayerNav/LayerName")
 _prev_layer_button = NodePath("../ViewportUI/BottomBar/Row/NavGroup/LayerNav/PrevLayer")
 _next_layer_button = NodePath("../ViewportUI/BottomBar/Row/NavGroup/LayerNav/NextLayer")
-_area_name_label = NodePath("../ViewportUI/BottomBar/Row/NavGroup/AreaNav/AreaName")
-_prev_area_button = NodePath("../ViewportUI/BottomBar/Row/NavGroup/AreaNav/PrevArea")
-_next_area_button = NodePath("../ViewportUI/BottomBar/Row/NavGroup/AreaNav/NextArea")
 
 [node name="FileHandler" type="Node" parent="." unique_id=350661988 node_paths=PackedStringArray("_save_file_dialog", "_load_file_dialog", "_reset_level_dialog", "_save_new_button", "_save_button")]
 script = ExtResource("14_flh")
@@ -348,7 +345,7 @@ _save_button = NodePath("../ViewportUI/TopBarL/Row/FileGroup/SaveButton")
 
 [node name="HotbarHandler" type="Node" parent="." unique_id=1390092617 node_paths=PackedStringArray("_hotbar_buttons")]
 script = ExtResource("15_hbh")
-_hotbar_buttons = [NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton2"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton3"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton4"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton5"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton6")]
+_hotbar_buttons = [NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton2"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton3"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton4"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton5"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton6"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton7"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton8")]
 
 [node name="ChromeHandler" type="Node" parent="." unique_id=1489396500 node_paths=PackedStringArray("_select_button", "_brush_button", "_move_button", "_rotate_button", "_scale_button", "_place_button", "_poly_edit_button", "_poly_add_button", "_poly_cut_button", "_selection_op_buttons", "_undo_button", "_redo_button", "_paste_button", "_properties_button", "_panel_buttons")]
 script = ExtResource("19_chrome")
@@ -377,7 +374,7 @@ metadata/gdss_mode = 1
 texture_filter = 4
 offset_left = 12.0
 offset_top = 10.0
-offset_right = 217.0
+offset_right = 12.0
 offset_bottom = 46.0
 mouse_filter = 1
 theme = ExtResource("20_theme")
@@ -405,7 +402,7 @@ metadata/gdss_classes = PackedStringArray("IconButton")
 [node name="SaveNewButton" type="Button" parent="ViewportUI/TopBarL/Row/FileGroup" unique_id=619679234]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-tooltip_text = "Save As… (Ctrl+Shift+S)"
+tooltip_text = "Save As... (Ctrl+Shift+S)"
 focus_mode = 0
 mouse_default_cursor_shape = 2
 shortcut = SubResource("Shortcut_4kay6")
@@ -658,7 +655,7 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 12.0
 offset_top = -46.0
-offset_right = 454.0
+offset_right = 12.0
 offset_bottom = -3.0
 grow_vertical = 0
 mouse_filter = 1
@@ -741,43 +738,32 @@ expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
+[node name="HotbarButton7" type="Button" parent="ViewportUI/BottomBar/Row/Hotbar" unique_id=111111117]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+expand_icon = true
+script = ExtResource("2_sdhrq")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton8" type="Button" parent="ViewportUI/BottomBar/Row/Hotbar" unique_id=111111118]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+expand_icon = true
+script = ExtResource("2_sdhrq")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
 [node name="NavGroup" type="HBoxContainer" parent="ViewportUI/BottomBar/Row" unique_id=1024703432]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 4
-
-[node name="AreaNav" type="HBoxContainer" parent="ViewportUI/BottomBar/Row/NavGroup" unique_id=1666894534]
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="PrevArea" type="Button" parent="ViewportUI/BottomBar/Row/NavGroup/AreaNav" unique_id=1174641705]
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-tooltip_text = "Previous Area"
-focus_mode = 0
-mouse_default_cursor_shape = 2
-icon = ExtResource("ic_prev")
-expand_icon = true
-metadata/gdss_classes = PackedStringArray("IconButton")
-
-[node name="AreaName" type="Label" parent="ViewportUI/BottomBar/Row/NavGroup/AreaNav" unique_id=1292755810]
-custom_minimum_size = Vector2(46, 0)
-layout_mode = 2
-text = "Area 1"
-horizontal_alignment = 1
-
-[node name="NextArea" type="Button" parent="ViewportUI/BottomBar/Row/NavGroup/AreaNav" unique_id=206754109]
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-tooltip_text = "Next Area"
-focus_mode = 0
-mouse_default_cursor_shape = 2
-icon = ExtResource("ic_next")
-expand_icon = true
-metadata/gdss_classes = PackedStringArray("IconButton")
-
-[node name="Divider" type="VSeparator" parent="ViewportUI/BottomBar/Row/NavGroup" unique_id=737923906]
-layout_mode = 2
 
 [node name="LayerNav" type="HBoxContainer" parent="ViewportUI/BottomBar/Row/NavGroup" unique_id=1997310836]
 layout_mode = 2
@@ -1112,8 +1098,6 @@ will be lost!"
 [connection signal="toggled" from="ViewportUI/LayerVisualsHBox/ParallaxingButton" to="ViewportHandler" method="set_parallaxing_enabled"]
 [connection signal="toggled" from="ViewportUI/LayerVisualsHBox/GhostingButton" to="ViewportHandler" method="set_ghosting_enabled"]
 [connection signal="toggled" from="ViewportUI/LayerVisualsHBox/ModulationButton" to="ViewportHandler" method="set_modulation_enabled"]
-[connection signal="pressed" from="ViewportUI/BottomBar/Row/NavGroup/AreaNav/PrevArea" to="ToolbarHandler" method="_on_prev_area_pressed"]
-[connection signal="pressed" from="ViewportUI/BottomBar/Row/NavGroup/AreaNav/NextArea" to="ToolbarHandler" method="_on_next_area_pressed"]
 [connection signal="pressed" from="ViewportUI/BottomBar/Row/NavGroup/LayerNav/PrevLayer" to="ToolbarHandler" method="_on_prev_layer_pressed"]
 [connection signal="pressed" from="ViewportUI/BottomBar/Row/NavGroup/LayerNav/NextLayer" to="ToolbarHandler" method="_on_next_layer_pressed"]
 [connection signal="pressed" from="ViewportUI/ToolRail/Tools/ObjectBrowserButton" to="WindowHandler" method="toggle_object_browser"]

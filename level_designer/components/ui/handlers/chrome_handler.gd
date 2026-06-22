@@ -178,6 +178,9 @@ func _on_armed_stamp_changed(stamp: LDStamp) -> void:
 
 
 func _set_disabled(button: Button, value: bool) -> void:
-	GDSS.set_disabled(button, value)
+	if button == null or button.disabled == value:
+		return
+	button.disabled = value
+	GDSS.refresh(button)
 
 #endregion

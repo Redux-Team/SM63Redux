@@ -5,17 +5,10 @@ extends Node
 ## active-layer navigation, and the stamp/tag buttons. Layers are created/renamed/reordered in the
 ## Layers window. Reached via LD.get_ui().get_toolbar_handler(). Button signals connect to these.
 
-const WAVE_MASK: Texture2D = preload("uid://c0rwnbt8w3qel")
-
-
 ## Shows the active layer's name (or "Layer <index>") between the prev/next buttons.
 @export var _layer_name_label: Label
 @export var _prev_layer_button: Button
 @export var _next_layer_button: Button
-## Active-area spinbox, mirroring the layer one (sits just above it).
-@export var _area_name_label: Label
-@export var _prev_area_button: Button
-@export var _next_area_button: Button
 
 
 var _viewport: LDViewport:
@@ -26,7 +19,6 @@ var _viewport: LDViewport:
 ## Called by LDUI once the level designer is fully ready.
 func setup() -> void:
 	LDLevel._inst.active_area_changed.connect(_bind_area)
-	LDLevel._inst.areas_changed.connect(_refresh_area_label)
 	_bind_area(LD.get_area())
 
 
@@ -37,37 +29,6 @@ func _bind_area(area: LDArea) -> void:
 	if not area.layers_changed.is_connected(_refresh_layer_label):
 		area.layers_changed.connect(_refresh_layer_label)
 	_refresh_layer_label()
-	_refresh_area_label()
-
-
-func _on_prev_area_pressed() -> void:
-	_step_area(-1)
-
-
-func _on_next_area_pressed() -> void:
-	_step_area(1)
-
-
-## Switches to the previous/next area, covering the swap with a wave transition.
-func _step_area(delta: int) -> void:
-	var level: LDLevel = LD.get_level()
-	var target: int = level.get_active_index() + delta
-	if target < 0 or target >= level.get_areas().size() or Singleton.is_transitioning():
-		return
-	Singleton.build_screen_transition().set_wave().set_texture(WAVE_MASK).set_wave_scale(4.0).load(func() -> void:
-		level.set_active_area_index(target)
-	).done()
-
-
-func _refresh_area_label() -> void:
-	var level: LDLevel = LD.get_level()
-	var idx: int = level.get_active_index()
-	var areas: Array[LDArea] = level.get_areas()
-	if idx >= 0 and idx < areas.size():
-		var area: LDArea = areas[idx]
-		_area_name_label.text = area.area_name if not area.area_name.is_empty() else "Area %d" % (idx + 1)
-	GDSS.set_disabled(_prev_area_button, idx <= 0)
-	GDSS.set_disabled(_next_area_button, idx < 0 or idx >= areas.size() - 1)
 
 
 func _on_active_layer_changed(_index: int) -> void:
@@ -299,7 +260,9 @@ func _refresh_layer_label() -> void:
 			pos = i
 			var layer: LDLayer = area.layers[i]
 			_layer_name_label.text = layer.layer_name if not layer.layer_name.is_empty() else "Layer %d" % (layer.index - anchor)
-	GDSS.set_disabled(_prev_layer_button, pos <= 0)
-	GDSS.set_disabled(_next_layer_button, pos < 0 or pos >= area.layers.size() - 1)
+	_prev_layer_button.disabled = pos <= 0
+	GDSS.refresh(_prev_layer_button)
+	_next_layer_button.disabled = pos < 0 or pos >= area.layers.size() - 1
+	GDSS.refresh(_next_layer_button)
 
 #endregion

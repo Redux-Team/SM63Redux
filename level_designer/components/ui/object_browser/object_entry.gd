@@ -17,7 +17,6 @@ signal entry_selected(ref: LDObjectItemEntry)
 func _ready() -> void:
 	var has_texture: bool = obj_ref.ld_entry_texture != null
 	var show_caption: bool = not has_texture or not Device.is_desktop()
-	var cell: int = 54 if Device.is_desktop() else 72
 	item_id.text = obj_ref.get_object_name()
 	preview_texture_rect.texture = obj_ref.ld_entry_texture
 	preview_texture_rect.visible = has_texture
