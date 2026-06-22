@@ -10,12 +10,21 @@ signal scenario_removed(index: int)
 signal scenario_changed(scenario: LDScenario)
 
 
+const SAVE_DEBOUNCE: float = 0.3
+
+
 var _common: LDScenario
 var _scenarios: Dictionary[int, LDScenario] = {}
+var _save_timer: Timer = null
 
 
 func _on_ready() -> void:
 	_ensure_common()
+	_save_timer = Timer.new()
+	_save_timer.one_shot = true
+	_save_timer.wait_time = SAVE_DEBOUNCE
+	_save_timer.timeout.connect(_flush_session)
+	add_child(_save_timer)
 	scenario_added.connect(_persist_session.unbind(1))
 	scenario_removed.connect(_persist_session.unbind(1))
 	scenario_changed.connect(_persist_session.unbind(1))
@@ -276,4 +285,8 @@ func clear_editor_preview() -> void:
 
 
 func _persist_session() -> void:
+	_save_timer.start()
+
+
+func _flush_session() -> void:
 	LD.get_save_load_handler().save_session()

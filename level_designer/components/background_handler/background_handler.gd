@@ -64,8 +64,11 @@ func is_custom() -> bool:
 func select_preset(preset_name: String) -> void:
 	var area: LDArea = LD.get_area()
 	if preset_name == LDBackgroundDB.CUSTOM:
+		if not area.custom_background:
+			area.custom_background = area.background.working_copy()
+		area.background = area.custom_background
 		area.background_preset = LDBackgroundDB.CUSTOM
-		background_changed.emit()
+		_changed()
 		return
 	var preset: LDBackground = LDBackgroundDB.get_preset(preset_name)
 	if not preset:
@@ -167,6 +170,8 @@ func apply_to_area(area: LDArea, data: Dictionary) -> void:
 	else:
 		area.background_preset = LDBackgroundDB.CUSTOM
 	area.background = LDBackgroundDB.resolve(data)
+	if area.background_preset == LDBackgroundDB.CUSTOM:
+		area.custom_background = area.background
 
 
 func serialize() -> Dictionary:
@@ -183,7 +188,9 @@ func deserialize(data: Dictionary) -> void:
 
 ## Any edit turns the active area's background into a custom one.
 func _mark_custom() -> void:
-	LD.get_area().background_preset = LDBackgroundDB.CUSTOM
+	var area: LDArea = LD.get_area()
+	area.custom_background = area.background
+	area.background_preset = LDBackgroundDB.CUSTOM
 	_changed()
 
 

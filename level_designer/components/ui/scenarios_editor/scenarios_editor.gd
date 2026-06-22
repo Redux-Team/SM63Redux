@@ -2,28 +2,38 @@ class_name LDScenarioEditor
 extends MarginContainer
 
 ## Editor for the level's scenarios. Left = scenario list (COMMON pinned first, plus
-## numbered scenarios). Right = per-scenario toggles for every layer and tag.
+## numbered scenarios). Right = per-scenario toggles for every layer, tag and stamp.
 ## COMMON rows are Enabled/Disabled (the baseline); numbered scenarios are
 ## Inherit/Enabled/Disabled overrides on top of COMMON. Mirrors stamps_editor.gd.
 
 
-@export var scenario_list: ItemList
+const ROW_CLASS: StringName = &"ListRow"
+const INDEX_META: StringName = &"scenario_index"
+
+
+@export var row_container: VBoxContainer
 @export var add_button: Button
 @export var remove_button: Button
 @export var move_up_button: Button
 @export var move_down_button: Button
-@export var empty_label: Label
+
+@export var empty_center: Control
 @export var detail_content: Control
 @export var shine_row: HBoxContainer
 @export var name_edit: LineEdit
 @export var shine_check: CheckButton
 @export var area_row: HBoxContainer
 @export var area_option: OptionButton
+@export var layers_header: Label
 @export var layers_container: VBoxContainer
+@export var tags_header: Label
 @export var tags_container: VBoxContainer
+@export var stamps_header: Label
 @export var stamps_container: VBoxContainer
 
 
+var _rows: Array[Button] = []
+var _row_group: ButtonGroup = ButtonGroup.new()
 var _selected_index: int = -1
 
 
@@ -32,16 +42,15 @@ func _ready() -> void:
 	remove_button.pressed.connect(_on_remove_pressed)
 	move_up_button.pressed.connect(_on_move_pressed.bind(-1))
 	move_down_button.pressed.connect(_on_move_pressed.bind(1))
-	scenario_list.item_selected.connect(_on_scenario_selected)
-
+	
 	name_edit.text_changed.connect(_on_name_changed)
 	shine_check.toggled.connect(_on_shine_toggled)
 	area_option.item_selected.connect(_on_area_option_selected)
-
+	
 	var sh: LDScenarioHandler = LD.get_scenario_handler()
 	sh.scenario_added.connect(_on_scenarios_changed.unbind(1))
 	sh.scenario_removed.connect(_on_scenarios_changed.unbind(1))
-
+	
 	_refresh_list()
 
 
@@ -73,25 +82,48 @@ func _on_scenarios_changed() -> void:
 	_refresh_list()
 
 
+#region Scenario list
+
 func _refresh_list() -> void:
 	var prev: int = _selected_index
-	scenario_list.clear()
-	scenario_list.add_item("COMMON")
-	scenario_list.set_item_metadata(scenario_list.item_count - 1, LDScenario.COMMON_INDEX)
+	_clear_rows()
+	_add_list_row("COMMON", LDScenario.COMMON_INDEX)
 	for scenario: LDScenario in LD.get_scenario_handler().get_numbered_scenarios():
-		scenario_list.add_item("Scenario %d" % scenario.index)
-		scenario_list.set_item_metadata(scenario_list.item_count - 1, scenario.index)
-
-	for i: int in scenario_list.item_count:
-		if int(scenario_list.get_item_metadata(i)) == prev:
-			scenario_list.select(i)
+		_add_list_row("Scenario %d" % scenario.index, scenario.index)
+	
+	for row: Button in _rows:
+		if int(row.get_meta(INDEX_META)) == prev:
+			row.button_pressed = true
 			_show_detail(prev)
 			return
 	_show_detail(-1)
 
 
-func _on_scenario_selected(idx: int) -> void:
-	_show_detail(int(scenario_list.get_item_metadata(idx)))
+func _add_list_row(text: String, index: int) -> void:
+	var row: Button = Button.new()
+	row.text = text
+	row.toggle_mode = true
+	row.button_group = _row_group
+	row.focus_mode = Control.FOCUS_NONE
+	row.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	row.set_meta(&"gdss_classes", PackedStringArray([ROW_CLASS]))
+	row.set_meta(INDEX_META, index)
+	row_container.add_child(row)
+	row.pressed.connect(_on_scenario_row_pressed.bind(index))
+	_rows.append(row)
+
+
+func _clear_rows() -> void:
+	for row: Button in _rows:
+		row.button_group = null
+		row_container.remove_child(row)
+		row.queue_free()
+	_rows.clear()
+
+
+func _on_scenario_row_pressed(index: int) -> void:
+	_show_detail(index)
 
 
 func _on_add_pressed() -> void:
@@ -115,19 +147,24 @@ func _on_move_pressed(delta: int) -> void:
 
 
 func _select_index(index: int) -> void:
-	for i: int in scenario_list.item_count:
-		if int(scenario_list.get_item_metadata(i)) == index:
-			scenario_list.select(i)
+	for row: Button in _rows:
+		if int(row.get_meta(INDEX_META)) == index:
+			row.button_pressed = true
 			_show_detail(index)
 			return
 
+#endregion
+
+
+#region Detail
 
 func _show_detail(index: int) -> void:
 	_selected_index = index
 	var has_scenario: bool = index >= 0
-	empty_label.visible = not has_scenario
+	empty_center.visible = not has_scenario
 	detail_content.visible = has_scenario
-	GDSS.set_disabled(remove_button, index <= LDScenario.COMMON_INDEX)
+	remove_button.disabled = index <= LDScenario.COMMON_INDEX
+	GDSS.refresh(remove_button)
 	# Name / shine-select only apply to numbered scenarios, not the COMMON baseline.
 	var is_numbered: bool = index > LDScenario.COMMON_INDEX
 	var ordered: Array[LDScenario] = LD.get_scenario_handler().get_numbered_scenarios()
@@ -136,8 +173,10 @@ func _show_detail(index: int) -> void:
 		if ordered[i].index == index:
 			order_pos = i
 			break
-	GDSS.set_disabled(move_up_button, not is_numbered or order_pos <= 0)
-	GDSS.set_disabled(move_down_button, not is_numbered or order_pos < 0 or order_pos >= ordered.size() - 1)
+	move_up_button.disabled = not is_numbered or order_pos <= 0
+	GDSS.refresh(move_up_button)
+	move_down_button.disabled = not is_numbered or order_pos < 0 or order_pos >= ordered.size() - 1
+	GDSS.refresh(move_down_button)
 	shine_row.visible = is_numbered
 	if is_numbered:
 		var scenario: LDScenario = LD.get_scenario_handler().get_scenario(index)
@@ -173,19 +212,16 @@ func _area_label(area: LDArea, index: int) -> String:
 
 
 func _build_rows() -> void:
-	for child: Node in layers_container.get_children():
-		child.queue_free()
-	for child: Node in tags_container.get_children():
-		child.queue_free()
-	for child: Node in stamps_container.get_children():
-		child.queue_free()
-
+	_clear_container(layers_container)
+	_clear_container(tags_container)
+	_clear_container(stamps_container)
+	
 	var sh: LDScenarioHandler = LD.get_scenario_handler()
 	var scenario: LDScenario = sh.get_scenario(_selected_index)
 	if not scenario:
 		return
 	var is_common: bool = _selected_index == LDScenario.COMMON_INDEX
-
+	
 	for layer: LDLayer in LD.get_area().layers:
 		var layer_index: int = layer.index
 		var opt: OptionButton = _make_row(layers_container, "Layer %d" % layer_index, is_common, scenario.get_layer_override(layer_index))
@@ -193,14 +229,14 @@ func _build_rows() -> void:
 			sh.set_layer_override(_selected_index, layer_index, _state_from_id(opt.get_item_id(sel)))
 			sh.apply_to_editor(_selected_index)
 		)
-
+	
 	for tag: String in LD.get_tag_handler().get_all_tags():
 		var opt2: OptionButton = _make_row(tags_container, tag, is_common, scenario.get_tag_override(tag))
 		opt2.item_selected.connect(func(sel: int) -> void:
 			sh.set_tag_override(_selected_index, tag, _state_from_id(opt2.get_item_id(sel)))
 			sh.apply_to_editor(_selected_index)
 		)
-
+	
 	for stamp: LDStamp in LD.get_stamp_handler().get_all_stamps():
 		var stamp_id: String = stamp.id
 		var opt3: OptionButton = _make_row(stamps_container, stamp_id, is_common, scenario.get_stamp_override(stamp_id))
@@ -208,16 +244,30 @@ func _build_rows() -> void:
 			sh.set_stamp_override(_selected_index, stamp_id, _state_from_id(opt3.get_item_id(sel)))
 			sh.apply_to_editor(_selected_index)
 		)
+	
+	layers_header.visible = layers_container.get_child_count() > 0
+	tags_header.visible = tags_container.get_child_count() > 0
+	stamps_header.visible = stamps_container.get_child_count() > 0
+
+
+func _clear_container(parent: VBoxContainer) -> void:
+	for child: Node in parent.get_children():
+		parent.remove_child(child)
+		child.queue_free()
 
 
 func _make_row(parent: VBoxContainer, text: String, is_common: bool, override: Variant) -> OptionButton:
 	var row: HBoxContainer = HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
 	var label: Label = Label.new()
 	label.text = text
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	row.add_child(label)
-
+	
 	var opt: OptionButton = OptionButton.new()
+	opt.custom_minimum_size = Vector2(112, 28)
+	opt.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	if is_common:
 		opt.add_item("Enabled", 1)
 		opt.add_item("Disabled", 0)
@@ -244,3 +294,5 @@ func _state_from_id(id: int) -> Variant:
 		0:
 			return false
 	return null
+
+#endregion

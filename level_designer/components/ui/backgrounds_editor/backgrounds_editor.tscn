@@ -1,296 +1,347 @@
-[gd_scene load_steps=4 format=3 uid="uid://c8bgedit0lds1"]
+[gd_scene load_steps=6 format=3 uid="uid://c8bgedit0lds1"]
 
 [ext_resource type="Script" uid="uid://doxcls30t26e" path="res://level_designer/components/ui/backgrounds_editor/backgrounds_editor.gd" id="1_bged"]
 [ext_resource type="Texture2D" uid="uid://boi5n5utdpqmj" path="res://assets/textures/level_designer/ui_icons/add.svg" id="ic_add"]
+[ext_resource type="Texture2D" uid="uid://cyjlsmgjeixte" path="res://assets/textures/level_designer/ui_icons/up.svg" id="ic_up"]
+[ext_resource type="Texture2D" uid="uid://dtcx7p5e7ovqf" path="res://assets/textures/level_designer/ui_icons/down.svg" id="ic_down"]
 [ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="ic_remove"]
 
-[node name="BackgroundsEditor" type="MarginContainer" unique_id=534413008 node_paths=PackedStringArray("preset_option", "type_option", "solid_row", "solid_color", "gradient_rows", "gradient_top", "gradient_bottom", "backdrop_preview", "layer_list", "add_layer_button", "move_up_button", "move_down_button", "remove_layer_button", "layer_placeholder", "layer_preview", "layer_fields", "texture_option", "parallax_spin", "custom_color_check", "color_picker", "offset_x", "offset_y", "autoscroll_x", "autoscroll_y")]
-custom_minimum_size = Vector2(505, 360)
-scale = Vector2(0.8, 0.8)
-size_flags_horizontal = 3
-size_flags_vertical = 3
+[node name="BackgroundsEditor" type="MarginContainer" node_paths=PackedStringArray("preset_option", "row_container", "add_layer_button", "move_up_button", "move_down_button", "remove_layer_button", "empty_center", "backdrop_content", "type_option", "solid_row", "solid_color", "gradient_rows", "gradient_top", "gradient_bottom", "backdrop_preview", "layer_content", "layer_preview", "texture_option", "parallax_spin", "custom_color_check", "color_picker", "offset_x", "offset_y", "autoscroll_x", "autoscroll_y")]
+custom_minimum_size = Vector2(520, 0)
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+metadata/gdss_mode = 1
 script = ExtResource("1_bged")
-metadata/gdss_mode = 2
-preset_option = NodePath("Body/PresetRow/PresetOption")
-type_option = NodePath("Body/Tabs/Backdrop/VBoxContainer/TypeRow/TypeOption")
-solid_row = NodePath("Body/Tabs/Backdrop/VBoxContainer/SolidRow")
-solid_color = NodePath("Body/Tabs/Backdrop/VBoxContainer/SolidRow/SolidColor")
-gradient_rows = NodePath("Body/Tabs/Backdrop/VBoxContainer/GradientRows")
-gradient_top = NodePath("Body/Tabs/Backdrop/VBoxContainer/GradientRows/TopRow/GradientTop")
-gradient_bottom = NodePath("Body/Tabs/Backdrop/VBoxContainer/GradientRows/BottomRow/GradientBottom")
-backdrop_preview = NodePath("Body/Tabs/Backdrop/VBoxContainer/Preview")
-layer_list = NodePath("Body/Tabs/Layers/HBoxContainer/Main/LayerList")
-add_layer_button = NodePath("Body/Tabs/Layers/HBoxContainer/Main/LayersHeader/AddLayerButton")
-move_up_button = NodePath("Body/Tabs/Layers/HBoxContainer/Main/LayerButtons/MoveUpButton")
-move_down_button = NodePath("Body/Tabs/Layers/HBoxContainer/Main/LayerButtons/MoveDownButton")
-remove_layer_button = NodePath("Body/Tabs/Layers/HBoxContainer/Main/LayerButtons/RemoveLayerButton")
-layer_placeholder = NodePath("Body/Tabs/Layers/HBoxContainer/Detail/Placeholder")
-layer_preview = NodePath("Body/Tabs/Layers/HBoxContainer/Detail/Preview")
-layer_fields = NodePath("Body/Tabs/Layers/HBoxContainer/Detail/Fields")
-texture_option = NodePath("Body/Tabs/Layers/HBoxContainer/Detail/Fields/TextureRow/TextureOption")
-parallax_spin = NodePath("Body/Tabs/Layers/HBoxContainer/Detail/Fields/ParallaxRow/ParallaxSpin")
-custom_color_check = NodePath("Body/Tabs/Layers/HBoxContainer/Detail/Fields/CustomColorRow/CustomColorCheck")
-color_picker = NodePath("Body/Tabs/Layers/HBoxContainer/Detail/Fields/CustomColorRow/ColorPicker")
-offset_x = NodePath("Body/Tabs/Layers/HBoxContainer/Detail/Fields/OffsetRow/OffsetX")
-offset_y = NodePath("Body/Tabs/Layers/HBoxContainer/Detail/Fields/OffsetRow/OffsetY")
-autoscroll_x = NodePath("Body/Tabs/Layers/HBoxContainer/Detail/Fields/AutoscrollRow/AutoscrollX")
-autoscroll_y = NodePath("Body/Tabs/Layers/HBoxContainer/Detail/Fields/AutoscrollRow/AutoscrollY")
+preset_option = NodePath("Columns/ListColumn/PresetOption")
+row_container = NodePath("Columns/ListColumn/ListInset/ListScroll/RowList")
+add_layer_button = NodePath("Columns/ListColumn/Toolbar/AddLayerButton")
+move_up_button = NodePath("Columns/ListColumn/Toolbar/MoveUpButton")
+move_down_button = NodePath("Columns/ListColumn/Toolbar/MoveDownButton")
+remove_layer_button = NodePath("Columns/ListColumn/Toolbar/RemoveLayerButton")
+empty_center = NodePath("Columns/Detail/DetailInset/EmptyCenter")
+backdrop_content = NodePath("Columns/Detail/DetailInset/BackdropContent")
+type_option = NodePath("Columns/Detail/DetailInset/BackdropContent/TypeRow/TypeOption")
+solid_row = NodePath("Columns/Detail/DetailInset/BackdropContent/SolidRow")
+solid_color = NodePath("Columns/Detail/DetailInset/BackdropContent/SolidRow/SolidColor")
+gradient_rows = NodePath("Columns/Detail/DetailInset/BackdropContent/GradientRows")
+gradient_top = NodePath("Columns/Detail/DetailInset/BackdropContent/GradientRows/TopRow/GradientTop")
+gradient_bottom = NodePath("Columns/Detail/DetailInset/BackdropContent/GradientRows/BottomRow/GradientBottom")
+backdrop_preview = NodePath("Columns/Detail/DetailInset/BackdropContent/BackdropPreviewInset/BackdropPreview")
+layer_content = NodePath("Columns/Detail/DetailInset/LayerContent")
+layer_preview = NodePath("Columns/Detail/DetailInset/LayerContent/LayerPreviewInset/LayerPreview")
+texture_option = NodePath("Columns/Detail/DetailInset/LayerContent/TextureRow/TextureOption")
+parallax_spin = NodePath("Columns/Detail/DetailInset/LayerContent/ParallaxRow/ParallaxSpin")
+custom_color_check = NodePath("Columns/Detail/DetailInset/LayerContent/CustomColorRow/CustomColorCheck")
+color_picker = NodePath("Columns/Detail/DetailInset/LayerContent/CustomColorRow/ColorPicker")
+offset_x = NodePath("Columns/Detail/DetailInset/LayerContent/OffsetRow/OffsetX")
+offset_y = NodePath("Columns/Detail/DetailInset/LayerContent/OffsetRow/OffsetY")
+autoscroll_x = NodePath("Columns/Detail/DetailInset/LayerContent/AutoscrollRow/AutoscrollX")
+autoscroll_y = NodePath("Columns/Detail/DetailInset/LayerContent/AutoscrollRow/AutoscrollY")
 
-[node name="Body" type="VBoxContainer" parent="." unique_id=623943725]
+[node name="Columns" type="HBoxContainer" parent="."]
 layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="ListColumn" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(178, 0)
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="PresetRow" type="HBoxContainer" parent="Body" unique_id=1087036142]
+[node name="PresetOption" type="OptionButton" parent="Columns/ListColumn"]
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+tooltip_text = "Background preset"
+mouse_default_cursor_shape = 2
 
-[node name="Label" type="Label" parent="Body/PresetRow" unique_id=1403566913]
-layout_mode = 2
-text = "Preset"
-
-[node name="PresetOption" type="OptionButton" parent="Body/PresetRow" unique_id=879638498]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Tabs" type="TabContainer" parent="Body" unique_id=300000001]
+[node name="ListInset" type="PanelContainer" parent="Columns/ListColumn"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 1
-
-[node name="Backdrop" type="MarginContainer" parent="Body/Tabs" unique_id=1051788834]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-metadata/_tab_index = 0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Body/Tabs/Backdrop" unique_id=300000002]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="TypeRow" type="HBoxContainer" parent="Body/Tabs/Backdrop/VBoxContainer" unique_id=1261623433]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Body/Tabs/Backdrop/VBoxContainer/TypeRow" unique_id=1952366454]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Type"
-
-[node name="TypeOption" type="OptionButton" parent="Body/Tabs/Backdrop/VBoxContainer/TypeRow" unique_id=1164599777]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="SolidRow" type="HBoxContainer" parent="Body/Tabs/Backdrop/VBoxContainer" unique_id=1539831174]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Body/Tabs/Backdrop/VBoxContainer/SolidRow" unique_id=1426592835]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Color"
-
-[node name="SolidColor" type="ColorPickerButton" parent="Body/Tabs/Backdrop/VBoxContainer/SolidRow" unique_id=780906982]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="GradientRows" type="VBoxContainer" parent="Body/Tabs/Backdrop/VBoxContainer" unique_id=519528379]
-layout_mode = 2
-
-[node name="TopRow" type="HBoxContainer" parent="Body/Tabs/Backdrop/VBoxContainer/GradientRows" unique_id=868040899]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Body/Tabs/Backdrop/VBoxContainer/GradientRows/TopRow" unique_id=254991994]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Top"
-
-[node name="GradientTop" type="ColorPickerButton" parent="Body/Tabs/Backdrop/VBoxContainer/GradientRows/TopRow" unique_id=122183130]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="BottomRow" type="HBoxContainer" parent="Body/Tabs/Backdrop/VBoxContainer/GradientRows" unique_id=1509660779]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Body/Tabs/Backdrop/VBoxContainer/GradientRows/BottomRow" unique_id=288449962]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Bottom"
-
-[node name="GradientBottom" type="ColorPickerButton" parent="Body/Tabs/Backdrop/VBoxContainer/GradientRows/BottomRow" unique_id=1590719843]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Preview" type="TextureRect" parent="Body/Tabs/Backdrop/VBoxContainer" unique_id=300000004]
-custom_minimum_size = Vector2(0, 110)
-layout_mode = 2
-size_flags_vertical = 3
-expand_mode = 1
 metadata/gdss_classes = PackedStringArray("Inset")
 
-[node name="Layers" type="MarginContainer" parent="Body/Tabs" unique_id=118970384]
+[node name="ListScroll" type="ScrollContainer" parent="Columns/ListColumn/ListInset"]
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-metadata/_tab_index = 1
+horizontal_scroll_mode = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Body/Tabs/Layers" unique_id=1467022476]
+[node name="RowList" type="VBoxContainer" parent="Columns/ListColumn/ListInset/ListScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="Toolbar" type="HBoxContainer" parent="Columns/ListColumn"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Main" type="VBoxContainer" parent="Body/Tabs/Layers/HBoxContainer" unique_id=2078615983]
-custom_minimum_size = Vector2(200, 0)
+[node name="AddLayerButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="LayersHeader" type="HBoxContainer" parent="Body/Tabs/Layers/HBoxContainer/Main" unique_id=716977149]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Body/Tabs/Layers/HBoxContainer/Main/LayersHeader" unique_id=643096659]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Layers"
-
-[node name="AddLayerButton" type="Button" parent="Body/Tabs/Layers/HBoxContainer/Main/LayersHeader" unique_id=1337213103]
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-tooltip_text = "Add layer"
+tooltip_text = "Add Layer"
+mouse_default_cursor_shape = 2
 icon = ExtResource("ic_add")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="LayerList" type="ItemList" parent="Body/Tabs/Layers/HBoxContainer/Main" unique_id=243729061]
-custom_minimum_size = Vector2(0, 90)
+[node name="MoveUpButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
-size_flags_vertical = 3
+tooltip_text = "Move Layer Up"
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_up")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="LayerButtons" type="HBoxContainer" parent="Body/Tabs/Layers/HBoxContainer/Main" unique_id=7322063]
+[node name="MoveDownButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
+tooltip_text = "Move Layer Down"
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_down")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="MoveUpButton" type="Button" parent="Body/Tabs/Layers/HBoxContainer/Main/LayerButtons" unique_id=444991513]
+[node name="Spacer" type="Control" parent="Columns/ListColumn/Toolbar"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Move Up"
+mouse_filter = 2
 
-[node name="MoveDownButton" type="Button" parent="Body/Tabs/Layers/HBoxContainer/Main/LayerButtons" unique_id=2034139678]
+[node name="RemoveLayerButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Move Down"
-
-[node name="RemoveLayerButton" type="Button" parent="Body/Tabs/Layers/HBoxContainer/Main/LayerButtons" unique_id=1569352731]
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Remove layer"
+tooltip_text = "Remove Layer"
+mouse_default_cursor_shape = 2
 icon = ExtResource("ic_remove")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton", "Danger")
 
-[node name="Sep" type="VSeparator" parent="Body/Tabs/Layers/HBoxContainer" unique_id=1196054632]
-layout_mode = 2
-
-[node name="Detail" type="VBoxContainer" parent="Body/Tabs/Layers/HBoxContainer" unique_id=670612497]
-custom_minimum_size = Vector2(210, 0)
+[node name="Detail" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Preview" type="TextureRect" parent="Body/Tabs/Layers/HBoxContainer/Detail" unique_id=300000003]
-visible = false
-custom_minimum_size = Vector2(0, 110)
-layout_mode = 2
-expand_mode = 1
-stretch_mode = 5
-metadata/gdss_classes = PackedStringArray("Inset")
-
-[node name="Placeholder" type="Label" parent="Body/Tabs/Layers/HBoxContainer/Detail" unique_id=780336242]
+[node name="DetailInset" type="PanelContainer" parent="Columns/Detail"]
+custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
 size_flags_vertical = 3
-text = "Select a background layer"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-metadata/gdss_classes = PackedStringArray("Mute")
+metadata/gdss_classes = PackedStringArray("Card")
 
-[node name="Fields" type="VBoxContainer" parent="Body/Tabs/Layers/HBoxContainer/Detail" unique_id=957191827]
+[node name="BackdropContent" type="VBoxContainer" parent="Columns/Detail/DetailInset"]
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="TextureRow" type="HBoxContainer" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields" unique_id=1105580233]
+[node name="TypeRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/BackdropContent"]
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields/TextureRow" unique_id=1546192954]
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/BackdropContent/TypeRow"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Type"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="TypeOption" type="OptionButton" parent="Columns/Detail/DetailInset/BackdropContent/TypeRow"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+
+[node name="SolidRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/BackdropContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/BackdropContent/SolidRow"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Color"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="SolidColor" type="ColorPickerButton" parent="Columns/Detail/DetailInset/BackdropContent/SolidRow"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+
+[node name="GradientRows" type="VBoxContainer" parent="Columns/Detail/DetailInset/BackdropContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TopRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/BackdropContent/GradientRows"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/BackdropContent/GradientRows/TopRow"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Top"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="GradientTop" type="ColorPickerButton" parent="Columns/Detail/DetailInset/BackdropContent/GradientRows/TopRow"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+
+[node name="BottomRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/BackdropContent/GradientRows"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/BackdropContent/GradientRows/BottomRow"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Bottom"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="GradientBottom" type="ColorPickerButton" parent="Columns/Detail/DetailInset/BackdropContent/GradientRows/BottomRow"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+
+[node name="BackdropPreviewInset" type="PanelContainer" parent="Columns/Detail/DetailInset/BackdropContent"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="BackdropPreview" type="TextureRect" parent="Columns/Detail/DetailInset/BackdropContent/BackdropPreviewInset"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+expand_mode = 1
+
+[node name="LayerContent" type="VBoxContainer" parent="Columns/Detail/DetailInset"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TextureRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/LayerContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/LayerContent/TextureRow"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+size_flags_vertical = 4
 text = "Texture"
+metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="TextureOption" type="OptionButton" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields/TextureRow" unique_id=1522231585]
+[node name="TextureOption" type="OptionButton" parent="Columns/Detail/DetailInset/LayerContent/TextureRow"]
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
 
-[node name="ParallaxRow" type="HBoxContainer" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields" unique_id=728578257]
+[node name="ParallaxRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/LayerContent"]
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields/ParallaxRow" unique_id=1845631332]
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/LayerContent/ParallaxRow"]
+custom_minimum_size = Vector2(72, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_vertical = 4
 text = "Parallax"
+metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="ParallaxSpin" type="SpinBox" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields/ParallaxRow" unique_id=240362263]
+[node name="ParallaxSpin" type="SpinBox" parent="Columns/Detail/DetailInset/LayerContent/ParallaxRow"]
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 2.0
 step = 0.01
 
-[node name="CustomColorRow" type="HBoxContainer" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields" unique_id=774335701]
+[node name="CustomColorRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/LayerContent"]
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields/CustomColorRow" unique_id=400961702]
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/LayerContent/CustomColorRow"]
+custom_minimum_size = Vector2(72, 0)
 layout_mode = 2
+size_flags_vertical = 4
 text = "Custom Color"
+metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="CustomColorCheck" type="CheckButton" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields/CustomColorRow" unique_id=414490121]
+[node name="CustomColorCheck" type="CheckButton" parent="Columns/Detail/DetailInset/LayerContent/CustomColorRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 
-[node name="ColorPicker" type="ColorPickerButton" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields/CustomColorRow" unique_id=414490122]
+[node name="ColorPicker" type="ColorPickerButton" parent="Columns/Detail/DetailInset/LayerContent/CustomColorRow"]
+visible = false
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+
+[node name="OffsetRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/LayerContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/LayerContent/OffsetRow"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Offset"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="OffsetX" type="SpinBox" parent="Columns/Detail/DetailInset/LayerContent/OffsetRow"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -4000.0
+max_value = 4000.0
+
+[node name="OffsetY" type="SpinBox" parent="Columns/Detail/DetailInset/LayerContent/OffsetRow"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -4000.0
+max_value = 4000.0
+
+[node name="AutoscrollRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/LayerContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/LayerContent/AutoscrollRow"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Autoscroll"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="AutoscrollX" type="SpinBox" parent="Columns/Detail/DetailInset/LayerContent/AutoscrollRow"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -500.0
+max_value = 500.0
+
+[node name="AutoscrollY" type="SpinBox" parent="Columns/Detail/DetailInset/LayerContent/AutoscrollRow"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -500.0
+max_value = 500.0
+
+[node name="LayerPreviewInset" type="PanelContainer" parent="Columns/Detail/DetailInset/LayerContent"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="LayerPreview" type="TextureRect" parent="Columns/Detail/DetailInset/LayerContent/LayerPreviewInset"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EmptyCenter" type="CenterContainer" parent="Columns/Detail/DetailInset"]
 visible = false
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="OffsetRow" type="HBoxContainer" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields" unique_id=1733192205]
+[node name="EmptyLabel" type="Label" parent="Columns/Detail/DetailInset/EmptyCenter"]
+modulate = Color(1, 1, 1, 0.6)
 layout_mode = 2
-
-[node name="Label" type="Label" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields/OffsetRow" unique_id=2127549240]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Offset"
-
-[node name="OffsetX" type="SpinBox" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields/OffsetRow" unique_id=506869147]
-layout_mode = 2
-size_flags_horizontal = 3
-min_value = -4000.0
-max_value = 4000.0
-
-[node name="OffsetY" type="SpinBox" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields/OffsetRow" unique_id=415749553]
-layout_mode = 2
-size_flags_horizontal = 3
-min_value = -4000.0
-max_value = 4000.0
-
-[node name="AutoscrollRow" type="HBoxContainer" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields" unique_id=1831022778]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields/AutoscrollRow" unique_id=1634794655]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Autoscroll"
-
-[node name="AutoscrollX" type="SpinBox" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields/AutoscrollRow" unique_id=1354333653]
-layout_mode = 2
-size_flags_horizontal = 3
-min_value = -500.0
-max_value = 500.0
-
-[node name="AutoscrollY" type="SpinBox" parent="Body/Tabs/Layers/HBoxContainer/Detail/Fields/AutoscrollRow" unique_id=227677570]
-layout_mode = 2
-size_flags_horizontal = 3
-min_value = -500.0
-max_value = 500.0
+text = "Select the backdrop or a layer."
+metadata/gdss_classes = PackedStringArray("Mute")

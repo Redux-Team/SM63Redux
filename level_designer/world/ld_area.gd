@@ -23,6 +23,9 @@ var area_name: String = ""
 var background: LDBackground
 ## Preset name driving the background, or LDBackgroundDB.CUSTOM once it has been edited.
 var background_preset: String = ""
+## The area's preserved freely-edited background, stashed aside so switching to a preset and back to
+## Custom restores the earlier edits. Only the active `background` is rendered and serialized.
+var custom_background: LDBackground = null
 ## Per-area editor view: each area pans/zooms independently, like a separate level. Stripped on
 ## export, so it only matters in the editor.
 var camera_position: Vector2 = Vector2.ZERO
