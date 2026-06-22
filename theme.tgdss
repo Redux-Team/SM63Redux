@@ -216,7 +216,7 @@ Button {
 		icon_max_width: 18
 		padding: 12 12 6 6
 		shadow: 8 8 8 8
-		shadow_color: alpha("#000", 0.3)
+		shadow_color: alpha("#000", 0.15)
 		:hover {
 			bg_color: liquid_blur(2, $accent_hi, 0.78, 1.3)
 			border_color: "#cfe6ff"
@@ -225,8 +225,7 @@ Button {
 		}
 		:pressed {
 			bg_color: $accent_press
-			font_color: $on_accent
-			icon_color: $on_accent
+			font_color: WHITE
 		}
 	}
 
