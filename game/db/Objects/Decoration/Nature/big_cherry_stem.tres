@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://ckphd4pb2lbl3"]
+
+[ext_resource type="Texture2D" uid="uid://b1wp4rvlj6ja1" path="res://assets/textures/objects/decoration/nature/big_cherry_stem.png" id="1_pgbtx"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_s3hm3"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_ph3o0"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_wctxo"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_tmpqj"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_neh6v"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s3hm3"]
+atlas = ExtResource("1_pgbtx")
+region = Rect2(-2, 8, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/big_cherry_stem.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_neh6v")
+id = "big_cherry_stem"
+category = 6
+subpath = "Nature/medium_cherry_tree"
+group_path = "Nature"
+name_override = "Cherry Tree"
+ld_index_id = "tree_cherry"
+ld_entry_texture = SubResource("AtlasTexture_s3hm3")
+ld_properties = Array[ExtResource("2_s3hm3")]([ExtResource("3_ph3o0"), ExtResource("4_wctxo"), ExtResource("5_tmpqj")])
+sprite_texture = ExtResource("1_pgbtx")
+ld_object_path = "Decoration/Nature/big_cherry_stem"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

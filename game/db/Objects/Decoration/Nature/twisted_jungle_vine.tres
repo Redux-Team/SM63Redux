@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dylyb2804rot0"]
+
+[ext_resource type="PackedScene" uid="uid://noj0vm52nxvs" path="res://game/object/twisted/twisted_tree.tscn" id="1_ffbjo"]
+[ext_resource type="PackedScene" uid="uid://o7r2bmjo0n8m" path="res://game/db/Objects/Decoration/Nature/twisted_tree_ld.tscn" id="2_e8krl"]
+[ext_resource type="Texture2D" uid="uid://b6e0h5b8l1g8h" path="res://assets/textures/objects/decoration/nature/twisted_jungle_vine_ld.png" id="3_ffbjo"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_5ey18"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_t7i2s"]
+[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="6_bw2l4"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_aob75"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e8krl"]
+atlas = ExtResource("3_ffbjo")
+region = Rect2(-12, -17, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/twisted_jungle_vine.tres"
+resource_scene_unique_id = ""
+script = ExtResource("7_aob75")
+id = "twisted_jungle_vine"
+category = 6
+subpath = "Nature/twisted_tree"
+group_path = "Nature"
+name_override = "Twisted Tree"
+ld_index_id = "tree"
+ld_select_tool_override = "path_edit"
+ld_placement_tool_override = "path"
+ld_editor_instance = ExtResource("2_e8krl")
+game_instance = ExtResource("1_ffbjo")
+ld_entry_texture = SubResource("AtlasTexture_e8krl")
+ld_properties = Array[ExtResource("4_5ey18")]([ExtResource("5_t7i2s"), ExtResource("6_bw2l4")])
+ld_object_path = "Decoration/Nature/twisted_jungle_vine"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

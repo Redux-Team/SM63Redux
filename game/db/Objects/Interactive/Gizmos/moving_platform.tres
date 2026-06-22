@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dhyodlkfh60hd"]
+
+[ext_resource type="PackedScene" uid="uid://ckdfyoldc0frd" path="res://game/object/moving_platform/moving_platform.tscn" id="1_5pwsb"]
+[ext_resource type="PackedScene" uid="uid://duukwfxuutbsc" path="res://game/db/Objects/Interactive/Gizmos/moving_platform_ld.tscn" id="2_la5pd"]
+[ext_resource type="Texture2D" uid="uid://dvbkxl53m0k4c" path="res://assets/textures/objects/interactive/gizmos/moving_platform_ld.png" id="3_da5wp"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_d7b8b"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_a80dm"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_gsv6x"]
+[ext_resource type="Script" uid="uid://c74p8giulwgqm" path="res://game/db/Properties/t_size_x.gd" id="7_p53v8"]
+[ext_resource type="Resource" uid="uid://dk8qlbripls8x" path="res://game/db/Properties/moving_platform/platform_amount.tres" id="8_4xw36"]
+[ext_resource type="Resource" uid="uid://cwscua7waq0vn" path="res://game/db/Properties/moving_platform/platform_radius.tres" id="9_7s8ke"]
+[ext_resource type="Resource" uid="uid://ctlyyrjsbjt07" path="res://game/db/Properties/moving_platform/platform_period.tres" id="10_2je53"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="11_yxp33"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bb6u5"]
+atlas = ExtResource("3_da5wp")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="Resource" id="Resource_72rtd"]
+script = ExtResource("7_p53v8")
+key = &"t_size_x"
+label = "Width"
+type = 1
+default_value = 1
+metadata/_custom_type_script = "uid://c74p8giulwgqm"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qjrcg"]
+
+[resource]
+resource_path = "res://game/db/Objects/Interactive/Gizmos/moving_platform.tres"
+resource_scene_unique_id = ""
+script = ExtResource("11_yxp33")
+id = "moving_platform"
+category = 6
+subpath = "Gizmos/moving_platform"
+group_path = "Gizmos"
+ld_editor_instance = ExtResource("2_la5pd")
+game_instance = ExtResource("1_5pwsb")
+ld_entry_texture = SubResource("AtlasTexture_bb6u5")
+ld_properties = Array[ExtResource("4_d7b8b")]([ExtResource("5_a80dm"), ExtResource("6_gsv6x"), SubResource("Resource_72rtd"), ExtResource("8_4xw36"), ExtResource("9_7s8ke"), ExtResource("10_2je53")])
+telescoping_atlas = SubResource("AtlasTexture_qjrcg")
+ld_object_path = "Interactive/Gizmos/moving_platform"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

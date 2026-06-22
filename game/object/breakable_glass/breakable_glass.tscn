@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://bppwwwruvw60p"]
 
 [ext_resource type="PackedScene" uid="uid://c7ler7lqg61m1" path="res://game/object/breakable_box/breakable_box.tscn" id="1_gb4rt"]
-[ext_resource type="Texture2D" uid="uid://csab8p3wucepo" path="res://assets/textures/props/interactable/breakable_glass_0.png" id="2_q7nns"]
-[ext_resource type="Texture2D" uid="uid://by72j0f1vxmja" path="res://assets/textures/props/interactable/breakable_glass_2.png" id="3_5x1lc"]
+[ext_resource type="Texture2D" uid="uid://csab8p3wucepo" path="res://assets/textures/objects/interactive/interactable/breakable_glass_0.png" id="2_q7nns"]
+[ext_resource type="Texture2D" uid="uid://by72j0f1vxmja" path="res://assets/textures/objects/interactive/interactable/breakable_glass_2.png" id="3_5x1lc"]
 [ext_resource type="AudioStream" uid="uid://csj1dtritxkmf" path="res://assets/sfx/object/breakable_glass/glass_break_1.ogg" id="3_iibrf"]
-[ext_resource type="Texture2D" uid="uid://b6rve2nk74725" path="res://assets/textures/props/interactable/breakable_glass_particles.png" id="3_q7nns"]
+[ext_resource type="Texture2D" uid="uid://b6rve2nk74725" path="res://assets/textures/objects/interactive/interactable/breakable_glass_particles.png" id="3_q7nns"]
 [ext_resource type="AudioStream" uid="uid://tsl83yg44tmp" path="res://assets/sfx/object/breakable_glass/glass_break_2.ogg" id="3_vlmnl"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_71e71"]
 [ext_resource type="AudioStream" uid="uid://dum4iavp1jkui" path="res://assets/sfx/object/breakable_glass/glass_break_3.ogg" id="4_ummfn"]

@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://3pu7061f4gdn"]
+
+[ext_resource type="Texture2D" uid="uid://yt7pvswblmng" path="res://assets/textures/objects/decoration/platform/bone_platform_ld.png" id="1_o33om"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_vw5lg"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_h7xwb"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_ly0ta"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_xsv4y"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="6_ldpl5"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_fkpd5"]
+[ext_resource type="Texture2D" uid="uid://ljj17a8rjf5v" path="res://assets/textures/objects/decoration/platform/bone_platform.png" id="8_1cadn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5shr0"]
+atlas = ExtResource("1_o33om")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8f6vu"]
+atlas = ExtResource("8_1cadn")
+region = Rect2(17, 0, 16, 9)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Platforms/bone_platform.tres"
+resource_scene_unique_id = ""
+script = ExtResource("7_fkpd5")
+id = "bone_platform"
+category = 6
+subpath = "Platforms/bone_platform"
+group_path = "Platforms"
+ld_index_id = "platform"
+ld_placement_tool_override = "telescoping"
+ld_entry_texture = SubResource("AtlasTexture_5shr0")
+ld_properties = Array[ExtResource("2_vw5lg")]([ExtResource("3_h7xwb"), ExtResource("4_ly0ta"), ExtResource("5_xsv4y"), ExtResource("6_ldpl5")])
+object_type = 1
+telescoping_atlas = SubResource("AtlasTexture_8f6vu")
+ld_object_path = "Decoration/Platforms/bone_platform"
+collision_enabled = true
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://bf8n38aw0auma"]
+
+[ext_resource type="PackedScene" uid="uid://crc4nl4nsnqah" path="res://game/object/tipping/tipping_log.tscn" id="1_afypt"]
+[ext_resource type="Texture2D" uid="uid://cw5yvowfsm05i" path="res://assets/textures/objects/decoration/platform/tipping_platform_cherry.png" id="2_7v6m3"]
+[ext_resource type="Texture2D" uid="uid://bdth2dtikekn" path="res://assets/textures/objects/decoration/platform/tipping_platform_cherry_center.png" id="3_rk28m"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_7v6m3"]
+diffuse_texture = ExtResource("3_rk28m")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a7hv6"]
+resource_local_to_scene = true
+size = Vector2(32, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vg5yl"]
+resource_local_to_scene = true
+size = Vector2(32, 2)
+
+[node name="TippingCherryPlatform" unique_id=1813505387 instance=ExtResource("1_afypt")]
+
+[node name="NinePatch" parent="." index="0" unique_id=1004792424]
+texture = ExtResource("2_7v6m3")
+
+[node name="TippingCenter" parent="." index="1" unique_id=51585662]
+texture = SubResource("CanvasTexture_7v6m3")
+canvas_texture = SubResource("CanvasTexture_7v6m3")
+diffuse_texture = ExtResource("3_rk28m")
+
+[node name="CollisionShape2D" parent="StaticBody2D" parent_id_path=PackedInt32Array(689719996) index="0" unique_id=706654042]
+shape = SubResource("RectangleShape2D_a7hv6")
+
+[node name="CollisionShape2D" parent="RideArea" parent_id_path=PackedInt32Array(1178477417) index="0" unique_id=796793170]
+shape = SubResource("RectangleShape2D_vg5yl")

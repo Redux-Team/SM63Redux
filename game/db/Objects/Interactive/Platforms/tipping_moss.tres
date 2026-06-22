@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bvcudvudtw6s6"]
+
+[ext_resource type="PackedScene" uid="uid://b571dgd8fhw7i" path="res://game/object/tipping/tipping_moss.tscn" id="1_8rbdv"]
+[ext_resource type="PackedScene" uid="uid://djgvo5ef6qlja" path="res://game/db/Objects/Interactive/Platforms/tipping_moss_ld.tscn" id="2_syyj7"]
+[ext_resource type="Texture2D" uid="uid://dsw0wctldme1m" path="res://assets/textures/objects/decoration/platform/tipping_platform_moss_ld.png" id="3_lpl0i"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_cu1rs"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_6lqhg"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_22xll"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="7_pb8hr"]
+[ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="8_0h7c7"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="9_m0a6x"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_by2gu"]
+atlas = ExtResource("3_lpl0i")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kbjqa"]
+
+[resource]
+resource_path = "res://game/db/Objects/Interactive/Platforms/tipping_moss.tres"
+resource_scene_unique_id = ""
+script = ExtResource("9_m0a6x")
+id = "tipping_moss"
+category = 6
+subpath = "Platforms/tipping_moss"
+group_path = "Platforms"
+ld_index_id = "tipping_2"
+ld_placement_tool_override = "telescoping"
+ld_editor_instance = ExtResource("2_syyj7")
+game_instance = ExtResource("1_8rbdv")
+ld_entry_texture = SubResource("AtlasTexture_by2gu")
+ld_properties = Array[ExtResource("4_cu1rs")]([ExtResource("5_6lqhg"), ExtResource("6_22xll"), ExtResource("7_pb8hr"), ExtResource("8_0h7c7")])
+telescoping_atlas = SubResource("AtlasTexture_kbjqa")
+ld_object_path = "Interactive/Platforms/tipping_moss"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

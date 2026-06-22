@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://u0c5qwqjxkub" path="res://game/object_templates/telescoping/level_object_telescoping.gd" id="1_4p6u2"]
 [ext_resource type="Shader" uid="uid://g3ewropiv6mx" path="res://core/shader/hsv.gdshader" id="1_lk5vn"]
-[ext_resource type="Texture2D" uid="uid://bvhnsfmnwobe3" path="res://assets/textures/props/warps/pipe.png" id="3_lk5vn"]
+[ext_resource type="Texture2D" uid="uid://bvhnsfmnwobe3" path="res://assets/textures/objects/interactive/warps/pipe.png" id="3_lk5vn"]
 [ext_resource type="Shader" uid="uid://dcb7jh0modabn" path="res://core/shader/level_object.gdshader" id="3_vkc4e"]
-[ext_resource type="Texture2D" uid="uid://d1ejgxow46a1e" path="res://assets/textures/props/warps/pipe_palette.png" id="4_vkc4e"]
+[ext_resource type="Texture2D" uid="uid://d1ejgxow46a1e" path="res://assets/textures/objects/interactive/warps/pipe_palette.png" id="4_vkc4e"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vkc4e"]
 shader = ExtResource("1_lk5vn")

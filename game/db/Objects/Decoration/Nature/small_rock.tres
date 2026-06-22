@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bywn2c1kw0pxn"]
+
+[ext_resource type="Texture2D" uid="uid://cgf8cokpn8q8s" path="res://assets/textures/objects/decoration/nature/small_rock.png" id="1_2ewqi"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_1hlkq"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_mr6qr"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_o5bpm"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_hvqoe"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_8leef"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mjm7j"]
+atlas = ExtResource("1_2ewqi")
+region = Rect2(1, -28, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/small_rock.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_8leef")
+id = "small_rock"
+category = 6
+subpath = "Nature/small_rock"
+group_path = "Nature"
+name_override = "Small Rock"
+ld_index_id = "rock"
+ld_entry_texture = SubResource("AtlasTexture_mjm7j")
+ld_properties = Array[ExtResource("2_1hlkq")]([ExtResource("3_mr6qr"), ExtResource("4_o5bpm"), ExtResource("5_hvqoe")])
+sprite_texture = ExtResource("1_2ewqi")
+ld_object_path = "Decoration/Nature/small_rock"
+collision_enabled = true
+collision_polygon = PackedVector2Array(-23, 9, -11, -9, -8, -9, -2, -7, 3, -4, 7, -2, 13, -1, 17, 3, 23, 5, 22, 9)
+collision_one_way = false
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dk4nnd468ovme"]
+
+[ext_resource type="Texture2D" uid="uid://jmg6e73ryu2i" path="res://assets/textures/objects/decoration/nature/big_snowy_tree.png" id="1_htelc"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_0hjty"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_ik3ka"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_hc86o"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_83ibd"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_haluu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t7uan"]
+atlas = ExtResource("1_htelc")
+region = Rect2(8, 0, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/big_snowy_tree.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_haluu")
+id = "big_snowy_tree"
+category = 6
+subpath = "Nature/small_mossy_rock"
+group_path = "Nature"
+name_override = "Small Mossy Rock"
+ld_index_id = "rock_moss"
+ld_entry_texture = SubResource("AtlasTexture_t7uan")
+ld_properties = Array[ExtResource("2_0hjty")]([ExtResource("3_ik3ka"), ExtResource("4_hc86o"), ExtResource("5_83ibd")])
+sprite_texture = ExtResource("1_htelc")
+ld_object_path = "Decoration/Nature/big_snowy_tree"
+collision_enabled = true
+collision_polygon = PackedVector2Array(-12, 7, -10, -3, -5, -7, 3, -10, 6, -9, 14, -2, 14, 6, 16, 16, -14, 16)
+collision_one_way = false
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://b1ld3dit0set1"]
+
+[ext_resource type="Script" path="res://level_designer/components/ui/editor_settings/editor_settings.gd" id="1_edset"]
+
+[node name="EditorSettings" type="MarginContainer" node_paths=PackedStringArray("pan_speed_slider", "pan_speed_value")]
+custom_minimum_size = Vector2(360, 0)
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+script = ExtResource("1_edset")
+pan_speed_slider = NodePath("VBox/CameraRow/PanSpeedSlider")
+pan_speed_value = NodePath("VBox/CameraRow/PanSpeedValue")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Editor Settings"
+
+[node name="CameraRow" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CameraLabel" type="Label" parent="VBox/CameraRow"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Camera Speed"
+
+[node name="PanSpeedSlider" type="HSlider" parent="VBox/CameraRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="PanSpeedValue" type="Label" parent="VBox/CameraRow"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "4.0"

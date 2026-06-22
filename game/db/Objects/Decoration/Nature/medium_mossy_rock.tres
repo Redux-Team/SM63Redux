@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://b3t6s483sljer"]
+
+[ext_resource type="Texture2D" uid="uid://52hxg8r2pfeb" path="res://assets/textures/objects/decoration/nature/medium_mossy_rock.png" id="1_2xsac"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_rk1jb"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_jegf0"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_ccttt"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_hn6ub"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_8qpjp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rk1jb"]
+atlas = ExtResource("1_2xsac")
+region = Rect2(-2, -1, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/medium_mossy_rock.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_8qpjp")
+id = "medium_mossy_rock"
+category = 6
+subpath = "Nature/large_rock"
+group_path = "Nature"
+name_override = "Large Rock"
+ld_index_id = "rock"
+ld_entry_texture = SubResource("AtlasTexture_rk1jb")
+ld_properties = Array[ExtResource("2_rk1jb")]([ExtResource("3_jegf0"), ExtResource("4_ccttt"), ExtResource("5_hn6ub")])
+sprite_texture = ExtResource("1_2xsac")
+ld_object_path = "Decoration/Nature/medium_mossy_rock"
+collision_enabled = true
+collision_polygon = PackedVector2Array(-27, 1, -39, 32, 40, 32, 34, 12, 21, 0, 19, -22, -4, -31, -10, -31, -22, 1)
+collision_one_way = false
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

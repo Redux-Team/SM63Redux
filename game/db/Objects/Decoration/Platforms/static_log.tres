@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://by8vbnkxga54a"]
+
+[ext_resource type="Texture2D" uid="uid://eg3jm1ifajro" path="res://assets/textures/objects/decoration/platform/static_log.png" id="1_jr0ek"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_m7qt5"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_s705n"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_j12x7"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_1i45m"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_go2m8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_20wns"]
+resource_local_to_scene = true
+size = Vector2(16, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gnkvx"]
+atlas = ExtResource("1_jr0ek")
+region = Rect2(-15, -11, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3wp0g"]
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Platforms/static_log.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_go2m8")
+id = "static_log"
+category = 6
+subpath = "Platforms/static_log"
+group_path = "Platforms"
+name_override = "Static Log"
+ld_index_id = "log"
+ld_entry_texture = SubResource("AtlasTexture_gnkvx")
+ld_properties = Array[ExtResource("2_m7qt5")]([ExtResource("3_s705n"), ExtResource("4_j12x7"), ExtResource("5_1i45m")])
+sprite_texture = ExtResource("1_jr0ek")
+telescoping_atlas = SubResource("AtlasTexture_3wp0g")
+ld_object_path = "Decoration/Platforms/static_log"
+collision_enabled = true
+collision_shape = SubResource("RectangleShape2D_20wns")
+collision_offset = Vector2(0, 2)
+collision_one_way_margin = 12.0
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

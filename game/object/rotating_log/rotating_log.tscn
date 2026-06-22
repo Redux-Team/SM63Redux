@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dyafr57h4w3nb" path="res://game/object/rotating_log/rotating_log.gd" id="1_nk88i"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_ix08y"]
-[ext_resource type="Texture2D" uid="uid://djm1torl70def" path="res://assets/textures/props/platform/rotating_log.png" id="3_chxp7"]
-[ext_resource type="Texture2D" uid="uid://brraxgulqctod" path="res://assets/textures/props/platform/rotating_log_center.png" id="4_7064w"]
+[ext_resource type="Texture2D" uid="uid://djm1torl70def" path="res://assets/textures/objects/decoration/platform/rotating_log.png" id="3_chxp7"]
+[ext_resource type="Texture2D" uid="uid://brraxgulqctod" path="res://assets/textures/objects/decoration/platform/rotating_log_center.png" id="4_7064w"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="5_3qjx1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_or17q"]

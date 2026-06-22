@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://kd03uj0tg4kr"]
+
+[ext_resource type="PackedScene" uid="uid://taxkdf07e5q7" path="res://game/db/Objects/Interactive/Platforms/tipping_log_ld.tscn" id="1_nx806"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_0t0j5"]
+[ext_resource type="Texture2D" uid="uid://cw5yvowfsm05i" path="res://assets/textures/objects/decoration/platform/tipping_platform_cherry.png" id="3_nx806"]
+[ext_resource type="Texture2D" uid="uid://bdth2dtikekn" path="res://assets/textures/objects/decoration/platform/tipping_platform_cherry_center.png" id="4_0t0j5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lul7e"]
+resource_local_to_scene = true
+shader = ExtResource("2_0t0j5")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/saturation = 1.0
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_hquvt"]
+diffuse_texture = ExtResource("4_0t0j5")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yymdm"]
+resource_local_to_scene = true
+size = Vector2(38, 16)
+
+[node name="TippingCherryPlatform" unique_id=247389356 instance=ExtResource("1_nx806")]
+
+[node name="NinePatch" parent="." index="0" unique_id=510440931]
+material = SubResource("ShaderMaterial_lul7e")
+texture = ExtResource("3_nx806")
+
+[node name="TippingCenter" parent="." index="1" unique_id=169820774]
+texture = SubResource("CanvasTexture_hquvt")
+canvas_texture = SubResource("CanvasTexture_hquvt")
+diffuse_texture = ExtResource("4_0t0j5")
+
+[node name="EditorShape" parent="EditorShapeArea" parent_id_path=PackedInt32Array(1717977380) index="0" unique_id=515550961]
+shape = SubResource("RectangleShape2D_yymdm")

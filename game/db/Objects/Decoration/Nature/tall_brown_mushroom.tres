@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bd1gtus0g3k3q"]
+
+[ext_resource type="PackedScene" uid="uid://c5q8q8iivnaej" path="res://game/object/tall/brown_mushroom_tall.tscn" id="1_5ympm"]
+[ext_resource type="PackedScene" uid="uid://i55kk4n4jgd" path="res://game/db/Objects/Decoration/Nature/tall_brown_mushroom_ld.tscn" id="2_kumkj"]
+[ext_resource type="Texture2D" uid="uid://ctko8sp872smb" path="res://assets/textures/objects/decoration/nature/tall_brown_mushroom_ld.png" id="3_0hklo"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_0q2a0"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_58ms3"]
+[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="6_xtob5"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_qtp61"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aorbd"]
+atlas = ExtResource("3_0hklo")
+region = Rect2(0, 0, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/tall_brown_mushroom.tres"
+resource_scene_unique_id = ""
+script = ExtResource("7_qtp61")
+id = "tall_brown_mushroom"
+category = 6
+subpath = "Nature/tall_brown_mushroom"
+group_path = "Nature"
+ld_index_id = "mushroom"
+ld_select_tool_override = "path_edit"
+ld_placement_tool_override = "path"
+ld_editor_instance = ExtResource("2_kumkj")
+game_instance = ExtResource("1_5ympm")
+ld_entry_texture = SubResource("AtlasTexture_aorbd")
+ld_properties = Array[ExtResource("4_0q2a0")]([ExtResource("5_58ms3"), ExtResource("6_xtob5")])
+ld_object_path = "Decoration/Nature/tall_brown_mushroom"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

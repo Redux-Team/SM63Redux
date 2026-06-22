@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://ditcepctxb8cd"]
+
+[ext_resource type="PackedScene" uid="uid://taxkdf07e5q7" path="res://game/db/Objects/Interactive/Platforms/tipping_log_ld.tscn" id="1_nn23w"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_osgtt"]
+[ext_resource type="Texture2D" uid="uid://c2h4ng3sl4bui" path="res://assets/textures/objects/decoration/platform/tipping_metal_beam.png" id="3_nn23w"]
+[ext_resource type="Texture2D" uid="uid://diwv555c3gwjb" path="res://assets/textures/objects/decoration/platform/tipping_metal_beam_center.png" id="4_nn23w"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nn23w"]
+resource_local_to_scene = true
+shader = ExtResource("2_osgtt")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/saturation = 1.0
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_hquvt"]
+diffuse_texture = ExtResource("4_nn23w")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_osgtt"]
+resource_local_to_scene = true
+size = Vector2(38, 16)
+
+[node name="TippingMetalBeam" unique_id=247389356 instance=ExtResource("1_nn23w")]
+
+[node name="NinePatch" parent="." index="0" unique_id=510440931]
+material = SubResource("ShaderMaterial_nn23w")
+texture = ExtResource("3_nn23w")
+
+[node name="TippingCenter" parent="." index="1" unique_id=169820774]
+texture = SubResource("CanvasTexture_hquvt")
+canvas_texture = SubResource("CanvasTexture_hquvt")
+diffuse_texture = ExtResource("4_nn23w")
+
+[node name="EditorShape" parent="EditorShapeArea" parent_id_path=PackedInt32Array(1717977380) index="0" unique_id=515550961]
+shape = SubResource("RectangleShape2D_osgtt")

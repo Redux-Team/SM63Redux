@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bkrycmuw2cib7"]
+
+[ext_resource type="PackedScene" uid="uid://c4jmo072najyx" path="res://game/object/tall/cherry_flower_tall.tscn" id="1_k6sr1"]
+[ext_resource type="PackedScene" uid="uid://bja44snljmeu8" path="res://game/db/Objects/Decoration/Nature/tall_cherry_flower_ld.tscn" id="2_533ha"]
+[ext_resource type="Texture2D" uid="uid://kf0mtlfaxxlg" path="res://assets/textures/objects/decoration/nature/tall_cherry_flower_ld.png" id="3_fs2at"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_60p1i"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_nhtnp"]
+[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="6_1u5xv"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_78hih"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lhthd"]
+atlas = ExtResource("3_fs2at")
+region = Rect2(0, 0, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/tall_cherry_flower.tres"
+resource_scene_unique_id = ""
+script = ExtResource("7_78hih")
+id = "tall_cherry_flower"
+category = 6
+subpath = "Nature/tall_cherry_flower"
+group_path = "Nature"
+ld_index_id = "mushroom"
+ld_select_tool_override = "path_edit"
+ld_placement_tool_override = "path"
+ld_editor_instance = ExtResource("2_533ha")
+game_instance = ExtResource("1_k6sr1")
+ld_entry_texture = SubResource("AtlasTexture_lhthd")
+ld_properties = Array[ExtResource("4_60p1i")]([ExtResource("5_nhtnp"), ExtResource("6_1u5xv")])
+ld_object_path = "Decoration/Nature/tall_cherry_flower"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

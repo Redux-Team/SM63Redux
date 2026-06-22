@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bheaxqig7mqtr"]
+
+[ext_resource type="Texture2D" uid="uid://cfapwb7f3q6nr" path="res://assets/textures/objects/decoration/nature/pink_tulip_flowers.png" id="1_4fs54"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_x48lp"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_hxusi"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_5wf3k"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_1hwno"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_c0vgl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x48lp"]
+atlas = ExtResource("1_4fs54")
+region = Rect2(-11, -4, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/pink_tulip_flowers.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_c0vgl")
+id = "pink_tulip_flowers"
+category = 6
+subpath = "Nature/medium_cherry_tree"
+group_path = "Nature"
+name_override = "Cherry Tree"
+ld_index_id = "tree_cherry"
+ld_entry_texture = SubResource("AtlasTexture_x48lp")
+ld_properties = Array[ExtResource("2_x48lp")]([ExtResource("3_hxusi"), ExtResource("4_5wf3k"), ExtResource("5_1hwno")])
+sprite_texture = ExtResource("1_4fs54")
+ld_object_path = "Decoration/Nature/pink_tulip_flowers"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

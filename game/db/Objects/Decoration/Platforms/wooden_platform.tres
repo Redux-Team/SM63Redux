@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cnpufyaj5itij"]
+
+[ext_resource type="Texture2D" uid="uid://cpce6xc5ll4o8" path="res://assets/textures/objects/decoration/platform/wooden_platform_ld.png" id="1_3x8je"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_s1o2v"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_cuo6l"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_guk6m"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_qd38g"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="6_85i6g"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_dtje5"]
+[ext_resource type="Texture2D" uid="uid://cybx48dgm813r" path="res://assets/textures/objects/decoration/platform/wooden_platform.png" id="8_ou2qa"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nu505"]
+atlas = ExtResource("1_3x8je")
+region = Rect2(-7, -17, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_av0g1"]
+atlas = ExtResource("8_ou2qa")
+region = Rect2(16, 0, 16, 15)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Platforms/wooden_platform.tres"
+resource_scene_unique_id = ""
+script = ExtResource("7_dtje5")
+id = "wooden_platform"
+category = 6
+subpath = "Platforms/wooden_platform"
+group_path = "Platforms"
+ld_index_id = "platform"
+ld_placement_tool_override = "telescoping"
+ld_entry_texture = SubResource("AtlasTexture_nu505")
+ld_properties = Array[ExtResource("2_s1o2v")]([ExtResource("3_cuo6l"), ExtResource("4_guk6m"), ExtResource("5_qd38g"), ExtResource("6_85i6g")])
+object_type = 1
+telescoping_atlas = SubResource("AtlasTexture_av0g1")
+ld_object_path = "Decoration/Platforms/wooden_platform"
+collision_enabled = true
+collision_expand = Vector2(-2, 0)
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

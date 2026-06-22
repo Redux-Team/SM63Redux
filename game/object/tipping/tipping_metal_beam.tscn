@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://bm1hwf7olewbg"]
+
+[ext_resource type="PackedScene" uid="uid://crc4nl4nsnqah" path="res://game/object/tipping/tipping_log.tscn" id="1_uxocr"]
+[ext_resource type="Texture2D" uid="uid://c2h4ng3sl4bui" path="res://assets/textures/objects/decoration/platform/tipping_metal_beam.png" id="2_bmpwd"]
+[ext_resource type="Texture2D" uid="uid://diwv555c3gwjb" path="res://assets/textures/objects/decoration/platform/tipping_metal_beam_center.png" id="3_pgopj"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_bmpwd"]
+diffuse_texture = ExtResource("3_pgopj")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pgopj"]
+resource_local_to_scene = true
+size = Vector2(32, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bmpwd"]
+resource_local_to_scene = true
+size = Vector2(32, 2)
+
+[node name="TippingMetalBeam" unique_id=1813505387 instance=ExtResource("1_uxocr")]
+
+[node name="NinePatch" parent="." index="0" unique_id=1004792424]
+texture = ExtResource("2_bmpwd")
+
+[node name="TippingCenter" parent="." index="1" unique_id=51585662]
+texture = SubResource("CanvasTexture_bmpwd")
+canvas_texture = SubResource("CanvasTexture_bmpwd")
+diffuse_texture = ExtResource("3_pgopj")
+
+[node name="CollisionShape2D" parent="StaticBody2D" parent_id_path=PackedInt32Array(689719996) index="0" unique_id=706654042]
+shape = SubResource("RectangleShape2D_pgopj")
+
+[node name="CollisionShape2D" parent="RideArea" parent_id_path=PackedInt32Array(1178477417) index="0" unique_id=796793170]
+shape = SubResource("RectangleShape2D_bmpwd")

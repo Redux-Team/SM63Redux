@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dx40j6ny5t0vp"]
+
+[ext_resource type="Texture2D" uid="uid://dotqodrnocjf4" path="res://assets/textures/objects/decoration/nature/snowy_mushroom_pair.png" id="1_3e8ui"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_0fbg0"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_b80vy"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_n72o1"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_q3jm1"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_c7553"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0fbg0"]
+atlas = ExtResource("1_3e8ui")
+region = Rect2(-6, -4, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/snowy_mushroom_pair.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_c7553")
+id = "snowy_mushroom_pair"
+category = 6
+subpath = "Nature/small_mossy_rock"
+group_path = "Nature"
+name_override = "Small Mossy Rock"
+ld_index_id = "rock_moss"
+ld_entry_texture = SubResource("AtlasTexture_0fbg0")
+ld_properties = Array[ExtResource("2_0fbg0")]([ExtResource("3_b80vy"), ExtResource("4_n72o1"), ExtResource("5_q3jm1")])
+sprite_texture = ExtResource("1_3e8ui")
+ld_object_path = "Decoration/Nature/snowy_mushroom_pair"
+collision_enabled = true
+collision_polygon = PackedVector2Array(-12, 7, -10, -3, -5, -7, 3, -10, 6, -9, 14, -2, 14, 6, 16, 16, -14, 16)
+collision_one_way = false
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

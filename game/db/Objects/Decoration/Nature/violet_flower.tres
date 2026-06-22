@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://c43monaot52r7"]
+
+[ext_resource type="Texture2D" uid="uid://dri1q3nuyg8q2" path="res://assets/textures/objects/decoration/nature/violet_flower.png" id="1_m842k"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_1vjiv"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_8ps5y"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_qlgei"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_pv4np"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_0dfun"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1vjiv"]
+atlas = ExtResource("1_m842k")
+region = Rect2(-11, -5, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/violet_flower.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_0dfun")
+id = "violet_flower"
+category = 6
+subpath = "Nature/big_jungle_tree"
+group_path = "Nature"
+ld_entry_texture = SubResource("AtlasTexture_1vjiv")
+ld_properties = Array[ExtResource("2_1vjiv")]([ExtResource("3_8ps5y"), ExtResource("4_qlgei"), ExtResource("5_pv4np")])
+sprite_texture = ExtResource("1_m842k")
+ld_object_path = "Decoration/Nature/violet_flower"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

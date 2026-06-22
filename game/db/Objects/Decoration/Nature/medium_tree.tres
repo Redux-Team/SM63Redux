@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://1ymxj4gqgbyl"]
+
+[ext_resource type="Texture2D" uid="uid://u36r15ijlqeb" path="res://assets/textures/objects/decoration/nature/medium_tree.png" id="1_xb0hi"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_nsuki"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_8d6pw"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_akka1"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_jugqg"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_nk04w"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5p1y3"]
+atlas = ExtResource("1_xb0hi")
+region = Rect2(-3, -1, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/medium_tree.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_nk04w")
+id = "medium_tree"
+category = 6
+subpath = "Nature/medium_tree"
+group_path = "Nature"
+name_override = "Medium Tree"
+ld_index_id = "tree"
+ld_entry_texture = SubResource("AtlasTexture_5p1y3")
+ld_properties = Array[ExtResource("2_nsuki")]([ExtResource("3_8d6pw"), ExtResource("4_akka1"), ExtResource("5_jugqg")])
+sprite_texture = ExtResource("1_xb0hi")
+ld_object_path = "Decoration/Nature/medium_tree"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

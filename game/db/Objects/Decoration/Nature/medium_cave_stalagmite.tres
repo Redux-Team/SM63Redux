@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cwxax1fhdadfg"]
+
+[ext_resource type="Texture2D" uid="uid://dbok1h3p6i0uq" path="res://assets/textures/objects/decoration/nature/medium_cave_stalagmite.png" id="1_cmm2a"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_cmm2a"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_nf6et"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_0gcfg"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_iuhed"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_trgia"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nf6et"]
+atlas = ExtResource("1_cmm2a")
+region = Rect2(-5, -1, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/medium_cave_stalagmite.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_trgia")
+id = "medium_cave_stalagmite"
+category = 6
+subpath = "Nature/medium_cherry_tree"
+group_path = "Nature"
+name_override = "Cherry Tree"
+ld_index_id = "tree_cherry"
+ld_entry_texture = SubResource("AtlasTexture_nf6et")
+ld_properties = Array[ExtResource("2_cmm2a")]([ExtResource("3_nf6et"), ExtResource("4_0gcfg"), ExtResource("5_iuhed")])
+sprite_texture = ExtResource("1_cmm2a")
+ld_object_path = "Decoration/Nature/medium_cave_stalagmite"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"
