@@ -46,6 +46,7 @@ func add_area(area_name: String) -> LDArea:
 	area.area_name = area_name
 	add_child(area)
 	area.apply_default_background()
+	area.apply_default_music()
 	area.visible = _areas.is_empty()
 	_areas.append(area)
 	if _areas.size() == 1:

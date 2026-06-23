@@ -1,0 +1,195 @@
+[gd_scene load_steps=4 format=3 uid="uid://cmusiceditor01"]
+
+[ext_resource type="Script" uid="uid://corf2s2gghyll" path="res://level_designer/components/ui/music_editor/music_editor.gd" id="1_music"]
+[ext_resource type="Script" path="res://level_designer/components/ui/music_editor/waveform_view.gd" id="2_wave"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_tabs"]
+
+[node name="MusicEditor" type="MarginContainer" node_paths=PackedStringArray("base_option", "base_preview", "layer_list", "add_button", "upload_button", "preview_player", "level_panel", "ld_panel", "level_tab", "ld_tab", "ld_list", "play_button", "time_label", "now_playing_label", "waveform")]
+script = ExtResource("1_music")
+base_option = NodePath("Root/LevelPanel/BaseRow/BaseOption")
+base_preview = NodePath("Root/LevelPanel/BaseRow/BasePreview")
+layer_list = NodePath("Root/LevelPanel/LayersInset/LayersScroll/LayerList")
+add_button = NodePath("Root/LevelPanel/LayersHeader/AddButton")
+upload_button = NodePath("Root/LevelPanel/BaseRow/UploadButton")
+preview_player = NodePath("PreviewPlayer")
+level_panel = NodePath("Root/LevelPanel")
+ld_panel = NodePath("Root/LDPanel")
+level_tab = NodePath("Root/Tabs/LevelTab")
+ld_tab = NodePath("Root/Tabs/LDTab")
+ld_list = NodePath("Root/LDPanel/LDInset/LDScroll/LDList")
+play_button = NodePath("Root/PreviewBar/PreviewBox/TransportRow/PlayButton")
+time_label = NodePath("Root/PreviewBar/PreviewBox/TransportRow/TimeLabel")
+now_playing_label = NodePath("Root/PreviewBar/PreviewBox/TransportRow/NowPlaying")
+waveform = NodePath("Root/PreviewBar/PreviewBox/Waveform")
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Root" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Tabs" type="HBoxContainer" parent="Root"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LevelTab" type="Button" parent="Root/Tabs"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_tabs")
+mouse_default_cursor_shape = 2
+text = "Level Music"
+metadata/gdss_classes = PackedStringArray("Chip")
+
+[node name="LDTab" type="Button" parent="Root/Tabs"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+button_group = SubResource("ButtonGroup_tabs")
+mouse_default_cursor_shape = 2
+text = "LD Playlist"
+metadata/gdss_classes = PackedStringArray("Chip")
+
+[node name="LevelPanel" type="VBoxContainer" parent="Root"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="BaseRow" type="HBoxContainer" parent="Root/LevelPanel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="Root/LevelPanel/BaseRow"]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+size_flags_vertical = 1
+vertical_alignment = 1
+text = "Base"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="BaseOption" type="OptionButton" parent="Root/LevelPanel/BaseRow"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BasePreview" type="Button" parent="Root/LevelPanel/BaseRow"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "▶"
+
+[node name="UploadButton" type="Button" parent="Root/LevelPanel/BaseRow"]
+custom_minimum_size = Vector2(64, 28)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Upload"
+
+[node name="LayersHeader" type="HBoxContainer" parent="Root/LevelPanel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TriggeredLabel" type="Label" parent="Root/LevelPanel/LayersHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+vertical_alignment = 1
+text = "Triggered layers"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="AddButton" type="Button" parent="Root/LevelPanel/LayersHeader"]
+custom_minimum_size = Vector2(64, 24)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "+ Add"
+
+[node name="LayersInset" type="PanelContainer" parent="Root/LevelPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="LayersScroll" type="ScrollContainer" parent="Root/LevelPanel/LayersInset"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="LayerList" type="VBoxContainer" parent="Root/LevelPanel/LayersInset/LayersScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="LDPanel" type="VBoxContainer" parent="Root"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="LDHint" type="Label" parent="Root/LDPanel"]
+layout_mode = 2
+text = "Songs that play while editing"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="LDInset" type="PanelContainer" parent="Root/LDPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="LDScroll" type="ScrollContainer" parent="Root/LDPanel/LDInset"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="LDList" type="VBoxContainer" parent="Root/LDPanel/LDInset/LDScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="PreviewBar" type="PanelContainer" parent="Root"]
+layout_mode = 2
+metadata/gdss_classes = PackedStringArray("Card")
+
+[node name="PreviewBox" type="VBoxContainer" parent="Root/PreviewBar"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Waveform" type="Control" parent="Root/PreviewBar/PreviewBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+script = ExtResource("2_wave")
+
+[node name="TransportRow" type="HBoxContainer" parent="Root/PreviewBar/PreviewBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PlayButton" type="Button" parent="Root/PreviewBar/PreviewBox/TransportRow"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "▶"
+
+[node name="NowPlaying" type="Label" parent="Root/PreviewBar/PreviewBox/TransportRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+vertical_alignment = 1
+text = "Nothing playing"
+clip_text = true
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="TimeLabel" type="Label" parent="Root/PreviewBar/PreviewBox/TransportRow"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+size_flags_vertical = 1
+vertical_alignment = 1
+horizontal_alignment = 2
+text = "0:00 / 0:00"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="PreviewPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"Music"

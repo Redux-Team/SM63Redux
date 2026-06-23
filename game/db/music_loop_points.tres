@@ -1,0 +1,577 @@
+[gd_resource type="Resource" script_class="LDMusicLoopPoints" format=3]
+
+[ext_resource type="Script" path="res://level_designer/world/ld_music_loop_points.gd" id="1_j0do1"]
+
+[resource]
+script = ExtResource("1_j0do1")
+entries = Array[Dictionary]([{
+"id": "",
+"loop_start": 4.251,
+"number": 1,
+"status": "Completed",
+"title": "Title Screen (Welcome to Super Mario 63 Redux!)"
+}, {
+"id": "",
+"loop_start": 4.364,
+"number": 2,
+"status": "Completed",
+"title": "Main Menu (Start at the Beginning)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 3,
+"status": "In Progress",
+"title": "Intro Cutscene"
+}, {
+"id": "tutorial",
+"loop_start": 12.025,
+"number": 4,
+"status": "Completed",
+"title": "Mushroom Kingdom (Learning the Ropes)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 5,
+"status": "Not Started",
+"title": "Outskirts of the Mushroom Kingdom"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 6,
+"status": "Not Started",
+"title": "Bowser Attacks"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 7,
+"status": "Not Started",
+"title": "Mario is Defeated"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 8,
+"status": "Not Started",
+"title": "Peach's Castle (Grounds)"
+}, {
+"id": "peachs_castle_ground_floor",
+"loop_start": 3.454,
+"number": 9,
+"status": "Completed",
+"title": "Peach's Castle (Ground Floor)"
+}, {
+"id": "",
+"loop_start": 3.454,
+"number": 10,
+"status": "Completed",
+"title": "Peach's Castle (Basement)"
+}, {
+"id": "",
+"loop_start": 3.454,
+"number": 11,
+"status": "Completed",
+"title": "Peach's Castle (Upper Floors)"
+}, {
+"id": "",
+"loop_start": 3.454,
+"number": 12,
+"status": "Completed",
+"title": "Peach's Castle (Shine Orb)"
+}, {
+"id": "",
+"loop_start": 3.454,
+"number": 13,
+"status": "Completed",
+"title": "Peach's Castle (Secret Passages)"
+}, {
+"id": "",
+"loop_start": 4.866,
+"number": 14,
+"status": "Completed",
+"title": "The Endless Staircase"
+}, {
+"id": "bob_omb_battlefield",
+"loop_start": 6.289,
+"number": 15,
+"status": "Completed",
+"title": "Bob-Omb Battlefield"
+}, {
+"id": "bob_omb_battlefield_mountain",
+"loop_start": 6.289,
+"number": 16,
+"status": "Completed",
+"title": "Bob-Omb Battlefield (Mountain)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 17,
+"status": "Not Started",
+"title": "Snowman's Land"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 18,
+"status": "Not Started",
+"title": "Snowman's Land (Igloo)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 19,
+"status": "Not Started",
+"title": "Snowman's Land (Snowman)"
+}, {
+"id": "",
+"loop_start": 7.419,
+"number": 20,
+"status": "Completed",
+"title": "Hazy Maze Cave"
+}, {
+"id": "",
+"loop_start": 7.419,
+"number": 21,
+"status": "Completed",
+"title": "Hazy Maze Cave (Toxic Maze & Lake)"
+}, {
+"id": "boos_mansion_exterior",
+"loop_start": 10.667,
+"number": 22,
+"status": "Completed",
+"title": "Boo's Mansion (Exterior)"
+}, {
+"id": "boos_mansion_interior",
+"loop_start": 10.667,
+"number": 23,
+"status": "Completed",
+"title": "Boo's Mansion (Interior)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 24,
+"status": "Not Started",
+"title": "Boo's Mansion (Basement)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 25,
+"status": "Not Started",
+"title": "Lethal Lava Land"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 26,
+"status": "Not Started",
+"title": "Lethal Lava Land (Toad Fortress)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 27,
+"status": "Not Started",
+"title": "Lethal Lava Land (Bully Fortress)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 28,
+"status": "Not Started",
+"title": "Lethal Lava Land (Volcano)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 29,
+"status": "Not Started",
+"title": "Tall, Tall Mountain (Front Side)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 30,
+"status": "Not Started",
+"title": "Tall, Tall Mountain (Back Side)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 31,
+"status": "Not Started",
+"title": "Rainbow Ride"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 32,
+"status": "Not Started",
+"title": "Rainbow Ride (Flying Carpet)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 33,
+"status": "Not Started",
+"title": "Wet-Dry World"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 34,
+"status": "Not Started",
+"title": "Wet-Dry World (Town)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 35,
+"status": "Not Started",
+"title": "Shifting Sand Land"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 36,
+"status": "Not Started",
+"title": "Shifting Sand Land (Pyramid)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 37,
+"status": "Not Started",
+"title": "Tick-Tock Clock"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 38,
+"status": "Not Started",
+"title": "Secret Level"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 39,
+"status": "Not Started",
+"title": "Secret of the Mushroom"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 40,
+"status": "Not Started",
+"title": "Tidal Isle"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 41,
+"status": "Not Started",
+"title": "Tidal Isle (Underwater)"
+}, {
+"id": "jolly_roger_bay",
+"loop_start": 3.732,
+"number": 42,
+"status": "Completed",
+"title": "Jolly Roger Bay"
+}, {
+"id": "jolly_roger_bay_underwater",
+"loop_start": 3.732,
+"number": 43,
+"status": "Completed",
+"title": "Jolly Roger Bay (Underwater)"
+}, {
+"id": "frosty_fludd",
+"loop_start": 6.883,
+"number": 44,
+"status": "Completed",
+"title": "Frosty F.L.U.D.D"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 45,
+"status": "Not Started",
+"title": "Frosty F.L.U.D.D (Turbo)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 46,
+"status": "Not Started",
+"title": "Secret of the Sky"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 47,
+"status": "Not Started",
+"title": "Thwomp's Castle"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 48,
+"status": "Not Started",
+"title": "The Cave of Empuzzlement"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 49,
+"status": "Not Started",
+"title": "Magma Maze"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 50,
+"status": "Not Started",
+"title": "A Galaxy of Stars"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 51,
+"status": "Not Started",
+"title": "Edge of the Mushroom Kingdom (Section 1)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 52,
+"status": "Not Started",
+"title": "Edge of the Mushroom Kingdom (Section 2)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 53,
+"status": "Not Started",
+"title": "Kamek's Castle"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 54,
+"status": "Not Started",
+"title": "Bowser in the Dark World"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 55,
+"status": "Not Started",
+"title": "Boss - Bowser 1"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 56,
+"status": "Not Started",
+"title": "Bowser in the Fire Fortress"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 57,
+"status": "Not Started",
+"title": "Boss - Bowser 2"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 58,
+"status": "Not Started",
+"title": "Bowser's Castle Grounds"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 59,
+"status": "Not Started",
+"title": "Bowser's Castle"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 60,
+"status": "Not Started",
+"title": "Bowser's Castle (Lava)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 61,
+"status": "Not Started",
+"title": "Bowser's Castle (Cave)"
+}, {
+"id": "bowser_koopa_king_of_the_stars",
+"loop_start": 21.359,
+"number": 62,
+"status": "Completed",
+"title": "Bowser in the Stars (Bowser, Koopa King of the Stars)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 63,
+"status": "Not Started",
+"title": "Fake Bowser"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 64,
+"status": "Not Started",
+"title": "Final Boss Tension"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 65,
+"status": "Not Started",
+"title": "Final Boss"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 66,
+"status": "Not Started",
+"title": "Escape from Bowser's Castle"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 67,
+"status": "Not Started",
+"title": "Congratulations!"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 68,
+"status": "Not Started",
+"title": "Credits"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 69,
+"status": "Not Started",
+"title": "Boss - Kamek 1"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 70,
+"status": "Not Started",
+"title": "Boss - Kamek 2"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 71,
+"status": "Not Started",
+"title": "Boss - King Bob-Omb"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 72,
+"status": "Not Started",
+"title": "Boss - King Boo"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 73,
+"status": "Not Started",
+"title": "King Boo (Lights On)"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 74,
+"status": "Not Started",
+"title": "Boss - Chief Chilly"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 75,
+"status": "Not Started",
+"title": "Boss - Big Bully"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 76,
+"status": "Not Started",
+"title": "Shine Get"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 77,
+"status": "Not Started",
+"title": "Death"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 78,
+"status": "Not Started",
+"title": "Wing Cap"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 79,
+"status": "Not Started",
+"title": "Metal Cap"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 80,
+"status": "Not Started",
+"title": "Invisibility Cap"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 81,
+"status": "Not Started",
+"title": "Bowser Attacks"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 82,
+"status": "Not Started",
+"title": "Mario is Defeated"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 83,
+"status": "Not Started",
+"title": "Bowser's Foreshadowing"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 84,
+"status": "Not Started",
+"title": "Kamek's Theme"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 85,
+"status": "Not Started",
+"title": "Bowser's Theme"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 86,
+"status": "Not Started",
+"title": "The Orb of Power"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 87,
+"status": "Not Started",
+"title": "Level Editor - Menu"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 88,
+"status": "Not Started",
+"title": "Level Editor - Theme 1"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 89,
+"status": "Not Started",
+"title": "Level Editor - Theme 2"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 90,
+"status": "Not Started",
+"title": "Level Editor - Theme 3"
+}, {
+"id": "editor_n64",
+"loop_start": -1.0,
+"number": 91,
+"status": "Completed",
+"title": "Level Editor - Super Mario 64"
+}, {
+"id": "editor_sunshine",
+"loop_start": -1.0,
+"number": 92,
+"status": "Completed",
+"title": "Level Editor - Super Mario Sunshine"
+}, {
+"id": "editor_galaxy",
+"loop_start": -1.0,
+"number": 93,
+"status": "Completed",
+"title": "Level Editor - Super Mario Galaxy"
+}, {
+"id": "editor_galaxy_2",
+"loop_start": -1.0,
+"number": 94,
+"status": "Completed",
+"title": "Level Editor - Super Mario Galaxy 2"
+}, {
+"id": "",
+"loop_start": -1.0,
+"number": 95,
+"status": "In Progress",
+"title": "Level Editor - Super Mario 3D Land"
+}])

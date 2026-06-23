@@ -14,6 +14,7 @@ const STAMP_EDITOR: StringName = &"stamp_editor"
 const SCENARIO_EDITOR: StringName = &"scenario_editor"
 const TAG_EDITOR: StringName = &"tag_editor"
 const BACKGROUND_EDITOR: StringName = &"background_editor"
+const MUSIC_EDITOR: StringName = &"music_editor"
 const PICKER: StringName = &"picker"
 
 
@@ -78,6 +79,10 @@ func toggle_tag_editor() -> LDTagEditor:
 
 func toggle_background_editor() -> LDBackgroundEditor:
 	return toggle(BACKGROUND_EDITOR) as LDBackgroundEditor
+
+
+func toggle_music_editor() -> LDMusicEditor:
+	return toggle(MUSIC_EDITOR) as LDMusicEditor
 
 
 #endregion

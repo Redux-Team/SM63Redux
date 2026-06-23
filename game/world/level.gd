@@ -37,6 +37,8 @@ var _progress: LevelProgress = LevelProgress.new()
 @export var _level_camera: LevelCamera
 @export var music_player: AudioStreamPlayer
 
+var _music_controller: MusicController
+
 
 func _init() -> void:
 	_inst = self
@@ -155,6 +157,7 @@ func load_from_dict(data: Dictionary, scenario_index: int = 0) -> Error:
 		return ERR_INVALID_DATA
 
 	_clear()
+	LDMusicDB.deserialize_custom(data.get("custom_music", {}))
 
 	# Apply the COMMON baseline, then the chosen numbered scenario's overrides on top: layers,
 	# tags and stamps left disabled are simply not spawned.
@@ -169,13 +172,15 @@ func load_from_dict(data: Dictionary, scenario_index: int = 0) -> Error:
 	if target_name.is_empty() and not areas_list.is_empty() and areas_list[0] is Dictionary:
 		target_name = str((areas_list[0] as Dictionary).get("name", "default"))
 
+	var loaded_area_data: Dictionary = {}
 	for area_variant: Variant in areas_list:
 		if not area_variant is Dictionary:
 			continue
 		var area_data: Dictionary = area_variant
 		if str(area_data.get("name", "default")) != target_name:
 			continue
-		_build_background(area_data, data)
+		loaded_area_data = area_data
+		_build_background(area_data, data, scenario_index)
 		var current_area: LevelArea = _get_or_create_area(str(area_data.get("name", "default")))
 		for layer_data: Variant in area_data.get("layers", []):
 			if not layer_data is Dictionary:
@@ -209,7 +214,11 @@ func load_from_dict(data: Dictionary, scenario_index: int = 0) -> Error:
 	_loaded = true
 	loaded.emit()
 
-	_play_music_when_visible()
+	var music_data: Variant = _resolve_music(loaded_area_data, data, scenario_index)
+	if music_data == null:
+		_play_music_when_visible()
+	else:
+		_start_adaptive_music(LDMusic.deserialize(music_data))
 
 	return OK
 
@@ -218,15 +227,55 @@ func _play_music_when_visible() -> void:
 	create_tween().tween_callback(music_player.play).set_delay(0.5)
 
 
+func _resolve_music(area_data: Dictionary, data: Dictionary, scenario_index: int) -> Variant:
+	var scenarios: Variant = data.get("scenarios", {})
+	if scenarios is Dictionary:
+		if scenario_index > 0:
+			for entry: Variant in (scenarios as Dictionary).get("scenarios", []):
+				if entry is Dictionary and int((entry as Dictionary).get("index", 0)) == scenario_index:
+					if bool((entry as Dictionary).get("music_override_enabled", false)):
+						return (entry as Dictionary).get("music_override", [])
+					break
+		var common: Variant = (scenarios as Dictionary).get("common", {})
+		if common is Dictionary and bool((common as Dictionary).get("music_override_enabled", false)):
+			return (common as Dictionary).get("music_override", [])
+	if area_data.has("music"):
+		return area_data.get("music")
+	return null
+
+
+func _start_adaptive_music(music: LDMusic) -> void:
+	if not is_instance_valid(_music_controller):
+		_music_controller = MusicController.new()
+		_music_controller.name = "MusicController"
+		add_child(_music_controller)
+	create_tween().tween_callback(func() -> void:
+		_music_controller.play(music)
+		if is_instance_valid(_player):
+			if not _player.swimming_changed.is_connected(_music_controller.set_underwater):
+				_player.swimming_changed.connect(_music_controller.set_underwater)
+			_music_controller.set_underwater(_player.is_in_water())
+	).set_delay(0.5)
+
+
+func stop_music() -> void:
+	if is_instance_valid(_music_controller):
+		_music_controller.stop()
+	if is_instance_valid(music_player):
+		music_player.stop()
+
+
 ## Builds the loaded area's background (backdrop + parallax layers) into a CanvasLayer behind the
 ## level, using the same LDBackground.build_into() the editor uses. Legacy levels stored a single
 ## background under editor.background, so fall back to that when the area has none.
-func _build_background(area_data: Dictionary, data: Dictionary) -> void:
+func _build_background(area_data: Dictionary, data: Dictionary, scenario_index: int) -> void:
 	var existing: Node = get_node_or_null(^"Background")
 	if existing:
 		existing.free()
 
-	var bg_data: Variant = area_data.get("background", null)
+	var bg_data: Variant = _scenario_background_override(data, scenario_index)
+	if not bg_data is Dictionary or (bg_data as Dictionary).is_empty():
+		bg_data = area_data.get("background", null)
 	if not bg_data is Dictionary or (bg_data as Dictionary).is_empty():
 		var editor: Variant = data.get("editor", {})
 		if editor is Dictionary:
@@ -239,6 +288,25 @@ func _build_background(area_data: Dictionary, data: Dictionary) -> void:
 	layer.layer = -2
 	add_child(layer)
 	LDBackgroundDB.resolve(bg_data).build_into(layer)
+
+
+func _scenario_background_override(data: Dictionary, scenario_index: int) -> Variant:
+	var scenarios: Variant = data.get("scenarios", {})
+	if not scenarios is Dictionary:
+		return {}
+	if scenario_index > 0:
+		for entry: Variant in (scenarios as Dictionary).get("scenarios", []):
+			if entry is Dictionary and int((entry as Dictionary).get("index", 0)) == scenario_index:
+				var override: Variant = (entry as Dictionary).get("background_override", {})
+				if override is Dictionary and not (override as Dictionary).is_empty():
+					return override
+				break
+	var common: Variant = (scenarios as Dictionary).get("common", {})
+	if common is Dictionary:
+		var common_override: Variant = (common as Dictionary).get("background_override", {})
+		if common_override is Dictionary and not (common_override as Dictionary).is_empty():
+			return common_override
+	return {}
 
 
 ## The name of the area the chosen scenario loads: the numbered scenario's area_name, else COMMON's,

@@ -5,6 +5,9 @@ class_name Player
 extends Entity
 
 
+signal swimming_changed(swimming: bool)
+
+
 const BUFFER_ACTIONS: PackedStringArray = ["jump"]
 var buffer_dictionary: Dictionary[String, float]
 
@@ -275,10 +278,14 @@ func get_terrain() -> String:
 
 
 func _on_water_check_water_entered() -> void:
+	is_swimming = true
+	swimming_changed.emit(true)
 	for effect: AudioEffect in submerged_bus_effects:
 		AudioServer.add_bus_effect(0, effect)
 
 
 func _on_water_check_water_exited() -> void:
+	is_swimming = false
+	swimming_changed.emit(false)
 	for i: int in submerged_bus_effects.size():
 		AudioServer.remove_bus_effect(0, 0)

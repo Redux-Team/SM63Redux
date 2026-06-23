@@ -62,6 +62,12 @@ static func content_hash(data: Dictionary) -> int:
 			if area_entry is Dictionary:
 				for key: String in VOLATILE_AREA_KEYS:
 					(area_entry as Dictionary).erase(key)
+	var custom: Variant = copy.get("custom_music")
+	if custom is Dictionary:
+		for id: String in (custom as Dictionary):
+			var entry: Variant = (custom as Dictionary).get(id)
+			if entry is Dictionary:
+				(entry as Dictionary).erase("data")
 	return hash(copy)
 
 
@@ -205,6 +211,7 @@ func reset_level() -> void:
 	level.clear_areas()
 	level.add_area("Area 1")
 	level.set_active_area_index(0, false)
+	LDMusicDB.clear_custom()
 
 	# Clear the rest of the level state too, otherwise stamps/tags/scenarios linger.
 	LD.get_tag_handler().deserialize_all([])
@@ -299,6 +306,7 @@ func _serialize() -> Dictionary:
 		areas_data.append({
 			"name": area.area_name,
 			"background": bg_handler.serialize_area(area),
+			"music": area.music.serialize() if area.music else [],
 			"camera_position": Packer.vec2_to_array(area.camera_position),
 			"camera_zoom": Packer.vec2_to_array(area.camera_zoom),
 			"active_layer": area._active_index,
@@ -318,6 +326,7 @@ func _serialize() -> Dictionary:
 		"tags": LD.get_tag_handler().serialize_all(),
 		"scenarios": LD.get_scenario_handler().serialize_all(),
 		"areas": areas_data,
+		"custom_music": LDMusicDB.serialize_custom(),
 	}
 
 
@@ -406,6 +415,7 @@ func _deserialize(data: Dictionary) -> Error:
 
 	viewport.clear_selection()
 	level.clear_areas()
+	LDMusicDB.deserialize_custom(normalized.get("custom_music", {}))
 
 	var db: GameDB = GameDB.get_db()
 
@@ -425,12 +435,17 @@ func _deserialize(data: Dictionary) -> Error:
 			LD.get_background_handler().apply_to_area(area, legacy_bg)
 		else:
 			area.apply_default_background()
+		if entry.has("music"):
+			area.music = LDMusic.deserialize(entry.get("music"))
+		else:
+			area.apply_default_music()
 		# Per-area editor view (defaults to a fresh ZERO/ONE view for areas that predate it).
 		area.camera_position = Packer.array_to_vec2(entry.get("camera_position", [0.0, 0.0]))
 		area.camera_zoom = Packer.array_to_vec2(entry.get("camera_zoom", [1.0, 1.0]))
 		area._active_index = int(entry.get("active_layer", 0))
 		_deserialize_area(entry, area, db)
 		_ensure_player_spawn(area)
+		_sanitize_player_layer(area)
 
 	# A level always has at least one area to edit.
 	if level.get_areas().is_empty():
@@ -538,6 +553,16 @@ func _ensure_player_spawn(area: LDArea = null) -> void:
 	area.add_object(instance, Vector2i.ZERO, 0)
 	instance.init_properties(game_object)
 	instance.place()
+
+
+func _sanitize_player_layer(area: LDArea) -> void:
+	var player_index: int = area.get_player_layer_index()
+	for layer: LDLayer in area.layers:
+		if layer.index == player_index:
+			layer.layer_name = ""
+			layer.is_decoration = false
+			layer.parallax_scale = Vector2.ONE
+			return
 
 
 func _find_game_object_by_scene(scene: PackedScene) -> GameObject:

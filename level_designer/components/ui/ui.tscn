@@ -18,6 +18,8 @@
 [ext_resource type="Script" uid="uid://d38wd86ydwydo" path="res://level_designer/components/ui/window/window_def.gd" id="16_wdef"]
 [ext_resource type="PackedScene" uid="uid://c8bgedit0lds1" path="res://level_designer/components/ui/backgrounds_editor/backgrounds_editor.tscn" id="17_bged"]
 [ext_resource type="PackedScene" uid="uid://bar3aedit0r7x" path="res://level_designer/components/ui/areas_editor/areas_editor.tscn" id="18_aread"]
+[ext_resource type="PackedScene" uid="uid://cmusiceditor01" path="res://level_designer/components/ui/music_editor/music_editor.tscn" id="21_mused"]
+[ext_resource type="Texture2D" uid="uid://dcgs3ybhnoflf" path="res://assets/textures/level_designer/ui_icons/music.svg" id="ic_music"]
 [ext_resource type="Script" uid="uid://cer032iulvsqx" path="res://level_designer/components/ui/handlers/chrome_handler.gd" id="19_chrome"]
 [ext_resource type="Theme" uid="uid://b6ld3d1tor8em" path="res://level_designer/ld_editor_theme.tres" id="20_theme"]
 [ext_resource type="Texture2D" uid="uid://bg3fpaudox0nq" path="res://assets/textures/level_designer/ui_icons/areas.svg" id="ic_areas"]
@@ -111,6 +113,12 @@ script = ExtResource("16_wdef")
 id = &"background_editor"
 scene = ExtResource("17_bged")
 title = "Background"
+
+[sub_resource type="Resource" id="WindowDef_music"]
+script = ExtResource("16_wdef")
+id = &"music_editor"
+scene = ExtResource("21_mused")
+title = "Music"
 
 [sub_resource type="Resource" id="WindowDef_picker"]
 script = ExtResource("16_wdef")
@@ -322,7 +330,7 @@ _chrome_handler = NodePath("ChromeHandler")
 [node name="WindowHandler" type="Node" parent="." unique_id=1919577132 node_paths=PackedStringArray("_window")]
 script = ExtResource("11_winh")
 _window = NodePath("../WindowLayer/Window")
-_window_defs = Array[ExtResource("16_wdef")]([SubResource("WindowDef_browser"), SubResource("WindowDef_properties"), SubResource("WindowDef_layer"), SubResource("WindowDef_area"), SubResource("WindowDef_stamp"), SubResource("WindowDef_scenario"), SubResource("WindowDef_tag"), SubResource("WindowDef_background"), SubResource("WindowDef_picker")])
+_window_defs = Array[ExtResource("16_wdef")]([SubResource("WindowDef_browser"), SubResource("WindowDef_properties"), SubResource("WindowDef_layer"), SubResource("WindowDef_area"), SubResource("WindowDef_stamp"), SubResource("WindowDef_scenario"), SubResource("WindowDef_tag"), SubResource("WindowDef_background"), SubResource("WindowDef_music"), SubResource("WindowDef_picker")])
 
 [node name="ViewportHandler" type="Node" parent="." unique_id=253371726 node_paths=PackedStringArray("_parallaxing_button", "_ghosting_button", "_modulation_button")]
 script = ExtResource("12_vph")
@@ -365,8 +373,8 @@ _undo_button = NodePath("../ViewportUI/TopBarL/Row/FileGroup/UndoButton")
 _redo_button = NodePath("../ViewportUI/TopBarL/Row/FileGroup/RedoButton")
 _paste_button = NodePath("../ViewportUI/TopBarR/EditGroup/PasteButton")
 _properties_button = NodePath("../ViewportUI/ToolRail/Tools/PropertiesButton")
-_panel_buttons = [NodePath("../ViewportUI/ToolRail/Tools/ObjectBrowserButton"), NodePath("../ViewportUI/ToolRail/Tools/PropertiesButton"), NodePath("../ViewportUI/PanelRail/Panels/LayerProperties"), NodePath("../ViewportUI/PanelRail/Panels/AreasButton"), NodePath("../ViewportUI/PanelRail/Panels/TagsButton"), NodePath("../ViewportUI/PanelRail/Panels/StampsButton"), NodePath("../ViewportUI/PanelRail/Panels/ScenariosButton"), NodePath("../ViewportUI/PanelRail/Panels/BackgroundButton")]
-_panel_ids = Array[StringName]([&"object_browser", &"object_properties", &"layer_properties", &"area_editor", &"tag_editor", &"stamp_editor", &"scenario_editor", &"background_editor"])
+_panel_buttons = [NodePath("../ViewportUI/ToolRail/Tools/ObjectBrowserButton"), NodePath("../ViewportUI/ToolRail/Tools/PropertiesButton"), NodePath("../ViewportUI/PanelRail/Panels/LayerProperties"), NodePath("../ViewportUI/PanelRail/Panels/AreasButton"), NodePath("../ViewportUI/PanelRail/Panels/TagsButton"), NodePath("../ViewportUI/PanelRail/Panels/StampsButton"), NodePath("../ViewportUI/PanelRail/Panels/ScenariosButton"), NodePath("../ViewportUI/PanelRail/Panels/BackgroundButton"), NodePath("../ViewportUI/PanelRail/Panels/MusicButton")]
+_panel_ids = Array[StringName]([&"object_browser", &"object_properties", &"layer_properties", &"area_editor", &"tag_editor", &"stamp_editor", &"scenario_editor", &"background_editor", &"music_editor"])
 
 [node name="ViewportUI" type="CanvasLayer" parent="." unique_id=1959582476]
 layer = 2
@@ -1037,6 +1045,16 @@ icon = ExtResource("ic_background")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
+[node name="MusicButton" type="Button" parent="ViewportUI/PanelRail/Panels"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Music"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_music")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
 [node name="TestServerButton" type="Button" parent="ViewportUI" unique_id=1723719953]
 texture_filter = 4
 custom_minimum_size = Vector2(28, 28)
@@ -1131,6 +1149,7 @@ will be lost!"
 [connection signal="pressed" from="ViewportUI/PanelRail/Panels/StampsButton" to="WindowHandler" method="toggle_stamp_editor"]
 [connection signal="pressed" from="ViewportUI/PanelRail/Panels/ScenariosButton" to="WindowHandler" method="toggle_scenario_editor"]
 [connection signal="pressed" from="ViewportUI/PanelRail/Panels/BackgroundButton" to="WindowHandler" method="toggle_background_editor"]
+[connection signal="pressed" from="ViewportUI/PanelRail/Panels/MusicButton" to="WindowHandler" method="toggle_music_editor"]
 [connection signal="pressed" from="ViewportUI/TestServerButton" to="FileHandler" method="_on_test_server_button_pressed"]
 [connection signal="file_selected" from="WindowLayer/SaveFileDialog" to="FileHandler" method="_on_save_file_selected"]
 [connection signal="file_selected" from="WindowLayer/LoadFileDialog" to="FileHandler" method="_on_load_file_selected"]

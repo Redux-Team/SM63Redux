@@ -21,6 +21,9 @@ const COMMON_INDEX: int = 0
 @export var layer_overrides: Dictionary[int, bool] = {}
 @export var tag_overrides: Dictionary[String, bool] = {}
 @export var stamp_overrides: Dictionary[String, bool] = {}
+@export var background_override: Dictionary = {}
+@export var music_override_enabled: bool = false
+@export var music_override: Array = []
 
 
 func is_common() -> bool:
@@ -61,6 +64,27 @@ func get_stamp_override(stamp_id: String) -> Variant:
 	return stamp_overrides.get(stamp_id, null)
 
 
+func set_background_override(data: Variant) -> void:
+	background_override = (data as Dictionary) if data is Dictionary else {}
+
+
+func get_background_override() -> Variant:
+	return background_override if not background_override.is_empty() else null
+
+
+func set_music_override(layers: Variant) -> void:
+	if layers == null:
+		music_override_enabled = false
+		music_override = []
+	else:
+		music_override_enabled = true
+		music_override = (layers as Array) if layers is Array else []
+
+
+func get_music_override() -> Variant:
+	return music_override if music_override_enabled else null
+
+
 func serialize() -> Dictionary:
 	var layers: Array = []
 	for k: int in layer_overrides:
@@ -79,6 +103,9 @@ func serialize() -> Dictionary:
 		"layer_overrides": layers,
 		"tag_overrides": tags,
 		"stamp_overrides": stamps,
+		"background_override": background_override,
+		"music_override_enabled": music_override_enabled,
+		"music_override": music_override,
 	}
 
 
@@ -97,4 +124,9 @@ static func deserialize(data: Dictionary) -> LDScenario:
 	for pair: Variant in data.get("stamp_overrides", []):
 		if pair is Array and (pair as Array).size() == 2:
 			scenario.stamp_overrides[str(pair[0])] = bool(pair[1])
+	var bg_override: Variant = data.get("background_override", {})
+	scenario.background_override = (bg_override as Dictionary) if bg_override is Dictionary else {}
+	scenario.music_override_enabled = bool(data.get("music_override_enabled", false))
+	var music_override_data: Variant = data.get("music_override", [])
+	scenario.music_override = (music_override_data as Array) if music_override_data is Array else []
 	return scenario

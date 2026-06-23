@@ -5,7 +5,7 @@ extends State
 
 
 func _on_enter() -> void:
-	Level.get_instance().music_player.stop()
+	Level.get_instance().stop_music()
 	player.collision_mask = 0
 	player.z_index = 10
 	player.z_as_relative = false

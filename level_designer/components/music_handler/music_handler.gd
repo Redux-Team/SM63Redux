@@ -1,7 +1,6 @@
 class_name LDMusicHandler
 extends LDComponent
 
-@export var tracks: Dictionary[String, AudioStream]
 @export var song_label: Label
 @export_group("Internal")
 @export var audio_stream_player: AudioStreamPlayer
@@ -16,10 +15,11 @@ func _on_ready() -> void:
 
 
 func new_track() -> void:
-	if not tracks.is_empty():
-		var selected_track_name: String = tracks.keys().pick_random()
-		song_label.text = selected_track_name
-		audio_stream_player.stream = tracks.get(selected_track_name)
-	
+	var playlist: Array[String] = LDEditorConfig.get_ld_playlist()
+	if playlist.is_empty():
+		return
+	var id: String = playlist.pick_random()
+	song_label.text = LDMusicDB.get_display_name(id)
+	audio_stream_player.stream = LDMusicDB.get_stream(id)
 	audio_stream_player.play()
 	animation_player.play(&"new_song")

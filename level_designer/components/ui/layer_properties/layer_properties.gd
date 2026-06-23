@@ -242,21 +242,27 @@ func _show_detail(pos: int) -> void:
 	
 	var layer: LDLayer = _area().layers[pos]
 	var locked: bool = layer.index == _area().get_player_layer_index()
-	detail_rows.visible = not locked
+	detail_rows.visible = true
+	var mod_row: Node = modulate_color_picker.get_parent()
+	for row: Node in detail_rows.get_children():
+		var item: CanvasItem = row as CanvasItem
+		if item:
+			item.visible = (not locked) or (row == mod_row)
 	blocked_label.visible = locked
+	if locked:
+		blocked_label.text = "The player's layer is fixed as Layer 0. Only its tint can be edited."
 	remove_button.disabled = locked
 	GDSS.refresh(remove_button)
-	if locked:
-		return
-	
+
 	_setting_fields = true
-	name_edit.text = layer.layer_name
-	deco_layer.button_pressed = layer.is_decoration
-	parallax_slider_x.value = layer.parallax_scale.x
-	parallax_label_x.text = "%.1fx" % layer.parallax_scale.x
-	parallax_slider_y.value = layer.parallax_scale.y
-	parallax_label_y.text = "%.1fx" % layer.parallax_scale.y
 	modulate_color_picker.color = layer.modulation
+	if not locked:
+		name_edit.text = layer.layer_name
+		deco_layer.button_pressed = layer.is_decoration
+		parallax_slider_x.value = layer.parallax_scale.x
+		parallax_label_x.text = "%.1fx" % layer.parallax_scale.x
+		parallax_slider_y.value = layer.parallax_scale.y
+		parallax_label_y.text = "%.1fx" % layer.parallax_scale.y
 	_setting_fields = false
 
 
@@ -276,6 +282,8 @@ func _on_prop_changed(_value: Variant = null) -> void:
 		return
 	var layer: LDLayer = _area().get_active_layer()
 	layer.modulation = modulate_color_picker.color
+	if layer.index == _area().get_player_layer_index():
+		return
 	layer.is_decoration = deco_layer.button_pressed
 	layer.parallax_scale.x = parallax_slider_x.value
 	parallax_label_x.text = "%.1fx" % layer.parallax_scale.x
