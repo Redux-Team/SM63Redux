@@ -17,6 +17,7 @@ const PAN_SPEED_MAX: float = 16.0
 static var _config: ConfigFile
 static var _pan_speed: float = PAN_SPEED_DEFAULT
 static var _ld_playlist: Array[String] = []
+static var _ld_loop: bool = false
 
 
 static func _ensure_loaded() -> void:
@@ -29,6 +30,7 @@ static func _ensure_loaded() -> void:
 		_ld_playlist.assign(_config.get_value(MUSIC_SECTION, "ld_playlist", PackedStringArray()))
 	else:
 		_ld_playlist.assign(LDMusicDB.get_track_ids_in(LDMusicDB.CATEGORY_LD))
+	_ld_loop = bool(_config.get_value(MUSIC_SECTION, "ld_loop", false))
 
 
 ## Camera pan speed used by WASD navigation in the editor viewport.
@@ -61,4 +63,16 @@ static func set_ld_track_enabled(id: String, enabled: bool) -> void:
 	elif not enabled:
 		_ld_playlist.erase(id)
 	_config.set_value(MUSIC_SECTION, "ld_playlist", PackedStringArray(_ld_playlist))
+	_config.save(CONFIG_PATH)
+
+
+static func get_ld_loop() -> bool:
+	_ensure_loaded()
+	return _ld_loop
+
+
+static func set_ld_loop(value: bool) -> void:
+	_ensure_loaded()
+	_ld_loop = value
+	_config.set_value(MUSIC_SECTION, "ld_loop", value)
 	_config.save(CONFIG_PATH)

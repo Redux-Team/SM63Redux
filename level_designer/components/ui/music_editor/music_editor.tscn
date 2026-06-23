@@ -5,7 +5,7 @@
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_tabs"]
 
-[node name="MusicEditor" type="MarginContainer" node_paths=PackedStringArray("base_option", "base_preview", "layer_list", "add_button", "upload_button", "preview_player", "level_panel", "ld_panel", "level_tab", "ld_tab", "ld_list", "play_button", "time_label", "now_playing_label", "waveform")]
+[node name="MusicEditor" type="MarginContainer" node_paths=PackedStringArray("base_option", "base_preview", "layer_list", "add_button", "upload_button", "preview_player", "level_panel", "ld_panel", "level_tab", "ld_tab", "ld_list", "play_button", "time_label", "now_playing_label", "waveform", "ambient_now_label", "ambient_play_button", "ambient_ff_button", "ambient_loop_button")]
 script = ExtResource("1_music")
 base_option = NodePath("Root/LevelPanel/BaseRow/BaseOption")
 base_preview = NodePath("Root/LevelPanel/BaseRow/BasePreview")
@@ -18,6 +18,10 @@ ld_panel = NodePath("Root/LDPanel")
 level_tab = NodePath("Root/Tabs/LevelTab")
 ld_tab = NodePath("Root/Tabs/LDTab")
 ld_list = NodePath("Root/LDPanel/LDInset/LDScroll/LDList")
+ambient_now_label = NodePath("Root/LDPanel/CurrentlyPlaying/AmbientNow")
+ambient_play_button = NodePath("Root/LDPanel/CurrentlyPlaying/AmbientPlay")
+ambient_ff_button = NodePath("Root/LDPanel/CurrentlyPlaying/AmbientFF")
+ambient_loop_button = NodePath("Root/LDPanel/CurrentlyPlaying/AmbientLoop")
 play_button = NodePath("Root/PreviewBar/PreviewBox/TransportRow/PlayButton")
 time_label = NodePath("Root/PreviewBar/PreviewBox/TransportRow/TimeLabel")
 now_playing_label = NodePath("Root/PreviewBar/PreviewBox/TransportRow/NowPlaying")
@@ -128,9 +132,41 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 6
 
+[node name="CurrentlyPlaying" type="HBoxContainer" parent="Root/LDPanel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AmbientNow" type="Label" parent="Root/LDPanel/CurrentlyPlaying"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+vertical_alignment = 1
+text = "Nothing playing"
+clip_text = true
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="AmbientPlay" type="Button" parent="Root/LDPanel/CurrentlyPlaying"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "⏸"
+
+[node name="AmbientFF" type="Button" parent="Root/LDPanel/CurrentlyPlaying"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "⏭"
+
+[node name="AmbientLoop" type="Button" parent="Root/LDPanel/CurrentlyPlaying"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+toggle_mode = true
+mouse_default_cursor_shape = 2
+text = "⟳"
+
 [node name="LDHint" type="Label" parent="Root/LDPanel"]
 layout_mode = 2
-text = "Songs that play while editing"
+text = "Playlist"
 metadata/gdss_classes = PackedStringArray("Dim")
 
 [node name="LDInset" type="PanelContainer" parent="Root/LDPanel"]

@@ -28,6 +28,10 @@ const TRIGGER_NAMES: Dictionary = {
 @export var time_label: Label
 @export var now_playing_label: Label
 @export var waveform: LDWaveformView
+@export var ambient_now_label: Label
+@export var ambient_play_button: Button
+@export var ambient_ff_button: Button
+@export var ambient_loop_button: Button
 
 
 var _now_playing: String = NONE_ID
@@ -50,6 +54,9 @@ func _ready() -> void:
 	ld_tab.pressed.connect(_select_ld_tab)
 	play_button.pressed.connect(_on_play_pressed)
 	waveform.seek_requested.connect(_on_seek)
+	ambient_play_button.pressed.connect(_on_ambient_play)
+	ambient_ff_button.pressed.connect(_on_ambient_ff)
+	ambient_loop_button.toggled.connect(_on_ambient_loop_toggled)
 	_update_now_playing()
 	_update_play_button()
 	if LDLevel._inst and not LDLevel._inst.active_area_changed.is_connected(_on_area_changed):
@@ -101,6 +108,8 @@ func _process(_delta: float) -> void:
 			_update_time(pos, length)
 	if _scanning:
 		_poll_scan()
+	if ld_panel.visible:
+		_refresh_ambient()
 
 
 func _drain_capture(capture: AudioEffectCapture, fraction: float) -> void:
@@ -131,11 +140,15 @@ func _poll_scan() -> void:
 
 
 func _on_show() -> void:
-	_set_ambient_muted(false)
+	_set_ambient_ducked(false)
 	_equalize_panels()
 	_select_level_tab()
 	_refresh()
 	_build_ld_playlist()
+	var handler: LDMusicHandler = _ambient()
+	if handler and not handler.track_changed.is_connected(_on_ambient_track_changed):
+		handler.track_changed.connect(_on_ambient_track_changed)
+	_refresh_ambient()
 
 
 func _equalize_panels() -> void:
@@ -147,17 +160,60 @@ func _equalize_panels() -> void:
 func _on_hide() -> void:
 	preview_player.stop()
 	_stop_scan()
-	_set_ambient_muted(false)
+	_set_ambient_ducked(false)
 	_now_playing = NONE_ID
 	waveform.clear_bins()
 	_update_now_playing()
 	_update_play_button()
 
 
-func _set_ambient_muted(muted: bool) -> void:
-	var idx: int = AudioServer.get_bus_index(&"Music")
-	if idx != -1:
-		AudioServer.set_bus_mute(idx, muted)
+func _set_ambient_ducked(ducked: bool) -> void:
+	var handler: LDMusicHandler = _ambient()
+	if handler == null:
+		return
+	if ducked:
+		handler.pause_for_preview()
+	else:
+		handler.resume_after_preview()
+
+
+func _ambient() -> LDMusicHandler:
+	var handler: LDMusicHandler = LD.get_music_handler()
+	return handler if is_instance_valid(handler) else null
+
+
+func _on_ambient_play() -> void:
+	var handler: LDMusicHandler = _ambient()
+	if handler:
+		handler.toggle_pause()
+	_refresh_ambient()
+
+
+func _on_ambient_ff() -> void:
+	var handler: LDMusicHandler = _ambient()
+	if handler:
+		handler.skip()
+	_refresh_ambient()
+
+
+func _on_ambient_loop_toggled(on: bool) -> void:
+	var handler: LDMusicHandler = _ambient()
+	if handler:
+		handler.set_loop(on)
+
+
+func _on_ambient_track_changed(_id: String) -> void:
+	_refresh_ambient()
+
+
+func _refresh_ambient() -> void:
+	var handler: LDMusicHandler = _ambient()
+	if handler == null:
+		return
+	var id: String = handler.get_current_id()
+	ambient_now_label.text = LDMusicDB.get_display_name(id) if not id.is_empty() else "Nothing playing"
+	ambient_play_button.text = "▶" if handler.is_paused() else "⏸"
+	ambient_loop_button.set_pressed_no_signal(handler.is_looping())
 
 
 func _select_level_tab() -> void:
@@ -316,11 +372,11 @@ func _on_play_pressed() -> void:
 		return
 	if preview_player.playing:
 		preview_player.stream_paused = not preview_player.stream_paused
-		_set_ambient_muted(not preview_player.stream_paused)
+		_set_ambient_ducked(not preview_player.stream_paused)
 	else:
 		preview_player.play()
 		preview_player.stream_paused = false
-		_set_ambient_muted(true)
+		_set_ambient_ducked(true)
 	_update_play_button()
 
 
@@ -333,7 +389,7 @@ func _on_seek(fraction: float) -> void:
 	if not preview_player.playing:
 		preview_player.play()
 		preview_player.stream_paused = false
-		_set_ambient_muted(true)
+		_set_ambient_ducked(true)
 	preview_player.seek(fraction * length)
 	waveform.set_progress(fraction)
 	_update_time(fraction * length, length)
@@ -344,7 +400,7 @@ func _preview(track_id: String) -> void:
 	if track_id == NONE_ID:
 		preview_player.stop()
 		_stop_scan()
-		_set_ambient_muted(false)
+		_set_ambient_ducked(false)
 		_now_playing = NONE_ID
 		waveform.clear_bins()
 		_update_now_playing()
@@ -356,7 +412,7 @@ func _preview(track_id: String) -> void:
 	preview_player.stream = _prepare_stream(stream, LDMusicDB.get_loop_start(track_id))
 	preview_player.stream_paused = false
 	preview_player.play()
-	_set_ambient_muted(true)
+	_set_ambient_ducked(true)
 	_now_playing = track_id
 	if _wave_cache.has(track_id):
 		waveform.load_bins(_wave_cache.get(track_id))
