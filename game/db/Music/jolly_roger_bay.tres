@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="LDMusic" format=3]
+
+[ext_resource type="Script" path="res://level_designer/world/ld_music.gd" id="1_ydk32"]
+[ext_resource type="Script" path="res://level_designer/world/ld_music_subtrack.gd" id="2_pvl0o"]
+
+[sub_resource type="Resource" id="Resource_pcenl"]
+script = ExtResource("2_pvl0o")
+track_id = "jolly_roger_bay"
+
+[sub_resource type="Resource" id="Resource_v3bdf"]
+script = ExtResource("2_pvl0o")
+track_id = "jolly_roger_bay_underwater"
+trigger = 1
+
+[resource]
+script = ExtResource("1_ydk32")
+preset_name = "Jolly Roger Bay"
+underwater_mode = 1
+subtracks = Array[ExtResource("2_pvl0o")]([SubResource("Resource_pcenl"), SubResource("Resource_v3bdf")])

@@ -218,7 +218,7 @@ func load_from_dict(data: Dictionary, scenario_index: int = 0) -> Error:
 	if music_data == null:
 		_play_music_when_visible()
 	else:
-		_start_adaptive_music(LDMusic.deserialize(music_data))
+		_start_adaptive_music(LDMusicPresetDB.resolve(music_data))
 
 	return OK
 

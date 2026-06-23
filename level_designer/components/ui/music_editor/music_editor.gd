@@ -9,7 +9,13 @@ const SCAN_BUS: StringName = &"LDScan"
 const SCAN_PITCH: float = 40.0
 const SCAN_VOLUME_DB: float = -80.0
 const TRIGGER_NAMES: Dictionary = {
-	LDMusicLayer.Trigger.UNDERWATER: "Underwater",
+	LDMusicSubtrack.Trigger.UNDERWATER: "Underwater",
+	LDMusicSubtrack.Trigger.REGION: "Region",
+}
+const UNDERWATER_NAMES: Dictionary = {
+	LDMusic.UnderwaterMode.MUFFLE: "Muffle",
+	LDMusic.UnderwaterMode.TRACK: "Track",
+	LDMusic.UnderwaterMode.IGNORE: "Ignore",
 }
 
 
@@ -32,6 +38,9 @@ const TRIGGER_NAMES: Dictionary = {
 @export var ambient_play_button: Button
 @export var ambient_ff_button: Button
 @export var ambient_loop_button: Button
+@export var preset_option: OptionButton
+@export var underwater_option: OptionButton
+@export var loop_spin: SpinBox
 
 
 var _now_playing: String = NONE_ID
@@ -57,6 +66,10 @@ func _ready() -> void:
 	ambient_play_button.pressed.connect(_on_ambient_play)
 	ambient_ff_button.pressed.connect(_on_ambient_ff)
 	ambient_loop_button.toggled.connect(_on_ambient_loop_toggled)
+	preset_option.item_selected.connect(_on_preset_selected)
+	underwater_option.item_selected.connect(_on_underwater_selected)
+	loop_spin.value_changed.connect(_on_loop_changed)
+	_populate_underwater()
 	_update_now_playing()
 	_update_play_button()
 	if LDLevel._inst and not LDLevel._inst.active_area_changed.is_connected(_on_area_changed):
@@ -141,7 +154,6 @@ func _poll_scan() -> void:
 
 func _on_show() -> void:
 	_set_ambient_ducked(false)
-	_equalize_panels()
 	_select_level_tab()
 	_refresh()
 	_build_ld_playlist()
@@ -151,20 +163,28 @@ func _on_show() -> void:
 	_refresh_ambient()
 
 
-func _equalize_panels() -> void:
-	var target: float = maxf(level_panel.get_combined_minimum_size().y, ld_panel.get_combined_minimum_size().y)
-	level_panel.custom_minimum_size.y = target
-	ld_panel.custom_minimum_size.y = target
-
-
 func _on_hide() -> void:
 	preview_player.stop()
 	_stop_scan()
 	_set_ambient_ducked(false)
 	_now_playing = NONE_ID
 	waveform.clear_bins()
+	loop_spin.editable = false
+	loop_spin.set_value_no_signal(0.0)
 	_update_now_playing()
 	_update_play_button()
+
+
+func _on_loop_changed(value: float) -> void:
+	if not LDMusicDB.is_custom(_now_playing):
+		return
+	LDMusicDB.set_custom_loop_start(_now_playing, value)
+	var stream: AudioStream = preview_player.stream
+	if stream is AudioStreamOggVorbis:
+		(stream as AudioStreamOggVorbis).loop_offset = value
+	elif stream is AudioStreamMP3:
+		(stream as AudioStreamMP3).loop_offset = value
+	_persist()
 
 
 func _set_ambient_ducked(ducked: bool) -> void:
@@ -178,6 +198,8 @@ func _set_ambient_ducked(ducked: bool) -> void:
 
 
 func _ambient() -> LDMusicHandler:
+	if not LD.is_ready():
+		return null
 	var handler: LDMusicHandler = LD.get_music_handler()
 	return handler if is_instance_valid(handler) else null
 
@@ -269,33 +291,100 @@ func _persist() -> void:
 	LD.get_save_load_handler().save_session()
 
 
-func _base_layer() -> LDMusicLayer:
-	for layer: LDMusicLayer in _music().layers:
-		if layer.trigger == LDMusicLayer.Trigger.ALWAYS:
+func _base_layer() -> LDMusicSubtrack:
+	for layer: LDMusicSubtrack in _music().subtracks:
+		if layer.trigger == LDMusicSubtrack.Trigger.ALWAYS:
 			return layer
 	return null
 
 
 func _base_track_id() -> String:
-	var base: LDMusicLayer = _base_layer()
+	var base: LDMusicSubtrack = _base_layer()
 	return base.track_id if base else NONE_ID
 
 
-func _triggered_layers() -> Array[LDMusicLayer]:
-	var result: Array[LDMusicLayer] = []
-	for layer: LDMusicLayer in _music().layers:
-		if layer.trigger != LDMusicLayer.Trigger.ALWAYS:
+func _triggered_layers() -> Array[LDMusicSubtrack]:
+	var result: Array[LDMusicSubtrack] = []
+	for layer: LDMusicSubtrack in _music().subtracks:
+		if layer.trigger != LDMusicSubtrack.Trigger.ALWAYS:
 			result.append(layer)
 	return result
 
 
 func _refresh() -> void:
+	_populate_presets()
+	_select_active_preset()
+	_apply_underwater_ui()
 	_populate_track_option(base_option, true)
 	_select_track(base_option, _base_track_id())
 	for child: Node in layer_list.get_children():
 		child.queue_free()
-	for layer: LDMusicLayer in _triggered_layers():
+	for layer: LDMusicSubtrack in _triggered_layers():
 		layer_list.add_child(_build_layer_row(layer))
+
+
+func _mark_custom() -> void:
+	var area: LDArea = LD.get_area()
+	area.music_preset = LDMusicPresetDB.CUSTOM
+	area.custom_music = area.music
+	_persist()
+
+
+func _populate_presets() -> void:
+	preset_option.clear()
+	preset_option.clip_text = true
+	for preset_name: String in LDMusicPresetDB.get_preset_names():
+		preset_option.add_item(preset_name)
+		preset_option.set_item_metadata(preset_option.item_count - 1, preset_name)
+	preset_option.add_item(LDMusicPresetDB.CUSTOM)
+	preset_option.set_item_metadata(preset_option.item_count - 1, LDMusicPresetDB.CUSTOM)
+
+
+func _select_active_preset() -> void:
+	var active: String = LD.get_area().music_preset
+	for i: int in preset_option.item_count:
+		if str(preset_option.get_item_metadata(i)) == active:
+			preset_option.select(i)
+			return
+	preset_option.select(preset_option.item_count - 1)
+
+
+func _on_preset_selected(index: int) -> void:
+	var preset_name: String = str(preset_option.get_item_metadata(index))
+	var area: LDArea = LD.get_area()
+	if preset_name == LDMusicPresetDB.CUSTOM:
+		if area.custom_music == null:
+			area.custom_music = area.music.working_copy() if area.music else LDMusic.new()
+		area.music = area.custom_music
+		area.music_preset = LDMusicPresetDB.CUSTOM
+	else:
+		var preset: LDMusic = LDMusicPresetDB.get_preset(preset_name)
+		if preset == null:
+			return
+		area.music = preset.working_copy()
+		area.music_preset = preset_name
+	_persist()
+	_refresh()
+
+
+func _populate_underwater() -> void:
+	underwater_option.clear()
+	for mode: int in UNDERWATER_NAMES:
+		underwater_option.add_item(str(UNDERWATER_NAMES.get(mode)))
+		underwater_option.set_item_metadata(underwater_option.item_count - 1, mode)
+
+
+func _apply_underwater_ui() -> void:
+	for i: int in underwater_option.item_count:
+		if int(underwater_option.get_item_metadata(i)) == _music().underwater_mode:
+			underwater_option.select(i)
+			return
+
+
+func _on_underwater_selected(index: int) -> void:
+	_music().underwater_mode = int(underwater_option.get_item_metadata(index))
+	_mark_custom()
+	_select_active_preset()
 
 
 func _populate_track_option(option: OptionButton, include_none: bool) -> void:
@@ -336,18 +425,18 @@ func _on_base_selected(index: int) -> void:
 
 
 func _set_base_track(track_id: String) -> void:
-	var base: LDMusicLayer = _base_layer()
+	var base: LDMusicSubtrack = _base_layer()
 	if track_id == NONE_ID:
 		if base:
-			_music().layers.erase(base)
+			_music().subtracks.erase(base)
 	elif base == null:
-		base = LDMusicLayer.new()
-		base.trigger = LDMusicLayer.Trigger.ALWAYS
+		base = LDMusicSubtrack.new()
+		base.trigger = LDMusicSubtrack.Trigger.ALWAYS
 		base.track_id = track_id
-		_music().layers.insert(0, base)
+		_music().subtracks.insert(0, base)
 	else:
 		base.track_id = track_id
-	_persist()
+	_mark_custom()
 	_refresh()
 
 
@@ -356,10 +445,10 @@ func _on_base_preview() -> void:
 
 
 func _on_add_triggered() -> void:
-	var layer: LDMusicLayer = LDMusicLayer.new()
-	layer.trigger = LDMusicLayer.Trigger.UNDERWATER
-	_music().layers.append(layer)
-	_persist()
+	var layer: LDMusicSubtrack = LDMusicSubtrack.new()
+	layer.trigger = LDMusicSubtrack.Trigger.UNDERWATER
+	_music().subtracks.append(layer)
+	_mark_custom()
 	_refresh()
 
 
@@ -403,6 +492,8 @@ func _preview(track_id: String) -> void:
 		_set_ambient_ducked(false)
 		_now_playing = NONE_ID
 		waveform.clear_bins()
+		loop_spin.visible = false
+		loop_spin.set_value_no_signal(0.0)
 		_update_now_playing()
 		_update_play_button()
 		return
@@ -414,6 +505,9 @@ func _preview(track_id: String) -> void:
 	preview_player.play()
 	_set_ambient_ducked(true)
 	_now_playing = track_id
+	var is_custom: bool = LDMusicDB.is_custom(track_id)
+	loop_spin.visible = is_custom
+	loop_spin.set_value_no_signal(LDMusicDB.get_loop_start(track_id) if is_custom else 0.0)
 	if _wave_cache.has(track_id):
 		waveform.load_bins(_wave_cache.get(track_id))
 		_stop_scan()
@@ -518,7 +612,7 @@ func _import_custom(path: String) -> String:
 	return id
 
 
-func _build_layer_row(layer: LDMusicLayer) -> HBoxContainer:
+func _build_layer_row(layer: LDMusicSubtrack) -> HBoxContainer:
 	var row: HBoxContainer = HBoxContainer.new()
 	row.add_theme_constant_override(&"separation", 6)
 	var trigger_option: OptionButton = OptionButton.new()
@@ -529,9 +623,21 @@ func _build_layer_row(layer: LDMusicLayer) -> HBoxContainer:
 	_select_trigger(trigger_option, layer.trigger)
 	trigger_option.item_selected.connect(func(index: int) -> void:
 		layer.trigger = int(trigger_option.get_item_metadata(index))
-		_persist()
+		_mark_custom()
+		_refresh()
 	)
 	row.add_child(trigger_option)
+	if layer.trigger == LDMusicSubtrack.Trigger.REGION:
+		var region_edit: LineEdit = LineEdit.new()
+		region_edit.custom_minimum_size = Vector2(64, 0)
+		region_edit.placeholder_text = "Region"
+		region_edit.text = layer.region_id
+		region_edit.tooltip_text = "Region id"
+		region_edit.text_changed.connect(func(value: String) -> void:
+			layer.region_id = value
+			_mark_custom()
+		)
+		row.add_child(region_edit)
 	var track_option: OptionButton = OptionButton.new()
 	track_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_populate_track_option(track_option, false)
@@ -541,13 +647,13 @@ func _build_layer_row(layer: LDMusicLayer) -> HBoxContainer:
 		if picked == UPLOAD_ID:
 			_open_upload(func(id: String) -> void:
 				layer.track_id = id
-				_persist()
+				_mark_custom()
 				_refresh()
 			)
 			_select_track(track_option, layer.track_id)
 			return
 		layer.track_id = picked
-		_persist()
+		_mark_custom()
 	)
 	row.add_child(track_option)
 	var volume: HSlider = HSlider.new()
@@ -560,7 +666,7 @@ func _build_layer_row(layer: LDMusicLayer) -> HBoxContainer:
 	volume.tooltip_text = "Layer volume"
 	volume.value_changed.connect(func(value: float) -> void:
 		layer.volume_db = value
-		_persist()
+		_mark_custom()
 	)
 	row.add_child(volume)
 	var preview: Button = Button.new()
@@ -573,8 +679,8 @@ func _build_layer_row(layer: LDMusicLayer) -> HBoxContainer:
 	remove.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	remove.set_meta(&"gdss_classes", PackedStringArray(["Danger"]))
 	remove.pressed.connect(func() -> void:
-		_music().layers.erase(layer)
-		_persist()
+		_music().subtracks.erase(layer)
+		_mark_custom()
 		_refresh()
 	)
 	row.add_child(remove)

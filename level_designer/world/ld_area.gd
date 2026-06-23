@@ -27,6 +27,11 @@ var background_preset: String = ""
 ## Custom restores the earlier edits. Only the active `background` is rendered and serialized.
 var custom_background: LDBackground = null
 var music: LDMusic = null
+## Preset name driving the music, or LDMusicPresetDB.CUSTOM once it has been edited.
+var music_preset: String = ""
+## The area's preserved freely-edited music, stashed aside so switching to a preset and back to
+## Custom restores the earlier edits.
+var custom_music: LDMusic = null
 ## Per-area editor view: each area pans/zooms independently, like a separate level. Stripped on
 ## export, so it only matters in the editor.
 var camera_position: Vector2 = Vector2.ZERO
@@ -183,6 +188,8 @@ func apply_default_background() -> void:
 
 func apply_default_music() -> void:
 	music = LDMusic.new()
+	music_preset = LDMusicPresetDB.CUSTOM
+	custom_music = music
 
 
 ## Saves the current editor viewport view into this area (called when leaving it).

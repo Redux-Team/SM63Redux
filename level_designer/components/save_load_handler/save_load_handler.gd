@@ -306,7 +306,7 @@ func _serialize() -> Dictionary:
 		areas_data.append({
 			"name": area.area_name,
 			"background": bg_handler.serialize_area(area),
-			"music": area.music.serialize() if area.music else [],
+			"music": LDMusicPresetDB.serialize_area(area),
 			"camera_position": Packer.vec2_to_array(area.camera_position),
 			"camera_zoom": Packer.vec2_to_array(area.camera_zoom),
 			"active_layer": area._active_index,
@@ -436,7 +436,7 @@ func _deserialize(data: Dictionary) -> Error:
 		else:
 			area.apply_default_background()
 		if entry.has("music"):
-			area.music = LDMusic.deserialize(entry.get("music"))
+			LDMusicPresetDB.apply_to_area(area, entry.get("music"))
 		else:
 			area.apply_default_music()
 		# Per-area editor view (defaults to a fresh ZERO/ONE view for areas that predate it).

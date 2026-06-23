@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="LDMusic" format=3]
+
+[ext_resource type="Script" path="res://level_designer/world/ld_music.gd" id="1_de7up"]
+[ext_resource type="Script" path="res://level_designer/world/ld_music_subtrack.gd" id="2_70ir1"]
+
+[sub_resource type="Resource" id="Resource_af1ic"]
+script = ExtResource("2_70ir1")
+track_id = "bob_omb_battlefield"
+
+[sub_resource type="Resource" id="Resource_yn0cf"]
+script = ExtResource("2_70ir1")
+track_id = "bob_omb_battlefield_mountain"
+trigger = 2
+region_id = "mountain"
+
+[resource]
+script = ExtResource("1_de7up")
+preset_name = "Bob-omb Battlefield"
+subtracks = Array[ExtResource("2_70ir1")]([SubResource("Resource_af1ic"), SubResource("Resource_yn0cf")])

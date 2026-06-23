@@ -2,28 +2,47 @@ class_name LDMusic
 extends Resource
 
 
-@export var layers: Array[LDMusicLayer] = []
+enum UnderwaterMode {
+	MUFFLE,
+	TRACK,
+	IGNORE,
+}
+
+
+## Display name when this resource is a preset (empty for the working copy / custom music).
+@export var preset_name: String = ""
+@export var underwater_mode: UnderwaterMode = UnderwaterMode.MUFFLE
+@export var subtracks: Array[LDMusicSubtrack] = []
 
 
 func is_empty() -> bool:
-	return layers.is_empty()
+	return subtracks.is_empty()
 
 
 func working_copy() -> LDMusic:
-	return deserialize(serialize())
+	var copy: LDMusic = deserialize(serialize())
+	copy.preset_name = preset_name
+	return copy
 
 
-func serialize() -> Array:
+func serialize() -> Dictionary:
 	var result: Array = []
-	for layer: LDMusicLayer in layers:
-		result.append(layer.serialize())
-	return result
+	for subtrack: LDMusicSubtrack in subtracks:
+		result.append(subtrack.serialize())
+	return {
+		"underwater_mode": int(underwater_mode),
+		"subtracks": result,
+	}
 
 
 static func deserialize(data: Variant) -> LDMusic:
 	var music: LDMusic = LDMusic.new()
-	if data is Array:
-		for entry: Variant in data:
+	var entries: Variant = data
+	if data is Dictionary:
+		music.underwater_mode = int((data as Dictionary).get("underwater_mode", UnderwaterMode.MUFFLE))
+		entries = (data as Dictionary).get("subtracks", [])
+	if entries is Array:
+		for entry: Variant in entries:
 			if entry is Dictionary:
-				music.layers.append(LDMusicLayer.deserialize(entry))
+				music.subtracks.append(LDMusicSubtrack.deserialize(entry))
 	return music
