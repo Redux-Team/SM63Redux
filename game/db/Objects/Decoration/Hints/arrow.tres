@@ -19,6 +19,7 @@ id = "arrow"
 category = 6
 subpath = "Hints/arrow"
 group_path = "Hints"
+ld_index_id = "arrow_0"
 ld_entry_texture = SubResource("AtlasTexture_6y7o3")
 ld_properties = Array[ExtResource("2_802f4")]([ExtResource("3_4vypm"), ExtResource("4_memmi"), ExtResource("5_xcck4")])
 sprite_texture = ExtResource("1_aft2p")

@@ -25,7 +25,6 @@ id = "static_log"
 category = 6
 subpath = "Platforms/static_log"
 group_path = "Platforms"
-name_override = "Static Log"
 ld_index_id = "log"
 ld_entry_texture = SubResource("AtlasTexture_gnkvx")
 ld_properties = Array[ExtResource("2_m7qt5")]([ExtResource("3_s705n"), ExtResource("4_j12x7"), ExtResource("5_1i45m")])

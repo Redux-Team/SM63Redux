@@ -25,6 +25,7 @@ id = "cloud"
 category = 6
 subpath = "Platforms/cloud"
 group_path = "Platforms"
+ld_index_id = "platform"
 ld_placement_tool_override = "telescoping"
 ld_entry_texture = SubResource("AtlasTexture_7ifo6")
 ld_properties = Array[ExtResource("2_px4rd")]([ExtResource("3_o1mfe"), ExtResource("4_07o68"), ExtResource("5_ivpmy"), ExtResource("6_ekwiq")])

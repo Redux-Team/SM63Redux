@@ -21,7 +21,6 @@ id = "cheep_cheep"
 category_string = "Entity"
 subpath = "Enemy/cheep_cheep"
 group_path = "Enemy"
-name_override = "Cheep Cheep"
 game_instance = ExtResource("1_7vw3y")
 ld_entry_texture = SubResource("AtlasTexture_b702n")
 ld_properties = Array[ExtResource("1_ae6ea")]([ExtResource("4_b702n"), ExtResource("5_7vw3y")])

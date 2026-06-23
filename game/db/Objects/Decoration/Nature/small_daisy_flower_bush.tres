@@ -6,7 +6,6 @@
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_4fhpc"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_rn31s"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_0sw3h"]
-[ext_resource type="Texture2D" uid="uid://b1wp4rvlj6ja1" path="res://assets/textures/objects/decoration/nature/big_cherry_stem.png" id="7_y77f2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hufso"]
 atlas = ExtResource("1_brlvq")
@@ -18,13 +17,12 @@ resource_scene_unique_id = ""
 script = ExtResource("6_0sw3h")
 id = "small_daisy_flower_bush"
 category = 6
-subpath = "Nature/medium_cherry_tree"
+subpath = "Nature/small_daisy_flower_bush"
 group_path = "Nature"
-name_override = "Cherry Tree"
-ld_index_id = "tree_cherry"
+ld_index_id = "flower_20"
 ld_entry_texture = SubResource("AtlasTexture_hufso")
 ld_properties = Array[ExtResource("2_ew1r4")]([ExtResource("3_8fg5m"), ExtResource("4_4fhpc"), ExtResource("5_rn31s")])
-sprite_texture = ExtResource("7_y77f2")
+sprite_texture = ExtResource("1_brlvq")
 ld_object_path = "Decoration/Nature/small_daisy_flower_bush"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

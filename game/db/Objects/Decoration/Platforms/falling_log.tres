@@ -23,7 +23,6 @@ id = "falling_log"
 category = 6
 subpath = "Platforms/falling_log"
 group_path = "Platforms"
-name_override = "Falling Log"
 ld_index_id = "log"
 game_instance = ExtResource("1_m6n3w")
 ld_entry_texture = SubResource("AtlasTexture_ng04l")

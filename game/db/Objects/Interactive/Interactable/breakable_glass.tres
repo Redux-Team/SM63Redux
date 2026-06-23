@@ -31,6 +31,7 @@ id = "breakable_glass"
 category = 6
 subpath = "Interactable/breakable_glass"
 group_path = "Interactable"
+ld_index_id = "breakable"
 ld_editor_instance = ExtResource("2_ocypg")
 game_instance = ExtResource("1_onfi0")
 ld_entry_texture = SubResource("AtlasTexture_em4cj")

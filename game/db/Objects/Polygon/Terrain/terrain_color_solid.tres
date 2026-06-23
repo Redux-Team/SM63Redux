@@ -21,6 +21,7 @@ category = 2
 category_string = "Polygon"
 subpath = "Terrain/terrain_color_solid"
 group_path = "Terrain"
+name_override = "Solid Color"
 ld_properties = Array[ExtResource("1_prop")]([ExtResource("3_pos")])
 object_type = 4
 telescoping_atlas = SubResource("AtlasTexture_snk2d")

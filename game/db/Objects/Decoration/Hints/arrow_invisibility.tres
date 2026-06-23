@@ -19,6 +19,7 @@ id = "arrow_invisibility"
 category = 6
 subpath = "Hints/arrow_invisibility"
 group_path = "Hints"
+ld_index_id = "arrow_2"
 name_override = "Invisibility Arrow"
 ld_entry_texture = SubResource("AtlasTexture_6pbe7")
 ld_properties = Array[ExtResource("2_esdll")]([ExtResource("3_vy7xq"), ExtResource("4_7el48"), ExtResource("5_hbsoi")])

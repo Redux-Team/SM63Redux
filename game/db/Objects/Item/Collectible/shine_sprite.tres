@@ -24,6 +24,7 @@ category = 1
 category_string = "Item"
 subpath = "Collectible/shine_sprite"
 group_path = "Collectible"
+ld_index_id = "shine"
 ld_editor_instance = ExtResource("1_cftkg")
 game_instance = ExtResource("1_5hoxe")
 ld_entry_texture = SubResource("AtlasTexture_xsgd7")

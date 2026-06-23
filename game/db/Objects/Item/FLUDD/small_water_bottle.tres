@@ -23,7 +23,6 @@ category = 1
 category_string = "Item"
 subpath = "FLUDD/small_water_bottle"
 group_path = "FLUDD"
-name_override = "Small Water Bottle"
 ld_index_id = "water_bottle"
 game_instance = ExtResource("1_28jm4")
 ld_entry_texture = SubResource("AtlasTexture_octo7")

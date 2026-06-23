@@ -34,6 +34,7 @@ id = "arrow_sign"
 category = 6
 subpath = "Hints/arrow_sign"
 group_path = "Hints"
+ld_index_id = "sign_0"
 ld_editor_instance = ExtResource("2_2tydh")
 game_instance = ExtResource("1_x16t4")
 ld_entry_texture = SubResource("AtlasTexture_j8dcr")

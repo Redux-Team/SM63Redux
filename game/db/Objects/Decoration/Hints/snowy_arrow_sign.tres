@@ -32,6 +32,7 @@ id = "snowy_arrow_sign"
 category = 6
 subpath = "Hints/snowy_arrow_sign"
 group_path = "Hints"
+ld_index_id = "sign_1"
 ld_editor_instance = ExtResource("2_wu2il")
 game_instance = ExtResource("1_fvg35")
 ld_entry_texture = SubResource("AtlasTexture_p7uv7")

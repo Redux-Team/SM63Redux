@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bptwvo6mfp7uv"]
 
-[ext_resource type="Texture2D" uid="uid://cskipslykmb3k" path="res://assets/textures/objects/decoration/nature/white_flower_triplet.png" id="1_38pxm"]
+[ext_resource type="Texture2D" uid="uid://docvf1iuew4e6" path="res://assets/textures/objects/decoration/nature/yellow_flower_bouquet.png" id="1_38pxm"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_j3adj"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_7uu0w"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_8b3ps"]
@@ -17,10 +17,9 @@ resource_scene_unique_id = ""
 script = ExtResource("6_ot2ed")
 id = "yellow_flower_bouquet"
 category = 6
-subpath = "Nature/small_mossy_rock"
+subpath = "Nature/yellow_flower_bouquet"
 group_path = "Nature"
-name_override = "Small Mossy Rock"
-ld_index_id = "rock_moss"
+ld_index_id = "flower_19"
 ld_entry_texture = SubResource("AtlasTexture_70p08")
 ld_properties = Array[ExtResource("2_j3adj")]([ExtResource("3_7uu0w"), ExtResource("4_8b3ps"), ExtResource("5_nkb8u")])
 sprite_texture = ExtResource("1_38pxm")

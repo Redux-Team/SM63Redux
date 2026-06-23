@@ -19,6 +19,7 @@ id = "arrow_metal"
 category = 6
 subpath = "Hints/arrow_metal"
 group_path = "Hints"
+ld_index_id = "arrow_1"
 name_override = "Metal Arrow"
 ld_entry_texture = SubResource("AtlasTexture_423gf")
 ld_properties = Array[ExtResource("2_vpid7")]([ExtResource("3_3o1pc"), ExtResource("4_7n4p6"), ExtResource("5_p6450")])

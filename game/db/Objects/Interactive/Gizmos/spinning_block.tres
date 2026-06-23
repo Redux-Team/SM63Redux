@@ -24,7 +24,6 @@ id = "spinning_block"
 category = 6
 subpath = "Gizmos/spinning_block"
 group_path = "Gizmos"
-name_override = "Spinning Block"
 ld_select_tool_override = "block_edit"
 ld_placement_tool_override = "block"
 ld_editor_instance = ExtResource("2_73w3l")
