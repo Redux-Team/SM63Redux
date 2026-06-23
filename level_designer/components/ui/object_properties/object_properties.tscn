@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cep7riau5en0" path="res://level_designer/components/ui/object_properties/widgets/float_property_widget.tscn" id="4_6w1u8"]
 [ext_resource type="PackedScene" uid="uid://dnry2u8uye886" path="res://level_designer/components/ui/object_properties/widgets/int_property_widget.tscn" id="5_q6tw2"]
 [ext_resource type="PackedScene" path="res://level_designer/components/ui/object_properties/widgets/option_property_widget.tscn" id="6_opt"]
+[ext_resource type="PackedScene" path="res://level_designer/components/ui/object_properties/widgets/string_property_widget.tscn" id="7_str"]
 
 [node name="LDObjectProperties" type="MarginContainer" unique_id=899359989 node_paths=PackedStringArray("_container")]
 offset_right = 24.0
@@ -23,6 +24,7 @@ _vector2_widget_scene = ExtResource("3_c3mal")
 _float_widget_scene = ExtResource("4_6w1u8")
 _int_widget_scene = ExtResource("5_q6tw2")
 _option_widget_scene = ExtResource("6_opt")
+_string_widget_scene = ExtResource("7_str")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1453832203]
 layout_mode = 2

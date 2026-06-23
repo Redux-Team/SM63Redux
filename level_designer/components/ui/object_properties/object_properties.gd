@@ -8,6 +8,7 @@ extends MarginContainer
 @export var _float_widget_scene: PackedScene
 @export var _int_widget_scene: PackedScene
 @export var _option_widget_scene: PackedScene
+@export var _string_widget_scene: PackedScene
 
 
 func load_selection(objects: Array[LDObject]) -> void:
@@ -77,4 +78,6 @@ func _create_widget(prop: LDProperty) -> LDPropertyWidget:
 			return _vector2_widget_scene.instantiate() as LDPropertyWidget
 		LDProperty.Type.OPTION:
 			return _option_widget_scene.instantiate() as LDPropertyWidget
+		LDProperty.Type.STRING:
+			return _string_widget_scene.instantiate() as LDPropertyWidget
 	return null

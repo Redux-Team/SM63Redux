@@ -94,6 +94,7 @@
 [ext_resource type="Resource" uid="uid://lv8lc3too2cm" path="res://game/db/Objects/Decoration/Platforms/snowy_tiled_platform.tres" id="76_awe0f"]
 [ext_resource type="Resource" uid="uid://v3yk2lwwo751" path="res://game/db/Objects/Decoration/Platforms/cloud.tres" id="77_6fphn"]
 [ext_resource type="Resource" uid="uid://d3vfvvtqanxml" path="res://game/db/Objects/Polygon/Volumes/camera_deny_area.tres" id="78_76t45"]
+[ext_resource type="Resource" path="res://game/db/Objects/Polygon/Volumes/music_region.tres" id="146_mreg"]
 [ext_resource type="Resource" uid="uid://du05wmn6o6uhx" path="res://game/db/Objects/Decoration/Platforms/dark_platform.tres" id="79_02eb1"]
 [ext_resource type="Resource" uid="uid://p1rx0878ftm2" path="res://game/db/Objects/Polygon/Terrain/terrain_color_solid.tres" id="82_mtxdl"]
 [ext_resource type="Resource" uid="uid://dg3x7l0kphplx" path="res://game/db/Objects/Decoration/Platforms/cherry_platform.tres" id="86_0f4s0"]
@@ -303,6 +304,7 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Polygon/Terrain/terrain_jungle": ExtResource("59_ib6pc"),
 "Polygon/Terrain/terrain_snow": ExtResource("60_rpot8"),
 "Polygon/Volumes/camera_deny_area": ExtResource("78_76t45"),
+"Polygon/Volumes/music_region": ExtResource("146_mreg"),
 "Polygon/Volumes/water": ExtResource("58_j0wnv")
 })
 properties = Dictionary[String, ExtResource("46_d7ntl")]({

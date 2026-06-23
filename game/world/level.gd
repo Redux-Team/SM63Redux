@@ -255,7 +255,32 @@ func _start_adaptive_music(music: LDMusic) -> void:
 			if not _player.swimming_changed.is_connected(_music_controller.set_underwater):
 				_player.swimming_changed.connect(_music_controller.set_underwater)
 			_music_controller.set_underwater(_player.is_in_water())
+			var region_check: MusicRegionCheckArea = _ensure_region_check()
+			if region_check:
+				if not region_check.region_changed.is_connected(_music_controller.set_region):
+					region_check.region_changed.connect(_music_controller.set_region)
+				_music_controller.set_region(region_check.current_region())
 	).set_delay(0.5)
+
+
+## Attaches (once) a music-region detector to the player so walking into a music-region volume drives
+## MusicController.set_region. Done in code to avoid editing the player scene.
+func _ensure_region_check() -> MusicRegionCheckArea:
+	if not is_instance_valid(_player):
+		return null
+	var existing: MusicRegionCheckArea = _player.get_node_or_null("MusicRegionCheck") as MusicRegionCheckArea
+	if existing:
+		return existing
+	var check: MusicRegionCheckArea = MusicRegionCheckArea.new()
+	check.name = "MusicRegionCheck"
+	var shape: CollisionShape2D = CollisionShape2D.new()
+	var rect: RectangleShape2D = RectangleShape2D.new()
+	rect.size = Vector2(16.0, 24.0)
+	shape.shape = rect
+	shape.position = Vector2(0.0, -8.0)
+	check.add_child(shape)
+	_player.add_child(check)
+	return check
 
 
 func stop_music() -> void:
