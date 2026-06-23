@@ -5,6 +5,9 @@ extends Node
 const BUS: StringName = &"Music"
 const SILENCE_DB: float = -80.0
 const MUFFLE_CUTOFF: float = 600.0
+## Fraction of the fade an outgoing track waits before it starts fading out, so the incoming track is
+## already rising and the sum never dips (a seamless crossfade instead of a mid-transition gap).
+const CROSSFADE_OVERLAP: float = 0.5
 
 
 var _entries: Array[Dictionary] = []
@@ -71,12 +74,18 @@ func _refresh_volumes() -> void:
 		var subtrack: LDMusicSubtrack = entry.get("subtrack") as LDMusicSubtrack
 		if not is_instance_valid(player):
 			continue
-		var target: float = subtrack.volume_db if _is_active(subtrack) else SILENCE_DB
+		var active: bool = _is_active(subtrack)
+		var target: float = subtrack.volume_db if active else SILENCE_DB
+		if is_equal_approx(player.volume_db, target):
+			continue
+		var fade: float = maxf(0.01, subtrack.fade_time)
 		var old_tween: Variant = entry.get("tween")
 		if old_tween is Tween and (old_tween as Tween).is_valid():
 			(old_tween as Tween).kill()
 		var tween: Tween = create_tween()
-		tween.tween_property(player, "volume_db", target, maxf(0.01, subtrack.fade_time))
+		if not active:
+			tween.tween_interval(fade * CROSSFADE_OVERLAP)
+		tween.tween_property(player, "volume_db", target, fade)
 		entry.set("tween", tween)
 
 
