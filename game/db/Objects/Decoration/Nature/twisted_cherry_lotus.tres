@@ -1,33 +1,36 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://b15tjs5dppj2s"]
 
-[ext_resource type="PackedScene" uid="uid://c4k5fmd3513p0" path="res://game/object/twisted/twisted_cherry_lotus.tscn" id="1_o218v"]
-[ext_resource type="PackedScene" uid="uid://5ca2ke2c8wdg" path="res://game/db/Objects/Decoration/Nature/twisted_cherry_lotus_ld.tscn" id="2_esfrk"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_o218v"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_esfrk"]
-[ext_resource type="Texture2D" uid="uid://c7vf7o0vyn2xy" path="res://assets/textures/objects/decoration/nature/twisted_cherry_lotus_ld.png" id="3_o218v"]
-[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="6_dtbqt"]
-[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_kakw4"]
+[ext_resource type="Texture2D" uid="uid://c7vf7o0vyn2xy" path="res://assets/textures/objects/decoration/nature/twisted_cherry_lotus_ld.png" id="1_ld"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
+[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="4_path"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="5_go"]
+[ext_resource type="Texture2D" uid="uid://pigwsbgrdftf" path="res://assets/textures/objects/decoration/nature/twisted_cherry_lotus_stem.png" id="6_stem"]
+[ext_resource type="Texture2D" uid="uid://c31b3y3mkdjhp" path="res://assets/textures/objects/decoration/nature/twisted_cherry_lotus_head.png" id="7_head"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_esfrk"]
-atlas = ExtResource("3_o218v")
+atlas = ExtResource("1_ld")
 region = Rect2(-13, -15, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o218v"]
 
 [resource]
 resource_path = "res://game/db/Objects/Decoration/Nature/twisted_cherry_lotus.tres"
 resource_scene_unique_id = ""
-script = ExtResource("6_kakw4")
+script = ExtResource("5_go")
 id = "twisted_cherry_lotus"
 category = 6
 subpath = "Nature/twisted_tree"
 group_path = "Nature"
 name_override = "Twisted Tree"
 ld_index_id = "tree"
-ld_select_tool_override = "path_edit"
-ld_placement_tool_override = "path"
-ld_editor_instance = ExtResource("2_esfrk")
-game_instance = ExtResource("1_o218v")
 ld_entry_texture = SubResource("AtlasTexture_esfrk")
-ld_properties = Array[ExtResource("2_o218v")]([ExtResource("3_esfrk"), ExtResource("6_dtbqt")])
+ld_properties = Array[ExtResource("2_prop")]([ExtResource("3_pos"), ExtResource("4_path")])
+object_type = 2
+telescoping_atlas = SubResource("AtlasTexture_o218v")
+path_line_texture = ExtResource("6_stem")
+path_head_texture = ExtResource("7_head")
+path_stem_width = 10.0
 ld_object_path = "Decoration/Nature/twisted_cherry_lotus"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

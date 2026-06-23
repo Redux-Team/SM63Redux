@@ -101,7 +101,20 @@ static func build_seam_polygon(outer: PackedVector2Array, hole: PackedVector2Arr
 	return {"polygon": result, "seam_indices": seam_indices}
 
 
-static func get_topline_segments(points: PackedVector2Array, threshold: float, seam_indices: PackedInt32Array = PackedInt32Array(), invert_normal: bool = false) -> Array[PackedVector2Array]:
+static func edge_midpoint_key(a: Vector2, b: Vector2) -> String:
+	var mid: Vector2 = (a + b) * 0.5
+	return "%d,%d" % [roundi(mid.x), roundi(mid.y)]
+
+
+static func is_top_edge(a: Vector2, b: Vector2, threshold: float, invert_normal: bool = false) -> bool:
+	var edge: Vector2 = (b - a).normalized()
+	if invert_normal:
+		edge = -edge
+	var normal: Vector2 = Vector2(edge.y, -edge.x)
+	return normal.y < -threshold
+
+
+static func get_topline_segments(points: PackedVector2Array, threshold: float, seam_indices: PackedInt32Array = PackedInt32Array(), invert_normal: bool = false, forced: Dictionary = {}) -> Array[PackedVector2Array]:
 	var count: int = points.size()
 	var segments: Array[PackedVector2Array] = []
 	var current: PackedVector2Array = PackedVector2Array()
@@ -115,12 +128,11 @@ static func get_topline_segments(points: PackedVector2Array, threshold: float, s
 		
 		var a: Vector2 = points[i]
 		var b: Vector2 = points[(i + 1) % count]
-		var edge: Vector2 = (b - a).normalized()
-		if invert_normal:
-			edge = -edge
-		var normal: Vector2 = Vector2(edge.y, -edge.x)
-		var is_top: bool = normal.y < -threshold
-		
+		var is_top: bool = is_top_edge(a, b, threshold, invert_normal)
+		var key: String = edge_midpoint_key(a, b)
+		if forced.has(key):
+			is_top = bool(forced[key])
+
 		if is_top:
 			if current.is_empty():
 				current.append(a)

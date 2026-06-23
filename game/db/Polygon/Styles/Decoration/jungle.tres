@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PolygonDecorationStyle" format=3]
+
+[ext_resource type="Script" uid="uid://6bps37udg7ro" path="res://game/object_data/polygon_decoration_style.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cw0t5jwemniys" path="res://assets/textures/terrain/jungle/terrain_jungle_decoration_1.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://dtxdwmowmg18b" path="res://assets/textures/terrain/jungle/terrain_jungle_decoration_2.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://sfsbwj8x4y3d" path="res://assets/textures/terrain/jungle/terrain_jungle_decoration_3.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://cetpm6bacmf68" path="res://assets/textures/terrain/jungle/terrain_jungle_decoration_4.png" id="5"]
+
+[resource]
+script = ExtResource("1")
+style_name = "Jungle"
+weightmap = Dictionary[Texture2D, float]({
+ExtResource("2"): 2.0,
+ExtResource("3"): 1.0,
+ExtResource("4"): 1.0,
+ExtResource("5"): 0.5
+})
+density = 35.0

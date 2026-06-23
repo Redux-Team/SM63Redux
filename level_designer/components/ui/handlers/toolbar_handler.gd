@@ -74,6 +74,10 @@ func _on_poly_add_pressed() -> void:
 func _on_poly_cut_pressed() -> void:
 	LD.get_tool_handler().select_tool("polygon_cut")
 
+
+func _on_topline_pressed() -> void:
+	LD.get_tool_handler().select_tool("topline")
+
 #endregion
 
 

@@ -1,32 +1,36 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bvgvx4o7bwrq8"]
 
-[ext_resource type="PackedScene" uid="uid://v173euxqvp2q" path="res://game/object/tall/snowy_mushroom_tall.tscn" id="1_thwq3"]
-[ext_resource type="PackedScene" uid="uid://baopoj2xpv6fa" path="res://game/db/Objects/Decoration/Nature/tall_snowy_mushroom_ld.tscn" id="2_w0ati"]
-[ext_resource type="Texture2D" uid="uid://bpc21ojqsoemb" path="res://assets/textures/objects/decoration/nature/tall_snowy_mushroom_ld.png" id="3_o12km"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_pfccr"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_yhd3x"]
-[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="6_ta17i"]
-[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_0mcw0"]
+[ext_resource type="Texture2D" uid="uid://bpc21ojqsoemb" path="res://assets/textures/objects/decoration/nature/tall_snowy_mushroom_ld.png" id="1_ld"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
+[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="4_path"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="5_go"]
+[ext_resource type="Texture2D" uid="uid://dr3hvvu5207o0" path="res://assets/textures/objects/decoration/nature/tall_snowy_mushroom_stem.png" id="6_stem"]
+[ext_resource type="Texture2D" uid="uid://dw0gslxxtjnct" path="res://assets/textures/objects/decoration/nature/tall_snowy_mushroom_head.png" id="7_head"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3ftqo"]
-atlas = ExtResource("3_o12km")
+atlas = ExtResource("1_ld")
 region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_thwq3"]
 
 [resource]
 resource_path = "res://game/db/Objects/Decoration/Nature/tall_snowy_mushroom.tres"
 resource_scene_unique_id = ""
-script = ExtResource("7_0mcw0")
+script = ExtResource("5_go")
 id = "tall_snowy_mushroom"
 category = 6
 subpath = "Nature/tall_snowy_mushroom"
 group_path = "Nature"
 ld_index_id = "mushroom"
-ld_select_tool_override = "path_edit"
-ld_placement_tool_override = "path"
-ld_editor_instance = ExtResource("2_w0ati")
-game_instance = ExtResource("1_thwq3")
 ld_entry_texture = SubResource("AtlasTexture_3ftqo")
-ld_properties = Array[ExtResource("4_pfccr")]([ExtResource("5_yhd3x"), ExtResource("6_ta17i")])
+ld_properties = Array[ExtResource("2_prop")]([ExtResource("3_pos"), ExtResource("4_path")])
+object_type = 2
+telescoping_atlas = SubResource("AtlasTexture_thwq3")
+path_line_texture = ExtResource("6_stem")
+path_head_texture = ExtResource("7_head")
+path_head_collision = true
+path_head_collision_polygon = PackedVector2Array(-27, -1, -19, -7, -5, -9, 5, -9, 19, -7, 27, -1, 27, 4, -27, 4)
 ld_object_path = "Decoration/Nature/tall_snowy_mushroom"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

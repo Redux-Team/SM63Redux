@@ -184,6 +184,10 @@ func get_property_values() -> Dictionary[StringName, Variant]:
 	return _property_values.duplicate()
 
 
+func get_property_options(_key: StringName) -> PackedStringArray:
+	return PackedStringArray()
+
+
 func has_property(key: String) -> bool:
 	return _property_values.has(key)
 

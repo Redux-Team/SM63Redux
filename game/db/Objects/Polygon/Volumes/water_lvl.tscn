@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bbikt30pixqht"]
 
 [ext_resource type="Script" uid="uid://b7bulkw3s6705" path="res://game/db/Objects/Polygon/Volumes/water_lvl.gd" id="1_7mws3"]
-[ext_resource type="Resource" uid="uid://c1aygscm4h0bo" path="res://game/db/Objects/Polygon/Volumes/water_data.tres" id="2_tmccv"]
 
 [node name="Water" type="Node2D" unique_id=335077795 node_paths=PackedStringArray("_water_collision", "_polygon", "_collision", "_outline_container", "_topline_container", "_topline_shadow_container", "_static_body_2d")]
 texture_repeat = 2
@@ -10,7 +9,6 @@ wave_speed = 0.0
 wave_amplitude = 1.0
 splash_amplitude = 0.0
 _water_collision = NodePath("WaterArea/CollisionPolygon2D")
-polygon_data = ExtResource("2_tmccv")
 _polygon = NodePath("Polygon")
 _collision = NodePath("StaticBody2D/CollisionPolygon2D")
 _outline_container = NodePath("OutlineContainer")

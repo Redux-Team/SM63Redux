@@ -1,33 +1,36 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bu0o6g7cp2rub"]
 
-[ext_resource type="PackedScene" uid="uid://c4k5fmd3513p0" path="res://game/object/twisted/twisted_cherry_lotus.tscn" id="1_rndsh"]
-[ext_resource type="PackedScene" uid="uid://2cr5adhl067r" path="res://game/db/Objects/Decoration/Nature/twisted_cave_flower_ld.tscn" id="2_rndsh"]
-[ext_resource type="Texture2D" uid="uid://bxjy7eqpvi2g3" path="res://assets/textures/objects/decoration/nature/twisted_cave_flower_ld.png" id="3_rndsh"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_30hwd"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_akswb"]
-[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="6_e78de"]
-[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_korbu"]
+[ext_resource type="Texture2D" uid="uid://bxjy7eqpvi2g3" path="res://assets/textures/objects/decoration/nature/twisted_cave_flower_ld.png" id="1_ld"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
+[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="4_path"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="5_go"]
+[ext_resource type="Texture2D" uid="uid://df03f1k2vqhg2" path="res://assets/textures/objects/decoration/nature/twisted_cave_flower_stem.png" id="6_stem"]
+[ext_resource type="Texture2D" uid="uid://oyw4wsdk64ar" path="res://assets/textures/objects/decoration/nature/twisted_cave_flower_head.png" id="7_head"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k5bmu"]
-atlas = ExtResource("3_rndsh")
+atlas = ExtResource("1_ld")
 region = Rect2(-10, -15, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rndsh"]
 
 [resource]
 resource_path = "res://game/db/Objects/Decoration/Nature/twisted_cave_flower.tres"
 resource_scene_unique_id = ""
-script = ExtResource("7_korbu")
+script = ExtResource("5_go")
 id = "twisted_cave_flower"
 category = 6
 subpath = "Nature/twisted_tree"
 group_path = "Nature"
 name_override = "Twisted Tree"
 ld_index_id = "tree"
-ld_select_tool_override = "path_edit"
-ld_placement_tool_override = "path"
-ld_editor_instance = ExtResource("2_rndsh")
-game_instance = ExtResource("1_rndsh")
 ld_entry_texture = SubResource("AtlasTexture_k5bmu")
-ld_properties = Array[ExtResource("4_30hwd")]([ExtResource("5_akswb"), ExtResource("6_e78de")])
+ld_properties = Array[ExtResource("2_prop")]([ExtResource("3_pos"), ExtResource("4_path")])
+object_type = 2
+telescoping_atlas = SubResource("AtlasTexture_rndsh")
+path_line_texture = ExtResource("6_stem")
+path_head_texture = ExtResource("7_head")
+path_stem_width = 10.0
 ld_object_path = "Decoration/Nature/twisted_cave_flower"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://sw01i5n1vrbp" path="res://level_designer/components/tool_handler/tools/polygon/polygon_tool.gd" id="7_pkfdl"]
 [ext_resource type="PackedScene" uid="uid://gtms80khkvap" path="res://level_designer/components/tool_handler/widgets/rotation_widget.tscn" id="8_a2bxr"]
 [ext_resource type="Script" uid="uid://cqvblppfibjsb" path="res://level_designer/components/tool_handler/tools/polygon/polygon_edit_tool.gd" id="8_c517l"]
+[ext_resource type="Script" path="res://level_designer/components/tool_handler/tools/polygon/topline_tool.gd" id="30_topline"]
 [ext_resource type="Script" uid="uid://dvev7tchn04wj" path="res://level_designer/components/tool_handler/tools/scale_tool.gd" id="9_vhsj3"]
 [ext_resource type="PackedScene" uid="uid://d2sw3mtdu35yd" path="res://level_designer/components/tool_handler/widgets/scale_widget.tscn" id="10_qdjy3"]
 [ext_resource type="Script" uid="uid://s77vtjwxty2o" path="res://level_designer/components/tool_handler/tools/polygon/polygon_add_tool.gd" id="10_u22y6"]
@@ -63,6 +64,9 @@ script = ExtResource("10_u22y6")
 
 [node name="PolygonCutTool" type="Node" parent="PolygonTool" unique_id=1318500431]
 script = ExtResource("11_4dp4y")
+
+[node name="ToplineTool" type="Node" parent="PolygonTool"]
+script = ExtResource("30_topline")
 
 [node name="PathTool" type="Node" parent="." unique_id=2075599837]
 script = ExtResource("12_4dp4y")

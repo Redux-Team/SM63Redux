@@ -151,6 +151,11 @@
 [ext_resource type="Resource" uid="uid://bn5yv45cbk1nv" path="res://game/db/Objects/Decoration/Nature/big_cherry_tree.tres" id="138_eowkn"]
 [ext_resource type="Resource" uid="uid://ckphd4pb2lbl3" path="res://game/db/Objects/Decoration/Nature/big_cherry_stem.tres" id="139_chn07"]
 [ext_resource type="Resource" uid="uid://bcmc5jcdbslq4" path="res://game/db/Objects/Decoration/Nature/twisted_crystal.tres" id="140_da43u"]
+[ext_resource type="Resource" uid="uid://c1yk0p8ujnu4p" path="res://game/db/Objects/Polygon/Terrain/terrain_cherry.tres" id="141_78wvd"]
+[ext_resource type="Resource" uid="uid://csbey5xxkepux" path="res://game/db/Objects/Item/FLUDD/hover_nozzle.tres" id="142_q1c6v"]
+[ext_resource type="Resource" uid="uid://dgutlwhtijc77" path="res://game/db/Objects/Item/FLUDD/turbo_nozzle.tres" id="143_1ysu7"]
+[ext_resource type="Resource" uid="uid://busbfhse2ydjh" path="res://game/db/Objects/Item/FLUDD/rocket_nozzle.tres" id="144_kjcoh"]
+[ext_resource type="Resource" uid="uid://bl2kt32lgc6gi" path="res://game/db/Objects/Polygon/Terrain/terrain_cave.tres" id="145_1ysu7"]
 
 [resource]
 script = ExtResource("47_j75gy")
@@ -284,10 +289,15 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Item/Collectible/yellow_coin": ExtResource("14_q5xve"),
 "Item/FLUDD/big_water_bottle": ExtResource("17_ib6pc"),
 "Item/FLUDD/hover_fludd_box": ExtResource("20_cjg54"),
+"Item/FLUDD/hover_nozzle": ExtResource("142_q1c6v"),
 "Item/FLUDD/rocket_fludd_box": ExtResource("16_naun0"),
+"Item/FLUDD/rocket_nozzle": ExtResource("144_kjcoh"),
 "Item/FLUDD/small_water_bottle": ExtResource("18_rpot8"),
 "Item/FLUDD/turbo_fludd_box": ExtResource("19_2x7la"),
+"Item/FLUDD/turbo_nozzle": ExtResource("143_1ysu7"),
 "Item/Utility/spinning_heart": ExtResource("64_q5xve"),
+"Polygon/Terrain/terrain_cave": ExtResource("145_1ysu7"),
+"Polygon/Terrain/terrain_cherry": ExtResource("141_78wvd"),
 "Polygon/Terrain/terrain_color_solid": ExtResource("82_mtxdl"),
 "Polygon/Terrain/terrain_grass": ExtResource("45_3w7om"),
 "Polygon/Terrain/terrain_jungle": ExtResource("59_ib6pc"),

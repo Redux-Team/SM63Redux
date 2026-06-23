@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="PolygonData" format=3 uid="uid://b2y75a2ickfn3"]
-
-[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="1_7cng8"]
-
-[resource]
-script = ExtResource("1_7cng8")
-textured = false
-outline_width = 0.0
-metadata/_custom_type_script = "uid://drs86mw0b40vi"

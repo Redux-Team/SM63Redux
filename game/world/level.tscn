@@ -53,7 +53,7 @@ shape = SubResource("RectangleShape2D_7lr4m")
 remote_path = NodePath("../../Camera2D")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1470691944]
-ignore_rotation = false
+rotation_smoothing_speed = 3.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1277764924]
 visible = false

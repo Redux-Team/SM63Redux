@@ -1,33 +1,36 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bcmc5jcdbslq4"]
 
-[ext_resource type="PackedScene" uid="uid://noj0vm52nxvs" path="res://game/object/twisted/twisted_tree.tscn" id="1_wxdpr"]
-[ext_resource type="PackedScene" uid="uid://dyksopr0uguij" path="res://game/db/Objects/Decoration/Nature/twisted_crystal_ld.tscn" id="2_wxdpr"]
-[ext_resource type="Texture2D" uid="uid://bm40gkvgdsxt8" path="res://assets/textures/objects/decoration/nature/twisted_crystal_ld.png" id="3_wxdpr"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_ggnuw"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_meh0t"]
-[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="6_3oqes"]
-[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_arhux"]
+[ext_resource type="Texture2D" uid="uid://bm40gkvgdsxt8" path="res://assets/textures/objects/decoration/nature/twisted_crystal_ld.png" id="1_ld"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
+[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="4_path"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="5_go"]
+[ext_resource type="Texture2D" uid="uid://bxqt3au4e86eq" path="res://assets/textures/objects/decoration/nature/twisted_crystal_stem.png" id="6_stem"]
+[ext_resource type="Texture2D" uid="uid://btelfxilgfuv0" path="res://assets/textures/objects/decoration/nature/twisted_crystal.png" id="7_head"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_66ii8"]
-atlas = ExtResource("3_wxdpr")
+atlas = ExtResource("1_ld")
 region = Rect2(-12, -15, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wxdpr"]
 
 [resource]
 resource_path = "res://game/db/Objects/Decoration/Nature/twisted_crystal.tres"
 resource_scene_unique_id = ""
-script = ExtResource("7_arhux")
+script = ExtResource("5_go")
 id = "twisted_crystal"
 category = 6
 subpath = "Nature/twisted_tree"
 group_path = "Nature"
 name_override = "Twisted Tree"
 ld_index_id = "tree"
-ld_select_tool_override = "path_edit"
-ld_placement_tool_override = "path"
-ld_editor_instance = ExtResource("2_wxdpr")
-game_instance = ExtResource("1_wxdpr")
 ld_entry_texture = SubResource("AtlasTexture_66ii8")
-ld_properties = Array[ExtResource("4_ggnuw")]([ExtResource("5_meh0t"), ExtResource("6_3oqes")])
+ld_properties = Array[ExtResource("2_prop")]([ExtResource("3_pos"), ExtResource("4_path")])
+object_type = 2
+telescoping_atlas = SubResource("AtlasTexture_wxdpr")
+path_line_texture = ExtResource("6_stem")
+path_head_texture = ExtResource("7_head")
+path_stem_width = 10.0
 ld_object_path = "Decoration/Nature/twisted_crystal"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

@@ -31,6 +31,7 @@ enum ObjectType {
 	TELESCOPING,
 	TEXTURED_PATH,
 	CUSTOM,
+	POLYGON,
 }
 
 enum AuthorityMode {
@@ -116,6 +117,20 @@ enum CollisionAnchor {
 			var atlas: AtlasTexture = AtlasTexture.new()
 			atlas.atlas = value
 			telescoping_atlas = atlas
+@export var polygon_data: PolygonData
+@export_group("Path", "path_")
+@export var path_line_texture: Texture2D
+@export var path_head_texture: Texture2D:
+	set(value):
+		path_head_texture = value
+		if not ld_entry_texture:
+			ld_entry_texture = value
+@export var path_subdivide: bool = true
+@export var path_use_stem_collision: bool = false
+@export var path_stem_width: float = 16.0
+@export var path_head_collision: bool = false
+@export var path_head_collision_polygon: PackedVector2Array
+@export_group("")
 
 @export_category("Editor Data")
 @export_storage var ld_object_path: String:
@@ -191,14 +206,23 @@ func _get_allowed_properties() -> PackedStringArray:
 		ObjectType.SPRITE:
 			return [
 				"sprite_texture", # Object
-				"editor_shape_shape_override", "editor_offset", # Editor 
+				"editor_shape_shape_override", "editor_shape_offset", # Editor
 				"collision_enabled", "collision_one_way", "collision_shape", "collision_polygon", "collision_offset" # Level
 			]
 		ObjectType.TELESCOPING:
 			return [
 				"telescoping_atlas",
-				"",
 				"collision_enabled", "collision_anchor", "collision_expand", "collision_offset", "collision_one_way", "collision_one_way_margin"
+			]
+		ObjectType.POLYGON:
+			return [
+				"polygon_data"
+			]
+		ObjectType.TEXTURED_PATH:
+			return [
+				"path_line_texture", "path_head_texture", "path_subdivide",
+				"path_use_stem_collision", "path_stem_width",
+				"path_head_collision", "path_head_collision_polygon"
 			]
 	return []
 
@@ -235,6 +259,8 @@ func get_editor_instance() -> LDObject:
 	match object_type:
 		ObjectType.SPRITE: return LDObjectSprite.from_game_object(self)
 		ObjectType.TELESCOPING: return LDObjectTelescoping.from_game_object(self)
+		ObjectType.POLYGON: return LDObjectPolygon.from_game_object(self)
+		ObjectType.TEXTURED_PATH: return LDObjectPath.from_game_object(self)
 	
 	return LDObject.new()
 
@@ -246,6 +272,8 @@ func get_game_instance() -> Node:
 	match object_type:
 		ObjectType.SPRITE: return LevelObjectSprite.from_game_object(self)
 		ObjectType.TELESCOPING: return LevelObjectTelescoping.from_game_object(self)
+		ObjectType.POLYGON: return LevelObjectTerrain.from_game_object(self)
+		ObjectType.TEXTURED_PATH: return LevelObjectPath.from_game_object(self)
 	
 	return null
 
@@ -283,6 +311,7 @@ func get_placement_tool() -> String:
 	match object_type:
 		ObjectType.TELESCOPING: return "telescoping"
 		ObjectType.TEXTURED_PATH: return "path"
+		ObjectType.POLYGON: return "polygon"
 	return ""
 
 
@@ -293,6 +322,7 @@ func get_select_tool() -> String:
 	match object_type:
 		ObjectType.TELESCOPING: return "telescoping_edit"
 		ObjectType.TEXTURED_PATH: return "path_edit"
+		ObjectType.POLYGON: return "polygon_edit"
 	return ""
 
 

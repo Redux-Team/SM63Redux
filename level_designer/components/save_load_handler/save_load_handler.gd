@@ -377,6 +377,8 @@ func _serialize_object(obj: LDObject) -> Dictionary:
 					hole_arr.append(Packer.vec2_to_array(p))
 				holes_data.append(hole_arr)
 			data["polygon_holes"] = holes_data
+		if not poly_obj.get_topline_forced().is_empty():
+			data["topline_forced"] = poly_obj.get_topline_forced().duplicate()
 	
 	var props: Dictionary = obj.get_property_values()
 	for key: StringName in props:
@@ -580,6 +582,9 @@ func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB, area: L
 			points.append(Packer.array_to_vec2(p))
 		poly_obj.apply_points(points)
 	
+	if instance is LDObjectPolygon and data.has("topline_forced") and data.get("topline_forced") is Dictionary:
+		(instance as LDObjectPolygon).set_topline_forced_all(data.get("topline_forced"))
+
 	if instance is LDObjectPolygon and data.has("polygon_holes"):
 		var poly_obj: LDObjectPolygon = instance as LDObjectPolygon
 		for hole_data: Variant in data.get("polygon_holes", []):

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PolygonToplineStyle" format=3]
+
+[ext_resource type="Script" uid="uid://ch2gd44i1b23u" path="res://game/object_data/polygon_topline_style.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://n0jyw6q5ioeo" path="res://assets/textures/terrain/snow/terrain_snow_top.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://dt5o1wfangng7" path="res://assets/textures/terrain/grass/terrain_grass_shadow.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://cpchki6mx2brf" path="res://assets/textures/terrain/snow/terrain_snow_top_left.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://dufdvyfibqn74" path="res://assets/textures/terrain/snow/terrain_snow_top_right.png" id="5"]
+
+[resource]
+script = ExtResource("1")
+style_name = "Snow"
+topline_texture = ExtResource("2")
+topline_shadow_texture = ExtResource("3")
+topline_left_end = ExtResource("4")
+topline_right_end = ExtResource("5")
+topline_width = 28.0
+topline_angle_threshold = 0.6499999999999999

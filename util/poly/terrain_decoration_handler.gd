@@ -9,7 +9,9 @@ const MAX_DECORATIONS: int = 350
 var _canvas_items: Array[RID] = []
 var _last_outer_points: PackedVector2Array = PackedVector2Array()
 var _last_holes: Array[PackedVector2Array] = []
-var _last_polygon_data: PolygonData = null
+var _last_weightmap: Dictionary[Texture2D, float] = {}
+var _last_density: float = -1.0
+var _last_enabled: bool = false
 var _last_rng_seed: int = -1
 
 
@@ -18,20 +20,30 @@ func _notification(what: int) -> void:
 		_clear()
 
 
-func rebuild(outer_points: PackedVector2Array, holes: Array[PackedVector2Array], polygon_data: PolygonData, rng_seed: int) -> void:
-	if _is_same_input(outer_points, holes, polygon_data, rng_seed):
+func rebuild(outer_points: PackedVector2Array, holes: Array[PackedVector2Array], polygon_data: PolygonData, rng_seed: int, weightmap_override: Dictionary[Texture2D, float] = {}, density_override: float = -1.0, enabled: bool = true) -> void:
+	var weightmap: Dictionary[Texture2D, float] = {}
+	if not weightmap_override.is_empty():
+		weightmap = weightmap_override
+	elif polygon_data:
+		weightmap = polygon_data.decoration_weightmap
+	var density: float = density_override if density_override > 0.0 else (polygon_data.decoration_density if polygon_data else 20.0)
+	var active: bool = enabled and not weightmap.is_empty()
+
+	if _is_same_input(outer_points, holes, weightmap, density, active, rng_seed):
 		return
-	
+
 	_last_outer_points = outer_points.duplicate()
 	_last_holes = holes.duplicate()
-	_last_polygon_data = polygon_data
+	_last_weightmap = weightmap
+	_last_density = density
+	_last_enabled = active
 	_last_rng_seed = rng_seed
-	
+
 	_clear()
-	
+
 	if Engine.is_editor_hint():
 		return
-	if not polygon_data or polygon_data.decoration_weightmap.is_empty() or outer_points.size() < 3:
+	if not active or outer_points.size() < 3:
 		return
 	
 	var eroded_outer: Array = Geometry2D.offset_polygon(outer_points, -DECORATION_EDGE_BUFFER)
@@ -52,7 +64,7 @@ func rebuild(outer_points: PackedVector2Array, holes: Array[PackedVector2Array],
 		bounds = bounds.expand(point)
 	
 	var area: float = bounds.size.x * bounds.size.y
-	var candidate_count: int = int(area / 10000.0 * polygon_data.decoration_density)
+	var candidate_count: int = int(area / 10000.0 * density)
 	if candidate_count <= 0:
 		return
 	
@@ -86,12 +98,12 @@ func rebuild(outer_points: PackedVector2Array, holes: Array[PackedVector2Array],
 				continue
 			
 			var tex_index: int = 0
-			for tex: Texture2D in polygon_data.decoration_weightmap:
+			for tex: Texture2D in weightmap:
 				if not tex:
 					tex_index += 1
 					continue
 				rng.seed = rng_seed ^ (row * 2654435761) ^ (col * 2246822519) ^ (tex_index * 374761393)
-				var chance: float = polygon_data.decoration_weightmap.get(tex)
+				var chance: float = weightmap.get(tex)
 				if rng.randf() * 100.0 > chance:
 					tex_index += 1
 					continue
@@ -135,10 +147,14 @@ func _clear() -> void:
 	_canvas_items.clear()
 
 
-func _is_same_input(outer_points: PackedVector2Array, holes: Array[PackedVector2Array], polygon_data: PolygonData, rng_seed: int) -> bool:
-	if polygon_data != _last_polygon_data:
+func _is_same_input(outer_points: PackedVector2Array, holes: Array[PackedVector2Array], weightmap: Dictionary[Texture2D, float], density: float, enabled: bool, rng_seed: int) -> bool:
+	if enabled != _last_enabled:
 		return false
 	if rng_seed != _last_rng_seed:
+		return false
+	if density != _last_density:
+		return false
+	if weightmap != _last_weightmap:
 		return false
 	if outer_points != _last_outer_points:
 		return false

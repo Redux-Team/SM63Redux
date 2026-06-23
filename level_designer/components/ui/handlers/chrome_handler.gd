@@ -29,6 +29,7 @@ const PLACEMENT_TOOLTIPS: Dictionary[String, String] = {
 @export var _poly_edit_button: Button
 @export var _poly_add_button: Button
 @export var _poly_cut_button: Button
+@export var _topline_button: Button
 
 @export_group("Edit ops")
 @export var _selection_op_buttons: Array[Button]
@@ -63,8 +64,9 @@ func setup() -> void:
 		"polygonedit": _poly_edit_button,
 		"polygonadd": _poly_add_button,
 		"polygoncut": _poly_cut_button,
+		"topline": _topline_button,
 	}
-	_poly_buttons = [_poly_edit_button, _poly_add_button, _poly_cut_button]
+	_poly_buttons = [_poly_edit_button, _poly_add_button, _poly_cut_button, _topline_button]
 	var tools: LDToolHandler = LD.get_tool_handler()
 	if tools and not tools.tool_changed.is_connected(_on_tool_changed):
 		tools.tool_changed.connect(_on_tool_changed)

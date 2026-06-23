@@ -1,32 +1,36 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://boljvdptgk7ul"]
 
-[ext_resource type="PackedScene" uid="uid://cv8n4uf5u7rr7" path="res://game/object/tall/cave_mushroom_tall.tscn" id="1_jruwa"]
-[ext_resource type="PackedScene" uid="uid://eh8f20vlk7u2" path="res://game/db/Objects/Decoration/Nature/tall_cave_mushroom_ld.tscn" id="2_65101"]
-[ext_resource type="Texture2D" uid="uid://cngd5yvftb31q" path="res://assets/textures/objects/decoration/nature/tall_cave_mushroom_ld.png" id="3_xfrug"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_f2qe6"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_0msim"]
-[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="6_q547s"]
-[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_gqwyj"]
+[ext_resource type="Texture2D" uid="uid://cngd5yvftb31q" path="res://assets/textures/objects/decoration/nature/tall_cave_mushroom_ld.png" id="1_ld"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
+[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="4_path"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="5_go"]
+[ext_resource type="Texture2D" uid="uid://djkajknxss5j1" path="res://assets/textures/objects/decoration/nature/tall_cave_mushroom_stem.png" id="6_stem"]
+[ext_resource type="Texture2D" uid="uid://c7641olkeoexr" path="res://assets/textures/objects/decoration/nature/tall_cave_mushroom_head.png" id="7_head"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eegv7"]
-atlas = ExtResource("3_xfrug")
+atlas = ExtResource("1_ld")
 region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jruwa"]
 
 [resource]
 resource_path = "res://game/db/Objects/Decoration/Nature/tall_cave_mushroom.tres"
 resource_scene_unique_id = ""
-script = ExtResource("7_gqwyj")
+script = ExtResource("5_go")
 id = "tall_cave_mushroom"
 category = 6
 subpath = "Nature/tall_cave_mushroom"
 group_path = "Nature"
 ld_index_id = "mushroom_cave"
-ld_select_tool_override = "path_edit"
-ld_placement_tool_override = "path"
-ld_editor_instance = ExtResource("2_65101")
-game_instance = ExtResource("1_jruwa")
 ld_entry_texture = SubResource("AtlasTexture_eegv7")
-ld_properties = Array[ExtResource("4_f2qe6")]([ExtResource("5_0msim"), ExtResource("6_q547s")])
+ld_properties = Array[ExtResource("2_prop")]([ExtResource("3_pos"), ExtResource("4_path")])
+object_type = 2
+telescoping_atlas = SubResource("AtlasTexture_jruwa")
+path_line_texture = ExtResource("6_stem")
+path_head_texture = ExtResource("7_head")
+path_head_collision = true
+path_head_collision_polygon = PackedVector2Array(-27, -1, -19, -7, -5, -9, 5, -9, 19, -7, 27, -1, 27, 4, -27, 4)
 ld_object_path = "Decoration/Nature/tall_cave_mushroom"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

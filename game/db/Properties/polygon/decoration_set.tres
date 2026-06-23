@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="LDPropertyDecorationSet" format=3]
+
+[ext_resource type="Script" path="res://game/db/Properties/polygon/decoration_set.gd" id="1_ds"]
+
+[resource]
+script = ExtResource("1_ds")
+key = &"decoration_set"
+label = "Decoration Set"
+type = 7
+default_value = ""
+visible_in_editor = true
+exclusive = false

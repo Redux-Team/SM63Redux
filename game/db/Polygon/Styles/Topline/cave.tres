@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PolygonToplineStyle" format=3 uid="uid://cdpik77xxogru"]
+
+[ext_resource type="Script" uid="uid://ch2gd44i1b23u" path="res://game/object_data/polygon_topline_style.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cbkg4m1of0ked" path="res://assets/textures/terrain/cave/terrain_cave_top_left.png" id="2_v56v2"]
+[ext_resource type="Texture2D" uid="uid://yvisp1kpts7c" path="res://assets/textures/terrain/cave/terrain_cave_top_right.png" id="3_kcpi0"]
+[ext_resource type="Texture2D" uid="uid://cu4b8itko2cdn" path="res://assets/textures/terrain/cave/terrain_cave_top.png" id="4_qeq8f"]
+
+[resource]
+script = ExtResource("1")
+style_name = "Cave"
+topline_texture = ExtResource("4_qeq8f")
+topline_left_end = ExtResource("2_v56v2")
+topline_right_end = ExtResource("3_kcpi0")
+topline_width = 28.0
+topline_angle_threshold = 0.6499999999999999

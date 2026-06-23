@@ -7,6 +7,7 @@ extends MarginContainer
 @export var _vector2_widget_scene: PackedScene
 @export var _float_widget_scene: PackedScene
 @export var _int_widget_scene: PackedScene
+@export var _option_widget_scene: PackedScene
 
 
 func load_selection(objects: Array[LDObject]) -> void:
@@ -21,6 +22,8 @@ func load_selection(objects: Array[LDObject]) -> void:
 		if not widget:
 			continue
 		var current_value: Variant = handler.get_property_value(objects, prop.key)
+		if widget is LDOptionWidget and not objects.is_empty():
+			(widget as LDOptionWidget).set_options(objects[0].get_property_options(prop.key))
 		widget.setup(prop, current_value)
 		if read_only:
 			_make_read_only(widget)
@@ -72,4 +75,6 @@ func _create_widget(prop: LDProperty) -> LDPropertyWidget:
 			return _int_widget_scene.instantiate() as LDPropertyWidget
 		LDProperty.Type.VECTOR2:
 			return _vector2_widget_scene.instantiate() as LDPropertyWidget
+		LDProperty.Type.OPTION:
+			return _option_widget_scene.instantiate() as LDPropertyWidget
 	return null

@@ -43,6 +43,7 @@
 [ext_resource type="Texture2D" uid="uid://t56qffjb1o1v" path="res://assets/textures/level_designer/ui_icons/poly_add.svg" id="ic_poly_add"]
 [ext_resource type="Texture2D" uid="uid://bfgi7fllhubb1" path="res://assets/textures/level_designer/ui_icons/poly_cut.svg" id="ic_poly_cut"]
 [ext_resource type="Texture2D" uid="uid://dgwk8rteoin2n" path="res://assets/textures/level_designer/ui_icons/poly_edit.svg" id="ic_poly_edit"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/topline.svg" id="ic_topline"]
 [ext_resource type="Texture2D" uid="uid://dupps81nqleq" path="res://assets/textures/level_designer/ui_icons/prev.svg" id="ic_prev"]
 [ext_resource type="Texture2D" uid="uid://b2rthm7cwu5f7" path="res://assets/textures/level_designer/ui_icons/properties.svg" id="ic_properties"]
 [ext_resource type="Texture2D" uid="uid://6tjh88q2g2eg" path="res://assets/textures/level_designer/ui_icons/redo.svg" id="ic_redo"]
@@ -347,7 +348,7 @@ _save_button = NodePath("../ViewportUI/TopBarL/Row/FileGroup/SaveButton")
 script = ExtResource("15_hbh")
 _hotbar_buttons = [NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton2"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton3"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton4"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton5"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton6"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton7"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton8")]
 
-[node name="ChromeHandler" type="Node" parent="." unique_id=1489396500 node_paths=PackedStringArray("_select_button", "_brush_button", "_move_button", "_rotate_button", "_scale_button", "_place_button", "_poly_edit_button", "_poly_add_button", "_poly_cut_button", "_selection_op_buttons", "_undo_button", "_redo_button", "_paste_button", "_properties_button", "_panel_buttons")]
+[node name="ChromeHandler" type="Node" parent="." unique_id=1489396500 node_paths=PackedStringArray("_select_button", "_brush_button", "_move_button", "_rotate_button", "_scale_button", "_place_button", "_poly_edit_button", "_poly_add_button", "_poly_cut_button", "_topline_button", "_selection_op_buttons", "_undo_button", "_redo_button", "_paste_button", "_properties_button", "_panel_buttons")]
 script = ExtResource("19_chrome")
 _select_button = NodePath("../ViewportUI/ToolRail/Tools/SelectButton")
 _brush_button = NodePath("../ViewportUI/ToolRail/Tools/BrushButton")
@@ -358,6 +359,7 @@ _place_button = NodePath("../ViewportUI/ToolRail/Tools/PlaceButton")
 _poly_edit_button = NodePath("../ViewportUI/ToolRail/Tools/PolyEditButton")
 _poly_add_button = NodePath("../ViewportUI/ToolRail/Tools/PolyAddButton")
 _poly_cut_button = NodePath("../ViewportUI/ToolRail/Tools/PolyCutButton")
+_topline_button = NodePath("../ViewportUI/ToolRail/Tools/ToplineButton")
 _selection_op_buttons = [NodePath("../ViewportUI/TopBarR/EditGroup/CutButton"), NodePath("../ViewportUI/TopBarR/EditGroup/CopyButton"), NodePath("../ViewportUI/TopBarR/EditGroup/DuplicateButton"), NodePath("../ViewportUI/TopBarR/EditGroup/DeselectButton"), NodePath("../ViewportUI/TopBarR/EditGroup/MoveToFrontButton"), NodePath("../ViewportUI/TopBarR/EditGroup/MoveToBackButton"), NodePath("../ViewportUI/TopBarR/EditGroup/DeleteButton")]
 _undo_button = NodePath("../ViewportUI/TopBarL/Row/FileGroup/UndoButton")
 _redo_button = NodePath("../ViewportUI/TopBarL/Row/FileGroup/RedoButton")
@@ -939,6 +941,17 @@ icon = ExtResource("ic_poly_cut")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
+[node name="ToplineButton" type="Button" parent="ViewportUI/ToolRail/Tools"]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Edit Toplines"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_topline")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
 [node name="Control" type="Control" parent="ViewportUI/ToolRail/Tools" unique_id=1312792724]
 layout_mode = 2
 
@@ -1111,6 +1124,7 @@ will be lost!"
 [connection signal="pressed" from="ViewportUI/ToolRail/Tools/PolyEditButton" to="ToolbarHandler" method="_on_poly_edit_pressed"]
 [connection signal="pressed" from="ViewportUI/ToolRail/Tools/PolyAddButton" to="ToolbarHandler" method="_on_poly_add_pressed"]
 [connection signal="pressed" from="ViewportUI/ToolRail/Tools/PolyCutButton" to="ToolbarHandler" method="_on_poly_cut_pressed"]
+[connection signal="pressed" from="ViewportUI/ToolRail/Tools/ToplineButton" to="ToolbarHandler" method="_on_topline_pressed"]
 [connection signal="pressed" from="ViewportUI/PanelRail/Panels/LayerProperties" to="WindowHandler" method="toggle_layer_properties"]
 [connection signal="pressed" from="ViewportUI/PanelRail/Panels/AreasButton" to="WindowHandler" method="toggle_area_editor"]
 [connection signal="pressed" from="ViewportUI/PanelRail/Panels/TagsButton" to="WindowHandler" method="toggle_tag_editor"]

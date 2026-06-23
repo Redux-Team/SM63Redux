@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://busbfhse2ydjh"]
+
+[ext_resource type="PackedScene" uid="uid://cxhx88u13fqba" path="res://game/object/fludd_nozzle/fludd_nozzle_rocket.tscn" id="1_6thkw"]
+[ext_resource type="Texture2D" uid="uid://cjxw4ol8yjv8p" path="res://assets/textures/item/fludd/fludd_nozzle_rocket.png" id="2_f6xek"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_f6xek"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_bva22"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="5_hm7y1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bva22"]
+atlas = ExtResource("2_f6xek")
+region = Rect2(-16, -11, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m8mu8"]
+
+[resource]
+resource_path = "res://game/db/Objects/Item/FLUDD/rocket_nozzle.tres"
+resource_scene_unique_id = ""
+script = ExtResource("5_hm7y1")
+id = "rocket_nozzle"
+category = 1
+category_string = "Item"
+subpath = "FLUDD/rocket_nozzle"
+group_path = "FLUDD"
+ld_index_id = "fludd_nozzle"
+game_instance = ExtResource("1_6thkw")
+ld_entry_texture = SubResource("AtlasTexture_bva22")
+ld_properties = Array[ExtResource("3_f6xek")]([ExtResource("4_bva22")])
+sprite_texture = ExtResource("2_f6xek")
+telescoping_atlas = SubResource("AtlasTexture_m8mu8")
+ld_object_path = "Item/FLUDD/rocket_nozzle"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bl2kt32lgc6gi"]
+
+[ext_resource type="Texture2D" uid="uid://tssemhgtaiw7" path="res://assets/textures/terrain/cave/terrain_cave_ld.png" id="1_n8f0p"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_7qjyo"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_4g2tl"]
+[ext_resource type="Resource" uid="uid://b12ma52j5x2hd" path="res://game/db/Properties/rng_seed.tres" id="4_mo4ql"]
+[ext_resource type="Resource" path="res://game/db/Properties/polygon/base_style.tres" id="5_3igbu"]
+[ext_resource type="Resource" path="res://game/db/Properties/polygon/topline_style.tres" id="6_krbad"]
+[ext_resource type="Resource" path="res://game/db/Properties/polygon/decorations_enabled.tres" id="7_e30xn"]
+[ext_resource type="Resource" path="res://game/db/Properties/polygon/decoration_set.tres" id="8_pi6xk"]
+[ext_resource type="Texture2D" uid="uid://ctedk5d3wbs5d" path="res://assets/textures/terrain/cave/terrain_cave_base.png" id="9_n8f0p"]
+[ext_resource type="Texture2D" uid="uid://cmwc7f8x68o3m" path="res://assets/textures/terrain/cave/terrain_cave_outline.png" id="14_s44e5"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="15_7q8qx"]
+[ext_resource type="Texture2D" uid="uid://cbkg4m1of0ked" path="res://assets/textures/terrain/cave/terrain_cave_top_left.png" id="16_s44e5"]
+[ext_resource type="Texture2D" uid="uid://yvisp1kpts7c" path="res://assets/textures/terrain/cave/terrain_cave_top_right.png" id="17_n8f0p"]
+[ext_resource type="Texture2D" uid="uid://cu4b8itko2cdn" path="res://assets/textures/terrain/cave/terrain_cave_top.png" id="19_n8f0p"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="20_8ahf0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7qjyo"]
+atlas = ExtResource("1_n8f0p")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="Resource" id="PolygonData_snow"]
+script = ExtResource("15_7q8qx")
+base_texture = ExtResource("9_n8f0p")
+terrain_type = "cave"
+topline_texture = ExtResource("19_n8f0p")
+topline_left_end = ExtResource("16_s44e5")
+topline_right_end = ExtResource("17_n8f0p")
+topline_angle_threshold = 0.6499999999999999
+topline_width = 28.0
+outline_texture = ExtResource("14_s44e5")
+outline_width = 16.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_no05i"]
+
+[resource]
+resource_path = "res://game/db/Objects/Polygon/Terrain/terrain_cave.tres"
+resource_scene_unique_id = ""
+script = ExtResource("20_8ahf0")
+id = "terrain_cave"
+category = 2
+category_string = "Polygon"
+subpath = "Terrain/terrain_cave"
+group_path = "Terrain"
+name_override = "Cave"
+ld_placement_rules = 2
+ld_entry_texture = SubResource("AtlasTexture_7qjyo")
+ld_properties = Array[ExtResource("2_7qjyo")]([ExtResource("3_4g2tl"), ExtResource("4_mo4ql"), ExtResource("5_3igbu"), ExtResource("6_krbad"), ExtResource("7_e30xn"), ExtResource("8_pi6xk")])
+object_type = 4
+telescoping_atlas = SubResource("AtlasTexture_no05i")
+polygon_data = SubResource("PolygonData_snow")
+ld_object_path = "Polygon/Terrain/terrain_cave"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"
