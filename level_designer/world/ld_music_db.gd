@@ -120,9 +120,12 @@ static func serialize_custom() -> Dictionary:
 
 
 static func deserialize_custom(data: Variant) -> void:
-	clear_custom()
 	if not data is Dictionary:
+		clear_custom()
 		return
+	if _matches_loaded(data as Dictionary):
+		return
+	clear_custom()
 	for id: String in (data as Dictionary):
 		var entry: Dictionary = (data as Dictionary).get(id)
 		var bytes: PackedByteArray = Marshalls.base64_to_raw(str(entry.get("data", "")))
@@ -130,6 +133,17 @@ static func deserialize_custom(data: Variant) -> void:
 		var stream: AudioStream = _decode(format, bytes)
 		if stream:
 			_custom.set(id, {"name": str(entry.get("name", id)), "format": format, "bytes": bytes, "stream": stream, "loop_start": float(entry.get("loop_start", 0.0))})
+
+
+## True when the already-loaded custom set matches the incoming one, so it need not be re-decoded.
+## Custom ids are content-hashed, so matching ids guarantee matching audio.
+static func _matches_loaded(incoming: Dictionary) -> bool:
+	if incoming.size() != _custom.size():
+		return false
+	for id: String in incoming:
+		if not _custom.has(id):
+			return false
+	return true
 
 
 static func _decode(format: String, bytes: PackedByteArray) -> AudioStream:

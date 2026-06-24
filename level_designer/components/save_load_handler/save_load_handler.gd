@@ -638,7 +638,4 @@ func find_game_object_for(obj: LDObject) -> GameObject:
 
 
 func find_game_object_by_id(id: String, db: GameDB) -> GameObject:
-	for game_object: GameObject in db.objects.values():
-		if game_object.id == id:
-			return game_object
-	return null
+	return db.find_game_object(id)
