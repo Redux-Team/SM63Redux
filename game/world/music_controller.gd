@@ -7,15 +7,12 @@ const SILENCE_DB: float = -80.0
 const MUFFLE_CUTOFF: float = 600.0
 
 
-## Fraction of a transition's fade time that the outgoing track waits before it starts fading out, so
-## the incoming track is already rising and the crossfade never dips. 0 = both move together;
-## 1 = the old track only starts leaving once the new one is fully in.
-@export_range(0.0, 1.0) var crossfade_overlap: float = 0.5
-## Shapes the incoming track's volume ramp over its fade (X: 0..1 time, Y: 0..1 progress). Left unset,
-## a smooth ease-in-out is used.
-@export var fade_in_curve: Curve
-## Shapes the outgoing track's volume ramp over its fade. Left unset, a smooth ease-in-out is used.
-@export var fade_out_curve: Curve
+## Maps a subtrack's "presence" (0 = silent, 1 = full) to its gain (0..1). Left unset, an equal-power
+## (sine) law is used so that crossfading synchronized variants (base <-> region/underwater) keeps a
+## constant total volume: no mid dip, and no doubling from both arrangements playing at once.
+@export var fade_curve: Curve
+## Prints region/underwater changes and which subtracks become active, to diagnose transitions.
+@export var debug: bool = false
 
 
 var _entries: Array[Dictionary] = []
@@ -23,13 +20,6 @@ var _underwater: bool = false
 var _current_region: String = ""
 var _mode: LDMusic.UnderwaterMode = LDMusic.UnderwaterMode.MUFFLE
 var _muffle: AudioEffectLowPassFilter
-
-
-func _ready() -> void:
-	if fade_in_curve == null:
-		fade_in_curve = _default_fade_curve()
-	if fade_out_curve == null:
-		fade_out_curve = _default_fade_curve()
 
 
 func play(music: LDMusic) -> void:
@@ -44,10 +34,13 @@ func play(music: LDMusic) -> void:
 		var player: AudioStreamPlayer = AudioStreamPlayer.new()
 		player.stream = _looped(stream, LDMusicDB.get_loop_start(subtrack.track_id))
 		player.bus = BUS
-		player.volume_db = subtrack.volume_db if _is_active(subtrack) else SILENCE_DB
+		var mix: float = 1.0 if _is_active(subtrack) else 0.0
+		player.volume_db = _mix_db(mix, subtrack.volume_db)
 		add_child(player)
 		player.play()
-		_entries.append({"player": player, "subtrack": subtrack, "tween": null})
+		_entries.append({"player": player, "subtrack": subtrack, "tween": null, "mix": mix})
+	if debug:
+		print("[music] play: ", _entries.size(), " subtracks, mode=", _mode)
 
 
 func stop() -> void:
@@ -71,6 +64,8 @@ func set_underwater(underwater: bool) -> void:
 	if _underwater == underwater:
 		return
 	_underwater = underwater
+	if debug:
+		print("[music] underwater -> ", underwater, " (mode=", _mode, ")")
 	if _mode == LDMusic.UnderwaterMode.MUFFLE:
 		_apply_muffle(underwater)
 	elif _mode == LDMusic.UnderwaterMode.TRACK:
@@ -81,6 +76,8 @@ func set_region(region_id: String) -> void:
 	if _current_region == region_id:
 		return
 	_current_region = region_id
+	if debug:
+		print("[music] region -> '", region_id, "'")
 	_refresh_volumes()
 
 
@@ -90,30 +87,44 @@ func _refresh_volumes() -> void:
 		var subtrack: LDMusicSubtrack = entry.get("subtrack") as LDMusicSubtrack
 		if not is_instance_valid(player):
 			continue
-		var active: bool = _is_active(subtrack)
-		var target: float = subtrack.volume_db if active else SILENCE_DB
-		if is_equal_approx(player.volume_db, target):
+		var target_mix: float = 1.0 if _is_active(subtrack) else 0.0
+		var from_mix: float = float(entry.get("mix", 0.0))
+		if is_equal_approx(from_mix, target_mix):
 			continue
-		var fade: float = maxf(0.01, subtrack.fade_time)
+		if debug:
+			print("[music]   ", subtrack.track_id, " ", from_mix, " -> ", target_mix)
 		_kill_tween(entry)
-		var curve: Curve = fade_in_curve if active else fade_out_curve
-		var delay: float = 0.0 if active else fade * crossfade_overlap
-		entry.set("tween", _fade_player(player, target, fade, curve, delay))
+		entry.set("tween", _fade_entry(entry, from_mix, target_mix, maxf(0.01, subtrack.fade_time)))
 
 
-## Tweens a player's volume from its current level to `target` over `fade`, shaped by `curve`, after
-## an optional `delay` (used to stagger the outgoing track so the crossfade stays seamless).
-func _fade_player(player: AudioStreamPlayer, target: float, fade: float, curve: Curve, delay: float) -> Tween:
-	var from_db: float = player.volume_db
+## Crossfades one subtrack between silent (mix 0) and full (mix 1) over `fade`, driving its volume
+## through the equal-power gain law. Run simultaneously on the outgoing and incoming subtracks, the
+## sine/cosine pairing keeps total power constant.
+func _fade_entry(entry: Dictionary, from_mix: float, target_mix: float, fade: float) -> Tween:
+	var player: AudioStreamPlayer = entry.get("player") as AudioStreamPlayer
+	var full_db: float = (entry.get("subtrack") as LDMusicSubtrack).volume_db
 	var tween: Tween = create_tween()
-	if delay > 0.0:
-		tween.tween_interval(delay)
 	tween.tween_method(func(progress: float) -> void:
+		var mix: float = lerpf(from_mix, target_mix, progress)
+		entry.set("mix", mix)
 		if is_instance_valid(player):
-			var shaped: float = curve.sample(progress) if curve else progress
-			player.volume_db = lerpf(from_db, target, shaped)
+			player.volume_db = _mix_db(mix, full_db)
 	, 0.0, 1.0, fade)
 	return tween
+
+
+func _mix_db(mix: float, full_db: float) -> float:
+	var gain: float = _gain(mix)
+	if gain <= 0.0001:
+		return SILENCE_DB
+	return full_db + linear_to_db(gain)
+
+
+func _gain(mix: float) -> float:
+	var clamped: float = clampf(mix, 0.0, 1.0)
+	if fade_curve:
+		return clampf(fade_curve.sample(clamped), 0.0, 1.0)
+	return sin(clamped * PI * 0.5)
 
 
 func _kill_tween(entry: Dictionary) -> void:
@@ -183,11 +194,3 @@ func _looped(stream: AudioStream, loop_start: float) -> AudioStream:
 		wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
 		wav.loop_begin = int(loop_start * float(wav.mix_rate))
 	return copy
-
-
-## A smooth ease-in-out ramp (flat tangents at both ends) used when no fade curve is assigned.
-func _default_fade_curve() -> Curve:
-	var curve: Curve = Curve.new()
-	curve.add_point(Vector2(0.0, 0.0))
-	curve.add_point(Vector2(1.0, 1.0))
-	return curve
