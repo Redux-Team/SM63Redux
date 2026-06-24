@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="LDPropertyMusicRegion" format=3]
+[gd_resource type="Resource" script_class="LDPropertyMusicRegion" format=3 uid="uid://bp5hqk7p5mdi1"]
 
-[ext_resource type="Script" path="res://game/db/Properties/music_region.gd" id="1_7wdys"]
+[ext_resource type="Script" uid="uid://cc1qsymhrrfs3" path="res://game/db/Properties/music_region.gd" id="1_7wdys"]
 
 [resource]
 script = ExtResource("1_7wdys")
@@ -8,5 +8,3 @@ key = &"music_region"
 label = "Music Region"
 type = 3
 default_value = ""
-visible_in_editor = true
-exclusive = false
