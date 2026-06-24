@@ -142,12 +142,12 @@ func _poll_scan() -> void:
 		_drain_capture(_scan_capture, fraction)
 	if not _scanner.playing:
 		_scanning = false
-		var bins: PackedFloat32Array = waveform.get_bins()
+		var bars: PackedFloat32Array = waveform.get_bars()
 		var loudest: float = 0.0
-		for value: float in bins:
+		for value: float in bars:
 			loudest = maxf(loudest, value)
 		if loudest > 0.02:
-			_wave_cache[_scan_track] = bins
+			_wave_cache[_scan_track] = bars
 
 
 func _on_show() -> void:
@@ -174,7 +174,7 @@ func _on_hide() -> void:
 	_stop_scan()
 	_set_ambient_ducked(false)
 	_now_playing = NONE_ID
-	waveform.clear_bins()
+	waveform.clear_bars()
 	loop_spin.editable = false
 	loop_spin.set_value_no_signal(0.0)
 	_update_now_playing()
@@ -493,7 +493,7 @@ func _preview(track_id: String) -> void:
 		_stop_scan()
 		_set_ambient_ducked(false)
 		_now_playing = NONE_ID
-		waveform.clear_bins()
+		waveform.clear_bars()
 		loop_spin.visible = false
 		loop_spin.set_value_no_signal(0.0)
 		_update_now_playing()
@@ -511,10 +511,10 @@ func _preview(track_id: String) -> void:
 	loop_spin.visible = is_custom
 	loop_spin.set_value_no_signal(LDMusicDB.get_loop_start(track_id) if is_custom else 0.0)
 	if _wave_cache.has(track_id):
-		waveform.load_bins(_wave_cache.get(track_id))
+		waveform.load_bars(_wave_cache.get(track_id))
 		_stop_scan()
 	else:
-		waveform.clear_bins()
+		waveform.clear_bars()
 		_begin_scan(track_id, preview_player.stream.get_length())
 	_update_now_playing()
 	_update_play_button()

@@ -28,7 +28,7 @@ static var _re_local: RegEx = RegEx.create_from_string(r"^var\s+(\w+)\s*:\s*(.+)
 static var _re_bad_annotation: RegEx = RegEx.create_from_string(r"^@(\w+)")
 static var _re_scheme: RegEx = RegEx.create_from_string(r"^@scheme\s+(\w+)")
 static var _re_meta: RegEx = RegEx.create_from_string(r"^@meta\b")
-static var _re_import: RegEx = RegEx.create_from_string(r"^@import\s+[\"\'](.+?)[\"\']")
+static var _re_import: RegEx = RegEx.create_from_string(r"^@import\s+([\"'])(.+?)\1")
 
 var _defaults: Dictionary[String, Dictionary] = {}
 
@@ -152,6 +152,10 @@ func _method_name_of(call_text: String) -> String:
 	return call_text.substr(0, call_text.find("(")).strip_edges()
 
 
+func _is_quoted_literal(s: String) -> bool:
+	return s.length() >= 2 and ((s.begins_with("\"") and s.ends_with("\"")) or (s.begins_with("'") and s.ends_with("'")))
+
+
 func _is_undefined_var(var_name: String, declared_vars: Dictionary) -> bool:
 	return not declared_vars.has(var_name) and not _global_defaults.has(var_name) and not _instance_defaults.has(var_name)
 
@@ -190,15 +194,30 @@ static var COLOR_ALIASES: Dictionary = {
 	"TRANSPARENT_BLACK": Color(0, 0, 0, 0),
 	"TRANSPARENT_WHITE": Color(1, 1, 1, 0),
 }
+# Memoizes name -> Color (success) or name -> false (not a color), keyed by raw name.
+# parse_named_color is probed for every non-hex string value (cursors, enums, etc.),
+# so caching misses too avoids repeating to_upper()/from_string() on the hot path.
+# Bounded by the distinct string values in the stylesheet. Fallback is applied per call.
+static var _named_color_cache: Dictionary = {}
 
 
 ## Resolves a named color, honouring GDSS aliases (such as TRANSPARENT_BLACK)
 ## before falling back to Godot's built-in color names.
 static func parse_named_color(name: String, fallback: Color) -> Color:
+	var cached: Variant = _named_color_cache.get(name)
+	if cached != null:
+		return cached if cached is Color else fallback
 	var alias: Variant = COLOR_ALIASES.get(name.to_upper())
 	if alias is Color:
+		_named_color_cache[name] = alias
 		return alias
-	return Color.from_string(name, fallback)
+	const SENTINEL: Color = Color(-1, -1, -1, -1)
+	var resolved: Color = Color.from_string(name, SENTINEL)
+	if resolved != SENTINEL:
+		_named_color_cache[name] = resolved
+		return resolved
+	_named_color_cache[name] = false
+	return fallback
 
 
 func _is_valid_color_value(val: String) -> bool:
@@ -244,6 +263,8 @@ func _check_method_arg_type(arg: String, param: GdssMethod.Param, method_name: S
 
 
 func _check_method_call(value_str: String, method_name: String, prop: GdssProp, known_methods: Dictionary, errors: Array[Array], line: int) -> void:
+	if method_name == "calc":
+		return
 	if not known_methods.has(method_name):
 		errors.append(["Unknown method '%s()'" % method_name, line])
 		return
@@ -273,7 +294,7 @@ func _check_method_call(value_str: String, method_name: String, prop: GdssProp, 
 		if required_count == total_count:
 			errors.append(["Method '%s()' expects %d argument(s), got %d" % [method_name, required_count, args.size()], line])
 		else:
-			errors.append(["Method '%s()' expects %d–%d argument(s), got %d" % [method_name, required_count, total_count, args.size()], line])
+			errors.append(["Method '%s()' expects %d-%d argument(s), got %d" % [method_name, required_count, total_count, args.size()], line])
 		return
 
 	for ai: int in args.size():
@@ -315,9 +336,51 @@ func _split_top_level_args(args_raw: String) -> Array[String]:
 	return result
 
 
+func _check_calc_value(value_str: String, declared_vars: Dictionary, errors: Array[Array], line: int) -> void:
+	var open_count: int = value_str.count("(")
+	var close_count: int = value_str.count(")")
+	if open_count != close_count:
+		errors.append(["Unbalanced parentheses in calc() expression", line])
+		return
+	var body_start: int = value_str.find("(")
+	var body: String = value_str.substr(body_start + 1, value_str.rfind(")") - body_start - 1)
+	if body.strip_edges().is_empty():
+		errors.append(["calc() expression is empty", line])
+		return
+	var tokens: Array[String] = _calc_lex(body)
+	if tokens.is_empty():
+		errors.append(["calc() expression is empty", line])
+		return
+	var expect_operand: bool = true
+	for t: String in tokens:
+		if t == "(":
+			expect_operand = true
+			continue
+		if t == ")":
+			expect_operand = false
+			continue
+		if t == "+" or t == "-" or t == "*" or t == "/":
+			if expect_operand and t != "+" and t != "-":
+				errors.append(["calc() has a misplaced '%s' operator" % t, line])
+			expect_operand = true
+			continue
+		if t.begins_with("$"):
+			var var_name: String = t.substr(1)
+			if _is_undefined_var(var_name, declared_vars):
+				errors.append(["Undefined variable '$%s' in calc()" % var_name, line])
+		elif not t.is_valid_float():
+			errors.append(["calc() operand '%s' must be a number or $variable" % t, line])
+		expect_operand = false
+	if expect_operand:
+		errors.append(["calc() expression is incomplete", line])
+
+
 func _check_prop_value(value_str: String, prop: GdssProp, prop_name: String, known_methods: Dictionary, declared_vars: Dictionary, errors: Array[Array], line: int) -> void:
-	if value_str.contains("("):
+	if not _is_quoted_literal(value_str) and value_str.contains("("):
 		var method_name: String = _method_name_of(value_str)
+		if method_name == "calc":
+			_check_calc_value(value_str, declared_vars, errors, line)
+			return
 		_check_method_call(value_str, method_name, prop, known_methods, errors, line)
 		return
 	
@@ -326,7 +389,7 @@ func _check_prop_value(value_str: String, prop: GdssProp, prop_name: String, kno
 		actual_type = GDSS.Type.INT
 	
 	if actual_type == GDSS.Type.COMPOSITE4:
-		var parts: PackedStringArray = value_str.split(" ", false)
+		var parts: PackedStringArray = value_str.replace("\t", " ").split(" ", false)
 		if parts.size() != 4:
 			errors.append(["Property '%s' expects 4 integer values, got %d" % [prop_name, parts.size()], line])
 			return
@@ -407,7 +470,7 @@ func check_errors(source: String) -> Array[Array]:
 					declared_vars[m.get_string(1)] = true
 					if is_global:
 						declared_globals[m.get_string(1)] = true
-					if val_str.contains("("):
+					if not _is_quoted_literal(val_str) and val_str.contains("("):
 						var method_name: String = _method_name_of(val_str)
 						_check_method_call(val_str, method_name, null, known_methods, errors, i)
 			continue
@@ -424,7 +487,7 @@ func check_errors(source: String) -> Array[Array]:
 					if declared_vars.has(m.get_string(1)):
 						errors.append(["Variable '%s' is already declared" % m.get_string(1), i])
 					declared_vars[m.get_string(1)] = true
-					if val_str.contains("("):
+					if not _is_quoted_literal(val_str) and val_str.contains("("):
 						var method_name: String = _method_name_of(val_str)
 						_check_method_call(val_str, method_name, null, known_methods, errors, i)
 			continue
@@ -503,7 +566,7 @@ func check_errors(source: String) -> Array[Array]:
 				var all_props: Array[GdssProp] = gdss_node.get_enabled_props()
 				var matched_prop: GdssProp = null
 				for p: GdssProp in all_props:
-					if p.name == prop_name or p.composite_of.has(prop_name):
+					if p.name == prop_name or p.composite_of.has(prop_name) or p.category_subproperties.has(prop_name):
 						matched_prop = p
 						break
 
@@ -516,11 +579,18 @@ func check_errors(source: String) -> Array[Array]:
 					var var_name: String = value_str.substr(1)
 					if _is_undefined_var(var_name, declared_vars):
 						errors.append(["Undefined variable '$%s'" % var_name, i])
-				elif value_str.contains("("):
+				elif not _is_quoted_literal(value_str) and value_str.contains("("):
 					var method_name: String = _method_name_of(value_str)
-					_check_method_call(value_str, method_name, null, known_methods, errors, i)
+					if method_name == "calc":
+						_check_calc_value(value_str, declared_vars, errors, i)
+					else:
+						_check_method_call(value_str, method_name, null, known_methods, errors, i)
 		else:
-			errors.append(["Stray token '%s': expected a property or block" % stripped, i])
+			var stray_ctx: String = selector_stack.back() if not selector_stack.is_empty() else ""
+			if stray_ctx.is_empty():
+				errors.append(["Stray token '%s': expected a property or block" % stripped, i])
+			else:
+				errors.append(["Stray token '%s' in '%s': expected a property or block" % [stripped, stray_ctx], i])
 
 	for line: int in brace_open_lines:
 		errors.append(["Unclosed brace '{'", line])
@@ -766,7 +836,7 @@ func _collect_imports(source: String) -> Array:
 		var stripped: String = _strip_line_comment(lines[i].strip_edges())
 		var m: RegExMatch = _re_import.search(stripped)
 		if m != null:
-			result.append({"path": m.get_string(1), "line": i})
+			result.append({"path": m.get_string(2), "line": i})
 	return result
 
 
@@ -779,7 +849,7 @@ func _resolve_import_path(path: String, base_dir: String) -> String:
 func _gather_import_sources(source: String, base_dir: String, seen: Dictionary) -> PackedStringArray:
 	var result: PackedStringArray = []
 	for entry: Dictionary in _collect_imports(source):
-		var resolved: String = _resolve_import_path(entry["path"], base_dir)
+		var resolved: String = _resolve_import_path(entry["path"], base_dir).simplify_path()
 		if resolved.is_empty() or seen.has(resolved) or not FileAccess.file_exists(resolved):
 			continue
 		seen[resolved] = true
@@ -1169,13 +1239,13 @@ func _tokenize(source: String) -> Array[String]:
 	return tokens
 
 
-func _ensure_selector(result: Dictionary, selector: String, known_states: PackedStringArray) -> void:
+func _ensure_selector(result: Dictionary, selector: String, _known_states: PackedStringArray) -> void:
+	# States are created lazily by _set_prop / _inherit as they're actually styled, so an
+	# entry no longer carries ~70 empty state dicts (smaller parsed data + far cheaper
+	# entry scans, e.g. the styled-prop set). Unstyled states resolve via "all"/default.
 	if result.has(selector):
 		return
-	var entry: Dictionary = {"all": {}, "_classes": {}}
-	for state: String in known_states:
-		entry[state] = {}
-	result[selector] = entry
+	result[selector] = {"all": {}, "_classes": {}}
 
 
 func _parse_block(tokens: Array[String], pos: int, result: Dictionary, parent_selector: String, known_states: PackedStringArray) -> int:
@@ -1210,10 +1280,27 @@ func _parse_block(tokens: Array[String], pos: int, result: Dictionary, parent_se
 			pos = block_end
 			continue
 
+		# Event block: name(...) { ... } e.g. on_show() { ... }. Distinct from states
+		# by the parens; stored under the (lowercased) event name as its own entry key.
+		if next == "(":
+			var close: int = pos + 2
+			while close < tokens.size() and tokens[close] != ")":
+				close += 1
+			if not parent_selector.is_empty() and close + 1 < tokens.size() and tokens[close + 1] == "{":
+				_ensure_selector(result, parent_selector, known_states)
+				pos = _parse_props_into(tokens, close + 2, result, parent_selector, token.to_lower(), known_states)
+			else:
+				pos = close + 1
+			continue
+
 		if next == ":" and next2 != "" and next2 != "{" and pos + 3 < tokens.size() and tokens[pos + 3] == "{":
-			var child_container: Dictionary = _get_child_container(result, parent_selector)
-			_ensure_selector(child_container, token, known_states)
-			pos = _parse_props_into(tokens, pos + 4, child_container, token, next2.to_lower(), known_states)
+			# "%Variation" targets a node's theme_type_variation; a prefix-less name is a
+			# regular gdss class (applied via gdss_classes / GDSS.add_class).
+			var is_variation: bool = token.begins_with("%") and not parent_selector.is_empty()
+			var child_name: String = token.substr(1) if is_variation else token
+			var child_container: Dictionary = _get_variation_container(result, parent_selector) if is_variation else _get_child_container(result, parent_selector)
+			_ensure_selector(child_container, child_name, known_states)
+			pos = _parse_props_into(tokens, pos + 4, child_container, child_name, next2.to_lower(), known_states)
 			continue
 
 		if token == ":" and next2 == "{":
@@ -1225,11 +1312,15 @@ func _parse_block(tokens: Array[String], pos: int, result: Dictionary, parent_se
 			continue
 
 		if next == "{":
-			var child_container: Dictionary = _get_child_container(result, parent_selector)
-			_ensure_selector(child_container, token, known_states)
+			# "%Variation" targets a node's theme_type_variation; a prefix-less name is a
+			# regular gdss class (applied via gdss_classes / GDSS.add_class).
+			var is_variation: bool = token.begins_with("%") and not parent_selector.is_empty()
+			var child_name: String = token.substr(1) if is_variation else token
+			var child_container: Dictionary = _get_variation_container(result, parent_selector) if is_variation else _get_child_container(result, parent_selector)
+			_ensure_selector(child_container, child_name, known_states)
 			if not parent_selector.is_empty():
-				_inherit(child_container, token, result[parent_selector])
-			pos = _parse_block(tokens, pos + 2, child_container, token, known_states)
+				_inherit(child_container, child_name, result[parent_selector])
+			pos = _parse_block(tokens, pos + 2, child_container, child_name, known_states)
 			continue
 
 		if next == ":":
@@ -1253,6 +1344,17 @@ func _get_child_container(result: Dictionary, parent_selector: String) -> Dictio
 	if not result[parent_selector].has("_classes"):
 		result[parent_selector]["_classes"] = {}
 	return result[parent_selector]["_classes"]
+
+
+# Container for theme-type-variation blocks ("/FlatButton { }"), kept separate
+# from "_classes" so variations are auto-applied from a node's theme_type_variation
+# rather than from explicit gdss_classes.
+func _get_variation_container(result: Dictionary, parent_selector: String) -> Dictionary:
+	if parent_selector.is_empty():
+		return result
+	if not result[parent_selector].has("_variations"):
+		result[parent_selector]["_variations"] = {}
+	return result[parent_selector]["_variations"]
 
 
 func _has_comma_before_brace(tokens: Array[String], pos: int) -> bool:
@@ -1319,7 +1421,14 @@ func _consume_value(tokens: Array[String], pos: int, known_states: PackedStringA
 		var lookahead: String = tokens[pos + 1] if pos + 1 < tokens.size() else ""
 		var lookahead2: String = tokens[pos + 2] if pos + 2 < tokens.size() else ""
 		if lookahead == "(":
-			return _parse_method_call(tokens, pos)
+			# "name(...)" is a method-call value only when it STARTS the value. After a
+			# value is already collected, a "name(" begins the next statement (e.g. an
+			# on_show()/on_hide() event block), so end this value here.
+			if parts.is_empty():
+				if t == "calc":
+					return _parse_calc(tokens, pos)
+				return _parse_method_call(tokens, pos)
+			break
 		if lookahead == "{":
 			break
 		if lookahead == ":" and (lookahead2 == "{" or known_states.has(lookahead2.to_lower())):
@@ -1362,12 +1471,100 @@ func _parse_method_call(tokens: Array[String], pos: int) -> Array:
 	return [{"__gdss_method__": method_name, "args": args}, pos]
 
 
+func _parse_calc(tokens: Array[String], pos: int) -> Array:
+	var depth: int = 0
+	var close: int = pos + 1
+	while close < tokens.size():
+		if tokens[close] == "(":
+			depth += 1
+		elif tokens[close] == ")":
+			depth -= 1
+			if depth == 0:
+				break
+		close += 1
+	var inner: Array[String] = tokens.slice(pos + 2, close)
+	var lexed: Array[String] = _calc_lex(" ".join(inner))
+	var state: Dictionary = {"toks": lexed, "i": 0}
+	var ast: Variant = _calc_expr(state)
+	return [{"__gdss_calc__": ast}, close + 1]
+
+
+func _calc_lex(raw: String) -> Array[String]:
+	var out: Array[String] = []
+	var i: int = 0
+	var n: int = raw.length()
+	while i < n:
+		var ch: String = raw[i]
+		if ch == " " or ch == "\t":
+			i += 1
+			continue
+		if ch == "+" or ch == "-" or ch == "*" or ch == "/" or ch == "(" or ch == ")":
+			out.append(ch)
+			i += 1
+			continue
+		var start: int = i
+		while i < n:
+			var c: String = raw[i]
+			if c == " " or c == "\t" or c == "+" or c == "-" or c == "*" or c == "/" or c == "(" or c == ")":
+				break
+			i += 1
+		out.append(raw.substr(start, i - start))
+	return out
+
+
+func _calc_peek(state: Dictionary) -> String:
+	return state["toks"][state["i"]] if state["i"] < (state["toks"] as Array).size() else ""
+
+
+func _calc_advance(state: Dictionary) -> String:
+	var t: String = _calc_peek(state)
+	state["i"] = state["i"] + 1
+	return t
+
+
+func _calc_expr(state: Dictionary) -> Variant:
+	var node: Variant = _calc_term(state)
+	while _calc_peek(state) == "+" or _calc_peek(state) == "-":
+		var op: String = _calc_advance(state)
+		node = {"calc_op": op, "l": node, "r": _calc_term(state)}
+	return node
+
+
+func _calc_term(state: Dictionary) -> Variant:
+	var node: Variant = _calc_factor(state)
+	while _calc_peek(state) == "*" or _calc_peek(state) == "/":
+		var op: String = _calc_advance(state)
+		node = {"calc_op": op, "l": node, "r": _calc_factor(state)}
+	return node
+
+
+func _calc_factor(state: Dictionary) -> Variant:
+	var t: String = _calc_peek(state)
+	if t == "-":
+		_calc_advance(state)
+		return {"calc_neg": _calc_factor(state)}
+	if t == "(":
+		_calc_advance(state)
+		var node: Variant = _calc_expr(state)
+		if _calc_peek(state) == ")":
+			_calc_advance(state)
+		return node
+	_calc_advance(state)
+	if t.is_valid_float() or t.is_valid_int():
+		return {"calc_num": float(t)}
+	return {"calc_ref": t}
+
+
 func _inherit(result: Dictionary, child: String, parent_data: Dictionary) -> void:
 	for state: String in parent_data:
-		if state == "_classes" or not result[child].has(state):
+		if state == "_classes" or state == "_variations":
 			continue
 		if not parent_data[state] is Dictionary:
 			continue
+		# States are no longer pre-created, so create the child's state on demand to keep
+		# inheriting the parent's styled states.
+		if not result[child].has(state):
+			result[child][state] = {}
 		for prop: String in parent_data[state]:
 			if not result[child][state].has(prop):
 				result[child][state][prop] = parent_data[state][prop]
@@ -1388,6 +1585,8 @@ func _parse_value(parts: Array[String]) -> Variant:
 			return Vector4i(int(parts[0]), int(parts[1]), int(parts[2]), int(parts[3]))
 		if all_int_resolvable:
 			return {"__gdss_composite4__": [parts[0], parts[1], parts[2], parts[3]]}
+	if parts.size() == 2 and parts[0].is_valid_float() and parts[1].is_valid_float():
+		return Vector2(float(parts[0]), float(parts[1]))
 	if parts.size() == 1:
 		var token: String = parts[0].trim_prefix("\"").trim_suffix("\"").trim_prefix("'").trim_suffix("'")
 		if token.to_lower() == "true":

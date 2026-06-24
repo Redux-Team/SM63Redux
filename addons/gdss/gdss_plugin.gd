@@ -17,7 +17,6 @@ var inspector_plugin: GdssInspectorPlugin
 var export_plugin: GdssExportPlugin
 var import_plugin: GdssImportPlugin
 var gdss_dock: GdssDock
-var was_in_distraction_free_mode: bool = false
 var _loading_scene: bool = false
 
 
@@ -42,9 +41,6 @@ func _exit_tree() -> void:
 		scene_changed.disconnect(_on_scene_changed)
 	if get_tree() != null and get_tree().node_added.is_connected(_on_editor_node_added):
 		get_tree().node_added.disconnect(_on_editor_node_added)
-	var editor_settings: EditorSettings = EditorInterface.get_editor_settings()
-	if editor_settings.settings_changed.is_connected(_on_editor_settings_changed):
-		editor_settings.settings_changed.disconnect(_on_editor_settings_changed)
 	if is_instance_valid(gdss_dock):
 		remove_dock(gdss_dock)
 		gdss_dock.queue_free()
@@ -77,7 +73,6 @@ func _setup_settings() -> void:
 		"hint": PROPERTY_HINT_ENUM,
 		"hint_string": "Dock,Main Screen"
 	})
-	editor_settings.settings_changed.connect(_on_editor_settings_changed)
 	if not ProjectSettings.has_setting("gdss/storage/save_path"):
 		ProjectSettings.set_setting("gdss/storage/save_path", "res://theme.tgdss")
 		ProjectSettings.set_initial_value("gdss/storage/save_path", "res://theme.tgdss")
@@ -195,10 +190,6 @@ func _prompt_reload() -> void:
 	dialog.popup_centered()
 
 
-func _on_editor_settings_changed() -> void:
-	pass
-
-
 func _has_main_screen() -> bool:
 	return EditorInterface.get_editor_settings().get_setting("gdss/editor/location") == 1
 
@@ -207,11 +198,6 @@ func _make_visible(visible: bool) -> void:
 	if not _has_main_screen() or not is_instance_valid(gdss_editor):
 		return
 	gdss_editor.set(&"visible", visible)
-	if visible:
-		was_in_distraction_free_mode = EditorInterface.distraction_free_mode
-		EditorInterface.distraction_free_mode = true
-	if not was_in_distraction_free_mode and not visible:
-		EditorInterface.distraction_free_mode = false
 
 
 func _get_plugin_name() -> String:

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dtvjt7k3c8dhn" path="res://game/world/level.gd" id="1_0euo3"]
 [ext_resource type="AudioStream" uid="uid://cmiulmppvmbql" path="res://assets/music/level_tutorial_1.mp3" id="2_81ib3"]
 [ext_resource type="Script" uid="uid://w60fapixf1o5" path="res://game/world/level_camera.gd" id="2_n8vjl"]
+[ext_resource type="Script" uid="uid://copo5v08m41mi" path="res://game/world/music_controller.gd" id="3_fuut0"]
 [ext_resource type="Shader" uid="uid://bdjde8udebjtr" path="res://core/shader/camera_zoom_effect.gdshader" id="3_v5b65"]
 
 [sub_resource type="Curve" id="Curve_7lr4m"]
@@ -19,15 +20,20 @@ shader_parameter/vignette_softness = 0.5
 shader_parameter/fisheye_strength = 0.0
 shader_parameter/zoom_velocity = 0.0
 
-[node name="Level" type="Node2D" unique_id=1909384183 node_paths=PackedStringArray("_level_camera", "music_player")]
+[node name="Level" type="Node2D" unique_id=1909384183 node_paths=PackedStringArray("_level_camera", "music_player", "music_controller")]
 script = ExtResource("1_0euo3")
 _level_camera = NodePath("LevelCamera")
 music_player = NodePath("MusicPlayer")
+music_controller = NodePath("MusicController")
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="." unique_id=1044394242]
 stream = ExtResource("2_81ib3")
 volume_db = -10.0
 bus = &"Music"
+
+[node name="MusicController" type="Node" parent="." unique_id=1926261932]
+script = ExtResource("3_fuut0")
+metadata/_custom_type_script = "uid://copo5v08m41mi"
 
 [node name="LevelCamera" type="CharacterBody2D" parent="." unique_id=1904263241 node_paths=PackedStringArray("_camera", "_remote_transform")]
 collision_layer = 0

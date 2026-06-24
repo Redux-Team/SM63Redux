@@ -36,12 +36,16 @@ var _progress: LevelProgress = LevelProgress.new()
 
 @export var _level_camera: LevelCamera
 @export var music_player: AudioStreamPlayer
-
-var _music_controller: MusicController
+@export var music_controller: MusicController
 
 
 func _init() -> void:
 	_inst = self
+
+
+func _exit_tree() -> void:
+	if _inst == self:
+		_inst = null
 
 
 static func instantiate() -> Level:
@@ -245,21 +249,21 @@ func _resolve_music(area_data: Dictionary, data: Dictionary, scenario_index: int
 
 
 func _start_adaptive_music(music: LDMusic) -> void:
-	if not is_instance_valid(_music_controller):
-		_music_controller = MusicController.new()
-		_music_controller.name = "MusicController"
-		add_child(_music_controller)
+	if not is_instance_valid(music_controller):
+		music_controller = MusicController.new()
+		music_controller.name = "MusicController"
+		add_child(music_controller)
 	create_tween().tween_callback(func() -> void:
-		_music_controller.play(music)
+		music_controller.play(music)
 		if is_instance_valid(_player):
-			if not _player.swimming_changed.is_connected(_music_controller.set_underwater):
-				_player.swimming_changed.connect(_music_controller.set_underwater)
-			_music_controller.set_underwater(_player.is_in_water())
+			if not _player.swimming_changed.is_connected(music_controller.set_underwater):
+				_player.swimming_changed.connect(music_controller.set_underwater)
+			music_controller.set_underwater(_player.is_in_water())
 			var region_check: MusicRegionCheckArea = _ensure_region_check()
 			if region_check:
-				if not region_check.region_changed.is_connected(_music_controller.set_region):
-					region_check.region_changed.connect(_music_controller.set_region)
-				_music_controller.set_region(region_check.current_region())
+				if not region_check.region_changed.is_connected(music_controller.set_region):
+					region_check.region_changed.connect(music_controller.set_region)
+				music_controller.set_region(region_check.current_region())
 	).set_delay(0.5)
 
 
@@ -284,8 +288,8 @@ func _ensure_region_check() -> MusicRegionCheckArea:
 
 
 func stop_music() -> void:
-	if is_instance_valid(_music_controller):
-		_music_controller.stop()
+	if is_instance_valid(music_controller):
+		music_controller.stop()
 	if is_instance_valid(music_player):
 		music_player.stop()
 

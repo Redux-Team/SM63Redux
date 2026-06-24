@@ -112,13 +112,6 @@ func _ready() -> void:
 	Level.get_camera().anchor_to_object(self)
 
 
-func _physics_process(delta: float) -> void:
-	super(delta)
-	if is_on_floor():
-		var gc: GravityComponent = get_component(GravityComponent)
-		gc.direction = get_floor_normal().rotated(PI)
-
-
 func _process(delta: float) -> void:
 	_move_dir_raw = Input.get_axis("move_left", "move_right")
 	is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
