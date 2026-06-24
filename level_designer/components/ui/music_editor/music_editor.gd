@@ -23,7 +23,6 @@ const UNDERWATER_NAMES: Dictionary = {
 @export var base_preview: Button
 @export var layer_list: VBoxContainer
 @export var add_button: Button
-@export var upload_button: Button
 @export var preview_player: AudioStreamPlayer
 @export var level_panel: Control
 @export var ld_panel: Control
@@ -58,7 +57,6 @@ func _ready() -> void:
 	base_option.item_selected.connect(_on_base_selected)
 	base_preview.pressed.connect(_on_base_preview)
 	add_button.pressed.connect(_on_add_triggered)
-	upload_button.pressed.connect(_on_upload_pressed)
 	level_tab.pressed.connect(_select_level_tab)
 	ld_tab.pressed.connect(_select_ld_tab)
 	play_button.pressed.connect(_on_play_pressed)
@@ -161,6 +159,14 @@ func _on_show() -> void:
 	if handler and not handler.track_changed.is_connected(_on_ambient_track_changed):
 		handler.track_changed.connect(_on_ambient_track_changed)
 	_refresh_ambient()
+	_equalize_panels()
+
+
+## Keeps both tab panels the same height so switching tabs doesn't resize the window.
+func _equalize_panels() -> void:
+	var target: float = maxf(level_panel.get_combined_minimum_size().y, ld_panel.get_combined_minimum_size().y)
+	level_panel.custom_minimum_size.y = target
+	ld_panel.custom_minimum_size.y = target
 
 
 func _on_hide() -> void:
@@ -450,10 +456,6 @@ func _on_add_triggered() -> void:
 	_music().subtracks.append(layer)
 	_mark_custom()
 	_refresh()
-
-
-func _on_upload_pressed() -> void:
-	_open_upload(_set_base_track)
 
 
 func _on_play_pressed() -> void:

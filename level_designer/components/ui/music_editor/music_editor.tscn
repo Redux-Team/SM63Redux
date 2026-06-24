@@ -5,29 +5,28 @@
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_tabs"]
 
-[node name="MusicEditor" type="MarginContainer" node_paths=PackedStringArray("base_option", "base_preview", "layer_list", "add_button", "upload_button", "preview_player", "level_panel", "ld_panel", "level_tab", "ld_tab", "ld_list", "play_button", "time_label", "now_playing_label", "waveform", "ambient_now_label", "ambient_play_button", "ambient_ff_button", "ambient_loop_button", "preset_option", "underwater_option", "loop_spin")]
+[node name="MusicEditor" type="MarginContainer" node_paths=PackedStringArray("base_option", "base_preview", "layer_list", "add_button", "preview_player", "level_panel", "ld_panel", "level_tab", "ld_tab", "ld_list", "play_button", "time_label", "now_playing_label", "waveform", "ambient_now_label", "ambient_play_button", "ambient_ff_button", "ambient_loop_button", "preset_option", "underwater_option", "loop_spin")]
 script = ExtResource("1_music")
-base_option = NodePath("Root/LevelPanel/LevelScroll/LevelContent/BaseRow/BaseOption")
-base_preview = NodePath("Root/LevelPanel/LevelScroll/LevelContent/BaseRow/BasePreview")
-layer_list = NodePath("Root/LevelPanel/LevelScroll/LevelContent/SubtrackList")
-add_button = NodePath("Root/LevelPanel/LevelScroll/LevelContent/SubtracksHeader/AddButton")
-upload_button = NodePath("Root/LevelPanel/LevelScroll/LevelContent/BaseRow/UploadButton")
+base_option = NodePath("Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow/BaseOption")
+base_preview = NodePath("Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow/BasePreview")
+layer_list = NodePath("Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/SubtrackList")
+add_button = NodePath("Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/SubtracksHeader/AddButton")
 preview_player = NodePath("PreviewPlayer")
 level_panel = NodePath("Root/LevelPanel")
 ld_panel = NodePath("Root/LDPanel")
 level_tab = NodePath("Root/Tabs/LevelTab")
 ld_tab = NodePath("Root/Tabs/LDTab")
-ld_list = NodePath("Root/LDPanel/LDScroll/LDContent/LDList")
-ambient_now_label = NodePath("Root/LDPanel/LDScroll/LDContent/CurrentlyPlaying/AmbientNow")
-ambient_play_button = NodePath("Root/LDPanel/LDScroll/LDContent/CurrentlyPlaying/AmbientPlay")
-ambient_ff_button = NodePath("Root/LDPanel/LDScroll/LDContent/CurrentlyPlaying/AmbientFF")
-ambient_loop_button = NodePath("Root/LDPanel/LDScroll/LDContent/CurrentlyPlaying/AmbientLoop")
+ld_list = NodePath("Root/LDPanel/LDInset/LDScroll/LDList")
 play_button = NodePath("Root/PreviewBar/PreviewBox/TransportRow/PlayButton")
 time_label = NodePath("Root/PreviewBar/PreviewBox/TransportRow/TimeLabel")
 now_playing_label = NodePath("Root/PreviewBar/PreviewBox/TransportRow/NowPlaying")
 waveform = NodePath("Root/PreviewBar/PreviewBox/Waveform")
-preset_option = NodePath("Root/LevelPanel/LevelScroll/LevelContent/ConfigRow/PresetOption")
-underwater_option = NodePath("Root/LevelPanel/LevelScroll/LevelContent/ConfigRow/UnderwaterOption")
+ambient_now_label = NodePath("Root/LDPanel/CurrentlyPlaying/AmbientNow")
+ambient_play_button = NodePath("Root/LDPanel/CurrentlyPlaying/AmbientPlay")
+ambient_ff_button = NodePath("Root/LDPanel/CurrentlyPlaying/AmbientFF")
+ambient_loop_button = NodePath("Root/LDPanel/CurrentlyPlaying/AmbientLoop")
+preset_option = NodePath("Root/LevelPanel/PresetRow/PresetOption")
+underwater_option = NodePath("Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow/UnderwaterOption")
 loop_spin = NodePath("Root/PreviewBar/PreviewBox/TransportRow/LoopSpin")
 theme_override_constants/margin_left = 6
 theme_override_constants/margin_top = 6
@@ -62,40 +61,73 @@ mouse_default_cursor_shape = 2
 text = "LD Playlist"
 metadata/gdss_classes = PackedStringArray("Chip")
 
-[node name="LevelPanel" type="PanelContainer" parent="Root"]
+[node name="LevelPanel" type="VBoxContainer" parent="Root"]
 layout_mode = 2
 size_flags_vertical = 3
-metadata/gdss_classes = PackedStringArray("Inset")
-
-[node name="LevelScroll" type="ScrollContainer" parent="Root/LevelPanel"]
-custom_minimum_size = Vector2(0, 140)
-layout_mode = 2
-horizontal_scroll_mode = 0
-
-[node name="LevelContent" type="VBoxContainer" parent="Root/LevelPanel/LevelScroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 8
-
-[node name="ConfigRow" type="HBoxContainer" parent="Root/LevelPanel/LevelScroll/LevelContent"]
-layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="PresetLabel" type="Label" parent="Root/LevelPanel/LevelScroll/LevelContent/ConfigRow"]
+[node name="PresetRow" type="HBoxContainer" parent="Root/LevelPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MusicLabel" type="Label" parent="Root/LevelPanel/PresetRow"]
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
 size_flags_vertical = 1
 vertical_alignment = 1
-text = "Preset"
+text = "Music"
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="PresetOption" type="OptionButton" parent="Root/LevelPanel/LevelScroll/LevelContent/ConfigRow"]
+[node name="PresetOption" type="OptionButton" parent="Root/LevelPanel/PresetRow"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Music preset for this area"
+
+[node name="PresetHint" type="Label" parent="Root/LevelPanel"]
+layout_mode = 2
+text = "Pick a preset, or edit below to customize."
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="CustomizeInset" type="PanelContainer" parent="Root/LevelPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="CustomizeScroll" type="ScrollContainer" parent="Root/LevelPanel/CustomizeInset"]
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="CustomizeContent" type="VBoxContainer" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="BaseRow" type="HBoxContainer" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BaseLabel" type="Label" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_vertical = 1
+vertical_alignment = 1
+text = "Base"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="BaseOption" type="OptionButton" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow"]
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Music preset"
 
-[node name="WaterLabel" type="Label" parent="Root/LevelPanel/LevelScroll/LevelContent/ConfigRow"]
+[node name="BasePreview" type="Button" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "▶"
+
+[node name="WaterLabel" type="Label" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow"]
 custom_minimum_size = Vector2(44, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -103,45 +135,16 @@ vertical_alignment = 1
 text = "Water"
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="UnderwaterOption" type="OptionButton" parent="Root/LevelPanel/LevelScroll/LevelContent/ConfigRow"]
-custom_minimum_size = Vector2(120, 28)
+[node name="UnderwaterOption" type="OptionButton" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow"]
+custom_minimum_size = Vector2(112, 28)
 layout_mode = 2
 tooltip_text = "Underwater mode"
 
-[node name="BaseRow" type="HBoxContainer" parent="Root/LevelPanel/LevelScroll/LevelContent"]
+[node name="SubtracksHeader" type="HBoxContainer" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent"]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="Root/LevelPanel/LevelScroll/LevelContent/BaseRow"]
-custom_minimum_size = Vector2(36, 0)
-layout_mode = 2
-size_flags_vertical = 1
-vertical_alignment = 1
-text = "Base"
-metadata/gdss_classes = PackedStringArray("Dim")
-
-[node name="BaseOption" type="OptionButton" parent="Root/LevelPanel/LevelScroll/LevelContent/BaseRow"]
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="BasePreview" type="Button" parent="Root/LevelPanel/LevelScroll/LevelContent/BaseRow"]
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-text = "▶"
-
-[node name="UploadButton" type="Button" parent="Root/LevelPanel/LevelScroll/LevelContent/BaseRow"]
-custom_minimum_size = Vector2(64, 28)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-text = "Upload"
-
-[node name="SubtracksHeader" type="HBoxContainer" parent="Root/LevelPanel/LevelScroll/LevelContent"]
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="TriggeredLabel" type="Label" parent="Root/LevelPanel/LevelScroll/LevelContent/SubtracksHeader"]
+[node name="TriggeredLabel" type="Label" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/SubtracksHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -149,38 +152,29 @@ vertical_alignment = 1
 text = "Subtracks"
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="AddButton" type="Button" parent="Root/LevelPanel/LevelScroll/LevelContent/SubtracksHeader"]
+[node name="AddButton" type="Button" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/SubtracksHeader"]
 custom_minimum_size = Vector2(64, 24)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "+ Add"
 
-[node name="SubtrackList" type="VBoxContainer" parent="Root/LevelPanel/LevelScroll/LevelContent"]
+[node name="SubtrackList" type="VBoxContainer" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
 
-[node name="LDPanel" type="PanelContainer" parent="Root"]
+[node name="LDPanel" type="VBoxContainer" parent="Root"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
-metadata/gdss_classes = PackedStringArray("Inset")
-
-[node name="LDScroll" type="ScrollContainer" parent="Root/LDPanel"]
-custom_minimum_size = Vector2(0, 140)
-layout_mode = 2
-horizontal_scroll_mode = 0
-
-[node name="LDContent" type="VBoxContainer" parent="Root/LDPanel/LDScroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 8
-
-[node name="CurrentlyPlaying" type="HBoxContainer" parent="Root/LDPanel/LDScroll/LDContent"]
-layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="AmbientNow" type="Label" parent="Root/LDPanel/LDScroll/LDContent/CurrentlyPlaying"]
+[node name="CurrentlyPlaying" type="HBoxContainer" parent="Root/LDPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AmbientNow" type="Label" parent="Root/LDPanel/CurrentlyPlaying"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -189,31 +183,41 @@ text = "Nothing playing"
 clip_text = true
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="AmbientPlay" type="Button" parent="Root/LDPanel/LDScroll/LDContent/CurrentlyPlaying"]
-custom_minimum_size = Vector2(28, 28)
+[node name="AmbientPlay" type="Button" parent="Root/LDPanel/CurrentlyPlaying"]
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "⏸"
 
-[node name="AmbientFF" type="Button" parent="Root/LDPanel/LDScroll/LDContent/CurrentlyPlaying"]
-custom_minimum_size = Vector2(28, 28)
+[node name="AmbientFF" type="Button" parent="Root/LDPanel/CurrentlyPlaying"]
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "⏭"
 
-[node name="AmbientLoop" type="Button" parent="Root/LDPanel/LDScroll/LDContent/CurrentlyPlaying"]
-custom_minimum_size = Vector2(28, 28)
+[node name="AmbientLoop" type="Button" parent="Root/LDPanel/CurrentlyPlaying"]
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 toggle_mode = true
 mouse_default_cursor_shape = 2
 text = "⟳"
 
-[node name="LDHint" type="Label" parent="Root/LDPanel/LDScroll/LDContent"]
+[node name="LDHint" type="Label" parent="Root/LDPanel"]
 layout_mode = 2
-text = "Playlist"
+text = "Songs that play while editing (add / remove below)."
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="LDList" type="VBoxContainer" parent="Root/LDPanel/LDScroll/LDContent"]
+[node name="LDInset" type="PanelContainer" parent="Root/LDPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="LDScroll" type="ScrollContainer" parent="Root/LDPanel/LDInset"]
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="LDList" type="VBoxContainer" parent="Root/LDPanel/LDInset/LDScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
@@ -227,7 +231,7 @@ layout_mode = 2
 theme_override_constants/separation = 4
 
 [node name="Waveform" type="Control" parent="Root/PreviewBar/PreviewBox"]
-custom_minimum_size = Vector2(0, 52)
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
@@ -235,10 +239,10 @@ script = ExtResource("2_wave")
 
 [node name="TransportRow" type="HBoxContainer" parent="Root/PreviewBar/PreviewBox"]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="PlayButton" type="Button" parent="Root/PreviewBar/PreviewBox/TransportRow"]
-custom_minimum_size = Vector2(28, 28)
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "▶"
@@ -263,7 +267,7 @@ step = 0.1
 tooltip_text = "Custom loop start (s)"
 
 [node name="TimeLabel" type="Label" parent="Root/PreviewBar/PreviewBox/TransportRow"]
-custom_minimum_size = Vector2(72, 0)
+custom_minimum_size = Vector2(76, 0)
 layout_mode = 2
 size_flags_vertical = 1
 vertical_alignment = 1
