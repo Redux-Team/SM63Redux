@@ -29,15 +29,15 @@ waveform = NodePath("Root/PreviewBar/PreviewBox/Waveform")
 preset_option = NodePath("Root/LevelPanel/LevelScroll/LevelContent/ConfigRow/PresetOption")
 underwater_option = NodePath("Root/LevelPanel/LevelScroll/LevelContent/ConfigRow/UnderwaterOption")
 loop_spin = NodePath("Root/PreviewBar/PreviewBox/TransportRow/LoopSpin")
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
 
 [node name="Root" type="VBoxContainer" parent="."]
-custom_minimum_size = Vector2(400, 0)
+custom_minimum_size = Vector2(560, 0)
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="Tabs" type="HBoxContainer" parent="Root"]
 layout_mode = 2
@@ -68,18 +68,26 @@ size_flags_vertical = 3
 metadata/gdss_classes = PackedStringArray("Inset")
 
 [node name="LevelScroll" type="ScrollContainer" parent="Root/LevelPanel"]
-custom_minimum_size = Vector2(0, 104)
+custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
 [node name="LevelContent" type="VBoxContainer" parent="Root/LevelPanel/LevelScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="ConfigRow" type="HBoxContainer" parent="Root/LevelPanel/LevelScroll/LevelContent"]
 layout_mode = 2
 theme_override_constants/separation = 6
+
+[node name="PresetLabel" type="Label" parent="Root/LevelPanel/LevelScroll/LevelContent/ConfigRow"]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+size_flags_vertical = 1
+vertical_alignment = 1
+text = "Preset"
+metadata/gdss_classes = PackedStringArray("Dim")
 
 [node name="PresetOption" type="OptionButton" parent="Root/LevelPanel/LevelScroll/LevelContent/ConfigRow"]
 custom_minimum_size = Vector2(0, 28)
@@ -87,8 +95,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Music preset"
 
+[node name="WaterLabel" type="Label" parent="Root/LevelPanel/LevelScroll/LevelContent/ConfigRow"]
+custom_minimum_size = Vector2(44, 0)
+layout_mode = 2
+size_flags_vertical = 1
+vertical_alignment = 1
+text = "Water"
+metadata/gdss_classes = PackedStringArray("Dim")
+
 [node name="UnderwaterOption" type="OptionButton" parent="Root/LevelPanel/LevelScroll/LevelContent/ConfigRow"]
-custom_minimum_size = Vector2(96, 28)
+custom_minimum_size = Vector2(120, 28)
 layout_mode = 2
 tooltip_text = "Underwater mode"
 
@@ -142,7 +158,7 @@ text = "+ Add"
 [node name="SubtrackList" type="VBoxContainer" parent="Root/LevelPanel/LevelScroll/LevelContent"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 4
+theme_override_constants/separation = 6
 
 [node name="LDPanel" type="PanelContainer" parent="Root"]
 visible = false
@@ -151,14 +167,14 @@ size_flags_vertical = 3
 metadata/gdss_classes = PackedStringArray("Inset")
 
 [node name="LDScroll" type="ScrollContainer" parent="Root/LDPanel"]
-custom_minimum_size = Vector2(0, 104)
+custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
 [node name="LDContent" type="VBoxContainer" parent="Root/LDPanel/LDScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="CurrentlyPlaying" type="HBoxContainer" parent="Root/LDPanel/LDScroll/LDContent"]
 layout_mode = 2
@@ -200,7 +216,7 @@ metadata/gdss_classes = PackedStringArray("Dim")
 [node name="LDList" type="VBoxContainer" parent="Root/LDPanel/LDScroll/LDContent"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 4
+theme_override_constants/separation = 6
 
 [node name="PreviewBar" type="PanelContainer" parent="Root"]
 layout_mode = 2
@@ -211,7 +227,7 @@ layout_mode = 2
 theme_override_constants/separation = 4
 
 [node name="Waveform" type="Control" parent="Root/PreviewBar/PreviewBox"]
-custom_minimum_size = Vector2(0, 32)
+custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2

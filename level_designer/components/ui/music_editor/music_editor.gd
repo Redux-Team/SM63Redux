@@ -614,7 +614,7 @@ func _import_custom(path: String) -> String:
 
 func _build_layer_row(layer: LDMusicSubtrack) -> HBoxContainer:
 	var row: HBoxContainer = HBoxContainer.new()
-	row.add_theme_constant_override(&"separation", 6)
+	row.add_theme_constant_override(&"separation", 8)
 	var trigger_option: OptionButton = OptionButton.new()
 	trigger_option.clip_text = true
 	for trigger: int in TRIGGER_NAMES:
