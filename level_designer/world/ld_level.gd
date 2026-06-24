@@ -25,6 +25,11 @@ func _init() -> void:
 	_inst = self
 
 
+func _exit_tree() -> void:
+	if _inst == self:
+		_inst = null
+
+
 ## Returns the currently active area.
 static func get_active_area() -> LDArea:
 	return _inst._active_area

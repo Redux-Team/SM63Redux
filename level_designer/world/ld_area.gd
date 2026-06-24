@@ -11,9 +11,6 @@ signal preview_mode_changed(enabled: bool)
 const LAYER_ALPHA_STEP: float = 0.6
 
 
-static var _inst: LDArea
-
-
 @export var layers: Array[LDLayer]
 
 
@@ -44,7 +41,6 @@ var _background_root: Node2D
 
 
 func _init() -> void:
-	_inst = self
 	_background_root = Node2D.new()
 	_background_root.name = "Background"
 	add_child(_background_root)

@@ -13,6 +13,11 @@ func _init() -> void:
 	_inst = self
 
 
+func _exit_tree() -> void:
+	if _inst == self:
+		_inst = null
+
+
 static func get_instance() -> LevelArea:
 	return _inst
 
