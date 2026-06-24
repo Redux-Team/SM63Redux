@@ -79,5 +79,6 @@ func _create_widget(prop: LDProperty) -> LDPropertyWidget:
 		LDProperty.Type.OPTION:
 			return _option_widget_scene.instantiate() as LDPropertyWidget
 		LDProperty.Type.STRING:
-			return _string_widget_scene.instantiate() as LDPropertyWidget
+			if _string_widget_scene:
+				return _string_widget_scene.instantiate() as LDPropertyWidget
 	return null
