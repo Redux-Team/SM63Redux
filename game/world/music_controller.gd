@@ -22,6 +22,12 @@ var _mode: LDMusic.UnderwaterMode = LDMusic.UnderwaterMode.MUFFLE
 var _muffle: AudioEffectLowPassFilter
 
 
+## Ensures the underwater lowpass is removed from the (permanent) Music bus whenever this controller
+## leaves the tree, even if stop() was never called (e.g. the level is freed on a playtest exit).
+func _exit_tree() -> void:
+	_apply_muffle(false)
+
+
 func play(music: LDMusic) -> void:
 	stop()
 	if music == null or music.is_empty():
