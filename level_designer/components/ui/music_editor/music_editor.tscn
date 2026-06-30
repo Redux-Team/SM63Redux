@@ -5,44 +5,183 @@
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_tabs"]
 
-[node name="MusicEditor" type="MarginContainer" unique_id=686206977 node_paths=PackedStringArray("base_option", "base_preview", "layer_list", "add_button", "preview_player", "level_panel", "ld_panel", "level_tab", "ld_tab", "ld_list", "play_button", "time_label", "now_playing_label", "waveform", "ambient_now_label", "ambient_play_button", "ambient_ff_button", "ambient_loop_button", "preset_option", "underwater_option", "loop_spin")]
-theme_override_constants/margin_left = 6
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 6
-theme_override_constants/margin_bottom = 6
+[node name="MusicEditor" type="MarginContainer" node_paths=PackedStringArray("base_option", "base_preview", "layer_list", "add_button", "preview_player", "level_panel", "ld_panel", "level_tab", "ld_tab", "ld_list", "play_button", "time_label", "now_playing_label", "waveform", "ambient_now_label", "ambient_play_button", "ambient_ff_button", "ambient_loop_button", "preset_option", "underwater_option", "loop_spin", "area_play_button", "area_underwater_button", "area_region_button")]
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
 script = ExtResource("1_music")
-base_option = NodePath("Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow/BaseOption")
-base_preview = NodePath("Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow/BasePreview")
-layer_list = NodePath("Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/SubtrackList")
-add_button = NodePath("Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/SubtracksHeader/AddButton")
+base_option = NodePath("Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow/BaseOption")
+base_preview = NodePath("Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow/BasePreview")
+layer_list = NodePath("Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/SubtrackList")
+add_button = NodePath("Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/SubtracksHeader/AddButton")
 preview_player = NodePath("PreviewPlayer")
-level_panel = NodePath("Root/LevelPanel")
-ld_panel = NodePath("Root/LDPanel")
-level_tab = NodePath("Root/Tabs/LevelTab")
-ld_tab = NodePath("Root/Tabs/LDTab")
-ld_list = NodePath("Root/LDPanel/LDInset/LDScroll/LDList")
-play_button = NodePath("Root/PreviewBar/PreviewBox/TransportRow/PlayButton")
-time_label = NodePath("Root/PreviewBar/PreviewBox/TransportRow/TimeLabel")
-now_playing_label = NodePath("Root/PreviewBar/PreviewBox/TransportRow/NowPlaying")
-waveform = NodePath("Root/PreviewBar/PreviewBox/Waveform")
-ambient_now_label = NodePath("Root/LDPanel/CurrentlyPlaying/AmbientNow")
-ambient_play_button = NodePath("Root/LDPanel/CurrentlyPlaying/AmbientPlay")
-ambient_ff_button = NodePath("Root/LDPanel/CurrentlyPlaying/AmbientFF")
-ambient_loop_button = NodePath("Root/LDPanel/CurrentlyPlaying/AmbientLoop")
-preset_option = NodePath("Root/LevelPanel/PresetRow/PresetOption")
-underwater_option = NodePath("Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow/UnderwaterOption")
-loop_spin = NodePath("Root/PreviewBar/PreviewBox/TransportRow/LoopSpin")
+level_panel = NodePath("Columns/ConfigColumn/LevelPanel")
+ld_panel = NodePath("Columns/ConfigColumn/LDPanel")
+level_tab = NodePath("Columns/ConfigColumn/Tabs/LevelTab")
+ld_tab = NodePath("Columns/ConfigColumn/Tabs/LDTab")
+ld_list = NodePath("Columns/ConfigColumn/LDPanel/LDInset/LDScroll/LDList")
+play_button = NodePath("Columns/PreviewColumn/PreviewBar/PreviewBox/TransportRow/PlayButton")
+time_label = NodePath("Columns/PreviewColumn/PreviewBar/PreviewBox/TransportRow/TimeLabel")
+now_playing_label = NodePath("Columns/PreviewColumn/PreviewBar/PreviewBox/TransportRow/NowPlaying")
+waveform = NodePath("Columns/PreviewColumn/PreviewBar/PreviewBox/Waveform")
+ambient_now_label = NodePath("Columns/PreviewColumn/AmbientBar/CurrentlyPlaying/AmbientNow")
+ambient_play_button = NodePath("Columns/PreviewColumn/AmbientBar/CurrentlyPlaying/AmbientPlay")
+ambient_ff_button = NodePath("Columns/PreviewColumn/AmbientBar/CurrentlyPlaying/AmbientFF")
+ambient_loop_button = NodePath("Columns/PreviewColumn/AmbientBar/CurrentlyPlaying/AmbientLoop")
+preset_option = NodePath("Columns/ConfigColumn/LevelPanel/PresetRow/PresetOption")
+underwater_option = NodePath("Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow/UnderwaterOption")
+loop_spin = NodePath("Columns/PreviewColumn/PreviewBar/PreviewBox/TransportRow/LoopSpin")
+area_play_button = NodePath("Columns/PreviewColumn/AreaBar/AreaRow/AreaPlay")
+area_underwater_button = NodePath("Columns/PreviewColumn/AreaBar/AreaRow/AreaUnderwater")
+area_region_button = NodePath("Columns/PreviewColumn/AreaBar/AreaRow/AreaRegion")
+metadata/gdss_mode = 1
 
-[node name="Root" type="VBoxContainer" parent="." unique_id=1897824132]
+[node name="Columns" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="PreviewColumn" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(228, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="PreviewBar" type="PanelContainer" parent="Columns/PreviewColumn"]
+layout_mode = 2
+metadata/gdss_classes = PackedStringArray("Card")
+
+[node name="PreviewBox" type="VBoxContainer" parent="Columns/PreviewColumn/PreviewBar"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Waveform" type="Control" parent="Columns/PreviewColumn/PreviewBar/PreviewBox"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+script = ExtResource("2_wave")
+
+[node name="TransportRow" type="HBoxContainer" parent="Columns/PreviewColumn/PreviewBar/PreviewBox"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Tabs" type="HBoxContainer" parent="Root" unique_id=938452806]
+[node name="PlayButton" type="Button" parent="Columns/PreviewColumn/PreviewBar/PreviewBox/TransportRow"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "▶"
+
+[node name="NowPlaying" type="Label" parent="Columns/PreviewColumn/PreviewBar/PreviewBox/TransportRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Nothing playing"
+vertical_alignment = 1
+clip_text = true
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="LoopSpin" type="SpinBox" parent="Columns/PreviewColumn/PreviewBar/PreviewBox/TransportRow"]
+visible = false
+custom_minimum_size = Vector2(66, 0)
+layout_mode = 2
+tooltip_text = "Custom loop start (s)"
+max_value = 600.0
+step = 0.1
+
+[node name="TimeLabel" type="Label" parent="Columns/PreviewColumn/PreviewBar/PreviewBox/TransportRow"]
+custom_minimum_size = Vector2(76, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "0:00 / 0:00"
+horizontal_alignment = 2
+vertical_alignment = 1
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="AreaBar" type="PanelContainer" parent="Columns/PreviewColumn"]
+layout_mode = 2
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="AreaRow" type="HBoxContainer" parent="Columns/PreviewColumn/AreaBar"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AreaPlay" type="Button" parent="Columns/PreviewColumn/AreaBar/AreaRow"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+tooltip_text = "Preview the whole area's adaptive music"
+text = "▶"
+
+[node name="AreaUnderwater" type="Button" parent="Columns/PreviewColumn/AreaBar/AreaRow"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+toggle_mode = true
+tooltip_text = "Toggle underwater to hear the transition"
+text = "Underwater"
+clip_text = true
+metadata/gdss_classes = PackedStringArray("Chip")
+
+[node name="AreaRegion" type="Button" parent="Columns/PreviewColumn/AreaBar/AreaRow"]
+custom_minimum_size = Vector2(64, 30)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+tooltip_text = "Cycle the previewed music region"
+text = "Region"
+clip_text = true
+metadata/gdss_classes = PackedStringArray("Chip")
+
+[node name="AmbientBar" type="PanelContainer" parent="Columns/PreviewColumn"]
+layout_mode = 2
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="CurrentlyPlaying" type="HBoxContainer" parent="Columns/PreviewColumn/AmbientBar"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AmbientNow" type="Label" parent="Columns/PreviewColumn/AmbientBar/CurrentlyPlaying"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Nothing playing"
+vertical_alignment = 1
+clip_text = true
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="AmbientPlay" type="Button" parent="Columns/PreviewColumn/AmbientBar/CurrentlyPlaying"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "⏸"
+
+[node name="AmbientFF" type="Button" parent="Columns/PreviewColumn/AmbientBar/CurrentlyPlaying"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "⏭"
+
+[node name="AmbientLoop" type="Button" parent="Columns/PreviewColumn/AmbientBar/CurrentlyPlaying"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+toggle_mode = true
+text = "⟳"
+
+[node name="ConfigColumn" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Tabs" type="HBoxContainer" parent="Columns/ConfigColumn"]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="LevelTab" type="Button" parent="Root/Tabs" unique_id=859218223]
+[node name="LevelTab" type="Button" parent="Columns/ConfigColumn/Tabs"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
@@ -52,7 +191,7 @@ button_group = SubResource("ButtonGroup_tabs")
 text = "Level Music"
 metadata/gdss_classes = PackedStringArray("Chip")
 
-[node name="LDTab" type="Button" parent="Root/Tabs" unique_id=1899151492]
+[node name="LDTab" type="Button" parent="Columns/ConfigColumn/Tabs"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
@@ -61,16 +200,16 @@ button_group = SubResource("ButtonGroup_tabs")
 text = "LD Playlist"
 metadata/gdss_classes = PackedStringArray("Chip")
 
-[node name="LevelPanel" type="VBoxContainer" parent="Root" unique_id=835647413]
+[node name="LevelPanel" type="VBoxContainer" parent="Columns/ConfigColumn"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 6
 
-[node name="PresetRow" type="HBoxContainer" parent="Root/LevelPanel" unique_id=705933785]
+[node name="PresetRow" type="HBoxContainer" parent="Columns/ConfigColumn/LevelPanel"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="MusicLabel" type="Label" parent="Root/LevelPanel/PresetRow" unique_id=2098393881]
+[node name="MusicLabel" type="Label" parent="Columns/ConfigColumn/LevelPanel/PresetRow"]
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -78,37 +217,32 @@ text = "Music"
 vertical_alignment = 1
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="PresetOption" type="OptionButton" parent="Root/LevelPanel/PresetRow" unique_id=1556143049]
+[node name="PresetOption" type="OptionButton" parent="Columns/ConfigColumn/LevelPanel/PresetRow"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Music preset for this area"
 
-[node name="PresetHint" type="Label" parent="Root/LevelPanel" unique_id=2146053813]
-layout_mode = 2
-text = "Pick a preset, or edit below to customize."
-metadata/gdss_classes = PackedStringArray("Dim")
-
-[node name="CustomizeInset" type="PanelContainer" parent="Root/LevelPanel" unique_id=571293345]
+[node name="CustomizeInset" type="PanelContainer" parent="Columns/ConfigColumn/LevelPanel"]
 layout_mode = 2
 size_flags_vertical = 3
 metadata/gdss_classes = PackedStringArray("Inset")
 
-[node name="CustomizeScroll" type="ScrollContainer" parent="Root/LevelPanel/CustomizeInset" unique_id=69814232]
-custom_minimum_size = Vector2(0, 92)
+[node name="CustomizeScroll" type="ScrollContainer" parent="Columns/ConfigColumn/LevelPanel/CustomizeInset"]
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="CustomizeContent" type="VBoxContainer" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll" unique_id=82319202]
+[node name="CustomizeContent" type="VBoxContainer" parent="Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="BaseRow" type="HBoxContainer" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent" unique_id=110524491]
+[node name="BaseRow" type="HBoxContainer" parent="Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="BaseLabel" type="Label" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow" unique_id=1688001623]
+[node name="BaseLabel" type="Label" parent="Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow"]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -116,18 +250,18 @@ text = "Base"
 vertical_alignment = 1
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="BaseOption" type="OptionButton" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow" unique_id=1079529124]
+[node name="BaseOption" type="OptionButton" parent="Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow"]
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BasePreview" type="Button" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow" unique_id=1802860601]
+[node name="BasePreview" type="Button" parent="Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow"]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "▶"
 
-[node name="WaterLabel" type="Label" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow" unique_id=437259998]
+[node name="WaterLabel" type="Label" parent="Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow"]
 custom_minimum_size = Vector2(44, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -135,16 +269,16 @@ text = "Water"
 vertical_alignment = 1
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="UnderwaterOption" type="OptionButton" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow" unique_id=308491961]
+[node name="UnderwaterOption" type="OptionButton" parent="Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/BaseRow"]
 custom_minimum_size = Vector2(112, 28)
 layout_mode = 2
 tooltip_text = "Underwater mode"
 
-[node name="SubtracksHeader" type="HBoxContainer" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent" unique_id=1977316217]
+[node name="SubtracksHeader" type="HBoxContainer" parent="Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="TriggeredLabel" type="Label" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/SubtracksHeader" unique_id=1280996323]
+[node name="TriggeredLabel" type="Label" parent="Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/SubtracksHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -152,126 +286,37 @@ text = "Subtracks"
 vertical_alignment = 1
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="AddButton" type="Button" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/SubtracksHeader" unique_id=1862513911]
+[node name="AddButton" type="Button" parent="Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent/SubtracksHeader"]
 custom_minimum_size = Vector2(64, 24)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "+ Add"
 
-[node name="SubtrackList" type="VBoxContainer" parent="Root/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent" unique_id=1782556042]
+[node name="SubtrackList" type="VBoxContainer" parent="Columns/ConfigColumn/LevelPanel/CustomizeInset/CustomizeScroll/CustomizeContent"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
 
-[node name="LDPanel" type="VBoxContainer" parent="Root" unique_id=596630432]
+[node name="LDPanel" type="VBoxContainer" parent="Columns/ConfigColumn"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 6
 
-[node name="CurrentlyPlaying" type="HBoxContainer" parent="Root/LDPanel" unique_id=1190701958]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="AmbientNow" type="Label" parent="Root/LDPanel/CurrentlyPlaying" unique_id=21994656]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-text = "Nothing playing"
-vertical_alignment = 1
-clip_text = true
-metadata/gdss_classes = PackedStringArray("Dim")
-
-[node name="AmbientPlay" type="Button" parent="Root/LDPanel/CurrentlyPlaying" unique_id=2039549501]
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-text = "⏸"
-
-[node name="AmbientFF" type="Button" parent="Root/LDPanel/CurrentlyPlaying" unique_id=1346374223]
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-text = "⏭"
-
-[node name="AmbientLoop" type="Button" parent="Root/LDPanel/CurrentlyPlaying" unique_id=527603030]
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-toggle_mode = true
-text = "⟳"
-
-[node name="LDHint" type="Label" parent="Root/LDPanel" unique_id=982167761]
-layout_mode = 2
-text = "Songs that play while editing (add / remove below)."
-metadata/gdss_classes = PackedStringArray("Dim")
-
-[node name="LDInset" type="PanelContainer" parent="Root/LDPanel" unique_id=1247193872]
+[node name="LDInset" type="PanelContainer" parent="Columns/ConfigColumn/LDPanel"]
 layout_mode = 2
 size_flags_vertical = 3
 metadata/gdss_classes = PackedStringArray("Inset")
 
-[node name="LDScroll" type="ScrollContainer" parent="Root/LDPanel/LDInset" unique_id=270740872]
-custom_minimum_size = Vector2(0, 92)
+[node name="LDScroll" type="ScrollContainer" parent="Columns/ConfigColumn/LDPanel/LDInset"]
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="LDList" type="VBoxContainer" parent="Root/LDPanel/LDInset/LDScroll" unique_id=760070873]
+[node name="LDList" type="VBoxContainer" parent="Columns/ConfigColumn/LDPanel/LDInset/LDScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
 
-[node name="PreviewBar" type="PanelContainer" parent="Root" unique_id=594262668]
-layout_mode = 2
-metadata/gdss_classes = PackedStringArray("Card")
-
-[node name="PreviewBox" type="VBoxContainer" parent="Root/PreviewBar" unique_id=794309217]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="Waveform" type="Control" parent="Root/PreviewBar/PreviewBox" unique_id=1989613035]
-custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_default_cursor_shape = 2
-script = ExtResource("2_wave")
-
-[node name="TransportRow" type="HBoxContainer" parent="Root/PreviewBar/PreviewBox" unique_id=1460820922]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="PlayButton" type="Button" parent="Root/PreviewBar/PreviewBox/TransportRow" unique_id=1721177415]
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-text = "▶"
-
-[node name="NowPlaying" type="Label" parent="Root/PreviewBar/PreviewBox/TransportRow" unique_id=965177101]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-text = "Nothing playing"
-vertical_alignment = 1
-clip_text = true
-metadata/gdss_classes = PackedStringArray("Dim")
-
-[node name="LoopSpin" type="SpinBox" parent="Root/PreviewBar/PreviewBox/TransportRow" unique_id=1871343351]
-visible = false
-custom_minimum_size = Vector2(66, 0)
-layout_mode = 2
-tooltip_text = "Custom loop start (s)"
-max_value = 600.0
-step = 0.1
-
-[node name="TimeLabel" type="Label" parent="Root/PreviewBar/PreviewBox/TransportRow" unique_id=1965010770]
-custom_minimum_size = Vector2(76, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "0:00 / 0:00"
-horizontal_alignment = 2
-vertical_alignment = 1
-metadata/gdss_classes = PackedStringArray("Dim")
-
-[node name="PreviewPlayer" type="AudioStreamPlayer" parent="." unique_id=894162870]
+[node name="PreviewPlayer" type="AudioStreamPlayer" parent="."]
 bus = &"Music"

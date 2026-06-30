@@ -2,11 +2,11 @@ class_name MusicController
 extends Node
 
 
-const BUS: StringName = &"Music"
 const SILENCE_DB: float = -80.0
 const MUFFLE_CUTOFF: float = 600.0
 
 
+@export var bus: StringName = &"Music"
 ## Maps a subtrack's "presence" (0 = silent, 1 = full) to its gain (0..1). Left unset, an equal-power
 ## (sine) law is used so that crossfading synchronized variants (base <-> region/underwater) keeps a
 ## constant total volume: no mid dip, and no doubling from both arrangements playing at once.
@@ -19,13 +19,12 @@ var _entries: Array[Dictionary] = []
 var _underwater: bool = false
 var _current_region: String = ""
 var _mode: LDMusic.UnderwaterMode = LDMusic.UnderwaterMode.MUFFLE
-var _muffle: AudioEffectLowPassFilter
 
 
-## Ensures the underwater lowpass is removed from the (permanent) Music bus whenever this controller
-## leaves the tree, even if stop() was never called (e.g. the level is freed on a playtest exit).
+## Ensures the underwater muffle bus is torn down whenever this controller leaves the tree, even if
+## stop() was never called (e.g. the level is freed on a playtest exit).
 func _exit_tree() -> void:
-	_apply_muffle(false)
+	_remove_muffle_bus()
 
 
 func play(music: LDMusic) -> void:
@@ -33,13 +32,14 @@ func play(music: LDMusic) -> void:
 	if music == null or music.is_empty():
 		return
 	_mode = music.underwater_mode
+	_ensure_muffle_bus()
 	for subtrack: LDMusicSubtrack in music.subtracks:
 		var stream: AudioStream = LDMusicDB.get_stream(subtrack.track_id)
 		if stream == null:
 			continue
 		var player: AudioStreamPlayer = AudioStreamPlayer.new()
 		player.stream = _looped(stream, LDMusicDB.get_loop_start(subtrack.track_id))
-		player.bus = BUS
+		player.bus = _muffle_bus_name() if _muffle_eligible(subtrack) else bus
 		var mix: float = 1.0 if _is_active(subtrack) else 0.0
 		player.volume_db = _mix_db(mix, subtrack.volume_db)
 		add_child(player)
@@ -50,7 +50,6 @@ func play(music: LDMusic) -> void:
 
 
 func stop() -> void:
-	_apply_muffle(false)
 	for entry: Dictionary in _entries:
 		_kill_tween(entry)
 		var player: AudioStreamPlayer = entry.get("player") as AudioStreamPlayer
@@ -58,6 +57,7 @@ func stop() -> void:
 			player.stop()
 			player.queue_free()
 	_entries.clear()
+	_remove_muffle_bus()
 	_underwater = false
 	_current_region = ""
 
@@ -72,10 +72,8 @@ func set_underwater(underwater: bool) -> void:
 	_underwater = underwater
 	if debug:
 		print("[music] underwater -> ", underwater, " (mode=", _mode, ")")
-	if _mode == LDMusic.UnderwaterMode.MUFFLE:
-		_apply_muffle(underwater)
-	elif _mode == LDMusic.UnderwaterMode.TRACK:
-		_refresh_volumes()
+	_set_muffle_enabled(underwater)
+	_refresh_volumes()
 
 
 func set_region(region_id: String) -> void:
@@ -164,27 +162,42 @@ func _override_active() -> bool:
 	return false
 
 
-func _apply_muffle(on: bool) -> void:
-	var idx: int = AudioServer.get_bus_index(BUS)
+func _muffle_bus_name() -> StringName:
+	return StringName("%sMuffled" % bus)
+
+
+func _muffle_eligible(subtrack: LDMusicSubtrack) -> bool:
+	if subtrack.trigger == LDMusicSubtrack.Trigger.ALWAYS:
+		return _mode == LDMusic.UnderwaterMode.MUFFLE
+	return subtrack.muffled
+
+
+func _ensure_muffle_bus() -> int:
+	var muffle_name: StringName = _muffle_bus_name()
+	var idx: int = AudioServer.get_bus_index(muffle_name)
 	if idx == -1:
-		return
-	if on:
-		if _muffle == null:
-			_muffle = AudioEffectLowPassFilter.new()
-			_muffle.cutoff_hz = MUFFLE_CUTOFF
-			AudioServer.add_bus_effect(idx, _muffle)
-	elif _muffle:
-		var effect_idx: int = _find_effect(idx, _muffle)
-		if effect_idx != -1:
-			AudioServer.remove_bus_effect(idx, effect_idx)
-		_muffle = null
+		idx = AudioServer.bus_count
+		AudioServer.add_bus(idx)
+		AudioServer.set_bus_name(idx, muffle_name)
+		AudioServer.set_bus_send(idx, bus)
+		var low_pass: AudioEffectLowPassFilter = AudioEffectLowPassFilter.new()
+		low_pass.cutoff_hz = MUFFLE_CUTOFF
+		AudioServer.add_bus_effect(idx, low_pass)
+		idx = AudioServer.get_bus_index(muffle_name)
+	AudioServer.set_bus_effect_enabled(idx, 0, _underwater)
+	return idx
 
 
-func _find_effect(bus_idx: int, effect: AudioEffect) -> int:
-	for i: int in AudioServer.get_bus_effect_count(bus_idx):
-		if AudioServer.get_bus_effect(bus_idx, i) == effect:
-			return i
-	return -1
+func _set_muffle_enabled(on: bool) -> void:
+	var idx: int = AudioServer.get_bus_index(_muffle_bus_name())
+	if idx != -1:
+		AudioServer.set_bus_effect_enabled(idx, 0, on)
+
+
+func _remove_muffle_bus() -> void:
+	var idx: int = AudioServer.get_bus_index(_muffle_bus_name())
+	if idx != -1:
+		AudioServer.remove_bus(idx)
 
 
 func _looped(stream: AudioStream, loop_start: float) -> AudioStream:

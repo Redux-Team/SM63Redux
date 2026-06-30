@@ -540,6 +540,7 @@ HSeparator {
 	bg_color: alpha(WHITE, 0.1)
 }
 
+
 # @chunk Inputs
 LineEdit {
 	bg_color: blur(11, $glass, 0.85)

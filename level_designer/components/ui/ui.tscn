@@ -18,10 +18,9 @@
 [ext_resource type="Script" uid="uid://d38wd86ydwydo" path="res://level_designer/components/ui/window/window_def.gd" id="16_wdef"]
 [ext_resource type="PackedScene" uid="uid://c8bgedit0lds1" path="res://level_designer/components/ui/backgrounds_editor/backgrounds_editor.tscn" id="17_bged"]
 [ext_resource type="PackedScene" uid="uid://bar3aedit0r7x" path="res://level_designer/components/ui/areas_editor/areas_editor.tscn" id="18_aread"]
-[ext_resource type="PackedScene" uid="uid://cmusiceditor01" path="res://level_designer/components/ui/music_editor/music_editor.tscn" id="21_mused"]
-[ext_resource type="Texture2D" uid="uid://dcgs3ybhnoflf" path="res://assets/textures/level_designer/ui_icons/music.svg" id="ic_music"]
 [ext_resource type="Script" uid="uid://cer032iulvsqx" path="res://level_designer/components/ui/handlers/chrome_handler.gd" id="19_chrome"]
 [ext_resource type="Theme" uid="uid://b6ld3d1tor8em" path="res://level_designer/ld_editor_theme.tres" id="20_theme"]
+[ext_resource type="PackedScene" uid="uid://dkm3i8yhjnauq" path="res://level_designer/components/ui/music_editor/music_editor.tscn" id="21_mused"]
 [ext_resource type="Texture2D" uid="uid://bg3fpaudox0nq" path="res://assets/textures/level_designer/ui_icons/areas.svg" id="ic_areas"]
 [ext_resource type="Texture2D" uid="uid://cosmmki8kuy3b" path="res://assets/textures/level_designer/ui_icons/back.svg" id="ic_back"]
 [ext_resource type="Texture2D" uid="uid://bt8u6qrpfh11r" path="res://assets/textures/level_designer/ui_icons/background.svg" id="ic_background"]
@@ -37,6 +36,7 @@
 [ext_resource type="Texture2D" uid="uid://c687phmm1ui5d" path="res://assets/textures/level_designer/ui_icons/load.svg" id="ic_load"]
 [ext_resource type="Texture2D" uid="uid://c3wjnompc3ko1" path="res://assets/textures/level_designer/ui_icons/modulate.svg" id="ic_modulate"]
 [ext_resource type="Texture2D" uid="uid://c0t02y00tbi4v" path="res://assets/textures/level_designer/ui_icons/move.svg" id="ic_move"]
+[ext_resource type="Texture2D" uid="uid://dcgs3ybhnoflf" path="res://assets/textures/level_designer/ui_icons/music.svg" id="ic_music"]
 [ext_resource type="Texture2D" uid="uid://dc3oaou1gm27a" path="res://assets/textures/level_designer/ui_icons/next.svg" id="ic_next"]
 [ext_resource type="Texture2D" uid="uid://c6nnr2y5wa4kb" path="res://assets/textures/level_designer/ui_icons/obj_browser.svg" id="ic_obj_browser"]
 [ext_resource type="Texture2D" uid="uid://bcwxbcnfeorko" path="res://assets/textures/level_designer/ui_icons/parallax.svg" id="ic_parallax"]
@@ -45,7 +45,6 @@
 [ext_resource type="Texture2D" uid="uid://t56qffjb1o1v" path="res://assets/textures/level_designer/ui_icons/poly_add.svg" id="ic_poly_add"]
 [ext_resource type="Texture2D" uid="uid://bfgi7fllhubb1" path="res://assets/textures/level_designer/ui_icons/poly_cut.svg" id="ic_poly_cut"]
 [ext_resource type="Texture2D" uid="uid://dgwk8rteoin2n" path="res://assets/textures/level_designer/ui_icons/poly_edit.svg" id="ic_poly_edit"]
-[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/topline.svg" id="ic_topline"]
 [ext_resource type="Texture2D" uid="uid://dupps81nqleq" path="res://assets/textures/level_designer/ui_icons/prev.svg" id="ic_prev"]
 [ext_resource type="Texture2D" uid="uid://b2rthm7cwu5f7" path="res://assets/textures/level_designer/ui_icons/properties.svg" id="ic_properties"]
 [ext_resource type="Texture2D" uid="uid://6tjh88q2g2eg" path="res://assets/textures/level_designer/ui_icons/redo.svg" id="ic_redo"]
@@ -61,6 +60,7 @@
 [ext_resource type="Texture2D" uid="uid://biiwxx0evmvuj" path="res://assets/textures/level_designer/ui_icons/tags.svg" id="ic_tags"]
 [ext_resource type="Texture2D" uid="uid://bjde8tocexeq5" path="res://assets/textures/level_designer/ui_icons/test.svg" id="ic_test"]
 [ext_resource type="Texture2D" uid="uid://bv2rdcprprwg4" path="res://assets/textures/level_designer/ui_icons/test_client.svg" id="ic_test_client"]
+[ext_resource type="Texture2D" uid="uid://cnmqrty555op" path="res://assets/textures/level_designer/ui_icons/topline.svg" id="ic_topline"]
 [ext_resource type="Texture2D" uid="uid://noedtsilxu8q" path="res://assets/textures/level_designer/ui_icons/undo.svg" id="ic_undo"]
 
 [sub_resource type="Resource" id="WindowDef_browser"]
@@ -392,11 +392,9 @@ metadata/gdss_classes = PackedStringArray("Bar")
 
 [node name="Row" type="HBoxContainer" parent="ViewportUI/TopBarL" unique_id=1057369055]
 layout_mode = 2
-theme_override_constants/separation = 4
 
 [node name="FileGroup" type="HBoxContainer" parent="ViewportUI/TopBarL/Row" unique_id=1277824668]
 layout_mode = 2
-theme_override_constants/separation = 3
 
 [node name="SaveButton" type="Button" parent="ViewportUI/TopBarL/Row/FileGroup" unique_id=492240994]
 custom_minimum_size = Vector2(28, 28)
@@ -473,7 +471,6 @@ metadata/gdss_classes = PackedStringArray("IconButton")
 [node name="TestGroup" type="HBoxContainer" parent="ViewportUI/TopBarL/Row" unique_id=1547971091]
 visible = false
 layout_mode = 2
-theme_override_constants/separation = 3
 
 [node name="TestClientButton" type="Button" parent="ViewportUI/TopBarL/Row/TestGroup" unique_id=1156923080]
 visible = false
@@ -503,7 +500,6 @@ metadata/gdss_classes = PackedStringArray("Bar")
 
 [node name="EditGroup" type="HBoxContainer" parent="ViewportUI/TopBarR" unique_id=530623221]
 layout_mode = 2
-theme_override_constants/separation = 3
 alignment = 2
 
 [node name="CutButton" type="Button" parent="ViewportUI/TopBarR/EditGroup" unique_id=1818156251]
@@ -675,12 +671,10 @@ metadata/gdss_classes = PackedStringArray("Bar", "BottomBar")
 [node name="Row" type="HBoxContainer" parent="ViewportUI/BottomBar" unique_id=130066930]
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_constants/separation = 6
 
 [node name="Hotbar" type="HBoxContainer" parent="ViewportUI/BottomBar/Row" unique_id=608451390]
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_constants/separation = 4
 
 [node name="HotbarButton" type="Button" parent="ViewportUI/BottomBar/Row/Hotbar" unique_id=1096804141]
 custom_minimum_size = Vector2(30, 30)
@@ -773,11 +767,9 @@ metadata/gdss_classes = PackedStringArray("Hotbar")
 [node name="NavGroup" type="HBoxContainer" parent="ViewportUI/BottomBar/Row" unique_id=1024703432]
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_constants/separation = 4
 
 [node name="LayerNav" type="HBoxContainer" parent="ViewportUI/BottomBar/Row/NavGroup" unique_id=1997310836]
 layout_mode = 2
-theme_override_constants/separation = 2
 
 [node name="PrevLayer" type="Button" parent="ViewportUI/BottomBar/Row/NavGroup/LayerNav" unique_id=396428949]
 custom_minimum_size = Vector2(28, 28)
@@ -824,7 +816,6 @@ metadata/gdss_classes = PackedStringArray("Bar")
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
-theme_override_constants/separation = 3
 vertical = true
 
 [node name="ObjectBrowserButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=597165367]
@@ -949,7 +940,7 @@ icon = ExtResource("ic_poly_cut")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
-[node name="ToplineButton" type="Button" parent="ViewportUI/ToolRail/Tools"]
+[node name="ToplineButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=772524995]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -982,7 +973,6 @@ metadata/gdss_classes = PackedStringArray("Bar")
 
 [node name="Panels" type="BoxContainer" parent="ViewportUI/PanelRail" unique_id=1974809186]
 layout_mode = 2
-theme_override_constants/separation = 3
 vertical = true
 
 [node name="LayerProperties" type="Button" parent="ViewportUI/PanelRail/Panels" unique_id=1517088773]
@@ -1045,12 +1035,12 @@ icon = ExtResource("ic_background")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="MusicButton" type="Button" parent="ViewportUI/PanelRail/Panels"]
+[node name="MusicButton" type="Button" parent="ViewportUI/PanelRail/Panels" unique_id=2117669485]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Music"
 focus_mode = 0
-mouse_default_cursor_shape = 2
+disabled = true
 icon = ExtResource("ic_music")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")

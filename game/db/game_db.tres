@@ -157,6 +157,9 @@
 [ext_resource type="Resource" uid="uid://dgutlwhtijc77" path="res://game/db/Objects/Item/FLUDD/turbo_nozzle.tres" id="143_1ysu7"]
 [ext_resource type="Resource" uid="uid://busbfhse2ydjh" path="res://game/db/Objects/Item/FLUDD/rocket_nozzle.tres" id="144_kjcoh"]
 [ext_resource type="Resource" uid="uid://bl2kt32lgc6gi" path="res://game/db/Objects/Polygon/Terrain/terrain_cave.tres" id="145_1ysu7"]
+[ext_resource type="Resource" path="res://game/db/Objects/Decoration/Nature/medium_cave_stem.tres" id="200_mcs"]
+[ext_resource type="Resource" path="res://game/db/Objects/Decoration/Nature/snowman.tres" id="201_swm"]
+[ext_resource type="Resource" path="res://game/db/Objects/Decoration/Nature/snoadman.tres" id="202_sdm"]
 
 [resource]
 script = ExtResource("47_j75gy")
@@ -192,6 +195,7 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Decoration/Nature/large_rock": ExtResource("45_p6y4p"),
 "Decoration/Nature/medium_bush": ExtResource("99_nuguj"),
 "Decoration/Nature/medium_cave_stalagmite": ExtResource("111_muv8j"),
+"Decoration/Nature/medium_cave_stem": ExtResource("200_mcs"),
 "Decoration/Nature/medium_cave_tree": ExtResource("122_8ci3r"),
 "Decoration/Nature/medium_cherry_tree": ExtResource("44_nlb24"),
 "Decoration/Nature/medium_daisy_flower_bush": ExtResource("94_q1c6v"),
@@ -218,6 +222,8 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Decoration/Nature/small_rock": ExtResource("26_58mp6"),
 "Decoration/Nature/small_snowy_tree": ExtResource("128_in4wu"),
 "Decoration/Nature/small_tree": ExtResource("43_wx8c6"),
+"Decoration/Nature/snoadman": ExtResource("202_sdm"),
+"Decoration/Nature/snowman": ExtResource("201_swm"),
 "Decoration/Nature/snowy_mushroom": ExtResource("103_riofs"),
 "Decoration/Nature/snowy_mushroom_pair": ExtResource("125_xgnah"),
 "Decoration/Nature/sunflower": ExtResource("135_obcsq"),

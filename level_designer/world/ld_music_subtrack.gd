@@ -14,6 +14,7 @@ enum Trigger {
 @export var region_id: String = ""
 @export var volume_db: float = 0.0
 @export var fade_time: float = 1.0
+@export var muffled: bool = false
 
 
 func serialize() -> Dictionary:
@@ -23,6 +24,7 @@ func serialize() -> Dictionary:
 		"region_id": region_id,
 		"volume_db": volume_db,
 		"fade_time": fade_time,
+		"muffled": muffled,
 	}
 
 
@@ -33,4 +35,5 @@ static func deserialize(data: Dictionary) -> LDMusicSubtrack:
 	subtrack.region_id = str(data.get("region_id", ""))
 	subtrack.volume_db = float(data.get("volume_db", 0.0))
 	subtrack.fade_time = float(data.get("fade_time", 1.0))
+	subtrack.muffled = bool(data.get("muffled", false))
 	return subtrack

@@ -197,6 +197,8 @@ func get_tree() -> Array[GameObjectCategory]:
 	for obj: GameObject in objects.values():
 		var cat_id: String = obj.ld_object_path.get_slice("/", 0)
 		var group_id: String = obj.ld_object_path.get_slice("/", 1)
+		if group_id == "Nature" and not obj.ld_index_id.is_empty():
+			group_id = obj.ld_index_id.get_slice("_", 0).capitalize()
 		if cat_id not in cats:
 			var cat: GameObjectCategory = GameObjectCategory.new()
 			cat._id = cat_id

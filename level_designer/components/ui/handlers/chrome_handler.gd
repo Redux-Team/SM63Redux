@@ -144,9 +144,14 @@ func _on_selection_changed(objects: Array[LDObject]) -> void:
 	for button: Button in _selection_op_buttons:
 		_set_disabled(button, not has_selection)
 	var is_polygon: bool = objects.size() == 1 and objects.front() is LDObjectPolygon
+	var supports_topline: bool = false
+	if is_polygon:
+		var poly: LDObjectPolygon = objects.front() as LDObjectPolygon
+		supports_topline = poly.polygon_data != null and poly.polygon_data.line_mode == PolygonData.LineMode.TOPLINE
 	for button: Button in _poly_buttons:
 		if button:
 			button.visible = is_polygon
+	_set_disabled(_topline_button, is_polygon and not supports_topline)
 	var any_rotatable: bool = false
 	var any_scalable: bool = false
 	for obj: LDObject in objects:

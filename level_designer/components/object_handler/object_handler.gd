@@ -143,7 +143,8 @@ func has_editable_properties(objects: Array[LDObject]) -> bool:
 		if not prop.visible_in_editor:
 			continue
 		match prop.type:
-			LDProperty.Type.BOOL, LDProperty.Type.INT, LDProperty.Type.FLOAT, LDProperty.Type.VECTOR2:
+			LDProperty.Type.BOOL, LDProperty.Type.INT, LDProperty.Type.FLOAT, LDProperty.Type.VECTOR2, \
+			LDProperty.Type.STRING, LDProperty.Type.OPTION:
 				return true
 	return false
 

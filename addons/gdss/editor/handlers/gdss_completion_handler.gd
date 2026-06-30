@@ -14,6 +14,7 @@ var _property_meta: Dictionary = {}
 var _user_variables: Array[String] = []
 var _variable_lines: Dictionary = {}
 var _methods: Array[GdssMethod] = []
+var _events: Dictionary = {}
 var _last_hover_word: String = ""
 
 var _completion_color: Color
@@ -33,10 +34,25 @@ const BUILTIN_COLORS: Array[String] = [
 	"TRANSPARENT", "ORANGE", "PURPLE", "CYAN", "MAGENTA", "GRAY"
 ]
 
+# Event blocks (on_show() { … }) map to the node signal that drives them at runtime
+# (see runtime.gd _EVENT_SIGNALS). Only the visibility events are completed: interaction
+# events (hover/press/focus/…) are expressed as state selectors (:hover, :pressed, :focus)
+# instead. Gated per-node on the signal, so it's skipped where unavailable (e.g. Windows).
+const _EVENT_SIGNALS: Dictionary = {
+	"on_show": "visibility_changed",
+	"on_hide": "visibility_changed",
+}
+
 
 func _ready() -> void:
 	gdss_editor = get_parent() as GdssEditor
 	_completion_color = EditorInterface.get_editor_settings().get_setting("text_editor/theme/highlighting/completion_font_color")
+	# CodeEdit keeps its own string/comment delimiters (separate from the syntax highlighter)
+	# to drive in-string detection for completion and auto-brace. Without registering "#",
+	# an apostrophe or quote inside a comment (e.g. "It's") opens a phantom string, so every
+	# following line reads as in-string and CodeEdit wraps completion candidates in quotes.
+	if not editor.has_comment_delimiter("#"):
+		editor.add_comment_delimiter("#", "")
 	_build_from_objects()
 	editor.code_completion_requested.connect(_on_completion_requested)
 	editor.text_changed.connect(_on_text_changed)
@@ -56,6 +72,7 @@ func _build_from_objects() -> void:
 	_states.clear()
 	_property_meta.clear()
 	_methods.clear()
+	_events.clear()
 
 	var prefixes: Array[String] = ["@", ":", "\t", "$"]
 	
@@ -70,6 +87,12 @@ func _build_from_objects() -> void:
 		_properties[style_name] = props_dict.keys()
 		_states[style_name] = obj.states
 
+		var events: Array[String] = []
+		for event_name: String in _EVENT_SIGNALS:
+			if ClassDB.class_has_signal(obj.base_type, _EVENT_SIGNALS[event_name]):
+				events.append(event_name)
+		_events[style_name] = events
+
 		if style_name.length() > 0 and not prefixes.has(style_name[0]):
 			prefixes.append(style_name[0])
 
@@ -78,6 +101,12 @@ func _build_from_objects() -> void:
 				var pre: String = key.substr(0, l)
 				if not prefixes.has(pre):
 					prefixes.append(pre)
+
+	for event_name: String in _EVENT_SIGNALS:
+		for l: int in range(1, min(4, event_name.length()) + 1):
+			var pre: String = event_name.substr(0, l)
+			if not prefixes.has(pre):
+				prefixes.append(pre)
 
 	for method: GdssMethod in GDSS._get_gdss_methods().values():
 		_methods.append(method)
@@ -148,6 +177,9 @@ func _update_code_hint(_word: String) -> void:
 		return
 	var before_paren: String = line.substr(0, paren_pos).strip_edges()
 	var method_name: String = before_paren.split(" ")[-1].split(":")[-1].strip_edges()
+	if method_name == "calc":
+		_show_hint("calc( expression )  —  + - * /, numbers, $variables")
+		return
 	var method: GdssMethod = GDSS._get_gdss_methods().get(method_name)
 	if method == null:
 		_hide_hint()
@@ -240,6 +272,7 @@ func _update_completions(word: String) -> void:
 				_complete_states(word.trim_prefix(":"), context.get("style", ""))
 			else:
 				_complete_properties(word, context.get("style", ""))
+				_complete_events(word, context.get("style", ""))
 		"variant_decl":
 			_complete_states(word.trim_prefix(":"), context.get("style", ""))
 		"property_value", "property_value_filled":
@@ -297,6 +330,13 @@ func _complete_properties(word: String, style_name: String) -> void:
 			var sub: String = prop_def.composite_of[idx]
 			if _matches(sub, word):
 				editor.add_code_completion_option(CodeEdit.KIND_MEMBER, sub, sub + ": ", _completion_color, _get_icon(&"int"))
+
+
+func _complete_events(word: String, style_name: String) -> void:
+	var events: Array = _events.get(style_name, [])
+	for event_name: String in events:
+		if _matches(event_name, word):
+			editor.add_code_completion_option(CodeEdit.KIND_PLAIN_TEXT, event_name + "()", event_name + "() ", _completion_color, _get_icon(&"Signal"))
 
 
 func _complete_states(word: String, style_name: String) -> void:
@@ -366,6 +406,10 @@ func _complete_values(word: String, style_name: String, prop: String) -> void:
 				_completion_color,
 				_get_icon(&"MemberMethod")
 			)
+
+	if effective_type == GDSS.Type.INT or effective_type == GDSS.Type.FLOAT or effective_type == GDSS.Type.COMPOSITE4:
+		if _matches("calc", word):
+			editor.add_code_completion_option(CodeEdit.KIND_FUNCTION, "calc(…)", "calc(", _completion_color, _get_icon(&"MemberMethod"))
 
 	if prop_def == null:
 		return
@@ -480,6 +524,22 @@ func _get_context() -> Dictionary:
 				"in_variant": true
 			})
 			continue
+
+		# Event blocks (on_show() { … }) use the call form, so they match neither selector
+		# regex above. Track them as a frame inheriting the enclosing style; otherwise the
+		# block's closing brace pops the parent selector and desyncs every following subclass,
+		# whose style then fails to resolve and falls back to a merged/top-level completion.
+		if line.ends_with("{"):
+			var head: String = line.substr(0, line.length() - 1).strip_edges()
+			var paren: int = head.find("(")
+			if paren > 0 and head.ends_with(")") and head.substr(0, paren).is_valid_identifier():
+				var top: Dictionary = stack.back() if stack.size() > 0 else {}
+				stack.push_back({
+					"style": top.get("style", ""),
+					"variant": head.substr(0, paren),
+					"in_variant": true
+				})
+				continue
 
 		if "}" in line:
 			if stack.size() > 0:
@@ -609,6 +669,8 @@ func _word_at(line: int, column: int) -> String:
 func _hover_doc(word: String) -> String:
 	if word.is_empty():
 		return ""
+	if word == "calc":
+		return "calc( expression )  —  arithmetic with + - * / and $variables"
 	var method: GdssMethod = GDSS._get_gdss_methods().get(word)
 	if method != null:
 		return method.get_code_hint()
@@ -656,7 +718,10 @@ func _matches(candidate: String, word: String) -> bool:
 
 
 func _get_icon(icon_name: StringName) -> Texture2D:
-	return EditorInterface.get_editor_theme().get_icon(icon_name, &"EditorIcons")
+	var theme: Theme = EditorInterface.get_editor_theme()
+	if not theme.has_icon(icon_name, &"EditorIcons"):
+		icon_name = &"Node"
+	return theme.get_icon(icon_name, &"EditorIcons")
 
 
 func _first_separator(s: String) -> int:

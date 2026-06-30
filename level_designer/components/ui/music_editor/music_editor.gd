@@ -40,6 +40,9 @@ const UNDERWATER_NAMES: Dictionary = {
 @export var preset_option: OptionButton
 @export var underwater_option: OptionButton
 @export var loop_spin: SpinBox
+@export var area_play_button: Button
+@export var area_underwater_button: Button
+@export var area_region_button: Button
 
 
 var _now_playing: String = NONE_ID
@@ -50,6 +53,12 @@ var _wave_cache: Dictionary = {}
 var _scanning: bool = false
 var _scan_track: String = NONE_ID
 var _scan_length: float = 0.0
+var _scan_bars: PackedFloat32Array = PackedFloat32Array()
+var _adaptive: MusicController
+var _preview_underwater: bool = false
+var _preview_region: String = ""
+var _region_ids: PackedStringArray = PackedStringArray()
+var _region_index: int = 0
 
 
 func _ready() -> void:
@@ -67,6 +76,9 @@ func _ready() -> void:
 	preset_option.item_selected.connect(_on_preset_selected)
 	underwater_option.item_selected.connect(_on_underwater_selected)
 	loop_spin.value_changed.connect(_on_loop_changed)
+	area_play_button.pressed.connect(_on_area_play)
+	area_underwater_button.toggled.connect(_on_area_underwater)
+	area_region_button.pressed.connect(_on_area_region)
 	_populate_underwater()
 	_update_now_playing()
 	_update_play_button()
@@ -82,6 +94,10 @@ func _setup_buses() -> void:
 	_scanner.bus = SCAN_BUS
 	_scanner.pitch_scale = SCAN_PITCH
 	add_child(_scanner)
+	_scan_bars.resize(waveform.bar_count)
+	_adaptive = MusicController.new()
+	_adaptive.bus = PREVIEW_BUS
+	add_child(_adaptive)
 
 
 func _ensure_capture_bus(bus_name: StringName, volume_db: float) -> AudioEffectCapture:
@@ -98,6 +114,8 @@ func _ensure_capture_bus(bus_name: StringName, volume_db: float) -> AudioEffectC
 
 
 func _exit_tree() -> void:
+	if _adaptive:
+		_adaptive.stop()
 	_remove_bus(PREVIEW_BUS)
 	_remove_bus(SCAN_BUS)
 
@@ -139,15 +157,31 @@ func _drain_capture(capture: AudioEffectCapture, fraction: float) -> void:
 func _poll_scan() -> void:
 	if _scan_length > 0.0:
 		var fraction: float = clampf(_scanner.get_playback_position() / _scan_length, 0.0, 1.0)
-		_drain_capture(_scan_capture, fraction)
+		_drain_scan(fraction)
 	if not _scanner.playing:
 		_scanning = false
-		var bars: PackedFloat32Array = waveform.get_bars()
 		var loudest: float = 0.0
-		for value: float in bars:
+		for value: float in _scan_bars:
 			loudest = maxf(loudest, value)
 		if loudest > 0.02:
-			_wave_cache[_scan_track] = bars
+			_wave_cache.set(_scan_track, _scan_bars.duplicate())
+			if _scan_track == _now_playing:
+				waveform.load_bars(_scan_bars)
+
+
+func _drain_scan(fraction: float) -> void:
+	if _scan_capture == null:
+		return
+	var available: int = _scan_capture.get_frames_available()
+	if available <= 0:
+		return
+	var frames: PackedVector2Array = _scan_capture.get_buffer(available)
+	var peak: float = 0.0
+	for frame: Vector2 in frames:
+		peak = maxf(peak, maxf(absf(frame.x), absf(frame.y)))
+	var idx: int = clampi(int(fraction * float(waveform.bar_count)), 0, waveform.bar_count - 1)
+	if peak > _scan_bars.get(idx):
+		_scan_bars.set(idx, peak)
 
 
 func _on_show() -> void:
@@ -171,6 +205,9 @@ func _equalize_panels() -> void:
 
 func _on_hide() -> void:
 	preview_player.stop()
+	_stop_adaptive()
+	area_underwater_button.set_pressed_no_signal(false)
+	_preview_underwater = false
 	_stop_scan()
 	_set_ambient_ducked(false)
 	_now_playing = NONE_ID
@@ -327,6 +364,8 @@ func _refresh() -> void:
 		child.queue_free()
 	for layer: LDMusicSubtrack in _triggered_layers():
 		layer_list.add_child(_build_layer_row(layer))
+	_refresh_region_state()
+	_prewarm(_base_track_id())
 
 
 func _mark_custom() -> void:
@@ -461,6 +500,7 @@ func _on_add_triggered() -> void:
 func _on_play_pressed() -> void:
 	if preview_player.stream == null:
 		return
+	_stop_adaptive()
 	if preview_player.playing:
 		preview_player.stream_paused = not preview_player.stream_paused
 		_set_ambient_ducked(not preview_player.stream_paused)
@@ -471,9 +511,83 @@ func _on_play_pressed() -> void:
 	_update_play_button()
 
 
+func _on_area_play() -> void:
+	if _adaptive.has_music():
+		_stop_adaptive()
+		_set_ambient_ducked(false)
+		return
+	preview_player.stop()
+	preview_player.stream = null
+	_stop_scan()
+	waveform.clear_bars()
+	_now_playing = NONE_ID
+	_update_now_playing()
+	_update_play_button()
+	_adaptive.play(_music())
+	_adaptive.set_underwater(_preview_underwater)
+	_adaptive.set_region(_preview_region)
+	_set_ambient_ducked(true)
+	_update_area_button()
+
+
+func _stop_adaptive() -> void:
+	if _adaptive and _adaptive.has_music():
+		_adaptive.stop()
+	_update_area_button()
+
+
+func _on_area_underwater(on: bool) -> void:
+	_preview_underwater = on
+	if _adaptive and _adaptive.has_music():
+		_adaptive.set_underwater(on)
+
+
+func _on_area_region() -> void:
+	if _region_ids.is_empty():
+		return
+	_region_index = (_region_index + 1) % (_region_ids.size() + 1)
+	_preview_region = "" if _region_index == 0 else _region_ids.get(_region_index - 1)
+	_update_region_button()
+	if _adaptive and _adaptive.has_music():
+		_adaptive.set_region(_preview_region)
+
+
+func _update_area_button() -> void:
+	area_play_button.text = "⏹" if _adaptive and _adaptive.has_music() else "▶"
+
+
+func _update_region_button() -> void:
+	area_region_button.text = "Region" if _preview_region.is_empty() else "Region: " + _preview_region
+
+
+func _refresh_region_state() -> void:
+	_region_ids = PackedStringArray()
+	for layer: LDMusicSubtrack in _music().subtracks:
+		if layer.trigger == LDMusicSubtrack.Trigger.REGION and not layer.region_id.is_empty() and not _region_ids.has(layer.region_id):
+			_region_ids.append(layer.region_id)
+	area_region_button.visible = not _region_ids.is_empty()
+	if _region_ids.has(_preview_region):
+		_region_index = _region_ids.find(_preview_region) + 1
+	else:
+		_preview_region = ""
+		_region_index = 0
+		if _adaptive and _adaptive.has_music():
+			_adaptive.set_region("")
+	_update_region_button()
+
+
+func _prewarm(track_id: String) -> void:
+	if track_id == NONE_ID or _wave_cache.has(track_id):
+		return
+	if _scanning:
+		return
+	_begin_scan(track_id)
+
+
 func _on_seek(fraction: float) -> void:
 	if preview_player.stream == null:
 		return
+	_stop_adaptive()
 	var length: float = preview_player.stream.get_length()
 	if length <= 0.0:
 		return
@@ -502,6 +616,7 @@ func _preview(track_id: String) -> void:
 	var stream: AudioStream = LDMusicDB.get_stream(track_id)
 	if stream == null:
 		return
+	_stop_adaptive()
 	preview_player.stream = _prepare_stream(stream, LDMusicDB.get_loop_start(track_id))
 	preview_player.stream_paused = false
 	preview_player.play()
@@ -513,19 +628,27 @@ func _preview(track_id: String) -> void:
 	if _wave_cache.has(track_id):
 		waveform.load_bars(_wave_cache.get(track_id))
 		_stop_scan()
+	elif _scanning and _scan_track == track_id:
+		waveform.clear_bars()
 	else:
 		waveform.clear_bars()
-		_begin_scan(track_id, preview_player.stream.get_length())
+		_begin_scan(track_id)
 	_update_now_playing()
 	_update_play_button()
 
 
-func _begin_scan(track_id: String, length: float) -> void:
+func _begin_scan(track_id: String) -> void:
+	var stream: AudioStream = _unlooped(LDMusicDB.get_stream(track_id))
+	if stream == null:
+		return
+	var length: float = stream.get_length()
 	if length <= 0.0:
 		return
 	_scan_track = track_id
 	_scan_length = length
-	_scanner.stream = _unlooped(LDMusicDB.get_stream(track_id))
+	for i: int in _scan_bars.size():
+		_scan_bars.set(i, 0.0)
+	_scanner.stream = stream
 	_scanner.play()
 	_scanning = true
 
@@ -671,6 +794,18 @@ func _build_layer_row(layer: LDMusicSubtrack) -> HBoxContainer:
 		_mark_custom()
 	)
 	row.add_child(volume)
+	var muffle: Button = Button.new()
+	muffle.toggle_mode = true
+	muffle.custom_minimum_size = Vector2(28, 0)
+	muffle.text = "≈"
+	muffle.tooltip_text = "Muffle this subtrack underwater"
+	muffle.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	muffle.set_pressed_no_signal(layer.muffled)
+	muffle.toggled.connect(func(on: bool) -> void:
+		layer.muffled = on
+		_mark_custom()
+	)
+	row.add_child(muffle)
 	var preview: Button = Button.new()
 	preview.text = "▶"
 	preview.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND

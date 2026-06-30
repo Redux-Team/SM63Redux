@@ -6,7 +6,7 @@ const GRAB_RADIUS: float = 12.0
 
 
 var _editing_object: LDObjectPolygon
-var _handles: Array[ColorRect] = []
+var _handles: Array[Button] = []
 var _edges: Array[Dictionary] = []
 
 
@@ -118,12 +118,16 @@ func _rebuild_handles() -> void:
 	var global_xform: Transform2D = _editing_object.get_global_transform()
 	var half: float = HANDLE_SIZE * 0.5
 	for i: int in _edges.size():
-		var handle: ColorRect = ColorRect.new()
+		var handle: Button = Button.new()
+		handle.theme_type_variation = &"PolyVertex"
+		handle.set_meta(&"gdss_mode", 1)
+		handle.set_meta(&"gdss_classes", PackedStringArray(["Vertex"]))
 		handle.custom_minimum_size = Vector2(HANDLE_SIZE, HANDLE_SIZE)
 		handle.size = Vector2(HANDLE_SIZE, HANDLE_SIZE)
+		handle.focus_mode = Control.FOCUS_NONE
 		handle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		handle.color = Color(0.2, 0.9, 0.35, 0.85) if bool(_edges[i].get("on")) else Color(0.25, 0.25, 0.28, 0.7)
-		var mid_screen: Vector2 = _world_to_screen(global_xform * (_edges[i].get("mid") as Vector2))
+		handle.modulate = Color.WHITE if bool(_edges.get(i).get("on")) else Color(0.5, 0.5, 0.55, 0.6)
+		var mid_screen: Vector2 = _world_to_screen(global_xform * (_edges.get(i).get("mid") as Vector2))
 		handle.position = mid_screen - Vector2(half, half)
 		overlay.add_child(handle)
 		_handles.append(handle)
@@ -140,7 +144,7 @@ func _sync_handles() -> void:
 
 
 func _clear_handles() -> void:
-	for handle: ColorRect in _handles:
+	for handle: Button in _handles:
 		if is_instance_valid(handle):
 			handle.queue_free()
 	_handles.clear()
