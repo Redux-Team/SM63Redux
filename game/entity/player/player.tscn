@@ -1488,8 +1488,8 @@ root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
 sfx_root = NodePath("..")
-__last__editor_position = Vector2(1269.4768, 251.82452)
-__last_editor_zoom = 0.6115912
+__last__editor_position = Vector2(-1026.7544, -357.08005)
+__last_editor_zoom = 0.6830132
 __states = {
 &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0": NodePath("GroundPound/GroundPoundSlam"),
 &"092ff28f-6a90-40e8-8c49-a55969c526c7": NodePath("Dry/Grounded/Idle"),

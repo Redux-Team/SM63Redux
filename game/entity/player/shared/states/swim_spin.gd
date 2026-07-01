@@ -2,10 +2,11 @@
 extends State
 
 @export var spin_hitbox: HitBox
-
+## Time for which the spin hitbox is active, in seconds.
+@export var spin_hitbox_timer: float = 0.3
 
 func _on_enter() -> void:
-	spin_hitbox.enable(0.3)
+	spin_hitbox.enable(spin_hitbox_timer)
 	if not player.is_on_floor():
 		if player.velocity.y > 0:
 			player.velocity.y = -35
