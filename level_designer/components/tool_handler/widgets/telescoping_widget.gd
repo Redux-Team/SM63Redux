@@ -9,7 +9,6 @@ const POINT_GRAB_RADIUS: float = 18.0
 @export var point_b: Button
 
 
-var _tool_node: Node
 var _dragging_idx: int = -1
 var _hovered_idx: int = -1
 var _drag_start_units: int = 0
@@ -21,25 +20,17 @@ var _pending_object_drag: bool = false
 
 
 func _on_activate() -> void:
-	if get_parent() != get_overlay():
-		_tool_node = get_parent()
-		reparent(get_overlay())
+	_attach_to_overlay()
 	show()
-	_tool.viewport.viewport_moved.connect(_on_viewport_moved)
 	_sync_buttons()
 
 
 func _on_deactivate() -> void:
 	hide()
-	if _tool.viewport.viewport_moved.is_connected(_on_viewport_moved):
-		_tool.viewport.viewport_moved.disconnect(_on_viewport_moved)
+	_detach_from_overlay()
 	_dragging_idx = -1
 	_hovered_idx = -1
 	_pending_object_drag = false
-
-
-func _on_viewport_moved(_pos: Vector2, _zoom: Vector2) -> void:
-	_sync_buttons()
 
 
 func _on_refresh(_objects: Array[LDObject]) -> void:
@@ -55,10 +46,7 @@ func _on_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		if _pending_object_drag:
 			_pending_object_drag = false
-			var move_tool: LDToolMove = _get_move_tool()
-			if move_tool and move_tool.try_begin_drag(get_screen_mouse_pos(), [obj]):
-				move_tool.return_tool = "TelescopingEdit"
-				select_tool("move")
+			_begin_move_handoff("TelescopingEdit", [obj])
 			return
 		
 		if _dragging_idx >= 0:
@@ -257,9 +245,3 @@ func _screen_dist_to_world(screen_dist: float, is_x: bool) -> float:
 	var origin: Vector2 = xform.affine_inverse() * Vector2.ZERO
 	var unit: Vector2 = xform.affine_inverse() * (Vector2(screen_dist, 0.0) if is_x else Vector2(0.0, screen_dist))
 	return (unit - origin).length() * signf(screen_dist)
-
-
-func _get_move_tool() -> LDToolMove:
-	return _tool.get_tool_handler().get_tool_list().filter(func(t: LDTool) -> bool:
-		return t is LDToolMove
-	).front() as LDToolMove

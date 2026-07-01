@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bbjsvaqvicvlc"]
+
+[ext_resource type="Texture2D" uid="uid://c088nc8m0lbxc" path="res://assets/textures/objects/decoration/hints/arrow_metal.png" id="1_h5xwr"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_vpid7"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_3o1pc"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_7n4p6"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_p6450"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_xxu5q"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_423gf"]
+atlas = ExtResource("1_h5xwr")
+region = Rect2(-10, -15, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Hints/arrow_metal.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_xxu5q")
+id = "arrow_metal"
+category = 6
+subpath = "Hints/arrow_metal"
+group_path = "Hints"
+ld_index_id = "arrow_1"
+name_override = "Metal Arrow"
+ld_entry_texture = SubResource("AtlasTexture_423gf")
+ld_properties = Array[ExtResource("2_vpid7")]([ExtResource("3_3o1pc"), ExtResource("4_7n4p6"), ExtResource("5_p6450")])
+sprite_texture = ExtResource("1_h5xwr")
+ld_object_path = "Decoration/Hints/arrow_metal"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,272 +1,91 @@
 class_name LDUI
 extends LDComponent
 
+## Facade over the level designer's UI. Holds no logic itself - every concern lives in a
+## dedicated handler, reachable via the get_*_handler() accessors (mirrors how the LD
+## singleton exposes its subsystem handlers).
+
+
+## The editor chrome is sized compact for desktop by default (scene values) and
+## scaled UP on touch/mobile. Font size lives on the editor Theme so one property
+## scales every label/button; button min-sizes scale in code and their icons
+## follow automatically via expand_icon.
+## Not a const: GDScript forbids mutating a const resource's properties, and we
+## tweak default_font_size at runtime. It's still the shared cached instance the
+## scenes reference, so the change propagates to all UI text.
+var _editor_theme: Theme = preload("res://level_designer/ld_editor_theme.tres")
+const DESKTOP_FONT_SIZE: int = 14
+const MOBILE_FONT_SIZE: int = 18
+const MOBILE_BUTTON_SCALE: float = 1.65
+const MOBILE_MIN_TARGET: float = 44.0
+const MOBILE_SEPARATION: int = 8
 
 @export var _canvas_layer: CanvasLayer
-@export_group("Windows")
-@export var _obj_browser_window: LDWindow
-@export var _object_property_window: LDWindow
-@export var _layer_properties_window: LDWindow
-@export_group("File Dialogs")
-@export var _save_file_dialog: FileDialog
-@export var _load_file_dialog: FileDialog
-@export var _reset_level_dialog: ConfirmationDialog
-@export_group("Layer")
-@export var _layer_num: Label
-@export var _parallaxing_button: Button
-@export var _ghosting_button: Button
-@export var _hotbar_buttons: Array[LDHotbarButton]
-var _pending_hotbar_button: LDHotbarButton = null
-
-
-var parallaxing_enabled: bool = false
-var ghosting_enabled: bool = false
-
-var viewport: LDViewport:
-	get():
-		return LD.get_editor_viewport()
+@export_group("Handlers")
+@export var _window_handler: LDUIWindowHandler
+@export var _viewport_handler: LDUIViewportHandler
+@export var _toolbar_handler: LDUIToolbarHandler
+@export var _file_handler: LDUIFileHandler
+@export var _hotbar_handler: LDUIHotbarHandler
+@export var _chrome_handler: LDUIChromeHandler
 
 
 func _on_ready() -> void:
-	var browser: LDObjectBrowser = _obj_browser_window.get_content_ref() as LDObjectBrowser
-	
-	_layer_num.text = str(LD.get_area().get_active_layer_index())
-	
-	browser.category_changed.connect(func(n: String) -> void:
-		_obj_browser_window.title = "Objects - " + (n if n else "All")
-	)
-	browser.hide_request.connect(_on_browser_hide_request)
-	
-	for button: LDHotbarButton in _hotbar_buttons:
-		button.new_object_request.connect(_on_hotbar_new_object_request)
-	
-	_save_file_dialog.filters = PackedStringArray([
-		"*.63rl;63 Redux Level",
-		"*.json;JSON Level"
-	])
-	_load_file_dialog.filters = PackedStringArray([
-		"*.63rl;63 Redux Level",
-		"*.json;JSON Level"
-	])
+	# Handlers that touch level/area state wait until everything is ready.
+	_toolbar_handler.setup()
+	_file_handler.setup()
+	_hotbar_handler.setup()
+	_chrome_handler.setup()
+	_apply_responsive()
 
 
+## Desktop keeps the compact scene sizing (so the chrome never runs off-screen).
+## On touch/mobile, scale the whole chrome up: bigger tap targets, wider spacing,
+## and a larger base font (via the shared editor Theme). Driven off
+## Device.is_mobile() / live touch state — one hook adapts the entire UI.
+func _apply_responsive() -> void:
+	var touch: bool = Device.is_mobile() or Singleton.get_input_handler().is_using_touch()
+	_editor_theme.default_font_size = MOBILE_FONT_SIZE if touch else DESKTOP_FONT_SIZE
+	if touch:
+		_scale_chrome(_canvas_layer)
 
-func _on_input(_event: InputEvent) -> void:
-	pass
+
+func _scale_chrome(node: Node) -> void:
+	for child: Node in node.get_children():
+		if child is BaseButton:
+			var control: Control = child as Control
+			var size: Vector2 = control.custom_minimum_size
+			control.custom_minimum_size = Vector2(
+				maxf(size.x * MOBILE_BUTTON_SCALE, MOBILE_MIN_TARGET),
+				maxf(size.y * MOBILE_BUTTON_SCALE, MOBILE_MIN_TARGET))
+		elif child is BoxContainer:
+			(child as BoxContainer).add_theme_constant_override(&"separation", MOBILE_SEPARATION)
+		_scale_chrome(child)
+
+
+func get_window_handler() -> LDUIWindowHandler:
+	return _window_handler
+
+
+func get_viewport_handler() -> LDUIViewportHandler:
+	return _viewport_handler
+
+
+func get_toolbar_handler() -> LDUIToolbarHandler:
+	return _toolbar_handler
+
+
+func get_file_handler() -> LDUIFileHandler:
+	return _file_handler
+
+
+func get_hotbar_handler() -> LDUIHotbarHandler:
+	return _hotbar_handler
+
+
+func get_chrome_handler() -> LDUIChromeHandler:
+	return _chrome_handler
 
 
 func get_canvas_layer() -> CanvasLayer:
 	return _canvas_layer
-
-
-func get_object_browser_window() -> LDWindow:
-	return _obj_browser_window
-
-
-func get_object_properties_window() -> LDWindow:
-	return _object_property_window
-
-
-func _toggle_window(window: LDWindow) -> void:
-	if window.visible:
-		window.popout()
-		LD.get_input_handler().remove_input_priority(self)
-	else:
-		LD.get_input_handler().set_input_priority(self)
-		window.popin()
-
-
-func _on_save_file_selected(path: String) -> void:
-	var handler: LDSaveLoadHandler = LD.get_save_load_handler()
-	var err: Error
-	if path.get_extension() == "json":
-		err = handler.save_json(path)
-	else:
-		err = handler.save_binary(path)
-	if err != OK:
-		push_error("Failed to save level: " + error_string(err))
-
-
-func _on_load_file_selected(path: String) -> void:
-	var handler: LDSaveLoadHandler = LD.get_save_load_handler()
-	var err: Error
-	if path.ends_with(".json"):
-		err = handler.load_json(path)
-	else:
-		err = handler.load_binary(path)
-	if err != OK:
-		push_error("Failed to load level: " + error_string(err))
-
-
-func _on_object_browser_button_pressed() -> void:
-	_toggle_window(_obj_browser_window)
-
-
-func _on_properties_button_pressed() -> void:
-	_toggle_window(_object_property_window)
-
-
-func _on_layer_properties_pressed() -> void:
-	_toggle_window(_layer_properties_window)
-
-
-func _on_select_button_pressed() -> void:
-	LD.get_tool_handler().select_tool("select")
-
-
-func _on_brush_button_pressed() -> void:
-	LD.get_tool_handler().select_tool("brush")
-
-
-func _on_move_button_pressed() -> void:
-	LD.get_tool_handler().select_tool("move")
-
-
-func _on_reset_cam_button_pressed() -> void:
-	var player: LDObject = LD.get_area().find_object_by_id("player_mario", 0)
-	viewport.refocus_camera(player.position, Vector2.ONE)
-
-
-func _on_delete_button_pressed() -> void:
-	LD.get_object_handler().delete_placed_selection()
-
-
-func _on_save_button_pressed() -> void:
-	_save_file_dialog.popup_centered()
-
-
-func _on_load_button_pressed() -> void:
-	_load_file_dialog.popup_centered()
-
-
-func _on_reset_button_pressed() -> void:
-	_reset_level_dialog.popup_centered()
-
-
-func _on_rotate_button_pressed() -> void:
-	LD.get_tool_handler().select_tool("rotate")
-
-
-func _on_test_server_button_pressed() -> void:
-	#Singleton.get_multiplayer_handler().start_server()
-	Singleton.set_meta("playtest", LD.get_save_load_handler().get_level_data())
-	
-	LD.get_save_load_handler().save_session()
-	
-	get_tree().change_scene_to_file("uid://ctssku6r3gx0a")
-
-
-func _on_test_client_button_pressed() -> void:
-	Singleton.get_multiplayer_handler().start_client()
-	Singleton.set_meta("playtest", LD.get_save_load_handler().get_level_data())
-	
-	get_tree().change_scene_to_file("uid://ctssku6r3gx0a")
-
-
-func _on_poly_edit_pressed() -> void:
-	LD.get_tool_handler().select_tool("polygon_edit")
-
-
-func _on_poly_add_pressed() -> void:
-	LD.get_tool_handler().select_tool("polygon_add")
-
-
-func _on_poly_cut_pressed() -> void:
-	LD.get_tool_handler().select_tool("polygon_cut")
-
-
-func _on_move_to_front_button_pressed() -> void:
-	var objs: Array[LDObject] = viewport.get_selected_objects()
-	for obj: LDObject in objs:
-		obj.get_parent().move_child(obj, -1)
-
-
-func _on_move_to_back_button_pressed() -> void:
-	var objs: Array[LDObject] = viewport.get_selected_objects()
-	for obj: LDObject in objs:
-		obj.get_parent().move_child(obj, 0)
-
-
-func set_parallaxing(toggled_on: bool) -> void:
-	parallaxing_enabled = toggled_on
-	_parallaxing_button.set_pressed_no_signal(toggled_on)
-	for layer: LDLayer in LD.get_area().layers:
-		layer.is_parallaxing = toggled_on
-	LD.get_area().refresh_layer_visuals()
-	LD.get_editor_viewport().refresh()
-
-
-func set_ghosting(toggled_on: bool) -> void:
-	ghosting_enabled = toggled_on
-	_ghosting_button.set_pressed_no_signal(toggled_on)
-	LD.get_editor_viewport().clear_selection()
-	LD.get_area().refresh_layer_visuals()
-
-
-func _on_reset_level_dialog_confirmed() -> void:
-	LD.get_save_load_handler().reset_level()
-
-
-func _on_deselect_button_pressed() -> void:
-	LD.get_editor_viewport().clear_selection()
-
-
-func _on_scale_button_pressed() -> void:
-	LD.get_tool_handler().select_tool("scale")
-
-
-func _on_cut_button_pressed() -> void:
-	LD.get_clipboard_handler().cut()
-
-
-func _on_copy_button_pressed() -> void:
-	LD.get_clipboard_handler().copy()
-
-
-func _on_paste_button_pressed() -> void:
-	const OFFSET: Vector2 = Vector2(24, -24)
-	var camera_pos: Vector2 = LD.get_editor_viewport().camera_position
-	LD.get_clipboard_handler().paste_absolute(camera_pos + OFFSET)
-
-
-func _on_duplicate_button_pressed() -> void:
-	LD.get_clipboard_handler().duplicate_objects()
-
-
-func _on_hotbar_new_object_request(button: LDHotbarButton) -> void:
-	_pending_hotbar_button = button
-	_toggle_window(_obj_browser_window)
-
-
-func _on_browser_hide_request() -> void:
-	_obj_browser_window.popout()
-	
-	if not _pending_hotbar_button:
-		return
-	
-	var selected: GameObject = LD.get_object_handler().get_selected_object()
-	if selected:
-		_pending_hotbar_button.assign_object(selected)
-	
-	_pending_hotbar_button = null
-
-
-func _on_layer_down_pressed() -> void:
-	_set_layer(-1, true)
-
-
-func _on_layer_up_pressed() -> void:
-	_set_layer(1, true)
-
-
-func _set_layer(index: int, increment: bool = false) -> void:
-	if increment:
-		LD.get_area().set_active_layer(LD.get_area().get_active_layer_index() + index)
-	else:
-		LD.get_area().set_active_layer(index)
-	
-	if viewport.get_selected_objects().size() > 0:
-		var selection: Array[LDObject] = viewport.get_selected_objects()
-		LD.get_area().move_objects_to_layer(selection, index)
-	
-	_layer_num.text = str(LD.get_area().get_active_layer_index())

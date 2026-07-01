@@ -9,6 +9,7 @@ signal popped_out
 		title = t
 		if _title_label:
 			_title_label.text = t
+			_title_label.visible = not t.is_empty()
 
 @export var content: PackedScene
 
@@ -69,6 +70,28 @@ func _ready() -> void:
 	_setup_backdrop()
 
 
+## Adds a content node to the shell up-front (kept hidden until bound). Used by
+## LDUIWindowHandler to pre-instantiate every window's content into the single shell.
+func add_content(control: Control) -> void:
+	if not control:
+		return
+	control.visible = false
+	_content_container.add_child(control)
+
+
+## Makes `control` the active content and applies its shell settings. The content must
+## already have been added via add_content(); other contents are just hidden, never
+## reparented or freed, so their state is preserved across opens.
+func bind(control: Control, window_title: String, back_closes: bool, scale: Vector2) -> void:
+	title = window_title
+	close_on_back_input = back_closes
+	window_scale = scale
+	for c: Node in _content_container.get_children():
+		if c is CanvasItem:
+			(c as CanvasItem).visible = c == control
+	_content_ref = control
+
+
 func _input(event: InputEvent) -> void:
 	if close_on_back_input and event.is_action_pressed("_ui_back"):
 		popout()
@@ -110,11 +133,14 @@ func popin() -> void:
 	_panel.scale = Vector2(0.6, 0.6)
 	_panel.modulate = Color.TRANSPARENT
 	
-	_panel.size = Vector2.ZERO
+	# Fit the panel to the active content. Swapping the visible content invalidates the minimum-size
+	# cache, but the container re-sort that finalizes it is deferred, so measuring this same frame
+	# can read a stale (often larger) size. Wait one frame so the panel fits the new content.
 	await get_tree().process_frame
-	_panel.size = Vector2.ZERO
-	await get_tree().process_frame
-	
+	if not _popping_in:
+		return
+	_panel.reset_size()
+
 	if pop_in_centered:
 		_center_in_viewport()
 	

@@ -7,12 +7,15 @@ extends MarginContainer
 @export var _vector2_widget_scene: PackedScene
 @export var _float_widget_scene: PackedScene
 @export var _int_widget_scene: PackedScene
+@export var _option_widget_scene: PackedScene
+@export var _string_widget_scene: PackedScene
 
 
 func load_selection(objects: Array[LDObject]) -> void:
 	_clear()
 	var handler: LDObjectHandler = LD.get_object_handler()
 	var properties: Array[LDProperty] = handler.get_shared_properties(objects)
+	var read_only: bool = _selection_is_read_only(objects)
 	for prop: LDProperty in properties:
 		if not prop.visible_in_editor:
 			continue
@@ -20,13 +23,38 @@ func load_selection(objects: Array[LDObject]) -> void:
 		if not widget:
 			continue
 		var current_value: Variant = handler.get_property_value(objects, prop.key)
+		if widget is LDOptionWidget and not objects.is_empty():
+			(widget as LDOptionWidget).set_options(objects[0].get_property_options(prop.key))
 		widget.setup(prop, current_value)
-		widget.value_changed.connect(func(key: StringName, value: Variant) -> void:
-			handler.set_property_on_selection(key, value)
-			var applied: Variant = handler.get_property_value(handler.get_placed_selection(), key)
-			widget._on_property_applied(applied)
-		)
+		if read_only:
+			_make_read_only(widget)
+		else:
+			widget.value_changed.connect(func(key: StringName, value: Variant) -> void:
+				handler.set_property_on_selection(key, value)
+				var applied: Variant = handler.get_property_value(handler.get_placed_selection(), key)
+				widget._on_property_applied(applied)
+			)
 		_container.add_child(widget)
+
+
+## Linked-stamp "ghost" copies are read-only; their properties can't be edited.
+func _selection_is_read_only(objects: Array[LDObject]) -> bool:
+	for obj: LDObject in objects:
+		if LD.get_stamp_handler().is_linked_readonly(obj):
+			return true
+	return false
+
+
+func _make_read_only(widget: Control) -> void:
+	widget.modulate = Color(1.0, 1.0, 1.0, 0.5)
+	for node: Node in widget.find_children("*", "", true, false):
+		if node is SpinBox:
+			(node as SpinBox).editable = false
+		elif node is LineEdit:
+			(node as LineEdit).editable = false
+		elif node is BaseButton:
+			(node as BaseButton).disabled = true
+			GDSS.refresh(node)
 
 
 func _on_show() -> void:
@@ -48,4 +76,9 @@ func _create_widget(prop: LDProperty) -> LDPropertyWidget:
 			return _int_widget_scene.instantiate() as LDPropertyWidget
 		LDProperty.Type.VECTOR2:
 			return _vector2_widget_scene.instantiate() as LDPropertyWidget
+		LDProperty.Type.OPTION:
+			return _option_widget_scene.instantiate() as LDPropertyWidget
+		LDProperty.Type.STRING:
+			if _string_widget_scene:
+				return _string_widget_scene.instantiate() as LDPropertyWidget
 	return null

@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://cmh307lx6bbro"]
+
+[ext_resource type="Script" uid="uid://bvhonmp5uo5cv" path="res://level_designer/components/ui/object_browser/stamp_entry.gd" id="1_uthr8"]
+
+[node name="StampEntry" type="Button" unique_id=493092085 node_paths=PackedStringArray("preview_rect", "stamp_label")]
+custom_minimum_size = Vector2(48, 48)
+offset_right = 8.0
+offset_bottom = 8.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_default_cursor_shape = 2
+script = ExtResource("1_uthr8")
+metadata/gdss_classes = PackedStringArray("Tile")
+preview_rect = NodePath("PreviewTexture")
+stamp_label = NodePath("StampLabel")
+
+[node name="PreviewTexture" type="TextureRect" parent="." unique_id=1698399676]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StampLabel" type="Label" parent="." unique_id=1342569207]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 8
+text = "super_duper_duper_long_item_name_that_is_long"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

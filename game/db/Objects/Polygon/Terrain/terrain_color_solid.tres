@@ -1,26 +1,31 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://p1rx0878ftm2"]
 
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_k5tpx"]
-[ext_resource type="PackedScene" uid="uid://ccouuvp88qhjy" path="res://game/db/Objects/Polygon/Terrain/terrain_color_solid_ld.tscn" id="1_nvy0h"]
-[ext_resource type="PackedScene" uid="uid://ceb84vl3jrmja" path="res://game/db/Objects/Polygon/Terrain/terrain_color_solid_lvl.tscn" id="1_snk2d"]
-[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_nvy0h"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_yq3xy"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_prop"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_go"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="4_pd"]
+
+[sub_resource type="Resource" id="PolygonData_solid"]
+script = ExtResource("4_pd")
+textured = false
+outline_width = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_snk2d"]
 
 [resource]
 resource_path = "res://game/db/Objects/Polygon/Terrain/terrain_color_solid.tres"
 resource_scene_unique_id = ""
-script = ExtResource("2_nvy0h")
+script = ExtResource("2_go")
 id = "terrain_color_solid"
 category = 2
 category_string = "Polygon"
 subpath = "Terrain/terrain_color_solid"
 group_path = "Terrain"
-ld_select_tool_override = "polygon_edit"
-ld_placement_tool_override = "polygon"
-ld_editor_instance = ExtResource("1_nvy0h")
-game_instance = ExtResource("1_snk2d")
-ld_properties = Array[ExtResource("1_k5tpx")]([ExtResource("4_yq3xy")])
-object_type = 3
+name_override = "Solid Color"
+ld_properties = Array[ExtResource("1_prop")]([ExtResource("3_pos")])
+object_type = 4
+telescoping_atlas = SubResource("AtlasTexture_snk2d")
+polygon_data = SubResource("PolygonData_solid")
 ld_object_path = "Polygon/Terrain/terrain_color_solid"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

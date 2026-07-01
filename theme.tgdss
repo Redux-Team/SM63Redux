@@ -1,0 +1,765 @@
+# @chunk Meta
+@meta {
+	name: "LD Glass"
+	default_scheme: dark
+}
+
+# @chunk Palette
+# Brand / accent
+@global var accent: "#3da4ff"
+@global var accent_hi: "#62b6ff"
+@global var accent_press: "#2c82d6"
+@global var on_accent: "#06101f"
+
+# Cool blue-tinted dark surfaces
+@global var bg: "#141a26"
+@global var surface: "#1c2332"
+@global var surface_2: "#252e41"
+@global var surface_3: "#333e57"
+@global var surface_4: "#42506e"
+@global var surface_glass: "#1c2332e6"
+
+# Text
+@global var text: "#eaeef5"
+@global var text_dim: "#9fa9bd"
+@global var text_mute: "#6a7488"
+
+# Lines / borders
+@global var line: "#3c4a63"
+@global var line_hi: "#54658c"
+
+# Semantic
+@global var danger: "#f25a4f"
+@global var danger_hi: "#ff7066"
+@global var danger_press: "#cf4339"
+@global var add: "#54d07a"
+@global var warn: "#ffb454"
+
+# Frosted glass (macOS / iOS vibrancy)
+@global var glass: "#0d121c"
+
+# Viewport gizmo palette
+@global var vertex_fill: "#f2f5f8"
+@global var vertex_border: "#3da4ff"
+@global var gizmo_edge: "#ffffff66"
+@global var gizmo_disabled: "#7a818c"
+@global var selection: "#3da4ff"
+@global var selection_fill: "#3da4ff20"
+@global var scrim: "#0a0d12c0"
+
+# Misc
+@global var tt: 0.06
+
+@scheme dark {
+}
+
+# @chunk Buttons
+Button {
+	bg_color: linear_gradient($surface_3, $surface_2, 90)
+	border_color: alpha(WHITE, 0.16)
+	border: 1 1 1 1
+	corner_radius: 6 6 6 6
+	anti_aliasing: true
+	font_color: $text
+	icon_color: WHITE
+	padding: 11 11 6 6
+	cursor: POINTING
+	transition_time: $tt
+	transition_type: EASE_OUT
+	transition_func: QUAD
+
+	:hover {
+		bg_color: linear_gradient($surface_4, $surface_3, 90)
+		border_color: alpha($accent, 0.45)
+	}
+	:pressed {
+		bg_color: linear_gradient($accent_hi, $accent, 90)
+		border_color: $accent_hi
+		font_color: $on_accent
+		icon_color: $on_accent
+	}
+	:hover_pressed {
+		bg_color: linear_gradient($accent_hi, $accent, 90)
+		border_color: $accent_hi
+		font_color: $on_accent
+		icon_color: $on_accent
+	}
+	:disabled {
+		bg_color: alpha($surface, 0.3)
+		border_color: alpha($line, 0.4)
+		font_color: $text_mute
+		icon_color: $text_mute
+		cursor: ARROW
+	}
+	:focus {
+		border_color: $accent
+	}
+
+	IconButton {
+		bg_color: rgba(0, 0, 0, 0)
+		border_color: rgba(0, 0, 0, 0)
+		border: 0 0 0 0
+		padding: 5 5 5 5
+		icon_color: WHITE
+		:hover {
+			bg_color: alpha(WHITE, 0.12)
+			border_color: rgba(0, 0, 0, 0)
+			icon_color: $text
+		}
+		:pressed {
+			bg_color: linear_gradient($accent_hi, $accent, 90)
+			icon_color: $on_accent
+		}
+		:disabled {
+			bg_color: rgba(0, 0, 0, 0)
+			icon_color: $text_mute
+		}
+	}
+
+	ToolButton {
+		bg_color: rgba(0, 0, 0, 0)
+		border_color: rgba(0, 0, 0, 0)
+		border: 0 0 0 0
+		padding: 5 5 5 5
+		icon_color: WHITE
+		:hover {
+			bg_color: alpha(WHITE, 0.12)
+			icon_color: $text
+		}
+		:pressed {
+			bg_color: linear_gradient($accent_hi, $accent, 90)
+			icon_color: $on_accent
+		}
+		:disabled {
+			bg_color: rgba(0, 0, 0, 0)
+			icon_color: $text_mute
+		}
+	}
+
+	Active {
+		bg_color: liquid_blur(2, $accent, 0.85, 1, 0.3)
+		border_color: $accent_hi
+		border: 1 1 1 1
+		padding: 5 5 5 5
+		icon_color: WHITE
+		font_color: WHITE
+		:hover {
+			bg_color: liquid_blur(2, $accent_hi, 0.9, 1, 0.32)
+			border_color: "#9bd0ff"
+			icon_color: WHITE
+		}
+		:pressed {
+			bg_color: $accent_press
+			icon_color: WHITE
+		}
+	}
+
+	ListRow {
+		bg_color: TRANSPARENT
+		border_color: rgba(0, 0, 0, 0)
+		border: 0 0 0 0
+		corner_radius: 6 6 6 6
+		font_color: $text
+		padding: 11 11 7 7
+		transition_time: 0.14
+		:hover {
+			bg_color: liquid_blur(3, $surface_3, 0.42, 1, 0.32)
+		}
+		:pressed {
+			bg_color: liquid_blur(2, $accent, 0.85, 1, 0.3)
+			font_color: WHITE
+		}
+		:hover_pressed {
+			bg_color: liquid_blur(2, $accent_hi, 0.9, 1, 0.32)
+			font_color: WHITE
+		}
+	}
+
+	Primary {
+		font_color: WHITE
+		bg_color: linear_gradient($accent_hi, $accent, 90)
+		border_color: $accent_hi
+		border: 1 1 1 1
+		corner_radius: 8 8 8 8
+		icon_color: WHITE
+		icon_max_width: 18
+		padding: 12 12 6 6
+		shadow: 3 3 3 3
+		shadow_color: alpha("#000", 0.15)
+		:hover {
+			bg_color: linear_gradient("#7cc2ff", $accent_hi, 90)
+			border_color: "#9bd0ff"
+			font_color: WHITE
+			icon_color: WHITE
+		}
+		:pressed {
+			bg_color: $accent_press
+			border_color: $accent_hi
+			font_color: WHITE
+			icon_color: WHITE
+		}
+		:hover_pressed {
+			bg_color: $accent_press
+			border_color: $accent_hi
+			font_color: WHITE
+			icon_color: WHITE
+		}
+	}
+
+	Test {
+		bg_color: liquid_blur(2, $accent, 0.72, 1.2)
+		border_color: alpha("#9bd0ff", 0.6)
+		border: 1 1 1 1
+		corner_radius: 8 8 8 8
+		font_color: WHITE
+		icon_color: WHITE
+		icon_max_width: 18
+		padding: 12 12 6 6
+		shadow: 8 8 8 8
+		shadow_color: alpha("#000", 0.15)
+		:hover {
+			bg_color: liquid_blur(2, $accent_hi, 0.78, 1.3)
+			border_color: "#cfe6ff"
+			font_color: WHITE
+			icon_color: WHITE
+		}
+		:pressed {
+			bg_color: $accent_press
+			font_color: WHITE
+		}
+	}
+
+	Danger {
+		bg_color: rgba(0, 0, 0, 0)
+		border_color: rgba(0, 0, 0, 0)
+		border: 0 0 0 0
+		icon_color: WHITE
+		font_color: $text
+		padding: 5 5 5 5
+		:hover {
+			bg_color: linear_gradient($danger_hi, $danger, 90)
+			icon_color: WHITE
+			font_color: WHITE
+		}
+		:pressed {
+			bg_color: $danger_press
+			icon_color: WHITE
+			font_color: WHITE
+		}
+		:disabled {
+			bg_color: rgba(0, 0, 0, 0)
+			border_color: rgba(0, 0, 0, 0)
+			border: 0 0 0 0
+			icon_color: $text_mute
+			font_color: $text_mute
+		}
+	}
+
+	Ghost {
+		bg_color: rgba(0, 0, 0, 0)
+		border_color: alpha(WHITE, 0.18)
+		border: 1 1 1 1
+		font_color: $text
+		icon_color: $text
+		:hover {
+			bg_color: alpha(WHITE, 0.1)
+			border_color: $accent
+		}
+		:pressed {
+			bg_color: alpha(WHITE, 0.16)
+		}
+	}
+
+	Flat {
+		bg_color: TRANSPARENT
+		border_color: TRANSPARENT
+		border: 0 0 0 0
+		font_color: alpha($text_dim, 0.3)
+		icon_color: $text_dim
+		padding: 8 8 5 5
+		:hover {
+			bg_color: alpha(WHITE, 0.1)
+			font_color: $text
+			icon_color: $text
+		}
+		:pressed {
+			bg_color: alpha(WHITE, 0.14)
+			font_color: $text
+			icon_color: $text
+		}
+		:hover_pressed {
+			font_color: $accent
+		}
+
+		FlatTab {
+			border: 1 1 1 1
+			border_color: alpha($line, 0.1)
+			bg_color: alpha("#000", 0.2)
+
+			:hover, :pressed, :hover_pressed {
+				border: 0 0 0 0
+			}
+		}
+	}
+
+	Chip {
+		bg_color: alpha(WHITE, 0.05)
+		border_color: alpha(WHITE, 0.1)
+		border: 1 1 1 1
+		corner_radius: 99 99 99 99
+		font_color: $text_dim
+		padding: 14 14 6 6
+		:hover {
+			bg_color: alpha(WHITE, 0.12)
+			font_color: $text
+		}
+		:pressed {
+			bg_color: linear_gradient($accent_hi, $accent, 90)
+			border_color: $accent_hi
+			font_color: $on_accent
+		}
+		:hover_pressed {
+			bg_color: linear_gradient($accent_hi, $accent, 90)
+			border_color: $accent_hi
+			font_color: $on_accent
+		}
+	}
+
+	ViewportToggle {
+		bg_color: alpha($glass, 0.55)
+		border_color: alpha(WHITE, 0.14)
+		border: 1 1 1 1
+		corner_radius: 8 8 8 8
+		padding: 5 5 5 5
+		icon_color: WHITE
+		:hover {
+			bg_color: alpha($glass, 0.72)
+			border_color: alpha($accent, 0.5)
+			icon_color: $text
+		}
+		:pressed {
+			bg_color: linear_gradient($accent_hi, $accent, 90)
+			border_color: $accent_hi
+			icon_color: $on_accent
+		}
+		:hover_pressed {
+			bg_color: linear_gradient($accent_hi, $accent, 90)
+			icon_color: $on_accent
+		}
+		:disabled {
+			bg_color: rgba(0, 0, 0, 0)
+			border_color: rgba(0, 0, 0, 0)
+			icon_color: $text_mute
+		}
+	}
+
+	Close {
+		bg_color: TRANSPARENT
+		border_color: alpha(WHITE, 0.18)
+		border: 1 1 1 1
+		corner_radius: 8 8 8 8
+		icon_color: $text
+		padding: 5 5 5 5
+		:hover {
+			bg_color: linear_gradient($danger_hi, $danger, 90)
+			border_color: $danger_hi
+			icon_color: "#ffffff"
+		}
+		:pressed {
+			border_color: TRANSPARENT
+			bg_color: $danger_press
+			icon_color: "#ffffff"
+		}
+	}
+
+	Tile {
+		bg_color: alpha(WHITE, 0.05)
+		border_color: alpha(WHITE, 0.1)
+		border: 1 1 1 1
+		corner_radius: 8 8 8 8
+		padding: 3 3 3 3
+		:hover {
+			bg_color: alpha(WHITE, 0.12)
+			border_color: $accent
+		}
+		:pressed {
+			bg_color: alpha($accent, 0.25)
+			border_color: $accent
+		}
+		:focus {
+			border_color: $accent
+		}
+	}
+
+	Hotbar {
+		bg_color: alpha(WHITE, 0.05)
+		border_color: alpha(WHITE, 0.12)
+		border: 1 1 1 1
+		corner_radius: 8 8 8 8
+		padding: 3 3 3 3
+		:hover {
+			bg_color: alpha(WHITE, 0.12)
+			border_color: $accent
+		}
+		:focus {
+			border_color: $accent
+		}
+
+		BorderlessHotbar {
+			border: 0 0 0 0
+			bg_color: alpha(WHITE, 0.04)
+			padding: 6 6 6 6
+		}
+	}
+
+	Vertex {
+		bg_color: $vertex_fill
+		border_color: $accent
+		border: 2 2 2 2
+		corner_radius: 99 99 99 99
+		padding: 0 0 0 0
+		:hover {
+			bg_color: $accent
+			border_color: $accent_hi
+		}
+		:pressed {
+			bg_color: $accent_press
+			border_color: "#ffffff"
+		}
+	}
+	VertexHead {
+		bg_color: $accent
+		border_color: "#ffffff"
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+		:hover {
+			bg_color: $accent_hi
+		}
+	}
+	VertexHole {
+		bg_color: alpha($surface, 0.92)
+		border_color: $accent
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+		:hover {
+			bg_color: alpha($accent, 0.2)
+		}
+	}
+	VertexPreview {
+		bg_color: alpha($accent, 0.2)
+		border_color: alpha($accent, 0.45)
+		border: 2 2 2 2
+		corner_radius: 2 2 2 2
+	}
+}
+
+# @chunk Panels
+Panel, PanelContainer {
+	bg_color: TRANSPARENT
+	border_color: TRANSPARENT
+	border: 0 0 0 0
+	corner_radius: 0 0 0 0
+	anti_aliasing: true
+	
+	Window {
+		bg_color: $surface_glass
+		border_color: $line_hi
+		border: 1 1 1 1
+		corner_radius: 14 14 14 14
+		shadow: 28 28 28 28
+		shadow_color: alpha("#000", 0.42)
+	}
+	
+	Bar {
+		bg_color: liquid_blur(2.5, $surface, 0.7, 2)
+		corner_radius: 10 10 10 10
+		padding: 4 4 4 4
+		shadow: 5 5 5 5
+		shadow_color: alpha("#000", 0.22)
+	
+		BottomBar {
+			corner_radius: 10 10 10 10
+		}
+	}
+
+	ToolBar {
+		bg_color: liquid_blur(4, $glass, 0.1)
+		border_color: alpha(WHITE, 0.16)
+		border: 0 0 0 0
+		corner_radius: 10 10 0 0
+		padding: 4 4 4 4
+	}
+
+	Card {
+		bg_color: liquid_blur(3, $surface_2, 0.85, 1, 0.1)
+		border: 0 0 0 0
+		corner_radius: 10 10 10 10
+		padding: 8 8 8 8
+	}
+
+	Inset {
+		bg_color: alpha("#000", 0.22)
+		border_color: alpha("#000", 0.3)
+		border: 0 0 0 0
+		corner_radius: 8 8 8 8
+		padding: 6 6 6 6
+	}
+
+	SliderKnob {
+		bg_color: "#f2f5f8"
+		border_color: alpha("#0a0d12", 0.5)
+		border: 1 1 1 1
+		corner_radius: 99 99 99 99
+	}
+
+	Group {
+		bg_color: liquid_blur(8, $surface_glass, 0.85)
+		border_color: alpha(WHITE, 0.08)
+		border: 1 1 1 1
+		corner_radius: 8 8 8 8
+		padding: 5 5 5 5
+	}
+
+	Tooltip {
+		bg_color: liquid_blur(4, $glass, 0.72)
+		border_color: alpha(WHITE, 0.16)
+		border: 1 1 1 1
+		corner_radius: 8 8 8 8
+		padding: 6 6 5 5
+	}
+}
+
+
+VSeparator {
+	padding_left: 1
+	bg_color: alpha(WHITE, 0.12)
+}
+
+HSeparator {
+	padding_top: 1
+	bg_color: alpha(WHITE, 0.1)
+}
+
+
+# @chunk Inputs
+LineEdit {
+	bg_color: blur(11, $glass, 0.85)
+	border_color: alpha(WHITE, 0.12)
+	border: 1 1 1 1
+	corner_radius: 6 6 6 6
+	anti_aliasing: true
+	font_color: $text
+	caret_color: $accent
+
+	selection_color: alpha($accent, 0.45)
+	padding: 8 8 6 6
+	cursor: IBEAM
+	transition_time: $tt
+	:focus {
+		border_color: $accent
+	}
+	:read_only {
+		bg_color: alpha("#000", 0.12)
+		font_color: $text_mute
+	}
+}
+
+OptionButton {
+	bg_color: alpha(WHITE, 0.06)
+	border_color: alpha(WHITE, 0.12)
+	border: 1 1 1 1
+	corner_radius: 6 6 6 6
+	anti_aliasing: true
+	font_color: $text
+	padding: 10 10 6 6
+	cursor: POINTING
+	transition_time: $tt
+	:hover {
+		bg_color: alpha(WHITE, 0.1)
+		border_color: alpha($accent, 0.5)
+	}
+	:pressed {
+		bg_color: alpha(WHITE, 0.14)
+	}
+	:focus {
+		border_color: $accent
+	}
+}
+
+SpinBox {
+	bg_color: alpha("#000", 0.22)
+	border_color: alpha(WHITE, 0.12)
+	border: 1 1 1 1
+	corner_radius: 6 6 6 6
+	anti_aliasing: true
+	font_color: $text
+	:focus {
+		border_color: $accent
+	}
+}
+
+CheckBox, CheckButton {
+	font_color: $text_dim
+	cursor: POINTING
+	transition_time: $tt
+	:hover {
+		font_color: $text
+	}
+	:pressed {
+		font_color: $accent
+	}
+}
+
+HSlider, VSlider {
+	bg_color: alpha(WHITE, 0.12)
+	border_color: alpha(WHITE, 0.16)
+	border: 1 1 1 1
+	corner_radius: 4 4 4 4
+	padding: 2 2 3 3
+	anti_aliasing: true
+	:grabber_area {
+		bg_color: linear_gradient($accent_hi, $accent, 90)
+		corner_radius: 4 4 4 4
+		padding: 2 2 3 3
+	}
+	:grabber_area_highlight {
+		bg_color: linear_gradient("#7cc2ff", $accent_hi, 90)
+		corner_radius: 4 4 4 4
+		padding: 2 2 3 3
+	}
+}
+
+# @chunk Lists
+ItemList {
+	bg_color: alpha("#000", 0.18)
+	border_color: alpha(WHITE, 0.1)
+	border: 1 1 1 1
+	corner_radius: 8 8 8 8
+	anti_aliasing: true
+	font_color: $text
+	:hovered {
+		bg_color: alpha(WHITE, 0.08)
+		corner_radius: 6 6 6 6
+	}
+	:selected {
+		bg_color: alpha($accent, 0.22)
+		border_color: alpha($accent, 0.45)
+		border: 1 1 1 1
+		corner_radius: 6 6 6 6
+	}
+	:selected_focus {
+		bg_color: alpha($accent, 0.22)
+		border_color: $accent
+		border: 1 1 1 1
+		corner_radius: 6 6 6 6
+	}
+	:cursor {
+		bg_color: rgba(0, 0, 0, 0)
+		border_color: alpha($accent, 0.45)
+		border: 1 1 1 1
+		corner_radius: 6 6 6 6
+	}
+	:cursor_unfocused {
+		bg_color: rgba(0, 0, 0, 0)
+		border_color: $line
+		border: 1 1 1 1
+		corner_radius: 6 6 6 6
+	}
+}
+
+Tree {
+	bg_color: alpha("#000", 0.18)
+	border_color: alpha(WHITE, 0.1)
+	border: 1 1 1 1
+	corner_radius: 8 8 8 8
+	anti_aliasing: true
+	font_color: $text
+	:selected {
+		bg_color: alpha($accent, 0.22)
+		corner_radius: 6 6 6 6
+	}
+	:selected_focus {
+		bg_color: alpha($accent, 0.22)
+		corner_radius: 6 6 6 6
+	}
+}
+
+TabContainer, TabBar {
+	bg_color: rgba(0, 0, 0, 0)
+	anti_aliasing: true
+	font_color: $text_dim
+	:tab_selected {
+		bg_color: alpha(WHITE, 0.1)
+		font_color: $text
+		corner_radius: 6 6 0 0
+	}
+	:tab_hovered {
+		bg_color: alpha(WHITE, 0.06)
+	}
+	:tab_unselected {
+		bg_color: rgba(0, 0, 0, 0)
+		font_color: $text_mute
+	}
+}
+
+ScrollContainer {
+	bg_color: rgba(0, 0, 0, 0)
+}
+
+VScrollBar, HScrollBar {
+	bg_color: rgba(0, 0, 0, 0)
+	anti_aliasing: true
+	:scroll {
+		bg_color: rgba(0, 0, 0, 0)
+	}
+	:grabber {
+		bg_color: alpha(WHITE, 0.18)
+		corner_radius: 6 6 6 6
+	}
+	:grabber_highlight {
+		bg_color: alpha(WHITE, 0.28)
+		corner_radius: 6 6 6 6
+	}
+	:grabber_pressed {
+		bg_color: $accent
+		corner_radius: 6 6 6 6
+	}
+}
+
+# @chunk Text
+Label {
+	font_color: $text
+
+	Title {
+		font_color: $text
+		font_size: 17
+	}
+	Subtitle {
+		font_color: $text_dim
+		font_size: 13
+	}
+	Dim {
+		font_color: $text_dim
+	}
+	Mute {
+		font_color: $text_mute
+		font_size: 12
+	}
+	Status {
+		font_color: $text
+		font_outline_color: "#0a0d12"
+		outline_size: 4
+	}
+	SectionHeader {
+		font_color: $text_dim
+		font_size: 12
+	}
+	TileCaption {
+		font_color: $text_dim
+		font_size: 9
+	}
+}
+
+RichTextLabel {
+	font_color: $text
+}

@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://om5f15t2keo7" path="res://game/object/spinning_block/spinning_block.gd" id="1_n0bea"]
 [ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_kecoa"]
-[ext_resource type="Texture2D" uid="uid://yjs38ak21x7k" path="res://assets/textures/props/gizmos/spinning_block_pattern_chainlink.png" id="2_n0bea"]
-[ext_resource type="Texture2D" uid="uid://byohvqpuouqc6" path="res://assets/textures/props/gizmos/spinning_block_center.png" id="4_7uylk"]
-[ext_resource type="Texture2D" uid="uid://dxk70eouctxtx" path="res://assets/textures/props/gizmos/spinning_block.png" id="4_sef56"]
+[ext_resource type="Texture2D" uid="uid://yjs38ak21x7k" path="res://assets/textures/objects/interactive/gizmos/spinning_block_pattern_chainlink.png" id="2_n0bea"]
+[ext_resource type="Texture2D" uid="uid://byohvqpuouqc6" path="res://assets/textures/objects/interactive/gizmos/spinning_block_center.png" id="4_7uylk"]
+[ext_resource type="Texture2D" uid="uid://dxk70eouctxtx" path="res://assets/textures/objects/interactive/gizmos/spinning_block.png" id="4_sef56"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kecoa"]
 resource_local_to_scene = true

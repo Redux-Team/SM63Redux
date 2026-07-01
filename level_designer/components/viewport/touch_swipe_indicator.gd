@@ -103,12 +103,13 @@ func _draw() -> void:
 	if _outer_alpha <= 0.0:
 		return
 	
-	var outer_color: Color = Color(circle_color.r, circle_color.g, circle_color.b, outer_opacity * _outer_alpha)
+	var base: Color = LDPalette.accent()
+	var outer_color: Color = Color(base.r, base.g, base.b, outer_opacity * _outer_alpha)
 	draw_arc(_pos, max_radius, 0.0, TAU, 64, outer_color, outer_width)
-	
+
 	if _fill_alpha > 0.0 and _fill_radius > 0.0:
-		var base_color: Color = Color(circle_color.r, circle_color.g, circle_color.b, circle_color.a * _fill_alpha)
+		var base_color: Color = Color(base.r, base.g, base.b, circle_color.a * _fill_alpha)
 		draw_circle(_pos, _fill_radius, base_color)
 		if _pulse_alpha > 0.0:
-			var pulse_color: Color = Color(1.0, 1.0, 1.0, _pulse_alpha * _fill_alpha)
+			var pulse_color: Color = Color(LDPalette.vertex_fill(), _pulse_alpha * _fill_alpha)
 			draw_circle(_pos, _fill_radius, pulse_color)

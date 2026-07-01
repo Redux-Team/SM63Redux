@@ -1,0 +1,198 @@
+[gd_scene load_steps=4 format=3 uid="uid://bv5681608mo15"]
+
+[ext_resource type="Script" uid="uid://g3xdcqgrak3c" path="res://level_designer/components/ui/stamps_editor/stamps_editor.gd" id="1_nu57e"]
+[ext_resource type="Texture2D" uid="uid://boi5n5utdpqmj" path="res://assets/textures/level_designer/ui_icons/add.svg" id="ic_add"]
+[ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="ic_remove"]
+
+[node name="StampsEditor" type="MarginContainer" node_paths=PackedStringArray("row_container", "count_label", "create_button", "remove_button", "detail_content", "empty_center", "name_edit", "indexable_check", "preview_rect", "replace_button", "instances_label", "instance_row_container", "remove_instance_button")]
+custom_minimum_size = Vector2(500, 0)
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+metadata/gdss_mode = 1
+script = ExtResource("1_nu57e")
+row_container = NodePath("Columns/ListColumn/ListInset/ListScroll/RowList")
+count_label = NodePath("Columns/ListColumn/CountLabel")
+create_button = NodePath("Columns/ListColumn/Toolbar/CreateButton")
+remove_button = NodePath("Columns/ListColumn/Toolbar/RemoveButton")
+detail_content = NodePath("Columns/Detail/DetailInset/DetailContent")
+empty_center = NodePath("Columns/Detail/DetailInset/EmptyCenter")
+name_edit = NodePath("Columns/Detail/DetailInset/DetailContent/TopRow/NameCol/NameEdit")
+indexable_check = NodePath("Columns/Detail/DetailInset/DetailContent/IndexableRow/IndexableCheck")
+preview_rect = NodePath("Columns/Detail/DetailInset/DetailContent/TopRow/PreviewFrame/PreviewRect")
+replace_button = NodePath("Columns/Detail/DetailInset/DetailContent/ReplaceButton")
+instances_label = NodePath("Columns/Detail/DetailInset/DetailContent/InstancesHeader/InstancesLabel")
+instance_row_container = NodePath("Columns/Detail/DetailInset/DetailContent/InstanceInset/InstanceScroll/InstanceRowList")
+remove_instance_button = NodePath("Columns/Detail/DetailInset/DetailContent/InstancesHeader/RemoveInstanceButton")
+
+[node name="Columns" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="ListColumn" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="ListInset" type="PanelContainer" parent="Columns/ListColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="ListScroll" type="ScrollContainer" parent="Columns/ListColumn/ListInset"]
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="RowList" type="VBoxContainer" parent="Columns/ListColumn/ListInset/ListScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="CountLabel" type="Label" parent="Columns/ListColumn"]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0.55)
+horizontal_alignment = 1
+metadata/gdss_classes = PackedStringArray("Mute")
+
+[node name="Toolbar" type="HBoxContainer" parent="Columns/ListColumn"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CreateButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+tooltip_text = "Create from Selection"
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_add")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="Spacer" type="Control" parent="Columns/ListColumn/Toolbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="RemoveButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+tooltip_text = "Remove Stamp"
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_remove")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton", "Danger")
+
+[node name="Detail" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DetailInset" type="PanelContainer" parent="Columns/Detail"]
+custom_minimum_size = Vector2(0, 244)
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Card")
+
+[node name="DetailContent" type="VBoxContainer" parent="Columns/Detail/DetailInset"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TopRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/DetailContent"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PreviewFrame" type="PanelContainer" parent="Columns/Detail/DetailInset/DetailContent/TopRow"]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+size_flags_vertical = 4
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="PreviewRect" type="TextureRect" parent="Columns/Detail/DetailInset/DetailContent/TopRow/PreviewFrame"]
+texture_filter = 1
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameCol" type="VBoxContainer" parent="Columns/Detail/DetailInset/DetailContent/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 6
+
+[node name="NameLabel" type="Label" parent="Columns/Detail/DetailInset/DetailContent/TopRow/NameCol"]
+layout_mode = 2
+text = "Name"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="NameEdit" type="LineEdit" parent="Columns/Detail/DetailInset/DetailContent/TopRow/NameCol"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+placeholder_text = "Stamp name"
+
+[node name="IndexableRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/DetailContent"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/DetailContent/IndexableRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+vertical_alignment = 1
+text = "Show in Object Browser"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="IndexableCheck" type="CheckButton" parent="Columns/Detail/DetailInset/DetailContent/IndexableRow"]
+layout_mode = 2
+
+[node name="InstancesHeader" type="HBoxContainer" parent="Columns/Detail/DetailInset/DetailContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="InstancesLabel" type="Label" parent="Columns/Detail/DetailInset/DetailContent/InstancesHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+vertical_alignment = 1
+text = "Instances in this area"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="RemoveInstanceButton" type="Button" parent="Columns/Detail/DetailInset/DetailContent/InstancesHeader"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Remove Instance"
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_remove")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton", "Danger")
+
+[node name="InstanceInset" type="PanelContainer" parent="Columns/Detail/DetailInset/DetailContent"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="InstanceScroll" type="ScrollContainer" parent="Columns/Detail/DetailInset/DetailContent/InstanceInset"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="InstanceRowList" type="VBoxContainer" parent="Columns/Detail/DetailInset/DetailContent/InstanceInset/InstanceScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="ReplaceButton" type="Button" parent="Columns/Detail/DetailInset/DetailContent"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+tooltip_text = "Rebuild this stamp from the current selection"
+mouse_default_cursor_shape = 2
+text = "Replace with Selection"
+
+[node name="EmptyCenter" type="CenterContainer" parent="Columns/Detail/DetailInset"]
+layout_mode = 2
+
+[node name="EmptyLabel" type="Label" parent="Columns/Detail/DetailInset/EmptyCenter"]
+modulate = Color(1, 1, 1, 0.6)
+layout_mode = 2
+text = "No stamp selected."
+metadata/gdss_classes = PackedStringArray("Mute")

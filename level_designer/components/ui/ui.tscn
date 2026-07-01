@@ -6,70 +6,177 @@
 [ext_resource type="PackedScene" uid="uid://bk2iromqs3siv" path="res://level_designer/components/ui/object_browser/object_browser.tscn" id="3_ms7r3"]
 [ext_resource type="PackedScene" uid="uid://wfkq6ce52aet" path="res://level_designer/components/ui/object_properties/object_properties.tscn" id="4_4nlpt"]
 [ext_resource type="PackedScene" uid="uid://ckffdp04tglj1" path="res://level_designer/components/ui/layer_properties/layer_properties.tscn" id="5_uannl"]
+[ext_resource type="PackedScene" uid="uid://bv5681608mo15" path="res://level_designer/components/ui/stamps_editor/stamps_editor.tscn" id="7_7flq5"]
+[ext_resource type="PackedScene" uid="uid://dgird3k34e6e4" path="res://level_designer/components/ui/picker_dialog/picker_dialog.tscn" id="8_7agmi"]
+[ext_resource type="PackedScene" uid="uid://bal8u53r7omfw" path="res://level_designer/components/ui/scenarios_editor/scenarios_editor.tscn" id="9_scen0"]
+[ext_resource type="PackedScene" uid="uid://bcntswgx5f1b5" path="res://level_designer/components/ui/tags_editor/tags_editor.tscn" id="10_tagsed"]
+[ext_resource type="Script" uid="uid://bcrr2s3fmhfcm" path="res://level_designer/components/ui/handlers/window_handler.gd" id="11_winh"]
+[ext_resource type="Script" uid="uid://bf2vj410dqc8f" path="res://level_designer/components/ui/handlers/viewport_handler.gd" id="12_vph"]
+[ext_resource type="Script" uid="uid://cbw1d2jhdpum6" path="res://level_designer/components/ui/handlers/toolbar_handler.gd" id="13_tbh"]
+[ext_resource type="Script" uid="uid://lrb5ohycsklh" path="res://level_designer/components/ui/handlers/file_handler.gd" id="14_flh"]
+[ext_resource type="Script" uid="uid://dk5mqfpnm77cy" path="res://level_designer/components/ui/handlers/hotbar_handler.gd" id="15_hbh"]
+[ext_resource type="Script" uid="uid://d38wd86ydwydo" path="res://level_designer/components/ui/window/window_def.gd" id="16_wdef"]
+[ext_resource type="PackedScene" uid="uid://c8bgedit0lds1" path="res://level_designer/components/ui/backgrounds_editor/backgrounds_editor.tscn" id="17_bged"]
+[ext_resource type="PackedScene" uid="uid://bar3aedit0r7x" path="res://level_designer/components/ui/areas_editor/areas_editor.tscn" id="18_aread"]
+[ext_resource type="Script" uid="uid://cer032iulvsqx" path="res://level_designer/components/ui/handlers/chrome_handler.gd" id="19_chrome"]
+[ext_resource type="Theme" uid="uid://b6ld3d1tor8em" path="res://level_designer/ld_editor_theme.tres" id="20_theme"]
+[ext_resource type="PackedScene" uid="uid://dkm3i8yhjnauq" path="res://level_designer/components/ui/music_editor/music_editor.tscn" id="21_mused"]
+[ext_resource type="Texture2D" uid="uid://bg3fpaudox0nq" path="res://assets/textures/level_designer/ui_icons/areas.svg" id="ic_areas"]
+[ext_resource type="Texture2D" uid="uid://cosmmki8kuy3b" path="res://assets/textures/level_designer/ui_icons/back.svg" id="ic_back"]
+[ext_resource type="Texture2D" uid="uid://bt8u6qrpfh11r" path="res://assets/textures/level_designer/ui_icons/background.svg" id="ic_background"]
+[ext_resource type="Texture2D" uid="uid://dxl3d6p8p8abe" path="res://assets/textures/level_designer/ui_icons/brush.svg" id="ic_brush"]
+[ext_resource type="Texture2D" uid="uid://4d45lckanwet" path="res://assets/textures/level_designer/ui_icons/copy.svg" id="ic_copy"]
+[ext_resource type="Texture2D" uid="uid://cy2fwmvt1qb8m" path="res://assets/textures/level_designer/ui_icons/cut.svg" id="ic_cut"]
+[ext_resource type="Texture2D" uid="uid://h1c6arheylxs" path="res://assets/textures/level_designer/ui_icons/delete.svg" id="ic_delete"]
+[ext_resource type="Texture2D" uid="uid://cydterukyixtc" path="res://assets/textures/level_designer/ui_icons/deselect.svg" id="ic_deselect"]
+[ext_resource type="Texture2D" uid="uid://ckpn15rmdxikj" path="res://assets/textures/level_designer/ui_icons/duplicate.svg" id="ic_duplicate"]
+[ext_resource type="Texture2D" uid="uid://d3e3c2uxp1rug" path="res://assets/textures/level_designer/ui_icons/front.svg" id="ic_front"]
+[ext_resource type="Texture2D" uid="uid://cdf06k1irrjl7" path="res://assets/textures/level_designer/ui_icons/ghost.svg" id="ic_ghost"]
+[ext_resource type="Texture2D" uid="uid://btl2agxeb00f0" path="res://assets/textures/level_designer/ui_icons/layers.svg" id="ic_layers"]
+[ext_resource type="Texture2D" uid="uid://c687phmm1ui5d" path="res://assets/textures/level_designer/ui_icons/load.svg" id="ic_load"]
+[ext_resource type="Texture2D" uid="uid://c3wjnompc3ko1" path="res://assets/textures/level_designer/ui_icons/modulate.svg" id="ic_modulate"]
+[ext_resource type="Texture2D" uid="uid://c0t02y00tbi4v" path="res://assets/textures/level_designer/ui_icons/move.svg" id="ic_move"]
+[ext_resource type="Texture2D" uid="uid://dcgs3ybhnoflf" path="res://assets/textures/level_designer/ui_icons/music.svg" id="ic_music"]
+[ext_resource type="Texture2D" uid="uid://dc3oaou1gm27a" path="res://assets/textures/level_designer/ui_icons/next.svg" id="ic_next"]
+[ext_resource type="Texture2D" uid="uid://c6nnr2y5wa4kb" path="res://assets/textures/level_designer/ui_icons/obj_browser.svg" id="ic_obj_browser"]
+[ext_resource type="Texture2D" uid="uid://bcwxbcnfeorko" path="res://assets/textures/level_designer/ui_icons/parallax.svg" id="ic_parallax"]
+[ext_resource type="Texture2D" uid="uid://6gsw2a3tl24c" path="res://assets/textures/level_designer/ui_icons/paste.svg" id="ic_paste"]
+[ext_resource type="Texture2D" uid="uid://x3thrperd2h" path="res://assets/textures/level_designer/ui_icons/place.svg" id="ic_place"]
+[ext_resource type="Texture2D" uid="uid://t56qffjb1o1v" path="res://assets/textures/level_designer/ui_icons/poly_add.svg" id="ic_poly_add"]
+[ext_resource type="Texture2D" uid="uid://bfgi7fllhubb1" path="res://assets/textures/level_designer/ui_icons/poly_cut.svg" id="ic_poly_cut"]
+[ext_resource type="Texture2D" uid="uid://dgwk8rteoin2n" path="res://assets/textures/level_designer/ui_icons/poly_edit.svg" id="ic_poly_edit"]
+[ext_resource type="Texture2D" uid="uid://dupps81nqleq" path="res://assets/textures/level_designer/ui_icons/prev.svg" id="ic_prev"]
+[ext_resource type="Texture2D" uid="uid://b2rthm7cwu5f7" path="res://assets/textures/level_designer/ui_icons/properties.svg" id="ic_properties"]
+[ext_resource type="Texture2D" uid="uid://6tjh88q2g2eg" path="res://assets/textures/level_designer/ui_icons/redo.svg" id="ic_redo"]
+[ext_resource type="Texture2D" uid="uid://chn4l2chy35bf" path="res://assets/textures/level_designer/ui_icons/reset_cam.svg" id="ic_reset_cam"]
+[ext_resource type="Texture2D" uid="uid://0o252anyb2n6" path="res://assets/textures/level_designer/ui_icons/reset_level.svg" id="ic_reset_level"]
+[ext_resource type="Texture2D" uid="uid://c81rcaj0gayug" path="res://assets/textures/level_designer/ui_icons/rotate.svg" id="ic_rotate"]
+[ext_resource type="Texture2D" uid="uid://datc01a7vb6pb" path="res://assets/textures/level_designer/ui_icons/save.svg" id="ic_save"]
+[ext_resource type="Texture2D" uid="uid://doo3j04k8g04x" path="res://assets/textures/level_designer/ui_icons/save_as.svg" id="ic_save_as"]
+[ext_resource type="Texture2D" uid="uid://befcyokqxrxmb" path="res://assets/textures/level_designer/ui_icons/scale.svg" id="ic_scale"]
+[ext_resource type="Texture2D" uid="uid://bplaqhn46tmar" path="res://assets/textures/level_designer/ui_icons/scenarios.svg" id="ic_scenarios"]
+[ext_resource type="Texture2D" uid="uid://bab4d65df10qt" path="res://assets/textures/level_designer/ui_icons/select.svg" id="ic_select"]
+[ext_resource type="Texture2D" uid="uid://c6so00y5lshit" path="res://assets/textures/level_designer/ui_icons/stamps.svg" id="ic_stamps"]
+[ext_resource type="Texture2D" uid="uid://biiwxx0evmvuj" path="res://assets/textures/level_designer/ui_icons/tags.svg" id="ic_tags"]
+[ext_resource type="Texture2D" uid="uid://bjde8tocexeq5" path="res://assets/textures/level_designer/ui_icons/test.svg" id="ic_test"]
+[ext_resource type="Texture2D" uid="uid://bv2rdcprprwg4" path="res://assets/textures/level_designer/ui_icons/test_client.svg" id="ic_test_client"]
+[ext_resource type="Texture2D" uid="uid://cnmqrty555op" path="res://assets/textures/level_designer/ui_icons/topline.svg" id="ic_topline"]
+[ext_resource type="Texture2D" uid="uid://noedtsilxu8q" path="res://assets/textures/level_designer/ui_icons/undo.svg" id="ic_undo"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_y8t77"]
+[sub_resource type="Resource" id="WindowDef_browser"]
+script = ExtResource("16_wdef")
+id = &"object_browser"
+scene = ExtResource("3_ms7r3")
+title = "Objects - All"
+window_scale = Vector2(0.9, 0.9)
+
+[sub_resource type="Resource" id="WindowDef_properties"]
+script = ExtResource("16_wdef")
+id = &"object_properties"
+scene = ExtResource("4_4nlpt")
+title = "Properties - <obj>"
+close_on_back_input = true
+window_scale = Vector2(0.9, 0.9)
+
+[sub_resource type="Resource" id="WindowDef_layer"]
+script = ExtResource("16_wdef")
+id = &"layer_properties"
+scene = ExtResource("5_uannl")
+title = "Layers"
+
+[sub_resource type="Resource" id="WindowDef_area"]
+script = ExtResource("16_wdef")
+id = &"area_editor"
+scene = ExtResource("18_aread")
+title = "Areas"
+
+[sub_resource type="Resource" id="WindowDef_stamp"]
+script = ExtResource("16_wdef")
+id = &"stamp_editor"
+scene = ExtResource("7_7flq5")
+title = "Stamp Editor"
+
+[sub_resource type="Resource" id="WindowDef_scenario"]
+script = ExtResource("16_wdef")
+id = &"scenario_editor"
+scene = ExtResource("9_scen0")
+title = "Scenario Editor"
+
+[sub_resource type="Resource" id="WindowDef_tag"]
+script = ExtResource("16_wdef")
+id = &"tag_editor"
+scene = ExtResource("10_tagsed")
+title = "Tag Editor"
+
+[sub_resource type="Resource" id="WindowDef_background"]
+script = ExtResource("16_wdef")
+id = &"background_editor"
+scene = ExtResource("17_bged")
+title = "Background"
+
+[sub_resource type="Resource" id="WindowDef_music"]
+script = ExtResource("16_wdef")
+id = &"music_editor"
+scene = ExtResource("21_mused")
+title = "Music"
+
+[sub_resource type="Resource" id="WindowDef_picker"]
+script = ExtResource("16_wdef")
+id = &"picker"
+scene = ExtResource("8_7agmi")
+title = "Select"
+
+[sub_resource type="InputEventKey" id="InputEventKey_jswlc"]
 device = -1
-keycode = 32
-unicode = 32
+ctrl_pressed = true
+keycode = 83
 
-[sub_resource type="Shortcut" id="Shortcut_agrqq"]
-events = [SubResource("InputEventKey_y8t77")]
+[sub_resource type="Shortcut" id="Shortcut_8wigk"]
+events = [SubResource("InputEventKey_jswlc")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_agrqq"]
+[sub_resource type="InputEventKey" id="InputEventKey_nm1lm"]
 device = -1
-keycode = 80
-unicode = 112
+shift_pressed = true
+ctrl_pressed = true
+keycode = 83
 
-[sub_resource type="Shortcut" id="Shortcut_wp4la"]
-events = [SubResource("InputEventKey_agrqq")]
+[sub_resource type="Shortcut" id="Shortcut_4kay6"]
+events = [SubResource("InputEventKey_nm1lm")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_wp4la"]
+[sub_resource type="InputEventKey" id="InputEventKey_d0brl"]
 device = -1
-keycode = 49
-unicode = 49
+ctrl_pressed = true
+keycode = 79
 
-[sub_resource type="Shortcut" id="Shortcut_kp1nf"]
-events = [SubResource("InputEventKey_wp4la")]
-
-[sub_resource type="InputEventKey" id="InputEventKey_11twt"]
+[sub_resource type="InputEventKey" id="InputEventKey_llbru"]
 device = -1
-keycode = 50
-unicode = 50
+ctrl_pressed = true
+keycode = 76
 
-[sub_resource type="Shortcut" id="Shortcut_awha3"]
-events = [SubResource("InputEventKey_11twt")]
+[sub_resource type="Shortcut" id="Shortcut_00vlk"]
+events = [SubResource("InputEventKey_d0brl"), SubResource("InputEventKey_llbru")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_uannl"]
+[sub_resource type="InputEventKey" id="InputEventKey_undo"]
 device = -1
-keycode = 81
-unicode = 113
+ctrl_pressed = true
+keycode = 90
 
-[sub_resource type="Shortcut" id="Shortcut_sdhrq"]
-events = [SubResource("InputEventKey_uannl")]
+[sub_resource type="Shortcut" id="Shortcut_undo"]
+events = [SubResource("InputEventKey_undo")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_sdhrq"]
+[sub_resource type="InputEventKey" id="InputEventKey_redo"]
 device = -1
-keycode = 66
-unicode = 98
+shift_pressed = true
+ctrl_pressed = true
+keycode = 90
 
-[sub_resource type="Shortcut" id="Shortcut_7flq5"]
-events = [SubResource("InputEventKey_sdhrq")]
-
-[sub_resource type="InputEventKey" id="InputEventKey_7flq5"]
+[sub_resource type="InputEventKey" id="InputEventKey_redoy"]
 device = -1
-keycode = 77
-unicode = 109
+ctrl_pressed = true
+keycode = 89
 
-[sub_resource type="Shortcut" id="Shortcut_7agmi"]
-events = [SubResource("InputEventKey_7flq5")]
-
-[sub_resource type="InputEventKey" id="InputEventKey_7agmi"]
-device = -1
-keycode = 82
-unicode = 114
-
-[sub_resource type="Shortcut" id="Shortcut_n78f0"]
-events = [SubResource("InputEventKey_7agmi")]
+[sub_resource type="Shortcut" id="Shortcut_redo"]
+events = [SubResource("InputEventKey_redo"), SubResource("InputEventKey_redoy")]
 
 [sub_resource type="InputEventKey" id="InputEventKey_gbgf4"]
 device = -1
@@ -107,17 +214,6 @@ unicode = 100
 [sub_resource type="Shortcut" id="Shortcut_uannl"]
 events = [SubResource("InputEventKey_kp1nf")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_bt7vf"]
-device = -1
-keycode = 4194312
-
-[sub_resource type="InputEventKey" id="InputEventKey_bntcf"]
-device = -1
-keycode = 4194308
-
-[sub_resource type="Shortcut" id="Shortcut_d84u2"]
-events = [SubResource("InputEventKey_bt7vf"), SubResource("InputEventKey_bntcf")]
-
 [sub_resource type="InputEventKey" id="InputEventKey_n78f0"]
 device = -1
 keycode = 4194305
@@ -139,348 +235,854 @@ keycode = 4194324
 [sub_resource type="Shortcut" id="Shortcut_y8t77"]
 events = [SubResource("InputEventKey_8p5vc")]
 
-[node name="UI" type="Node" unique_id=503310052 node_paths=PackedStringArray("_canvas_layer", "_obj_browser_window", "_object_property_window", "_layer_properties_window", "_save_file_dialog", "_load_file_dialog", "_reset_level_dialog", "_layer_num", "_parallaxing_button", "_ghosting_button", "_hotbar_buttons")]
+[sub_resource type="InputEventKey" id="InputEventKey_bt7vf"]
+device = -1
+keycode = 4194312
+
+[sub_resource type="InputEventKey" id="InputEventKey_bntcf"]
+device = -1
+keycode = 4194308
+
+[sub_resource type="Shortcut" id="Shortcut_d84u2"]
+events = [SubResource("InputEventKey_bt7vf"), SubResource("InputEventKey_bntcf")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_wp4la"]
+device = -1
+keycode = 49
+unicode = 49
+
+[sub_resource type="Shortcut" id="Shortcut_kp1nf"]
+events = [SubResource("InputEventKey_wp4la")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_11twt"]
+device = -1
+keycode = 50
+unicode = 50
+
+[sub_resource type="Shortcut" id="Shortcut_awha3"]
+events = [SubResource("InputEventKey_11twt")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_y8t77"]
+device = -1
+keycode = 32
+unicode = 32
+
+[sub_resource type="Shortcut" id="Shortcut_agrqq"]
+events = [SubResource("InputEventKey_y8t77")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_agrqq"]
+device = -1
+keycode = 80
+unicode = 112
+
+[sub_resource type="Shortcut" id="Shortcut_wp4la"]
+events = [SubResource("InputEventKey_agrqq")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_d84u2"]
+device = -1
+physical_keycode = 81
+unicode = 97
+
+[sub_resource type="Shortcut" id="Shortcut_sdhrq"]
+events = [SubResource("InputEventKey_d84u2")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_sdhrq"]
+device = -1
+keycode = 66
+unicode = 98
+
+[sub_resource type="Shortcut" id="Shortcut_7flq5"]
+events = [SubResource("InputEventKey_sdhrq")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_7flq5"]
+device = -1
+keycode = 77
+unicode = 109
+
+[sub_resource type="Shortcut" id="Shortcut_7agmi"]
+events = [SubResource("InputEventKey_7flq5")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_7agmi"]
+device = -1
+keycode = 82
+unicode = 114
+
+[sub_resource type="Shortcut" id="Shortcut_n78f0"]
+events = [SubResource("InputEventKey_7agmi")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_8wigk"]
+device = -1
+physical_keycode = 4194309
+
+[sub_resource type="Shortcut" id="Shortcut_nm1lm"]
+events = [SubResource("InputEventKey_8wigk")]
+
+[node name="UI" type="Node" unique_id=2080364698 node_paths=PackedStringArray("_canvas_layer", "_window_handler", "_viewport_handler", "_toolbar_handler", "_file_handler", "_hotbar_handler", "_chrome_handler")]
 script = ExtResource("1_8w51u")
 _canvas_layer = NodePath("ViewportUI")
-_obj_browser_window = NodePath("WindowLayer/ObjectBrowserWindow")
-_object_property_window = NodePath("WindowLayer/ObjectPropertyWindow")
-_layer_properties_window = NodePath("WindowLayer/LayerPropertiesWindow")
-_save_file_dialog = NodePath("WindowLayer/SaveFileDialog")
-_load_file_dialog = NodePath("WindowLayer/LoadFileDialog")
-_reset_level_dialog = NodePath("WindowLayer/ResetLevelDialog")
-_layer_num = NodePath("ViewportUI/VBoxContainer/HBoxContainer/LayerNum")
-_parallaxing_button = NodePath("ViewportUI/VBoxContainer/ParallaxingButton")
-_ghosting_button = NodePath("ViewportUI/VBoxContainer/GhostingButton")
-_hotbar_buttons = [NodePath("ViewportUI/HBoxContainer/HotbarButton"), NodePath("ViewportUI/HBoxContainer/HotbarButton2"), NodePath("ViewportUI/HBoxContainer/HotbarButton3"), NodePath("ViewportUI/HBoxContainer/HotbarButton4"), NodePath("ViewportUI/HBoxContainer/HotbarButton5"), NodePath("ViewportUI/HBoxContainer/HotbarButton6")]
+_window_handler = NodePath("WindowHandler")
+_viewport_handler = NodePath("ViewportHandler")
+_toolbar_handler = NodePath("ToolbarHandler")
+_file_handler = NodePath("FileHandler")
+_hotbar_handler = NodePath("HotbarHandler")
+_chrome_handler = NodePath("ChromeHandler")
 
-[node name="ViewportUI" type="CanvasLayer" parent="." unique_id=1904926983]
+[node name="WindowHandler" type="Node" parent="." unique_id=1919577132 node_paths=PackedStringArray("_window")]
+script = ExtResource("11_winh")
+_window = NodePath("../WindowLayer/Window")
+_window_defs = Array[ExtResource("16_wdef")]([SubResource("WindowDef_browser"), SubResource("WindowDef_properties"), SubResource("WindowDef_layer"), SubResource("WindowDef_area"), SubResource("WindowDef_stamp"), SubResource("WindowDef_scenario"), SubResource("WindowDef_tag"), SubResource("WindowDef_background"), SubResource("WindowDef_music"), SubResource("WindowDef_picker")])
+
+[node name="ViewportHandler" type="Node" parent="." unique_id=253371726 node_paths=PackedStringArray("_parallaxing_button", "_ghosting_button", "_modulation_button")]
+script = ExtResource("12_vph")
+_parallaxing_button = NodePath("../ViewportUI/LayerVisualsHBox/ParallaxingButton")
+_ghosting_button = NodePath("../ViewportUI/LayerVisualsHBox/GhostingButton")
+_modulation_button = NodePath("../ViewportUI/LayerVisualsHBox/ModulationButton")
+
+[node name="ToolbarHandler" type="Node" parent="." unique_id=1552504920 node_paths=PackedStringArray("_layer_name_label", "_prev_layer_button", "_next_layer_button")]
+script = ExtResource("13_tbh")
+_layer_name_label = NodePath("../ViewportUI/BottomBar/Row/NavGroup/LayerNav/LayerName")
+_prev_layer_button = NodePath("../ViewportUI/BottomBar/Row/NavGroup/LayerNav/PrevLayer")
+_next_layer_button = NodePath("../ViewportUI/BottomBar/Row/NavGroup/LayerNav/NextLayer")
+
+[node name="FileHandler" type="Node" parent="." unique_id=350661988 node_paths=PackedStringArray("_save_file_dialog", "_load_file_dialog", "_reset_level_dialog", "_save_new_button", "_save_button")]
+script = ExtResource("14_flh")
+_save_file_dialog = NodePath("../WindowLayer/SaveFileDialog")
+_load_file_dialog = NodePath("../WindowLayer/LoadFileDialog")
+_reset_level_dialog = NodePath("../WindowLayer/ResetLevelDialog")
+_save_new_button = NodePath("../ViewportUI/TopBarL/Row/FileGroup/SaveNewButton")
+_save_button = NodePath("../ViewportUI/TopBarL/Row/FileGroup/SaveButton")
+
+[node name="HotbarHandler" type="Node" parent="." unique_id=1390092617 node_paths=PackedStringArray("_hotbar_buttons")]
+script = ExtResource("15_hbh")
+_hotbar_buttons = [NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton2"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton3"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton4"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton5"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton6"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton7"), NodePath("../ViewportUI/BottomBar/Row/Hotbar/HotbarButton8")]
+
+[node name="ChromeHandler" type="Node" parent="." unique_id=1489396500 node_paths=PackedStringArray("_select_button", "_brush_button", "_move_button", "_rotate_button", "_scale_button", "_place_button", "_poly_edit_button", "_poly_add_button", "_poly_cut_button", "_topline_button", "_selection_op_buttons", "_undo_button", "_redo_button", "_paste_button", "_properties_button", "_panel_buttons")]
+script = ExtResource("19_chrome")
+_select_button = NodePath("../ViewportUI/ToolRail/Tools/SelectButton")
+_brush_button = NodePath("../ViewportUI/ToolRail/Tools/BrushButton")
+_move_button = NodePath("../ViewportUI/ToolRail/Tools/MoveButton")
+_rotate_button = NodePath("../ViewportUI/ToolRail/Tools/RotateButton")
+_scale_button = NodePath("../ViewportUI/ToolRail/Tools/ScaleButton")
+_place_button = NodePath("../ViewportUI/ToolRail/Tools/PlaceButton")
+_poly_edit_button = NodePath("../ViewportUI/ToolRail/Tools/PolyEditButton")
+_poly_add_button = NodePath("../ViewportUI/ToolRail/Tools/PolyAddButton")
+_poly_cut_button = NodePath("../ViewportUI/ToolRail/Tools/PolyCutButton")
+_topline_button = NodePath("../ViewportUI/ToolRail/Tools/ToplineButton")
+_selection_op_buttons = [NodePath("../ViewportUI/TopBarR/EditGroup/CutButton"), NodePath("../ViewportUI/TopBarR/EditGroup/CopyButton"), NodePath("../ViewportUI/TopBarR/EditGroup/DuplicateButton"), NodePath("../ViewportUI/TopBarR/EditGroup/DeselectButton"), NodePath("../ViewportUI/TopBarR/EditGroup/MoveToFrontButton"), NodePath("../ViewportUI/TopBarR/EditGroup/MoveToBackButton"), NodePath("../ViewportUI/TopBarR/EditGroup/DeleteButton")]
+_undo_button = NodePath("../ViewportUI/TopBarL/Row/FileGroup/UndoButton")
+_redo_button = NodePath("../ViewportUI/TopBarL/Row/FileGroup/RedoButton")
+_paste_button = NodePath("../ViewportUI/TopBarR/EditGroup/PasteButton")
+_properties_button = NodePath("../ViewportUI/ToolRail/Tools/PropertiesButton")
+_panel_buttons = [NodePath("../ViewportUI/ToolRail/Tools/ObjectBrowserButton"), NodePath("../ViewportUI/ToolRail/Tools/PropertiesButton"), NodePath("../ViewportUI/PanelRail/Panels/LayerProperties"), NodePath("../ViewportUI/PanelRail/Panels/AreasButton"), NodePath("../ViewportUI/PanelRail/Panels/TagsButton"), NodePath("../ViewportUI/PanelRail/Panels/StampsButton"), NodePath("../ViewportUI/PanelRail/Panels/ScenariosButton"), NodePath("../ViewportUI/PanelRail/Panels/BackgroundButton"), NodePath("../ViewportUI/PanelRail/Panels/MusicButton")]
+_panel_ids = Array[StringName]([&"object_browser", &"object_properties", &"layer_properties", &"area_editor", &"tag_editor", &"stamp_editor", &"scenario_editor", &"background_editor", &"music_editor"])
+
+[node name="ViewportUI" type="CanvasLayer" parent="." unique_id=1959582476]
 layer = 2
+metadata/gdss_mode = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ViewportUI" unique_id=973437547]
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 123.0
-offset_bottom = 62.0
-mouse_filter = 2
+[node name="TopBarL" type="PanelContainer" parent="ViewportUI" unique_id=931816477]
+texture_filter = 4
+offset_left = 12.0
+offset_top = 10.0
+offset_right = 12.0
+offset_bottom = 46.0
+mouse_filter = 1
+theme = ExtResource("20_theme")
+metadata/gdss_classes = PackedStringArray("Bar")
 
-[node name="ObjectBrowserButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=1541290733]
+[node name="Row" type="HBoxContainer" parent="ViewportUI/TopBarL" unique_id=1057369055]
 layout_mode = 2
-size_flags_horizontal = 0
+
+[node name="FileGroup" type="HBoxContainer" parent="ViewportUI/TopBarL/Row" unique_id=1277824668]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="ViewportUI/TopBarL/Row/FileGroup" unique_id=492240994]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Save (Ctrl+S)"
 focus_mode = 0
-shortcut = SubResource("Shortcut_agrqq")
-text = "Object Browser"
+mouse_default_cursor_shape = 2
+shortcut = SubResource("Shortcut_8wigk")
+icon = ExtResource("ic_save")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="PropertiesButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=1478737431]
+[node name="SaveNewButton" type="Button" parent="ViewportUI/TopBarL/Row/FileGroup" unique_id=619679234]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-size_flags_horizontal = 0
+tooltip_text = "Save As... (Ctrl+Shift+S)"
 focus_mode = 0
-shortcut = SubResource("Shortcut_wp4la")
-text = "Properties"
+mouse_default_cursor_shape = 2
+shortcut = SubResource("Shortcut_4kay6")
+icon = ExtResource("ic_save_as")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="Control" type="Control" parent="ViewportUI/VBoxContainer" unique_id=1869592936]
-custom_minimum_size = Vector2(0, 10)
+[node name="LoadButton" type="Button" parent="ViewportUI/TopBarL/Row/FileGroup" unique_id=1506340993]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Open (Ctrl+O)"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut = SubResource("Shortcut_00vlk")
+icon = ExtResource("ic_load")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="HistSep" type="VSeparator" parent="ViewportUI/TopBarL/Row/FileGroup" unique_id=1477449155]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ViewportUI/VBoxContainer" unique_id=1923085649]
+[node name="ResetButton" type="Button" parent="ViewportUI/TopBarL/Row/FileGroup" unique_id=1408504642]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Reset Level"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_reset_level")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("Danger")
+
+[node name="Sep" type="VSeparator" parent="ViewportUI/TopBarL/Row/FileGroup" unique_id=408344831]
+layout_mode = 2
+metadata/gdss_classes = PackedStringArray()
+
+[node name="UndoButton" type="Button" parent="ViewportUI/TopBarL/Row/FileGroup" unique_id=1022696286]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Undo (Ctrl+Z)"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut = SubResource("Shortcut_undo")
+icon = ExtResource("ic_undo")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="RedoButton" type="Button" parent="ViewportUI/TopBarL/Row/FileGroup" unique_id=1871421934]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Redo (Ctrl+Shift+Z)"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut = SubResource("Shortcut_redo")
+icon = ExtResource("ic_redo")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="TestGroup" type="HBoxContainer" parent="ViewportUI/TopBarL/Row" unique_id=1547971091]
+visible = false
 layout_mode = 2
 
-[node name="LayerDown" type="Button" parent="ViewportUI/VBoxContainer/HBoxContainer" unique_id=847013967]
-custom_minimum_size = Vector2(20, 0)
+[node name="TestClientButton" type="Button" parent="ViewportUI/TopBarL/Row/TestGroup" unique_id=1156923080]
+visible = false
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-text = "-"
+tooltip_text = "Test (Client)"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_test_client")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="LayerNum" type="Label" parent="ViewportUI/VBoxContainer/HBoxContainer" unique_id=252050851]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 24
-text = "0"
-horizontal_alignment = 1
-
-[node name="LayerUp" type="Button" parent="ViewportUI/VBoxContainer/HBoxContainer" unique_id=1986875795]
-custom_minimum_size = Vector2(20, 0)
-layout_mode = 2
-text = "+"
-
-[node name="LayerProperties" type="Button" parent="ViewportUI/VBoxContainer" unique_id=1864635163]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Props"
-
-[node name="ParallaxingButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=486808561]
-layout_mode = 2
-size_flags_horizontal = 0
-toggle_mode = true
-shortcut = SubResource("Shortcut_kp1nf")
-text = "Parallax"
-
-[node name="GhostingButton" type="Button" parent="ViewportUI/VBoxContainer" unique_id=22491131]
-layout_mode = 2
-size_flags_horizontal = 0
-toggle_mode = true
-shortcut = SubResource("Shortcut_awha3")
-text = "Ghosting"
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="ViewportUI" unique_id=1713123835]
+[node name="TopBarR" type="PanelContainer" parent="ViewportUI" unique_id=622649123]
+texture_filter = 4
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -216.0
-offset_top = 16.0
+offset_left = -276.0
+offset_top = 10.0
 offset_right = -16.0
-offset_bottom = 56.0
+offset_bottom = 46.0
 grow_horizontal = 0
-mouse_filter = 2
+size_flags_horizontal = 8
+mouse_filter = 1
+theme = ExtResource("20_theme")
+metadata/gdss_classes = PackedStringArray("Bar")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ViewportUI/VBoxContainer2" unique_id=469316941]
+[node name="EditGroup" type="HBoxContainer" parent="ViewportUI/TopBarR" unique_id=530623221]
 layout_mode = 2
-mouse_filter = 2
-
-[node name="SelectButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1240001976]
-layout_mode = 2
-focus_mode = 0
-shortcut = SubResource("Shortcut_sdhrq")
-text = "Select"
-
-[node name="BrushButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1759864043]
-layout_mode = 2
-focus_mode = 0
-shortcut = SubResource("Shortcut_7flq5")
-text = "Brush"
-
-[node name="MoveButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1672483253]
-layout_mode = 2
-focus_mode = 0
-shortcut = SubResource("Shortcut_7agmi")
-text = "Move"
-
-[node name="RotateButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1358070352]
-layout_mode = 2
-focus_mode = 0
-shortcut = SubResource("Shortcut_n78f0")
-text = "Rotate"
-
-[node name="ScaleButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1384956283]
-layout_mode = 2
-focus_mode = 0
-text = "Scale"
-
-[node name="PolyEditButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=891112985]
-visible = false
-layout_mode = 2
-focus_mode = 0
-text = "Edit (P)"
-
-[node name="PolyAddButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=472817273]
-layout_mode = 2
-focus_mode = 0
-text = "Add (P)"
-
-[node name="PolyCutButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer" unique_id=1121572227]
-layout_mode = 2
-focus_mode = 0
-text = "Cut (P)"
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="ViewportUI/VBoxContainer2" unique_id=227411509]
-layout_mode = 2
-mouse_filter = 2
 alignment = 2
 
-[node name="CutButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1356009072]
+[node name="CutButton" type="Button" parent="ViewportUI/TopBarR/EditGroup" unique_id=1818156251]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
+tooltip_text = "Cut (Ctrl+X)"
 focus_mode = 0
+mouse_default_cursor_shape = 2
 shortcut = SubResource("Shortcut_bt7vf")
-text = "Cut"
+icon = ExtResource("ic_cut")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="CopyButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1530935064]
+[node name="CopyButton" type="Button" parent="ViewportUI/TopBarR/EditGroup" unique_id=1697368065]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
+tooltip_text = "Copy (Ctrl+C)"
 focus_mode = 0
+mouse_default_cursor_shape = 2
 shortcut = SubResource("Shortcut_11twt")
-text = "Copy"
+icon = ExtResource("ic_copy")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="PasteButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=658755433]
+[node name="PasteButton" type="Button" parent="ViewportUI/TopBarR/EditGroup" unique_id=62919595]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
+tooltip_text = "Paste (Ctrl+V)"
 focus_mode = 0
+mouse_default_cursor_shape = 2
 shortcut = SubResource("Shortcut_45bup")
-text = "Paste"
+icon = ExtResource("ic_paste")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="DuplicateButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1512356184]
+[node name="DuplicateButton" type="Button" parent="ViewportUI/TopBarR/EditGroup" unique_id=1864598383]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
+tooltip_text = "Duplicate (Ctrl+D)"
 focus_mode = 0
+mouse_default_cursor_shape = 2
 shortcut = SubResource("Shortcut_uannl")
-text = "Duplicate"
+icon = ExtResource("ic_duplicate")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="DeleteButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=1153339096]
+[node name="DeselectButton" type="Button" parent="ViewportUI/TopBarR/EditGroup" unique_id=1091155536]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
+tooltip_text = "Deselect All (Esc)"
 focus_mode = 0
-shortcut = SubResource("Shortcut_d84u2")
-text = "Delete"
-
-[node name="DeselectButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer2" unique_id=382669193]
-layout_mode = 2
-focus_mode = 0
+mouse_default_cursor_shape = 2
 shortcut = SubResource("Shortcut_lff0g")
-text = "Deselect All"
+icon = ExtResource("ic_deselect")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="ViewportUI/VBoxContainer2" unique_id=1197968246]
+[node name="Sep1" type="VSeparator" parent="ViewportUI/TopBarR/EditGroup" unique_id=662183484]
 layout_mode = 2
-mouse_filter = 2
-alignment = 2
 
-[node name="MoveToFrontButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=1732178860]
+[node name="MoveToFrontButton" type="Button" parent="ViewportUI/TopBarR/EditGroup" unique_id=2041611272]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
+tooltip_text = "Move to Front"
 focus_mode = 0
+mouse_default_cursor_shape = 2
 shortcut = SubResource("Shortcut_8p5vc")
-text = "MTF*"
+icon = ExtResource("ic_front")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="MoveToBackButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=865471635]
+[node name="MoveToBackButton" type="Button" parent="ViewportUI/TopBarR/EditGroup" unique_id=153783409]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
+tooltip_text = "Move to Back"
 focus_mode = 0
+mouse_default_cursor_shape = 2
 shortcut = SubResource("Shortcut_y8t77")
-text = "MTB*"
+icon = ExtResource("ic_back")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="ResetCamButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=1951778345]
+[node name="Sep2" type="VSeparator" parent="ViewportUI/TopBarR/EditGroup" unique_id=1408139407]
 layout_mode = 2
+
+[node name="DeleteButton" type="Button" parent="ViewportUI/TopBarR/EditGroup" unique_id=593030704]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Delete (Del)"
 focus_mode = 0
-text = "Reset Cam"
+mouse_default_cursor_shape = 2
+shortcut = SubResource("Shortcut_d84u2")
+icon = ExtResource("ic_delete")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("Danger")
 
-[node name="ResetButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer4" unique_id=296567184]
-layout_mode = 2
-focus_mode = 0
-text = "Reset Level"
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="ViewportUI/VBoxContainer2" unique_id=1216125888]
-layout_mode = 2
-mouse_filter = 2
+[node name="LayerVisualsHBox" type="HBoxContainer" parent="ViewportUI" unique_id=1740288039]
+texture_filter = 4
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -140.0
+offset_top = 51.0
+offset_right = -16.0
+offset_bottom = 79.0
+grow_horizontal = 0
 alignment = 2
 
-[node name="SaveButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer3" unique_id=244361035]
+[node name="ResetCamButton" type="Button" parent="ViewportUI/LayerVisualsHBox" unique_id=488887995]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
+tooltip_text = "Reset Camera"
 focus_mode = 0
-text = "Save"
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_reset_cam")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ViewportToggle")
 
-[node name="LoadButton" type="Button" parent="ViewportUI/VBoxContainer2/HBoxContainer3" unique_id=1138989682]
+[node name="ParallaxingButton" type="Button" parent="ViewportUI/LayerVisualsHBox" unique_id=904290079]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
+tooltip_text = "Parallax (1)"
 focus_mode = 0
-text = "Load"
+mouse_default_cursor_shape = 2
+toggle_mode = true
+shortcut = SubResource("Shortcut_kp1nf")
+icon = ExtResource("ic_parallax")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ViewportToggle")
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="ViewportUI" unique_id=2052051468]
+[node name="GhostingButton" type="Button" parent="ViewportUI/LayerVisualsHBox" unique_id=930484823]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Ghosting (2)"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+toggle_mode = true
+shortcut = SubResource("Shortcut_awha3")
+icon = ExtResource("ic_ghost")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ViewportToggle")
+
+[node name="ModulationButton" type="Button" parent="ViewportUI/LayerVisualsHBox" unique_id=1750643856]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Modulate"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+toggle_mode = true
+button_pressed = true
+icon = ExtResource("ic_modulate")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ViewportToggle")
+
+[node name="BottomBar" type="PanelContainer" parent="ViewportUI" unique_id=806800024]
+texture_filter = 4
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -46.0
+offset_right = 12.0
+offset_bottom = -3.0
+grow_vertical = 0
+mouse_filter = 1
+theme = ExtResource("20_theme")
+metadata/gdss_classes = PackedStringArray("Bar", "BottomBar")
+
+[node name="Row" type="HBoxContainer" parent="ViewportUI/BottomBar" unique_id=130066930]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Hotbar" type="HBoxContainer" parent="ViewportUI/BottomBar/Row" unique_id=608451390]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="HotbarButton" type="Button" parent="ViewportUI/BottomBar/Row/Hotbar" unique_id=1096804141]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+expand_icon = true
+script = ExtResource("2_sdhrq")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton2" type="Button" parent="ViewportUI/BottomBar/Row/Hotbar" unique_id=541497215]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+expand_icon = true
+script = ExtResource("2_sdhrq")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton3" type="Button" parent="ViewportUI/BottomBar/Row/Hotbar" unique_id=1372065227]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+expand_icon = true
+script = ExtResource("2_sdhrq")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton4" type="Button" parent="ViewportUI/BottomBar/Row/Hotbar" unique_id=402916020]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+expand_icon = true
+script = ExtResource("2_sdhrq")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton5" type="Button" parent="ViewportUI/BottomBar/Row/Hotbar" unique_id=1863370433]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+expand_icon = true
+script = ExtResource("2_sdhrq")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton6" type="Button" parent="ViewportUI/BottomBar/Row/Hotbar" unique_id=849594177]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+expand_icon = true
+script = ExtResource("2_sdhrq")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton7" type="Button" parent="ViewportUI/BottomBar/Row/Hotbar" unique_id=111111117]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+expand_icon = true
+script = ExtResource("2_sdhrq")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton8" type="Button" parent="ViewportUI/BottomBar/Row/Hotbar" unique_id=111111118]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+expand_icon = true
+script = ExtResource("2_sdhrq")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="NavGroup" type="HBoxContainer" parent="ViewportUI/BottomBar/Row" unique_id=1024703432]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="LayerNav" type="HBoxContainer" parent="ViewportUI/BottomBar/Row/NavGroup" unique_id=1997310836]
+layout_mode = 2
+
+[node name="PrevLayer" type="Button" parent="ViewportUI/BottomBar/Row/NavGroup/LayerNav" unique_id=396428949]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Previous Layer"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_prev")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="LayerName" type="Label" parent="ViewportUI/BottomBar/Row/NavGroup/LayerNav" unique_id=231210094]
+custom_minimum_size = Vector2(46, 0)
+layout_mode = 2
+text = "Layer 0"
+horizontal_alignment = 1
+
+[node name="NextLayer" type="Button" parent="ViewportUI/BottomBar/Row/NavGroup/LayerNav" unique_id=169832467]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Next Layer"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_next")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="ToolRail" type="PanelContainer" parent="ViewportUI" unique_id=664428989]
+texture_filter = 4
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 12.0
+offset_top = -66.0
+offset_right = 48.0
+offset_bottom = 66.0
+grow_vertical = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme = ExtResource("20_theme")
+metadata/gdss_classes = PackedStringArray("Bar")
+
+[node name="Tools" type="BoxContainer" parent="ViewportUI/ToolRail" unique_id=479776930]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+vertical = true
+
+[node name="ObjectBrowserButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=597165367]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Object Browser (Space)"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut = SubResource("Shortcut_agrqq")
+icon = ExtResource("ic_obj_browser")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="PropertiesButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=56257471]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Properties (P)"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut = SubResource("Shortcut_wp4la")
+icon = ExtResource("ic_properties")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="SelectButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=1017939358]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Select (Q)"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut = SubResource("Shortcut_sdhrq")
+icon = ExtResource("ic_select")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="BrushButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=510352985]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Brush (B)"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut = SubResource("Shortcut_7flq5")
+icon = ExtResource("ic_brush")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="MoveButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=1363880092]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Move (M)"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut = SubResource("Shortcut_7agmi")
+icon = ExtResource("ic_move")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="RotateButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=316894685]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Rotate (R)"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut = SubResource("Shortcut_n78f0")
+icon = ExtResource("ic_rotate")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="ScaleButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=1106547301]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Scale"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_scale")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="PlaceButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=1206655787]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Place"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_place")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="PolyEditButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=1443655826]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Edit Polygon"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_poly_edit")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="PolyAddButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=818526651]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Append to Polygon"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_poly_add")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="PolyCutButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=593973020]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Cut from Polygon"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_poly_cut")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="ToplineButton" type="Button" parent="ViewportUI/ToolRail/Tools" unique_id=772524995]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Edit Toplines"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_topline")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="Control" type="Control" parent="ViewportUI/ToolRail/Tools" unique_id=1312792724]
+layout_mode = 2
+
+[node name="PanelRail" type="PanelContainer" parent="ViewportUI" unique_id=1287214286]
+texture_filter = 4
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -52.0
+offset_top = -81.5
+offset_right = -16.0
+offset_bottom = 109.5
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("20_theme")
+metadata/gdss_classes = PackedStringArray("Bar")
+
+[node name="Panels" type="BoxContainer" parent="ViewportUI/PanelRail" unique_id=1974809186]
+layout_mode = 2
+vertical = true
+
+[node name="LayerProperties" type="Button" parent="ViewportUI/PanelRail/Panels" unique_id=1517088773]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Layers"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_layers")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="AreasButton" type="Button" parent="ViewportUI/PanelRail/Panels" unique_id=525087515]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Areas"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_areas")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="TagsButton" type="Button" parent="ViewportUI/PanelRail/Panels" unique_id=2135885518]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Tags"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_tags")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="StampsButton" type="Button" parent="ViewportUI/PanelRail/Panels" unique_id=1136739095]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Stamps"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_stamps")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="ScenariosButton" type="Button" parent="ViewportUI/PanelRail/Panels" unique_id=338039244]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Scenarios"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_scenarios")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="BackgroundButton" type="Button" parent="ViewportUI/PanelRail/Panels" unique_id=1030440329]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Background"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_background")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="MusicButton" type="Button" parent="ViewportUI/PanelRail/Panels" unique_id=2117669485]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Music"
+focus_mode = 0
+disabled = true
+icon = ExtResource("ic_music")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="TestServerButton" type="Button" parent="ViewportUI" unique_id=1723719953]
+texture_filter = 4
+custom_minimum_size = Vector2(28, 28)
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -6.0
-offset_top = -12.0
-offset_right = -6.0
+offset_left = -109.0
+offset_top = -41.0
+offset_right = -12.0
 offset_bottom = -12.0
 grow_horizontal = 0
 grow_vertical = 0
-mouse_filter = 2
-alignment = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ViewportUI/VBoxContainer3" unique_id=341053402]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="TestClientButton" type="Button" parent="ViewportUI/VBoxContainer3/HBoxContainer" unique_id=1982310012]
-visible = false
-layout_mode = 2
+tooltip_text = "Test Level (F5)"
 focus_mode = 0
-text = "Test (Client)"
-
-[node name="TestServerButton" type="Button" parent="ViewportUI/VBoxContainer3/HBoxContainer" unique_id=700489393]
-layout_mode = 2
-focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut = SubResource("Shortcut_nm1lm")
 text = "Test Level"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ViewportUI" unique_id=245638557]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = -20.0
-offset_right = 16.0
-offset_bottom = -12.0
-grow_vertical = 0
-
-[node name="HotbarButton" type="Button" parent="ViewportUI/HBoxContainer" unique_id=1118662531]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
+icon = ExtResource("ic_test")
 expand_icon = true
-script = ExtResource("2_sdhrq")
+metadata/gdss_classes = PackedStringArray("Test")
 
-[node name="HotbarButton2" type="Button" parent="ViewportUI/HBoxContainer" unique_id=1875689471]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-expand_icon = true
-script = ExtResource("2_sdhrq")
-
-[node name="HotbarButton3" type="Button" parent="ViewportUI/HBoxContainer" unique_id=920297160]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-expand_icon = true
-script = ExtResource("2_sdhrq")
-
-[node name="HotbarButton4" type="Button" parent="ViewportUI/HBoxContainer" unique_id=1179526136]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-expand_icon = true
-script = ExtResource("2_sdhrq")
-
-[node name="HotbarButton5" type="Button" parent="ViewportUI/HBoxContainer" unique_id=1695555152]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-expand_icon = true
-script = ExtResource("2_sdhrq")
-
-[node name="HotbarButton6" type="Button" parent="ViewportUI/HBoxContainer" unique_id=226246494]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-expand_icon = true
-script = ExtResource("2_sdhrq")
-
-[node name="WindowLayer" type="CanvasLayer" parent="." unique_id=783443360]
+[node name="WindowLayer" type="CanvasLayer" parent="." unique_id=130147268]
 layer = 3
 
-[node name="ObjectBrowserWindow" parent="WindowLayer" unique_id=1964419486 instance=ExtResource("2_ms7r3")]
+[node name="Window" parent="WindowLayer" unique_id=1566440149 instance=ExtResource("2_ms7r3")]
+layer = 3
 visible = false
-title = "Objects - All"
-content = ExtResource("3_ms7r3")
-window_scale = Vector2(0.9, 0.9)
 
-[node name="ObjectPropertyWindow" parent="WindowLayer" unique_id=1576900173 instance=ExtResource("2_ms7r3")]
-visible = false
-title = "Properties - <obj>"
-content = ExtResource("4_4nlpt")
-close_on_back_input = true
-window_scale = Vector2(0.9, 0.9)
-
-[node name="LayerPropertiesWindow" parent="WindowLayer" unique_id=354043236 instance=ExtResource("2_ms7r3")]
-visible = false
-title = "Layer Properties"
-content = ExtResource("5_uannl")
-
-[node name="SaveFileDialog" type="FileDialog" parent="WindowLayer" unique_id=1751840764]
+[node name="SaveFileDialog" type="FileDialog" parent="WindowLayer" unique_id=1933146561]
 oversampling_override = 1.0
 position = Vector2i(0, 36)
 size = Vector2i(669, 360)
 access = 2
 use_native_dialog = true
 
-[node name="LoadFileDialog" type="FileDialog" parent="WindowLayer" unique_id=454435546]
+[node name="LoadFileDialog" type="FileDialog" parent="WindowLayer" unique_id=1707805020]
 oversampling_override = 1.0
 title = "Open a File"
 position = Vector2i(0, 36)
@@ -489,7 +1091,7 @@ file_mode = 0
 access = 2
 use_native_dialog = true
 
-[node name="ResetLevelDialog" type="ConfirmationDialog" parent="WindowLayer" unique_id=1679642937]
+[node name="ResetLevelDialog" type="ConfirmationDialog" parent="WindowLayer" unique_id=1345842998]
 oversampling_override = 1.0
 title = "Reset Level"
 position = Vector2i(0, 36)
@@ -498,35 +1100,47 @@ dialog_text = "Are you sure you want to reset
 the level? Any unsaved progress
 will be lost!"
 
-[connection signal="pressed" from="ViewportUI/VBoxContainer/ObjectBrowserButton" to="." method="_on_object_browser_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer/PropertiesButton" to="." method="_on_properties_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer/HBoxContainer/LayerDown" to="." method="_on_layer_down_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer/HBoxContainer/LayerUp" to="." method="_on_layer_up_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer/LayerProperties" to="." method="_on_layer_properties_pressed"]
-[connection signal="toggled" from="ViewportUI/VBoxContainer/ParallaxingButton" to="." method="set_parallaxing"]
-[connection signal="toggled" from="ViewportUI/VBoxContainer/GhostingButton" to="." method="set_ghosting"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/SelectButton" to="." method="_on_select_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/BrushButton" to="." method="_on_brush_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/MoveButton" to="." method="_on_move_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/RotateButton" to="." method="_on_rotate_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/ScaleButton" to="." method="_on_scale_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyEditButton" to="." method="_on_poly_edit_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyAddButton" to="." method="_on_poly_add_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer/PolyCutButton" to="." method="_on_poly_cut_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/CutButton" to="." method="_on_cut_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/CopyButton" to="." method="_on_copy_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/PasteButton" to="." method="_on_paste_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DuplicateButton" to="." method="_on_duplicate_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeleteButton" to="." method="_on_delete_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer2/DeselectButton" to="." method="_on_deselect_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/MoveToFrontButton" to="." method="_on_move_to_front_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/MoveToBackButton" to="." method="_on_move_to_back_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/ResetCamButton" to="." method="_on_reset_cam_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer4/ResetButton" to="." method="_on_reset_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/SaveButton" to="." method="_on_save_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer2/HBoxContainer3/LoadButton" to="." method="_on_load_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer3/HBoxContainer/TestClientButton" to="." method="_on_test_client_button_pressed"]
-[connection signal="pressed" from="ViewportUI/VBoxContainer3/HBoxContainer/TestServerButton" to="." method="_on_test_server_button_pressed"]
-[connection signal="file_selected" from="WindowLayer/SaveFileDialog" to="." method="_on_save_file_selected"]
-[connection signal="file_selected" from="WindowLayer/LoadFileDialog" to="." method="_on_load_file_selected"]
-[connection signal="confirmed" from="WindowLayer/ResetLevelDialog" to="." method="_on_reset_level_dialog_confirmed"]
+[connection signal="pressed" from="ViewportUI/TopBarL/Row/FileGroup/SaveButton" to="FileHandler" method="_on_save_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarL/Row/FileGroup/SaveNewButton" to="FileHandler" method="_on_save_new_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarL/Row/FileGroup/LoadButton" to="FileHandler" method="_on_load_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarL/Row/FileGroup/ResetButton" to="FileHandler" method="_on_reset_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarL/Row/FileGroup/UndoButton" to="ToolbarHandler" method="_on_undo_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarL/Row/FileGroup/RedoButton" to="ToolbarHandler" method="_on_redo_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarL/Row/TestGroup/TestClientButton" to="FileHandler" method="_on_test_client_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarR/EditGroup/CutButton" to="ToolbarHandler" method="_on_cut_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarR/EditGroup/CopyButton" to="ToolbarHandler" method="_on_copy_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarR/EditGroup/PasteButton" to="ToolbarHandler" method="_on_paste_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarR/EditGroup/DuplicateButton" to="ToolbarHandler" method="_on_duplicate_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarR/EditGroup/DeselectButton" to="ToolbarHandler" method="_on_deselect_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarR/EditGroup/MoveToFrontButton" to="ToolbarHandler" method="_on_move_to_front_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarR/EditGroup/MoveToBackButton" to="ToolbarHandler" method="_on_move_to_back_button_pressed"]
+[connection signal="pressed" from="ViewportUI/TopBarR/EditGroup/DeleteButton" to="ToolbarHandler" method="_on_delete_button_pressed"]
+[connection signal="pressed" from="ViewportUI/LayerVisualsHBox/ResetCamButton" to="ToolbarHandler" method="_on_reset_cam_button_pressed"]
+[connection signal="toggled" from="ViewportUI/LayerVisualsHBox/ParallaxingButton" to="ViewportHandler" method="set_parallaxing_enabled"]
+[connection signal="toggled" from="ViewportUI/LayerVisualsHBox/GhostingButton" to="ViewportHandler" method="set_ghosting_enabled"]
+[connection signal="toggled" from="ViewportUI/LayerVisualsHBox/ModulationButton" to="ViewportHandler" method="set_modulation_enabled"]
+[connection signal="pressed" from="ViewportUI/BottomBar/Row/NavGroup/LayerNav/PrevLayer" to="ToolbarHandler" method="_on_prev_layer_pressed"]
+[connection signal="pressed" from="ViewportUI/BottomBar/Row/NavGroup/LayerNav/NextLayer" to="ToolbarHandler" method="_on_next_layer_pressed"]
+[connection signal="pressed" from="ViewportUI/ToolRail/Tools/ObjectBrowserButton" to="WindowHandler" method="toggle_object_browser"]
+[connection signal="pressed" from="ViewportUI/ToolRail/Tools/PropertiesButton" to="WindowHandler" method="toggle_object_properties"]
+[connection signal="pressed" from="ViewportUI/ToolRail/Tools/SelectButton" to="ToolbarHandler" method="_on_select_button_pressed"]
+[connection signal="pressed" from="ViewportUI/ToolRail/Tools/BrushButton" to="ToolbarHandler" method="_on_brush_button_pressed"]
+[connection signal="pressed" from="ViewportUI/ToolRail/Tools/MoveButton" to="ToolbarHandler" method="_on_move_button_pressed"]
+[connection signal="pressed" from="ViewportUI/ToolRail/Tools/RotateButton" to="ToolbarHandler" method="_on_rotate_button_pressed"]
+[connection signal="pressed" from="ViewportUI/ToolRail/Tools/ScaleButton" to="ToolbarHandler" method="_on_scale_button_pressed"]
+[connection signal="pressed" from="ViewportUI/ToolRail/Tools/PlaceButton" to="ToolbarHandler" method="_on_place_button_pressed"]
+[connection signal="pressed" from="ViewportUI/ToolRail/Tools/PolyEditButton" to="ToolbarHandler" method="_on_poly_edit_pressed"]
+[connection signal="pressed" from="ViewportUI/ToolRail/Tools/PolyAddButton" to="ToolbarHandler" method="_on_poly_add_pressed"]
+[connection signal="pressed" from="ViewportUI/ToolRail/Tools/PolyCutButton" to="ToolbarHandler" method="_on_poly_cut_pressed"]
+[connection signal="pressed" from="ViewportUI/ToolRail/Tools/ToplineButton" to="ToolbarHandler" method="_on_topline_pressed"]
+[connection signal="pressed" from="ViewportUI/PanelRail/Panels/LayerProperties" to="WindowHandler" method="toggle_layer_properties"]
+[connection signal="pressed" from="ViewportUI/PanelRail/Panels/AreasButton" to="WindowHandler" method="toggle_area_editor"]
+[connection signal="pressed" from="ViewportUI/PanelRail/Panels/TagsButton" to="WindowHandler" method="toggle_tag_editor"]
+[connection signal="pressed" from="ViewportUI/PanelRail/Panels/StampsButton" to="WindowHandler" method="toggle_stamp_editor"]
+[connection signal="pressed" from="ViewportUI/PanelRail/Panels/ScenariosButton" to="WindowHandler" method="toggle_scenario_editor"]
+[connection signal="pressed" from="ViewportUI/PanelRail/Panels/BackgroundButton" to="WindowHandler" method="toggle_background_editor"]
+[connection signal="pressed" from="ViewportUI/PanelRail/Panels/MusicButton" to="WindowHandler" method="toggle_music_editor"]
+[connection signal="pressed" from="ViewportUI/TestServerButton" to="FileHandler" method="_on_test_server_button_pressed"]
+[connection signal="file_selected" from="WindowLayer/SaveFileDialog" to="FileHandler" method="_on_save_file_selected"]
+[connection signal="file_selected" from="WindowLayer/LoadFileDialog" to="FileHandler" method="_on_load_file_selected"]
+[connection signal="confirmed" from="WindowLayer/ResetLevelDialog" to="FileHandler" method="_on_reset_level_dialog_confirmed"]

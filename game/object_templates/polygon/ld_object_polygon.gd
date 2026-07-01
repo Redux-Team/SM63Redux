@@ -80,6 +80,17 @@ var _outer_points: PackedVector2Array = PackedVector2Array()
 var _holes: Array[PackedVector2Array] = []
 var _seam_indices: PackedInt32Array = PackedInt32Array()
 var _decoration_placements: Array[Dictionary] = []
+var _topline_forced: Dictionary = {}
+
+
+static func from_game_object(game_object: GameObject = null) -> LDObject:
+	if not game_object:
+		return null
+	
+	var instance: LDObjectPolygon = preload("res://game/object_templates/polygon/ld_object_polygon.tscn").instantiate()
+	instance.polygon_data = game_object.polygon_data
+	
+	return instance
 
 
 func _ready() -> void:
@@ -234,8 +245,109 @@ func apply_points_and_holes(points: PackedVector2Array, holes: Array[PackedVecto
 
 
 func _rebuild_decorations() -> void:
-	if _decoration_handler:
-		_decoration_handler.rebuild(_outer_points, _holes, polygon_data, get_property(&"rng_seed"))
+	if not _decoration_handler:
+		return
+	var seed_value: Variant = get_property(&"rng_seed")
+	var rng_seed: int = int(seed_value) if seed_value != null else 0
+	var enabled_value: Variant = get_property(&"decorations_enabled")
+	var enabled: bool = bool(enabled_value) if enabled_value != null else true
+	var deco: PolygonDecorationStyle = _resolved_decoration()
+	var weightmap: Dictionary[Texture2D, float] = {}
+	var density: float = -1.0
+	if deco:
+		weightmap = deco.weightmap
+		density = deco.density
+	_decoration_handler.rebuild(_outer_points, _holes, polygon_data, rng_seed, weightmap, density, enabled)
+
+
+func _resolved_base() -> PolygonBaseStyle:
+	var v: Variant = get_property(&"base_style")
+	var style_name: String = str(v) if v != null else ""
+	if style_name.is_empty():
+		return null
+	return PolygonStyleDB.get_base_style(style_name)
+
+
+func _resolved_topline() -> PolygonToplineStyle:
+	var v: Variant = get_property(&"topline_style")
+	var style_name: String = str(v) if v != null else ""
+	if style_name.is_empty():
+		return null
+	return PolygonStyleDB.get_topline_style(style_name)
+
+
+func _resolved_decoration() -> PolygonDecorationStyle:
+	var v: Variant = get_property(&"decoration_set")
+	var style_name: String = str(v) if v != null else ""
+	if style_name.is_empty():
+		return null
+	return PolygonStyleDB.get_decoration_style(style_name)
+
+
+func get_property_options(key: StringName) -> PackedStringArray:
+	var result: PackedStringArray = PackedStringArray()
+	match key:
+		&"base_style":
+			result.append("Default")
+			for style: PolygonBaseStyle in PolygonStyleDB.get_base_styles():
+				result.append(style.style_name)
+		&"topline_style":
+			result.append("Default")
+			for style: PolygonToplineStyle in PolygonStyleDB.get_topline_styles():
+				result.append(style.style_name)
+		&"decoration_set":
+			result.append("Default")
+			for style: PolygonDecorationStyle in PolygonStyleDB.get_decoration_styles():
+				result.append(style.style_name)
+	return result
+
+
+func _on_property_changed(key: StringName, _value: Variant) -> void:
+	if key in [&"base_style", &"topline_style", &"decoration_set", &"decorations_enabled"]:
+		_rebuild_polygon()
+
+
+func get_topline_threshold() -> float:
+	var t: PolygonToplineStyle = _resolved_topline()
+	if t:
+		return t.topline_angle_threshold
+	return polygon_data.topline_angle_threshold if polygon_data else 0.55
+
+
+func get_topline_edges() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var outer: PackedVector2Array = get_outer_points()
+	if outer.size() < 2:
+		return result
+	var cw: PackedVector2Array = TerrainPolygon.ensure_clockwise(outer)
+	var threshold: float = get_topline_threshold()
+	var n: int = cw.size()
+	for i: int in n:
+		var a: Vector2 = cw[i]
+		var b: Vector2 = cw[(i + 1) % n]
+		var key: String = TerrainPolygon.edge_midpoint_key(a, b)
+		var on: bool = bool(_topline_forced[key]) if _topline_forced.has(key) else TerrainPolygon.is_top_edge(a, b, threshold, false)
+		result.append({"a": a, "b": b, "mid": (a + b) * 0.5, "key": key, "on": on})
+	return result
+
+
+func toggle_topline_edge(key: String, on: bool) -> void:
+	_topline_forced[key] = on
+	_rebuild_polygon()
+
+
+func clear_topline_edge(key: String) -> void:
+	_topline_forced.erase(key)
+	_rebuild_polygon()
+
+
+func get_topline_forced() -> Dictionary:
+	return _topline_forced
+
+
+func set_topline_forced_all(data: Dictionary) -> void:
+	_topline_forced = data.duplicate()
+	_rebuild_polygon()
 
 
 func _update_visuals() -> void:
@@ -244,10 +356,21 @@ func _update_visuals() -> void:
 	
 	var textured: bool = polygon_data.textured if polygon_data else false
 	var line_mode: PolygonData.LineMode = polygon_data.line_mode if polygon_data else PolygonData.LineMode.NONE
-	
+	var base_style: PolygonBaseStyle = _resolved_base()
+	var topline_style: PolygonToplineStyle = _resolved_topline()
+	var base_tex: Texture2D = base_style.base_texture if base_style else (polygon_data.base_texture if polygon_data else null)
+	var outline_tex: Texture2D = base_style.outline_texture if base_style else (polygon_data.outline_texture if polygon_data else null)
+	var outline_w: float = base_style.outline_width if base_style else (polygon_data.outline_width if polygon_data else 7.0)
+	var topline_tex: Texture2D = topline_style.topline_texture if topline_style else (polygon_data.topline_texture if polygon_data else null)
+	var topline_shadow: Texture2D = topline_style.topline_shadow_texture if topline_style else (polygon_data.topline_shadow_texture if polygon_data else null)
+	var topline_left: Texture2D = topline_style.topline_left_end if topline_style else (polygon_data.topline_left_end if polygon_data else null)
+	var topline_right: Texture2D = topline_style.topline_right_end if topline_style else (polygon_data.topline_right_end if polygon_data else null)
+	var topline_w: float = topline_style.topline_width if topline_style else (polygon_data.topline_width if polygon_data else 30.0)
+	var topline_threshold: float = topline_style.topline_angle_threshold if topline_style else (polygon_data.topline_angle_threshold if polygon_data else 0.55)
+
 	if _polygon:
-		if textured and polygon_data and polygon_data.base_texture:
-			_polygon.texture = polygon_data.base_texture
+		if textured and base_tex:
+			_polygon.texture = base_tex
 			_polygon.color = Color.WHITE
 		elif polygon_data:
 			_polygon.texture = null
@@ -262,10 +385,9 @@ func _update_visuals() -> void:
 	if poly_points.size() < 3 or line_mode == PolygonData.LineMode.NONE:
 		return
 	
-	var outline_color: Color = polygon_data.outline_color if polygon_data else Color.WHITE
 	var outline_style: TerrainPolygon.LineStyle = TerrainPolygon.LineStyle.new(
-		polygon_data.outline_width,
-		polygon_data.outline_texture if textured else null,
+		outline_w,
+		outline_tex if textured else null,
 		polygon_data.outline_color,
 		textured,
 		polygon_data.outline_scroll_speed,
@@ -276,18 +398,18 @@ func _update_visuals() -> void:
 	
 	if line_mode == PolygonData.LineMode.TOPLINE:
 		var outer_cw: PackedVector2Array = TerrainPolygon.ensure_clockwise(_outer_points)
-		var top_segments: Array[PackedVector2Array] = TerrainPolygon.get_topline_segments(outer_cw, polygon_data.topline_angle_threshold)
-		
+		var top_segments: Array[PackedVector2Array] = TerrainPolygon.get_topline_segments(outer_cw, topline_threshold, PackedInt32Array(), false, _topline_forced)
+
 		for hole: PackedVector2Array in _holes:
 			top_segments.append_array(TerrainPolygon.get_topline_segments(
-				TerrainPolygon.ensure_counter_clockwise(hole), polygon_data.topline_angle_threshold
+				TerrainPolygon.ensure_counter_clockwise(hole), topline_threshold, PackedInt32Array(), false, _topline_forced
 			))
 		
 		#top_segments = TerrainPolygon.merge_adjacent_segments(top_segments)
 		
 		var line_style: TerrainPolygon.LineStyle = TerrainPolygon.LineStyle.new(
-			polygon_data.topline_width,
-			polygon_data.topline_texture if textured else null,
+			topline_w,
+			topline_tex if textured else null,
 			polygon_data.outline_color,
 			textured,
 			polygon_data.topline_scroll_speed,
@@ -296,8 +418,8 @@ func _update_visuals() -> void:
 			polygon_data.topline_ripple_speed
 		)
 		var cap_style: TerrainPolygon.CapStyle = TerrainPolygon.CapStyle.new(
-			polygon_data.topline_left_end if textured else null,
-			polygon_data.topline_right_end if textured else null,
+			topline_left if textured else null,
+			topline_right if textured else null,
 			polygon_data.topline_cap_inset
 		)
 		
@@ -305,12 +427,12 @@ func _update_visuals() -> void:
 			for segment: PackedVector2Array in top_segments:
 				TerrainPolygon.add_topline_segment(_topline_container, segment, line_style, cap_style)
 		
-		if _topline_shadow_container and textured and polygon_data.topline_shadow_texture:
+		if _topline_shadow_container and textured and topline_shadow:
 			for segment: PackedVector2Array in top_segments:
 				TerrainPolygon.add_topline_shadow(
 					_topline_shadow_container, segment,
-					polygon_data.topline_shadow_texture,
-					polygon_data.topline_width * 1.33
+					topline_shadow,
+					topline_w * 1.33
 				)
 	
 	if _outline_container:

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://kcnsa10lrl1u"]
+
+[ext_resource type="Texture2D" uid="uid://b67xlw4tgq3kp" path="res://assets/textures/objects/decoration/nature/white_bulb_flowers.png" id="1_mghk5"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_mghk5"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_v3pl8"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_k6rou"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_c5qi1"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_ak15a"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v3pl8"]
+atlas = ExtResource("1_mghk5")
+region = Rect2(-11, -7, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/white_bulb_flowers.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_ak15a")
+id = "white_bulb_flowers"
+category = 6
+subpath = "Nature/white_bulb_flowers"
+group_path = "Nature"
+ld_index_id = "grass_flower_08"
+ld_entry_texture = SubResource("AtlasTexture_v3pl8")
+ld_properties = Array[ExtResource("2_mghk5")]([ExtResource("3_v3pl8"), ExtResource("4_k6rou"), ExtResource("5_c5qi1")])
+sprite_texture = ExtResource("1_mghk5")
+ld_object_path = "Decoration/Nature/white_bulb_flowers"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

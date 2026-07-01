@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="PolygonBaseStyle" format=3]
+
+[ext_resource type="Script" uid="uid://du73sf56mrm15" path="res://game/object_data/polygon_base_style.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://c7cao14jm2etj" path="res://assets/textures/terrain/snow/terrain_snow_base.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://llcy8x8hxjgj" path="res://assets/textures/terrain/snow/terrain_snow_outline.png" id="3"]
+
+[resource]
+script = ExtResource("1")
+style_name = "Snow"
+base_texture = ExtResource("2")
+outline_texture = ExtResource("3")
+outline_width = 16.0

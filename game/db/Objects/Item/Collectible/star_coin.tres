@@ -19,6 +19,7 @@ category = 1
 category_string = "Item"
 subpath = "Collectible/star_coin"
 group_path = "Collectible"
+ld_index_id = "star"
 ld_entry_texture = SubResource("AtlasTexture_ib8qi")
 sprite_texture = ExtResource("1_y6234")
 telescoping_atlas = SubResource("AtlasTexture_y6234")

@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="GameObject" format=3]
+
+[ext_resource type="PackedScene" path="res://game/db/Objects/Polygon/Volumes/music_region_lvl.tscn" id="1_nhq7m"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/music_region.svg" id="2_arc3s"]
+[ext_resource type="Script" path="res://game/db/Properties/_ld_property.gd" id="3_ueolr"]
+[ext_resource type="Resource" path="res://game/db/Properties/position.tres" id="4_wd4vj"]
+[ext_resource type="Resource" path="res://game/db/Properties/music_region.tres" id="5_m007b"]
+[ext_resource type="Script" path="res://game/object_data/polygon_data.gd" id="6_ibnvv"]
+[ext_resource type="Script" path="res://game/db/Objects/game_object.gd" id="7_kts4y"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ehkp1"]
+atlas = ExtResource("2_arc3s")
+region = Rect2(0, 0, 96, 96)
+
+[sub_resource type="Resource" id="Resource_rax2k"]
+script = ExtResource("6_ibnvv")
+textured = false
+base_color = Color(0.45, 0.3, 0.85, 0.28)
+line_mode = 1
+outline_color = Color(0.55, 0.4, 0.95, 1)
+outline_width = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3lymh"]
+
+[resource]
+resource_scene_unique_id = ""
+script = ExtResource("7_kts4y")
+id = "music_region"
+category = 2
+category_string = "Polygon"
+subpath = "Volumes/music_region"
+group_path = "Volumes"
+name_override = ""
+ld_index_id = ""
+ld_indexable = true
+ld_select_tool_override = ""
+ld_placement_tool_override = ""
+ld_placement_rules = 1
+ld_flags = 15
+ld_stampable = true
+ld_unique = false
+game_instance = ExtResource("1_nhq7m")
+ld_entry_texture = SubResource("AtlasTexture_ehkp1")
+ld_properties = Array[ExtResource("3_ueolr")]([ExtResource("4_wd4vj"), ExtResource("5_m007b")])
+object_type = 4
+telescoping_atlas = SubResource("AtlasTexture_3lymh")
+polygon_data = SubResource("Resource_rax2k")
+path_subdivide = true
+path_use_stem_collision = false
+path_stem_width = 16.0
+path_head_collision = false
+path_head_collision_polygon = PackedVector2Array()
+ld_object_path = "Polygon/Volumes/music_region"
+editor_shape_offset = Vector2(0, 0)
+collision_enabled = false
+collision_polygon = PackedVector2Array()
+collision_offset = Vector2(0, 0)
+collision_expand = Vector2(0, 0)
+collision_anchor = 0
+collision_one_way = true
+collision_one_way_margin = 1.0
+collision_collapsed = true
+game_multiplayer_spawnable = false
+game_authority_mode = 0
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

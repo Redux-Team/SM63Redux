@@ -1,6 +1,8 @@
 class_name LDHistoryHandler
 extends LDComponent
 
+signal history_changed
+
 
 var _undo_redo: UndoRedo = UndoRedo.new()
 
@@ -46,11 +48,22 @@ func add_undo(callable: Callable) -> void:
 
 func commit_action() -> void:
 	_undo_redo.commit_action(false)
+	history_changed.emit()
 
 
 func undo() -> void:
 	_undo_redo.undo()
+	history_changed.emit()
 
 
 func redo() -> void:
 	_undo_redo.redo()
+	history_changed.emit()
+
+
+func can_undo() -> bool:
+	return _undo_redo.has_undo()
+
+
+func can_redo() -> bool:
+	return _undo_redo.has_redo()

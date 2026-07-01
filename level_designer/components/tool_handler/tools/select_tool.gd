@@ -112,36 +112,48 @@ func _commit_box_select() -> void:
 					combined.append(clicked)
 				else:
 					combined.erase(clicked)
-			viewport.set_selected_objects(combined)
+			viewport.set_selected_objects(_expand_linked_selection(combined))
 		else:
 			var single: Array[LDObject] = []
 			if clicked:
 				single.append(clicked)
-			viewport.set_selected_objects(single)
+			viewport.set_selected_objects(_expand_linked_selection(single))
 		return
-	
+
 	var found: Array[LDObject] = []
 	for obj: LDObject in _get_selectable_objects():
 		if obj.is_preview:
 			continue
 		if _object_intersects_box(obj):
 			found.append(obj)
-	
+
 	if _is_shift_selecting:
 		var combined: Array[LDObject] = viewport.get_selected_objects().duplicate()
 		for obj: LDObject in found:
 			if obj not in combined:
 				combined.append(obj)
-		viewport.set_selected_objects(combined)
+		viewport.set_selected_objects(_expand_linked_selection(combined))
 	else:
-		viewport.set_selected_objects(found)
+		viewport.set_selected_objects(_expand_linked_selection(found))
+
+
+## Expands any read-only linked-stamp "ghost" object to all objects in its instance
+## instance, so a linked placement is selected as a single unit.
+func _expand_linked_selection(objects: Array[LDObject]) -> Array[LDObject]:
+	var gh: LDStampHandler = LD.get_stamp_handler()
+	var result: Array[LDObject] = []
+	for obj: LDObject in objects:
+		if gh.is_linked_readonly(obj):
+			for member: LDObject in gh.get_linked_instance_objects(obj):
+				if member not in result:
+					result.append(member)
+		elif obj not in result:
+			result.append(obj)
+	return result
 
 
 func _delete_selected() -> void:
-	var to_delete: Array[LDObject] = viewport.get_selected_objects().duplicate()
-	viewport.clear_selection()
-	for obj: LDObject in to_delete:
-		obj.queue_free()
+	LD.get_object_handler().delete_placed_selection()
 
 
 func _get_shape_screen_points(shape: CollisionShape2D) -> PackedVector2Array:
@@ -263,7 +275,7 @@ func _object_intersects_box(obj: LDObject) -> bool:
 
 
 func _get_selectable_objects() -> Array[LDObject]:
-	if LD.get_ui().ghosting_enabled:
+	if LD.get_ui().get_viewport_handler().is_ghosting_enabled():
 		return LD.get_area().get_all_objects_on_layer()
 	return LD.get_area().get_all_objects()
 
@@ -320,7 +332,7 @@ func _on_touch_tap(pos: Vector2) -> void:
 		return
 	var obj: LDObject = _get_object_at(pos)
 	if obj:
-		viewport.set_selected_objects([obj])
+		viewport.set_selected_objects(_expand_linked_selection([obj]))
 		if obj is LDObjectPath:
 			get_tool_handler().select_tool("path_edit")
 		elif obj is LDObjectPolygon:

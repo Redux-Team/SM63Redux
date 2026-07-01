@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://b0iomyjpgculo"]
+
+[ext_resource type="Texture2D" uid="uid://dkwum2wy3clju" path="res://assets/textures/objects/decoration/nature/medium_rock.png" id="1_hj21k"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_703vm"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_olctg"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_3m73c"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_7q8eq"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_y71or"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8cpal"]
+atlas = ExtResource("1_hj21k")
+region = Rect2(1, -14, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/medium_rock.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_y71or")
+id = "medium_rock"
+category = 6
+subpath = "Nature/medium_rock"
+group_path = "Nature"
+ld_index_id = "grass_rock_01"
+ld_entry_texture = SubResource("AtlasTexture_8cpal")
+ld_properties = Array[ExtResource("2_703vm")]([ExtResource("3_olctg"), ExtResource("4_3m73c"), ExtResource("5_7q8eq")])
+sprite_texture = ExtResource("1_hj21k")
+ld_object_path = "Decoration/Nature/medium_rock"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

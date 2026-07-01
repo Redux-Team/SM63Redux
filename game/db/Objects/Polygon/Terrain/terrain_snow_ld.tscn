@@ -1,7 +1,0 @@
-[gd_scene format=3 uid="uid://b5ks8obhabj2l"]
-
-[ext_resource type="PackedScene" uid="uid://km8g6043fcab" path="res://game/db/Objects/Polygon/Terrain/terrain_grass_ld.tscn" id="1_digjc"]
-[ext_resource type="Resource" uid="uid://b5caq56hrympb" path="res://game/db/Objects/Polygon/Terrain/terrain_snow_data.tres" id="2_03870"]
-
-[node name="Snow" unique_id=642150737 instance=ExtResource("1_digjc")]
-polygon_data = ExtResource("2_03870")

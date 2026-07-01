@@ -1,0 +1,123 @@
+[gd_scene format=3 uid="uid://bcntswgx5f1b5"]
+
+[ext_resource type="Script" uid="uid://c56pqdaxp553r" path="res://level_designer/components/ui/tags_editor/tags_editor.gd" id="1_tagsed"]
+[ext_resource type="Texture2D" uid="uid://boi5n5utdpqmj" path="res://assets/textures/level_designer/ui_icons/add.svg" id="ic_add"]
+[ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="ic_remove"]
+
+[node name="TagsEditor" type="MarginContainer" unique_id=1953644639 node_paths=PackedStringArray("selection_label", "row_container", "name_edit", "create_button", "delete_button", "selection_actions", "add_selection_button", "remove_selection_button")]
+custom_minimum_size = Vector2(470, 0)
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+script = ExtResource("1_tagsed")
+selection_label = NodePath("Columns/Detail/DetailInset/Rows/SelectionActions/SelectionLabel")
+row_container = NodePath("Columns/ListColumn/ListInset/ListScroll/RowList")
+name_edit = NodePath("Columns/Detail/DetailInset/Rows/NameEdit")
+create_button = NodePath("Columns/ListColumn/Toolbar/CreateButton")
+delete_button = NodePath("Columns/ListColumn/Toolbar/DeleteButton")
+selection_actions = NodePath("Columns/Detail/DetailInset/Rows/SelectionActions")
+add_selection_button = NodePath("Columns/Detail/DetailInset/Rows/SelectionActions/AddSelectionButton")
+remove_selection_button = NodePath("Columns/Detail/DetailInset/Rows/SelectionActions/RemoveSelectionButton")
+metadata/gdss_mode = 1
+
+[node name="Columns" type="HBoxContainer" parent="." unique_id=1825484677]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="ListColumn" type="VBoxContainer" parent="Columns" unique_id=871151097]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="ListInset" type="PanelContainer" parent="Columns/ListColumn" unique_id=1816891705]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="ListScroll" type="ScrollContainer" parent="Columns/ListColumn/ListInset" unique_id=2047756243]
+custom_minimum_size = Vector2(0, 196)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="RowList" type="VBoxContainer" parent="Columns/ListColumn/ListInset/ListScroll" unique_id=882097881]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="Toolbar" type="HBoxContainer" parent="Columns/ListColumn" unique_id=107145859]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CreateButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=509808497]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+tooltip_text = "Create Tag"
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_add")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="Spacer" type="Control" parent="Columns/ListColumn/Toolbar" unique_id=1183816843]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="DeleteButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=600990291]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+tooltip_text = "Delete Tag"
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_remove")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton", "Danger")
+
+[node name="Detail" type="VBoxContainer" parent="Columns" unique_id=1511740739]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DetailInset" type="PanelContainer" parent="Columns/Detail" unique_id=961428689]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Card")
+
+[node name="Rows" type="VBoxContainer" parent="Columns/Detail/DetailInset" unique_id=1520628097]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="NameEdit" type="LineEdit" parent="Columns/Detail/DetailInset/Rows" unique_id=584004901]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+placeholder_text = "New tag name"
+
+[node name="Spacer" type="Control" parent="Columns/Detail/DetailInset/Rows" unique_id=1847957288]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="SelectionActions" type="VBoxContainer" parent="Columns/Detail/DetailInset/Rows" unique_id=437044531]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SelectionLabel" type="Label" parent="Columns/Detail/DetailInset/Rows/SelectionActions" unique_id=1043510031]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "All tags in level"
+metadata/gdss_classes = PackedStringArray("Subtitle")
+
+[node name="AddSelectionButton" type="Button" parent="Columns/Detail/DetailInset/Rows/SelectionActions" unique_id=1411249265]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Add Tag to Selection"
+metadata/gdss_classes = PackedStringArray("Primary")
+
+[node name="RemoveSelectionButton" type="Button" parent="Columns/Detail/DetailInset/Rows/SelectionActions" unique_id=274001551]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Remove Tag from Selection"

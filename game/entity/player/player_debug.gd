@@ -7,8 +7,8 @@ var player: Player:
 
 
 
-#func _process(_delta: float) -> void:
-	#var debug_text: String = "%s" % player.velocity
+func _process(_delta: float) -> void:
+	var debug_text: String = "%s" % player.velocity
 	
 	#debug_text += "Current State: %s\n" % player.state_machine.current_state 
 	#debug_text += "Current Animation: %s\n" % player.state_machine.sprite.current_animation 
@@ -25,4 +25,4 @@ var player: Player:
 	#debug_text += "gravity_scale_factor: %s\n" % player.gravity_scale_factor
 	
 	
-	#debug_label.text = debug_text
+	debug_label.text = debug_text

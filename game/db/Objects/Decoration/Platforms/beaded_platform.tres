@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://chq66ovm2j0a6"]
+
+[ext_resource type="Texture2D" uid="uid://dv06cavccq55" path="res://assets/textures/objects/decoration/platform/beaded_platform.png" id="1_wlwjb"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_fytxr"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pqv20"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_ap6po"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_1uyx8"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="6_awrj4"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_q1bxf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5y614"]
+atlas = ExtResource("1_wlwjb")
+region = Rect2(-4, -20, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c1lcm"]
+atlas = ExtResource("1_wlwjb")
+region = Rect2(9, 0, 24, 9)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Platforms/beaded_platform.tres"
+resource_scene_unique_id = ""
+script = ExtResource("7_q1bxf")
+id = "beaded_platform"
+category = 6
+subpath = "Platforms/beaded_platform"
+group_path = "Platforms"
+ld_index_id = "platform"
+ld_placement_tool_override = "telescoping"
+ld_entry_texture = SubResource("AtlasTexture_5y614")
+ld_properties = Array[ExtResource("2_fytxr")]([ExtResource("3_pqv20"), ExtResource("4_ap6po"), ExtResource("5_1uyx8"), ExtResource("6_awrj4")])
+object_type = 1
+telescoping_atlas = SubResource("AtlasTexture_c1lcm")
+ld_object_path = "Decoration/Platforms/beaded_platform"
+collision_enabled = true
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

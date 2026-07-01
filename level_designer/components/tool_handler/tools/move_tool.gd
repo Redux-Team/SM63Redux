@@ -8,6 +8,7 @@ var _objects: Array[LDObject] = []
 var _is_dragging: bool = false
 var return_tool: String = "select"
 var _return_to_select: bool = false
+var _linked_instance_starts: Dictionary[String, Vector2] = {}
 
 
 func get_tool_name() -> String:
@@ -80,25 +81,37 @@ func end_drag() -> void:
 	var objects: Array[LDObject] = _objects.duplicate()
 	for obj: LDObject in objects:
 		new_positions.append(obj.position)
-	
+
+	var delta: Vector2 = (new_positions[0] - old_positions[0]) if not objects.is_empty() else Vector2.ZERO
+	var instance_starts: Dictionary[String, Vector2] = _linked_instance_starts.duplicate()
+	var gh: LDStampHandler = LD.get_stamp_handler()
+
 	var history: LDHistoryHandler = LD.get_history_handler()
 	history.begin_action("Move Objects")
 	history.add_do(func() -> void:
 		for i: int in objects.size():
 			if is_instance_valid(objects[i]):
 				objects[i].position = new_positions[i]
+		for address: String in instance_starts:
+			gh.set_instance_position_by_address(address, instance_starts[address] + delta)
 	)
 	history.add_undo(func() -> void:
 		for i: int in objects.size():
 			if is_instance_valid(objects[i]):
 				objects[i].position = old_positions[i]
+		for address: String in instance_starts:
+			gh.set_instance_position_by_address(address, instance_starts[address])
 	)
 	history.commit_action()
-	
+
+	for address: String in instance_starts:
+		gh.set_instance_position_by_address(address, instance_starts[address] + delta)
+
 	_is_dragging = false
 	_objects.clear()
 	_drag_start_positions.clear()
 	_drag_offsets.clear()
+	_linked_instance_starts.clear()
 	
 	if _return_to_select:
 		_return_to_select = false
@@ -122,9 +135,14 @@ func _try_begin_drag_at(mouse_pos: Vector2) -> bool:
 	var obj: LDObject = _get_object_at(mouse_pos)
 	if not obj:
 		return false
-	
-	viewport.set_selected_objects([obj])
-	_begin_drag(mouse_pos, [obj], false)
+
+	# Clicking any object of a linked instance grabs the whole instance.
+	var drag_set: Array[LDObject] = [obj]
+	var instance: Array[LDObject] = LD.get_stamp_handler().get_linked_instance_objects(obj)
+	if not instance.is_empty():
+		drag_set = instance
+	viewport.set_selected_objects(drag_set)
+	_begin_drag(mouse_pos, drag_set, false)
 	return true
 
 
@@ -141,6 +159,15 @@ func _begin_drag(mouse_pos: Vector2, objects: Array[LDObject], return_to_select:
 	for obj: LDObject in _objects:
 		_drag_start_positions.append(obj.position)
 		_drag_offsets.append(obj.position - world_mouse)
+
+	# Remember the start position of any linked instance in the drag set so the move
+	# can be written back to the instance (linked instances rehydrate from instances).
+	_linked_instance_starts.clear()
+	var gh: LDStampHandler = LD.get_stamp_handler()
+	for obj: LDObject in _objects:
+		var address: String = gh.get_object_linked_stamp(obj)
+		if not address.is_empty() and not _linked_instance_starts.has(address):
+			_linked_instance_starts[address] = gh.get_instance_position_for_object(obj)
 
 
 func _get_object_at(mouse_pos: Vector2) -> LDObject:

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bg6a8iw1274lt"]
+
+[ext_resource type="Texture2D" uid="uid://c6rorj5vsm4to" path="res://assets/textures/objects/decoration/nature/big_cave_tree.png" id="1_xw7au"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_46ib4"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_7xv23"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_c0u5y"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_qqwna"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_5wq8n"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_46ib4"]
+atlas = ExtResource("1_xw7au")
+region = Rect2(5, -3, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/big_cave_tree.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_5wq8n")
+id = "big_cave_tree"
+category = 6
+subpath = "Nature/big_cave_tree"
+group_path = "Nature"
+ld_index_id = "cave_tree_13"
+ld_entry_texture = SubResource("AtlasTexture_46ib4")
+ld_properties = Array[ExtResource("2_46ib4")]([ExtResource("3_7xv23"), ExtResource("4_c0u5y"), ExtResource("5_qqwna")])
+sprite_texture = ExtResource("1_xw7au")
+ld_object_path = "Decoration/Nature/big_cave_tree"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

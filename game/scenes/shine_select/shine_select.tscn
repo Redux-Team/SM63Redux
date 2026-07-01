@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://o6o0aexv7xvs"]
+
+[ext_resource type="Script" uid="uid://vpcg8rtvmmb7" path="res://game/scenes/shine_select/shine_select.gd" id="1_ss"]
+[ext_resource type="Shader" uid="uid://dbldxfaveqoao" path="res://core/shader/ld_window_backdrop.gdshader" id="2_blur"]
+[ext_resource type="Shader" uid="uid://cmtfnsjbl2jb8" path="res://core/shader/white_vignette.gdshader" id="3_vig"]
+[ext_resource type="FontFile" uid="uid://c4fspc7t5o2ac" path="res://core/theme/fonts/hud/pixel_sm64r.fnt" id="4_j36f6"]
+[ext_resource type="AudioStream" uid="uid://ccj4g3tei5r6p" path="res://assets/music/shine_select_bob_omb.ogg" id="4_music"]
+
+[sub_resource type="Curve" id="Curve_spin"]
+_limits = [0.0, 16.0, 0.0, 1.0]
+_data = [Vector2(0, 6), 0.0, 0.0, 0, 0, Vector2(0.5, 12), 0.0, 0.0, 0, 0, Vector2(1, 14), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_yvel"]
+_limits = [-800.0, 1600.0, 0.0, 1.0]
+_data = [Vector2(0, -206.25464), 0.0, 0.0, 0, 0, Vector2(1, 956.14124), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
+shader = ExtResource("2_blur")
+shader_parameter/tint = Color(0, 0, 0, 0)
+shader_parameter/blur = 6.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vig"]
+shader = ExtResource("3_vig")
+shader_parameter/inner = 0.30000001425
+shader_parameter/outer = 1.0
+shader_parameter/strength = 0.50000002375
+
+[node name="ShineSelect" type="CanvasLayer" unique_id=177695623 node_paths=PackedStringArray("bg_layer", "name_label", "carousel", "music")]
+script = ExtResource("1_ss")
+bg_layer = NodePath("BgRoot")
+name_label = NodePath("NameLabel")
+carousel = NodePath("Center/Carousel")
+music = NodePath("Music")
+selection_spin_speed_curve = SubResource("Curve_spin")
+selection_y_velocity_curve = SubResource("Curve_yvel")
+
+[node name="BgRoot" type="Control" parent="." unique_id=601727549]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BlurRect" type="ColorRect" parent="." unique_id=181194344]
+material = SubResource("ShaderMaterial_blur")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="Vignette" type="ColorRect" parent="." unique_id=1528816462]
+material = SubResource("ShaderMaterial_vig")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="NameLabel" type="Label" parent="." unique_id=1530598938]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 12.0
+offset_right = 300.0
+offset_bottom = 67.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("4_j36f6")
+theme_override_font_sizes/font_size = 48
+text = "shine select!"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Center" type="Control" parent="." unique_id=1616513556]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Carousel" type="Node2D" parent="Center" unique_id=1098736385]
+
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=777785733]
+stream = ExtResource("4_music")
+volume_db = -14.0
+bus = &"Music"

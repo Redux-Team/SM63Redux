@@ -36,7 +36,6 @@ enum HandleIndex {
 @export var scale_y_label_2: Label
 
 
-var _tool_node: Node
 var _is_dragging: bool = false
 var _did_drag: bool = false
 var _active_handle: HandleIndex = HandleIndex.TOP_LEFT
@@ -52,8 +51,7 @@ var _pending_object_drag: bool = false
 
 
 func _on_activate() -> void:
-	_tool_node = get_parent()
-	reparent(get_overlay())
+	_attach_to_overlay()
 	show()
 	_capture_baseline()
 	_sync_panel()
@@ -61,7 +59,7 @@ func _on_activate() -> void:
 
 func _on_deactivate() -> void:
 	hide()
-	reparent(_tool_node)
+	_detach_from_overlay()
 	_drag_start_scales.clear()
 	_drag_start_positions.clear()
 	_drag_anchor_positions.clear()
@@ -89,10 +87,7 @@ func _on_input(event: InputEvent) -> void:
 		
 		if _pending_object_drag:
 			_pending_object_drag = false
-			var move_tool: LDToolMove = _get_move_tool()
-			if move_tool and move_tool.try_begin_drag(mouse_pos, _bound_objects):
-				move_tool.return_tool = "scale"
-				select_tool("move")
+			_begin_move_handoff("scale", _bound_objects)
 			return
 		
 		if _is_dragging:
@@ -199,12 +194,6 @@ func _get_handle_cursor(handle: int) -> Control.CursorShape:
 func _is_mouse_inside_rect(center: Vector2, half: Vector2) -> bool:
 	var mouse: Vector2 = get_screen_mouse_pos()
 	return Rect2(center - half, half * 2.0).has_point(mouse)
-
-
-func _get_move_tool() -> LDToolMove:
-	return _tool.get_tool_handler().get_tool_list().filter(func(t: LDTool) -> bool:
-		return t is LDToolMove
-	).front() as LDToolMove
 
 
 func draw_overlay(_draw_node: CanvasItem) -> void:

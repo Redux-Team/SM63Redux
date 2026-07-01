@@ -4,20 +4,9 @@
 [ext_resource type="Script" uid="uid://bkvfc547p3vis" path="res://level_designer/components/viewport/root/viewport_root.gd" id="2_itnej"]
 [ext_resource type="Shader" uid="uid://d4m57jrrlul8l" path="res://core/shader/ld_viewport_bg.gdshader" id="2_vq6wp"]
 [ext_resource type="Texture2D" uid="uid://crqnqwpps0m8c" path="res://assets/textures/level_designer/viewport/bg_texture.png" id="3_nmc72"]
+[ext_resource type="Script" uid="uid://cftpqy38ystk8" path="res://level_designer/components/viewport/global_anchor.gd" id="5_ln2jb"]
 [ext_resource type="Script" uid="uid://bemjucm1rn4g1" path="res://level_designer/components/viewport/selection_overlay/selection_overlay.gd" id="5_pf3pc"]
 [ext_resource type="Script" uid="uid://ctu3ksd4yarv0" path="res://level_designer/components/viewport/touch_swipe_indicator.gd" id="6_uet0v"]
-
-[sub_resource type="GDScript" id="GDScript_uet0v"]
-script/source = "class_name LDBackgroundRoot
-extends Node2D
-
-
-#func _process(_delta: float) -> void:
-	#var vp: LDViewport = LD.get_editor_viewport()
-	#position = vp.camera.position
-	#rotation = vp.camera.rotation
-	#scale = Vector2.ONE / vp.camera_zoom
-"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nmc72"]
 shader = ExtResource("2_vq6wp")
@@ -31,7 +20,7 @@ shader_parameter/screen_size = Vector2(1152, 648)
 shader_parameter/grid_offset = Vector2(0, 0)
 shader_parameter/grid_fade_threshold = 1.0
 
-[node name="LDViewport" type="Node" unique_id=110890990 node_paths=PackedStringArray("camera", "_viewport_grid", "_root", "_selection_overlay", "_touch_indicator", "_background_root", "_viewport_input")]
+[node name="LDViewport" type="Node" unique_id=110890990 node_paths=PackedStringArray("camera", "_viewport_grid", "_root", "_selection_overlay", "_touch_indicator", "_background_root", "_global_anchor", "_viewport_input")]
 script = ExtResource("1_urtws")
 camera = NodePath("Root/LDCamera")
 _viewport_grid = NodePath("Root/BGCanvasLayer/ViewportGrid")
@@ -39,6 +28,7 @@ _root = NodePath("Root")
 _selection_overlay = NodePath("CanvasLayer/SelectionOverlay")
 _touch_indicator = NodePath("CanvasLayer/TouchSwipeIndicator")
 _background_root = NodePath("Root/BGCanvasLayer/Background")
+_global_anchor = NodePath("CanvasLayer/GlobalAnchor")
 _viewport_input = NodePath("CanvasLayer/ViewportInput")
 
 [node name="Root" type="Node2D" parent="." unique_id=959818305]
@@ -49,8 +39,13 @@ layer = -1
 
 [node name="ViewportBG" type="Node" parent="Root/BGCanvasLayer" unique_id=1288112237]
 
-[node name="Background" type="Node2D" parent="Root/BGCanvasLayer" unique_id=1074304744]
-script = SubResource("GDScript_uet0v")
+[node name="Background" type="Control" parent="Root/BGCanvasLayer" unique_id=1074304744]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="ViewportGrid" type="ColorRect" parent="Root/BGCanvasLayer" unique_id=1665666835]
 material = SubResource("ShaderMaterial_nmc72")
@@ -67,6 +62,11 @@ color = Color(1, 1, 1, 0.2901961)
 [node name="Layers" type="Node2D" parent="Root" unique_id=993688873]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1127959846]
+
+[node name="GlobalAnchor" type="Control" parent="CanvasLayer" unique_id=677547564]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("5_ln2jb")
 
 [node name="SelectionOverlay" type="Control" parent="CanvasLayer" unique_id=237957882]
 layout_mode = 3

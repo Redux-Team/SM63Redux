@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dw6l2d61dkq6p"]
+
+[ext_resource type="PackedScene" uid="uid://c6s8go3p2hh3f" path="res://game/object/spinning_block/spinning_block.tscn" id="1_ig3ub"]
+[ext_resource type="PackedScene" uid="uid://8jc2r14h0kqx" path="res://game/db/Objects/Interactive/Gizmos/spinning_block_ld.tscn" id="2_73w3l"]
+[ext_resource type="Texture2D" uid="uid://b5rye1b7re58f" path="res://assets/textures/objects/interactive/gizmos/spinning_block_ld.png" id="3_6xi66"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_jtynj"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_hxhnx"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_apvei"]
+[ext_resource type="Resource" uid="uid://slnqfgiyquh8" path="res://game/db/Properties/b_size_x.tres" id="7_3y1wv"]
+[ext_resource type="Resource" uid="uid://va740o4ucg11" path="res://game/db/Properties/b_size_y.tres" id="8_4wolb"]
+[ext_resource type="Resource" uid="uid://bodb72o31fuwr" path="res://game/db/Properties/spinning_block/b_wait_time.tres" id="9_8lqpn"]
+[ext_resource type="Resource" uid="uid://ds4v7d38dsv1r" path="res://game/db/Properties/spinning_block/b_rotate_speed.tres" id="10_ei3r3"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="11_fnit0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hmv4i"]
+atlas = ExtResource("3_6xi66")
+region = Rect2(-3, -3, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Interactive/Gizmos/spinning_block.tres"
+resource_scene_unique_id = ""
+script = ExtResource("11_fnit0")
+id = "spinning_block"
+category = 6
+subpath = "Gizmos/spinning_block"
+group_path = "Gizmos"
+ld_select_tool_override = "block_edit"
+ld_placement_tool_override = "block"
+ld_editor_instance = ExtResource("2_73w3l")
+game_instance = ExtResource("1_ig3ub")
+ld_entry_texture = SubResource("AtlasTexture_hmv4i")
+ld_properties = Array[ExtResource("4_jtynj")]([ExtResource("5_hxhnx"), ExtResource("6_apvei"), ExtResource("7_3y1wv"), ExtResource("8_4wolb"), ExtResource("9_8lqpn"), ExtResource("10_ei3r3")])
+ld_object_path = "Interactive/Gizmos/spinning_block"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

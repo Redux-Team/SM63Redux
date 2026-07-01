@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://q2j4bb8iqflm"]
+
+[ext_resource type="Texture2D" uid="uid://btjjbau1acxeg" path="res://assets/textures/objects/decoration/nature/small_jungle_bush.png" id="1_vh5c5"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_vh5c5"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_o8b8f"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_xind5"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_50rk3"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_14rwn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o8b8f"]
+atlas = ExtResource("1_vh5c5")
+region = Rect2(-12, -13, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/small_jungle_bush.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_14rwn")
+id = "small_jungle_bush"
+category = 6
+subpath = "Nature/small_jungle_bush"
+group_path = "Nature"
+ld_index_id = "jungle_bush_02"
+ld_entry_texture = SubResource("AtlasTexture_o8b8f")
+ld_properties = Array[ExtResource("2_vh5c5")]([ExtResource("3_o8b8f"), ExtResource("4_xind5"), ExtResource("5_50rk3")])
+sprite_texture = ExtResource("1_vh5c5")
+ld_object_path = "Decoration/Nature/small_jungle_bush"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

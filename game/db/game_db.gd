@@ -10,10 +10,13 @@ static var _inst: GameDB
 @export_dir var objects_root: String
 @export_dir var properties_root: String
 
+var _by_id: Dictionary[String, GameObject] = {}
+
 @export_tool_button("Auto-populate objects") var _populate_objects: Callable:
 	get:
 		return func() -> void:
 			populate_objects(objects_root)
+			_by_id.clear()
 
 
 @export_tool_button("Auto-populate properties") var _populate_props: Callable:
@@ -27,6 +30,7 @@ static var _inst: GameDB
 		return func() -> void:
 			objects.clear()
 			populate_objects.call(objects_root)
+			_by_id.clear()
 
 @export_category("Debug")
 @export_dir var ld_object_objects_root: String
@@ -193,6 +197,8 @@ func get_tree() -> Array[GameObjectCategory]:
 	for obj: GameObject in objects.values():
 		var cat_id: String = obj.ld_object_path.get_slice("/", 0)
 		var group_id: String = obj.ld_object_path.get_slice("/", 1)
+		if group_id == "Nature" and not obj.ld_index_id.is_empty():
+			group_id = obj.ld_index_id.get_slice("_", 0).capitalize()
 		if cat_id not in cats:
 			var cat: GameObjectCategory = GameObjectCategory.new()
 			cat._id = cat_id
@@ -263,10 +269,17 @@ func populate_objects(path: String) -> void:
 
 
 func find_game_object(id: String) -> GameObject:
+	if _by_id.is_empty() and not objects.is_empty():
+		_rebuild_by_id()
+	return _by_id.get(id, null)
+
+
+## Builds the id -> GameObject lookup so find_game_object is O(1) instead of an O(n) scan per call
+## (the per-object scans dominated level load / editor rebuild time). Rebuilt after a (re)populate.
+func _rebuild_by_id() -> void:
+	_by_id.clear()
 	for obj: GameObject in objects.values():
-		if obj.id == id:
-			return obj
-	return null
+		_by_id.set(obj.id, obj)
 
 
 func populate_properties(path: String) -> void:

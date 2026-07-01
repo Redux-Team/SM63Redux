@@ -84,9 +84,48 @@ func place(first: bool = false) -> void:
 	is_preview = false
 	for prop: LDProperty in _properties:
 		_apply_property(prop.key, _property_values.get(prop.key, prop.default_value))
-		
+
 		if first:
 			prop._on_first_placement(self, _property_values.get(prop.key, prop.default_value))
+
+	_enforce_uniqueness()
+
+
+## If this object's GameObject is flagged unique, removes any other placed instance of the same
+## object in this object's own area, so each area keeps exactly one (e.g. its own player spawn).
+func _enforce_uniqueness() -> void:
+	if source_object_id.is_empty() or not LD.is_ready():
+		return
+	var game_object: GameObject = GameDB.get_db().find_game_object(source_object_id)
+	if not game_object or not game_object.ld_unique:
+		return
+	var area: LDArea = _owning_area()
+	if not area:
+		return
+	for other: LDObject in area.get_all_objects():
+		if other == self or other.is_preview:
+			continue
+		if other.source_object_id == source_object_id:
+			if other.get_parent():
+				other.get_parent().remove_child(other)
+			other.queue_free()
+
+
+## Walks up the scene tree to the LDArea this object lives in (objects sit under layer → area).
+func _owning_area() -> LDArea:
+	var node: Node = get_parent()
+	while node and node is not LDArea:
+		node = node.get_parent()
+	return node as LDArea
+
+
+## The index of the LDLayer this object currently lives on (objects sit under layer → objects_root).
+func get_layer_index() -> int:
+	var node: Node = get_parent()
+	while node and node is not LDLayer:
+		node = node.get_parent()
+	var layer: LDLayer = node as LDLayer
+	return layer.index if layer else 0
 
 
 func bind_to_active_layer() -> void:
@@ -143,6 +182,10 @@ func get_properties() -> Array[LDProperty]:
 
 func get_property_values() -> Dictionary[StringName, Variant]:
 	return _property_values.duplicate()
+
+
+func get_property_options(_key: StringName) -> PackedStringArray:
+	return PackedStringArray()
 
 
 func has_property(key: String) -> bool:

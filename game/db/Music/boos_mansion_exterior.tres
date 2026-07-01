@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LDMusic" format=3]
+
+[ext_resource type="Script" path="res://level_designer/world/ld_music.gd" id="1_akck0"]
+[ext_resource type="Script" path="res://level_designer/world/ld_music_subtrack.gd" id="2_xajsd"]
+
+[sub_resource type="Resource" id="Resource_5c8yq"]
+script = ExtResource("2_xajsd")
+track_id = "boos_mansion_exterior"
+
+[resource]
+script = ExtResource("1_akck0")
+preset_name = "Boo's Mansion (Exterior)"
+subtracks = Array[ExtResource("2_xajsd")]([SubResource("Resource_5c8yq")])

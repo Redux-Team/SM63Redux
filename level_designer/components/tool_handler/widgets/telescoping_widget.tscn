@@ -22,6 +22,8 @@ offset_right = 4.0
 offset_bottom = 4.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/gdss_mode = 1
+metadata/gdss_classes = PackedStringArray("VertexHead")
 
 [node name="PointB" type="Button" parent="." unique_id=901104698]
 layout_mode = 1
@@ -36,3 +38,5 @@ offset_right = 4.0
 offset_bottom = 4.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/gdss_mode = 1
+metadata/gdss_classes = PackedStringArray("Vertex")

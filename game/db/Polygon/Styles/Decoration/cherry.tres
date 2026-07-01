@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PolygonDecorationStyle" format=3]
+
+[ext_resource type="Script" uid="uid://6bps37udg7ro" path="res://game/object_data/polygon_decoration_style.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dcdrvtrl2sdg3" path="res://assets/textures/terrain/cherry/terrain_cherry_decoration_1.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://xg2e2mbs22s5" path="res://assets/textures/terrain/cherry/terrain_cherry_decoration_2.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bx7nqdk0vstlh" path="res://assets/textures/terrain/cherry/terrain_cherry_decoration_3.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://cn85xifs4wkh8" path="res://assets/textures/terrain/cherry/terrain_cherry_decoration_4.png" id="5"]
+
+[resource]
+script = ExtResource("1")
+style_name = "Cherry"
+weightmap = Dictionary[Texture2D, float]({
+ExtResource("2"): 2.0,
+ExtResource("3"): 1.0,
+ExtResource("4"): 1.0,
+ExtResource("5"): 0.5
+})
+density = 20.0

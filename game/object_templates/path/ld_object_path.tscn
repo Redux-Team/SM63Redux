@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://yikxrbwply4j"]
+
+[ext_resource type="Script" uid="uid://2em0q35qtycp" path="res://game/object_templates/path/ld_object_path.gd" id="1_path"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_sel"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_smart"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_stem"]
+resource_local_to_scene = true
+shader = ExtResource("2_sel")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/saturation = 1.0
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_head"]
+resource_local_to_scene = true
+shader = ExtResource("2_sel")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/saturation = 1.0
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_muhsf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_head"]
+resource_local_to_scene = true
+size = Vector2(28, 20)
+
+[node name="LdObjectPath" type="Node2D" unique_id=262049671 node_paths=PackedStringArray("head", "stem", "head_shape_area", "stem_shape_area", "editor_shape_area", "editor_placement_rect", "editor_shape_areas", "origin_marker", "shader_objects")]
+script = ExtResource("1_path")
+head = NodePath("Head")
+stem = NodePath("Stem")
+head_shape_area = NodePath("EditorShapeArea")
+stem_shape_area = NodePath("StemShapeArea")
+editor_shape_area = NodePath("EditorShapeArea")
+editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
+editor_shape_areas = [NodePath("StemShapeArea")]
+origin_marker = NodePath("Origin")
+shader_objects = [NodePath("Head"), NodePath("Stem")]
+metadata/_custom_type_script = "uid://2em0q35qtycp"
+
+[node name="Stem" type="Line2D" parent="." unique_id=837947717]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_stem")
+texture_mode = 1
+
+[node name="Head" type="Sprite2D" parent="." unique_id=1478924218]
+material = SubResource("ShaderMaterial_head")
+texture = SubResource("CanvasTexture_muhsf")
+script = ExtResource("3_smart")
+canvas_texture = SubResource("CanvasTexture_muhsf")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=504418174]
+
+[node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=1525233621]
+shape = SubResource("RectangleShape2D_head")
+
+[node name="StemShapeArea" type="Area2D" parent="." unique_id=1240382157]
+
+[node name="Origin" type="Marker2D" parent="." unique_id=1677485957]

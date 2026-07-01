@@ -4,17 +4,35 @@ extends Node2D
 
 signal layer_created(layer: LDLayer)
 signal active_layer_changed(index: int)
+signal layers_changed
 signal preview_mode_changed(enabled: bool)
 
 
 const LAYER_ALPHA_STEP: float = 0.6
 
 
-static var _inst: LDArea
-
-
 @export var layers: Array[LDLayer]
 
+
+## Player-facing name shown in the Areas list and used to link scenarios to this area.
+var area_name: String = ""
+## This area's own background (each area renders its own backdrop + parallax layers).
+var background: LDBackground
+## Preset name driving the background, or LDBackgroundDB.CUSTOM once it has been edited.
+var background_preset: String = ""
+## The area's preserved freely-edited background, stashed aside so switching to a preset and back to
+## Custom restores the earlier edits. Only the active `background` is rendered and serialized.
+var custom_background: LDBackground = null
+var music: LDMusic = null
+## Preset name driving the music, or LDMusicPresetDB.CUSTOM once it has been edited.
+var music_preset: String = ""
+## The area's preserved freely-edited music, stashed aside so switching to a preset and back to
+## Custom restores the earlier edits.
+var custom_music: LDMusic = null
+## Per-area editor view: each area pans/zooms independently, like a separate level. Stripped on
+## export, so it only matters in the editor.
+var camera_position: Vector2 = Vector2.ZERO
+var camera_zoom: Vector2 = Vector2.ONE
 
 var _active_index: int = 0
 var _preview_mode: bool = false
@@ -23,7 +41,6 @@ var _background_root: Node2D
 
 
 func _init() -> void:
-	_inst = self
 	_background_root = Node2D.new()
 	_background_root.name = "Background"
 	add_child(_background_root)
@@ -49,12 +66,8 @@ func set_active_layer(index: int) -> void:
 			break
 	
 	if previous:
-		if previous.is_empty():
-			layers.erase(previous)
-			previous.queue_free()
-		else:
-			previous.is_active = false
-	
+		previous.is_active = false
+
 	var next: LDLayer = get_or_create_layer(index)
 	next.is_active = true
 	_active_index = index
@@ -65,6 +78,132 @@ func set_active_layer(index: int) -> void:
 ## Steps the active layer by a relative amount.
 func step_active_layer(delta: int) -> void:
 	set_active_layer(_active_index + delta)
+
+
+## Renames a layer, notifying listeners (e.g. the toolbar's active-layer label).
+func set_layer_name(layer: LDLayer, layer_name: String) -> void:
+	layer.layer_name = layer_name
+	layers_changed.emit()
+
+
+## Creates a fresh layer above the current topmost one and makes it active.
+func add_layer() -> LDLayer:
+	var top_index: int = 0
+	for layer: LDLayer in layers:
+		top_index = maxi(top_index, layer.index + 1)
+	var layer: LDLayer = get_or_create_layer(top_index)
+	set_active_layer(top_index)
+	return layer
+
+
+## Inserts a fresh layer directly below `reference` (shifting the layers above it up) and makes it
+## active.
+func add_layer_below(reference: LDLayer) -> LDLayer:
+	return _insert_layer(reference.index + 1)
+
+
+## Inserts a fresh layer directly above `reference` (shifting it and the layers above up) and makes
+## it active.
+func add_layer_above(reference: LDLayer) -> LDLayer:
+	return _insert_layer(reference.index)
+
+
+func _insert_layer(at_index: int) -> LDLayer:
+	for layer: LDLayer in layers:
+		if layer.index >= at_index:
+			layer.index += 1
+	var layer: LDLayer = get_or_create_layer(at_index)
+	_reorder_children()
+	set_active_layer(at_index)
+	layers_changed.emit()
+	return layer
+
+
+## Removes a layer (and any objects on it), picking a new active layer if needed.
+func remove_layer(layer: LDLayer) -> void:
+	if not layers.has(layer):
+		return
+	var was_active: bool = layer.index == _active_index
+	layers.erase(layer)
+	layer.queue_free()
+	if was_active:
+		_active_index = layers[0].index if not layers.is_empty() else 0
+		if not layers.is_empty():
+			layers[0].is_active = true
+	refresh_layer_visuals()
+	layers_changed.emit()
+	active_layer_changed.emit(_active_index)
+
+
+## Swaps a layer's render depth with its neighbour `delta` away (its objects move with it).
+func move_layer_order(layer: LDLayer, delta: int) -> void:
+	var pos: int = layers.find(layer)
+	var target: int = pos + delta
+	if pos < 0 or target < 0 or target >= layers.size():
+		return
+	var other: LDLayer = layers[target]
+	var active_layer: LDLayer = null
+	for candidate: LDLayer in layers:
+		if candidate.index == _active_index:
+			active_layer = candidate
+			break
+
+	var swapped_index: int = layer.index
+	layer.index = other.index
+	other.index = swapped_index
+	_reorder_children()
+
+	if active_layer:
+		_active_index = active_layer.index
+	refresh_layer_visuals()
+	layers_changed.emit()
+	active_layer_changed.emit(_active_index)
+
+
+## Sorts layers by index and matches the scene-tree order so the CanvasGroups render in order.
+func _reorder_children() -> void:
+	layers.sort_custom(func(a: LDLayer, b: LDLayer) -> bool:
+		return a.index < b.index
+	)
+	for i: int in layers.size():
+		move_child(layers[i], _background_root.get_index() + 1 + i)
+
+
+## Gives this area a fresh copy of the default background preset (used for new/blank areas).
+func apply_default_background() -> void:
+	var preset: LDBackground = LDBackgroundDB.get_preset(LDBackgroundHandler.DEFAULT_PRESET)
+	if not preset and not LDBackgroundDB.get_presets().is_empty():
+		preset = LDBackgroundDB.get_presets()[0]
+	if preset:
+		background = preset.working_copy()
+		background_preset = preset.preset_name
+	else:
+		background = LDBackground.new()
+		background_preset = LDBackgroundDB.CUSTOM
+
+
+func apply_default_music() -> void:
+	music = LDMusic.new()
+	music_preset = LDMusicPresetDB.CUSTOM
+	custom_music = music
+
+
+## Saves the current editor viewport view into this area (called when leaving it).
+func store_view() -> void:
+	var viewport: LDViewport = LD.get_editor_viewport()
+	if not is_instance_valid(viewport):
+		return
+	camera_position = viewport.camera_position
+	camera_zoom = viewport.camera_zoom
+
+
+## Applies this area's saved view to the editor viewport (called when entering it).
+func restore_view() -> void:
+	var viewport: LDViewport = LD.get_editor_viewport()
+	if not is_instance_valid(viewport):
+		return
+	viewport.camera_position = camera_position
+	viewport.camera_zoom = camera_zoom
 
 
 ## Sets the background of this area into the given root, replacing any existing background.
@@ -82,7 +221,8 @@ func get_or_create_layer(index: int) -> LDLayer:
 	
 	var new_layer: LDLayer = LDLayer.new()
 	new_layer.index = index
-	new_layer.is_parallaxing = LD.get_ui().parallaxing_enabled
+	new_layer.is_parallaxing = LD.get_ui().get_viewport_handler().is_parallaxing_enabled()
+	new_layer.set_modulating(LD.get_ui().get_viewport_handler().is_modulation_enabled())
 	add_child(new_layer)
 	
 	var insert_pos: int = 0
@@ -130,6 +270,17 @@ func find_object_by_id(id: String, index: int = _active_index) -> LDObject:
 		if obj.source_object_id == id:
 			return obj
 	return null
+
+
+## Index of the layer the player is on. Layer numbering is shown relative to this so the
+## player's layer reads as "Layer 0". Falls back to 0 when no player has been placed.
+func get_player_layer_index() -> int:
+	for layer: LDLayer in layers:
+		for child: Node in layer.get_objects_root().get_children():
+			var obj: LDObject = child as LDObject
+			if obj and obj.source_object_id == "player_mario":
+				return layer.index
+	return 0
 
 
 ## Adds an object to the layer at the given index, defaulting to the active layer.
@@ -201,7 +352,7 @@ func refresh_layer_visuals() -> void:
 
 
 func _apply_layer_visual(layer: LDLayer) -> void:
-	if not LD.get_ui().ghosting_enabled:
+	if not LD.get_ui().get_viewport_handler().is_ghosting_enabled():
 		layer.visible = true
 		layer._internal_modulation = Color.WHITE
 		return

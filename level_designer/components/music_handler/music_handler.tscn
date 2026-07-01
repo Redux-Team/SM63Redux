@@ -1,10 +1,6 @@
 [gd_scene format=3 uid="uid://drwhx30m8d8f7"]
 
 [ext_resource type="Script" uid="uid://ddiwtpjpciapl" path="res://level_designer/components/music_handler/music_handler.gd" id="1_rkng7"]
-[ext_resource type="AudioStream" uid="uid://s37wfuyxf504" path="res://assets/music/ld_64.mp3" id="2_bjm6i"]
-[ext_resource type="AudioStream" uid="uid://cm8xohoo5vmy" path="res://assets/music/ld_sunshine.mp3" id="3_j5u7t"]
-[ext_resource type="AudioStream" uid="uid://buy6m2r0lxnge" path="res://assets/music/ld_galaxy.mp3" id="4_brcp4"]
-[ext_resource type="AudioStream" uid="uid://bk7eyapdaww2u" path="res://assets/music/ld_galaxy_2.mp3" id="5_brcp4"]
 
 [sub_resource type="Animation" id="Animation_bjm6i"]
 length = 0.001
@@ -93,12 +89,6 @@ _data = {
 
 [node name="LDMusicHandler" type="Node" unique_id=803692291 node_paths=PackedStringArray("song_label", "audio_stream_player", "animation_player")]
 script = ExtResource("1_rkng7")
-tracks = Dictionary[String, AudioStream]({
-"Level Editor - 64": ExtResource("2_bjm6i"),
-"Level Editor - Galaxy": ExtResource("4_brcp4"),
-"Level Editor - Galaxy 2": ExtResource("5_brcp4"),
-"Level Editor - Sunshine": ExtResource("3_j5u7t")
-})
 song_label = NodePath("CanvasLayer/Control/SongLabel")
 audio_stream_player = NodePath("AudioStreamPlayer")
 animation_player = NodePath("AnimationPlayer")

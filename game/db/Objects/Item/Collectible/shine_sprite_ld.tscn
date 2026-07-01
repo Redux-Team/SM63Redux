@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_xqumg"]
 [ext_resource type="Texture2D" uid="uid://bh4jhqvk5nh4r" path="res://assets/textures/item/collectible/shine_sprite_spin.png" id="4_604nk"]
 [ext_resource type="Texture2D" uid="uid://6x6lxccsh6al" path="res://assets/textures/item/collectible/shine_sprite.png" id="5_xqumg"]
+[ext_resource type="FontFile" uid="uid://hhy8cxtk1xcx" path="res://core/theme/fonts/bylight/bylight.otf" id="6_604nk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xqumg"]
 shader = ExtResource("2_6iats")
@@ -41,15 +42,19 @@ shader_parameter/pulse_max = 1.0
 shader_parameter/outline_ignore_holes = true
 shader_parameter/outline_enabled = true
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_pj2iy"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_21hta"]
 atlas = ExtResource("4_604nk")
-region = Rect2(0, 0, 28, 31)
+region = Rect2(140, 0, 28, 31)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_xqumg"]
-diffuse_texture = SubResource("AtlasTexture_pj2iy")
+[sub_resource type="CanvasTexture" id="CanvasTexture_604nk"]
+diffuse_texture = SubResource("AtlasTexture_21hta")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_604nk"]
 atlas = ExtResource("5_xqumg")
+region = Rect2(0, 0, 28, 31)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pj2iy"]
+atlas = ExtResource("4_604nk")
 region = Rect2(0, 0, 28, 31)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rbtpv"]
@@ -67,10 +72,6 @@ region = Rect2(84, 0, 28, 31)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ypqng"]
 atlas = ExtResource("4_604nk")
 region = Rect2(112, 0, 28, 31)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_21hta"]
-atlas = ExtResource("4_604nk")
-region = Rect2(140, 0, 28, 31)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mecfo"]
 atlas = ExtResource("4_604nk")
@@ -151,10 +152,11 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1iq2w"]
 size = Vector2(26, 30)
 
-[node name="ShineSpriteLd" type="Node2D" unique_id=1568297185 node_paths=PackedStringArray("sprite", "sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker", "shader_objects")]
+[node name="ShineSpriteLd" type="Node2D" unique_id=1568297185 node_paths=PackedStringArray("sprite", "scenario_label", "sprite_ref", "editor_shape_area", "editor_placement_rect", "origin_marker", "shader_objects")]
 material = SubResource("ShaderMaterial_xqumg")
 script = ExtResource("1_xqumg")
 sprite = NodePath("Sprite")
+scenario_label = NodePath("ScenarioLabel")
 sprite_ref = NodePath("Sprite")
 editor_shape_area = NodePath("EditorShapeArea")
 editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
@@ -164,17 +166,15 @@ metadata/_custom_type_script = "uid://cfx4civm76jwr"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=784258312]
 material = SubResource("ShaderMaterial_s0v3f")
-texture = SubResource("CanvasTexture_xqumg")
+texture = SubResource("CanvasTexture_604nk")
 region_enabled = true
-region_rect = Rect2(0, 0, 28, 31)
+region_rect = Rect2(140, 0, 28, 31)
 script = ExtResource("3_xqumg")
-canvas_texture = SubResource("CanvasTexture_xqumg")
+canvas_texture = SubResource("CanvasTexture_604nk")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_7clx0")
-current_animation = "spin"
-current_frame = 0
 speed_scale = 1.0
-playing = false
+playing = true
 
 [node name="EditorShapeArea" type="Area2D" parent="." unique_id=758870913]
 
@@ -183,3 +183,21 @@ visible = false
 shape = SubResource("RectangleShape2D_1iq2w")
 
 [node name="Origin" type="Marker2D" parent="." unique_id=198463489]
+
+[node name="ScenarioLabel" type="Label" parent="." unique_id=1102107183]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -3.0
+offset_right = 17.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("6_604nk")
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1

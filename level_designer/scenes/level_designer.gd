@@ -8,6 +8,10 @@ static var _inst: LD
 @export_group("Components", "_ld_")
 @export var _ld_input_handler: LDInputHandler
 @export var _ld_object_handler: LDObjectHandler
+@export var _ld_stamp_handler: LDStampHandler
+@export var _ld_tag_handler: LDTagHandler
+@export var _ld_scenario_handler: LDScenarioHandler
+@export var _ld_background_handler: LDBackgroundHandler
 @export var _ld_tool_handler: LDToolHandler
 @export var _ld_music_handler: LDMusicHandler
 @export var _ld_history_handler: LDHistoryHandler
@@ -27,6 +31,22 @@ static func get_input_handler() -> LDInputHandler:
 
 static func get_object_handler() -> LDObjectHandler:
 	return get_instance()._ld_object_handler
+
+
+static func get_stamp_handler() -> LDStampHandler:
+	return get_instance()._ld_stamp_handler
+
+
+static func get_tag_handler() -> LDTagHandler:
+	return get_instance()._ld_tag_handler
+
+
+static func get_scenario_handler() -> LDScenarioHandler:
+	return get_instance()._ld_scenario_handler
+
+
+static func get_background_handler() -> LDBackgroundHandler:
+	return get_instance()._ld_background_handler
 
 
 static func get_tool_handler() -> LDToolHandler:
@@ -77,11 +97,9 @@ func _ready() -> void:
 	var level: LDLevel = LDLevel.new()
 	level.name = "Level"
 	get_editor_viewport().get_root().add_child(level)
-	
-	var area: LDArea = LDArea.new()
-	area.name = "Area"
-	level.add_child(area)
-	level._active_area = area
+
+	level.add_area("Area 1")
+	level.set_active_area_index(0)
 
 
 func _exit_tree() -> void:

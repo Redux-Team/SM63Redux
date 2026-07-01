@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PolygonDecorationStyle" format=3]
+
+[ext_resource type="Script" uid="uid://6bps37udg7ro" path="res://game/object_data/polygon_decoration_style.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://be85gi7nl7ugv" path="res://assets/textures/terrain/grass/terrain_grass_decoration_1.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://dovroqootwfhv" path="res://assets/textures/terrain/grass/terrain_grass_decoration_2.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://cdclscd5eam60" path="res://assets/textures/terrain/grass/terrain_grass_decoration_3.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://bwwmr75i87wbe" path="res://assets/textures/terrain/grass/terrain_grass_decoration_4.png" id="5"]
+
+[resource]
+script = ExtResource("1")
+style_name = "Grass"
+weightmap = Dictionary[Texture2D, float]({
+ExtResource("2"): 3.0,
+ExtResource("3"): 2.0,
+ExtResource("4"): 1.0,
+ExtResource("5"): 0.5
+})
+density = 20.0

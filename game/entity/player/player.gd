@@ -5,6 +5,9 @@ class_name Player
 extends Entity
 
 
+signal swimming_changed(swimming: bool)
+
+
 const BUFFER_ACTIONS: PackedStringArray = ["jump"]
 var buffer_dictionary: Dictionary[String, float]
 
@@ -79,7 +82,13 @@ var is_input_jump: bool = false:
 var is_input_dive: bool = false
 var is_input_ground_pound: bool = false
 var is_input_spin: bool = false
-var is_input_swim: bool = false
+## How long a swim (jump-underwater) press stays buffered. Buffering it means the state machine
+## still sees the press even if it samples on a frame after the one-frame "just pressed".
+const SWIM_INPUT_BUFFER: float = 0.12
+var swim_input_timer: float = 0.0
+var is_input_swim: bool:
+	get:
+		return swim_input_timer > 0.0
 
 var can_jump: bool = true
 var can_spin: bool = false
@@ -108,11 +117,12 @@ func _process(delta: float) -> void:
 	is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
 	is_input_dive = Input.is_action_pressed("dive") and not is_on_floor()
 	is_input_ground_pound = Input.is_action_pressed("ground_pound")
-	is_input_swim = Input.is_action_just_pressed("jump")
 	is_input_spin = Input.is_action_pressed("spin")
-	
+
 	if Input.is_action_just_pressed("jump"):
 		jump_buffer_timer = jump_buffer_time if can_jump else 0.0
+		swim_input_timer = SWIM_INPUT_BUFFER
+	swim_input_timer = max(swim_input_timer - delta, 0.0)
 	
 	for action: String in BUFFER_ACTIONS:
 		if Input.is_action_pressed(action):
@@ -261,10 +271,14 @@ func get_terrain() -> String:
 
 
 func _on_water_check_water_entered() -> void:
+	is_swimming = true
+	swimming_changed.emit(true)
 	for effect: AudioEffect in submerged_bus_effects:
 		AudioServer.add_bus_effect(0, effect)
 
 
 func _on_water_check_water_exited() -> void:
+	is_swimming = false
+	swimming_changed.emit(false)
 	for i: int in submerged_bus_effects.size():
 		AudioServer.remove_bus_effect(0, 0)

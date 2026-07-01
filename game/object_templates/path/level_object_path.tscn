@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://b0gax4sgha034"]
+
+[ext_resource type="Script" uid="uid://b2k22rvar0i2q" path="res://game/object_templates/path/level_object_path.gd" id="1_path"]
+[ext_resource type="Shader" uid="uid://dxlbj210tsi10" path="res://core/shader/ld_object_selection.gdshader" id="2_sel"]
+[ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="3_smart"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_stem"]
+resource_local_to_scene = true
+shader = ExtResource("2_sel")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/saturation = 1.0
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_head"]
+resource_local_to_scene = true
+shader = ExtResource("2_sel")
+shader_parameter/state = 0
+shader_parameter/palette_index = 0
+shader_parameter/pre_modulate = Color(1, 1, 1, 1)
+shader_parameter/post_modulate = Color(1, 1, 1, 1)
+shader_parameter/saturation = 1.0
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(1, 1, 1, 0.25)
+shader_parameter/hover_outline_color = Color(1, 1, 1, 1)
+shader_parameter/hover_fill_color = Color(1, 1, 1, 0.1)
+shader_parameter/pulse_speed = 0.5
+shader_parameter/pulse_min = 0.3
+shader_parameter/pulse_max = 1.0
+shader_parameter/outline_ignore_holes = true
+shader_parameter/outline_enabled = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_jotj4"]
+
+[node name="LevelObjectPath" type="Node2D" unique_id=1417171523 node_paths=PackedStringArray("line2d", "head", "head_static_body", "head_collision", "stem_static_body", "palette_objects")]
+script = ExtResource("1_path")
+line2d = NodePath("Stem")
+head = NodePath("Head")
+head_static_body = NodePath("HeadStaticBody")
+head_collision = NodePath("HeadStaticBody/HeadCollision")
+stem_static_body = NodePath("StemStaticBody")
+palette_objects = [NodePath("Head"), NodePath("Stem")]
+metadata/_custom_type_script = "uid://b2k22rvar0i2q"
+
+[node name="Stem" type="Line2D" parent="." unique_id=303399332]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_stem")
+texture_mode = 1
+
+[node name="Head" type="Sprite2D" parent="." unique_id=1086530944]
+material = SubResource("ShaderMaterial_head")
+texture = SubResource("CanvasTexture_jotj4")
+script = ExtResource("3_smart")
+canvas_texture = SubResource("CanvasTexture_jotj4")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://dlx4gw1u1xim"
+
+[node name="HeadStaticBody" type="StaticBody2D" parent="." unique_id=213520678]
+collision_layer = 514
+
+[node name="HeadCollision" type="CollisionPolygon2D" parent="HeadStaticBody" unique_id=1950260066]
+
+[node name="StemStaticBody" type="StaticBody2D" parent="." unique_id=1915901942]
+collision_layer = 514

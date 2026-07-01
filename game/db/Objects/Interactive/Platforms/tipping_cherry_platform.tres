@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cwjppj6rey6s"]
+
+[ext_resource type="PackedScene" uid="uid://crc4nl4nsnqah" path="res://game/object/tipping/tipping_log.tscn" id="1_y6g5g"]
+[ext_resource type="PackedScene" uid="uid://kd03uj0tg4kr" path="res://game/db/Objects/Interactive/Platforms/tipping_cherry_platform_ld.tscn" id="2_y0qru"]
+[ext_resource type="Texture2D" uid="uid://c6cvfdstlyj6i" path="res://assets/textures/objects/decoration/platform/tipping_platform_cherry_ld.png" id="3_hhxvw"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_dn12f"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_g0jen"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_hxjqf"]
+[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="7_ugbf6"]
+[ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="8_1uj8w"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="9_jny03"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i3aap"]
+atlas = ExtResource("3_hhxvw")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kbjqa"]
+
+[resource]
+resource_path = "res://game/db/Objects/Interactive/Platforms/tipping_cherry_platform.tres"
+resource_scene_unique_id = ""
+script = ExtResource("9_jny03")
+id = "tipping_cherry_platform"
+category = 6
+subpath = "Platforms/tipping_cherry_platform"
+group_path = "Platforms"
+ld_index_id = "tipping_3"
+ld_placement_tool_override = "telescoping"
+ld_editor_instance = ExtResource("2_y0qru")
+game_instance = ExtResource("1_y6g5g")
+ld_entry_texture = SubResource("AtlasTexture_i3aap")
+ld_properties = Array[ExtResource("4_dn12f")]([ExtResource("5_g0jen"), ExtResource("6_hxjqf"), ExtResource("7_ugbf6"), ExtResource("8_1uj8w")])
+telescoping_atlas = SubResource("AtlasTexture_kbjqa")
+ld_object_path = "Interactive/Platforms/tipping_cherry_platform"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

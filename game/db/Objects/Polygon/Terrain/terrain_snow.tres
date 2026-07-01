@@ -1,34 +1,67 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://c7em3naeyouse"]
 
-[ext_resource type="PackedScene" uid="uid://d126weu6rop6a" path="res://game/db/Objects/Polygon/Terrain/terrain_snow_lvl.tscn" id="1_odoqr"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_wrkex"]
-[ext_resource type="Texture2D" uid="uid://c7ocqykwyg3e7" path="res://assets/textures/terrain/snow/terrain_snow_ld.png" id="1_xxybb"]
-[ext_resource type="PackedScene" uid="uid://b5ks8obhabj2l" path="res://game/db/Objects/Polygon/Terrain/terrain_snow_ld.tscn" id="2_odoqr"]
-[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_xxybb"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_1narg"]
-[ext_resource type="Resource" uid="uid://b12ma52j5x2hd" path="res://game/db/Properties/rng_seed.tres" id="6_swwlr"]
+[ext_resource type="Texture2D" uid="uid://c7ocqykwyg3e7" path="res://assets/textures/terrain/snow/terrain_snow_ld.png" id="1_ld"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
+[ext_resource type="Resource" uid="uid://b12ma52j5x2hd" path="res://game/db/Properties/rng_seed.tres" id="4_seed"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="5_go"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="6_pd"]
+[ext_resource type="Texture2D" uid="uid://c7cao14jm2etj" path="res://assets/textures/terrain/snow/terrain_snow_base.png" id="7_base"]
+[ext_resource type="Texture2D" uid="uid://n0jyw6q5ioeo" path="res://assets/textures/terrain/snow/terrain_snow_top.png" id="8_top"]
+[ext_resource type="Texture2D" uid="uid://dt5o1wfangng7" path="res://assets/textures/terrain/grass/terrain_grass_shadow.png" id="9_shadow"]
+[ext_resource type="Texture2D" uid="uid://cpchki6mx2brf" path="res://assets/textures/terrain/snow/terrain_snow_top_left.png" id="10_tl"]
+[ext_resource type="Texture2D" uid="uid://dufdvyfibqn74" path="res://assets/textures/terrain/snow/terrain_snow_top_right.png" id="11_tr"]
+[ext_resource type="Texture2D" uid="uid://llcy8x8hxjgj" path="res://assets/textures/terrain/snow/terrain_snow_outline.png" id="12_out"]
+[ext_resource type="Texture2D" uid="uid://dx0qwnwhg1rre" path="res://assets/textures/terrain/snow/terrain_snow_decoration_1.png" id="13_d1"]
+[ext_resource type="Texture2D" uid="uid://bcfckryx00bpb" path="res://assets/textures/terrain/snow/terrain_snow_decoration_2.png" id="14_d2"]
+[ext_resource type="Texture2D" uid="uid://c7j6adxm3xwiq" path="res://assets/textures/terrain/snow/terrain_snow_decoration_3.png" id="15_d3"]
+[ext_resource type="Texture2D" uid="uid://cp7srf6x5cr38" path="res://assets/textures/terrain/snow/terrain_snow_decoration_4.png" id="16_d4"]
+[ext_resource type="Resource" path="res://game/db/Properties/polygon/base_style.tres" id="20_bs"]
+[ext_resource type="Resource" path="res://game/db/Properties/polygon/topline_style.tres" id="21_ts"]
+[ext_resource type="Resource" path="res://game/db/Properties/polygon/decorations_enabled.tres" id="22_de"]
+[ext_resource type="Resource" path="res://game/db/Properties/polygon/decoration_set.tres" id="23_ds"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_odoqr"]
-atlas = ExtResource("1_xxybb")
+atlas = ExtResource("1_ld")
 region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="Resource" id="PolygonData_snow"]
+script = ExtResource("6_pd")
+base_texture = ExtResource("7_base")
+terrain_type = "snow"
+topline_texture = ExtResource("8_top")
+topline_shadow_texture = ExtResource("9_shadow")
+topline_left_end = ExtResource("10_tl")
+topline_right_end = ExtResource("11_tr")
+topline_angle_threshold = 0.6499999999999999
+topline_width = 28.0
+outline_texture = ExtResource("12_out")
+outline_width = 16.0
+decoration_weightmap = Dictionary[Texture2D, float]({
+ExtResource("13_d1"): 2.0,
+ExtResource("14_d2"): 1.0,
+ExtResource("15_d3"): 0.5,
+ExtResource("16_d4"): 1.0
+})
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_no05i"]
 
 [resource]
 resource_path = "res://game/db/Objects/Polygon/Terrain/terrain_snow.tres"
 resource_scene_unique_id = ""
-script = ExtResource("2_xxybb")
+script = ExtResource("5_go")
 id = "terrain_snow"
 category = 2
 category_string = "Polygon"
 subpath = "Terrain/terrain_snow"
 group_path = "Terrain"
 name_override = "Snow"
-ld_select_tool_override = "polygon_edit"
-ld_placement_tool_override = "polygon"
 ld_placement_rules = 2
-ld_editor_instance = ExtResource("2_odoqr")
-game_instance = ExtResource("1_odoqr")
 ld_entry_texture = SubResource("AtlasTexture_odoqr")
-ld_properties = Array[ExtResource("1_wrkex")]([ExtResource("5_1narg"), ExtResource("6_swwlr")])
+ld_properties = Array[ExtResource("2_prop")]([ExtResource("3_pos"), ExtResource("4_seed"), ExtResource("20_bs"), ExtResource("21_ts"), ExtResource("22_de"), ExtResource("23_ds")])
+object_type = 4
+telescoping_atlas = SubResource("AtlasTexture_no05i")
+polygon_data = SubResource("PolygonData_snow")
 ld_object_path = "Polygon/Terrain/terrain_snow"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

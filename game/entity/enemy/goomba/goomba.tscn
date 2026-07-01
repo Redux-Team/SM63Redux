@@ -91,7 +91,6 @@ metadata/_custom_type_script = "uid://cd63gwefr4fp4"
 [sub_resource type="Resource" id="Resource_15o45"]
 script = ExtResource("4_wjeoi")
 playlist = SubResource("Resource_4grvk")
-volume_db = -7.0
 metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n0olq"]

@@ -17,8 +17,8 @@ func get_tool_name() -> String:
 
 
 func _setup_draw_node(node: LDPolygonBooleanDrawNode) -> void:
-	node.fill_color = Color(1.0, 0.2, 0.2, 0.2)
-	node.border_color = Color(1.0, 0.3, 0.3, 0.9)
+	node.fill_color = Color(LDPalette.danger(), 0.18)
+	node.border_color = Color(LDPalette.danger(), 0.9)
 
 
 func _classify_cut(target: LDObjectPolygon, cut: PackedVector2Array) -> CutCase:

@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/db/Objects/Polygon/Volumes/music_region_lvl.gd" id="1_mreg"]
+
+[node name="MusicRegion" type="Node2D" node_paths=PackedStringArray("applied_polygons", "region_area")]
+script = ExtResource("1_mreg")
+applied_polygons = [NodePath("RegionArea/CollisionPolygon2D")]
+region_area = NodePath("RegionArea")
+
+[node name="RegionArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RegionArea"]

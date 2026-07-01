@@ -3,13 +3,16 @@
 [ext_resource type="Script" uid="uid://coo688cpdp4ga" path="res://level_designer/components/tool_handler/widgets/scale_widget.gd" id="1_v6afa"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v6afa"]
-bg_color = Color(1, 1, 1, 1)
-draw_center = false
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 0, 0, 1)
+bg_color = Color(0.239216, 0.643137, 1, 0.0784314)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.239216, 0.643137, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="ScaleWidget" type="Control" unique_id=772322325 node_paths=PackedStringArray("scale_panel", "top_left_button", "top_button", "top_right_button", "left_button", "right_button", "bottom_left_button", "bottom_button", "bottom_right_button", "scale_x_label", "scale_x_label_2", "scale_y_label", "scale_y_label_2")]
 layout_mode = 3
@@ -49,6 +52,8 @@ layout_mode = 1
 offset_right = 8.0
 offset_bottom = 8.0
 metadata/_edit_lock_ = true
+metadata/gdss_mode = 1
+metadata/gdss_classes = PackedStringArray("Vertex")
 
 [node name="TopButton" type="Button" parent="ScalePanel" unique_id=158556206]
 layout_mode = 1
@@ -60,6 +65,8 @@ offset_right = 4.0
 offset_bottom = 8.0
 grow_horizontal = 2
 metadata/_edit_lock_ = true
+metadata/gdss_mode = 1
+metadata/gdss_classes = PackedStringArray("Vertex")
 
 [node name="TopRightButton" type="Button" parent="ScalePanel" unique_id=449912253]
 layout_mode = 1
@@ -70,6 +77,8 @@ offset_left = -8.0
 offset_bottom = 8.0
 grow_horizontal = 0
 metadata/_edit_lock_ = true
+metadata/gdss_mode = 1
+metadata/gdss_classes = PackedStringArray("Vertex")
 
 [node name="LeftButton" type="Button" parent="ScalePanel" unique_id=2041640112]
 layout_mode = 1
@@ -81,6 +90,8 @@ offset_right = 8.0
 offset_bottom = 4.0
 grow_vertical = 2
 metadata/_edit_lock_ = true
+metadata/gdss_mode = 1
+metadata/gdss_classes = PackedStringArray("Vertex")
 
 [node name="RightButton" type="Button" parent="ScalePanel" unique_id=318959792]
 layout_mode = 1
@@ -95,6 +106,8 @@ offset_bottom = 4.0
 grow_horizontal = 0
 grow_vertical = 2
 metadata/_edit_lock_ = true
+metadata/gdss_mode = 1
+metadata/gdss_classes = PackedStringArray("Vertex")
 
 [node name="BottomLeftButton" type="Button" parent="ScalePanel" unique_id=869471776]
 layout_mode = 1
@@ -105,6 +118,8 @@ offset_top = -8.0
 offset_right = 8.0
 grow_vertical = 0
 metadata/_edit_lock_ = true
+metadata/gdss_mode = 1
+metadata/gdss_classes = PackedStringArray("Vertex")
 
 [node name="BottomButton" type="Button" parent="ScalePanel" unique_id=176947069]
 layout_mode = 1
@@ -119,6 +134,8 @@ offset_right = 4.0
 grow_horizontal = 2
 grow_vertical = 0
 metadata/_edit_lock_ = true
+metadata/gdss_mode = 1
+metadata/gdss_classes = PackedStringArray("Vertex")
 
 [node name="BottomRightButton" type="Button" parent="ScalePanel" unique_id=590356443]
 layout_mode = 1
@@ -132,6 +149,8 @@ offset_top = -8.0
 grow_horizontal = 0
 grow_vertical = 0
 metadata/_edit_lock_ = true
+metadata/gdss_mode = 1
+metadata/gdss_classes = PackedStringArray("Vertex")
 
 [node name="ScaleXLabel" type="Label" parent="ScalePanel" unique_id=1020043207]
 layout_mode = 1

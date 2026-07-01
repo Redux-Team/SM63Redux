@@ -23,8 +23,8 @@ func _draw() -> void:
 		if style:
 			style.draw(get_canvas_item(), _box_rect)
 		else:
-			draw_rect(_box_rect, Color(0.4, 0.7, 1.0, 0.15), true)
-			draw_rect(_box_rect, Color(0.4, 0.7, 1.0, 0.8), false, 1.0)
+			draw_rect(_box_rect, LDPalette.selection_fill(), true)
+			draw_rect(_box_rect, LDPalette.selection(), false, 1.0)
 	
 	for tool: LDTool in LD.get_tool_handler().get_tool_list():
 		if tool.wants_overlay() and tool.is_active():

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://xc526f5go3ut"]
+
+[ext_resource type="Texture2D" uid="uid://da3lb0o0dcltb" path="res://assets/textures/objects/decoration/nature/cave_coral.png" id="1_scy5a"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_807x5"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_046al"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_70gfl"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_4mxfg"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_vuhe2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_807x5"]
+atlas = ExtResource("1_scy5a")
+region = Rect2(-12, -2, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/cave_coral.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_vuhe2")
+id = "cave_coral"
+category = 6
+subpath = "Nature/cave_coral"
+group_path = "Nature"
+ld_index_id = "cave_stalagmite_02"
+ld_entry_texture = SubResource("AtlasTexture_807x5")
+ld_properties = Array[ExtResource("2_807x5")]([ExtResource("3_046al"), ExtResource("4_70gfl"), ExtResource("5_4mxfg")])
+sprite_texture = ExtResource("1_scy5a")
+ld_object_path = "Decoration/Nature/cave_coral"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,34 +1,67 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cfa6sdichbg83"]
 
-[ext_resource type="PackedScene" uid="uid://cv8nnea0n101c" path="res://game/db/Objects/Polygon/Terrain/terrain_grass_lvl.tscn" id="1_8ntgt"]
-[ext_resource type="PackedScene" uid="uid://km8g6043fcab" path="res://game/db/Objects/Polygon/Terrain/terrain_grass_ld.tscn" id="1_fwwft"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_o2ahu"]
-[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_fwwft"]
-[ext_resource type="Texture2D" uid="uid://cmsnqvls7t2l3" path="res://assets/textures/terrain/grass/terrain_grass_ld.png" id="2_g0k2x"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_k1ik6"]
-[ext_resource type="Resource" uid="uid://b12ma52j5x2hd" path="res://game/db/Properties/rng_seed.tres" id="6_vbd38"]
+[ext_resource type="Texture2D" uid="uid://cmsnqvls7t2l3" path="res://assets/textures/terrain/grass/terrain_grass_ld.png" id="1_ld"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
+[ext_resource type="Resource" uid="uid://b12ma52j5x2hd" path="res://game/db/Properties/rng_seed.tres" id="4_seed"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="5_go"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="6_pd"]
+[ext_resource type="Texture2D" uid="uid://lwejtx4lbmrb" path="res://assets/textures/terrain/grass/terrain_grass_base.png" id="7_base"]
+[ext_resource type="Texture2D" uid="uid://rskimd81gk3w" path="res://assets/textures/terrain/grass/terrain_grass_top.png" id="8_top"]
+[ext_resource type="Texture2D" uid="uid://dt5o1wfangng7" path="res://assets/textures/terrain/grass/terrain_grass_shadow.png" id="9_shadow"]
+[ext_resource type="Texture2D" uid="uid://hsblflmkc6wq" path="res://assets/textures/terrain/grass/terrain_grass_top_left.png" id="10_tl"]
+[ext_resource type="Texture2D" uid="uid://da4iii6wieke3" path="res://assets/textures/terrain/grass/terrain_grass_top_right.png" id="11_tr"]
+[ext_resource type="Texture2D" uid="uid://bn3f02uv8d5sr" path="res://assets/textures/terrain/grass/terrain_grass_outline.png" id="12_out"]
+[ext_resource type="Texture2D" uid="uid://be85gi7nl7ugv" path="res://assets/textures/terrain/grass/terrain_grass_decoration_1.png" id="13_d1"]
+[ext_resource type="Texture2D" uid="uid://dovroqootwfhv" path="res://assets/textures/terrain/grass/terrain_grass_decoration_2.png" id="14_d2"]
+[ext_resource type="Texture2D" uid="uid://cdclscd5eam60" path="res://assets/textures/terrain/grass/terrain_grass_decoration_3.png" id="15_d3"]
+[ext_resource type="Texture2D" uid="uid://bwwmr75i87wbe" path="res://assets/textures/terrain/grass/terrain_grass_decoration_4.png" id="16_d4"]
+[ext_resource type="Resource" path="res://game/db/Properties/polygon/base_style.tres" id="20_bs"]
+[ext_resource type="Resource" path="res://game/db/Properties/polygon/topline_style.tres" id="21_ts"]
+[ext_resource type="Resource" path="res://game/db/Properties/polygon/decorations_enabled.tres" id="22_de"]
+[ext_resource type="Resource" path="res://game/db/Properties/polygon/decoration_set.tres" id="23_ds"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pbes7"]
-atlas = ExtResource("2_g0k2x")
+atlas = ExtResource("1_ld")
 region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="Resource" id="PolygonData_grass"]
+script = ExtResource("6_pd")
+base_texture = ExtResource("7_base")
+terrain_type = "grass"
+topline_texture = ExtResource("8_top")
+topline_shadow_texture = ExtResource("9_shadow")
+topline_left_end = ExtResource("10_tl")
+topline_right_end = ExtResource("11_tr")
+topline_angle_threshold = 0.6499999999999999
+topline_width = 28.0
+outline_texture = ExtResource("12_out")
+outline_width = 14.0
+decoration_weightmap = Dictionary[Texture2D, float]({
+ExtResource("13_d1"): 3.0,
+ExtResource("14_d2"): 2.0,
+ExtResource("15_d3"): 1.0,
+ExtResource("16_d4"): 0.5
+})
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ftb7x"]
 
 [resource]
 resource_path = "res://game/db/Objects/Polygon/Terrain/terrain_grass.tres"
 resource_scene_unique_id = ""
-script = ExtResource("2_fwwft")
+script = ExtResource("5_go")
 id = "terrain_grass"
 category = 2
 category_string = "Polygon"
 subpath = "Terrain/terrain_grass"
 group_path = "Terrain"
 name_override = "Grass"
-ld_select_tool_override = "polygon_edit"
-ld_placement_tool_override = "polygon"
 ld_placement_rules = 2
-ld_editor_instance = ExtResource("1_fwwft")
-game_instance = ExtResource("1_8ntgt")
 ld_entry_texture = SubResource("AtlasTexture_pbes7")
-ld_properties = Array[ExtResource("1_o2ahu")]([ExtResource("5_k1ik6"), ExtResource("6_vbd38")])
+ld_properties = Array[ExtResource("2_prop")]([ExtResource("3_pos"), ExtResource("4_seed"), ExtResource("20_bs"), ExtResource("21_ts"), ExtResource("22_de"), ExtResource("23_ds")])
+object_type = 4
+telescoping_atlas = SubResource("AtlasTexture_ftb7x")
+polygon_data = SubResource("PolygonData_grass")
 ld_object_path = "Polygon/Terrain/terrain_grass"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

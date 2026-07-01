@@ -1,31 +1,41 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://d3vfvvtqanxml"]
 
-[ext_resource type="PackedScene" uid="uid://bbr3dcpvk2mwl" path="res://game/db/Objects/Polygon/Volumes/camera_deny_area_ld.tscn" id="1_4114s"]
-[ext_resource type="PackedScene" uid="uid://dmeenft0pq1ex" path="res://game/db/Objects/Polygon/Volumes/camera_deny_area_lvl.tscn" id="1_pe8em"]
-[ext_resource type="Texture2D" uid="uid://d3p5x56xfhvko" path="res://assets/textures/level_designer/editor_objects/camera_deny_area_ld.png" id="2_pe8em"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_3orgh"]
-[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="4_q4yix"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_3orgh"]
+[ext_resource type="PackedScene" uid="uid://dmeenft0pq1ex" path="res://game/db/Objects/Polygon/Volumes/camera_deny_area_lvl.tscn" id="1_game"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/camera_deny.svg" id="2_ld"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_prop"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_pos"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="5_go"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="6_pd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ckirr"]
-atlas = ExtResource("2_pe8em")
-region = Rect2(-6, -8, 48, 48)
+atlas = ExtResource("2_ld")
+region = Rect2(0, 0, 96, 96)
+
+[sub_resource type="Resource" id="PolygonData_camera_deny"]
+script = ExtResource("6_pd")
+textured = false
+base_color = Color(0.88, 0.23759998, 0.23759998, 0.33333334)
+line_mode = 1
+outline_color = Color(0.88, 0.23759998, 0.23759998, 1)
+outline_width = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3orgh"]
 
 [resource]
 resource_path = "res://game/db/Objects/Polygon/Volumes/camera_deny_area.tres"
 resource_scene_unique_id = ""
-script = ExtResource("4_q4yix")
+script = ExtResource("5_go")
 id = "camera_deny_area"
 category = 2
 category_string = "Polygon"
 subpath = "Volumes/camera_deny_area"
 group_path = "Volumes"
-ld_select_tool_override = "polygon_edit"
-ld_placement_tool_override = "polygon"
-ld_editor_instance = ExtResource("1_4114s")
-game_instance = ExtResource("1_pe8em")
+game_instance = ExtResource("1_game")
 ld_entry_texture = SubResource("AtlasTexture_ckirr")
-ld_properties = Array[ExtResource("3_3orgh")]([ExtResource("5_3orgh")])
+ld_properties = Array[ExtResource("3_prop")]([ExtResource("4_pos")])
+object_type = 4
+telescoping_atlas = SubResource("AtlasTexture_3orgh")
+polygon_data = SubResource("PolygonData_camera_deny")
 ld_object_path = "Polygon/Volumes/camera_deny_area"
 _update_internal_info = Callable()
 _print_internal_info = Callable()

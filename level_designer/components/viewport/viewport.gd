@@ -34,7 +34,8 @@ static var _inst: LDViewport
 @export var _root: LDViewportRoot
 @export var _selection_overlay: LDSelectionOverlay
 @export var _touch_indicator: LDTouchSwipeIndicator
-@export var _background_root: Node2D
+@export var _background_root: Control
+@export var _global_anchor: LDViewportGlobalAnchor
 @warning_ignore("unused_private_class_variable") @export var _viewport_input: Control
 
 
@@ -62,6 +63,7 @@ var is_mouse_panning: bool = false:
 			else:
 				_viewport_input.mouse_default_cursor_shape = Control.CURSOR_ARROW
 
+var _bound_area: LDArea
 var _selected_objects: Array[LDObject] = []
 var _touch_points: Dictionary[int, Vector2] = {}
 var _hold_timer: float = 0.0
@@ -78,8 +80,19 @@ func _on_ready() -> void:
 	_on_viewport_moved(camera_position, camera_zoom)
 	set_input_priority()
 	
-	LDLevel.get_active_area().layer_created.connect(_on_layer_created)
-	LDLevel.get_active_area().active_layer_changed.connect(_on_active_layer_changed)
+	LDLevel._inst.active_area_changed.connect(_bind_area)
+	_bind_area(LDLevel.get_active_area())
+
+
+## Tracks the active area's layer signals, rebinding when the active area changes so the viewport
+## follows whichever area is being edited.
+func _bind_area(area: LDArea) -> void:
+	_bound_area = area
+	if not area.layer_created.is_connected(_on_layer_created):
+		area.layer_created.connect(_on_layer_created)
+	if not area.active_layer_changed.is_connected(_on_active_layer_changed):
+		area.active_layer_changed.connect(_on_active_layer_changed)
+	area.refresh_layer_visuals()
 
 
 func _process(delta: float) -> void:
@@ -229,13 +242,19 @@ func get_root() -> LDViewportRoot:
 
 
 ## Returns the background root node.
-func get_background_root() -> Node2D:
+func get_background_root() -> Control:
 	return _background_root
 
 
 ## Returns the selection overlay node.
 func get_selection_overlay() -> LDSelectionOverlay:
 	return _selection_overlay
+
+
+## Returns the global anchor for the viewport. Useful tool for having nodes be positioned
+## with a consistent size no matter the zoom.
+func get_global_anchor() -> LDViewportGlobalAnchor:
+	return _global_anchor
 
 
 ## Returns the currently selected objects.
@@ -263,6 +282,30 @@ func set_selected_objects(objects: Array[LDObject]) -> void:
 ## Clears the current selection.
 func clear_selection() -> void:
 	set_selected_objects([])
+
+
+## Switches the active layer to `target_index`. With "Follow" on, every selected layerable object
+## is shifted by the same delta as the active layer (creating layers at the ends as needed), so the
+## selection travels relative to where you move.
+func navigate_active_layer(target_index: int) -> void:
+	var area: LDArea = LDLevel.get_active_area()
+	var delta: int = target_index - area.get_active_layer_index()
+	var following: Array[LDObject] = []
+	if delta != 0 and LD.get_ui().get_viewport_handler().is_follow_enabled():
+		following = get_selected_objects().duplicate()
+
+	area.set_active_layer(target_index)
+
+	for obj: LDObject in following:
+		if not is_instance_valid(obj):
+			continue
+		var game_object: GameObject = GameDB.get_db().find_game_object(obj.source_object_id)
+		if not game_object or not (game_object.ld_flags & (1 << GameObject.LD_LAYERABLE)):
+			continue
+		area.move_object_to_layer(obj, obj.get_layer_index() + delta)
+
+	if not following.is_empty():
+		area.refresh_layer_visuals()
 
 
 ## Returns whether the viewport is currently in a panning state.
@@ -327,9 +370,12 @@ func _on_viewport_moved(pos: Vector2 = camera_position, zoom: Vector2 = camera_z
 	var mat: ShaderMaterial = _viewport_grid.material as ShaderMaterial
 	if not mat:
 		return
+	
 	mat.set_shader_parameter("camera_position", pos)
 	mat.set_shader_parameter("camera_zoom", zoom)
 	mat.set_shader_parameter("screen_size", get_viewport().get_visible_rect().size)
+	
+	get_global_anchor().refresh()
 
 
 func _zoom_at(pos: Vector2, zoom_delta: float) -> void:

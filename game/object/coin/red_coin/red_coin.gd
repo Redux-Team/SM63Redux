@@ -65,7 +65,7 @@ func _on_entity_check_area_player_entered(_player: Player) -> void:
 	if Red_coin_amount + 1 == Max_red_coin_amount:
 		all_collected.play()
 	else:
-		audio_stream_player_2d.pitch_scale = lerpf(1.0, 1.3, float(Red_coin_amount) / float(Max_red_coin_amount))
+		audio_stream_player_2d.pitch_scale = lerpf(1.0, 1.4, float(Red_coin_amount) / float(Max_red_coin_amount))
 		audio_stream_player_2d.play()
 	
 	Red_coin_amount += 1

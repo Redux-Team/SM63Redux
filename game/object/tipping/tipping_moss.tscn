@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://b571dgd8fhw7i"]
+
+[ext_resource type="PackedScene" uid="uid://crc4nl4nsnqah" path="res://game/object/tipping/tipping_log.tscn" id="1_8srpi"]
+[ext_resource type="Texture2D" uid="uid://beq8ygv2351kk" path="res://assets/textures/objects/decoration/platform/tipping_platform_moss_center.png" id="2_8srpi"]
+[ext_resource type="Texture2D" uid="uid://ckqyagq7a2s4f" path="res://assets/textures/objects/decoration/platform/tipping_platform_moss.png" id="2_me8x5"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_o42l7"]
+diffuse_texture = ExtResource("2_8srpi")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tud3h"]
+resource_local_to_scene = true
+size = Vector2(32, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_id7k3"]
+resource_local_to_scene = true
+size = Vector2(32, 2)
+
+[node name="TippingMoss" unique_id=1813505387 instance=ExtResource("1_8srpi")]
+
+[node name="NinePatch" parent="." index="0" unique_id=1004792424]
+texture = ExtResource("2_me8x5")
+
+[node name="TippingCenter" parent="." index="1" unique_id=51585662]
+position = Vector2(-1, -1)
+texture = SubResource("CanvasTexture_o42l7")
+canvas_texture = SubResource("CanvasTexture_o42l7")
+diffuse_texture = ExtResource("2_8srpi")
+
+[node name="CollisionShape2D" parent="StaticBody2D" parent_id_path=PackedInt32Array(689719996) index="0" unique_id=706654042]
+shape = SubResource("RectangleShape2D_tud3h")
+
+[node name="CollisionShape2D" parent="RideArea" parent_id_path=PackedInt32Array(1178477417) index="0" unique_id=796793170]
+shape = SubResource("RectangleShape2D_id7k3")

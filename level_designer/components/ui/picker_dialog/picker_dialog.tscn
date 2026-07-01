@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://dgird3k34e6e4"]
+
+[ext_resource type="Script" uid="uid://bds6qjf1ln817" path="res://level_designer/components/ui/picker_dialog/picker_dialog.gd" id="1_v2srq"]
+
+[node name="PickerDialog" type="MarginContainer" unique_id=1379600692 node_paths=PackedStringArray("option_button", "ok_button", "cancel_button")]
+script = ExtResource("1_v2srq")
+option_button = NodePath("VBoxContainer/OptionButton")
+ok_button = NodePath("VBoxContainer/HBoxContainer/OKButton")
+cancel_button = NodePath("VBoxContainer/HBoxContainer/CancelButton")
+metadata/gdss_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1191688948]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=1709359210]
+layout_mode = 2
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer" unique_id=1613229301]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=482000564]
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1082445085]
+layout_mode = 2
+text = "Cancel"
+metadata/gdss_classes = PackedStringArray("Ghost")
+
+[node name="OKButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1365993348]
+layout_mode = 2
+text = "OK"
+metadata/gdss_classes = PackedStringArray("Primary")

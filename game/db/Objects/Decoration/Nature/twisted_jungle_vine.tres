@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dylyb2804rot0"]
+
+[ext_resource type="Texture2D" uid="uid://b6e0h5b8l1g8h" path="res://assets/textures/objects/decoration/nature/twisted_jungle_vine_ld.png" id="1_ld"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
+[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="4_path"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="5_go"]
+[ext_resource type="Texture2D" uid="uid://dto8s5yaiampx" path="res://assets/textures/objects/decoration/nature/twisted_jungle_vine_stem.png" id="6_stem"]
+[ext_resource type="Texture2D" uid="uid://csux7y4dqbqdh" path="res://assets/textures/objects/decoration/nature/twisted_jungle_vine_head.png" id="7_head"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e8krl"]
+atlas = ExtResource("1_ld")
+region = Rect2(-12, -17, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ffbjo"]
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/twisted_jungle_vine.tres"
+resource_scene_unique_id = ""
+script = ExtResource("5_go")
+id = "twisted_jungle_vine"
+category = 6
+subpath = "Nature/twisted_jungle_vine"
+group_path = "Nature"
+ld_index_id = "jungle_twisted_01"
+ld_entry_texture = SubResource("AtlasTexture_e8krl")
+ld_properties = Array[ExtResource("2_prop")]([ExtResource("3_pos"), ExtResource("4_path")])
+object_type = 2
+telescoping_atlas = SubResource("AtlasTexture_ffbjo")
+path_line_texture = ExtResource("6_stem")
+path_head_texture = ExtResource("7_head")
+path_stem_width = 10.0
+ld_object_path = "Decoration/Nature/twisted_jungle_vine"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

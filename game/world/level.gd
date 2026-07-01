@@ -1,13 +1,21 @@
 class_name Level
 extends Node2D
 
-const LEVEL: PackedScene = preload("uid://dkjnplx3hhp7q")
+const LEVEL_SCENE: PackedScene = preload("uid://dkjnplx3hhp7q")
+const MAX_SCENARIO_COUNT: int = 16
+
 
 signal loaded
 
 signal yellow_coin_count_updated
 signal red_coin_count_updated
 signal purple_coin_count_updated
+
+## A shine sprite was collected; carries the shine's scenario id (0 = common).
+signal shine_collected(scenario_id: int)
+## The player should be removed from the level (e.g. after collecting a kickout shine). The runtime
+## decides how (transition out, results screen, ...).
+signal kickout_requested
 
 
 static var _inst: Level
@@ -24,17 +32,24 @@ var _purple_coins_collected: Dictionary[String, int]
 var _active_area: LevelArea
 var _player: Player
 var _loaded: bool = false
+var _progress: LevelProgress = LevelProgress.new()
 
 @export var _level_camera: LevelCamera
 @export var music_player: AudioStreamPlayer
+@export var music_controller: MusicController
 
 
 func _init() -> void:
 	_inst = self
 
 
+func _exit_tree() -> void:
+	if _inst == self:
+		_inst = null
+
+
 static func instantiate() -> Level:
-	return LEVEL.instantiate()
+	return LEVEL_SCENE.instantiate()
 
 
 static func get_instance() -> Level:
@@ -107,6 +122,23 @@ func add_purple_coin_max(group: String, amount: int = 1) -> void:
 func set_purple_coin_max(group: String, amount: int) -> void:
 	_purple_coins_max.set(group, amount)
 
+## The per-run collectible record (shines, star coins, ...) for this level.
+func get_progress() -> LevelProgress:
+	return _progress
+
+
+## Records a shine collection in the level progress and notifies listeners. [param scenario_id] is
+## the shine's scenario id (0 = common). Re-collecting an already-recorded shine is a no-op.
+func collect_shine(scenario_id: int) -> void:
+	if _progress.collect(LevelProgress.CATEGORY_SHINE, scenario_id):
+		shine_collected.emit(scenario_id)
+
+
+## Asks the runtime to remove the player from the level (e.g. after a kickout shine).
+func request_kickout() -> void:
+	kickout_requested.emit()
+
+
 ## Calls the callable once the level finishes loading, or calls it immediately if it
 ## already loaded.
 func on_load(callable: Callable, args: Array = []) -> void:
@@ -120,26 +152,48 @@ func is_loaded() -> bool:
 	return _loaded
 
 
-func load_from_dict(data: Dictionary) -> Error:
+func load_from_dict(data: Dictionary, scenario_index: int = 0) -> Error:
 	if not data.has("version"):
 		return ERR_INVALID_DATA
-	
+
 	var normalized: Dictionary = _normalize(data)
 	if not normalized.has("areas"):
 		return ERR_INVALID_DATA
-	
+
 	_clear()
-	
-	for area_data: Variant in normalized.get("areas", []):
-		if not area_data is Dictionary:
+	LDMusicDB.deserialize_custom(data.get("custom_music", {}))
+
+	# Apply the COMMON baseline, then the chosen numbered scenario's overrides on top: layers,
+	# tags and stamps left disabled are simply not spawned.
+	var disabled_layers: Dictionary[int, bool] = {}
+	var disabled_tags: Dictionary[String, bool] = {}
+	var disabled_stamps: Dictionary[String, bool] = {}
+	_read_scenario(data, scenario_index, disabled_layers, disabled_tags, disabled_stamps)
+
+	# Only one area loads at a time: the one the chosen scenario links to (defaulting to the first).
+	var areas_list: Array = normalized.get("areas", [])
+	var target_name: String = _resolve_area_name(data, scenario_index)
+	if target_name.is_empty() and not areas_list.is_empty() and areas_list[0] is Dictionary:
+		target_name = str((areas_list[0] as Dictionary).get("name", "default"))
+
+	var loaded_area_data: Dictionary = {}
+	for area_variant: Variant in areas_list:
+		if not area_variant is Dictionary:
 			continue
-		var current_area: LevelArea = _get_or_create_area(area_data.get("name", "default"))
+		var area_data: Dictionary = area_variant
+		if str(area_data.get("name", "default")) != target_name:
+			continue
+		loaded_area_data = area_data
+		_build_background(area_data, data, scenario_index)
+		var current_area: LevelArea = _get_or_create_area(str(area_data.get("name", "default")))
 		for layer_data: Variant in area_data.get("layers", []):
 			if not layer_data is Dictionary:
 				continue
 			if (layer_data.get("objects", []) as Array).is_empty():
 				continue
 			var layer_index: int = layer_data.get("layer_index", 0)
+			if disabled_layers.has(layer_index):
+				continue
 			var layer: LevelLayer = current_area.get_or_create_layer(layer_index)
 			var raw_parallax: Variant = layer_data.get("parallax_scale", null)
 			if raw_parallax != null:
@@ -151,14 +205,257 @@ func load_from_dict(data: Dictionary) -> Error:
 			for obj_data: Variant in layer_data.get("objects", []):
 				if not obj_data is Dictionary:
 					continue
+				if not _scenario_allows(obj_data, disabled_tags):
+					continue
 				_instantiate_object(obj_data, layer, current_area)
-	
+		break
+
+	# Stamps are stored as a definition plus instances; expand each placement into real
+	# objects so they exist at runtime (the editor rebuilds them from instances instead). Only
+	# instances belonging to the loaded area are spawned.
+	_spawn_stamps(data, target_name, disabled_layers, disabled_tags, disabled_stamps)
+
 	_loaded = true
 	loaded.emit()
-	
-	music_player.play()
-	
+
+	var music_data: Variant = _resolve_music(loaded_area_data, data, scenario_index)
+	if music_data == null:
+		_play_music_when_visible()
+	else:
+		_start_adaptive_music(LDMusicPresetDB.resolve(music_data))
+
 	return OK
+
+
+func _play_music_when_visible() -> void:
+	create_tween().tween_callback(music_player.play).set_delay(0.5)
+
+
+func _resolve_music(area_data: Dictionary, data: Dictionary, scenario_index: int) -> Variant:
+	var scenarios: Variant = data.get("scenarios", {})
+	if scenarios is Dictionary:
+		if scenario_index > 0:
+			for entry: Variant in (scenarios as Dictionary).get("scenarios", []):
+				if entry is Dictionary and int((entry as Dictionary).get("index", 0)) == scenario_index:
+					if bool((entry as Dictionary).get("music_override_enabled", false)):
+						return (entry as Dictionary).get("music_override", [])
+					break
+		var common: Variant = (scenarios as Dictionary).get("common", {})
+		if common is Dictionary and bool((common as Dictionary).get("music_override_enabled", false)):
+			return (common as Dictionary).get("music_override", [])
+	if area_data.has("music"):
+		return area_data.get("music")
+	return null
+
+
+func _start_adaptive_music(music: LDMusic) -> void:
+	if not is_instance_valid(music_controller):
+		music_controller = MusicController.new()
+		music_controller.name = "MusicController"
+		add_child(music_controller)
+	create_tween().tween_callback(func() -> void:
+		music_controller.play(music)
+		if is_instance_valid(_player):
+			if not _player.swimming_changed.is_connected(music_controller.set_underwater):
+				_player.swimming_changed.connect(music_controller.set_underwater)
+			music_controller.set_underwater(_player.is_in_water())
+			var region_check: MusicRegionCheckArea = _ensure_region_check()
+			if region_check:
+				if not region_check.region_changed.is_connected(music_controller.set_region):
+					region_check.region_changed.connect(music_controller.set_region)
+				music_controller.set_region(region_check.current_region())
+	).set_delay(0.5)
+
+
+## Attaches (once) a music-region detector to the player so walking into a music-region volume drives
+## MusicController.set_region. Done in code to avoid editing the player scene.
+func _ensure_region_check() -> MusicRegionCheckArea:
+	if not is_instance_valid(_player):
+		return null
+	var existing: MusicRegionCheckArea = _player.get_node_or_null("MusicRegionCheck") as MusicRegionCheckArea
+	if existing:
+		return existing
+	var check: MusicRegionCheckArea = MusicRegionCheckArea.new()
+	check.name = "MusicRegionCheck"
+	var shape: CollisionShape2D = CollisionShape2D.new()
+	var rect: RectangleShape2D = RectangleShape2D.new()
+	rect.size = Vector2(16.0, 24.0)
+	shape.shape = rect
+	shape.position = Vector2(0.0, -8.0)
+	check.add_child(shape)
+	_player.add_child(check)
+	return check
+
+
+func stop_music() -> void:
+	if is_instance_valid(music_controller):
+		music_controller.stop()
+	if is_instance_valid(music_player):
+		music_player.stop()
+
+
+## Builds the loaded area's background (backdrop + parallax layers) into a CanvasLayer behind the
+## level, using the same LDBackground.build_into() the editor uses. Legacy levels stored a single
+## background under editor.background, so fall back to that when the area has none.
+func _build_background(area_data: Dictionary, data: Dictionary, scenario_index: int) -> void:
+	var existing: Node = get_node_or_null(^"Background")
+	if existing:
+		existing.free()
+
+	var bg_data: Variant = _scenario_background_override(data, scenario_index)
+	if not bg_data is Dictionary or (bg_data as Dictionary).is_empty():
+		bg_data = area_data.get("background", null)
+	if not bg_data is Dictionary or (bg_data as Dictionary).is_empty():
+		var editor: Variant = data.get("editor", {})
+		if editor is Dictionary:
+			bg_data = (editor as Dictionary).get("background", {})
+	if not bg_data is Dictionary or (bg_data as Dictionary).is_empty():
+		return
+
+	var layer: CanvasLayer = CanvasLayer.new()
+	layer.name = "Background"
+	layer.layer = -2
+	add_child(layer)
+	LDBackgroundDB.resolve(bg_data).build_into(layer)
+
+
+func _scenario_background_override(data: Dictionary, scenario_index: int) -> Variant:
+	var scenarios: Variant = data.get("scenarios", {})
+	if not scenarios is Dictionary:
+		return {}
+	if scenario_index > 0:
+		for entry: Variant in (scenarios as Dictionary).get("scenarios", []):
+			if entry is Dictionary and int((entry as Dictionary).get("index", 0)) == scenario_index:
+				var override: Variant = (entry as Dictionary).get("background_override", {})
+				if override is Dictionary and not (override as Dictionary).is_empty():
+					return override
+				break
+	var common: Variant = (scenarios as Dictionary).get("common", {})
+	if common is Dictionary:
+		var common_override: Variant = (common as Dictionary).get("background_override", {})
+		if common_override is Dictionary and not (common_override as Dictionary).is_empty():
+			return common_override
+	return {}
+
+
+## The name of the area the chosen scenario loads: the numbered scenario's area_name, else COMMON's,
+## else empty (meaning the first area).
+func _resolve_area_name(data: Dictionary, scenario_index: int) -> String:
+	var scenarios: Variant = data.get("scenarios", {})
+	if not scenarios is Dictionary:
+		return ""
+	if scenario_index > 0:
+		for entry: Variant in (scenarios as Dictionary).get("scenarios", []):
+			if entry is Dictionary and int((entry as Dictionary).get("index", 0)) == scenario_index:
+				var scenario_area: String = str((entry as Dictionary).get("area_name", ""))
+				if not scenario_area.is_empty():
+					return scenario_area
+				break
+	var common: Variant = (scenarios as Dictionary).get("common", {})
+	if common is Dictionary:
+		return str((common as Dictionary).get("area_name", ""))
+	return ""
+
+
+## Reads the COMMON baseline plus the chosen numbered scenario into "disabled" lookups: a layer,
+## tag or stamp left off (by COMMON, then overridden by the scenario) should not spawn.
+func _read_scenario(data: Dictionary, scenario_index: int, out_layers: Dictionary[int, bool], out_tags: Dictionary[String, bool], out_stamps: Dictionary[String, bool]) -> void:
+	var scenarios: Variant = data.get("scenarios", {})
+	if not scenarios is Dictionary:
+		return
+	_apply_scenario_overrides((scenarios as Dictionary).get("common", {}), out_layers, out_tags, out_stamps)
+	if scenario_index <= 0:
+		return
+	for entry: Variant in (scenarios as Dictionary).get("scenarios", []):
+		if entry is Dictionary and int((entry as Dictionary).get("index", 0)) == scenario_index:
+			_apply_scenario_overrides(entry, out_layers, out_tags, out_stamps)
+			return
+
+
+## Folds one scenario's overrides into the disabled lookups: value false disables (adds), value
+## true re-enables (removes), mirroring the editor's layered COMMON + scenario evaluation.
+func _apply_scenario_overrides(scenario: Variant, out_layers: Dictionary[int, bool], out_tags: Dictionary[String, bool], out_stamps: Dictionary[String, bool]) -> void:
+	if not scenario is Dictionary:
+		return
+	for pair: Variant in (scenario as Dictionary).get("layer_overrides", []):
+		if pair is Array and (pair as Array).size() == 2:
+			if bool(pair[1]):
+				out_layers.erase(int(pair[0]))
+			else:
+				out_layers[int(pair[0])] = true
+	for pair: Variant in (scenario as Dictionary).get("tag_overrides", []):
+		if pair is Array and (pair as Array).size() == 2:
+			if bool(pair[1]):
+				out_tags.erase(str(pair[0]))
+			else:
+				out_tags[str(pair[0])] = true
+	for pair: Variant in (scenario as Dictionary).get("stamp_overrides", []):
+		if pair is Array and (pair as Array).size() == 2:
+			if bool(pair[1]):
+				out_stamps.erase(str(pair[0]))
+			else:
+				out_stamps[str(pair[0])] = true
+
+
+## True if none of the object's tags were disabled by the active scenario.
+func _scenario_allows(obj_data: Dictionary, disabled_tags: Dictionary[String, bool]) -> bool:
+	for tag: Variant in obj_data.get("tags", []):
+		if disabled_tags.has(str(tag)):
+			return false
+	return true
+
+
+## Expands every stamp placement (instance) into concrete level objects, applying the same
+## scenario filtering as regular objects.
+## The stamp instances placed in the loaded area: the per-area dict's entry for this area, or (for
+## legacy saves) the flat array filtered by each instance's area_name.
+func _stamp_area_instances(instances: Variant, area_name: String) -> Array:
+	if instances is Dictionary:
+		var area_list: Variant = (instances as Dictionary).get(area_name, [])
+		return area_list if area_list is Array else []
+	var result: Array = []
+	if instances is Array:
+		for instance: Variant in instances:
+			if instance is Dictionary:
+				var inst_area: String = str((instance as Dictionary).get("area_name", ""))
+				if inst_area.is_empty() or inst_area == area_name:
+					result.append(instance)
+	return result
+
+
+func _spawn_stamps(data: Dictionary, area_name: String, disabled_layers: Dictionary[int, bool], disabled_tags: Dictionary[String, bool], disabled_stamps: Dictionary[String, bool]) -> void:
+	if not is_instance_valid(_active_area):
+		return
+	var stamps: Variant = data.get("stamps", [])
+	if not stamps is Array:
+		return
+
+	for stamp_data: Variant in stamps:
+		if not stamp_data is Dictionary:
+			continue
+		if disabled_stamps.has(str((stamp_data as Dictionary).get("id", ""))):
+			continue
+		var entries: Array = (stamp_data as Dictionary).get("objects", [])
+		for instance: Variant in _stamp_area_instances((stamp_data as Dictionary).get("instances", {}), area_name):
+			if not instance is Dictionary:
+				continue
+			var instance_pos: Vector2 = Packer.array_to_vec2((instance as Dictionary).get("position", [0.0, 0.0]))
+			var instance_layer: int = int((instance as Dictionary).get("layer_index", 0))
+			for entry: Variant in entries:
+				if not entry is Dictionary:
+					continue
+				var obj_layer: int = instance_layer + int((entry as Dictionary).get("layer_offset", 0))
+				if disabled_layers.has(obj_layer):
+					continue
+				if not _scenario_allows(entry, disabled_tags):
+					continue
+				var world_pos: Vector2 = instance_pos + Packer.array_to_vec2((entry as Dictionary).get("local_offset", [0.0, 0.0]))
+				var spawn_data: Dictionary = (entry as Dictionary).duplicate(true)
+				spawn_data["position"] = [world_pos.x, world_pos.y]
+				if spawn_data.get("properties") is Dictionary and (spawn_data["properties"] as Dictionary).has("position"):
+					spawn_data["properties"]["position"] = [world_pos.x, world_pos.y]
+				var layer: LevelLayer = _active_area.get_or_create_layer(obj_layer)
+				_instantiate_object(spawn_data, layer, _active_area)
 
 
 func load_from_binary(path: String) -> Error:
@@ -198,7 +495,7 @@ func _normalize(data: Dictionary) -> Dictionary:
 		return {
 			"version": data.get("version", 1),
 			"areas": [{
-				"name": "default",
+				"name": "Area 1",
 				"layers": data.get("layers", []),
 			}],
 		}
@@ -258,3 +555,4 @@ func _clear() -> void:
 	_active_area = null
 	_player = null
 	_loaded = false
+	_progress.clear()

@@ -9,6 +9,7 @@ size_flags_vertical = 0
 script = ExtResource("1_w41nc")
 group_list = NodePath("MarginContainer/VBoxContainer/GroupList")
 toggle_group_button = NodePath("MarginContainer/VBoxContainer/ToggleGroupButton")
+metadata/gdss_classes = PackedStringArray("Group")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=2030229878]
 layout_mode = 2
@@ -25,20 +26,17 @@ size_flags_vertical = 0
 [node name="ToggleGroupButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=542606474]
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.8784314, 0.8784314, 0.8784314, 0.5568628)
-theme_override_colors/font_hover_color = Color(0.9490196, 0.93333334, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.9490196, 0.93333334, 0, 1)
 toggle_mode = true
 button_pressed = true
 text = "Group"
 flat = true
 alignment = 0
 icon_alignment = 2
+metadata/gdss_classes = PackedStringArray("Flat")
 
 [node name="GroupList" type="HFlowContainer" parent="MarginContainer/VBoxContainer" unique_id=1278476276]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
 
 [connection signal="toggled" from="MarginContainer/VBoxContainer/ToggleGroupButton" to="." method="_on_toggle_group_button_toggled"]

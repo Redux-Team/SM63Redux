@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bfxbwp3n4743t"]
+
+[ext_resource type="Texture2D" uid="uid://cy1vr4bx0oy36" path="res://assets/textures/objects/decoration/nature/big_jungle_tree.png" id="1_fjmhx"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_sabnw"]
+[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_0ndlv"]
+[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_puo6y"]
+[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_p2dyd"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_8jmdx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_irnc5"]
+atlas = ExtResource("1_fjmhx")
+region = Rect2(8, 17, 48, 48)
+
+[resource]
+resource_path = "res://game/db/Objects/Decoration/Nature/big_jungle_tree.tres"
+resource_scene_unique_id = ""
+script = ExtResource("6_8jmdx")
+id = "big_jungle_tree"
+category = 6
+subpath = "Nature/big_jungle_tree"
+group_path = "Nature"
+ld_index_id = "jungle_tree_10"
+ld_entry_texture = SubResource("AtlasTexture_irnc5")
+ld_properties = Array[ExtResource("2_sabnw")]([ExtResource("3_0ndlv"), ExtResource("4_puo6y"), ExtResource("5_p2dyd")])
+sprite_texture = ExtResource("1_fjmhx")
+ld_object_path = "Decoration/Nature/big_jungle_tree"
+_update_internal_info = Callable()
+_print_internal_info = Callable()
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

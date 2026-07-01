@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="LDMusic" format=3]
+
+[ext_resource type="Script" path="res://level_designer/world/ld_music.gd" id="1_35njr"]
+[ext_resource type="Script" path="res://level_designer/world/ld_music_subtrack.gd" id="2_mplaq"]
+
+[sub_resource type="Resource" id="Resource_ve4po"]
+script = ExtResource("2_mplaq")
+track_id = "bowser_koopa_king_of_the_stars"
+
+[resource]
+script = ExtResource("1_35njr")
+preset_name = "Bowser, Koopa King of the Stars"
+underwater_mode = 2
+subtracks = Array[ExtResource("2_mplaq")]([SubResource("Resource_ve4po")])

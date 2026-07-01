@@ -1,0 +1,220 @@
+[gd_scene format=3 uid="uid://bal8u53r7omfw"]
+
+[ext_resource type="Script" uid="uid://cm0wgakqfv4qa" path="res://level_designer/components/ui/scenarios_editor/scenarios_editor.gd" id="1_m0tjn"]
+[ext_resource type="Texture2D" uid="uid://boi5n5utdpqmj" path="res://assets/textures/level_designer/ui_icons/add.svg" id="ic_add"]
+[ext_resource type="Texture2D" uid="uid://dtcx7p5e7ovqf" path="res://assets/textures/level_designer/ui_icons/down.svg" id="ic_down"]
+[ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="ic_remove"]
+[ext_resource type="Texture2D" uid="uid://cyjlsmgjeixte" path="res://assets/textures/level_designer/ui_icons/up.svg" id="ic_up"]
+
+[node name="LDScenariosEditor" type="MarginContainer" unique_id=492338792 node_paths=PackedStringArray("row_container", "add_button", "remove_button", "move_up_button", "move_down_button", "empty_center", "detail_content", "shine_row", "name_edit", "shine_check", "area_row", "area_option", "layers_header", "layers_container", "tags_header", "tags_container", "stamps_header", "stamps_container")]
+custom_minimum_size = Vector2(510, 0)
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+script = ExtResource("1_m0tjn")
+row_container = NodePath("Columns/ListColumn/ListInset/ListScroll/RowList")
+add_button = NodePath("Columns/ListColumn/Toolbar/AddButton")
+remove_button = NodePath("Columns/ListColumn/Toolbar/RemoveButton")
+move_up_button = NodePath("Columns/ListColumn/Toolbar/MoveUpButton")
+move_down_button = NodePath("Columns/ListColumn/Toolbar/MoveDownButton")
+empty_center = NodePath("Columns/Detail/DetailInset/EmptyCenter")
+detail_content = NodePath("Columns/Detail/DetailInset/DetailContent")
+shine_row = NodePath("Columns/Detail/DetailInset/DetailContent/ShineRow")
+name_edit = NodePath("Columns/Detail/DetailInset/DetailContent/ShineRow/NameEdit")
+shine_check = NodePath("Columns/Detail/DetailInset/DetailContent/ShineRow/ShineCheck")
+area_row = NodePath("Columns/Detail/DetailInset/DetailContent/AreaRow")
+area_option = NodePath("Columns/Detail/DetailInset/DetailContent/AreaRow/AreaOption")
+layers_header = NodePath("Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows/LayersHeader")
+layers_container = NodePath("Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows/LayersContainer")
+tags_header = NodePath("Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows/TagsHeader")
+tags_container = NodePath("Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows/TagsContainer")
+stamps_header = NodePath("Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows/StampsHeader")
+stamps_container = NodePath("Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows/StampsContainer")
+metadata/gdss_mode = 1
+
+[node name="Columns" type="HBoxContainer" parent="." unique_id=92637023]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="ListColumn" type="VBoxContainer" parent="Columns" unique_id=1680184250]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="ListInset" type="PanelContainer" parent="Columns/ListColumn" unique_id=1069712080]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="ListScroll" type="ScrollContainer" parent="Columns/ListColumn/ListInset" unique_id=1863304064]
+custom_minimum_size = Vector2(0, 188)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="RowList" type="VBoxContainer" parent="Columns/ListColumn/ListInset/ListScroll" unique_id=365528751]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="Toolbar" type="HBoxContainer" parent="Columns/ListColumn" unique_id=673853318]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AddButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=904315900]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+tooltip_text = "Add Scenario"
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_add")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="MoveUpButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=446791266]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+tooltip_text = "Move Up"
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_up")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="MoveDownButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=1988731074]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+tooltip_text = "Move Down"
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_down")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="Spacer" type="Control" parent="Columns/ListColumn/Toolbar" unique_id=816145184]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="RemoveButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=1603018923]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+tooltip_text = "Remove Scenario"
+mouse_default_cursor_shape = 2
+icon = ExtResource("ic_remove")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton", "Danger")
+
+[node name="Detail" type="VBoxContainer" parent="Columns" unique_id=562104664]
+custom_minimum_size = Vector2(290, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DetailInset" type="PanelContainer" parent="Columns/Detail" unique_id=1026316283]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Card")
+
+[node name="DetailContent" type="VBoxContainer" parent="Columns/Detail/DetailInset" unique_id=680604093]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ShineRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/DetailContent" unique_id=975286288]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/DetailContent/ShineRow" unique_id=17856520]
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+text = "Name"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="NameEdit" type="LineEdit" parent="Columns/Detail/DetailInset/DetailContent/ShineRow" unique_id=1805647575]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Unnamed"
+
+[node name="ShineCheck" type="CheckButton" parent="Columns/Detail/DetailInset/DetailContent/ShineRow" unique_id=1219497472]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Shine"
+
+[node name="AreaRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/DetailContent" unique_id=428036226]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/DetailContent/AreaRow" unique_id=513162561]
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+text = "Area"
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="AreaOption" type="OptionButton" parent="Columns/Detail/DetailInset/DetailContent/AreaRow" unique_id=30056810]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+
+[node name="OverrideInset" type="PanelContainer" parent="Columns/Detail/DetailInset/DetailContent" unique_id=490436139]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="OverrideScroll" type="ScrollContainer" parent="Columns/Detail/DetailInset/DetailContent/OverrideInset" unique_id=1165065928]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="OverrideRows" type="VBoxContainer" parent="Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll" unique_id=649381520]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="LayersHeader" type="Label" parent="Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows" unique_id=807988252]
+layout_mode = 2
+text = "Layers"
+horizontal_alignment = 1
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="LayersContainer" type="VBoxContainer" parent="Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows" unique_id=1063752884]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="HSeparator" type="HSeparator" parent="Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows" unique_id=1480158205]
+layout_mode = 2
+
+[node name="TagsHeader" type="Label" parent="Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows" unique_id=442390970]
+layout_mode = 2
+text = "Tags"
+horizontal_alignment = 1
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="TagsContainer" type="VBoxContainer" parent="Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows" unique_id=1626356103]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="HSeparator2" type="HSeparator" parent="Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows" unique_id=1992030106]
+layout_mode = 2
+
+[node name="StampsHeader" type="Label" parent="Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows" unique_id=288690978]
+layout_mode = 2
+text = "Stamps"
+horizontal_alignment = 1
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="StampsContainer" type="VBoxContainer" parent="Columns/Detail/DetailInset/DetailContent/OverrideInset/OverrideScroll/OverrideRows" unique_id=1235109762]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="EmptyCenter" type="CenterContainer" parent="Columns/Detail/DetailInset" unique_id=1570125953]
+layout_mode = 2
+
+[node name="EmptyLabel" type="Label" parent="Columns/Detail/DetailInset/EmptyCenter" unique_id=67852690]
+modulate = Color(1, 1, 1, 0.6)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "No scenario selected."
+metadata/gdss_classes = PackedStringArray("Mute")

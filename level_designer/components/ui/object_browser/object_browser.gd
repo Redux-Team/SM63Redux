@@ -1,19 +1,26 @@
 class_name LDObjectBrowser
 extends Control
 
+
 signal category_changed(category_name: String)
 signal hide_request
 
+
 const OBJECT_GROUP_SCENE: PackedScene = preload("uid://d11ohrgxcihxx")
+const STAMP_ENTRY: PackedScene = preload("uid://cmh307lx6bbro")
 const TOOLTIP_MARGIN: float = 8.0
+
 
 @export var groups_v_box: VBoxContainer
 @export var category_buttons_container: HBoxContainer
 @export var tooltip_label: RichTextLabel
 @export var search_line_edit: LineEdit
 
+
 var _tab_button_group: ButtonGroup = ButtonGroup.new()
 var _tooltip_anchor: Control = null
+var _showing_stamps: bool = false
+var _stamps_button: Button = null
 
 
 func _init() -> void:
@@ -25,6 +32,15 @@ func _ready() -> void:
 	_populate_category_buttons()
 	populate_list()
 	tooltip_label.hide()
+	
+	var gh: LDStampHandler = LD.get_stamp_handler()
+	gh.stamp_added.connect(_on_stamps_changed)
+	gh.stamp_removed.connect(_on_stamps_changed_by_id)
+	gh.stamp_changed.connect(_on_stamps_changed)
+
+
+func _on_show() -> void:
+	_refresh_stamps_tab()
 
 
 func _process(_delta: float) -> void:
@@ -60,19 +76,70 @@ func _populate_category_buttons() -> void:
 		button.name = cat_name
 		button.toggle_mode = true
 		button.button_group = _tab_button_group
-		button.custom_minimum_size.x = 80
 		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		GDSS.add_class(button, "Chip")
 		category_buttons_container.add_child(button)
+	
+	var stamps_button: Button = Button.new()
+	stamps_button.text = "Stamps"
+	stamps_button.name = "__ld_stamps__"
+	stamps_button.toggle_mode = true
+	stamps_button.button_group = _tab_button_group
+	stamps_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	GDSS.add_class(stamps_button, "Chip")
+	category_buttons_container.add_child(stamps_button)
+	_stamps_button = stamps_button
+	_update_stamps_tab_visibility()
 
 
 func _on_tab_button_group_pressed(button: BaseButton) -> void:
 	_play_sfx(button != null)
-	populate_list()
+	_showing_stamps = button != null and button.name == "__ld_stamps__"
+	if _showing_stamps:
+		_populate_stamps_list()
+		category_changed.emit("Stamps")
+	else:
+		populate_list()
 
 
 func _on_search_line_edit_text_changed(new_text: String) -> void:
+	# An empty search just restores whatever tab is active; a query searches everything
+	# (objects and stamps), regardless of the current tab.
+	if new_text.strip_edges().is_empty() and _showing_stamps:
+		_populate_stamps_list()
+		return
 	populate_list(new_text)
+
+
+func _refresh_stamps_tab() -> void:
+	if _showing_stamps:
+		_populate_stamps_list()
+
+
+func _populate_stamps_list() -> void:
+	for n: Node in groups_v_box.get_children():
+		n.queue_free()
+	_add_stamps_group(LD.get_stamp_handler().get_indexable_stamps())
+
+
+## Builds a "Stamps" browser group from the given stamps (no-op if empty).
+func _add_stamps_group(stamps: Array[LDStamp]) -> void:
+	if stamps.is_empty():
+		return
+
+	var group_node: LDObjectBrowserGroup = OBJECT_GROUP_SCENE.instantiate()
+	group_node.set_group_name("Stamps")
+	groups_v_box.add_child(group_node)
+
+	for stamp: LDStamp in stamps:
+		var entry: LDStampEntry = STAMP_ENTRY.instantiate()
+		entry.setup(stamp)
+		entry.entry_selected.connect(_on_stamp_entry_selected, CONNECT_REFERENCE_COUNTED)
+		entry.entry_mouse_entered.connect(_on_stamp_entry_hovered, CONNECT_REFERENCE_COUNTED)
+		entry.entry_mouse_exited.connect(_on_stamp_entry_unhovered, CONNECT_REFERENCE_COUNTED)
+		entry.entry_focus_entered.connect(_on_stamp_entry_focused, CONNECT_REFERENCE_COUNTED)
+		entry.entry_focus_exited.connect(_on_stamp_entry_unhovered, CONNECT_REFERENCE_COUNTED)
+		group_node.group_list.add_child(entry)
 
 
 func populate_list(search: String = "") -> void:
@@ -81,11 +148,19 @@ func populate_list(search: String = "") -> void:
 	
 	var query: String = search.to_lower().strip_edges()
 	var pressed: BaseButton = _tab_button_group.get_pressed_button()
-	
+
+	# When searching, surface matching stamps at the top alongside the object results.
+	if not query.is_empty():
+		var matching_stamps: Array[LDStamp] = []
+		for stamp: LDStamp in LD.get_stamp_handler().get_indexable_stamps():
+			if _fuzzy_score(query, stamp.id.to_lower()) > 0:
+				matching_stamps.append(stamp)
+		_add_stamps_group(matching_stamps)
+
 	var all_groups: Array[GameDB.GameObjectGroup] = []
 	if query.is_empty():
 		var cat_name: String = pressed.name if pressed else &""
-		if cat_name.is_empty():
+		if cat_name.is_empty() or cat_name == "__ld_stamps__":
 			for cat: GameDB.GameObjectCategory in GameDB.get_db().get_tree():
 				all_groups.append_array(cat.get_groups())
 		else:
@@ -159,7 +234,64 @@ func _fuzzy_score(query: String, text: String) -> int:
 	return 200 + proximity_bonus
 
 
+func _on_stamp_entry_selected(entry: LDStampEntry) -> void:
+	var stamp: LDStamp = entry.stamp_ref
+	LD.get_stamp_handler().arm_stamp(stamp)
+	LD.get_tool_handler().select_tool("place")
+	hide_request.emit()
+
+
+func _on_stamp_entry_hovered(entry: LDStampEntry) -> void:
+	_tooltip_anchor = null
+	tooltip_label.text = entry.stamp_ref.id
+	tooltip_label.size = Vector2.ZERO
+	tooltip_label.show()
+
+
+func _on_stamp_entry_focused(entry: LDStampEntry) -> void:
+	_tooltip_anchor = entry
+	tooltip_label.text = entry.stamp_ref.id
+	tooltip_label.size = Vector2.ZERO
+	tooltip_label.show()
+
+
+func _on_stamp_entry_unhovered(_entry: LDStampEntry) -> void:
+	_tooltip_anchor = null
+	tooltip_label.hide()
+	tooltip_label.size = Vector2.ZERO
+
+
+func _on_stamps_changed(_group: LDStamp) -> void:
+	_update_stamps_tab_visibility()
+	if _showing_stamps:
+		_populate_stamps_list()
+
+
+func _on_stamps_changed_by_id(_group_id: String) -> void:
+	_update_stamps_tab_visibility()
+	if _showing_stamps:
+		_populate_stamps_list()
+
+
+func _has_placeable_stamps() -> bool:
+	return not LD.get_stamp_handler().get_indexable_stamps().is_empty()
+
+
+func _update_stamps_tab_visibility() -> void:
+	if not is_instance_valid(_stamps_button):
+		return
+	var has_stamps: bool = _has_placeable_stamps()
+	_stamps_button.visible = has_stamps
+	if not has_stamps and _showing_stamps:
+		_showing_stamps = false
+		_stamps_button.set_pressed_no_signal(false)
+		populate_list()
+
+
 func _on_entry_selected(obj: GameObject) -> void:
+	# Picking an object clears any armed stamp, so they stay mutually exclusive (the hotbar
+	# uses this to tell which kind was picked).
+	LD.get_stamp_handler().arm_stamp(null)
 	LD.get_object_handler().select_object(obj)
 	LD.get_tool_handler().select_tool("Brush")
 	hide_request.emit()
@@ -211,7 +343,7 @@ func _highlight_match(query: String, text: String) -> String:
 	var result: String = ""
 	for i: int in text.length():
 		if i in indices:
-			result += "[color=yellow]" + text[i] + "[/color]"
+			result += "[color=#" + LDPalette.accent().to_html(false) + "]" + text[i] + "[/color]"
 		else:
 			result += text[i]
 	return result
