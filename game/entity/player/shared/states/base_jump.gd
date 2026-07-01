@@ -2,13 +2,14 @@
 class_name BaseJump
 extends State
 
+@export var triple_jump_speed_threshold: float = 120
 
 func _pre_enter() -> void:
 	if is_active():
 		return
 	
 	var phase: int = player.current_jump + 1
-	if phase == 3 and (abs(player.velocity.x) < 120 or not player.is_moving_with_facing()):
+	if phase == 3 and (abs(player.velocity.x) < triple_jump_speed_threshold or not player.is_moving_with_facing()):
 		phase = 2
 	
 	var strengths: Array[float] = [0.0, player.jump_strength, player.double_jump_strength, player.triple_jump_strength]
