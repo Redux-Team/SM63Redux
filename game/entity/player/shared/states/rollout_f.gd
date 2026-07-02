@@ -7,6 +7,8 @@ func _on_enter() -> void:
 	player.velocity.y = -200
 	player.can_dive = false
 	await pause(0.275)
+	if not is_active():
+		return
 	player.can_dive = true
 
 

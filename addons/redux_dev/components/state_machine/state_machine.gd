@@ -2,14 +2,14 @@
 ##
 ## [StateMachine] is the central runtime controller for a node-based state graph.
 ## It owns all [State] and [StateTransition] resources, evaluates transition conditions
-## each frame, manages superstate stacks, and dispatches lifecycle callbacks
-## ([method State._on_enter], [method State._on_tick], [method State._on_exit], etc.)
-## to active states. Audio pooling, sprite rules, and animation hooks are also
-## coordinated here. [br][br]
+## on the fixed physics clock, manages superstate stacks, and dispatches lifecycle callbacks
+## ([method State._on_enter], [method State._on_physics_tick], [method State._on_exit], etc.)
+## to active states. Sprite rules and animation hooks are also coordinated here. [br][br]
+## All gameplay logic and transition evaluation run in [method _physics_process] so behavior
+## is identical at any render framerate; [method _process] only drives visual, render-rate hooks
+## ([method State._sprite_rules] and [method State._on_render_tick]). [br][br]
 ## This StateMachine does not require the Redux Development Plugin to run, however it is
 ## recommended to use it in order to [b]edit[/b] everything in the StateMachine.
-## In addition, it is also highly recommended to edit the states themselves in the dedicated
-## panel inside of the development plugin, otherwise scary things might happen..
 @icon("uid://c62fk8rmsd0do")
 @tool
 class_name StateMachine
@@ -18,14 +18,10 @@ extends Node
 
 signal state_changed(from: State, to: State)
 
-## When enabled, the state machine logic is handled in _physics_process instead of _process. This is
-## recommended for more consistent and predictable behavior.
-@export var physics_bound: bool = true
 @export var initial_state: State
 @export var root_node: NodePath
 @export var sprite: SmartSprite2D
 @export var animation_player: AnimationPlayer
-@export var sfx_root: Node
 
 @export_group("Internal", "__")
 @export var __last__editor_position: Vector2
@@ -43,8 +39,10 @@ signal state_changed(from: State, to: State)
 
 var _root_node: Node
 var _current_state: State
+var _current_uuid: StringName = &""
 var _active_superstates: Array[State] = []
 var _last_state: State
+var _next_state: State
 var _elapsed_time: float = 0.0
 var _elapsed_frames: int = 0
 var _elapsed_physics_frames: int = 0
@@ -57,8 +55,12 @@ var _pending_transition_timer: float = 0.0
 var _state_buffer: float = 0.0
 var _can_consume_buffer: bool = false
 var _last_transition: StateTransition = null
-var _sfx_pool: Dictionary[StringName, Array] = {}
-var _sfx_pool_2d: Dictionary[StringName, Array] = {}
+var _has_always_superstate: bool = false
+var _uuid_of_state: Dictionary[State, StringName] = {}
+var _alias_target: Dictionary[StringName, StringName] = {}
+var _out_transitions: Dictionary[StringName, Array] = {}
+var _transition_target: Dictionary[StateTransition, State] = {}
+var _immediate_out: Dictionary[StringName, bool] = {}
 
 
 # hides __ prefixed properties from the inspector unless SHOW_INTERNAL is set in the development plugin.
@@ -67,100 +69,49 @@ func _validate_property(property: Dictionary) -> void:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
 
 
-# resolves the root node and enters the initial or entry-linked state.
+# resolves the root node, builds lookup tables, and enters the initial or entry-linked state.
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	
+
 	_root_node = get_node_or_null(root_node)
 	_dispatch_root_node()
-	
-	if __has_entry and not __entry_target_uuid.is_empty():
-		var entry_state: State = __states.get(__entry_target_uuid) as State
-		if entry_state:
-			_enter_state(entry_state)
-	elif initial_state:
-		_enter_state(initial_state)
+	_build_tables()
+
+	var entry_state: State = _resolve_entry_state()
+	if entry_state:
+		_enter_state(entry_state)
 
 
-# Ticks the active state stack, evaluates transitions, and cascades immediates.
+# Drives render-rate visual hooks only. No logic, timers, or transitions run here.
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint() or not _running or not _current_state:
 		return
-	
-	if physics_bound:
-		return
-	
-	if _pending_transition:
-		_pending_transition_timer -= delta
-		if _pending_transition_timer <= 0.0:
-			var t: StateTransition = _pending_transition
-			var target: State = _pending_transition_target
-			_pending_transition = null
-			_pending_transition_target = null
-			_pending_transition_timer = 0.0
-			_transition_to(t, target)
-		return
-	
-	if _state_buffer > 0.0:
-		_state_buffer = max(_state_buffer - delta, 0.0)
-	else:
-		_can_consume_buffer = false
-	
-	_elapsed_time += delta
+
 	_elapsed_frames += 1
-	
 	for state: State in _active_superstates:
 		state._sprite_rules()
-		state._on_tick(delta)
-		if sfx_root and state.sfx_tick:
-			_play_sfx_entry(state.sfx_tick, state)
-		if sfx_root and state.sfx_frame and sprite:
-			if state.sfx_frame.check_frame_trigger(sprite.current_frame):
-				_play_sfx_entry(state.sfx_frame, state)
-	
+		state._on_render_tick(delta)
 	_current_state._sprite_rules()
-	_current_state._on_tick(delta)
-	if sfx_root and _current_state.sfx_tick:
-		_play_sfx_entry(_current_state.sfx_tick, _current_state)
-	if sfx_root and _current_state.sfx_frame and sprite:
-		if _current_state.sfx_frame.check_frame_trigger(sprite.current_frame):
-			_play_sfx_entry(_current_state.sfx_frame, _current_state)
-	
-	for uuid: StringName in __states:
-		var state: State = __states.get(uuid) as State
-		if state and not _is_state_in_stack(state):
-			state._on_tick_inactive(delta)
-	
-	var max_cascade: int = 8
-	while max_cascade > 0:
-		var before: State = _current_state
-		_evaluate_transitions()
-		if _current_state == before or _pending_transition:
-			break
-		if not _has_immediate_outgoing_transition():
-			break
-		max_cascade -= 1
+	_current_state._on_render_tick(delta)
 
 
+# The single fixed-timestep clock: all logic, timers, and transition evaluation happen here.
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint() or not _running or not _current_state:
 		return
-	
+
+	_fixed_step(delta)
+
+
+func _fixed_step(delta: float) -> void:
 	_elapsed_physics_frames += 1
-	
+	_elapsed_time += delta
+
 	for state: State in _active_superstates:
 		state._on_physics_tick(delta)
 	_current_state._on_physics_tick(delta)
-	
-	for uuid: StringName in __states:
-		var state: State = __states.get(uuid) as State
-		if state and not _is_state_in_stack(state):
-			state._on_physics_tick_inactive(delta)
-	
-	if not physics_bound:
-		return
-	
+
 	if _pending_transition:
 		_pending_transition_timer -= delta
 		if _pending_transition_timer <= 0.0:
@@ -171,56 +122,24 @@ func _physics_process(delta: float) -> void:
 			_pending_transition_timer = 0.0
 			_transition_to(t, target)
 		return
-	
+
 	if _state_buffer > 0.0:
 		_state_buffer = max(_state_buffer - delta, 0.0)
 	else:
 		_can_consume_buffer = false
-	
-	_elapsed_time += delta
-	_elapsed_frames += 1
-	
-	for state: State in _active_superstates:
-		state._sprite_rules()
-		state._on_tick(delta)
-		if sfx_root and state.sfx_tick:
-			_play_sfx_entry(state.sfx_tick, state)
-		if sfx_root and state.sfx_frame and sprite:
-			if state.sfx_frame.check_frame_trigger(sprite.current_frame):
-				_play_sfx_entry(state.sfx_frame, state)
-	
-	_current_state._sprite_rules()
-	_current_state._on_tick(delta)
-	if sfx_root and _current_state.sfx_tick:
-		_play_sfx_entry(_current_state.sfx_tick, _current_state)
-	if sfx_root and _current_state.sfx_frame and sprite:
-		if _current_state.sfx_frame.check_frame_trigger(sprite.current_frame):
-			_play_sfx_entry(_current_state.sfx_frame, _current_state)
-	
-	for uuid: StringName in __states:
-		var state: State = __states.get(uuid) as State
-		if state and not _is_state_in_stack(state):
-			state._on_tick_inactive(delta)
-	
+
+	if _current_state.runtime > 0.0 and _elapsed_time >= _current_state.runtime:
+		_notify_done(false)
+
 	var max_cascade: int = 8
 	while max_cascade > 0:
 		var before: State = _current_state
 		_evaluate_transitions()
 		if _current_state == before or _pending_transition:
 			break
-		if not _has_immediate_outgoing_transition():
+		if not _immediate_out.get(_current_uuid, false):
 			break
 		max_cascade -= 1
-
-
-# Forwards input events to all active states in the superstate stack.
-func _input(event: InputEvent) -> void:
-	if Engine.is_editor_hint() or not _running or not _current_state:
-		return
-	
-	for state: State in _active_superstates:
-		state._on_input(event)
-	_current_state._on_input(event)
 
 
 # Propagates the resolved root node, sprite, and animation player to all states and transitions.
@@ -233,9 +152,7 @@ func _dispatch_root_node() -> void:
 		state.root_node = _root_node
 		state.sprite = sprite
 		state.animation_player = animation_player
-		if _root_node is Entity:
-			state._original_collision_mask = _root_node.collision_mask
-	
+
 	for tid: StringName in __transitions:
 		var t: StateTransition = __transitions.get(tid) as StateTransition
 		if not t:
@@ -244,79 +161,94 @@ func _dispatch_root_node() -> void:
 		t._init_expression()
 
 
-# Collects and sorts by priority all outgoing transitions for the current state, then fires the first eligible one.
-func _evaluate_transitions() -> void:
-	var current_uuid: StringName = ""
+# Precomputes state identity, flattened aliases, and priority-sorted outgoing adjacency
+# so per-frame transition evaluation is O(out-degree) with no scanning or allocation.
+func _build_tables() -> void:
+	_uuid_of_state.clear()
+	_alias_target.clear()
+	_out_transitions.clear()
+	_transition_target.clear()
+	_immediate_out.clear()
+
 	for uuid: StringName in __states:
-		if __states.get(uuid) == _current_state:
-			current_uuid = uuid
-			break
-	
-	var candidates: Array[StateTransition] = []
+		var s: State = __states.get(uuid) as State
+		if s:
+			_uuid_of_state[s] = uuid
+
+	for alias_uuid: StringName in __aliases:
+		var data: Dictionary = __aliases.get(alias_uuid, {})
+		_alias_target[alias_uuid] = StringName(data.get("original_uuid", ""))
+
 	for tid: StringName in __transitions:
 		var t: StateTransition = __transitions.get(tid) as StateTransition
 		if not t:
 			continue
-		if t.__from_uuid == current_uuid or __aliases.get(t.__from_uuid, {}).get("original_uuid", "") == current_uuid:
-			candidates.append(t)
-		else:
-			for superstate: State in _active_superstates:
-				if not superstate.always_transition:
-					continue
-				if t.__from_uuid == superstate.__editor_uuid or __aliases.get(t.__from_uuid, {}).get("original_uuid", "") == superstate.__editor_uuid:
-					var to_state: State = __states.get(t.__to_uuid) as State
-					if not to_state:
-						var alias_data: Dictionary = __aliases.get(t.__to_uuid, {})
-						to_state = __states.get(alias_data.get("original_uuid", "")) as State
-					if to_state and not _is_state_in_stack(to_state):
-						candidates.append(t)
-					break
-	
-	candidates.sort_custom(func(a: StateTransition, b: StateTransition) -> bool:
-		return a.priority > b.priority)
-	
-	for t: StateTransition in candidates:
-		if _should_fire(t):
-			var target: State = __states.get(t.__to_uuid) as State
-			if not target:
-				var alias_data: Dictionary = __aliases.get(t.__to_uuid, {})
-				target = __states.get(alias_data.get("original_uuid", "")) as State
-			if target:
-				if t.transition_time > 0.0:
-					_pending_transition = t
-					_pending_transition_target = target
-					_pending_transition_timer = t.transition_time
-				else:
-					_transition_to(t, target)
-				return
-	
-	_done_requested = false
-	_done_forced = false
+		var from_uuid: StringName = _resolve_uuid(StringName(t.__from_uuid))
+		if not _out_transitions.has(from_uuid):
+			_out_transitions[from_uuid] = []
+		_out_transitions.get(from_uuid).append(t)
+		_transition_target[t] = _resolve_state(StringName(t.__to_uuid))
+
+	for uuid: StringName in _out_transitions:
+		var list: Array = _out_transitions.get(uuid)
+		list.sort_custom(_sort_priority_desc)
+		for t: StateTransition in list:
+			if t.check_immediately:
+				_immediate_out[uuid] = true
+				break
 
 
-# Returns true if the current state has at least one outgoing transition marked check_immediately.
-func _has_immediate_outgoing_transition() -> bool:
-	var current_uuid: StringName = ""
-	for uuid: StringName in __states:
-		if __states.get(uuid) == _current_state:
-			current_uuid = uuid
-			break
-	for tid: StringName in __transitions:
-		var t: StateTransition = __transitions.get(tid) as StateTransition
-		if not t or not t.check_immediately:
+func _sort_priority_desc(a: StateTransition, b: StateTransition) -> bool:
+	return a.priority > b.priority
+
+
+# Fires the first eligible outgoing transition from the current state (or an always-checking
+# superstate), honoring priority, min_active_frames, and the state's veto gates.
+func _evaluate_transitions() -> void:
+	if _elapsed_physics_frames < _current_state.min_active_frames:
+		return
+	if not _current_state._can_exit():
+		return
+
+	for t: StateTransition in _gather_candidates():
+		if not _should_fire(t, []):
 			continue
-		if t.__from_uuid == current_uuid or __aliases.get(t.__from_uuid, {}).get("original_uuid", "") == current_uuid:
-			return true
-	return false
+		var target: State = _transition_target.get(t)
+		if not target or not target._can_enter():
+			continue
+		if t.transition_time > 0.0:
+			_pending_transition = t
+			_pending_transition_target = target
+			_pending_transition_timer = t.transition_time
+			return
+		_transition_to(t, target)
+		return
+
+
+# Returns the priority-sorted transitions eligible to fire from the current stack. Fast-paths
+# the common case (no always-checking superstate) to the precomputed, allocation-free list.
+func _gather_candidates() -> Array:
+	var from_current: Array = _out_transitions.get(_current_uuid, [])
+	if not _has_always_superstate:
+		return from_current
+
+	var candidates: Array[StateTransition] = []
+	for t: StateTransition in from_current:
+		candidates.append(t)
+	for superstate: State in _active_superstates:
+		if not superstate.always_transition:
+			continue
+		var suid: StringName = _uuid_of_state.get(superstate, &"")
+		for t: StateTransition in _out_transitions.get(suid, []):
+			var target: State = _transition_target.get(t)
+			if target and not _is_state_in_stack(target):
+				candidates.append(t)
+	candidates.sort_custom(_sort_priority_desc)
+	return candidates
 
 
 # Evaluates whether a transition's mode conditions and target passthrough chain are satisfied.
-func _should_fire(t: StateTransition) -> bool:
-	var target: State = __states.get(t.__to_uuid) as State
-	if not target:
-		var alias_data: Dictionary = __aliases.get(t.__to_uuid, {})
-		target = __states.get(alias_data.get("original_uuid", "")) as State
-	
+func _should_fire(t: StateTransition, visited: Array[State]) -> bool:
 	match t.mode:
 		StateTransition.TransitionMode.AUTO:
 			if not t._should_transition():
@@ -334,33 +266,25 @@ func _should_fire(t: StateTransition) -> bool:
 				return false
 		StateTransition.TransitionMode.MANUAL:
 			return false
-	
+
+	var target: State = _transition_target.get(t)
 	if target and target.is_passthrough:
-		return _has_outgoing_transition_from(target)
-	
+		return _has_outgoing_transition_from(target, visited)
 	return true
 
 
-# Checks if a passthrough state has at least one fireable outgoing transition, pre entering it if needed.
-func _has_outgoing_transition_from(state: State) -> bool:
+# Checks if a passthrough state has a fireable outgoing transition, guarding against cycles.
+func _has_outgoing_transition_from(state: State, visited: Array[State]) -> bool:
+	if state in visited:
+		return false
+	visited.append(state)
 	if not state._pre_entered:
 		state._pre_enter()
 		state._pre_entered = true
-	
-	var uuid: StringName = state.__editor_uuid
-	var candidates: Array[StateTransition] = []
-	for tid: StringName in __transitions:
-		var t: StateTransition = __transitions.get(tid) as StateTransition
-		if not t:
-			continue
-		if t.__from_uuid == uuid or __aliases.get(t.__from_uuid, {}).get("original_uuid", "") == uuid:
-			candidates.append(t)
-	
-	candidates.sort_custom(func(a: StateTransition, b: StateTransition) -> bool:
-		return a.priority > b.priority)
-	
-	for t: StateTransition in candidates:
-		if _should_fire(t):
+
+	var uuid: StringName = _uuid_of_state.get(state, &"")
+	for t: StateTransition in _out_transitions.get(uuid, []):
+		if _should_fire(t, visited):
 			return true
 	return false
 
@@ -368,9 +292,10 @@ func _has_outgoing_transition_from(state: State) -> bool:
 # Executes the full exit/enter lifecycle, updates the active stack, and emits state_changed.
 func _transition_to(t: StateTransition, target: State) -> void:
 	_last_transition = t
+	_next_state = target
 	_done_requested = false
 	_done_forced = false
-	
+
 	var new_superstates: Array[State] = _collect_superstates(target)
 	var exiting: Array[State] = []
 	for s: State in _active_superstates:
@@ -380,23 +305,24 @@ func _transition_to(t: StateTransition, target: State) -> void:
 	for s: State in new_superstates:
 		if s not in _active_superstates:
 			entering.append(s)
-	
-	t._on_before_transition()
+
+	if t:
+		t._on_before_transition()
 	_current_state.__collision_exit()
 	_current_state.__sprite_exit()
 	_current_state.__animation_exit()
-	
+
 	_current_state._on_exit()
 	for s: State in exiting:
 		s._on_exit()
-	
+
 	var from: State = _current_state
 	_last_state = from
-	
+
 	_current_state._post_exit()
 	for s: State in exiting:
 		s._post_exit()
-	
+
 	for s: State in entering:
 		if not s._pre_entered:
 			s._pre_enter()
@@ -404,48 +330,35 @@ func _transition_to(t: StateTransition, target: State) -> void:
 	if not target._pre_entered:
 		target._pre_enter()
 	target._pre_entered = false
-	
-	_current_state = target
-	_active_superstates = new_superstates
+
+	_set_active_stack(target, new_superstates)
 	_elapsed_time = 0.0
 	_elapsed_frames = 0
 	_elapsed_physics_frames = 0
-	
+
 	for s: State in entering:
 		s._on_enter()
 	target._on_enter()
 	target.__sprite_enter()
 	target.__animation_enter()
 	target.__collision_enter()
-	
-	if sfx_root:
-		for s: State in exiting:
-			if s.sfx_exit:
-				_play_sfx_entry(s.sfx_exit, s)
-			_handle_sfx_exit(s)
-		if from.sfx_exit:
-			_play_sfx_entry(from.sfx_exit, from)
-		_handle_sfx_exit(from)
-		for s: State in entering:
-			if s.sfx_enter:
-				_play_sfx_entry(s.sfx_enter, s)
-		if target.sfx_enter:
-			_play_sfx_entry(target.sfx_enter, target)
-	
-	t._on_after_transition()
+
+	_next_state = null
+	if t:
+		t._on_after_transition()
 	state_changed.emit(from, target)
 
 
-# Sets the initial state, builds the superstate stack, and fires enter callbacks without a prior transition.
+# Sets the initial state, builds the superstate stack, and fires enter callbacks once.
 func _enter_state(state: State) -> void:
-	_current_state = state
-	_active_superstates = _collect_superstates(state)
+	var superstates: Array[State] = _collect_superstates(state)
+	_set_active_stack(state, superstates)
 	_elapsed_time = 0.0
 	_elapsed_frames = 0
 	_elapsed_physics_frames = 0
 	_running = true
-	
-	for s: State in _active_superstates:
+
+	for s: State in superstates:
 		if not s._pre_entered:
 			s._pre_enter()
 		s._pre_entered = false
@@ -454,11 +367,20 @@ func _enter_state(state: State) -> void:
 		state._pre_enter()
 	state._pre_entered = false
 	state._on_enter()
-	state._pre_enter()
-	state._on_enter()
 	state.__sprite_enter()
 	state.__animation_enter()
 	state.__collision_enter()
+
+
+func _set_active_stack(current: State, superstates: Array[State]) -> void:
+	_current_state = current
+	_current_uuid = _uuid_of_state.get(current, &"")
+	_active_superstates = superstates
+	_has_always_superstate = false
+	for s: State in superstates:
+		if s.always_transition:
+			_has_always_superstate = true
+			break
 
 
 # Walks the superstate chain of a state and returns an ordered array from outermost to innermost.
@@ -478,10 +400,23 @@ func _collect_superstates(state: State) -> Array[State]:
 func _is_state_in_stack(state: State) -> bool:
 	if state == _current_state:
 		return true
-	for s: State in _active_superstates:
-		if s == state:
-			return true
-	return false
+	return state in _active_superstates
+
+
+func _resolve_uuid(uuid: StringName) -> StringName:
+	return _alias_target.get(uuid, uuid)
+
+
+func _resolve_state(uuid: StringName) -> State:
+	return __states.get(_resolve_uuid(uuid)) as State
+
+
+func _resolve_entry_state() -> State:
+	if __has_entry and not __entry_target_uuid.is_empty():
+		var entry_state: State = __states.get(__entry_target_uuid) as State
+		if entry_state:
+			return entry_state
+	return initial_state
 
 
 # Looks up a state by its editor name, accepting both snake_case and original casing.
@@ -493,178 +428,6 @@ func _resolve_state_name(state_name: String) -> State:
 		if state.__editor_name == state_name.to_snake_case() or state.__editor_name == state_name:
 			return state
 	return null
-
-
-# Resolves and plays a StateSFXEntry through the appropriate flat or 2D audio pool.
-func _play_sfx_entry(entry: StateSFXEntry, state: State) -> void:
-	if not entry or not entry.playlist or not sfx_root:
-		return
-	if randf() > entry.chance:
-		return
-	
-	match entry.interrupt_policy:
-		StateSFXEntry.InterruptPolicy.CANCEL:
-			if _is_pool_playing(entry.pool_id, entry.spatial):
-				return
-		StateSFXEntry.InterruptPolicy.PLAY_IF_SUPERSTATE_ACTIVE:
-			if not _is_state_in_stack(state):
-				return
-		StateSFXEntry.InterruptPolicy.PLAY_ANYWAY:
-			pass
-	
-	var streams: Array[AudioStream] = _pick_stream(entry.playlist)
-	if streams.is_empty():
-		return
-	
-	var pitch: float = entry._resolve_pitch(_root_node)
-	var vol: float = entry._resolve_volume(_root_node)
-	var bus: StringName = entry._get_bus_name()
-	var attentuation: float = entry.attentuation
-	var max_distance: float = entry.max_distance
-	
-	for stream: AudioStream in streams:
-		if entry.spatial:
-			var player: AudioStreamPlayer2D = _get_pool_2d(entry.pool_id, entry.max_stack)
-			player.stream = stream
-			player.pitch_scale = pitch
-			player.volume_db = vol
-			player.bus = bus
-			player.attenuation = attentuation
-			player.max_distance = max_distance
-			player.play()
-		else:
-			var player: AudioStreamPlayer = _get_pool_flat(entry.pool_id, entry.max_stack)
-			player.stream = stream
-			player.pitch_scale = pitch
-			player.volume_db = vol
-			player.bus = bus
-			player.play()
-
-
-# Picks the next stream from a Playlist according to its play order and repeat settings.
-func _pick_stream(playlist: Playlist) -> Array[AudioStream]:
-	if playlist.tracklist.is_empty():
-		return []
-	match playlist.play_order:
-		Playlist.PlayOrder.RANDOM:
-			return [playlist.tracklist.pick_random()]
-		Playlist.PlayOrder.RANDOM_NEW:
-			var pick: AudioStream = playlist.tracklist.pick_random()
-			var attempts: int = 0
-			while pick.get_instance_id() == playlist.last_pick and playlist.tracklist.size() > 1 and attempts < 8:
-				pick = playlist.tracklist.pick_random()
-				attempts += 1
-			playlist.last_pick = pick.get_instance_id()
-			return [pick]
-		Playlist.PlayOrder.RANDOM_ONCE:
-			if playlist.sfx_pool.size() >= playlist.tracklist.size():
-				if not playlist.repeat_list:
-					return []
-				playlist.sfx_pool.clear()
-			for _i: int in playlist.tracklist.size():
-				var pick: AudioStream = playlist.tracklist.pick_random()
-				var id: int = pick.get_instance_id()
-				if not playlist.sfx_pool.has(id) and id != playlist.last_pick:
-					playlist.sfx_pool.append(id)
-					playlist.last_pick = id
-					return [pick]
-		Playlist.PlayOrder.SEQUENTIAL:
-			if playlist.sfx_pool.size() >= playlist.tracklist.size():
-				if not playlist.repeat_list:
-					return []
-				playlist.sfx_pool.clear()
-			var pick: AudioStream = playlist.tracklist[playlist.sfx_pool.size()]
-			playlist.sfx_pool.append(0)
-			return [pick]
-		Playlist.PlayOrder.SYNCHRONOUS:
-			return playlist.tracklist
-	return []
-
-
-# Returns an idle or newly created AudioStreamPlayer from the flat pool for the given pool_id.
-func _get_pool_flat(pool_id: StringName, max_stack: int) -> AudioStreamPlayer:
-	if not _sfx_pool.has(pool_id):
-		_sfx_pool[pool_id] = []
-	var pool: Array = _sfx_pool[pool_id]
-	for player: AudioStreamPlayer in pool:
-		if not player.playing:
-			return player
-	if pool.size() < max_stack:
-		var player: AudioStreamPlayer = AudioStreamPlayer.new()
-		sfx_root.add_child(player)
-		pool.append(player)
-		return player
-	return pool[0]
-
-
-# Returns an idle or newly created AudioStreamPlayer2D from the spatial pool for the given pool_id.
-func _get_pool_2d(pool_id: StringName, max_stack: int) -> AudioStreamPlayer2D:
-	if not _sfx_pool_2d.has(pool_id):
-		_sfx_pool_2d[pool_id] = []
-	var pool: Array = _sfx_pool_2d[pool_id]
-	for player: AudioStreamPlayer2D in pool:
-		if not player.playing:
-			return player
-	if pool.size() < max_stack:
-		var player: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
-		sfx_root.add_child(player)
-		pool.append(player)
-		return player
-	return pool[0]
-
-
-# Returns true if any player in the given pool is currently playing.
-func _is_pool_playing(pool_id: StringName, spatial: bool) -> bool:
-	var pool: Array = _sfx_pool_2d.get(pool_id, []) if spatial else _sfx_pool.get(pool_id, [])
-	if not pool:
-		return false
-	if not _sfx_pool_2d.has(pool_id) if spatial else not _sfx_pool.has(pool_id):
-		return false
-	for player: Object in pool:
-		if (player as AudioStreamPlayer2D).playing if spatial else (player as AudioStreamPlayer).playing:
-			return true
-	return false
-
-
-# Stops or frees audio pools for all SFX entries belonging to a state that is exiting.
-func _handle_sfx_exit(state: State) -> void:
-	for entry: StateSFXEntry in [state.sfx_enter, state.sfx_exit, state.sfx_tick, state.sfx_frame]:
-		if not entry:
-			continue
-		if entry.free_pool_on_exit:
-			_free_pool_entry(entry.pool_id, entry.spatial)
-		elif entry.stop_on_exit:
-			_stop_pool_entry(entry.pool_id, entry.spatial)
-
-
-# Stops all players in the given pool without freeing them.
-func _stop_pool_entry(pool_id: StringName, spatial: bool) -> void:
-	if spatial:
-		if not _sfx_pool_2d.has(pool_id):
-			return
-		for player: AudioStreamPlayer2D in _sfx_pool_2d[pool_id]:
-			player.stop()
-	else:
-		if not _sfx_pool.has(pool_id):
-			return
-		for player: AudioStreamPlayer in _sfx_pool[pool_id]:
-			player.stop()
-
-
-# queue_frees all players in the given pool and removes the pool entry.
-func _free_pool_entry(pool_id: StringName, spatial: bool) -> void:
-	if spatial:
-		if not _sfx_pool_2d.has(pool_id):
-			return
-		for player: AudioStreamPlayer2D in _sfx_pool_2d[pool_id]:
-			player.queue_free()
-		_sfx_pool_2d.erase(pool_id)
-	else:
-		if not _sfx_pool.has(pool_id):
-			return
-		for player: AudioStreamPlayer in _sfx_pool[pool_id]:
-			player.queue_free()
-		_sfx_pool.erase(pool_id)
 
 
 # Sets the done flag so WAIT_UNTIL_DONE transitions can fire; forced=true bypasses condition checks.
@@ -711,10 +474,7 @@ func change_state(state_name: String) -> void:
 	if not _running:
 		_enter_state(target)
 		return
-	var t: StateTransition = StateTransition.new()
-	t.__from_uuid = _current_state.__editor_uuid if _current_state else StringName("")
-	t.__to_uuid = target.__editor_uuid
-	_transition_to(t, target)
+	_transition_to(null, target)
 
 
 ## Fires the first [constant StateTransition.TransitionMode.MANUAL] transition
@@ -724,17 +484,41 @@ func change_state(state_name: String) -> void:
 func trigger(transition_label: String) -> void:
 	if not _current_state:
 		return
-	for tid: StringName in __transitions:
-		var t: StateTransition = __transitions.get(tid) as StateTransition
-		if not t or t.mode != StateTransition.TransitionMode.MANUAL:
-			continue
-		if t.__from_uuid != _current_state.__editor_uuid:
+	for t: StateTransition in _out_transitions.get(_current_uuid, []):
+		if t.mode != StateTransition.TransitionMode.MANUAL:
 			continue
 		if t.label == transition_label:
-			var target: State = __states.get(t.__to_uuid) as State
+			var target: State = _transition_target.get(t)
 			if target:
 				_transition_to(t, target)
 			return
+
+
+## Stops the machine, exiting the active state stack and halting all ticks and transitions.
+func stop() -> void:
+	if not _running or not _current_state:
+		return
+	_current_state.__collision_exit()
+	_current_state.__sprite_exit()
+	_current_state.__animation_exit()
+	_current_state._on_exit()
+	for s: State in _active_superstates:
+		s._on_exit()
+	_running = false
+	_current_state = null
+	_current_uuid = &""
+	_active_superstates = []
+	_pending_transition = null
+	_pending_transition_target = null
+	_pending_transition_timer = 0.0
+
+
+## Stops the machine and re-enters the initial (or entry-linked) state from scratch.
+func reset() -> void:
+	stop()
+	var entry_state: State = _resolve_entry_state()
+	if entry_state:
+		_enter_state(entry_state)
 
 
 ## Returns the currently active leaf [State].

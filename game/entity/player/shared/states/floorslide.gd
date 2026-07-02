@@ -59,7 +59,7 @@ func _on_physics_tick(delta: float) -> void:
 		player.velocity *= vector
 
 
-func _on_tick(_delta: float) -> void:
+func _on_render_tick(_delta: float) -> void:
 	update_slide_rotation()
 
 

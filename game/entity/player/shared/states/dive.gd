@@ -102,7 +102,7 @@ func _on_physics_tick(delta: float) -> void:
 
 
 
-func _on_tick(delta: float) -> void:
+func _on_render_tick(delta: float) -> void:
 	update_dive_rotation(delta)
 
 

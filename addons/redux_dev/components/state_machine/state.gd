@@ -12,11 +12,14 @@ var animation_player: AnimationPlayer
 ## How long in seconds this state will remain active before automatically calling [method done].
 ## A value of 0.0 disables the runtime limit.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var runtime: float = 0.0
+## The minimum number of physics frames this state must stay active before any of its
+## outgoing transitions are allowed to fire. Replaces ad-hoc "elapsed frames" guards.
+@export var min_active_frames: int = 0
 ## This defines whether the state can actually be [b]held[/b] by the [StateMachine].
 ## if [code]true[/code], then this state only serves to check transitions when it is transitioned
 ## to, otherwise the [StateMachine] will use the previous state.
 @export var is_passthrough: bool = false
-## When this state is not the primary state, but a superstate, transitions will 
+## When this state is not the primary state, but a superstate, transitions will
 ## normally not be checked. If [code]true[/code], then transitions will be checked
 ## regardless of if this state is active as a superstate or primary state.
 @export var always_transition: bool = false
@@ -60,17 +63,6 @@ var animation_player: AnimationPlayer
 @export var collision_disabled_shapes: Array[CollisionShape2D] = []
 @export_flags_2d_physics var collision_mask_override: int = 0
 
-
-@export_group("SFX", "sfx_")
-## SFX entry played when this state is entered.
-@export var sfx_enter: StateSFXEntry
-## SFX entry played when this state is exited.
-@export var sfx_exit: StateSFXEntry
-## SFX entry played every process tick while this state is active.
-@export var sfx_tick: StateSFXEntry
-## SFX entry triggered by specific sprite frames while this state is active.
-@export var sfx_frame: StateSFXEntry
-
 @export_group("Animation Player", "anim_")
 ## The [AnimationPlayer] animation to play when this state is entered.
 @export var anim_animation: String
@@ -89,28 +81,17 @@ var entity: Entity:
 	get:
 		if root_node is Entity:
 			return root_node as Entity
-		else:
-			print_debug("root_node passed as Entity when type does not match!")
-			return null
+		return null
 var player: Player:
 	get:
 		if root_node is Player:
 			return root_node as Player
-		else:
-			print_debug("root_node passed as Player when type does not match!")
-			return null
+		return null
 var _sprite_chain_index: int = 0
 var _pre_entered: bool = false
 var _collision_snapshot: Dictionary = {}
-var _original_collision_mask: int
-
-
-func _ready() -> void:
-	if not Engine.is_editor_hint() and runtime > 0:
-		get_tree().process_frame.connect(func() -> void:
-			if get_elapsed_time() >= runtime:
-				done()
-		)
+var _original_collision_mask: int = 0
+var _mask_overridden: bool = false
 
 
 func _validate_property(property: Dictionary) -> void:
@@ -131,6 +112,7 @@ func _validate_property(property: Dictionary) -> void:
 		if sm and sm.animation_player:
 			property.hint = PROPERTY_HINT_ENUM
 			property.hint_string = ",".join(sm.animation_player.get_animation_list())
+
 
 # Walks up the scene tree to find the nearest parent StateMachine.
 func _get_state_machine() -> StateMachine:
@@ -162,7 +144,7 @@ func get_elapsed_time() -> float:
 	return state_machine._elapsed_time
 
 
-## Returns the amount of process frames this state has been active for.
+## Returns the amount of render frames this state has been active for.
 func get_elapsed_frames() -> int:
 	if not state_machine or state_machine._current_state != self:
 		return 0
@@ -186,7 +168,9 @@ func get_last_state() -> State:
 ## Only valid for [method _on_exit] and [method _post_exit]. Will return the next
 ## state that the StateMachine is transitioning to.
 func get_next_state() -> State:
-	return null
+	if not state_machine:
+		return null
+	return state_machine._next_state
 
 
 ## Returns the root superstate that is being ran on the StateMachine, if this node
@@ -197,7 +181,7 @@ func get_superstate_root() -> State:
 	var superstates: Array[State] = state_machine._active_superstates
 	if superstates.is_empty():
 		return null
-	return superstates[0]
+	return superstates.front()
 
 
 ## Returns the parent superstate that is being ran on the StateMachine, if this node
@@ -213,7 +197,8 @@ func get_superstate_parent() -> State:
 	var idx: int = superstates.find(self)
 	if idx <= 0:
 		return null
-	return superstates[idx - 1]
+	return superstates.get(idx - 1)
+
 
 ## Returns the last transition triggered by the StateMachine.
 func get_last_transition() -> StateTransition:
@@ -236,6 +221,7 @@ func is_primary_active() -> bool:
 		return false
 	return state_machine._current_state == self
 
+
 ## Simple way to await time.
 func pause(time: float) -> void:
 	await get_tree().create_timer(time).timeout
@@ -255,12 +241,12 @@ func _can_exit() -> bool:
 	return true
 
 
-## Called every process frame, semantically used to handle sprite behavior
+## Called every render frame, semantically used to handle sprite behavior.
 func _sprite_rules() -> void:
 	pass
 
 
-## Called before the state is entered, just after [method _on_exit] 
+## Called before the state is entered, just after [method _on_exit]
 ## is called on the previous state. Useful for ensuring behavior before any
 ## tick method is called.
 func _pre_enter() -> void:
@@ -273,36 +259,15 @@ func _on_enter() -> void:
 	pass
 
 
-## Similar to [method _process], but will only be called when the state
-## is active. You may call [method _process] for behavior that must be ran
-## regardless of which state is active.
-func _on_tick(delta: float) -> void:
-	pass
-
-
-## Similar to [method _on_tick], but will only be called when the state
-## is inactive.
-func _on_tick_inactive(delta: float) -> void:
+## Called every render frame while the state is active. Use for visual-only
+## behavior that should update at the display refresh rate.
+func _on_render_tick(delta: float) -> void:
 	pass
 
 
 ## Similar to [method _physics_process], but will only be called when the state
-## is active. You may call [method _physics_process] for behavior that must be ran
-## regardless of which state is active.
+## is active. This is the gameplay clock: all logic and transitions run here.
 func _on_physics_tick(delta: float) -> void:
-	pass
-
-
-## Similar to [method _on_physics_tick], but will only be called when the state
-## is inactive.
-func _on_physics_tick_inactive(delta: float) -> void:
-	pass
-
-
-## Similar to [method _input], but will only be called when the state
-## is active. You may call [method _input] for behavior that must be ran
-## regardless of which state is active.
-func _on_input(event: InputEvent) -> void:
 	pass
 
 
@@ -354,15 +319,15 @@ func _resolve_sprite_offset() -> Vector2:
 		return Vector2.ZERO
 	var superstates: Array[State] = state_machine._active_superstates
 	for i: int in range(superstates.size() - 1, -1, -1):
-		if superstates[i].sprite_offset_enabled:
-			return superstates[i].sprite_offset_value
+		if superstates.get(i).sprite_offset_enabled:
+			return superstates.get(i).sprite_offset_value
 	return Vector2.ZERO
 
 
 func __sprite_chain_advance() -> void:
 	if not is_active() or _sprite_chain_index >= sprite_chain.size():
 		return
-	var next: StringName = sprite_chain[_sprite_chain_index]
+	var next: StringName = sprite_chain.get(_sprite_chain_index)
 	_sprite_chain_index += 1
 	var is_last: bool = _sprite_chain_index >= sprite_chain.size()
 	if sprite_override_loop:
@@ -376,16 +341,20 @@ func __collision_enter() -> void:
 	if not state_machine:
 		return
 	var entity_node: Entity = state_machine._root_node as Entity
-	if not entity_node or entity_node.collision_shapes.is_empty():
+	if not entity_node:
+		return
+	_mask_overridden = false
+	if collision_mask_override:
+		_original_collision_mask = entity_node.collision_mask
+		entity_node.collision_mask = collision_mask_override
+		_mask_overridden = true
+	if entity_node.collision_shapes.is_empty():
 		return
 	var enabled: Array[CollisionShape2D] = _resolve_collision_shapes()
 	var disabled: Array[CollisionShape2D] = _resolve_disabled_collision_shapes()
 	if enabled.is_empty() and disabled.is_empty():
 		return
 	_collision_snapshot.clear()
-	if collision_mask_override:
-		_original_collision_mask = entity_node.collision_mask
-		entity_node.collision_mask = collision_mask_override
 	for shape: CollisionShape2D in entity_node.collision_shapes:
 		_collision_snapshot[shape] = shape.disabled
 		if not enabled.is_empty():
@@ -395,14 +364,18 @@ func __collision_enter() -> void:
 
 
 func __collision_exit() -> void:
-	if not state_machine or _collision_snapshot.is_empty():
+	if not state_machine:
 		return
 	var entity_node: Entity = state_machine._root_node as Entity
-	if not entity_node or entity_node.collision_shapes.is_empty():
+	if not entity_node:
+		return
+	if _mask_overridden:
+		entity_node.collision_mask = _original_collision_mask
+		_mask_overridden = false
+	if _collision_snapshot.is_empty():
 		return
 	for shape: CollisionShape2D in _collision_snapshot:
 		shape.disabled = _collision_snapshot.get(shape, false)
-	entity_node.collision_mask = _original_collision_mask
 	_collision_snapshot.clear()
 
 
@@ -411,8 +384,8 @@ func _resolve_collision_shapes() -> Array[CollisionShape2D]:
 		return collision_enabled_shapes
 	var superstates: Array[State] = state_machine._active_superstates
 	for i: int in range(superstates.size() - 1, -1, -1):
-		if not superstates[i].collision_enabled_shapes.is_empty():
-			return superstates[i].collision_enabled_shapes
+		if not superstates.get(i).collision_enabled_shapes.is_empty():
+			return superstates.get(i).collision_enabled_shapes
 	return []
 
 
@@ -421,8 +394,8 @@ func _resolve_disabled_collision_shapes() -> Array[CollisionShape2D]:
 		return collision_disabled_shapes
 	var superstates: Array[State] = state_machine._active_superstates
 	for i: int in range(superstates.size() - 1, -1, -1):
-		if not superstates[i].collision_disabled_shapes.is_empty():
-			return superstates[i].collision_disabled_shapes
+		if not superstates.get(i).collision_disabled_shapes.is_empty():
+			return superstates.get(i).collision_disabled_shapes
 	return []
 
 
