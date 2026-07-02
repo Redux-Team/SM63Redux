@@ -67,14 +67,6 @@ var animation_player: AnimationPlayer
 ## The [AnimationPlayer] animation to play when this state is entered.
 @export var anim_animation: String
 
-@export_group("Internal")
-@export var __editor_name: StringName
-@export var __editor_position: Vector2
-@export var __editor_uuid: StringName
-@export var __editor_superstate_uuid: StringName
-@export var __editor_entry_uuid: StringName
-@export var __editor_superstate_wire_uuid: StringName
-
 var state_machine: StateMachine
 var root_node: Node
 var entity: Entity:
@@ -131,10 +123,9 @@ func done(force: bool = false) -> void:
 		state_machine._notify_done(force)
 
 
-## Returns the state name parsed by the internal editor and state machine,
-## which is in snake case.
+## Returns this state's identity name in snake_case, derived from the node name.
 func get_internal_name() -> String:
-	return __editor_name.to_snake_case()
+	return String(name).to_snake_case()
 
 
 ## Returns the time this state has been active for, in seconds.

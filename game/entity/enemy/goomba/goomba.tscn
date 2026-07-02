@@ -25,15 +25,6 @@
 [ext_resource type="Script" uid="uid://dnsd2a8oriy3" path="res://util/entity/forcebox.gd" id="26_a7n3c"]
 [ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="29_rakc8"]
 
-[sub_resource type="Resource" id="Resource_eqg5w"]
-resource_local_to_scene = true
-script = ExtResource("3_ios8m")
-mode = 1
-__from_uuid = "53d6d36b-82d5-4959-a868-aff4d9ec2aba"
-__to_uuid = "7e6bd701-d523-4ed2-8296-7bb3425517f0"
-__from_node_uuid = "53d6d36b-82d5-4959-a868-aff4d9ec2aba"
-__to_node_uuid = "7e6bd701-d523-4ed2-8296-7bb3425517f0"
-
 [sub_resource type="Curve" id="Curve_g7wuw"]
 _limits = [-1.0, 1.0, -1.0, 1.0]
 _data = [Vector2(-1, -1), 0.0, 0.0, 0, 0, Vector2(-0.35, -1), 0.0, 0.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -267,78 +258,36 @@ ExtResource("3_7e3mf"): 1
 })
 water_check = NodePath("WaterCheckArea")
 
-[node name="StateMachine" type="Node" parent="." unique_id=48097513 node_paths=PackedStringArray("initial_state", "sprite", "animation_player", "__states")]
+[node name="StateMachine" type="Node" parent="." unique_id=48097513 node_paths=PackedStringArray("initial_state", "sprite", "animation_player")]
 script = ExtResource("2_e0p0p")
 initial_state = NodePath("Wander/Patrol")
 root_node = NodePath("..")
 sprite = NodePath("../SmartSprite2D")
 animation_player = NodePath("../AnimationPlayer")
-__last__editor_position = Vector2(315.122, 21.69278)
-__last_editor_zoom = 0.81402785
-__states = {
-&"53d6d36b-82d5-4959-a868-aff4d9ec2aba": NodePath("Wander/Alert"),
-&"5f76de65-09f3-4b6f-9847-15c247ae70f1": NodePath("Strike"),
-&"68c1c64e-e88a-4ed3-bfca-021d704423e3": NodePath("Wander/Patrol"),
-&"7e6bd701-d523-4ed2-8296-7bb3425517f0": NodePath("Chase"),
-&"97212f4c-f576-4616-8814-5379e9dd5a08": NodePath("Wander"),
-&"cf4bd5dd-e0ad-4126-89fc-a6690ce13562": NodePath("Squish")
-}
-__transitions = Dictionary[StringName, ExtResource("3_ios8m")]({
-&"9d0b9bc7-49b3-40ea-b458-e58eeed70ea0": SubResource("Resource_eqg5w")
-})
 metadata/_custom_type_script = "uid://utibsg6xkllx"
-
 [node name="Wander" type="Node" parent="StateMachine" unique_id=288151632]
 script = ExtResource("3_tx7nd")
-__editor_name = &"wander"
-__editor_position = Vector2(200, 260)
-__editor_uuid = &"97212f4c-f576-4616-8814-5379e9dd5a08"
-
 [node name="Patrol" type="Node" parent="StateMachine/Wander" unique_id=392367863 node_paths=PackedStringArray("floor_check_r", "floor_check_l")]
 script = ExtResource("5_4grvk")
 displacement = SubResource("Curve_g7wuw")
 floor_check_r = NodePath("../../../FloorCheckR")
 floor_check_l = NodePath("../../../FloorCheckL")
 sprite_animation_name = &"walk"
-__editor_name = &"patrol"
-__editor_position = Vector2(500, 260)
-__editor_uuid = &"68c1c64e-e88a-4ed3-bfca-021d704423e3"
-__editor_superstate_uuid = &"97212f4c-f576-4616-8814-5379e9dd5a08"
-__editor_superstate_wire_uuid = &"97212f4c-f576-4616-8814-5379e9dd5a08"
-
 [node name="Alert" type="Node" parent="StateMachine/Wander" unique_id=1129696963]
 script = ExtResource("4_x5cu4")
-__editor_name = &"alert"
-__editor_position = Vector2(760, 260)
-__editor_uuid = &"53d6d36b-82d5-4959-a868-aff4d9ec2aba"
-__editor_superstate_uuid = &"97212f4c-f576-4616-8814-5379e9dd5a08"
-__editor_superstate_wire_uuid = &"68c1c64e-e88a-4ed3-bfca-021d704423e3"
-
 [node name="Chase" type="Node" parent="StateMachine" unique_id=1835913114]
 script = ExtResource("11_fb4me")
 sprite_animation_name = &"walk"
 sprite_speed_scale = 1.5
-__editor_name = &"chase"
-__editor_position = Vector2(1080, 260)
-__editor_uuid = &"7e6bd701-d523-4ed2-8296-7bb3425517f0"
-
 [node name="Squish" type="Node" parent="StateMachine" unique_id=354975756 node_paths=PackedStringArray("hit_box")]
 script = ExtResource("12_6f57m")
 hit_box = NodePath("../../HitBox")
 sprite_animation_name = &"squish"
 sprite_speed_scale = 1.5
-__editor_name = &"squish"
-__editor_position = Vector2(1080, 460)
-__editor_uuid = &"cf4bd5dd-e0ad-4126-89fc-a6690ce13562"
-
 [node name="Strike" type="Node" parent="StateMachine" unique_id=440686515 node_paths=PackedStringArray("hit_box")]
 script = ExtResource("14_xvu80")
 hit_box = NodePath("../../HitBox")
 anim_animation = "strike_hit"
-__editor_name = &"strike"
-__editor_position = Vector2(1400, 460)
-__editor_uuid = &"5f76de65-09f3-4b6f-9847-15c247ae70f1"
-
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(0, -7)
 texture = SubResource("CanvasTexture_a7n3c")
@@ -454,6 +403,11 @@ metadata/_custom_type_script = "uid://bhoysiia8munh"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WaterCheckArea" unique_id=749598814]
 shape = SubResource("RectangleShape2D_42vey")
+
+[node name="ToChase" type="Node" parent="StateMachine/Wander/Alert" node_paths=PackedStringArray("target") unique_id=100000]
+script = ExtResource("3_ios8m")
+target = NodePath("../../../Chase")
+mode = 1
 
 [connection signal="area_entered" from="PlayerCheck" to="." method="_on_area_2d_area_entered"]
 [connection signal="damaged" from="HurtBox" to="." method="_on_hurt_box_damaged"]

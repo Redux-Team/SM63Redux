@@ -1,12 +1,13 @@
-## Holds and organizes [State] resources, driving transitions between them.
+## Holds and organizes [State] nodes, driving transitions between them.
 ##
 ## [StateMachine] is the central runtime controller for a node-based state graph.
-## It owns all [State] and [StateTransition] resources, evaluates transition conditions
-## on the fixed physics clock, manages superstate stacks, and dispatches lifecycle callbacks
-## ([method State._on_enter], [method State._on_physics_tick], [method State._on_exit], etc.)
-## to active states. Sprite rules and animation hooks are also coordinated here. [br][br]
-## All gameplay logic and transition evaluation run in [method _physics_process] so behavior
-## is identical at any render framerate; [method _process] only drives visual, render-rate hooks
+## [State] nodes are its descendants; superstate nesting is expressed directly by the scene
+## tree, and each [State]'s outgoing [StateTransition] nodes live as its children. The machine
+## evaluates transition conditions on the fixed physics clock, manages the superstate stack, and
+## dispatches lifecycle callbacks ([method State._on_enter], [method State._on_physics_tick],
+## [method State._on_exit], etc.) to active states. [br][br]
+## All gameplay logic and transition evaluation run in [method _physics_process] so behavior is
+## identical at any render framerate; [method _process] only drives visual, render-rate hooks
 ## ([method State._sprite_rules] and [method State._on_render_tick]). [br][br]
 ## This StateMachine does not require the Redux Development Plugin to run, however it is
 ## recommended to use it in order to [b]edit[/b] everything in the StateMachine.
@@ -18,28 +19,14 @@ extends Node
 
 signal state_changed(from: State, to: State)
 
+## The [State] the machine enters on ready.
 @export var initial_state: State
 @export var root_node: NodePath
 @export var sprite: SmartSprite2D
 @export var animation_player: AnimationPlayer
 
-@export_group("Internal", "__")
-@export var __last__editor_position: Vector2
-@export var __last_editor_zoom: float
-@export var __states: Dictionary[StringName, State]
-@export var __annotations: Dictionary
-@export var __transitions: Dictionary[StringName, StateTransition]
-@export var __aliases: Dictionary
-@export var __entry_node_position: Vector2
-@export var __exit_node_position: Vector2
-@export var __has_entry: bool
-@export var __has_exit: bool
-@export var __entry_target_uuid: StringName
-@export var __exit_source_uuid: StringName
-
 var _root_node: Node
 var _current_state: State
-var _current_uuid: StringName = &""
 var _active_superstates: Array[State] = []
 var _last_state: State
 var _next_state: State
@@ -56,31 +43,22 @@ var _state_buffer: float = 0.0
 var _can_consume_buffer: bool = false
 var _last_transition: StateTransition = null
 var _has_always_superstate: bool = false
-var _uuid_of_state: Dictionary[State, StringName] = {}
-var _alias_target: Dictionary[StringName, StringName] = {}
-var _out_transitions: Dictionary[StringName, Array] = {}
-var _transition_target: Dictionary[StateTransition, State] = {}
-var _immediate_out: Dictionary[StringName, bool] = {}
+var _all_states: Array[State] = []
+var _out_transitions: Dictionary[State, Array] = {}
+var _immediate_out: Dictionary[State, bool] = {}
 
 
-# hides __ prefixed properties from the inspector unless SHOW_INTERNAL is set in the development plugin.
-func _validate_property(property: Dictionary) -> void:
-	if property.name.begins_with("__") and not ReduxPlugin.SHOW_INTERNAL:
-		property.usage = PROPERTY_USAGE_NO_EDITOR
-
-
-# resolves the root node, builds lookup tables, and enters the initial or entry-linked state.
+# resolves the root node, builds lookup tables, and enters the initial state.
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 
 	_root_node = get_node_or_null(root_node)
-	_dispatch_root_node()
 	_build_tables()
+	_dispatch_root_node()
 
-	var entry_state: State = _resolve_entry_state()
-	if entry_state:
-		_enter_state(entry_state)
+	if initial_state:
+		_enter_state(initial_state)
 
 
 # Drives render-rate visual hooks only. No logic, timers, or transitions run here.
@@ -137,65 +115,47 @@ func _fixed_step(delta: float) -> void:
 		_evaluate_transitions()
 		if _current_state == before or _pending_transition:
 			break
-		if not _immediate_out.get(_current_uuid, false):
+		if not _immediate_out.get(_current_state, false):
 			break
 		max_cascade -= 1
 
 
+# Collects every descendant State and precomputes each state's priority-sorted outgoing transitions.
+func _build_tables() -> void:
+	_all_states.clear()
+	_out_transitions.clear()
+	_immediate_out.clear()
+	_collect_states(self, _all_states)
+	for s: State in _all_states:
+		var outs: Array[StateTransition] = []
+		for child: Node in s.get_children():
+			if child is StateTransition:
+				outs.append(child)
+		outs.sort_custom(_sort_priority_desc)
+		_out_transitions[s] = outs
+		for t: StateTransition in outs:
+			if t.check_immediately:
+				_immediate_out[s] = true
+				break
+
+
+func _collect_states(node: Node, out: Array[State]) -> void:
+	for child: Node in node.get_children():
+		if child is State:
+			out.append(child)
+			_collect_states(child, out)
+
+
 # Propagates the resolved root node, sprite, and animation player to all states and transitions.
 func _dispatch_root_node() -> void:
-	for uuid: StringName in __states:
-		var state: State = __states.get(uuid) as State
-		if not state:
-			continue
-		state.state_machine = self
-		state.root_node = _root_node
-		state.sprite = sprite
-		state.animation_player = animation_player
-
-	for tid: StringName in __transitions:
-		var t: StateTransition = __transitions.get(tid) as StateTransition
-		if not t:
-			continue
-		t.root_node = _root_node
-		t._init_expression()
-
-
-# Precomputes state identity, flattened aliases, and priority-sorted outgoing adjacency
-# so per-frame transition evaluation is O(out-degree) with no scanning or allocation.
-func _build_tables() -> void:
-	_uuid_of_state.clear()
-	_alias_target.clear()
-	_out_transitions.clear()
-	_transition_target.clear()
-	_immediate_out.clear()
-
-	for uuid: StringName in __states:
-		var s: State = __states.get(uuid) as State
-		if s:
-			_uuid_of_state[s] = uuid
-
-	for alias_uuid: StringName in __aliases:
-		var data: Dictionary = __aliases.get(alias_uuid, {})
-		_alias_target[alias_uuid] = StringName(data.get("original_uuid", ""))
-
-	for tid: StringName in __transitions:
-		var t: StateTransition = __transitions.get(tid) as StateTransition
-		if not t:
-			continue
-		var from_uuid: StringName = _resolve_uuid(StringName(t.__from_uuid))
-		if not _out_transitions.has(from_uuid):
-			_out_transitions[from_uuid] = []
-		_out_transitions.get(from_uuid).append(t)
-		_transition_target[t] = _resolve_state(StringName(t.__to_uuid))
-
-	for uuid: StringName in _out_transitions:
-		var list: Array = _out_transitions.get(uuid)
-		list.sort_custom(_sort_priority_desc)
-		for t: StateTransition in list:
-			if t.check_immediately:
-				_immediate_out[uuid] = true
-				break
+	for s: State in _all_states:
+		s.state_machine = self
+		s.root_node = _root_node
+		s.sprite = sprite
+		s.animation_player = animation_player
+		for t: StateTransition in _out_transitions.get(s, []):
+			t.root_node = _root_node
+			t._init_expression()
 
 
 func _sort_priority_desc(a: StateTransition, b: StateTransition) -> bool:
@@ -213,13 +173,13 @@ func _evaluate_transitions() -> void:
 	for t: StateTransition in _gather_candidates():
 		if not _should_fire(t, []):
 			continue
-		var target: State = _transition_target.get(t)
+		var target: State = t.target
 		if not target or not target._can_enter():
 			continue
-		if t.transition_time > 0.0:
+		if t.min_delay > 0.0:
 			_pending_transition = t
 			_pending_transition_target = target
-			_pending_transition_timer = t.transition_time
+			_pending_transition_timer = t.min_delay
 			return
 		_transition_to(t, target)
 		return
@@ -228,7 +188,7 @@ func _evaluate_transitions() -> void:
 # Returns the priority-sorted transitions eligible to fire from the current stack. Fast-paths
 # the common case (no always-checking superstate) to the precomputed, allocation-free list.
 func _gather_candidates() -> Array:
-	var from_current: Array = _out_transitions.get(_current_uuid, [])
+	var from_current: Array = _out_transitions.get(_current_state, [])
 	if not _has_always_superstate:
 		return from_current
 
@@ -238,10 +198,8 @@ func _gather_candidates() -> Array:
 	for superstate: State in _active_superstates:
 		if not superstate.always_transition:
 			continue
-		var suid: StringName = _uuid_of_state.get(superstate, &"")
-		for t: StateTransition in _out_transitions.get(suid, []):
-			var target: State = _transition_target.get(t)
-			if target and not _is_state_in_stack(target):
+		for t: StateTransition in _out_transitions.get(superstate, []):
+			if t.target and not _is_state_in_stack(t.target):
 				candidates.append(t)
 	candidates.sort_custom(_sort_priority_desc)
 	return candidates
@@ -267,9 +225,8 @@ func _should_fire(t: StateTransition, visited: Array[State]) -> bool:
 		StateTransition.TransitionMode.MANUAL:
 			return false
 
-	var target: State = _transition_target.get(t)
-	if target and target.is_passthrough:
-		return _has_outgoing_transition_from(target, visited)
+	if t.target and t.target.is_passthrough:
+		return _has_outgoing_transition_from(t.target, visited)
 	return true
 
 
@@ -282,8 +239,7 @@ func _has_outgoing_transition_from(state: State, visited: Array[State]) -> bool:
 		state._pre_enter()
 		state._pre_entered = true
 
-	var uuid: StringName = _uuid_of_state.get(state, &"")
-	for t: StateTransition in _out_transitions.get(uuid, []):
+	for t: StateTransition in _out_transitions.get(state, []):
 		if _should_fire(t, visited):
 			return true
 	return false
@@ -374,7 +330,6 @@ func _enter_state(state: State) -> void:
 
 func _set_active_stack(current: State, superstates: Array[State]) -> void:
 	_current_state = current
-	_current_uuid = _uuid_of_state.get(current, &"")
 	_active_superstates = superstates
 	_has_always_superstate = false
 	for s: State in superstates:
@@ -383,16 +338,13 @@ func _set_active_stack(current: State, superstates: Array[State]) -> void:
 			break
 
 
-# Walks the superstate chain of a state and returns an ordered array from outermost to innermost.
+# Walks the scene-tree parent chain and returns the state's superstates, outermost first.
 func _collect_superstates(state: State) -> Array[State]:
 	var result: Array[State] = []
-	var current_uuid: StringName = state.__editor_superstate_uuid
-	while not current_uuid.is_empty():
-		var superstate: State = __states.get(current_uuid) as State
-		if not superstate:
-			break
-		result.push_front(superstate)
-		current_uuid = superstate.__editor_superstate_uuid
+	var parent: Node = state.get_parent()
+	while parent is State:
+		result.push_front(parent as State)
+		parent = parent.get_parent()
 	return result
 
 
@@ -403,30 +355,12 @@ func _is_state_in_stack(state: State) -> bool:
 	return state in _active_superstates
 
 
-func _resolve_uuid(uuid: StringName) -> StringName:
-	return _alias_target.get(uuid, uuid)
-
-
-func _resolve_state(uuid: StringName) -> State:
-	return __states.get(_resolve_uuid(uuid)) as State
-
-
-func _resolve_entry_state() -> State:
-	if __has_entry and not __entry_target_uuid.is_empty():
-		var entry_state: State = __states.get(__entry_target_uuid) as State
-		if entry_state:
-			return entry_state
-	return initial_state
-
-
-# Looks up a state by its editor name, accepting both snake_case and original casing.
+# Looks up a state by its identity name, accepting both snake_case and the raw node name.
 func _resolve_state_name(state_name: String) -> State:
-	for uuid: StringName in __states:
-		var state: State = __states.get(uuid) as State
-		if not state:
-			continue
-		if state.__editor_name == state_name.to_snake_case() or state.__editor_name == state_name:
-			return state
+	var snake: String = state_name.to_snake_case()
+	for s: State in _all_states:
+		if s.get_internal_name() == snake or String(s.name) == state_name:
+			return s
 	return null
 
 
@@ -465,7 +399,7 @@ func consume_state_buffer() -> bool:
 ## Bypasses transition conditions. If the machine is not yet running, the state
 ## is entered directly without an outgoing transition object.
 ## [br][br]
-## [param state_name] The [member State.__editor_name] of the target state (snake_case or original casing).
+## [param state_name] The identity name of the target state (snake_case or the raw node name).
 func change_state(state_name: String) -> void:
 	var target: State = _resolve_state_name(state_name)
 	if not target:
@@ -484,13 +418,11 @@ func change_state(state_name: String) -> void:
 func trigger(transition_label: String) -> void:
 	if not _current_state:
 		return
-	for t: StateTransition in _out_transitions.get(_current_uuid, []):
+	for t: StateTransition in _out_transitions.get(_current_state, []):
 		if t.mode != StateTransition.TransitionMode.MANUAL:
 			continue
-		if t.label == transition_label:
-			var target: State = _transition_target.get(t)
-			if target:
-				_transition_to(t, target)
+		if t.label == transition_label and t.target:
+			_transition_to(t, t.target)
 			return
 
 
@@ -506,19 +438,17 @@ func stop() -> void:
 		s._on_exit()
 	_running = false
 	_current_state = null
-	_current_uuid = &""
 	_active_superstates = []
 	_pending_transition = null
 	_pending_transition_target = null
 	_pending_transition_timer = 0.0
 
 
-## Stops the machine and re-enters the initial (or entry-linked) state from scratch.
+## Stops the machine and re-enters the initial state from scratch.
 func reset() -> void:
 	stop()
-	var entry_state: State = _resolve_entry_state()
-	if entry_state:
-		_enter_state(entry_state)
+	if initial_state:
+		_enter_state(initial_state)
 
 
 ## Returns the currently active leaf [State].
@@ -534,7 +464,7 @@ func get_active_superstates() -> Array[State]:
 ## Returns [code]true[/code] if the state matching [param state_name] is currently
 ## active - either as the current state or anywhere in the superstate stack.
 ## [br][br]
-## [param state_name] The [member State.__editor_name] of the state to check.
+## [param state_name] The identity name of the state to check.
 func is_state_active(state_name: String) -> bool:
 	var target: State = _resolve_state_name(state_name)
 	if not target:

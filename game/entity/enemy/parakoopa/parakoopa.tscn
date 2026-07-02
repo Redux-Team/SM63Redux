@@ -167,25 +167,15 @@ shape = SubResource("RectangleShape2D_rqgyx")
 stream = ExtResource("10_fbhtv")
 bus = &"SFX"
 
-[node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("initial_state", "sprite", "__states")]
+[node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("initial_state", "sprite")]
 script = ExtResource("11_vpirj")
 initial_state = NodePath("Glide")
 root_node = NodePath("..")
 sprite = NodePath("../Sprite")
-__last__editor_position = Vector2(1040.2024, 293.07025)
-__last_editor_zoom = 0.98497385
-__states = {
-&"0012d7e4-f5f1-4b35-b960-089238911775": NodePath("Glide")
-}
 metadata/_custom_type_script = "uid://utibsg6xkllx"
-
 [node name="Glide" type="Node" parent="StateMachine" unique_id=665780062]
 script = ExtResource("11_fewty")
 sprite_animation_name = &"default"
-__editor_name = &"glide"
-__editor_position = Vector2(1366.7354, 374.46564)
-__editor_uuid = &"0012d7e4-f5f1-4b35-b960-089238911775"
-
 [node name="ParticleEmitter" type="CPUParticles2D" parent="." unique_id=992989918]
 show_behind_parent = true
 light_mask = 2

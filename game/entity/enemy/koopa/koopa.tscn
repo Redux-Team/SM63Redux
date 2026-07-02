@@ -200,26 +200,16 @@ shape = SubResource("RectangleShape2D_rqgyx")
 stream = ExtResource("9_xhq40")
 bus = &"SFX"
 
-[node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("initial_state", "sprite", "__states")]
+[node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("initial_state", "sprite")]
 script = ExtResource("11_ot2q4")
 initial_state = NodePath("Patrol")
 root_node = NodePath("..")
 sprite = NodePath("../Sprite")
-__last__editor_position = Vector2(483.84595, 195.91019)
-__last_editor_zoom = 1.1918185
-__states = {
-&"64278622-8683-413c-bd61-8d4554e35ebc": NodePath("Patrol")
-}
 metadata/_custom_type_script = "uid://utibsg6xkllx"
-
 [node name="Patrol" type="Node" parent="StateMachine" unique_id=530492825]
 script = ExtResource("12_4agb1")
 displacement = SubResource("Curve_4agb1")
 sprite_animation_name = &"default"
-__editor_name = &"patrol"
-__editor_position = Vector2(4309.4546, 1252.7251)
-__editor_uuid = &"64278622-8683-413c-bd61-8d4554e35ebc"
-
 [node name="WaterCheckArea" type="Area2D" parent="." unique_id=1539458646]
 script = ExtResource("15_dk1mx")
 metadata/_custom_type_script = "uid://bhoysiia8munh"

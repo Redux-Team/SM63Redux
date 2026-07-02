@@ -212,46 +212,6 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="Resource" id="Resource_b1y5l"]
-resource_local_to_scene = true
-script = ExtResource("9_axbdk")
-mode = 3
-expression = "is_player_in_vision()"
-__from_uuid = "34fb93bc-8b7f-4c3b-b892-88e5204552ca"
-__to_uuid = "3ec49086-a48b-4a5a-b5f9-f4b24b07f50b"
-__from_node_uuid = "bb8750ea-49cf-467f-bc0b-54f3e3751073"
-__to_node_uuid = "dc66a188-76b5-4895-99fe-e887ecbf915c"
-
-[sub_resource type="Resource" id="Resource_66cei"]
-resource_local_to_scene = true
-script = ExtResource("9_axbdk")
-mode = 3
-expression = "is_player_out_of_vision()"
-__from_uuid = "3ec49086-a48b-4a5a-b5f9-f4b24b07f50b"
-__to_uuid = "34fb93bc-8b7f-4c3b-b892-88e5204552ca"
-__from_node_uuid = "dc66a188-76b5-4895-99fe-e887ecbf915c"
-__to_node_uuid = "d1458010-23b3-430d-a09e-f2c7dcc372d3"
-
-[sub_resource type="Resource" id="Resource_f1ga4"]
-resource_local_to_scene = true
-script = ExtResource("9_axbdk")
-mode = 3
-expression = "!is_in_water()"
-__from_uuid = "f62446bc-e445-46da-af50-b91f801d73b7"
-__to_uuid = "cce2ee04-1f1f-46f1-8bd5-11a72e4d133f"
-__from_node_uuid = "144d40bc-7e26-4829-89da-09c477265472"
-__to_node_uuid = "558426a6-f1c4-4f22-ba7f-b7fc496a9533"
-
-[sub_resource type="Resource" id="Resource_t1a8t"]
-resource_local_to_scene = true
-script = ExtResource("9_axbdk")
-mode = 3
-expression = "is_in_water()"
-__from_uuid = "56001e8e-221d-478d-837a-bc4017f547da"
-__to_uuid = "34fb93bc-8b7f-4c3b-b892-88e5204552ca"
-__from_node_uuid = "66bbe6b3-0ebe-4775-8220-512bd85f315f"
-__to_node_uuid = "bb8750ea-49cf-467f-bc0b-54f3e3751073"
-
 [sub_resource type="Curve" id="Curve_xq1me"]
 _limits = [-1.0, 1.0, -1.0, 1.0]
 _data = [Vector2(-1, -1), 0.0, 0.0, 0, 0, Vector2(-0.35, -1), 0.0, 0.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -341,61 +301,15 @@ speed_scale = 1.0
 playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
-[node name="StateMachine" type="Node" parent="." unique_id=903449368 node_paths=PackedStringArray("initial_state", "sprite", "__states")]
+[node name="StateMachine" type="Node" parent="." unique_id=903449368 node_paths=PackedStringArray("initial_state", "sprite")]
 script = ExtResource("12_imbt5")
 initial_state = NodePath("Submerged/Swim")
 root_node = NodePath("..")
 sprite = NodePath("../Sprite")
-__last_editor_zoom = 0.6115912
-__states = {
-&"34fb93bc-8b7f-4c3b-b892-88e5204552ca": NodePath("Submerged/Swim"),
-&"36cdc2e5-6b19-49d9-851e-d2dd5a122900": NodePath("Strike"),
-&"3ec49086-a48b-4a5a-b5f9-f4b24b07f50b": NodePath("Submerged/Chase"),
-&"56001e8e-221d-478d-837a-bc4017f547da": NodePath("Dry"),
-&"cce2ee04-1f1f-46f1-8bd5-11a72e4d133f": NodePath("Dry/Flop"),
-&"f62446bc-e445-46da-af50-b91f801d73b7": NodePath("Submerged")
-}
-__transitions = Dictionary[StringName, ExtResource("9_axbdk")]({
-&"9e87bece-74d1-4e00-9e08-3de173f11f3c": SubResource("Resource_b1y5l"),
-&"cfdd07c7-c39f-4b52-9906-9903a0725b30": SubResource("Resource_66cei"),
-&"d1ebff2f-d1c0-44d3-9af3-12c8f779e7e4": SubResource("Resource_f1ga4"),
-&"fa545afa-0b42-4e03-98df-d622c905c108": SubResource("Resource_t1a8t")
-})
-__aliases = {
-&"144d40bc-7e26-4829-89da-09c477265472": {
-"original_uuid": &"f62446bc-e445-46da-af50-b91f801d73b7",
-"position": Vector2(5020, 2520)
-},
-&"558426a6-f1c4-4f22-ba7f-b7fc496a9533": {
-"original_uuid": &"cce2ee04-1f1f-46f1-8bd5-11a72e4d133f",
-"position": Vector2(5400, 2280)
-},
-&"66bbe6b3-0ebe-4775-8220-512bd85f315f": {
-"original_uuid": &"56001e8e-221d-478d-837a-bc4017f547da",
-"position": Vector2(5120, 2680)
-},
-&"bb8750ea-49cf-467f-bc0b-54f3e3751073": {
-"original_uuid": &"34fb93bc-8b7f-4c3b-b892-88e5204552ca",
-"position": Vector2(5380, 3000)
-},
-&"d1458010-23b3-430d-a09e-f2c7dcc372d3": {
-"original_uuid": &"34fb93bc-8b7f-4c3b-b892-88e5204552ca",
-"position": Vector2(6060, 3200)
-},
-&"dc66a188-76b5-4895-99fe-e887ecbf915c": {
-"original_uuid": &"3ec49086-a48b-4a5a-b5f9-f4b24b07f50b",
-"position": Vector2(5720, 3000)
-}
-}
 metadata/_custom_type_script = "uid://utibsg6xkllx"
-
 [node name="Submerged" type="Node" parent="StateMachine" unique_id=1456638796]
 script = ExtResource("10_n3erx")
 always_transition = true
-__editor_name = &"submerged"
-__editor_position = Vector2(5220, 1820)
-__editor_uuid = &"f62446bc-e445-46da-af50-b91f801d73b7"
-
 [node name="Swim" type="Node" parent="StateMachine/Submerged" unique_id=993447039 node_paths=PackedStringArray("water_check_l", "water_check_r", "wall_check_l", "wall_check_r")]
 script = ExtResource("11_t1a8t")
 displacement = SubResource("Curve_xq1me")
@@ -404,48 +318,22 @@ water_check_r = NodePath("../../../WaterCheckR")
 wall_check_l = NodePath("../../../WallCheckL")
 wall_check_r = NodePath("../../../WallCheckR")
 sprite_animation_name = &"swim"
-__editor_name = &"swim"
-__editor_position = Vector2(5620, 1820)
-__editor_uuid = &"34fb93bc-8b7f-4c3b-b892-88e5204552ca"
-__editor_superstate_uuid = &"f62446bc-e445-46da-af50-b91f801d73b7"
-__editor_superstate_wire_uuid = &"f62446bc-e445-46da-af50-b91f801d73b7"
-
 [node name="Chase" type="Node" parent="StateMachine/Submerged" unique_id=832478878 node_paths=PackedStringArray("entity_check_area_lost")]
 script = ExtResource("12_b1y5l")
 entity_check_area_lost = NodePath("../../../EntityCheckAreaLost")
 sprite_animation_name = &"alert"
 sprite_chain = Array[StringName]([&"chase"])
-__editor_name = &"chase"
-__editor_position = Vector2(5940, 1820)
-__editor_uuid = &"3ec49086-a48b-4a5a-b5f9-f4b24b07f50b"
-__editor_superstate_uuid = &"f62446bc-e445-46da-af50-b91f801d73b7"
-__editor_superstate_wire_uuid = &"34fb93bc-8b7f-4c3b-b892-88e5204552ca"
-
 [node name="Dry" type="Node" parent="StateMachine" unique_id=1978203948]
 script = ExtResource("13_xq1me")
 always_transition = true
-__editor_name = &"dry"
-__editor_position = Vector2(5340, 2020)
-__editor_uuid = &"56001e8e-221d-478d-837a-bc4017f547da"
-
 [node name="Flop" type="Node" parent="StateMachine/Dry" unique_id=712154901]
 script = ExtResource("14_qj7y6")
 sprite_animation_name = &"idle"
-__editor_name = &"flop"
-__editor_position = Vector2(5620, 2020)
-__editor_uuid = &"cce2ee04-1f1f-46f1-8bd5-11a72e4d133f"
-__editor_superstate_uuid = &"56001e8e-221d-478d-837a-bc4017f547da"
-__editor_superstate_wire_uuid = &"56001e8e-221d-478d-837a-bc4017f547da"
-
 [node name="Strike" type="Node" parent="StateMachine" unique_id=2058756983 node_paths=PackedStringArray("friction_component", "collision_disabled_shapes")]
 script = ExtResource("15_66cei")
 friction_component = NodePath("../../Components/FrictionComponent")
 sprite_animation_name = &"strike"
 collision_disabled_shapes = [NodePath("../../HitBox/CollisionShape2D"), NodePath("../../HurtBox/CollisionShape2D")]
-__editor_name = &"strike"
-__editor_position = Vector2(5700, 2600)
-__editor_uuid = &"36cdc2e5-6b19-49d9-851e-d2dd5a122900"
-
 [node name="Components" type="Node" parent="." unique_id=729948919]
 
 [node name="GravityComponent" type="Node" parent="Components" unique_id=1208409901 node_paths=PackedStringArray("entity")]
@@ -555,5 +443,29 @@ collision_mask = 2
 position = Vector2(-1, 1)
 target_position = Vector2(-34, 0)
 collision_mask = 2
+
+[node name="ToChase" type="Node" parent="StateMachine/Submerged/Swim" node_paths=PackedStringArray("target") unique_id=100000]
+script = ExtResource("9_axbdk")
+target = NodePath("../../Chase")
+mode = 3
+expression = "is_player_in_vision()"
+
+[node name="ToSwim" type="Node" parent="StateMachine/Submerged/Chase" node_paths=PackedStringArray("target") unique_id=100001]
+script = ExtResource("9_axbdk")
+target = NodePath("../../Swim")
+mode = 3
+expression = "is_player_out_of_vision()"
+
+[node name="ToFlop" type="Node" parent="StateMachine/Submerged" node_paths=PackedStringArray("target") unique_id=100002]
+script = ExtResource("9_axbdk")
+target = NodePath("../../Dry/Flop")
+mode = 3
+expression = "!is_in_water()"
+
+[node name="ToSwim" type="Node" parent="StateMachine/Dry" node_paths=PackedStringArray("target") unique_id=100003]
+script = ExtResource("9_axbdk")
+target = NodePath("../../Submerged/Swim")
+mode = 3
+expression = "is_in_water()"
 
 [connection signal="water_entered" from="WaterCheckBody" to="." method="_on_water_check_body_water_entered"]
