@@ -19,57 +19,28 @@
 [ext_resource type="Texture2D" uid="uid://uypneyqh43dv" path="res://assets/textures/entity/player/mario/triple_jump.png" id="5_0rdsw"]
 [ext_resource type="Script" uid="uid://2tpewb2vj0d3" path="res://game/entity/player/shared/handlers/movement_handler.gd" id="6_0jrw7"]
 [ext_resource type="Script" uid="uid://bc37gx5nk2itj" path="res://game/entity/player/shared/states/floorslide.gd" id="6_y6elw"]
-[ext_resource type="Script" uid="uid://deiaa5u8esvnc" path="res://addons/redux_dev/components/state_machine/state_sfx_entry.gd" id="7_ioda6"]
 [ext_resource type="Script" uid="uid://drrqaswaoenmg" path="res://game/entity/player/shared/states/dry.gd" id="7_je5mu"]
 [ext_resource type="Script" uid="uid://dx5p37ei2616j" path="res://game/entity/player/shared/handlers/sprite_handler.gd" id="7_tb30q"]
 [ext_resource type="Script" uid="uid://jhkyxpjlw3nu" path="res://game/entity/player/shared/states/airborne.gd" id="8_k8egu"]
-[ext_resource type="AudioStream" uid="uid://ddyxdiykdet7b" path="res://assets/sfx/player/mario/dive/dive_0.wav" id="10_6suq8"]
 [ext_resource type="Script" uid="uid://csmwm706d5wgl" path="res://game/entity/player/shared/states/dive.gd" id="10_aln35"]
 [ext_resource type="Texture2D" uid="uid://cop36ryfkinef" path="res://assets/textures/entity/player/mario/swim_idle.png" id="10_j8m7m"]
 [ext_resource type="Script" uid="uid://csbysfcj1b3rh" path="res://game/entity/player/shared/states/grounded.gd" id="10_tb30q"]
 [ext_resource type="Script" uid="uid://bfttwny22bnoc" path="res://game/entity/player/shared/states/backflip_up.gd" id="11_b6ajd"]
-[ext_resource type="AudioStream" uid="uid://vvilx4sjryos" path="res://assets/sfx/player/mario/dive/dive_1.wav" id="11_eo5je"]
 [ext_resource type="Script" uid="uid://cscjl4ppceor3" path="res://game/entity/player/shared/states/backflip.gd" id="11_mb70y"]
 [ext_resource type="Script" uid="uid://bv6pacjmfysox" path="res://game/entity/player/shared/states/rollout_f.gd" id="12_02rvq"]
-[ext_resource type="AudioStream" uid="uid://cv0wy731vhj3o" path="res://assets/sfx/player/mario/dive/dive_2.wav" id="12_d635j"]
-[ext_resource type="Script" uid="uid://cd63gwefr4fp4" path="res://util/playlist.gd" id="13_8yq6v"]
-[ext_resource type="AudioStream" uid="uid://cjcl5pn71sgyv" path="res://assets/sfx/player/mario/dive/dive_3.wav" id="13_ae0hi"]
 [ext_resource type="Texture2D" uid="uid://bjblyiou2qe0f" path="res://assets/textures/entity/player/shared/hover_fludd_r_0.png" id="13_gqe2a"]
 [ext_resource type="Script" uid="uid://b40633h5y42cq" path="res://game/entity/player/shared/states/spin.gd" id="14_20bnd"]
-[ext_resource type="AudioStream" uid="uid://bcy4wwvxfd7km" path="res://assets/sfx/player/mario/jump/jump_0.wav" id="14_lh4k8"]
 [ext_resource type="Script" uid="uid://bisaomurugmd3" path="res://game/entity/player/shared/states/base_jump.gd" id="15_5mhew"]
 [ext_resource type="Script" uid="uid://cf26ky7vulna0" path="res://game/entity/player/shared/states/ground_pound_start.gd" id="15_eihrn"]
-[ext_resource type="AudioStream" uid="uid://sskhnc1p4cbo" path="res://assets/sfx/player/mario/jump/jump_1.wav" id="15_ria7k"]
 [ext_resource type="Script" uid="uid://cj6o2ytwpw4bq" path="res://game/entity/player/shared/states/ground_pound_fall.gd" id="16_eihrn"]
 [ext_resource type="Script" uid="uid://0amhvrekohhp" path="res://game/entity/player/shared/states/ground_pound_slam.gd" id="17_aln35"]
-[ext_resource type="AudioStream" uid="uid://cacxhcwvqwe3l" path="res://assets/sfx/player/mario/double_jump/double_jump_0.wav" id="17_lh4k8"]
-[ext_resource type="AudioStream" uid="uid://bb3kctktrncwe" path="res://assets/sfx/player/mario/double_jump/double_jump_1.wav" id="18_6rqdb"]
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="19_1wiqr"]
-[ext_resource type="AudioStream" uid="uid://6ngvah4nyray" path="res://assets/sfx/player/mario/double_jump/double_jump_2.wav" id="19_l0vtf"]
 [ext_resource type="Script" uid="uid://c02oltfntb3q8" path="res://game/entity/player/mp_player.gd" id="19_ntea6"]
-[ext_resource type="AudioStream" uid="uid://cl10c505sc7jn" path="res://assets/sfx/player/mario/triple_jump/triple_jump_0.wav" id="20_0vqd7"]
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="20_1wiqr"]
-[ext_resource type="AudioStream" uid="uid://d2u8p1w08sc8t" path="res://assets/sfx/player/mario/triple_jump/triple_jump_1.wav" id="21_icsuc"]
-[ext_resource type="AudioStream" uid="uid://b25chylcy5cvx" path="res://assets/sfx/player/mario/triple_jump/triple_jump_2.wav" id="22_yna46"]
-[ext_resource type="AudioStream" uid="uid://podpwijvoa8s" path="res://assets/sfx/player/mario/triple_jump/triple_jump_3.wav" id="23_6qpfs"]
-[ext_resource type="AudioStream" uid="uid://d8y8hq35tc28" path="res://assets/sfx/player/mario/triple_jump/triple_jump_4.wav" id="24_rlrt6"]
-[ext_resource type="AudioStream" uid="uid://c6fqas8c4pqox" path="res://assets/sfx/player/mario/triple_jump/triple_jump_5.wav" id="25_sxdt2"]
-[ext_resource type="AudioStream" uid="uid://bme1kk82dbdvc" path="res://assets/sfx/player/mario/triple_jump/triple_jump_6.wav" id="26_3i503"]
-[ext_resource type="AudioStream" uid="uid://buooavrsh260y" path="res://assets/sfx/player/mario/triple_jump/triple_jump_7.wav" id="27_6b4i6"]
-[ext_resource type="AudioStream" uid="uid://bxthrj2cgps5d" path="res://assets/sfx/player/mario/spin/spin_air_1.wav" id="29_icsuc"]
-[ext_resource type="AudioStream" uid="uid://e0gve7kc1mk1" path="res://assets/sfx/player/mario/spin/spin_air_2.wav" id="30_yna46"]
-[ext_resource type="AudioStream" uid="uid://csmh3s1xsm72b" path="res://assets/sfx/player/mario/spin/spin_air_3.wav" id="31_6qpfs"]
-[ext_resource type="AudioStream" uid="uid://cfcnya3ow457f" path="res://assets/sfx/player/mario/ground_pound/ground_pound_start.wav" id="34_rlrt6"]
-[ext_resource type="AudioStream" uid="uid://cvwxucpxjv4s2" path="res://assets/sfx/player/mario/damage/ough.ogg" id="37_d635j"]
-[ext_resource type="AudioStream" uid="uid://dly1p4x8t0r70" path="res://assets/sfx/player/mario/ground_pound/ground_pound_generic.wav" id="37_sxdt2"]
 [ext_resource type="Script" uid="uid://oxowxqwt4py6" path="res://game/entity/player/shared/states/submerged.gd" id="38_3h1ly"]
 [ext_resource type="Script" uid="uid://kvimrb1ymehh" path="res://game/entity/player/shared/states/swim_spin.gd" id="39_mjy7s"]
 [ext_resource type="Script" uid="uid://dkr10jumwrvmd" path="res://game/entity/player/shared/states/swim_up.gd" id="39_ohvaq"]
-[ext_resource type="AudioStream" uid="uid://bfd6xls4jjoac" path="res://assets/sfx/player/mario/spin/spin_water_1.wav" id="41_5ygwk"]
-[ext_resource type="AudioStream" uid="uid://dfoi0m0cw6fww" path="res://assets/sfx/player/mario/spin/spin_water_end.wav" id="42_dhqxs"]
 [ext_resource type="Script" uid="uid://ddf8yvf7uhqql" path="res://game/entity/player/shared/states/death_hit.gd" id="48_563ve"]
-[ext_resource type="AudioStream" uid="uid://b04rk3ffi85np" path="res://assets/sfx/player/death_hit.mp3" id="48_o4bil"]
-[ext_resource type="AudioStream" uid="uid://pga7av4xfjtv" path="res://assets/music/player_death.mp3" id="50_1p630"]
 [ext_resource type="Script" uid="uid://bwatknd7uh7kd" path="res://game/entity/player/shared/states/death_fall.gd" id="50_ndkiv"]
 [ext_resource type="Texture2D" uid="uid://ba0kx63gegu07" path="res://assets/textures/screen/bowser.png" id="51_26jgh"]
 [ext_resource type="Texture2D" uid="uid://bvpu1uexfy52t" path="res://assets/textures/entity/player/mario/bonk.png" id="51_d635j"]
@@ -756,166 +727,6 @@ _limits = [0.0, 1.0, -300.0, 500.0]
 _data = [Vector2(-300, 0.2696039), 0.0, 0.0, 0, 0, Vector2(500, 0.9474535), 0.0011276755, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_1p630"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("10_6suq8"), ExtResource("11_eo5je"), ExtResource("12_d635j"), ExtResource("13_ae0hi")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_ndkiv"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_1p630")
-bus = 3
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_26jgh"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("21_icsuc"), ExtResource("23_6qpfs"), ExtResource("25_sxdt2"), ExtResource("27_6b4i6")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_gmxc2"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_26jgh")
-bus = 3
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_6saf5"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("20_0vqd7"), ExtResource("22_yna46"), ExtResource("24_rlrt6"), ExtResource("26_3i503")])
-bus = 3
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_8odgw"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_6saf5")
-bus = 3
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_ejgj1"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("14_lh4k8"), ExtResource("15_ria7k")])
-play_order = 0
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_k0v5e"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_ejgj1")
-bus = 3
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_h6qgx"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("17_lh4k8"), ExtResource("18_6rqdb"), ExtResource("19_l0vtf")])
-bus = 3
-play_order = 0
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_dhqxs"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_h6qgx")
-bus = 3
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_j002l"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("20_0vqd7"), ExtResource("21_icsuc"), ExtResource("22_yna46"), ExtResource("23_6qpfs"), ExtResource("24_rlrt6"), ExtResource("25_sxdt2"), ExtResource("26_3i503"), ExtResource("27_6b4i6")])
-bus = 3
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_kyrvb"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_j002l")
-bus = 3
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_kw6gy"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("29_icsuc"), ExtResource("30_yna46"), ExtResource("31_6qpfs")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_q4egk"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_kw6gy")
-bus = 3
-stop_on_exit = true
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_d3nks"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("37_d635j")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_h7oe0"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_d3nks")
-bus = 3
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_gdvj3"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("41_5ygwk")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_cpfge"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_gdvj3")
-stop_on_exit = true
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_krv0b"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("42_dhqxs")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_3jg1m"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_krv0b")
-pool_id = &"exit"
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_fstnu"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("34_rlrt6")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_681d1"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_fstnu")
-bus = 3
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_o4bil"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("37_sxdt2")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_563ve"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_o4bil")
-bus = 3
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_681d1"]
-streams_count = 1
-stream_0/stream = ExtResource("37_d635j")
-
-[sub_resource type="AudioStreamSynchronized" id="AudioStreamSynchronized_o4bil"]
-stream_count = 2
-stream_0/stream = SubResource("AudioStreamRandomizer_681d1")
-stream_0/volume = 0.0
-stream_1/stream = ExtResource("48_o4bil")
-stream_1/volume = 0.0
-
-[sub_resource type="Resource" id="Resource_d80p0"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([SubResource("AudioStreamSynchronized_o4bil")])
-bus = 1
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_vxtrd"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_d80p0")
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
 [sub_resource type="Curve" id="Curve_ndkiv"]
 _limits = [-300.0, 700.0, 0.0, 3.0]
 _data = [Vector2(0, -269.97272), 0.0, 0.0, 0, 0, Vector2(0.18571427, -110.28204), 667.7625, 667.7625, 0, 0, Vector2(0.9285714, 427.9345), 414.01276, 414.01276, 0, 0, Vector2(3, 700), 63.087624, 0.0, 0, 0]
@@ -936,17 +747,6 @@ width = 256
 height = 256
 fill = 1
 fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="Resource" id="Resource_ql0th"]
-script = ExtResource("13_8yq6v")
-tracklist = Array[AudioStream]([ExtResource("50_1p630")])
-bus = 1
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_v2l3k"]
-script = ExtResource("7_ioda6")
-playlist = SubResource("Resource_ql0th")
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
 [sub_resource type="Animation" id="Animation_otk8c"]
 length = 0.001
@@ -1481,13 +1281,12 @@ collision_shapes = [NodePath("BaseCollision"), NodePath("GroundPoundCollision"),
 state_machine = NodePath("StateMachine")
 water_check = NodePath("Regions/WaterCheck")
 
-[node name="StateMachine" type="Node" parent="." unique_id=49398394 node_paths=PackedStringArray("initial_state", "sprite", "animation_player", "sfx_root", "__states")]
+[node name="StateMachine" type="Node" parent="." unique_id=49398394 node_paths=PackedStringArray("initial_state", "sprite", "animation_player", "__states")]
 script = ExtResource("2_cawmy")
 initial_state = NodePath("Dry/Grounded/Idle")
 root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
-sfx_root = NodePath("..")
 __last__editor_position = Vector2(1269.4768, 251.82452)
 __last_editor_zoom = 0.6115912
 __states = {
@@ -1943,7 +1742,6 @@ rotation_curve = SubResource("Curve_aln35")
 y_velocity_to_rotation_offset_curve = SubResource("Curve_ioda6")
 sprite_animation_name = &"dive"
 collision_enabled_shapes = [NodePath("../../../../DiveCollision"), NodePath("../../../../Hitboxes/Dive/CollisionShape2D")]
-sfx_enter = SubResource("Resource_ndkiv")
 __editor_name = &"dive"
 __editor_position = Vector2(-400, -480)
 __editor_uuid = &"0dd74506-66e0-4267-b86b-0572da305c2a"
@@ -1965,7 +1763,6 @@ sprite_animation_name = &"jump"
 sprite_restart_if_playing = false
 sprite_loop = false
 sprite_speed_scale = 0.0
-sfx_enter = SubResource("Resource_gmxc2")
 anim_animation = "backflip"
 __editor_name = &"backflip"
 __editor_position = Vector2(-400, 100)
@@ -1979,7 +1776,6 @@ sprite_animation_name = &"jump"
 sprite_restart_if_playing = false
 sprite_loop = false
 sprite_speed_scale = 0.0
-sfx_enter = SubResource("Resource_8odgw")
 anim_animation = "backflip"
 __editor_name = &"backflip_up"
 __editor_position = Vector2(140, 100)
@@ -2024,7 +1820,6 @@ __editor_superstate_wire_uuid = &"a8371ea8-4f4b-4cdc-8345-14368f1455d3"
 [node name="Jump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" unique_id=2029960993]
 script = ExtResource("4_4j27x")
 sprite_animation_name = &"jump"
-sfx_enter = SubResource("Resource_k0v5e")
 __editor_name = &"jump"
 __editor_position = Vector2(680, -200)
 __editor_uuid = &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
@@ -2034,7 +1829,6 @@ __editor_superstate_wire_uuid = &"4e77d567-5fca-48cf-9e61-dbb6250ef625"
 [node name="DoubleJump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" unique_id=936922287]
 script = ExtResource("4_4j27x")
 sprite_animation_name = &"double_jump"
-sfx_enter = SubResource("Resource_dhqxs")
 __editor_name = &"double_jump"
 __editor_position = Vector2(1160, -200)
 __editor_uuid = &"54a4d6c2-d938-40a1-92f4-ed7ef758c71c"
@@ -2044,7 +1838,6 @@ __editor_superstate_wire_uuid = &"2556e0d1-5e1d-49b6-a4e7-8acb6fb13bd2"
 [node name="TripleJump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" unique_id=702472203]
 script = ExtResource("4_4j27x")
 sprite_animation_name = &"triple_jump"
-sfx_enter = SubResource("Resource_kyrvb")
 anim_animation = "triple_jump"
 __editor_name = &"triple_jump"
 __editor_position = Vector2(1740, -200)
@@ -2057,7 +1850,6 @@ script = ExtResource("14_20bnd")
 spin_hitbox = NodePath("../../../../Hitboxes/Spin")
 sprite_animation_name = &"spin_start"
 sprite_chain = Array[StringName]([&"spin_loop"])
-sfx_enter = SubResource("Resource_q4egk")
 __editor_name = &"spin"
 __editor_position = Vector2(-880, -140)
 __editor_uuid = &"1f487687-d9c8-496b-9be9-7fd09f196b62"
@@ -2081,7 +1873,6 @@ script = ExtResource("4_4j27x")
 sprite_animation_name = &"bonk"
 sprite_lock_flipping = true
 sprite_loop = false
-sfx_enter = SubResource("Resource_h7oe0")
 __editor_name = &"strike"
 __editor_position = Vector2(-840, -680)
 __editor_uuid = &"6b7a379a-f04e-4f63-b078-03fc149a26bf"
@@ -2130,8 +1921,6 @@ script = ExtResource("39_mjy7s")
 spin_hitbox = NodePath("../../../Hitboxes/Spin")
 sprite_animation_name = &"spin_start"
 sprite_chain = Array[StringName]([&"spin_loop"])
-sfx_enter = SubResource("Resource_cpfge")
-sfx_exit = SubResource("Resource_3jg1m")
 __editor_name = &"swim_spin"
 __editor_position = Vector2(-240, 1020)
 __editor_uuid = &"cb2bce9e-79ca-46c1-9bc1-ab2d16c15822"
@@ -2156,7 +1945,6 @@ sprite_lock_flipping = true
 sprite_loop = false
 sprite_speed_scale = 0.0
 collision_mask_override = 512
-sfx_enter = SubResource("Resource_681d1")
 anim_animation = "ground_pound_start"
 __editor_name = &"ground_pound_start"
 __editor_position = Vector2(-2160, 1440)
@@ -2182,7 +1970,6 @@ __editor_superstate_wire_uuid = &"26117a90-ad8f-4dc7-b05f-b7d2d321b8c0"
 [node name="GroundPoundSlam" type="Node" parent="StateMachine/GroundPound" unique_id=333120121]
 script = ExtResource("17_aln35")
 collision_mask_override = 512
-sfx_enter = SubResource("Resource_563ve")
 __editor_name = &"ground_pound_slam"
 __editor_position = Vector2(-420, 1440)
 __editor_uuid = &"02ebca7a-db7b-4090-9536-6c5c1f4c57a0"
@@ -2194,7 +1981,6 @@ script = ExtResource("48_563ve")
 hurt_box = NodePath("../../Hitboxes/HurtBox")
 sprite_animation_name = &"bonk"
 sprite_lock_flipping = true
-sfx_enter = SubResource("Resource_vxtrd")
 __editor_name = &"death_hit"
 __editor_position = Vector2(-1720, -1700)
 __editor_uuid = &"b7d0f81a-a153-40a0-b0f5-e4d82aa9e8bc"
@@ -2206,7 +1992,6 @@ player_rotation_curve = SubResource("Curve_26jgh")
 death_screen_texture = ExtResource("51_26jgh")
 transition_out_texture = SubResource("GradientTexture2D_gmxc2")
 sprite_lock_flipping = true
-sfx_enter = SubResource("Resource_v2l3k")
 __editor_name = &"death_fall"
 __editor_position = Vector2(-1280, -1700)
 __editor_uuid = &"a7c6437f-db86-4f7b-9bc9-3d0b9200da2e"

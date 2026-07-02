@@ -12,8 +12,6 @@
 [ext_resource type="AudioStream" uid="uid://bepvphyfaeuk5" path="res://assets/sfx/entity/koopa/shell_kick.ogg" id="9_xhq40"]
 [ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="11_ot2q4"]
 [ext_resource type="Script" uid="uid://bd8l4ri83uu5a" path="res://game/entity/enemy/_shared/states/patrol.gd" id="12_4agb1"]
-[ext_resource type="Script" uid="uid://cd63gwefr4fp4" path="res://util/playlist.gd" id="13_lhbc1"]
-[ext_resource type="Script" uid="uid://deiaa5u8esvnc" path="res://addons/redux_dev/components/state_machine/state_sfx_entry.gd" id="14_dk1mx"]
 [ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="15_dk1mx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0apuc"]
@@ -126,28 +124,6 @@ _limits = [-1.0, 1.0, -1.0, 1.0]
 _data = [Vector2(-1, -1), 0.0, 0.0, 0, 0, Vector2(-0.35, -1), 0.0, 0.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="AudioStreamWAV" id="AudioStreamWAV_dmwm8"]
-data = PackedByteArray("cW9hZgAADbABAH0ADbAFmAAAAAAAAAAAAAAAAOAAQAAA00QU8UwKgwQDACEODwdfDfxYoETED9USQXCgiiQSBRZAAaAAZRIDEVJpOGFIIBoRR3bawEgoChUZC4EKzKPbJphpmDCBgUsiyyQjoImW1TFRbCkUTd7QMJgBiiEjIvk9+UCichWpEzJiX9ZKUstSP1IDotpoPThCCMAwUjzfk0g6I4jKbnUYQwlMM5wtKmxL8SYhUwZXl0RHm5jCZSKIQgN0NB4uBkExEvwFmg0wOE1RjDBrniAMSnVx3ChqxKtEDYACCSX5CTMwLGrldk3KOnY3nNIkvvFGkvlxCyiC3EATDRVGrIKoQwlppuAV5lVJLYROHq8r0UqSBLHQIJRhUVJglNAKtJtEChYeUKYg00VKDelYhYlARruU3QUMWoNE1KYmm1B8O0jKYLTsViefWGkJhBoAkBNPg2bAOEuvkEBKhZsVilZURkGOpElgqgNAYzkCF3mCVkrIIAutEYTVUtON4lMBtAsxrH0yIimQpDppj+mR+n61QEksIFggyeZO0SQkQ4T5OlKYVaDBAATRKcAFDMR/zX5Q0KhxvAAGF02bcApTLwqJRlpVwMIN6hJGSGGGkQWQ3ER8DRsgpCYKVM2CcMFNJhNCJXAmWUIQyE4MrwfgpSQ+UNFUPMkShVJPdw1DA01ROlSrgBJIBZjcUkkAgpNFkgBGgCBRuRRqhELBYMDRKoCrTEfL2EsJBiNAWVRELB0LCjp1YbRFyBfQRuIt4VH4iFlQqXm0LGKiQESVQaBRKZQrQ5kgVHwRhI1CSgI6mUvEwVBb1uBJVCIAQClKlIcm5fBGiuMukvFw0UZDBbmPU4+STze4sS/V5kozWaFq5J7NSEJaTTzbAqhIOF2OuYAMbjc7GkkuE3YJYjLpBTEARqZlMQFAt1hJLt0yCoS2anEAjEALAYKpFJCeKHD5JpVLl98kFD72dIBTXDAUGKDJBJtpJiJJp10CaYMwEkQy6AwAHTLCkTBJIZbZLiYa/9nbEDowCG2WAoXX4zzUYBALZJCSK/+4oII5te0lht2fAijFgzNoAiBJKAYSKC/+7bAEQtwlpH+UMkaQeTAglrZJICJaODJNtgxIFlo4Af7WUGmpAiSptdyhYffhOKAFkkAlggMnOmE0NFsWUzLdLQEaBhZBJJhthJl4Rkgk9S1F7VkUwSZSgf7ASA7sLbeuoAEFBAIog2KUAUESyCDbdZQUWkKAICt1hgFCokkaG2TkkQ5U2zJICQJURbpBIpMIhsqMtEgc67f6vZoptCSaIKAADtZpIEphkxpQAEAlESQ0CyCWWCBJZJJSYsaRFYMMY7f/IJImWRAwWQFCvScWroLSTFSLJGBEtEBkFUMVC/y24oykGhmTjBw2gFTQE3l//FeltbAwWSQi01iiwSTTFSiKEDrbIVklohkssBoZtBkFHEmKmhxDytp/z9ArGtYu/YILbJgdo70yweU6+BcVraCqCT6GIBApEgJDgogm6SgzSElSoRCQ2TT2rFboGt08EgsJFmAUiUAmlES8kxZJdIRTYSf7EpEgKVkRTswYi2klbtHWSBZ7M5uUbYYRJowkEGAUPOUXzs/7gebk3RcRCEMQMCZUENEtm1OuhokYhASUQkCm0xBCIThaABpqFgAFigroNEoUAmBkqFCm0xIdfBLIS6TCFxJFEQsMklASES0SE1K2yBrLQcEiQaKYEhBVkQlsAPsQgwQlBRNK0RDbJLRojVgQIIgppsAFtoAWO5AW1MHFExZKBYDbYKJYFkFNBEAEgIgUCUqQi0BQGBIaJYZLVESCGEoxCp1VlkgSQiAgQSUASAH7z0icr282Bh//t0AbcYYHsgmhanAg0wIaoQCTB3QgAEAgMMEAJoAAg1ZU0AmiCABAAAAAAAAA")
-format = 3
-mix_rate = 32000
-tags = {
-"title": "3W_SeEmKuriboRun"
-}
-
-[sub_resource type="Resource" id="Resource_3b6i3"]
-script = ExtResource("13_lhbc1")
-tracklist = Array[AudioStream]([SubResource("AudioStreamWAV_dmwm8")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_4ii8e"]
-script = ExtResource("14_dk1mx")
-playlist = SubResource("Resource_3b6i3")
-pitch_range = Vector2(0.9, 1.1)
-volume_db = -4.0
-max_distance = 500.0
-sfx_frames = Array[int]([1, 6])
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dmwm8"]
 resource_local_to_scene = true
 size = Vector2(18, 26)
@@ -224,12 +200,11 @@ shape = SubResource("RectangleShape2D_rqgyx")
 stream = ExtResource("9_xhq40")
 bus = &"SFX"
 
-[node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("initial_state", "sprite", "sfx_root", "__states")]
+[node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("initial_state", "sprite", "__states")]
 script = ExtResource("11_ot2q4")
 initial_state = NodePath("Patrol")
 root_node = NodePath("..")
 sprite = NodePath("../Sprite")
-sfx_root = NodePath("..")
 __last__editor_position = Vector2(483.84595, 195.91019)
 __last_editor_zoom = 1.1918185
 __states = {
@@ -241,7 +216,6 @@ metadata/_custom_type_script = "uid://utibsg6xkllx"
 script = ExtResource("12_4agb1")
 displacement = SubResource("Curve_4agb1")
 sprite_animation_name = &"default"
-sfx_frame = SubResource("Resource_4ii8e")
 __editor_name = &"patrol"
 __editor_position = Vector2(4309.4546, 1252.7251)
 __editor_uuid = &"64278622-8683-413c-bd61-8d4554e35ebc"

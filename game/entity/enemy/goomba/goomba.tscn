@@ -7,25 +7,19 @@
 [ext_resource type="Texture2D" uid="uid://djgg3rgm58230" path="res://assets/textures/entity/enemy/goomba/goomba_walk.png" id="3_hysx3"]
 [ext_resource type="Script" uid="uid://3y7t4ymugnxu" path="res://addons/redux_dev/components/state_machine/state_transition.gd" id="3_ios8m"]
 [ext_resource type="Script" uid="uid://dyjrhpdveexsr" path="res://addons/redux_dev/components/state_machine/state.gd" id="3_tx7nd"]
-[ext_resource type="Script" uid="uid://cd63gwefr4fp4" path="res://util/playlist.gd" id="4_dc2fh"]
 [ext_resource type="Texture2D" uid="uid://dtakiqymwlidq" path="res://assets/textures/entity/enemy/goomba/goomba_alert.png" id="4_kyaey"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_whnfo"]
-[ext_resource type="Script" uid="uid://deiaa5u8esvnc" path="res://addons/redux_dev/components/state_machine/state_sfx_entry.gd" id="4_wjeoi"]
 [ext_resource type="Script" uid="uid://ckuqr7ws7p6tk" path="res://game/entity/enemy/goomba/states/alert.gd" id="4_x5cu4"]
 [ext_resource type="Script" uid="uid://bd8l4ri83uu5a" path="res://game/entity/enemy/_shared/states/patrol.gd" id="5_4grvk"]
-[ext_resource type="AudioStream" uid="uid://dgmayxvw7oy3w" path="res://assets/sfx/entity/goomba/goomba_step.wav" id="5_dri63"]
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="5_n0olq"]
 [ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="5_whnfo"]
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="6_prjr3"]
 [ext_resource type="Texture2D" uid="uid://bpp7wgte6dq0l" path="res://assets/textures/entity/enemy/goomba/goomba_squish.png" id="7_phpar"]
-[ext_resource type="AudioStream" uid="uid://y56kvftd2idy" path="res://assets/sfx/entity/goomba/goomba_jump.ogg" id="8_dri63"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="10_d6enh"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="11_8wobc"]
 [ext_resource type="Script" uid="uid://ptqlxnwadjpm" path="res://game/entity/enemy/goomba/states/chase.gd" id="11_fb4me"]
 [ext_resource type="Script" uid="uid://bu81quiseko6w" path="res://game/entity/enemy/goomba/states/squish.gd" id="12_6f57m"]
-[ext_resource type="AudioStream" uid="uid://cucdekyl58ypv" path="res://assets/sfx/entity/goomba/goomba_stomped.wav" id="13_eqg5w"]
 [ext_resource type="Script" uid="uid://bxmdlmivclqhf" path="res://game/entity/enemy/goomba/states/strike.gd" id="14_xvu80"]
-[ext_resource type="AudioStream" uid="uid://dq4csxy68lb4q" path="res://assets/sfx/entity/goomba/goomba_struck.wav" id="15_lgdot"]
 [ext_resource type="Texture2D" uid="uid://djcybawlcos34" path="res://assets/textures/entity/enemy/goomba/goomba_hit.png" id="20_4grvk"]
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="26_15o45"]
 [ext_resource type="Script" uid="uid://dnsd2a8oriy3" path="res://util/entity/forcebox.gd" id="26_a7n3c"]
@@ -44,54 +38,6 @@ __to_node_uuid = "7e6bd701-d523-4ed2-8296-7bb3425517f0"
 _limits = [-1.0, 1.0, -1.0, 1.0]
 _data = [Vector2(-1, -1), 0.0, 0.0, 0, 0, Vector2(-0.35, -1), 0.0, 0.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 4
-
-[sub_resource type="Resource" id="Resource_ios8m"]
-script = ExtResource("4_dc2fh")
-tracklist = Array[AudioStream]([ExtResource("5_dri63")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_0js5a"]
-script = ExtResource("4_wjeoi")
-playlist = SubResource("Resource_ios8m")
-pitch_range = Vector2(0.9, 1.1)
-volume_db = -4.0
-max_distance = 500.0
-sfx_frames = Array[int]([0, 3])
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_fb4me"]
-script = ExtResource("4_dc2fh")
-tracklist = Array[AudioStream]([ExtResource("8_dri63")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_6f57m"]
-script = ExtResource("4_wjeoi")
-playlist = SubResource("Resource_fb4me")
-pitch_range = Vector2(0.9, 1.1)
-volume_db = -6.0
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_xvu80"]
-script = ExtResource("4_dc2fh")
-tracklist = Array[AudioStream]([ExtResource("13_eqg5w")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_lgdot"]
-script = ExtResource("4_wjeoi")
-playlist = SubResource("Resource_xvu80")
-pitch_range = Vector2(0.9, 1.1)
-volume_db = -10.0
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_4grvk"]
-script = ExtResource("4_dc2fh")
-tracklist = Array[AudioStream]([ExtResource("15_lgdot")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_15o45"]
-script = ExtResource("4_wjeoi")
-playlist = SubResource("Resource_4grvk")
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n0olq"]
 atlas = ExtResource("3_hysx3")
@@ -321,13 +267,12 @@ ExtResource("3_7e3mf"): 1
 })
 water_check = NodePath("WaterCheckArea")
 
-[node name="StateMachine" type="Node" parent="." unique_id=48097513 node_paths=PackedStringArray("initial_state", "sprite", "animation_player", "sfx_root", "__states")]
+[node name="StateMachine" type="Node" parent="." unique_id=48097513 node_paths=PackedStringArray("initial_state", "sprite", "animation_player", "__states")]
 script = ExtResource("2_e0p0p")
 initial_state = NodePath("Wander/Patrol")
 root_node = NodePath("..")
 sprite = NodePath("../SmartSprite2D")
 animation_player = NodePath("../AnimationPlayer")
-sfx_root = NodePath("..")
 __last__editor_position = Vector2(315.122, 21.69278)
 __last_editor_zoom = 0.81402785
 __states = {
@@ -355,7 +300,6 @@ displacement = SubResource("Curve_g7wuw")
 floor_check_r = NodePath("../../../FloorCheckR")
 floor_check_l = NodePath("../../../FloorCheckL")
 sprite_animation_name = &"walk"
-sfx_frame = SubResource("Resource_0js5a")
 __editor_name = &"patrol"
 __editor_position = Vector2(500, 260)
 __editor_uuid = &"68c1c64e-e88a-4ed3-bfca-021d704423e3"
@@ -364,7 +308,6 @@ __editor_superstate_wire_uuid = &"97212f4c-f576-4616-8814-5379e9dd5a08"
 
 [node name="Alert" type="Node" parent="StateMachine/Wander" unique_id=1129696963]
 script = ExtResource("4_x5cu4")
-sfx_enter = SubResource("Resource_6f57m")
 __editor_name = &"alert"
 __editor_position = Vector2(760, 260)
 __editor_uuid = &"53d6d36b-82d5-4959-a868-aff4d9ec2aba"
@@ -375,7 +318,6 @@ __editor_superstate_wire_uuid = &"68c1c64e-e88a-4ed3-bfca-021d704423e3"
 script = ExtResource("11_fb4me")
 sprite_animation_name = &"walk"
 sprite_speed_scale = 1.5
-sfx_frame = SubResource("Resource_0js5a")
 __editor_name = &"chase"
 __editor_position = Vector2(1080, 260)
 __editor_uuid = &"7e6bd701-d523-4ed2-8296-7bb3425517f0"
@@ -385,7 +327,6 @@ script = ExtResource("12_6f57m")
 hit_box = NodePath("../../HitBox")
 sprite_animation_name = &"squish"
 sprite_speed_scale = 1.5
-sfx_enter = SubResource("Resource_lgdot")
 __editor_name = &"squish"
 __editor_position = Vector2(1080, 460)
 __editor_uuid = &"cf4bd5dd-e0ad-4126-89fc-a6690ce13562"
@@ -393,7 +334,6 @@ __editor_uuid = &"cf4bd5dd-e0ad-4126-89fc-a6690ce13562"
 [node name="Strike" type="Node" parent="StateMachine" unique_id=440686515 node_paths=PackedStringArray("hit_box")]
 script = ExtResource("14_xvu80")
 hit_box = NodePath("../../HitBox")
-sfx_enter = SubResource("Resource_15o45")
 anim_animation = "strike_hit"
 __editor_name = &"strike"
 __editor_position = Vector2(1400, 460)

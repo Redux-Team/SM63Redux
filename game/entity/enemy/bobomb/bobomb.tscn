@@ -8,24 +8,17 @@
 [ext_resource type="Texture2D" uid="uid://c6mg7sixneubo" path="res://assets/textures/entity/enemy/bobomb/bobomb_fuse.png" id="5_a0onm"]
 [ext_resource type="Texture2D" uid="uid://ceasu8sxjtib1" path="res://assets/textures/entity/enemy/bobomb/bobomb_key_spin.png" id="6_4fxtu"]
 [ext_resource type="Texture2D" uid="uid://0oiraixfutpi" path="res://assets/textures/entity/enemy/bobomb/bobomb_fuse_unlit.png" id="6_6sje6"]
-[ext_resource type="Script" uid="uid://cd63gwefr4fp4" path="res://util/playlist.gd" id="6_e004a"]
 [ext_resource type="Texture2D" uid="uid://bxrc68naxvjh2" path="res://assets/textures/particle/entity/bobomb_explosion.png" id="7_na7jb"]
-[ext_resource type="AudioStream" uid="uid://dgmayxvw7oy3w" path="res://assets/sfx/entity/goomba/goomba_step.wav" id="7_x0pr4"]
-[ext_resource type="Script" uid="uid://deiaa5u8esvnc" path="res://addons/redux_dev/components/state_machine/state_sfx_entry.gd" id="8_6r7hc"]
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="12_200vj"]
 [ext_resource type="Script" uid="uid://3y7t4ymugnxu" path="res://addons/redux_dev/components/state_machine/state_transition.gd" id="13_i2i30"]
 [ext_resource type="Script" uid="uid://bd8l4ri83uu5a" path="res://game/entity/enemy/_shared/states/patrol.gd" id="14_qw5am"]
 [ext_resource type="Script" uid="uid://dnsd2a8oriy3" path="res://util/entity/forcebox.gd" id="16_glled"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="17_gjan8"]
-[ext_resource type="AudioStream" uid="uid://334xwjirxlct" path="res://assets/sfx/entity/bobomb/fuse.wav" id="19_i2i30"]
 [ext_resource type="Script" uid="uid://w00kyf4l0eer" path="res://game/entity/enemy/bobomb/states/chase.gd" id="19_na7jb"]
-[ext_resource type="AudioStream" uid="uid://dbtylflefgm2o" path="res://assets/sfx/entity/bobomb/explosion.wav" id="20_i2i30"]
-[ext_resource type="AudioStream" uid="uid://cnu88x3ta80kk" path="res://assets/sfx/entity/bobomb/explosion_buildup_1.wav" id="20_p1pya"]
 [ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="21_fyph1"]
 [ext_resource type="Script" uid="uid://ciewso6hi85f2" path="res://game/entity/enemy/bobomb/states/kaboom.gd" id="21_hy3hd"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="22_rkigm"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="23_psol5"]
-[ext_resource type="AudioStream" uid="uid://8ybrcf2gym5t" path="res://assets/sfx/entity/bobomb/knock.wav" id="23_u8txe"]
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="24_4fmyw"]
 [ext_resource type="Script" uid="uid://dmjeu88gcicx4" path="res://game/entity/enemy/bobomb/states/strike.gd" id="24_na7jb"]
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="25_whfh4"]
@@ -388,57 +381,10 @@ _limits = [-1.0, 1.0, -1.0, 1.0]
 _data = [Vector2(-1, -1), 0.0, 0.0, 0, 0, Vector2(-0.35, -1), 0.0, 0.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="Resource" id="Resource_ios8m"]
-script = ExtResource("6_e004a")
-tracklist = Array[AudioStream]([ExtResource("7_x0pr4")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_tfdvb"]
-script = ExtResource("8_6r7hc")
-playlist = SubResource("Resource_ios8m")
-pitch_range = Vector2(0.9, 1.1)
-volume_db = -4.0
-max_distance = 500.0
-sfx_frames = Array[int]([0, 3])
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
 [sub_resource type="Curve" id="Curve_na7jb"]
 _limits = [2.0, 5.0, 0.0, 1.0]
 _data = [Vector2(0.1400778, 2.922131), 0.0, -0.20538904, 0, 0, Vector2(0.99221784, 4.552459), 0.0, 0.0, 0, 0]
 point_count = 2
-
-[sub_resource type="Resource" id="Resource_na7jb"]
-script = ExtResource("6_e004a")
-tracklist = Array[AudioStream]([ExtResource("19_i2i30"), ExtResource("20_p1pya")])
-play_order = 4
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_200vj"]
-script = ExtResource("8_6r7hc")
-playlist = SubResource("Resource_na7jb")
-max_stack = 2
-stop_on_exit = true
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_u8txe"]
-script = ExtResource("6_e004a")
-tracklist = Array[AudioStream]([ExtResource("20_i2i30")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_hy3hd"]
-script = ExtResource("8_6r7hc")
-playlist = SubResource("Resource_u8txe")
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
-[sub_resource type="Resource" id="Resource_6sje6"]
-script = ExtResource("6_e004a")
-tracklist = Array[AudioStream]([ExtResource("23_u8txe")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_ccar4"]
-script = ExtResource("8_6r7hc")
-playlist = SubResource("Resource_6sje6")
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_glled"]
 size = Vector2(16, 18)
@@ -608,12 +554,11 @@ metadata/_custom_type_script = "uid://dnsd2a8oriy3"
 position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_5pxke")
 
-[node name="StateMachine" type="Node" parent="." unique_id=1758739681 node_paths=PackedStringArray("initial_state", "sprite", "sfx_root", "__states")]
+[node name="StateMachine" type="Node" parent="." unique_id=1758739681 node_paths=PackedStringArray("initial_state", "sprite", "__states")]
 script = ExtResource("2_wyvl3")
 initial_state = NodePath("Patrol")
 root_node = NodePath("..")
 sprite = NodePath("../Sprite")
-sfx_root = NodePath("..")
 __last_editor_zoom = 0.6115912
 __states = {
 &"059541e0-002a-4168-8fab-30866425b5b3": NodePath("Strike"),
@@ -633,7 +578,6 @@ displacement = SubResource("Curve_tfdvb")
 floor_check_r = NodePath("../../FloorCheckR")
 floor_check_l = NodePath("../../FloorCheckL")
 sprite_animation_name = &"patrol"
-sfx_frame = SubResource("Resource_tfdvb")
 __editor_name = &"patrol"
 __editor_position = Vector2(5301.7407, 1169.8741)
 __editor_uuid = &"a1aba490-20bb-4167-934b-8c4d4fb497cd"
@@ -648,7 +592,6 @@ runtime = 3.25
 sprite_animation_name = &"patrol"
 sprite_speed_scale = 2.0
 sprite_chain_loop_last = false
-sfx_enter = SubResource("Resource_200vj")
 __editor_name = &"chase"
 __editor_position = Vector2(5700, 1160)
 __editor_uuid = &"329fcf5b-1ec8-4ad8-a9e7-fd81d0ba2c56"
@@ -658,7 +601,6 @@ script = ExtResource("21_hy3hd")
 explosion_shape = NodePath("../../ExplosionHitbox/ExplosionShape")
 explosion = NodePath("../../Explosion")
 collision_enabled_shapes = [NodePath("../../ExplosionHitbox/ExplosionShape")]
-sfx_enter = SubResource("Resource_hy3hd")
 __editor_name = &"kaboom"
 __editor_position = Vector2(6080, 1160)
 __editor_uuid = &"9d55c10f-33be-4613-b483-063ef989c154"
@@ -669,7 +611,6 @@ fuse = NodePath("../../Sprite/Offset/Fuse")
 key = NodePath("../../Sprite/Offset/Key")
 sprite_animation_name = &"strike"
 collision_disabled_shapes = [NodePath("../../HurtBox/HurtboxShape")]
-sfx_enter = SubResource("Resource_ccar4")
 __editor_name = &"strike"
 __editor_position = Vector2(5740, 1320)
 __editor_uuid = &"059541e0-002a-4168-8fab-30866425b5b3"

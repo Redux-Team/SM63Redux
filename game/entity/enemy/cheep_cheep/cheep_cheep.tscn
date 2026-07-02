@@ -21,11 +21,8 @@
 [ext_resource type="Script" uid="uid://ceobnxgg033t3" path="res://game/entity/enemy/cheep_cheep/states/dry.gd" id="13_xq1me"]
 [ext_resource type="Script" uid="uid://c54stsmwcotyv" path="res://game/entity/enemy/cheep_cheep/states/flop.gd" id="14_qj7y6"]
 [ext_resource type="Script" uid="uid://d31u80a7usfqn" path="res://game/entity/enemy/cheep_cheep/states/strike.gd" id="15_66cei"]
-[ext_resource type="Script" uid="uid://cd63gwefr4fp4" path="res://util/playlist.gd" id="15_e3t42"]
 [ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="16_f1ga4"]
-[ext_resource type="AudioStream" uid="uid://ba2t54uhtn3i5" path="res://assets/sfx/entity/cheep_cheep/cheep_cheep_die.wav" id="16_qgp4f"]
 [ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="17_4q4ff"]
-[ext_resource type="Script" uid="uid://deiaa5u8esvnc" path="res://addons/redux_dev/components/state_machine/state_sfx_entry.gd" id="17_i3vhm"]
 [ext_resource type="Script" uid="uid://cf0fqotw8gu4p" path="res://core/custom_nodes/2d/entity_check_area.gd" id="20_b1y5l"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="21_qgp4f"]
 [ext_resource type="Script" uid="uid://dnsd2a8oriy3" path="res://util/entity/forcebox.gd" id="27_bwx7d"]
@@ -260,16 +257,6 @@ _limits = [-1.0, 1.0, -1.0, 1.0]
 _data = [Vector2(-1, -1), 0.0, 0.0, 0, 0, Vector2(-0.35, -1), 0.0, 0.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="Resource" id="Resource_dbaom"]
-script = ExtResource("15_e3t42")
-tracklist = Array[AudioStream]([ExtResource("16_qgp4f")])
-metadata/_custom_type_script = "uid://cd63gwefr4fp4"
-
-[sub_resource type="Resource" id="Resource_bwx7d"]
-script = ExtResource("17_i3vhm")
-playlist = SubResource("Resource_dbaom")
-metadata/_custom_type_script = "uid://deiaa5u8esvnc"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6u4ql"]
 size = Vector2(18, 16)
 
@@ -354,12 +341,11 @@ speed_scale = 1.0
 playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
-[node name="StateMachine" type="Node" parent="." unique_id=903449368 node_paths=PackedStringArray("initial_state", "sprite", "sfx_root", "__states")]
+[node name="StateMachine" type="Node" parent="." unique_id=903449368 node_paths=PackedStringArray("initial_state", "sprite", "__states")]
 script = ExtResource("12_imbt5")
 initial_state = NodePath("Submerged/Swim")
 root_node = NodePath("..")
 sprite = NodePath("../Sprite")
-sfx_root = NodePath("..")
 __last_editor_zoom = 0.6115912
 __states = {
 &"34fb93bc-8b7f-4c3b-b892-88e5204552ca": NodePath("Submerged/Swim"),
@@ -456,7 +442,6 @@ script = ExtResource("15_66cei")
 friction_component = NodePath("../../Components/FrictionComponent")
 sprite_animation_name = &"strike"
 collision_disabled_shapes = [NodePath("../../HitBox/CollisionShape2D"), NodePath("../../HurtBox/CollisionShape2D")]
-sfx_enter = SubResource("Resource_bwx7d")
 __editor_name = &"strike"
 __editor_position = Vector2(5700, 2600)
 __editor_uuid = &"36cdc2e5-6b19-49d9-851e-d2dd5a122900"

@@ -167,12 +167,11 @@ shape = SubResource("RectangleShape2D_rqgyx")
 stream = ExtResource("10_fbhtv")
 bus = &"SFX"
 
-[node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("initial_state", "sprite", "sfx_root", "__states")]
+[node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("initial_state", "sprite", "__states")]
 script = ExtResource("11_vpirj")
 initial_state = NodePath("Glide")
 root_node = NodePath("..")
 sprite = NodePath("../Sprite")
-sfx_root = NodePath("..")
 __last__editor_position = Vector2(1040.2024, 293.07025)
 __last_editor_zoom = 0.98497385
 __states = {
