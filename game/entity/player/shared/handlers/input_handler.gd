@@ -24,4 +24,4 @@ func is_action_just_pressed(action: String) -> bool:
 
 
 func is_action_just_released(action: String) -> bool:
-	return Input.is_action_just_pressed(action)
+	return Input.is_action_just_released(action)
