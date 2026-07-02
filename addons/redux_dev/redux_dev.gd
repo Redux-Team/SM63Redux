@@ -30,31 +30,32 @@ func _exit_tree() -> void:
 
 
 func _edit(object: Object) -> void:
-	if object is StateMachine:
-		if object == _editor._current_sm:
-			return
-		_editor.load_state_machine(object as StateMachine)
-	
-	if object is State:
-		var node: Node = object
-		while (node is not StateMachine and node.get_parent()):
-			node = node.get_parent()
-		if node is StateMachine:
-			if node == _editor._current_sm:
-				return
-			_editor.load_state_machine(node as StateMachine)
+	if not _editor:
+		return
+	var sm: StateMachine = _resolve_state_machine(object)
+	if not sm:
+		return
+	if _state_machine_editor_dock:
+		_state_machine_editor_dock.make_visible()
+	if sm == _editor._current_sm:
+		return
+	_editor.load_state_machine(sm)
 
 
 func _handles(object: Object) -> bool:
-	if object is not Node:
-		return false
-	
-	if object is StateMachine or object is State:
-		_state_machine_editor_dock.make_visible()
-	else:
-		_state_machine_editor_dock.close()
-	
-	return true
+	return object is StateMachine or object is State
+
+
+func _resolve_state_machine(object: Object) -> StateMachine:
+	if object is StateMachine:
+		return object as StateMachine
+	if object is State:
+		var node: Node = object as Node
+		while node:
+			if node is StateMachine:
+				return node as StateMachine
+			node = node.get_parent()
+	return null
 
 
 func _setup_docks() -> void:

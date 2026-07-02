@@ -2,31 +2,15 @@
 class_name EditorStateMachineGraphEdit
 extends GraphEdit
 
-
 const SCENE_STATE_NODE = preload("uid://lw2tqa550ufn")
 const SCENE_ANNOTATION = preload("uid://cxlnpbgvix7ms")
 const SCENE_ENTRY_NODE = preload("uid://cc2qqqr86hdcx")
-const SCENE_EXIT_NODE = preload("uid://bylae6s56vffn")
-const COLOR_ENTRY_EXIT: Color = Color(0.929, 0.686, 0.196)
-const PORT_TRANSITION_OUT: int = 0
-const PORT_TRANSITION_IN: int = 0
+const PORT_TRANSITION: int = 0
 const PORT_SUPERSTATE: int = 1
-
-const MENU_ITEMS: Dictionary[String, MenuItem] = {
-	"+ State": MenuItem.NEW_STATE,
-	"+ Annotation": MenuItem.NEW_ANNOTATION,
-	"+ Alias": MenuItem.NEW_ALIAS,
-}
 
 enum MenuItem {
 	NEW_STATE,
 	NEW_ANNOTATION,
-	NEW_ALIAS,
-	NEW_ENTRY,
-	NEW_EXIT,
-	CHANGE_STATE,
-	REPLACE_ALL,
-	DELETE_STATE,
 }
 
 @export var add_node_menu: PopupMenu
@@ -38,8 +22,11 @@ enum MenuItem {
 @export var connection_overlay: Control
 
 var _popup_pos: Vector2
-var _selected_transition_tid: StringName = ""
-var _transition_wire_cache: Dictionary[StringName, Array] = {}
+var _node_to_state: Dictionary[StringName, State] = {}
+var _state_to_node: Dictionary[State, StringName] = {}
+var _selected_transition: StateTransition
+var _refresh_queued: bool = false
+var _save_queued: bool = false
 
 
 func _init() -> void:
@@ -47,68 +34,657 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	if not owner._is_plugin_instance():
+	if not state_machine_editor or not state_machine_editor._is_plugin_instance():
 		return
-	
 	add_node_menu.clear()
-	for i: int in MENU_ITEMS.size():
-		add_node_menu.add_item(MENU_ITEMS.keys()[i], i)
-	
+	add_node_menu.add_item("+ State", MenuItem.NEW_STATE)
+	add_node_menu.add_item("+ Annotation", MenuItem.NEW_ANNOTATION)
 	connection_request.connect(_on_connection_request)
 	disconnection_request.connect(_on_disconnection_request)
-	connection_to_empty.connect(_on_connection_to_empty)
+	scroll_offset_changed.connect(_on_scroll_offset_changed)
 	connection_overlay.draw.connect(_on_overlay_draw)
 
 
 func _sm() -> StateMachine:
+	if not state_machine_editor:
+		return null
 	return state_machine_editor._current_sm
 
 
-func _resolve_uuid(uuid: StringName) -> StringName:
-	var data: Dictionary = _sm().__aliases.get(uuid, {})
-	return data.get("original_uuid", uuid)
+func _scene_root() -> Node:
+	var sm: StateMachine = _sm()
+	if not sm:
+		return null
+	return sm.owner if sm.owner else sm
 
 
-func _find_node_by_uuid(uuid: StringName) -> EditorStateMachineStateNode:
-	return get_node_or_null(NodePath(uuid)) as EditorStateMachineStateNode
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var mb: InputEventMouseButton = event
+		if mb.button_index == MOUSE_BUTTON_RIGHT and mb.pressed:
+			_popup_pos = (mb.position + scroll_offset) / zoom
+			add_node_menu.position = Vector2i(mb.global_position)
+			add_node_menu.popup()
+		elif mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
+			_try_inspect_connection(mb.position)
 
 
-func _find_node_by_resolved_uuid(logical_uuid: StringName) -> EditorStateMachineStateNode:
+func _on_scroll_offset_changed(_offset: Vector2) -> void:
+	connection_overlay.queue_redraw()
+	_queue_save_layout()
+
+
+func _on_add_node_menu_id_pressed(id: int) -> void:
+	match id:
+		MenuItem.NEW_STATE:
+			add_state_dialog.popup_centered()
+		MenuItem.NEW_ANNOTATION:
+			add_annotation_dialog.popup_centered()
+
+
+func _on_add_state_dialog_confirmed() -> void:
+	var label: String = new_state_name_input.text.strip_edges()
+	new_state_name_input.text = ""
+	if not _sm():
+		return
+	var base: String = label.to_pascal_case() if not label.is_empty() else "State"
+	_add_state(_selected_state_parent(), base, _popup_pos)
+
+
+func _on_add_annotation_dialog_confirmed() -> void:
+	var text: String = new_annotation_input.text.strip_edges()
+	new_annotation_input.text = ""
+	if text.is_empty() or not _sm():
+		return
+	_spawn_annotation(text, _popup_pos)
+	_queue_save_layout()
+
+
+func _selected_state_parent() -> Node:
+	var sm: StateMachine = _sm()
+	var selected: State
 	for child: Node in get_children():
-		var node: EditorStateMachineStateNode = child as EditorStateMachineStateNode
-		if node and _resolve_uuid(node.uuid) == logical_uuid:
-			return node
+		if child is EditorStateMachineStateNode:
+			var node: EditorStateMachineStateNode = child
+			if node.selected and is_instance_valid(node.state):
+				if selected:
+					return sm
+				selected = node.state
+	return selected if selected else sm
+
+
+func _add_state(parent: Node, base_name: String, pos: Vector2) -> void:
+	var sm: StateMachine = _sm()
+	if not sm or not is_instance_valid(parent):
+		return
+	var state_name: String = _unique_child_name(parent, base_name)
+	var new_state: State = State.new()
+	new_state.name = state_name
+	var relpath: String = _relpath_for_new(parent, state_name)
+	var undo: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
+	undo.create_action("Add State", UndoRedo.MERGE_DISABLE, sm)
+	undo.add_do_method(parent, &"add_child", new_state)
+	undo.add_do_property(new_state, &"owner", _scene_root())
+	undo.add_do_method(self, &"_store_state_position", relpath, pos)
+	undo.add_do_reference(new_state)
+	undo.add_do_method(self, &"_refresh")
+	undo.add_undo_method(parent, &"remove_child", new_state)
+	undo.add_undo_method(self, &"_refresh")
+	undo.commit_action()
+
+
+func _add_transition(from_state: State, to_state: State) -> void:
+	var sm: StateMachine = _sm()
+	if not sm:
+		return
+	if _find_transition(from_state, to_state):
+		return
+	var t: StateTransition = StateTransition.new()
+	t.name = _unique_child_name(from_state, "To" + String(to_state.name))
+	var undo: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
+	undo.create_action("Add Transition", UndoRedo.MERGE_DISABLE, sm)
+	undo.add_do_method(from_state, &"add_child", t)
+	undo.add_do_property(t, &"owner", _scene_root())
+	undo.add_do_property(t, &"target", to_state)
+	undo.add_do_reference(t)
+	undo.add_do_method(self, &"_refresh")
+	undo.add_undo_method(from_state, &"remove_child", t)
+	undo.add_undo_method(self, &"_refresh")
+	undo.commit_action()
+	_selected_transition = t
+	EditorInterface.inspect_object(t)
+
+
+func _remove_transition(from_state: State, to_state: State) -> void:
+	var t: StateTransition = _find_transition(from_state, to_state)
+	if not t:
+		return
+	var undo: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
+	undo.create_action("Remove Transition", UndoRedo.MERGE_DISABLE, _sm())
+	_add_remove_node_ops(undo, t)
+	undo.add_do_method(self, &"_refresh")
+	undo.add_undo_method(self, &"_refresh")
+	undo.commit_action()
+
+
+func _set_superstate(parent_state: State, child_state: State) -> void:
+	_reparent_state(parent_state, child_state)
+
+
+func _detach_superstate(child_state: State) -> void:
+	_reparent_state(_sm(), child_state)
+
+
+func _reparent_state(new_parent: Node, child_state: State) -> void:
+	var sm: StateMachine = _sm()
+	if not sm or not is_instance_valid(new_parent) or not is_instance_valid(child_state):
+		return
+	if new_parent == child_state or _is_descendant(new_parent, child_state):
+		return
+	if child_state.get_parent() == new_parent:
+		return
+	var old_parent: Node = child_state.get_parent()
+	var old_idx: int = child_state.get_index()
+	var targets: Dictionary = _capture_targets()
+	var initial: State = sm.initial_state
+	var undo: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
+	undo.create_action("Set Superstate", UndoRedo.MERGE_DISABLE, sm)
+	undo.add_do_method(old_parent, &"remove_child", child_state)
+	undo.add_do_method(new_parent, &"add_child", child_state)
+	undo.add_do_property(child_state, &"owner", _scene_root())
+	undo.add_do_method(self, &"_reown_subtree", child_state)
+	undo.add_do_method(self, &"_restore_targets", targets)
+	if initial:
+		undo.add_do_property(sm, &"initial_state", initial)
+	undo.add_do_method(self, &"_refresh")
+	undo.add_undo_method(new_parent, &"remove_child", child_state)
+	undo.add_undo_method(old_parent, &"add_child", child_state)
+	undo.add_undo_method(old_parent, &"move_child", child_state, old_idx)
+	undo.add_undo_property(child_state, &"owner", _scene_root())
+	undo.add_undo_method(self, &"_reown_subtree", child_state)
+	undo.add_undo_method(self, &"_restore_targets", targets)
+	if initial:
+		undo.add_undo_property(sm, &"initial_state", initial)
+	undo.add_undo_method(self, &"_refresh")
+	undo.commit_action()
+
+
+func _set_initial_state(target: State) -> void:
+	var sm: StateMachine = _sm()
+	if not sm:
+		return
+	var old: State = sm.initial_state
+	var undo: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
+	undo.create_action("Set Initial State", UndoRedo.MERGE_DISABLE, sm)
+	undo.add_do_property(sm, &"initial_state", target)
+	undo.add_do_method(self, &"_refresh")
+	undo.add_undo_property(sm, &"initial_state", old)
+	undo.add_undo_method(self, &"_refresh")
+	undo.commit_action()
+
+
+func _delete_states(states: Array[State]) -> void:
+	var sm: StateMachine = _sm()
+	if not sm:
+		return
+	var undo: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
+	undo.create_action("Delete State", UndoRedo.MERGE_DISABLE, sm)
+	var deleted: Dictionary = {}
+	for s: State in states:
+		deleted[s] = true
+		for d: State in _descendant_states(s):
+			deleted[d] = true
+	var clears_initial: bool = false
+	for s: State in states:
+		if _is_descendant(sm.initial_state, s):
+			clears_initial = true
+			break
+	if clears_initial:
+		undo.add_do_property(sm, &"initial_state", null)
+	for t: StateTransition in _all_transitions():
+		if deleted.has(t.target) and not _in_deleted_ancestry(t.get_parent(), deleted):
+			_add_remove_node_ops(undo, t)
+	for s: State in states:
+		if _in_deleted_ancestry(s.get_parent(), deleted):
+			continue
+		_add_remove_node_ops(undo, s)
+	if clears_initial:
+		undo.add_undo_property(sm, &"initial_state", sm.initial_state)
+	undo.add_do_method(self, &"_refresh")
+	undo.add_undo_method(self, &"_refresh")
+	undo.commit_action()
+
+
+func _on_delete_nodes_request(node_names: Array[StringName]) -> void:
+	var states_to_delete: Array[State] = []
+	var annotations_to_delete: Array[EditorStateMachineAnnotation] = []
+	for node_name: StringName in node_names:
+		var node: Node = get_node_or_null(NodePath(node_name))
+		if node is EditorStateMachineStateNode:
+			var state_node: EditorStateMachineStateNode = node
+			if is_instance_valid(state_node.state):
+				states_to_delete.append(state_node.state)
+		elif node is EditorStateMachineAnnotation:
+			annotations_to_delete.append(node)
+	if not states_to_delete.is_empty():
+		_delete_states(states_to_delete)
+	if not annotations_to_delete.is_empty():
+		for annotation: EditorStateMachineAnnotation in annotations_to_delete:
+			annotation.queue_free()
+		_queue_save_layout()
+
+
+func _on_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	if from_node == to_node:
+		return
+	var from_element: Node = get_node_or_null(NodePath(from_node))
+	var to_state: State = _node_to_state.get(to_node)
+	if from_element is EditorStateMachineEntryExitNode and to_state:
+		_set_initial_state(to_state)
+		return
+	var from_state: State = _node_to_state.get(from_node)
+	if not from_state or not to_state:
+		return
+	if from_port == PORT_TRANSITION and to_port == PORT_TRANSITION:
+		_add_transition(from_state, to_state)
+	elif from_port == PORT_SUPERSTATE and to_port == PORT_SUPERSTATE:
+		_set_superstate(from_state, to_state)
+
+
+func _on_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	var from_element: Node = get_node_or_null(NodePath(from_node))
+	if from_element is EditorStateMachineEntryExitNode:
+		_set_initial_state(null)
+		return
+	var from_state: State = _node_to_state.get(from_node)
+	var to_state: State = _node_to_state.get(to_node)
+	if not from_state or not to_state:
+		return
+	if from_port == PORT_TRANSITION and to_port == PORT_TRANSITION:
+		_remove_transition(from_state, to_state)
+	elif from_port == PORT_SUPERSTATE and to_port == PORT_SUPERSTATE:
+		_detach_superstate(to_state)
+
+
+func _add_remove_node_ops(undo: EditorUndoRedoManager, node: Node) -> void:
+	var parent: Node = node.get_parent()
+	var idx: int = node.get_index()
+	var node_owner: Node = node.owner
+	undo.add_do_method(parent, &"remove_child", node)
+	undo.add_undo_method(parent, &"add_child", node)
+	undo.add_undo_method(parent, &"move_child", node, idx)
+	undo.add_undo_property(node, &"owner", node_owner)
+	undo.add_undo_reference(node)
+
+
+func _capture_targets() -> Dictionary:
+	var result: Dictionary = {}
+	for t: StateTransition in _all_transitions():
+		result[t] = t.target
+	return result
+
+
+func _restore_targets(targets: Dictionary) -> void:
+	for t: StateTransition in targets:
+		var target: Variant = targets.get(t)
+		if is_instance_valid(t) and is_instance_valid(target):
+			t.target = target as State
+
+
+func _reown_subtree(node: Node) -> void:
+	var root: Node = _scene_root()
+	for child: Node in node.get_children():
+		child.owner = root
+		_reown_subtree(child)
+
+
+func _store_state_position(relpath: String, pos: Vector2) -> void:
+	var data: Dictionary = _load_sidecar()
+	var states: Dictionary = data.get("states", {}) as Dictionary
+	states[relpath] = [pos.x, pos.y]
+	data["states"] = states
+	_save_sidecar(data)
+
+
+func _find_transition(from_state: State, to_state: State) -> StateTransition:
+	for child: Node in from_state.get_children():
+		if child is StateTransition and (child as StateTransition).target == to_state:
+			return child
 	return null
 
 
-func _find_graph_node_for_logical(logical_uuid: StringName) -> EditorStateMachineStateNode:
-	var node: EditorStateMachineStateNode = _find_node_by_uuid(logical_uuid)
-	if node:
-		return node
-	return _find_node_by_resolved_uuid(logical_uuid)
+func _all_transitions() -> Array[StateTransition]:
+	var result: Array[StateTransition] = []
+	_gather_transitions(_sm(), result)
+	return result
+
+
+func _gather_transitions(node: Node, out: Array[StateTransition]) -> void:
+	if not node:
+		return
+	for child: Node in node.get_children():
+		if child is StateTransition:
+			out.append(child)
+		_gather_transitions(child, out)
+
+
+func _collect_states(node: Node, out: Array[State]) -> void:
+	for child: Node in node.get_children():
+		if child is State:
+			out.append(child)
+			_collect_states(child, out)
+
+
+func _descendant_states(s: State) -> Array[State]:
+	var result: Array[State] = []
+	_collect_states(s, result)
+	return result
+
+
+func _in_deleted_ancestry(node: Node, deleted: Dictionary) -> bool:
+	var n: Node = node
+	while n:
+		if deleted.has(n):
+			return true
+		n = n.get_parent()
+	return false
+
+
+func _is_descendant(node: Node, ancestor: Node) -> bool:
+	if not node or not ancestor:
+		return false
+	var n: Node = node
+	while n:
+		if n == ancestor:
+			return true
+		n = n.get_parent()
+	return false
+
+
+func _unique_child_name(parent: Node, base: String) -> String:
+	var candidate: String = base
+	var i: int = 1
+	while parent.has_node(NodePath(candidate)):
+		candidate = "%s%d" % [base, i]
+		i += 1
+	return candidate
+
+
+func _relpath_for_new(parent: Node, child_name: String) -> String:
+	var sm: StateMachine = _sm()
+	if parent == sm:
+		return child_name
+	return String(sm.get_path_to(parent)) + "/" + child_name
+
+
+func _refresh() -> void:
+	if _refresh_queued:
+		return
+	_refresh_queued = true
+	_do_refresh.call_deferred()
+
+
+func _do_refresh() -> void:
+	_refresh_queued = false
+	var to_remove: Array[Node] = []
+	for child: Node in get_children():
+		if child is EditorStateMachineStateNode or child is EditorStateMachineEntryExitNode:
+			to_remove.append(child)
+	for node: Node in to_remove:
+		node.free()
+	clear_connections()
+	_node_to_state.clear()
+	_state_to_node.clear()
+	var sm: StateMachine = _sm()
+	if not sm:
+		connection_overlay.queue_redraw()
+		return
+	var data: Dictionary = _load_sidecar()
+	_build_state_nodes(data)
+	_spawn_entry_node(data)
+	_build_connections()
+	connection_overlay.queue_redraw()
+
+
+func _reload() -> void:
+	var to_remove: Array[Node] = []
+	for child: Node in get_children():
+		if child is GraphElement:
+			to_remove.append(child)
+	for node: Node in to_remove:
+		node.free()
+	clear_connections()
+	_node_to_state.clear()
+	_state_to_node.clear()
+	_selected_transition = null
+	var sm: StateMachine = _sm()
+	if not sm:
+		connection_overlay.queue_redraw()
+		return
+	var data: Dictionary = _load_sidecar()
+	scroll_offset = _read_vec2(data.get("scroll_offset", []), scroll_offset)
+	zoom = float(data.get("zoom", zoom))
+	_spawn_annotations(data)
+	_build_state_nodes(data)
+	_spawn_entry_node(data)
+	_build_connections()
+	connection_overlay.queue_redraw()
+
+
+func _build_state_nodes(data: Dictionary) -> void:
+	var sm: StateMachine = _sm()
+	var states: Array[State] = []
+	_collect_states(sm, states)
+	var positions: Dictionary = data.get("states", {}) as Dictionary
+	var auto_index: int = 0
+	for s: State in states:
+		var node: EditorStateMachineStateNode = SCENE_STATE_NODE.instantiate()
+		var node_name: StringName = StringName(str(s.get_instance_id()))
+		node.name = node_name
+		node.state = s
+		node.editor = state_machine_editor
+		var relpath: String = String(sm.get_path_to(s))
+		var fallback: Vector2 = Vector2(float(auto_index % 6) * 260.0, float(auto_index / 6) * 140.0)
+		node.position_offset = _read_vec2(positions.get(relpath, []), fallback)
+		node.position_offset_changed.connect(_on_state_node_moved, CONNECT_DEFERRED)
+		node.node_selected.connect(_on_state_node_selected.bind(node))
+		add_child(node)
+		_node_to_state[node_name] = s
+		_state_to_node[s] = node_name
+		auto_index += 1
+
+
+func _build_connections() -> void:
+	var sm: StateMachine = _sm()
+	for s: State in _state_to_node:
+		var from_name: StringName = _state_to_node.get(s)
+		var parent: Node = s.get_parent()
+		if parent is State and _state_to_node.has(parent):
+			connect_node(_state_to_node.get(parent), PORT_SUPERSTATE, from_name, PORT_SUPERSTATE)
+		for child: Node in s.get_children():
+			if child is StateTransition:
+				var target: State = (child as StateTransition).target
+				if target and _state_to_node.has(target):
+					var to_name: StringName = _state_to_node.get(target)
+					if not is_node_connected(from_name, PORT_TRANSITION, to_name, PORT_TRANSITION):
+						connect_node(from_name, PORT_TRANSITION, to_name, PORT_TRANSITION)
+	if sm.initial_state and _state_to_node.has(sm.initial_state) and get_node_or_null(^"entry"):
+		connect_node(&"entry", PORT_TRANSITION, _state_to_node.get(sm.initial_state), PORT_TRANSITION)
+
+
+func _spawn_entry_node(data: Dictionary) -> void:
+	if get_node_or_null(^"entry"):
+		return
+	var node: EditorStateMachineEntryExitNode = SCENE_ENTRY_NODE.instantiate()
+	node.name = "entry"
+	node.is_entry = true
+	node.editor = state_machine_editor
+	node.position_offset = _read_vec2(data.get("entry_position", []), Vector2.ZERO)
+	add_child(node)
+	node.position_offset_changed.connect(_queue_save_layout, CONNECT_DEFERRED)
+
+
+func _spawn_annotations(data: Dictionary) -> void:
+	var annotations: Array = data.get("annotations", []) as Array
+	for entry: Variant in annotations:
+		if entry is Dictionary:
+			var text: String = String((entry as Dictionary).get("text", ""))
+			var pos: Vector2 = _read_vec2((entry as Dictionary).get("position", []), Vector2.ZERO)
+			_spawn_annotation(text, pos)
+
+
+func _spawn_annotation(text: String, pos: Vector2) -> void:
+	var node: EditorStateMachineAnnotation = SCENE_ANNOTATION.instantiate()
+	node.position_offset = pos
+	add_child(node)
+	node.text = text
+	node.position_offset_changed.connect(_queue_save_layout, CONNECT_DEFERRED)
+
+
+func _on_state_node_moved() -> void:
+	connection_overlay.queue_redraw()
+	_queue_save_layout()
+
+
+func _on_state_node_selected(node: EditorStateMachineStateNode) -> void:
+	_selected_transition = null
+	connection_overlay.queue_redraw()
+	node._on_node_selected()
+
+
+func _queue_save_layout() -> void:
+	if _save_queued or not is_inside_tree():
+		return
+	_save_queued = true
+	_flush_save_layout.call_deferred()
+
+
+func _flush_save_layout() -> void:
+	_save_queued = false
+	_save_layout()
+
+
+func _save_layout() -> void:
+	var sm: StateMachine = _sm()
+	if not sm:
+		return
+	var states: Dictionary = {}
+	var annotations: Array = []
+	var entry_pos: Array = [0.0, 0.0]
+	for child: Node in get_children():
+		if child is EditorStateMachineStateNode:
+			var node: EditorStateMachineStateNode = child
+			if is_instance_valid(node.state):
+				states[String(sm.get_path_to(node.state))] = [node.position_offset.x, node.position_offset.y]
+		elif child is EditorStateMachineAnnotation:
+			var anno: EditorStateMachineAnnotation = child
+			annotations.append({"text": anno.text, "position": [anno.position_offset.x, anno.position_offset.y]})
+		elif child is EditorStateMachineEntryExitNode:
+			entry_pos = [child.position_offset.x, child.position_offset.y]
+	var data: Dictionary = {
+		"states": states,
+		"annotations": annotations,
+		"scroll_offset": [scroll_offset.x, scroll_offset.y],
+		"zoom": zoom,
+		"entry_position": entry_pos,
+	}
+	_save_sidecar(data)
+
+
+func _sidecar_path() -> String:
+	var sm: StateMachine = _sm()
+	if not sm:
+		return ""
+	var root: Node = sm.owner if sm.owner else sm
+	var scene_path: String = root.scene_file_path
+	if scene_path.is_empty():
+		return ""
+	return scene_path + ".redux-layout.json"
+
+
+func _load_sidecar() -> Dictionary:
+	var path: String = _sidecar_path()
+	if path.is_empty() or not FileAccess.file_exists(path):
+		return {}
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	if not file:
+		return {}
+	var text: String = file.get_as_text()
+	file.close()
+	var parsed: Variant = JSON.parse_string(text)
+	if parsed is Dictionary:
+		return parsed as Dictionary
+	return {}
+
+
+func _save_sidecar(data: Dictionary) -> void:
+	var path: String = _sidecar_path()
+	if path.is_empty():
+		return
+	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if not file:
+		return
+	file.store_string(JSON.stringify(data, "\t"))
+	file.close()
+
+
+func _read_vec2(value: Variant, fallback: Vector2) -> Vector2:
+	if value is Array and (value as Array).size() >= 2:
+		var arr: Array = value
+		return Vector2(float(arr.get(0)), float(arr.get(1)))
+	return fallback
+
+
+func _try_inspect_connection(mouse_pos: Vector2) -> void:
+	for conn: Dictionary in get_connection_list():
+		if int(conn.get("from_port")) != PORT_TRANSITION or int(conn.get("to_port")) != PORT_TRANSITION:
+			continue
+		var from_name: StringName = StringName(conn.get("from_node"))
+		var to_name: StringName = StringName(conn.get("to_node"))
+		if not _node_to_state.has(from_name) or not _node_to_state.has(to_name):
+			continue
+		var from: GraphNode = get_node_or_null(NodePath(from_name)) as GraphNode
+		var to: GraphNode = get_node_or_null(NodePath(to_name)) as GraphNode
+		if not from or not to:
+			continue
+		var from_pos: Vector2 = (from.position_offset + from.get_output_port_position(0)) * zoom - scroll_offset
+		var to_pos: Vector2 = (to.position_offset + to.get_input_port_position(0)) * zoom - scroll_offset
+		var mid: Vector2 = _bezier_midpoint(from_pos, to_pos)
+		if mouse_pos.distance_to(mid) >= 12.0:
+			continue
+		var t: StateTransition = _find_transition(_node_to_state.get(from_name), _node_to_state.get(to_name))
+		if t:
+			_selected_transition = t
+			EditorInterface.inspect_object(t)
+			connection_overlay.queue_redraw()
+			return
+	_selected_transition = null
+	connection_overlay.queue_redraw()
 
 
 func _on_overlay_draw() -> void:
 	for conn: Dictionary in get_connection_list():
-		if conn.from_port != 0 or conn.to_port != 0:
+		if int(conn.get("from_port")) != PORT_TRANSITION or int(conn.get("to_port")) != PORT_TRANSITION:
 			continue
-		var from: GraphNode = get_node_or_null(NodePath(conn.from_node)) as GraphNode
-		var to: GraphNode = get_node_or_null(NodePath(conn.to_node)) as GraphNode
+		var from_name: StringName = StringName(conn.get("from_node"))
+		var to_name: StringName = StringName(conn.get("to_node"))
+		if not _node_to_state.has(from_name) or not _node_to_state.has(to_name):
+			continue
+		var from: GraphNode = get_node_or_null(NodePath(from_name)) as GraphNode
+		var to: GraphNode = get_node_or_null(NodePath(to_name)) as GraphNode
 		if not from or not to:
 			continue
-		
-		var logical_from: StringName = _resolve_uuid(StringName(conn.from_node))
-		var logical_to: StringName = _resolve_uuid(StringName(conn.to_node))
-		var is_selected: bool = false
-		for tid: StringName in _sm().__transitions:
-			var t: StateTransition = _sm().__transitions.get(tid) as StateTransition
-			if not t:
-				continue
-			if t.__from_uuid == logical_from and t.__to_uuid == logical_to:
-				is_selected = tid == _selected_transition_tid
-				break
-		
-		_draw_connection_chevron(from, to, is_selected)
+		_draw_connection_chevron(from, to, _is_selected_connection(from_name, to_name))
+
+
+func _is_selected_connection(from_name: StringName, to_name: StringName) -> bool:
+	if not is_instance_valid(_selected_transition):
+		return false
+	var src: Node = _selected_transition.get_parent()
+	var tgt: State = _selected_transition.target
+	if not src or not tgt:
+		return false
+	return _state_to_node.get(src, StringName("")) == from_name and _state_to_node.get(tgt, StringName("")) == to_name
 
 
 func _draw_connection_chevron(from: GraphNode, to: GraphNode, is_selected: bool) -> void:
@@ -117,7 +693,7 @@ func _draw_connection_chevron(from: GraphNode, to: GraphNode, is_selected: bool)
 	var mid: Vector2 = _bezier_midpoint(from_pos, to_pos)
 	var mid_tangent: Vector2 = _bezier_midtangent(from_pos, to_pos).normalized()
 	var perp: Vector2 = Vector2(-mid_tangent.y, mid_tangent.x)
-	var size: float = 7.0 if not is_selected else 9.0
+	var size: float = 9.0 if is_selected else 7.0
 	var tip: Vector2 = mid + mid_tangent * size
 	var left: Vector2 = mid - mid_tangent * size * 0.5 + perp * size
 	var right: Vector2 = mid - mid_tangent * size * 0.5 - perp * size
@@ -125,20 +701,19 @@ func _draw_connection_chevron(from: GraphNode, to: GraphNode, is_selected: bool)
 	connection_overlay.draw_colored_polygon(PackedVector2Array([left, tip, right]), col)
 
 
-func _bezier_cp(from_pos: Vector2, to_pos: Vector2) -> Array[Vector2]:
+func _bezier_control_offset(from_pos: Vector2, to_pos: Vector2) -> Vector2:
 	var tangent: float = min(200.0, from_pos.distance_to(to_pos) * 0.5) * zoom
-	var result: Array[Vector2] = [from_pos + Vector2(tangent, 0.0), to_pos - Vector2(tangent, 0.0)]
-	return result
+	return Vector2(tangent, 0.0)
 
 
 func _bezier_midpoint(from_pos: Vector2, to_pos: Vector2) -> Vector2:
-	var cp: Array[Vector2] = _bezier_cp(from_pos, to_pos)
-	return _bezier_point(from_pos, cp[0], cp[1], to_pos, 0.5)
+	var offset: Vector2 = _bezier_control_offset(from_pos, to_pos)
+	return _bezier_point(from_pos, from_pos + offset, to_pos - offset, to_pos, 0.5)
 
 
 func _bezier_midtangent(from_pos: Vector2, to_pos: Vector2) -> Vector2:
-	var cp: Array[Vector2] = _bezier_cp(from_pos, to_pos)
-	return _bezier_tangent(from_pos, cp[0], cp[1], to_pos, 0.5)
+	var offset: Vector2 = _bezier_control_offset(from_pos, to_pos)
+	return _bezier_tangent(from_pos, from_pos + offset, to_pos - offset, to_pos, 0.5)
 
 
 func _bezier_point(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, t: float) -> Vector2:
@@ -149,690 +724,3 @@ func _bezier_point(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, t: float)
 func _bezier_tangent(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, t: float) -> Vector2:
 	var u: float = 1.0 - t
 	return 3.0 * u * u * (p1 - p0) + 6.0 * u * t * (p2 - p1) + 3.0 * t * t * (p3 - p2)
-
-
-func _on_connection_request(from_node: StringName, from_slot: int, to_node: StringName, to_slot: int) -> void:
-	var from: Node = get_node_or_null(NodePath(from_node))
-	var to: Node = get_node_or_null(NodePath(to_node))
-	if not from or not to or from == to:
-		return
-	
-	if from is EditorStateMachineEntryExitNode and from.is_entry and to is EditorStateMachineStateNode:
-		_sm().__entry_target_uuid = _resolve_uuid(StringName(to_node))
-		if is_node_connected(from_node, 0, to_node, 0):
-			disconnect_node(from_node, 0, to_node, 0)
-		connect_node(from_node, 0, to_node, 0, true)
-		return
-	
-	if from is EditorStateMachineStateNode and to is EditorStateMachineEntryExitNode and not to.is_entry:
-		_sm().__exit_source_uuid = _resolve_uuid(StringName(from_node))
-		if is_node_connected(from_node, 0, to_node, 0):
-			disconnect_node(from_node, 0, to_node, 0)
-		connect_node(from_node, 0, to_node, 0, true)
-		return
-	
-	var from_state: EditorStateMachineStateNode = from as EditorStateMachineStateNode
-	var to_state: EditorStateMachineStateNode = to as EditorStateMachineStateNode
-	if not from_state or not to_state:
-		return
-	
-	if from_slot == 0 and to_slot == 1:
-		_connect_superstate(from_state, to_state)
-	elif from_slot == 0 and to_slot == 0:
-		_connect_transition(from_state, to_state)
-	elif from_slot == 1 and to_slot == 1 and not from_state.superstate_uuid.is_empty():
-		var wire_from: EditorStateMachineStateNode = _find_node_by_uuid(from_state.superstate_uuid)
-		if not wire_from:
-			return
-		to_state._set_superstate(from_state.superstate_uuid)
-		var state: State = _sm().__states.get(to_state.uuid)
-		if state:
-			state.__editor_superstate_wire_uuid = from_state.uuid
-		var parent_state: State = _sm().__states.get(_resolve_uuid(from_state.superstate_uuid))
-		var to_resolved: State = _sm().__states.get(_resolve_uuid(to_state.uuid))
-		if parent_state and to_resolved:
-			to_resolved.get_parent().remove_child(to_resolved)
-			parent_state.add_child(to_resolved)
-			to_resolved.owner = _sm().owner
-		connect_node(from_node, 1, to_node, 1, true)
-
-
-func _on_disconnection_request(from_node: StringName, from_slot: int, to_node: StringName, to_slot: int) -> void:
-	if from_slot == 0 and to_slot == 1:
-		var to: EditorStateMachineStateNode = _find_node_by_uuid(StringName(to_node))
-		if not to:
-			return
-		_detach_superstate(to)
-		disconnect_node(from_node, from_slot, to_node, to_slot)
-	elif from_slot == 0 and to_slot == 0:
-		var from: EditorStateMachineStateNode = _find_node_by_uuid(StringName(from_node))
-		var to: EditorStateMachineStateNode = _find_node_by_uuid(StringName(to_node))
-		if not from or not to:
-			return
-		_remove_transition(_resolve_uuid(from.uuid), _resolve_uuid(to.uuid))
-		disconnect_node(from_node, from_slot, to_node, to_slot)
-	elif from_slot == 1 and to_slot == 1:
-		var to: EditorStateMachineStateNode = _find_node_by_uuid(StringName(to_node))
-		if not to:
-			return
-		_detach_superstate(to)
-		disconnect_node(from_node, from_slot, to_node, to_slot)
-
-
-func _detach_superstate(node: EditorStateMachineStateNode) -> void:
-	node._set_superstate("")
-	var state: State = _sm().__states.get(_resolve_uuid(node.uuid))
-	if state:
-		state.get_parent().remove_child(state)
-		_sm().add_child(state)
-		state.owner = _sm().owner
-
-
-func _connect_transition(from: EditorStateMachineStateNode, to: EditorStateMachineStateNode) -> void:
-	var logical_from: StringName = _resolve_uuid(from.uuid)
-	var logical_to: StringName = _resolve_uuid(to.uuid)
-	if _transition_exists(logical_from, logical_to):
-		return
-	
-	var tid: StringName = StringName(Packer.generate_uuid())
-	var transition: StateTransition = StateTransition.new()
-	transition.resource_local_to_scene = true
-	transition.__from_uuid = logical_from
-	transition.__to_uuid = logical_to
-	transition.__from_node_uuid = from.uuid
-	transition.__to_node_uuid = to.uuid
-	_sm().__transitions[tid] = transition
-	_transition_wire_cache[tid] = [from.uuid, to.uuid]
-	
-	connect_node(from.uuid, 0, to.uuid, 0, true)
-	queue_redraw()
-	EditorInterface.inspect_object(transition)
-
-
-func _connect_superstate(from: EditorStateMachineStateNode, to: EditorStateMachineStateNode) -> void:
-	for conn: Dictionary in get_connection_list():
-		if conn.from_node == StringName(from.uuid) and conn.from_port == 0 and conn.to_port == 1:
-			disconnect_node(conn.from_node, conn.from_port, conn.to_node, conn.to_port)
-			break
-	
-	to._set_superstate(from.uuid)
-	var state: State = _sm().__states.get(to.uuid)
-	if state:
-		state.__editor_superstate_wire_uuid = from.uuid
-	
-	var from_state: State = _sm().__states.get(_resolve_uuid(from.uuid))
-	var to_state: State = _sm().__states.get(_resolve_uuid(to.uuid))
-	if from_state and to_state:
-		to_state.get_parent().remove_child(to_state)
-		from_state.add_child(to_state)
-		to_state.owner = _sm().owner
-	
-	connect_node(from.uuid, 0, to.uuid, 1, true)
-
-
-func _transition_exists(logical_from: StringName, logical_to: StringName) -> bool:
-	for tid: StringName in _sm().__transitions:
-		var t: StateTransition = _sm().__transitions.get(tid) as StateTransition
-		if t.__from_uuid == logical_from and t.__to_uuid == logical_to:
-			return true
-	return false
-
-
-func _remove_transition(logical_from: StringName, logical_to: StringName) -> void:
-	for tid: StringName in _sm().__transitions:
-		var t: StateTransition = _sm().__transitions.get(tid) as StateTransition
-		if t.__from_uuid == logical_from and t.__to_uuid == logical_to:
-			_sm().__transitions.erase(tid)
-			_transition_wire_cache.erase(tid)
-			return
-
-
-func _restore_connections() -> void:
-	if _sm().__has_entry:
-		_spawn_entry_node()
-	if _sm().__has_exit:
-		_spawn_exit_node()
-	
-	if not _sm().__entry_target_uuid.is_empty():
-		var target: EditorStateMachineStateNode = _find_graph_node_for_logical(_sm().__entry_target_uuid)
-		if target:
-			connect_node("entry", 0, target.uuid, 0, true)
-	
-	if not _sm().__exit_source_uuid.is_empty():
-		var source: EditorStateMachineStateNode = _find_graph_node_for_logical(_sm().__exit_source_uuid)
-		if source:
-			connect_node(source.uuid, 0, "exit", 0, true)
-	
-	for tid: StringName in _sm().__transitions:
-		var t: StateTransition = _sm().__transitions.get(tid) as StateTransition
-		if not is_instance_valid(t):
-			continue
-		var wire: Array = _transition_wire_cache.get(tid, [])
-		var from_node_uuid: StringName = wire[0] if wire.size() > 0 else t.__from_node_uuid
-		var to_node_uuid: StringName = wire[1] if wire.size() > 1 else t.__to_node_uuid
-		if from_node_uuid.is_empty():
-			from_node_uuid = t.__from_uuid
-		if to_node_uuid.is_empty():
-			to_node_uuid = t.__to_uuid
-		var from: EditorStateMachineStateNode = _find_node_by_uuid(from_node_uuid)
-		if not from:
-			from = _find_graph_node_for_logical(t.__from_uuid)
-		var to: EditorStateMachineStateNode = _find_node_by_uuid(to_node_uuid)
-		if not to:
-			to = _find_graph_node_for_logical(t.__to_uuid)
-		if from and to:
-			connect_node(from.uuid, 0, to.uuid, 0, true)
-	
-	for uuid: StringName in _sm().__states:
-		var state: State = _sm().__states.get(uuid) as State
-		if not is_instance_valid(state) or state.__editor_superstate_uuid.is_empty():
-			continue
-		var to: EditorStateMachineStateNode = _find_node_by_uuid(uuid)
-		var wire_from: EditorStateMachineStateNode = _find_node_by_uuid(state.__editor_superstate_wire_uuid)
-		if not to or not wire_from:
-			continue
-		wire_from._set_entry_port_enabled(true)
-		var is_sibling: bool = wire_from.uuid != state.__editor_superstate_uuid
-		if is_sibling:
-			connect_node(wire_from.uuid, 1, to.uuid, 1, true)
-		else:
-			connect_node(wire_from.uuid, 0, to.uuid, 1, true)
-	
-	connection_overlay.queue_redraw()
-
-
-func _on_connection_to_empty(from_node: StringName, from_slot: int, _release_pos: Vector2) -> void:
-	if from_slot == PORT_TRANSITION_OUT and _find_node_by_uuid(from_node):
-		EditorInterface.inspect_object(null)
-
-
-func _clear_superstate_references(deleted_uuid: StringName) -> void:
-	for child: Node in get_children():
-		var node: EditorStateMachineStateNode = child as EditorStateMachineStateNode
-		if node and node.superstate_uuid == deleted_uuid:
-			node._set_superstate("")
-
-
-func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
-		_rebuild_add_menu()
-		add_node_menu.position = event.global_position
-		add_node_menu.popup()
-		_popup_pos = (event.position + scroll_offset) / zoom
-	
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		_try_inspect_connection(event.position)
-	
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
-		_try_open_connection_script(event.position)
-	
-	_sm().__last__editor_position = scroll_offset
-	_sm().__last_editor_zoom = zoom
-	connection_overlay.queue_redraw()
-
-
-func _try_open_connection_script(mouse_pos: Vector2) -> void:
-	for conn: Dictionary in get_connection_list():
-		if conn.from_port != 0 or conn.to_port != 0:
-			continue
-		var from: GraphNode = get_node_or_null(NodePath(conn.from_node)) as GraphNode
-		var to: GraphNode = get_node_or_null(NodePath(conn.to_node)) as GraphNode
-		if not from or not to:
-			continue
-		
-		var from_pos: Vector2 = (from.position_offset + from.get_output_port_position(0)) * zoom - scroll_offset
-		var to_pos: Vector2 = (to.position_offset + to.get_input_port_position(0)) * zoom - scroll_offset
-		var mid: Vector2 = _bezier_midpoint(from_pos, to_pos)
-		if mouse_pos.distance_to(mid) >= 12.0:
-			continue
-		
-		var logical_from: StringName = _resolve_uuid(StringName(conn.from_node))
-		var logical_to: StringName = _resolve_uuid(StringName(conn.to_node))
-		for tid: StringName in _sm().__transitions:
-			var t: StateTransition = _sm().__transitions.get(tid) as StateTransition
-			if not t:
-				continue
-			if t.__from_uuid == logical_from and t.__to_uuid == logical_to:
-				EditorStateMachineEditor.prompt_transition_script(t)
-				return
-
-
-func _try_inspect_connection(mouse_pos: Vector2) -> void:
-	for conn: Dictionary in get_connection_list():
-		if conn.from_port != 0 or conn.to_port != 0:
-			continue
-		var from: GraphNode = get_node_or_null(NodePath(conn.from_node)) as GraphNode
-		var to: GraphNode = get_node_or_null(NodePath(conn.to_node)) as GraphNode
-		if not from or not to:
-			continue
-		
-		var from_pos: Vector2 = (from.position_offset + from.get_output_port_position(0)) * zoom - scroll_offset
-		var to_pos: Vector2 = (to.position_offset + to.get_input_port_position(0)) * zoom - scroll_offset
-		var mid: Vector2 = _bezier_midpoint(from_pos, to_pos)
-		if mouse_pos.distance_to(mid) >= 12.0:
-			continue
-		
-		var logical_from: StringName = _resolve_uuid(StringName(conn.from_node))
-		var logical_to: StringName = _resolve_uuid(StringName(conn.to_node))
-		for tid: StringName in _sm().__transitions:
-			var t: StateTransition = _sm().__transitions.get(tid) as StateTransition
-			if not t:
-				continue
-			if t.__from_uuid == logical_from and t.__to_uuid == logical_to:
-				_selected_transition_tid = tid
-				EditorInterface.inspect_object(t)
-				connection_overlay.queue_redraw()
-				return
-	
-	_selected_transition_tid = ""
-	connection_overlay.queue_redraw()
-
-
-func _rebuild_add_menu() -> void:
-	var selected_state: EditorStateMachineStateNode
-	for child: Node in get_children():
-		var node: EditorStateMachineStateNode = child as EditorStateMachineStateNode
-		if node and node.selected:
-			if selected_state:
-				selected_state = null
-				break
-			selected_state = node
-	
-	add_node_menu.clear()
-	add_node_menu.add_item("+ State", MenuItem.NEW_STATE)
-	add_node_menu.add_item("+ Annotation", MenuItem.NEW_ANNOTATION)
-	
-	if selected_state:
-		add_node_menu.add_item("+ Alias", MenuItem.NEW_ALIAS)
-		add_node_menu.add_separator()
-		add_node_menu.add_item("Change State", MenuItem.CHANGE_STATE)
-		add_node_menu.add_item("Replace All", MenuItem.REPLACE_ALL)
-		add_node_menu.add_separator()
-		add_node_menu.add_item("Delete", MenuItem.DELETE_STATE)
-	
-	add_node_menu.add_separator()
-	var control_flow_menu: PopupMenu = PopupMenu.new()
-	control_flow_menu.name = "ControlFlow"
-	control_flow_menu.add_item("+ Entry", MenuItem.NEW_ENTRY)
-	control_flow_menu.add_item("+ Exit", MenuItem.NEW_EXIT)
-	control_flow_menu.id_pressed.connect(_on_add_node_menu_id_pressed)
-	add_node_menu.add_child(control_flow_menu)
-	add_node_menu.add_submenu_item("Control Flow", "ControlFlow")
-
-
-func _on_delete_nodes_request(node_names: Array[StringName]) -> void:
-	_on_state_node_deselected()
-	for node_name: StringName in node_names:
-		var node: Node = find_child(node_name, false, false)
-		if not node:
-			continue
-		
-		if node is EditorStateMachineStateNode:
-			if not node.alias_of.is_empty():
-				_remove_alias(node.uuid)
-			else:
-				_remove_state(node.uuid)
-				_clear_superstate_references(node.uuid)
-		elif node is EditorStateMachineAnnotation:
-			_remove_annotation(node.uuid)
-		elif node is EditorStateMachineEntryExitNode:
-			if node.is_entry:
-				_sm().__has_entry = false
-				_sm().__entry_target_uuid = ""
-			else:
-				_sm().__has_exit = false
-				_sm().__exit_source_uuid = ""
-		
-		node.queue_free()
-
-
-func _on_add_node_menu_id_pressed(id: int) -> void:
-	match id:
-		MenuItem.NEW_STATE:
-			add_state_dialog.popup_centered()
-		MenuItem.NEW_ALIAS:
-			_try_add_alias()
-		MenuItem.NEW_ANNOTATION:
-			add_annotation_dialog.popup_centered()
-		MenuItem.NEW_ENTRY:
-			_add_entry_node()
-		MenuItem.NEW_EXIT:
-			_add_exit_node()
-		MenuItem.CHANGE_STATE:
-			_try_change_state(false)
-		MenuItem.REPLACE_ALL:
-			_try_change_state(true)
-		MenuItem.DELETE_STATE:
-			_delete_selected_state()
-
-
-func _delete_selected_state() -> void:
-	var to_delete: Array[StringName] = []
-	for child: Node in get_children():
-		var node: EditorStateMachineStateNode = child as EditorStateMachineStateNode
-		if node and node.selected:
-			to_delete.append(node.name)
-	if not to_delete.is_empty():
-		_on_delete_nodes_request(to_delete)
-
-
-func _try_add_alias() -> void:
-	var selected: EditorStateMachineStateNode
-	for child: Node in get_children():
-		var node: EditorStateMachineStateNode = child as EditorStateMachineStateNode
-		if node and node.selected:
-			selected = node
-			break
-	if not selected:
-		EditorInterface.get_editor_toaster().push_toast("Select a state node first to create an alias.")
-		return
-	_add_alias(_resolve_uuid(selected.uuid), _popup_pos)
-
-
-func _add_alias(original_uuid: StringName, pos: Vector2) -> void:
-	var alias_uuid: StringName = StringName(Packer.generate_uuid())
-	_sm().__aliases[alias_uuid] = { "original_uuid": original_uuid, "position": pos }
-	_spawn_alias_node(alias_uuid)
-
-
-func _remove_alias(alias_uuid: StringName) -> void:
-	_sm().__aliases.erase(alias_uuid)
-
-
-func _try_change_state(replace_all: bool) -> void:
-	var selected: EditorStateMachineStateNode
-	for child: Node in get_children():
-		var node: EditorStateMachineStateNode = child as EditorStateMachineStateNode
-		if node and node.selected:
-			selected = node
-			break
-	if not selected:
-		return
-	
-	EditorInterface.popup_node_selector(_on_change_state_picked.bind(selected, replace_all), ["State"])
-
-
-func _on_change_state_picked(path: NodePath, source_node: EditorStateMachineStateNode, replace_all: bool) -> void:
-	if path.is_empty():
-		return
-	
-	var target_state: State = _sm().owner.get_node_or_null(path) as State
-	if not target_state:
-		return
-	
-	var target_uuid: StringName = StringName("")
-	for uuid: StringName in _sm().__states:
-		if _sm().__states.get(uuid) == target_state:
-			target_uuid = uuid
-			break
-	if target_uuid.is_empty():
-		return
-	
-	var original_uuid: StringName = _resolve_uuid(source_node.uuid)
-	
-	if replace_all:
-		for child: Node in get_children():
-			var node: EditorStateMachineStateNode = child as EditorStateMachineStateNode
-			if not node:
-				continue
-			if _resolve_uuid(node.uuid) == original_uuid:
-				_remap_node(node, target_uuid)
-	else:
-		_remap_node(source_node, target_uuid)
-	
-	_on_state_node_deselected()
-
-
-
-func _remap_node(node: EditorStateMachineStateNode, target_uuid: StringName) -> void:
-	var target_state: State = _sm().__states.get(target_uuid) as State
-	if not target_state:
-		return
-	
-	if not node.alias_of.is_empty():
-		var data: Dictionary = _sm().__aliases.get(node.uuid, {})
-		data["original_uuid"] = target_uuid
-		_sm().__aliases[node.uuid] = data
-		node.alias_of = target_uuid
-	else:
-		var old_uuid: StringName = StringName(node.uuid)
-		node.uuid = target_uuid
-		node.name = target_uuid
-		
-		for tid: StringName in _sm().__transitions:
-			var t: StateTransition = _sm().__transitions.get(tid) as StateTransition
-			if not t:
-				continue
-			if t.__from_node_uuid == old_uuid:
-				t.__from_node_uuid = target_uuid
-				t.__from_uuid = target_uuid
-			if t.__to_node_uuid == old_uuid:
-				t.__to_node_uuid = target_uuid
-				t.__to_uuid = target_uuid
-	
-	node.title = target_state.__editor_name
-	node._update_script_button()
-	
-	clear_connections()
-	_restore_connections.call_deferred()
-
-
-func _add_entry_node() -> void:
-	if _sm().__has_entry:
-		EditorInterface.get_editor_toaster().push_toast("An entry node already exists.")
-		return
-	_sm().__has_entry = true
-	_sm().__entry_node_position = _popup_pos
-	_spawn_entry_node()
-
-
-func _add_exit_node() -> void:
-	if _sm().__has_exit:
-		EditorInterface.get_editor_toaster().push_toast("An exit node already exists.")
-		return
-	_sm().__has_exit = true
-	_sm().__exit_node_position = _popup_pos
-	_spawn_exit_node()
-
-
-func _spawn_entry_node() -> void:
-	if get_node_or_null("entry"):
-		return
-	var node: EditorStateMachineEntryExitNode = SCENE_ENTRY_NODE.instantiate()
-	node.name = "entry"
-	node.position_offset = _sm().__entry_node_position
-	node.is_entry = true
-	node.editor = owner
-	node.position_offset_changed.connect(func() -> void:
-		_sm().__entry_node_position = node.position_offset)
-	node.node_selected.connect(_on_entry_exit_selected.bind(node))
-	add_child(node)
-
-
-func _spawn_exit_node() -> void:
-	if get_node_or_null("exit"):
-		return
-	var node: EditorStateMachineEntryExitNode = SCENE_EXIT_NODE.instantiate()
-	node.name = "exit"
-	node.position_offset = _sm().__exit_node_position
-	node.is_entry = false
-	node.editor = owner
-	node.position_offset_changed.connect(func() -> void:
-		_sm().__exit_node_position = node.position_offset)
-	node.node_selected.connect(_on_entry_exit_selected.bind(node))
-	add_child(node)
-
-
-func _on_entry_exit_selected(_node: EditorStateMachineEntryExitNode) -> void:
-	EditorInterface.inspect_object(null)
-
-
-func _spawn_alias_node(alias_uuid: StringName) -> void:
-	var data: Dictionary = _sm().__aliases.get(alias_uuid, {})
-	if data.is_empty():
-		return
-	var original_uuid: StringName = data.get("original_uuid", "")
-	var state: State = _sm().__states.get(original_uuid)
-	if not state:
-		return
-	
-	var node: EditorStateMachineStateNode = SCENE_STATE_NODE.instantiate()
-	node.name = alias_uuid
-	node.uuid = alias_uuid
-	node.alias_of = original_uuid
-	node.title = state.__editor_name
-	node.position_offset = data.get("position", Vector2.ZERO)
-	node.superstate_uuid = state.__editor_superstate_uuid
-	node.editor = owner
-	node.position_offset_changed.connect(_on_state_node_moved.bind(node), CONNECT_DEFERRED)
-	node.node_selected.connect(_on_state_node_selected.bind(node))
-	node.node_deselected.connect(_on_state_node_deselected)
-	add_child(node)
-
-
-func _on_add_state_dialog_confirmed() -> void:
-	var label: String = new_state_name_input.text.strip_edges()
-	new_state_name_input.text = ""
-	if label.is_empty():
-		return
-	if _state_label_exists(label):
-		EditorInterface.get_editor_toaster().push_toast("A state with that name already exists!")
-		return
-	_add_state(label, _popup_pos)
-
-
-func _on_add_annotation_dialog_confirmed() -> void:
-	var text: String = new_annotation_input.text.strip_edges()
-	new_annotation_input.text = ""
-	if text.is_empty():
-		return
-	_add_annotation(text, _popup_pos)
-
-
-func _state_label_exists(label: String) -> bool:
-	for uuid: StringName in _sm().__states:
-		var state: State = _sm().__states.get(uuid)
-		if state.__editor_name == label:
-			return true
-	return false
-
-
-func _add_state(label: String, pos: Vector2) -> void:
-	var uuid: StringName = StringName(Packer.generate_uuid())
-	var state: State = State.new()
-	state.__editor_name = label
-	state.__editor_position = pos
-	state.__editor_uuid = uuid
-	
-	_sm().add_child(state)
-	state.name = label.to_pascal_case()
-	state.owner = _sm().owner
-	_sm().__states[uuid] = state
-	
-	_spawn_state_node(uuid)
-
-
-func _remove_state(uuid: StringName) -> void:
-	var state: State = _sm().__states.get(uuid)
-	if state:
-		state.queue_free()
-	_sm().__states.erase(uuid)
-	for tid: StringName in _sm().__transitions.keys():
-		var t: StateTransition = _sm().__transitions.get(tid)
-		if t.__from_uuid == uuid or t.__to_uuid == uuid:
-			_sm().__transitions.erase(tid)
-
-
-func _spawn_state_node(uuid: StringName) -> void:
-	var state: State = _sm().__states.get(uuid)
-	if not state:
-		return
-	
-	var node: EditorStateMachineStateNode = SCENE_STATE_NODE.instantiate()
-	node.name = uuid
-	node.uuid = uuid
-	node.title = state.__editor_name
-	node.position_offset = state.__editor_position
-	node.superstate_uuid = state.__editor_superstate_uuid
-	node.editor = owner
-	node.position_offset_changed.connect(_on_state_node_moved.bind(node), CONNECT_DEFERRED)
-	node.node_selected.connect(_on_state_node_selected.bind(node))
-	node.node_deselected.connect(_on_state_node_deselected)
-	add_child(node)
-
-
-func _add_annotation(text: String, pos: Vector2) -> void:
-	var uuid: StringName = StringName(Packer.generate_uuid())
-	_sm().__annotations[uuid] = { "text": text, "position": pos }
-	_spawn_annotation_node(uuid)
-
-
-func _remove_annotation(uuid: StringName) -> void:
-	_sm().__annotations.erase(uuid)
-
-
-func _spawn_annotation_node(uuid: StringName) -> void:
-	var data: Dictionary = _sm().__annotations.get(uuid, {})
-	if data.is_empty():
-		return
-	
-	var node: EditorStateMachineAnnotation = SCENE_ANNOTATION.instantiate()
-	node.uuid = uuid
-	node.text = data.get("text", "")
-	node.position_offset = data.get("position", Vector2.ZERO)
-	node.position_offset_changed.connect(_on_annotation_moved.bind(node), CONNECT_DEFERRED)
-	add_child(node)
-
-
-func _on_state_node_selected(node: EditorStateMachineStateNode) -> void:
-	_selected_transition_tid = ""
-	connection_overlay.queue_redraw()
-	node._on_node_selected()
-	
-	var connected_uuids: Dictionary[StringName, bool] = {}
-	for conn: Dictionary in get_connection_list():
-		if conn.from_node == StringName(node.uuid) or conn.to_node == StringName(node.uuid):
-			connected_uuids[StringName(conn.from_node)] = true
-			connected_uuids[StringName(conn.to_node)] = true
-	
-	var conns_snapshot: Array[Dictionary] = get_connection_list()
-	for conn: Dictionary in conns_snapshot:
-		if not connected_uuids.has(StringName(conn.from_node)) and not connected_uuids.has(StringName(conn.to_node)):
-			disconnect_node(conn.from_node, conn.from_port, conn.to_node, conn.to_port)
-	
-	for child: Node in get_children():
-		var other: EditorStateMachineStateNode = child as EditorStateMachineStateNode
-		if not other or other == node:
-			continue
-		if connected_uuids.has(StringName(other.uuid)):
-			other.show()
-		else:
-			other.modulate.a = 0.4
-
-
-func _on_state_node_deselected() -> void:
-	for child: Node in get_children():
-		var other: EditorStateMachineStateNode = child as EditorStateMachineStateNode
-		if not other:
-			continue
-		other.show()
-		other.modulate.a = 1.0
-	
-	_restore_connections()
-
-
-func _on_state_node_moved(node: EditorStateMachineStateNode) -> void:
-	if not node.alias_of.is_empty():
-		var data: Dictionary = _sm().__aliases.get(node.uuid, {})
-		data["position"] = node.position_offset
-		_sm().__aliases[node.uuid] = data
-	else:
-		var state: State = _sm().__states.get(node.uuid)
-		if state:
-			state.__editor_position = node.position_offset
-
-
-func _on_annotation_moved(node: EditorStateMachineAnnotation) -> void:
-	var data: Dictionary = _sm().__annotations.get(node.uuid, {})
-	data["position"] = node.position_offset
-	_sm().__annotations[node.uuid] = data

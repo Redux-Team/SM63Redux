@@ -4,7 +4,6 @@ extends GraphElement
 
 @export var label: Label
 
-var uuid: String = ""
 var text: String = "":
 	set(value):
 		text = value

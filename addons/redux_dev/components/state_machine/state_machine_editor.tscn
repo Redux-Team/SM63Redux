@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://ryatl5meky7h" path="res://addons/redux_dev/components/state_machine/state_machine_editor.gd" id="1_kuqj5"]
 [ext_resource type="Script" uid="uid://d35km3u86rpo3" path="res://addons/redux_dev/components/state_machine/state_machine_graph_edit.gd" id="2_hpxgv"]
 
-[node name="State Machine" type="Control" unique_id=482283223 node_paths=PackedStringArray("graph_edit", "state_machine_graph_edit", "save_script_dialog")]
+[node name="State Machine" type="Control" unique_id=482283223 node_paths=PackedStringArray("graph_edit", "state_machine_graph_edit", "current_node_button")]
 clip_contents = true
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 3
@@ -15,7 +15,7 @@ grow_vertical = 2
 script = ExtResource("1_kuqj5")
 graph_edit = NodePath("VBoxContainer/StateMachineContainer/StateMachineGraphEdit")
 state_machine_graph_edit = NodePath("VBoxContainer/StateMachineContainer/StateMachineGraphEdit")
-save_script_dialog = NodePath("SaveScriptDialog")
+current_node_button = NodePath("VBoxContainer/HBoxContainer/CurrentNodeButton")
 
 [node name="AddNodeMenu" type="PopupMenu" parent="." unique_id=122754592]
 oversampling_override = 1.0
@@ -105,6 +105,3 @@ mouse_filter = 2
 [connection signal="id_pressed" from="AddNodeMenu" to="VBoxContainer/StateMachineContainer/StateMachineGraphEdit" method="_on_add_node_menu_id_pressed"]
 [connection signal="confirmed" from="AddStateDialog" to="VBoxContainer/StateMachineContainer/StateMachineGraphEdit" method="_on_add_state_dialog_confirmed"]
 [connection signal="confirmed" from="AddAnnotationDialog" to="VBoxContainer/StateMachineContainer/StateMachineGraphEdit" method="_on_add_annotation_dialog_confirmed"]
-[connection signal="file_selected" from="SaveScriptDialog" to="." method="_on_save_script_dialog_file_selected"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/CurrentNodeButton" to="." method="_on_current_node_button_pressed"]
-[connection signal="gui_input" from="VBoxContainer/StateMachineContainer/StateMachineGraphEdit" to="." method="_on_graph_edit_gui_input"]
