@@ -27,6 +27,8 @@ static var _re_local: RegEx = RegEx.create_from_string(r"^var\s+(\w+)\s*[:=]")
 static var _re_node_open: RegEx = RegEx.create_from_string(r"^([\w][\w\s,]*)(?::(\w+))?\s*\{")
 static var _re_variant_open: RegEx = RegEx.create_from_string(r"^:([\w][\w\s,:]*)?\s*\{")
 static var _re_scheme_open: RegEx = RegEx.create_from_string(r"^@scheme\s+(\w+)")
+static var _re_scheme_head_parent: RegEx = RegEx.create_from_string(r"^\s*@scheme\s+(\w+)\s+extends\s+(\w*)$")
+static var _re_scheme_head_tail: RegEx = RegEx.create_from_string(r"^\s*@scheme\s+\w+\s+(\w*)$")
 static var _re_meta_open: RegEx = RegEx.create_from_string(r"^@meta\b")
 
 const BUILTIN_COLORS: Array[String] = [
@@ -147,6 +149,9 @@ func _on_text_changed() -> void:
 		editor.request_code_completion(true)
 		return
 	if word.is_empty():
+		if not (_scheme_header_mode().get("mode", "") as String).is_empty():
+			editor.request_code_completion(true)
+			return
 		var context: Dictionary = _get_context()
 		var type: String = context.get("type", "")
 		if type == "property_value" or type == "variant_decl" or type == "scheme_block" or type == "meta_block":
@@ -172,30 +177,59 @@ func _update_code_hint(_word: String) -> void:
 	var line: String = editor.get_line(editor.get_caret_line())
 	var col: int = mini(editor.get_caret_column(), line.length())
 	var paren_pos: int = line.rfind("(", col)
-	if paren_pos == -1:
-		_hide_hint()
+	if paren_pos != -1:
+		var before_paren: String = line.substr(0, paren_pos).strip_edges()
+		var method_name: String = before_paren.split(" ")[-1].split(":")[-1].strip_edges()
+		var method: GdssMethod = GDSS._get_gdss_methods().get(method_name)
+		if (method_name == "calc" or method != null) and not _in_meta_block():
+			if method_name == "calc":
+				_show_hint("calc( expression )  —  + - * /, numbers, $variables")
+				return
+			var inside: String = line.substr(paren_pos + 1, col - paren_pos - 1)
+			var depth: int = 0
+			var active_param: int = 0
+			for i: int in inside.length():
+				var c: String = inside[i]
+				if c == "(":
+					depth += 1
+				elif c == ")":
+					depth -= 1
+				elif c == "," and depth == 0:
+					active_param += 1
+			_show_hint(method.get_code_hint(active_param))
+			return
+	if _show_composite_hint(line, col):
 		return
-	var before_paren: String = line.substr(0, paren_pos).strip_edges()
-	var method_name: String = before_paren.split(" ")[-1].split(":")[-1].strip_edges()
-	if method_name == "calc":
-		_show_hint("calc( expression )  —  + - * /, numbers, $variables")
-		return
-	var method: GdssMethod = GDSS._get_gdss_methods().get(method_name)
-	if method == null:
-		_hide_hint()
-		return
-	var inside: String = line.substr(paren_pos + 1, col - paren_pos - 1)
-	var depth: int = 0
-	var active_param: int = 0
-	for i: int in inside.length():
-		var c: String = inside[i]
-		if c == "(":
-			depth += 1
-		elif c == ")":
-			depth -= 1
-		elif c == "," and depth == 0:
-			active_param += 1
-	_show_hint(method.get_code_hint(active_param))
+	_hide_hint()
+
+
+func _in_meta_block() -> bool:
+	return str(_get_context().get("type", "")) == "meta_block"
+
+
+func _show_composite_hint(line: String, col: int) -> bool:
+	var colon: int = line.find(":")
+	if colon == -1 or col <= colon:
+		return false
+	var prop_name: String = line.substr(0, colon).strip_edges()
+	var prop_def: GdssProp = GDSS.get_db().property_list.get(prop_name)
+	if prop_def == null or not prop_def.is_composite() or prop_def.type == GDSS.Type.COMPOSITE:
+		return false
+	var context_type: String = str(_get_context().get("type", ""))
+	if context_type != "property_value" and context_type != "property_value_filled":
+		return false
+	var value_before: String = line.substr(colon + 1, col - colon - 1)
+	var tokens: PackedStringArray = value_before.strip_edges().split(" ", false)
+	var active: int = tokens.size()
+	if not tokens.is_empty() and not value_before.ends_with(" ") and not value_before.ends_with("\t"):
+		active -= 1
+	active = clampi(active, 0, prop_def.composite_of.size() - 1)
+	var parts: PackedStringArray = []
+	for i: int in prop_def.composite_of.size():
+		var side: String = prop_def.composite_of[i].trim_prefix(prop_def.name + "_")
+		parts.append("[" + side + "]" if i == active else side)
+	_show_hint(prop_def.name + ": " + "  ".join(parts))
+	return true
 
 
 func _ensure_hint_panel() -> void:
@@ -256,7 +290,22 @@ func _update_completions(word: String) -> void:
 		_complete_values(word, "", "")
 		editor.update_code_completion_options(true)
 		return
-	
+
+	var scheme_header: Dictionary = _scheme_header_mode()
+	var scheme_mode: String = scheme_header.get("mode", "")
+	if scheme_mode == "keyword":
+		if word.is_empty() or "extends".begins_with(word):
+			editor.add_code_completion_option(CodeEdit.KIND_PLAIN_TEXT, "extends", "extends ", _completion_color, _get_icon(&"MemberAnnotation"))
+		editor.update_code_completion_options(true)
+		return
+	if scheme_mode == "parent":
+		var own_name: String = scheme_header.get("name", "")
+		for scheme_name: String in GdssInterpreter.schemes:
+			if scheme_name != own_name and _matches(scheme_name, word):
+				editor.add_code_completion_option(CodeEdit.KIND_PLAIN_TEXT, scheme_name, scheme_name + " ", _completion_color, _get_icon(&"BlitMaterial"))
+		editor.update_code_completion_options(true)
+		return
+
 	var context: Dictionary = _get_context()
 	
 	match context.get("type", "top_level"):
@@ -319,17 +368,14 @@ func _complete_properties(word: String, style_name: String) -> void:
 		if _matches(prop, word):
 			editor.add_code_completion_option(CodeEdit.KIND_MEMBER, prop, prop + ": ", _completion_color, icon)
 
-		if prop_def == null or prop_def.type != GDSS.Type.COMPOSITE4:
+		if prop_def == null or not prop_def.is_composite() or prop_def.type == GDSS.Type.COMPOSITE:
 			continue
-		if prop_def.default_value == null or not prop_def.default_value is Vector4i:
-			continue
-		var v4: Vector4i = prop_def.default_value
-		var components: Array[Variant] = [v4.x, v4.y, v4.z, v4.w]
+		var sub_icon: Texture2D = _get_icon(&"float") if prop_def.type == GDSS.Type.VECTOR2 else _get_icon(&"int")
 
 		for idx: int in range(prop_def.composite_of.size()):
 			var sub: String = prop_def.composite_of[idx]
 			if _matches(sub, word):
-				editor.add_code_completion_option(CodeEdit.KIND_MEMBER, sub, sub + ": ", _completion_color, _get_icon(&"int"))
+				editor.add_code_completion_option(CodeEdit.KIND_MEMBER, sub, sub + ": ", _completion_color, sub_icon)
 
 
 func _complete_events(word: String, style_name: String) -> void:
@@ -375,20 +421,23 @@ func _complete_values(word: String, style_name: String, prop: String) -> void:
 			if not raw is GdssProp:
 				continue
 			var pd: GdssProp = raw
-			if pd.type != GDSS.Type.COMPOSITE4:
-				continue
-			var raw_default: Variant = pd.default_value
-			if not raw_default is Vector4i:
+			if not pd.is_composite() or pd.type == GDSS.Type.COMPOSITE:
 				continue
 			var idx: int = pd.composite_of.find(prop)
 			if idx == -1:
 				continue
-			var v4: Vector4i = raw_default
-			var components: Array[Variant] = [v4.x, v4.y, v4.z, v4.w]
+			var raw_default: Variant = pd.default_value
+			var components: Array[Variant] = []
+			if raw_default is Vector4i:
+				var v4: Vector4i = raw_default
+				components = [v4.x, v4.y, v4.z, v4.w]
+			elif raw_default is Vector2:
+				var v2: Vector2 = raw_default
+				components = [v2.x, v2.y]
 			if idx < components.size():
 				var hint: String = str(components[idx])
 				editor.add_code_completion_option(CodeEdit.KIND_PLAIN_TEXT, hint, hint, _completion_color, _get_icon(&"MemberProperty"))
-			effective_type = GDSS.Type.INT
+			effective_type = GDSS.Type.FLOAT if pd.type == GDSS.Type.VECTOR2 else GDSS.Type.INT
 			break
 	else:
 		effective_type = prop_def.type
@@ -793,6 +842,24 @@ func _strip_comment(line: String) -> String:
 		elif c == "#":
 			return line.substr(0, i)
 	return line
+
+
+func _scheme_header_mode() -> Dictionary:
+	var line: String = editor.get_line(editor.get_caret_line())
+	var head: String = line.substr(0, mini(editor.get_caret_column(), line.length()))
+	var parent_match: RegExMatch = _re_scheme_head_parent.search(head)
+	if parent_match != null:
+		if head.ends_with(" ") and not parent_match.get_string(2).is_empty():
+			return {}
+		if head.ends_with(" ") and not head.strip_edges().ends_with("extends"):
+			return {}
+		return {"mode": "parent", "name": parent_match.get_string(1)}
+	var tail_match: RegExMatch = _re_scheme_head_tail.search(head)
+	if tail_match != null and "extends".begins_with(tail_match.get_string(1)):
+		if head.ends_with(" ") and not tail_match.get_string(1).is_empty():
+			return {}
+		return {"mode": "keyword"}
+	return {}
 
 
 func _complete_scheme_vars(word: String) -> void:

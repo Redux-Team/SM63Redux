@@ -132,15 +132,6 @@ func _process(delta: float) -> void:
 				buffer_dictionary.set(action, 0)
 		elif Input.is_action_just_released(action):
 			buffer_dictionary.erase(action)
-	
-	
-	if is_on_floor():
-		if jump_chain_timer > 0.0:
-			jump_chain_timer = max(jump_chain_timer - delta, 0.0)
-			if jump_chain_timer == 0.0:
-				current_jump = 0
-		elif current_jump >= 3:
-			current_jump = 0
 
 
 func get_facing() -> int:

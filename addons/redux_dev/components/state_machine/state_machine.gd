@@ -2,7 +2,8 @@
 ##
 ## [StateMachine] is the central runtime controller for a node-based state graph.
 ## [State] nodes are its descendants; superstate nesting is expressed directly by the scene
-## tree, and each [State]'s outgoing [StateTransition] nodes live as its children. The machine
+## tree, and each [State]'s outgoing [StateTransition] resources live in its
+## [member State.transitions] array, checked in order (top = highest priority). The machine
 ## evaluates transition conditions on the fixed physics clock, manages the superstate stack, and
 ## dispatches lifecycle callbacks ([method State._on_enter], [method State._on_physics_tick],
 ## [method State._on_exit], etc.) to active states. [br][br]
@@ -24,6 +25,8 @@ signal state_changed(from: State, to: State)
 @export var root_node: NodePath
 @export var sprite: SmartSprite2D
 @export var animation_player: AnimationPlayer
+## The audio bus a [State]'s SFX plays on when its bus is set to [code]Inherit[/code].
+@export var default_sfx_bus: StringName = &"SFX"
 
 var _root_node: Node
 var _current_state: State
@@ -44,13 +47,16 @@ var _can_consume_buffer: bool = false
 var _last_transition: StateTransition = null
 var _has_always_superstate: bool = false
 var _all_states: Array[State] = []
-var _out_transitions: Dictionary[State, Array] = {}
+var _target_of: Dictionary[StateTransition, State] = {}
 var _immediate_out: Dictionary[State, bool] = {}
+var _editor_targets: Dictionary[StateTransition, State] = {}
+var _editor_paths: Dictionary[State, String] = {}
 
 
 # resolves the root node, builds lookup tables, and enters the initial state.
 func _ready() -> void:
 	if Engine.is_editor_hint():
+		_editor_watch_states()
 		return
 
 	_root_node = get_node_or_null(root_node)
@@ -72,6 +78,7 @@ func _process(delta: float) -> void:
 		state._on_render_tick(delta)
 	_current_state._sprite_rules()
 	_current_state._on_render_tick(delta)
+	_current_state.__sfx_frame_tick()
 
 
 # The single fixed-timestep clock: all logic, timers, and transition evaluation happen here.
@@ -89,6 +96,7 @@ func _fixed_step(delta: float) -> void:
 	for state: State in _active_superstates:
 		state._on_physics_tick(delta)
 	_current_state._on_physics_tick(delta)
+	_current_state.__sfx_interval_tick(delta)
 
 	if _pending_transition:
 		_pending_transition_timer -= delta
@@ -120,23 +128,28 @@ func _fixed_step(delta: float) -> void:
 		max_cascade -= 1
 
 
-# Collects every descendant State and precomputes each state's priority-sorted outgoing transitions.
+# Collects every descendant State, resolves transition targets, and parses expressions once.
 func _build_tables() -> void:
 	_all_states.clear()
-	_out_transitions.clear()
+	_target_of.clear()
 	_immediate_out.clear()
 	_collect_states(self, _all_states)
 	for s: State in _all_states:
-		var outs: Array[StateTransition] = []
-		for child: Node in s.get_children():
-			if child is StateTransition:
-				outs.append(child)
-		outs.sort_custom(_sort_priority_desc)
-		_out_transitions[s] = outs
-		for t: StateTransition in outs:
+		if s.transitions.has(null):
+			push_warning("StateMachine: state '%s' has an empty transition element" % s.name)
+			var pruned: Array[StateTransition] = []
+			for t: StateTransition in s.transitions:
+				if t:
+					pruned.append(t)
+			s.transitions = pruned
+		for t: StateTransition in s.transitions:
+			var target: State = get_node_or_null(t.target) as State
+			if not target:
+				push_warning("StateMachine: transition '%s' on '%s' has no valid target ('%s')" % [t.resource_name, s.name, t.target])
+			_target_of[t] = target
+			t._ensure_parsed()
 			if t.check_immediately:
 				_immediate_out[s] = true
-				break
 
 
 func _collect_states(node: Node, out: Array[State]) -> void:
@@ -146,24 +159,17 @@ func _collect_states(node: Node, out: Array[State]) -> void:
 			_collect_states(child, out)
 
 
-# Propagates the resolved root node, sprite, and animation player to all states and transitions.
+# Propagates the resolved root node, sprite, and animation player to all states.
 func _dispatch_root_node() -> void:
 	for s: State in _all_states:
 		s.state_machine = self
 		s.root_node = _root_node
 		s.sprite = sprite
 		s.animation_player = animation_player
-		for t: StateTransition in _out_transitions.get(s, []):
-			t.root_node = _root_node
-			t._init_expression()
-
-
-func _sort_priority_desc(a: StateTransition, b: StateTransition) -> bool:
-	return a.priority > b.priority
 
 
 # Fires the first eligible outgoing transition from the current state (or an always-checking
-# superstate), honoring priority, min_active_frames, and the state's veto gates.
+# superstate), honoring array order, min_active_frames, and the state's veto gates.
 func _evaluate_transitions() -> void:
 	if _elapsed_physics_frames < _current_state.min_active_frames:
 		return
@@ -173,7 +179,7 @@ func _evaluate_transitions() -> void:
 	for t: StateTransition in _gather_candidates():
 		if not _should_fire(t, []):
 			continue
-		var target: State = t.target
+		var target: State = _target_of.get(t)
 		if not target or not target._can_enter():
 			continue
 		if t.min_delay > 0.0:
@@ -185,23 +191,23 @@ func _evaluate_transitions() -> void:
 		return
 
 
-# Returns the priority-sorted transitions eligible to fire from the current stack. Fast-paths
-# the common case (no always-checking superstate) to the precomputed, allocation-free list.
+# Returns the transitions eligible to fire from the current stack, in evaluation order:
+# the current state's array top-to-bottom, then always-checking superstates outermost-first.
+# Fast-paths the common case (no always-checking superstate) to the allocation-free array.
 func _gather_candidates() -> Array:
-	var from_current: Array = _out_transitions.get(_current_state, [])
 	if not _has_always_superstate:
-		return from_current
+		return _current_state.transitions
 
 	var candidates: Array[StateTransition] = []
-	for t: StateTransition in from_current:
+	for t: StateTransition in _current_state.transitions:
 		candidates.append(t)
 	for superstate: State in _active_superstates:
 		if not superstate.always_transition:
 			continue
-		for t: StateTransition in _out_transitions.get(superstate, []):
-			if t.target and not _is_state_in_stack(t.target):
+		for t: StateTransition in superstate.transitions:
+			var target: State = _target_of.get(t)
+			if target and not _is_state_in_stack(target):
 				candidates.append(t)
-	candidates.sort_custom(_sort_priority_desc)
 	return candidates
 
 
@@ -209,24 +215,18 @@ func _gather_candidates() -> Array:
 func _should_fire(t: StateTransition, visited: Array[State]) -> bool:
 	match t.mode:
 		StateTransition.TransitionMode.AUTO:
-			if not t._should_transition():
+			if not t._should_transition(self):
 				return false
 		StateTransition.TransitionMode.WAIT_UNTIL_DONE:
-			if not _done_forced and not (_done_requested and t._should_transition()):
-				return false
-		StateTransition.TransitionMode.WAIT_UNTIL_PARAMETER:
-			if t.parameter_name.is_empty() or not _root_node or not _root_node.get(t.parameter_name):
-				return false
-			if not t._should_transition():
+			if not _done_forced and not (_done_requested and t._should_transition(self)):
 				return false
 		StateTransition.TransitionMode.WAIT_UNTIL_EXPRESSION:
-			if not t._evaluate_expression() or not t._should_transition():
+			if not t._evaluate_expression(_root_node) or not t._should_transition(self):
 				return false
-		StateTransition.TransitionMode.MANUAL:
-			return false
 
-	if t.target and t.target.is_passthrough:
-		return _has_outgoing_transition_from(t.target, visited)
+	var target: State = _target_of.get(t)
+	if target and target.is_passthrough:
+		return _has_outgoing_transition_from(target, visited)
 	return true
 
 
@@ -239,7 +239,7 @@ func _has_outgoing_transition_from(state: State, visited: Array[State]) -> bool:
 		state._pre_enter()
 		state._pre_entered = true
 
-	for t: StateTransition in _out_transitions.get(state, []):
+	for t: StateTransition in state.transitions:
 		if _should_fire(t, visited):
 			return true
 	return false
@@ -247,6 +247,9 @@ func _has_outgoing_transition_from(state: State, visited: Array[State]) -> bool:
 
 # Executes the full exit/enter lifecycle, updates the active stack, and emits state_changed.
 func _transition_to(t: StateTransition, target: State) -> void:
+	_pending_transition = null
+	_pending_transition_target = null
+	_pending_transition_timer = 0.0
 	_last_transition = t
 	_next_state = target
 	_done_requested = false
@@ -263,10 +266,11 @@ func _transition_to(t: StateTransition, target: State) -> void:
 			entering.append(s)
 
 	if t:
-		t._on_before_transition()
+		t._on_before_transition(self)
 	_current_state.__collision_exit()
 	_current_state.__sprite_exit()
 	_current_state.__animation_exit()
+	_current_state.__sfx_exit()
 
 	_current_state._on_exit()
 	for s: State in exiting:
@@ -298,10 +302,11 @@ func _transition_to(t: StateTransition, target: State) -> void:
 	target.__sprite_enter()
 	target.__animation_enter()
 	target.__collision_enter()
+	target.__sfx_enter()
 
 	_next_state = null
 	if t:
-		t._on_after_transition()
+		t._on_after_transition(self)
 	state_changed.emit(from, target)
 
 
@@ -326,6 +331,7 @@ func _enter_state(state: State) -> void:
 	state.__sprite_enter()
 	state.__animation_enter()
 	state.__collision_enter()
+	state.__sfx_enter()
 
 
 func _set_active_stack(current: State, superstates: Array[State]) -> void:
@@ -411,19 +417,9 @@ func change_state(state_name: String) -> void:
 	_transition_to(null, target)
 
 
-## Fires the first [constant StateTransition.TransitionMode.MANUAL] transition
-## from the current state whose label matches [param transition_label].
-## [br][br]
-## [param transition_label] The label string set on the target [StateTransition].
-func trigger(transition_label: String) -> void:
-	if not _current_state:
-		return
-	for t: StateTransition in _out_transitions.get(_current_state, []):
-		if t.mode != StateTransition.TransitionMode.MANUAL:
-			continue
-		if t.label == transition_label and t.target:
-			_transition_to(t, t.target)
-			return
+## Returns the resolved root node this machine drives.
+func get_root() -> Node:
+	return _root_node
 
 
 ## Stops the machine, exiting the active state stack and halting all ticks and transitions.
@@ -433,6 +429,7 @@ func stop() -> void:
 	_current_state.__collision_exit()
 	_current_state.__sprite_exit()
 	_current_state.__animation_exit()
+	_current_state._stop_tracked_sfx()
 	_current_state._on_exit()
 	for s: State in _active_superstates:
 		s._on_exit()
@@ -470,3 +467,115 @@ func is_state_active(state_name: String) -> bool:
 	if not target:
 		return false
 	return _is_state_in_stack(target)
+
+
+func _validate_property(property: Dictionary) -> void:
+	if property.name == &"default_sfx_bus":
+		property.hint = PROPERTY_HINT_ENUM
+		property.hint_string = _bus_hint_string()
+
+
+func _bus_hint_string() -> String:
+	var names: PackedStringArray = []
+	for i: int in AudioServer.get_bus_count():
+		names.append(AudioServer.get_bus_name(i))
+	return ",".join(names)
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var warnings: PackedStringArray = []
+	var states: Array[State] = []
+	_collect_states(self, states)
+	for s: State in states:
+		for t: StateTransition in s.transitions:
+			if not t:
+				warnings.append("State '%s' has an empty transition element." % s.name)
+			elif not get_node_or_null(t.target) is State:
+				warnings.append("Transition '%s' on state '%s' does not resolve ('%s')." % [t.resource_name, s.name, t.target])
+	return warnings
+
+
+func _editor_watch_states() -> void:
+	_editor_targets.clear()
+	_editor_paths.clear()
+	var states: Array[State] = []
+	_collect_states(self, states)
+	for s: State in states:
+		_editor_paths[s] = String(get_path_to(s))
+		for t: StateTransition in s.transitions:
+			if not t:
+				continue
+			var target: State = get_node_or_null(t.target) as State
+			if target:
+				_editor_targets[t] = target
+		if not s.renamed.is_connected(_on_editor_state_renamed):
+			s.renamed.connect(_on_editor_state_renamed)
+	update_configuration_warnings()
+
+
+func _on_editor_state_renamed() -> void:
+	for t: StateTransition in _editor_targets:
+		var target: State = _editor_targets.get(t)
+		if is_instance_valid(target) and target.is_inside_tree():
+			t.target = get_path_to(target)
+	var rekeys: Dictionary = {}
+	for s: State in _editor_paths:
+		if not is_instance_valid(s) or not s.is_inside_tree():
+			continue
+		var current: String = String(get_path_to(s))
+		if _editor_paths.get(s) != current:
+			rekeys[_editor_paths.get(s)] = current
+			_editor_paths[s] = current
+	if not rekeys.is_empty():
+		_editor_rekey_sidecar(rekeys)
+	update_configuration_warnings()
+
+
+func _editor_map_rel(rel: String, rekeys: Dictionary) -> String:
+	if rekeys.has(rel):
+		return String(rekeys.get(rel))
+	for old: Variant in rekeys:
+		if rel.begins_with(String(old) + "/"):
+			return String(rekeys.get(old)) + rel.substr(String(old).length())
+	return rel
+
+
+func _editor_rekey_sidecar(rekeys: Dictionary) -> void:
+	var root: Node = owner if owner else self
+	var scene_path: String = root.scene_file_path
+	if scene_path.is_empty():
+		return
+	var path: String = scene_path + ".redux-layout.json"
+	if not FileAccess.file_exists(path):
+		return
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	if not file:
+		return
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	file.close()
+	if not parsed is Dictionary:
+		return
+	var data: Dictionary = parsed
+	var states: Dictionary = data.get("states", {}) as Dictionary
+	var new_states: Dictionary = {}
+	for key: Variant in states:
+		new_states[_editor_map_rel(String(key), rekeys)] = states.get(key)
+	data["states"] = new_states
+	var aliases: Dictionary = data.get("aliases", {}) as Dictionary
+	for alias_id: Variant in aliases:
+		var entry: Variant = aliases.get(alias_id)
+		if entry is Dictionary:
+			var alias: Dictionary = entry
+			alias["state"] = _editor_map_rel(String(alias.get("state", "")), rekeys)
+	var routes: Dictionary = data.get("routes", {}) as Dictionary
+	var new_routes: Dictionary = {}
+	for key: Variant in routes:
+		var from_rel: String = _editor_map_rel(String(key).get_slice(" -> ", 0), rekeys)
+		var to_rel: String = _editor_map_rel(String(key).get_slice(" -> ", 1), rekeys)
+		new_routes["%s -> %s" % [from_rel, to_rel]] = routes.get(key)
+	data["routes"] = new_routes
+	var out: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if not out:
+		return
+	out.store_string(JSON.stringify(data, "\t"))
+	out.close()

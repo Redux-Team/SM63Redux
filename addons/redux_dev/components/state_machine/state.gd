@@ -3,12 +3,18 @@
 class_name State
 extends Node
 
+## Bus value that defers to the owning [StateMachine]'s [member StateMachine.default_sfx_bus].
+const SFX_INHERIT: StringName = &"Inherit"
+
 ## The [SmartSprite2D] linked to the [StateMachine].
 var sprite: SmartSprite2D
 ## The [AnimationPlayer] linked to the [StateMachine].
 var animation_player: AnimationPlayer
 
 @export_group("State Machine")
+## Outgoing [StateTransition]s, checked in array order — the first eligible one fires,
+## so the top of the array is the highest priority.
+@export var transitions: Array[StateTransition] = []
 ## How long in seconds this state will remain active before automatically calling [method done].
 ## A value of 0.0 disables the runtime limit.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var runtime: float = 0.0
@@ -67,6 +73,66 @@ var animation_player: AnimationPlayer
 ## The [AnimationPlayer] animation to play when this state is entered.
 @export var anim_animation: String
 
+@export_group("SFX")
+@export_subgroup("Enter", "sfx_enter_")
+## Plays a sound each time this state is entered.
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sfx_enter_") var sfx_enter_enabled: bool = false
+## The sound played on enter, unless a [member sfx_enter_variants] entry overrides it.
+@export var sfx_enter_sound: AudioStream
+## Audio bus to route through. [code]Inherit[/code] uses the [StateMachine]'s default bus.
+@export var sfx_enter_bus: StringName = SFX_INHERIT
+## Play positionally at the machine's sprite instead of globally.
+@export var sfx_enter_spatial: bool = true
+## If [code]true[/code], stops this sound when the state exits (for looping/sustained sounds).
+@export var sfx_enter_stop_on_exit: bool = false
+## Method called on the root node; its return value selects a [member sfx_enter_variants] entry.
+@export var sfx_enter_method: StringName = &""
+## Maps [member sfx_enter_method]'s return value to the [AudioStream] played, overriding the sound.
+@export var sfx_enter_variants: Dictionary[Variant, AudioStream] = {}
+@export_subgroup("Exit", "sfx_exit_")
+## Plays a sound each time this state is exited.
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sfx_exit_") var sfx_exit_enabled: bool = false
+## The sound played on exit, unless a [member sfx_exit_variants] entry overrides it.
+@export var sfx_exit_sound: AudioStream
+## Audio bus to route through. [code]Inherit[/code] uses the [StateMachine]'s default bus.
+@export var sfx_exit_bus: StringName = SFX_INHERIT
+## Play positionally at the machine's sprite instead of globally.
+@export var sfx_exit_spatial: bool = true
+## Method called on the root node; its return value selects a [member sfx_exit_variants] entry.
+@export var sfx_exit_method: StringName = &""
+## Maps [member sfx_exit_method]'s return value to the [AudioStream] played, overriding the sound.
+@export var sfx_exit_variants: Dictionary[Variant, AudioStream] = {}
+@export_subgroup("Frame", "sfx_frame_")
+## Plays a sound whenever the sprite lands on one of [member sfx_frame_indices].
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sfx_frame_") var sfx_frame_enabled: bool = false
+## The sound played on a frame hit, unless a [member sfx_frame_variants] entry overrides it.
+@export var sfx_frame_sound: AudioStream
+## The sprite frame indices that fire the sound.
+@export var sfx_frame_indices: Array[int] = []
+## Audio bus to route through. [code]Inherit[/code] uses the [StateMachine]'s default bus.
+@export var sfx_frame_bus: StringName = SFX_INHERIT
+## Play positionally at the machine's sprite instead of globally.
+@export var sfx_frame_spatial: bool = true
+## Method called on the root node; its return value selects a [member sfx_frame_variants] entry.
+@export var sfx_frame_method: StringName = &""
+## Maps [member sfx_frame_method]'s return value to the [AudioStream] played, overriding the sound.
+@export var sfx_frame_variants: Dictionary[Variant, AudioStream] = {}
+@export_subgroup("Interval", "sfx_interval_")
+## Plays a sound every [member sfx_interval_seconds] while this state is active.
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sfx_interval_") var sfx_interval_enabled: bool = false
+## The sound played each interval, unless a [member sfx_interval_variants] entry overrides it.
+@export var sfx_interval_sound: AudioStream
+## Seconds between plays. A value of 0.0 never fires.
+@export_custom(PROPERTY_HINT_NONE, "suffix:s") var sfx_interval_seconds: float = 0.0
+## Audio bus to route through. [code]Inherit[/code] uses the [StateMachine]'s default bus.
+@export var sfx_interval_bus: StringName = SFX_INHERIT
+## Play positionally at the machine's sprite instead of globally.
+@export var sfx_interval_spatial: bool = true
+## Method called on the root node; its return value selects a [member sfx_interval_variants] entry.
+@export var sfx_interval_method: StringName = &""
+## Maps [member sfx_interval_method]'s return value to the [AudioStream] played, overriding the sound.
+@export var sfx_interval_variants: Dictionary[Variant, AudioStream] = {}
+
 var state_machine: StateMachine
 var root_node: Node
 var entity: Entity:
@@ -84,11 +150,19 @@ var _pre_entered: bool = false
 var _collision_snapshot: Dictionary = {}
 var _original_collision_mask: int = 0
 var _mask_overridden: bool = false
+var _sfx_last_frame: int = -1
+var _sfx_accum: float = 0.0
+var _sfx_active_players: Array[Node] = []
 
 
 func _validate_property(property: Dictionary) -> void:
 	if property.name.begins_with("_") and not ReduxPlugin.SHOW_INTERNAL:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
+	if property.name == "transitions":
+		property.usage |= PROPERTY_USAGE_ALWAYS_DUPLICATE
+	if property.name in [&"sfx_enter_bus", &"sfx_exit_bus", &"sfx_frame_bus", &"sfx_interval_bus"]:
+		property.hint = PROPERTY_HINT_ENUM
+		property.hint_string = _sfx_bus_hint_string()
 	if property.name == "sprite_animation_name":
 		var sm: StateMachine = _get_state_machine()
 		var frames: SpriteFrames = null
@@ -399,6 +473,88 @@ func __animation_enter() -> void:
 func __animation_exit() -> void:
 	if animation_player:
 		animation_player.play(&"RESET")
+
+
+func __sfx_enter() -> void:
+	_sfx_last_frame = -1
+	_sfx_accum = 0.0
+	if sfx_enter_enabled:
+		_play_sfx(sfx_enter_sound, sfx_enter_method, sfx_enter_variants, sfx_enter_bus, sfx_enter_spatial, sfx_enter_stop_on_exit)
+
+
+func __sfx_exit() -> void:
+	_stop_tracked_sfx()
+	if sfx_exit_enabled:
+		_play_sfx(sfx_exit_sound, sfx_exit_method, sfx_exit_variants, sfx_exit_bus, sfx_exit_spatial, false)
+
+
+func __sfx_frame_tick() -> void:
+	if not sfx_frame_enabled or not sprite:
+		return
+	var frame: int = sprite.current_frame
+	if frame == _sfx_last_frame:
+		return
+	_sfx_last_frame = frame
+	if sfx_frame_indices.has(frame):
+		_play_sfx(sfx_frame_sound, sfx_frame_method, sfx_frame_variants, sfx_frame_bus, sfx_frame_spatial, false)
+
+
+func __sfx_interval_tick(delta: float) -> void:
+	if not sfx_interval_enabled or sfx_interval_seconds <= 0.0:
+		return
+	_sfx_accum += delta
+	if _sfx_accum >= sfx_interval_seconds:
+		_sfx_accum -= sfx_interval_seconds
+		_play_sfx(sfx_interval_sound, sfx_interval_method, sfx_interval_variants, sfx_interval_bus, sfx_interval_spatial, false)
+
+
+func _stop_tracked_sfx() -> void:
+	for player: Node in _sfx_active_players:
+		if is_instance_valid(player):
+			player.stop()
+			player.queue_free()
+	_sfx_active_players.clear()
+
+
+func _resolve_sfx_sound(sound: AudioStream, method: StringName, variants: Dictionary) -> AudioStream:
+	if not method.is_empty() and state_machine:
+		var root: Node = state_machine.get_root()
+		var resolved_method: StringName = StringName(String(method).trim_suffix("()").strip_edges())
+		if root and root.has_method(resolved_method):
+			var key: Variant = root.call(resolved_method)
+			if variants.has(key):
+				return variants.get(key)
+	return sound
+
+
+func _play_sfx(sound: AudioStream, method: StringName, variants: Dictionary, bus: StringName, spatial: bool, track: bool) -> void:
+	if not state_machine:
+		return
+	var source: AudioStream = _resolve_sfx_sound(sound, method, variants)
+	if not source:
+		return
+	var resolved_bus: StringName = _resolve_sfx_bus(bus)
+	var at: Node2D = null
+	if spatial:
+		at = state_machine.sprite as Node2D
+		if not at:
+			at = state_machine.get_root() as Node2D
+	var player: Node = SFX.play_tracked_at(source, at, resolved_bus) if at else SFX.play_tracked(source, resolved_bus)
+	if track and player:
+		_sfx_active_players.append(player)
+
+
+func _resolve_sfx_bus(bus: StringName) -> StringName:
+	if bus.is_empty() or bus == SFX_INHERIT:
+		return state_machine.default_sfx_bus if state_machine else &"SFX"
+	return bus
+
+
+func _sfx_bus_hint_string() -> String:
+	var names: PackedStringArray = [String(SFX_INHERIT)]
+	for i: int in AudioServer.get_bus_count():
+		names.append(AudioServer.get_bus_name(i))
+	return ",".join(names)
 
 
 func _to_string() -> String:

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://ryatl5meky7h" path="res://addons/redux_dev/components/state_machine/state_machine_editor.gd" id="1_kuqj5"]
 [ext_resource type="Script" uid="uid://d35km3u86rpo3" path="res://addons/redux_dev/components/state_machine/state_machine_graph_edit.gd" id="2_hpxgv"]
 
-[node name="State Machine" type="Control" unique_id=482283223 node_paths=PackedStringArray("graph_edit", "state_machine_graph_edit", "current_node_button")]
+[node name="State Machine" type="Control" unique_id=482283223 node_paths=PackedStringArray("graph_edit", "state_machine_graph_edit", "current_node_button", "find_button", "find_popup", "find_from_option", "find_to_option", "find_results")]
 clip_contents = true
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 3
@@ -16,6 +16,11 @@ script = ExtResource("1_kuqj5")
 graph_edit = NodePath("VBoxContainer/StateMachineContainer/StateMachineGraphEdit")
 state_machine_graph_edit = NodePath("VBoxContainer/StateMachineContainer/StateMachineGraphEdit")
 current_node_button = NodePath("VBoxContainer/HBoxContainer/CurrentNodeButton")
+find_button = NodePath("VBoxContainer/HBoxContainer/FindTransitionButton")
+find_popup = NodePath("FindTransitionPopup")
+find_from_option = NodePath("FindTransitionPopup/FindVBox/FindFilters/FromOption")
+find_to_option = NodePath("FindTransitionPopup/FindVBox/FindFilters/ToOption")
+find_results = NodePath("FindTransitionPopup/FindVBox/FindResults")
 
 [node name="AddNodeMenu" type="PopupMenu" parent="." unique_id=122754592]
 oversampling_override = 1.0
@@ -51,6 +56,39 @@ alignment = 1
 
 [node name="SaveScriptDialog" type="FileDialog" parent="." unique_id=1255734430]
 
+[node name="FindTransitionPopup" type="PopupPanel" parent="."]
+size = Vector2i(620, 360)
+
+[node name="FindVBox" type="VBoxContainer" parent="FindTransitionPopup"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FindFilters" type="HBoxContainer" parent="FindTransitionPopup/FindVBox"]
+layout_mode = 2
+
+[node name="FromOption" type="OptionButton" parent="FindTransitionPopup/FindVBox/FindFilters"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ArrowLabel" type="Label" parent="FindTransitionPopup/FindVBox/FindFilters"]
+layout_mode = 2
+text = "→"
+
+[node name="ToOption" type="OptionButton" parent="FindTransitionPopup/FindVBox/FindFilters"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FindResults" type="ItemList" parent="FindTransitionPopup/FindVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1640640607]
 layout_mode = 1
 anchors_preset = 15
@@ -76,6 +114,14 @@ layout_mode = 2
 [node name="CurrentNodeButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=2119032451]
 layout_mode = 2
 text = "<empty>"
+
+[node name="FindSpacer" type="Control" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(12, 0)
+layout_mode = 2
+
+[node name="FindTransitionButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Find Transition"
 
 [node name="StateMachineContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1661052177]
 layout_mode = 2

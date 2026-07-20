@@ -47,16 +47,28 @@ static func stop_group(group: StringName) -> void:
 			bank.stop_all()
 
 
-static func _play_stream(stream: AudioStream, bus: StringName) -> void:
+## Plays an [AudioStream] and returns the created [AudioStreamPlayer] so the caller can
+## stop it early. It still frees itself when the sound finishes on its own.
+static func play_tracked(source: AudioStream, bus: StringName = &"SFX") -> AudioStreamPlayer:
+	return _play_stream(source, bus)
+
+
+## Positional variant of [method play_tracked]. Returns the [AudioStreamPlayer2D].
+static func play_tracked_at(source: AudioStream, at: Variant, bus: StringName = &"SFX") -> AudioStreamPlayer2D:
+	return _play_stream_at(source, at, bus)
+
+
+static func _play_stream(stream: AudioStream, bus: StringName) -> AudioStreamPlayer:
 	var player: AudioStreamPlayer = AudioStreamPlayer.new()
 	player.stream = stream
 	player.bus = bus
 	player.finished.connect(player.queue_free)
 	Singleton.add_child(player)
 	player.play()
+	return player
 
 
-static func _play_stream_at(stream: AudioStream, at: Variant, bus: StringName) -> void:
+static func _play_stream_at(stream: AudioStream, at: Variant, bus: StringName) -> AudioStreamPlayer2D:
 	var player: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
 	player.stream = stream
 	player.bus = bus
@@ -67,6 +79,7 @@ static func _play_stream_at(stream: AudioStream, at: Variant, bus: StringName) -
 		Singleton.add_child(player)
 		player.global_position = at as Vector2
 	player.play()
+	return player
 
 
 static func build(audio_stream: AudioStream = null) -> SFXBuilder:

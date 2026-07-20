@@ -25,6 +25,10 @@
 [ext_resource type="Script" uid="uid://dnsd2a8oriy3" path="res://util/entity/forcebox.gd" id="26_a7n3c"]
 [ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="29_rakc8"]
 
+[ext_resource type="AudioStream" uid="uid://dgmayxvw7oy3w" path="res://assets/sfx/entity/goomba/goomba_step.wav" id="sfxres1"]
+[ext_resource type="AudioStream" uid="uid://y56kvftd2idy" path="res://assets/sfx/entity/goomba/goomba_jump.ogg" id="sfxres2"]
+[ext_resource type="AudioStream" uid="uid://cucdekyl58ypv" path="res://assets/sfx/entity/goomba/goomba_stomped.wav" id="sfxres3"]
+[ext_resource type="AudioStream" uid="uid://dq4csxy68lb4q" path="res://assets/sfx/entity/goomba/goomba_struck.wav" id="sfxres4"]
 [sub_resource type="Curve" id="Curve_g7wuw"]
 _limits = [-1.0, 1.0, -1.0, 1.0]
 _data = [Vector2(-1, -1), 0.0, 0.0, 0, 0, Vector2(-0.35, -1), 0.0, 0.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -244,6 +248,12 @@ size = Vector2(14, 15)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_42vey"]
 size = Vector2(16, 16)
 
+[sub_resource type="Resource" id="Resource_AlertToChase"]
+script = ExtResource("3_ios8m")
+resource_name = "ToChase"
+target = NodePath("Chase")
+mode = 1
+
 [node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("player_check", "sprite", "components_root", "state_machine", "water_check")]
 collision_layer = 8
 collision_mask = 514
@@ -273,21 +283,40 @@ displacement = SubResource("Curve_g7wuw")
 floor_check_r = NodePath("../../../FloorCheckR")
 floor_check_l = NodePath("../../../FloorCheckL")
 sprite_animation_name = &"walk"
+sfx_frame_enabled = true
+sfx_frame_sound = ExtResource("sfxres1")
+sfx_frame_bus = &"SFX"
+sfx_frame_indices = Array[int]([0, 3])
 [node name="Alert" type="Node" parent="StateMachine/Wander" unique_id=1129696963]
 script = ExtResource("4_x5cu4")
+transitions = Array[ExtResource("3_ios8m")]([SubResource("Resource_AlertToChase")])
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres2")
+sfx_enter_bus = &"SFX"
+
 [node name="Chase" type="Node" parent="StateMachine" unique_id=1835913114]
 script = ExtResource("11_fb4me")
 sprite_animation_name = &"walk"
 sprite_speed_scale = 1.5
+sfx_frame_enabled = true
+sfx_frame_sound = ExtResource("sfxres1")
+sfx_frame_bus = &"SFX"
+sfx_frame_indices = Array[int]([0, 3])
 [node name="Squish" type="Node" parent="StateMachine" unique_id=354975756 node_paths=PackedStringArray("hit_box")]
 script = ExtResource("12_6f57m")
 hit_box = NodePath("../../HitBox")
 sprite_animation_name = &"squish"
 sprite_speed_scale = 1.5
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres3")
+sfx_enter_bus = &"SFX"
 [node name="Strike" type="Node" parent="StateMachine" unique_id=440686515 node_paths=PackedStringArray("hit_box")]
 script = ExtResource("14_xvu80")
 hit_box = NodePath("../../HitBox")
 anim_animation = "strike_hit"
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres4")
+sfx_enter_bus = &"SFX"
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(0, -7)
 texture = SubResource("CanvasTexture_a7n3c")
@@ -403,11 +432,6 @@ metadata/_custom_type_script = "uid://bhoysiia8munh"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WaterCheckArea" unique_id=749598814]
 shape = SubResource("RectangleShape2D_42vey")
-
-[node name="ToChase" type="Node" parent="StateMachine/Wander/Alert" node_paths=PackedStringArray("target") unique_id=100000]
-script = ExtResource("3_ios8m")
-target = NodePath("../../../Chase")
-mode = 1
 
 [connection signal="area_entered" from="PlayerCheck" to="." method="_on_area_2d_area_entered"]
 [connection signal="damaged" from="HurtBox" to="." method="_on_hurt_box_damaged"]

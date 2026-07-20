@@ -65,9 +65,147 @@
 [ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="81_dhqxs"]
 [ext_resource type="AudioStream" uid="uid://bffab71uf61kf" path="res://assets/sfx/player/fludd/hover.mp3" id="81_fstnu"]
 [ext_resource type="AudioStream" uid="uid://dolh40gtancy4" path="res://assets/sfx/player/fludd/hover_loop.mp3" id="82_681d1"]
+[ext_resource type="AudioStream" uid="uid://ddyxdiykdet7b" path="res://assets/sfx/player/mario/dive/dive_0.wav" id="sfxres1"]
+[ext_resource type="AudioStream" uid="uid://vvilx4sjryos" path="res://assets/sfx/player/mario/dive/dive_1.wav" id="sfxres2"]
+[ext_resource type="AudioStream" uid="uid://cv0wy731vhj3o" path="res://assets/sfx/player/mario/dive/dive_2.wav" id="sfxres3"]
+[ext_resource type="AudioStream" uid="uid://cjcl5pn71sgyv" path="res://assets/sfx/player/mario/dive/dive_3.wav" id="sfxres4"]
+[ext_resource type="AudioStream" uid="uid://d2u8p1w08sc8t" path="res://assets/sfx/player/mario/triple_jump/triple_jump_1.wav" id="sfxres6"]
+[ext_resource type="AudioStream" uid="uid://podpwijvoa8s" path="res://assets/sfx/player/mario/triple_jump/triple_jump_3.wav" id="sfxres7"]
+[ext_resource type="AudioStream" uid="uid://c6fqas8c4pqox" path="res://assets/sfx/player/mario/triple_jump/triple_jump_5.wav" id="sfxres8"]
+[ext_resource type="AudioStream" uid="uid://buooavrsh260y" path="res://assets/sfx/player/mario/triple_jump/triple_jump_7.wav" id="sfxres9"]
+[ext_resource type="AudioStream" uid="uid://cl10c505sc7jn" path="res://assets/sfx/player/mario/triple_jump/triple_jump_0.wav" id="sfxres11"]
+[ext_resource type="AudioStream" uid="uid://b25chylcy5cvx" path="res://assets/sfx/player/mario/triple_jump/triple_jump_2.wav" id="sfxres12"]
+[ext_resource type="AudioStream" uid="uid://d8y8hq35tc28" path="res://assets/sfx/player/mario/triple_jump/triple_jump_4.wav" id="sfxres13"]
+[ext_resource type="AudioStream" uid="uid://bme1kk82dbdvc" path="res://assets/sfx/player/mario/triple_jump/triple_jump_6.wav" id="sfxres14"]
+[ext_resource type="AudioStream" uid="uid://bcy4wwvxfd7km" path="res://assets/sfx/player/mario/jump/jump_0.wav" id="sfxres16"]
+[ext_resource type="AudioStream" uid="uid://sskhnc1p4cbo" path="res://assets/sfx/player/mario/jump/jump_1.wav" id="sfxres17"]
+[ext_resource type="AudioStream" uid="uid://cacxhcwvqwe3l" path="res://assets/sfx/player/mario/double_jump/double_jump_0.wav" id="sfxres19"]
+[ext_resource type="AudioStream" uid="uid://bb3kctktrncwe" path="res://assets/sfx/player/mario/double_jump/double_jump_1.wav" id="sfxres20"]
+[ext_resource type="AudioStream" uid="uid://6ngvah4nyray" path="res://assets/sfx/player/mario/double_jump/double_jump_2.wav" id="sfxres21"]
+[ext_resource type="AudioStream" uid="uid://bxthrj2cgps5d" path="res://assets/sfx/player/mario/spin/spin_air_1.wav" id="sfxres24"]
+[ext_resource type="AudioStream" uid="uid://e0gve7kc1mk1" path="res://assets/sfx/player/mario/spin/spin_air_2.wav" id="sfxres25"]
+[ext_resource type="AudioStream" uid="uid://csmh3s1xsm72b" path="res://assets/sfx/player/mario/spin/spin_air_3.wav" id="sfxres26"]
+[ext_resource type="AudioStream" uid="uid://cvwxucpxjv4s2" path="res://assets/sfx/player/mario/damage/ough.ogg" id="sfxres28"]
+[ext_resource type="AudioStream" uid="uid://bfd6xls4jjoac" path="res://assets/sfx/player/mario/spin/spin_water_1.wav" id="sfxres29"]
+[ext_resource type="AudioStream" uid="uid://dfoi0m0cw6fww" path="res://assets/sfx/player/mario/spin/spin_water_end.wav" id="sfxres30"]
+[ext_resource type="AudioStream" uid="uid://cfcnya3ow457f" path="res://assets/sfx/player/mario/ground_pound/ground_pound_start.wav" id="sfxres31"]
+[ext_resource type="AudioStream" uid="uid://dly1p4x8t0r70" path="res://assets/sfx/player/mario/ground_pound/ground_pound_generic.wav" id="sfxres32"]
+[ext_resource type="AudioStream" uid="uid://pga7av4xfjtv" path="res://assets/music/player_death.mp3" id="sfxres33"]
 
 [sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_3h1ly"]
 cutoff_hz = 2500.0
+
+[sub_resource type="Resource" id="Resource_DryToSwimIdle"]
+resource_name = "ToSwimIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Submerged/SwimIdle")
+mode = 2
+expression = "is_in_water()"
+
+[sub_resource type="Resource" id="Resource_IdleToSpin"]
+resource_name = "ToSpin"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Spin")
+mode = 2
+expression = "is_input_spin"
+
+[sub_resource type="Resource" id="Resource_IdleToCrouch"]
+resource_name = "ToCrouch"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Crouch")
+mode = 2
+expression = "is_action_pressed(\"crouch\") && abs(velocity.x) <= 50 && is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_IdleToFloorslide"]
+resource_name = "ToFloorslide"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Floorslide")
+mode = 2
+expression = "is_action_just_pressed(\"crouch\") && abs(velocity.x) > 50 && is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_IdleToWalk"]
+resource_name = "ToWalk"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Walk")
+mode = 2
+expression = "abs(move_dir) > 0.1 && is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_IdleToFall"]
+resource_name = "ToFall"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Fall")
+mode = 2
+expression = "velocity.y >= 0 && !is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_IdleToBaseJump"]
+resource_name = "ToBaseJump"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/BaseJump")
+mode = 2
+expression = "is_on_floor() && is_action_just_pressed(\"jump\", 0.2) && can_jump"
+
+[sub_resource type="Resource" id="Resource_CrouchToBackflip"]
+resource_name = "ToBackflip"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Backflip")
+mode = 2
+expression = "is_action_just_pressed(\"jump\") && is_moving_against_facing()"
+
+[sub_resource type="Resource" id="Resource_CrouchToBackflipUp"]
+resource_name = "ToBackflipUp"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/BackflipUp")
+mode = 2
+expression = "is_action_just_pressed(\"jump\") && move_dir == 0"
+
+[sub_resource type="Resource" id="Resource_CrouchToIdle"]
+resource_name = "ToIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Idle")
+mode = 2
+expression = "!is_crouching"
+
+[sub_resource type="Resource" id="Resource_WalkToFall"]
+resource_name = "ToFall"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Fall")
+mode = 2
+expression = "!is_on_floor() && velocity.y >= 0"
+
+[sub_resource type="Resource" id="Resource_WalkToIdle"]
+resource_name = "ToIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Idle")
+mode = 2
+expression = "abs(move_dir) < 0.1 && abs(velocity.x) < 0.5"
+
+[sub_resource type="Resource" id="Resource_WalkToCrouch"]
+resource_name = "ToCrouch"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Crouch")
+mode = 2
+expression = "is_action_just_pressed(\"crouch\") && abs(velocity.x) <= 50 && is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_WalkToFloorslide"]
+resource_name = "ToFloorslide"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Floorslide")
+mode = 2
+expression = "is_action_just_pressed(\"crouch\") && is_moving_with_facing() && is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_WalkToSpin"]
+resource_name = "ToSpin"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Spin")
+mode = 2
+expression = "is_input_spin"
+
+[sub_resource type="Resource" id="Resource_WalkToBaseJump"]
+resource_name = "ToBaseJump"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/BaseJump")
+mode = 2
+expression = "is_on_floor() && is_action_just_pressed(\"jump\", 0.2) && can_jump"
 
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
@@ -78,6 +216,398 @@ point_count = 2
 _limits = [0.0, 1.0, -300.0, 500.0]
 _data = [Vector2(-300, 0.2696039), 0.0, 0.0, 0, 0, Vector2(500, 0.9474535), 0.0011276755, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="Resource" id="Resource_DiveToFloorslide"]
+resource_name = "ToFloorslide"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Floorslide")
+mode = 2
+expression = "is_on_floor()"
+
+[sub_resource type="AudioStreamRandomizer" id="sfxrand5"]
+playback_mode = 1
+streams_count = 4
+stream_0/stream = ExtResource("sfxres1")
+stream_1/stream = ExtResource("sfxres2")
+stream_2/stream = ExtResource("sfxres3")
+stream_3/stream = ExtResource("sfxres4")
+
+[sub_resource type="Resource" id="Resource_IdleJumpToDive"]
+resource_name = "ToDive"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Dive")
+mode = 2
+expression = "is_action_just_pressed(\"dive\") && can_dive && get_active_state_uptime() > 0"
+
+[sub_resource type="Resource" id="Resource_IdleJumpToIdle"]
+resource_name = "ToIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Idle")
+mode = 2
+expression = "is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_IdleJumpToFall"]
+resource_name = "ToFall"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Fall")
+mode = 2
+expression = "velocity.y > 50"
+
+[sub_resource type="Resource" id="Resource_BackflipToIdle"]
+resource_name = "ToIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Idle")
+mode = 2
+expression = "is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_BackflipToDive"]
+resource_name = "ToDive"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Dive")
+mode = 2
+expression = "is_action_just_pressed(\"dive\")"
+
+[sub_resource type="Resource" id="Resource_BackflipToSpin"]
+resource_name = "ToSpin"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Spin")
+mode = 2
+expression = "is_input_spin && velocity.y > 155"
+
+[sub_resource type="AudioStreamRandomizer" id="sfxrand10"]
+playback_mode = 1
+streams_count = 4
+stream_0/stream = ExtResource("sfxres6")
+stream_1/stream = ExtResource("sfxres7")
+stream_2/stream = ExtResource("sfxres8")
+stream_3/stream = ExtResource("sfxres9")
+
+[sub_resource type="Resource" id="Resource_BackflipUpToIdle"]
+resource_name = "ToIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Idle")
+mode = 2
+expression = "is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_BackflipUpToSpin"]
+resource_name = "ToSpin"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Spin")
+mode = 2
+expression = "is_input_spin && velocity.y > 155"
+
+[sub_resource type="Resource" id="Resource_BackflipUpToDive"]
+resource_name = "ToDive"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Dive")
+mode = 2
+expression = "is_action_just_pressed(\"dive\") && can_dive"
+
+[sub_resource type="AudioStreamRandomizer" id="sfxrand15"]
+playback_mode = 1
+streams_count = 4
+stream_0/stream = ExtResource("sfxres11")
+stream_1/stream = ExtResource("sfxres12")
+stream_2/stream = ExtResource("sfxres13")
+stream_3/stream = ExtResource("sfxres14")
+
+[sub_resource type="Resource" id="Resource_FallToIdle"]
+resource_name = "ToIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Idle")
+mode = 2
+expression = "is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_FallToSpin"]
+resource_name = "ToSpin"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Spin")
+mode = 2
+expression = "is_input_spin && velocity.y > 100"
+
+[sub_resource type="Resource" id="Resource_FallToDive"]
+resource_name = "ToDive"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Dive")
+mode = 2
+expression = "is_action_just_pressed(\"dive\") && can_dive"
+
+[sub_resource type="Resource" id="Resource_RolloutFToIdle"]
+resource_name = "ToIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Idle")
+mode = 2
+expression = "is_on_floor() && get_active_state_uptime() > 0.1
+
+&& state_machine.consume_state_buffer()"
+
+[sub_resource type="Resource" id="Resource_RolloutFToDive"]
+resource_name = "ToDive"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Dive")
+mode = 2
+expression = "is_input_dive && get_active_state_uptime() > 0.2 && !is_on_floor() && can_dive"
+
+[sub_resource type="Resource" id="Resource_RolloutFToFall"]
+resource_name = "ToFall"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Fall")
+mode = 2
+expression = "velocity.y > 30 && 
+!is_on_floor() && 
+get_active_state_uptime() > 0.3 && 
+is_action_pressed(\"use_fludd\") &&
+get_fludd_handler().equipped_nozzle != 0"
+
+[sub_resource type="Resource" id="Resource_RolloutFToSpin"]
+resource_name = "ToSpin"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Spin")
+mode = 2
+expression = "is_input_spin && velocity.y > -40"
+
+[sub_resource type="Resource" id="Resource_BaseJumpToDive"]
+resource_name = "ToDive"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Dive")
+mode = 2
+expression = "is_action_just_pressed(\"dive\") && can_dive && get_active_state_uptime() > 0"
+
+[sub_resource type="Resource" id="Resource_BaseJumpToFall"]
+resource_name = "ToFall"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Fall")
+mode = 2
+expression = "velocity.y >= 0 && !is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_BaseJumpToIdle"]
+resource_name = "ToIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Idle")
+mode = 2
+expression = "is_on_floor() && !is_input_jump"
+
+[sub_resource type="Resource" id="Resource_BaseJumpToJump"]
+resource_name = "ToJump"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/BaseJump/Jump")
+mode = 2
+expression = "current_jump == 1"
+
+[sub_resource type="Resource" id="Resource_BaseJumpToDoubleJump"]
+resource_name = "ToDoubleJump"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/BaseJump/DoubleJump")
+mode = 2
+expression = "current_jump == 2"
+
+[sub_resource type="Resource" id="Resource_BaseJumpToTripleJump"]
+resource_name = "ToTripleJump"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/BaseJump/TripleJump")
+mode = 2
+expression = "current_jump == 3"
+
+[sub_resource type="Resource" id="Resource_JumpToSpin"]
+resource_name = "ToSpin"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Spin")
+mode = 2
+expression = "is_input_spin && velocity.y > -55"
+
+[sub_resource type="AudioStreamRandomizer" id="sfxrand18"]
+playback_mode = 1
+streams_count = 2
+stream_0/stream = ExtResource("sfxres16")
+stream_1/stream = ExtResource("sfxres17")
+
+[sub_resource type="Resource" id="Resource_DoubleJumpToSpin"]
+resource_name = "ToSpin"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Spin")
+mode = 2
+expression = "is_input_spin && velocity.y > -55"
+
+[sub_resource type="AudioStreamRandomizer" id="sfxrand22"]
+playback_mode = 1
+streams_count = 3
+stream_0/stream = ExtResource("sfxres19")
+stream_1/stream = ExtResource("sfxres20")
+stream_2/stream = ExtResource("sfxres21")
+
+[sub_resource type="AudioStreamRandomizer" id="sfxrand23"]
+playback_mode = 1
+streams_count = 8
+stream_0/stream = ExtResource("sfxres11")
+stream_1/stream = ExtResource("sfxres6")
+stream_2/stream = ExtResource("sfxres12")
+stream_3/stream = ExtResource("sfxres7")
+stream_4/stream = ExtResource("sfxres13")
+stream_5/stream = ExtResource("sfxres8")
+stream_6/stream = ExtResource("sfxres14")
+stream_7/stream = ExtResource("sfxres9")
+
+[sub_resource type="Resource" id="Resource_SpinToBaseJump"]
+resource_name = "ToBaseJump"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/BaseJump")
+mode = 2
+expression = "is_on_floor() && is_action_just_pressed(\"jump\", 0.2)"
+
+[sub_resource type="Resource" id="Resource_SpinToFall"]
+resource_name = "ToFall"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Fall")
+mode = 2
+expression = "!is_input_spin && !is_spinning && !is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_SpinToIdle"]
+resource_name = "ToIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Idle")
+mode = 2
+expression = "!is_input_spin && !is_spinning && is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_SpinToDive"]
+resource_name = "ToDive"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Dive")
+mode = 2
+expression = "is_action_just_pressed(\"dive\") && can_dive"
+
+[sub_resource type="AudioStreamRandomizer" id="sfxrand27"]
+playback_mode = 1
+streams_count = 3
+stream_0/stream = ExtResource("sfxres24")
+stream_1/stream = ExtResource("sfxres25")
+stream_2/stream = ExtResource("sfxres26")
+
+[sub_resource type="Resource" id="Resource_FloorslideToBackflip"]
+resource_name = "ToBackflip"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Backflip")
+mode = 2
+expression = "is_action_just_pressed(\"jump\", 0.2) && is_on_floor() && is_moving_against_facing() "
+
+[sub_resource type="Resource" id="Resource_FloorslideToRolloutF"]
+resource_name = "ToRolloutF"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/RolloutF")
+mode = 2
+expression = "is_action_pressed(\"jump\") && is_on_floor() && get_facing_velocity() > 50
+
+&& state_machine.store_state_buffer()"
+
+[sub_resource type="Resource" id="Resource_FloorslideToIdle"]
+resource_name = "ToIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Idle")
+mode = 2
+expression = "!is_crouching && abs(velocity.x) <= 5"
+
+[sub_resource type="Resource" id="Resource_StrikeToIdle"]
+resource_name = "ToIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Idle")
+mode = 2
+expression = "is_on_floor() && state_machine.get_current_state().get_elapsed_physics_frames() > 5"
+min_delay = 0.25
+
+[sub_resource type="Resource" id="Resource_SubmergedToFall"]
+resource_name = "ToFall"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/Fall")
+mode = 2
+expression = "!is_in_water() && velocity.y >= 0"
+
+[sub_resource type="Resource" id="Resource_SubmergedToIdleJump"]
+resource_name = "ToIdleJump"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Airborne/IdleJump")
+mode = 2
+expression = "!is_in_water() && velocity.y < 0"
+
+[sub_resource type="Resource" id="Resource_SwimIdleToSwimSpin"]
+resource_name = "ToSwimSpin"
+script = ExtResource("3_0jrw7")
+target = NodePath("Submerged/SwimSpin")
+mode = 2
+expression = "is_input_spin"
+
+[sub_resource type="Resource" id="Resource_SwimIdleToSwim"]
+resource_name = "ToSwim"
+script = ExtResource("3_0jrw7")
+target = NodePath("Submerged/Swim")
+mode = 2
+expression = "is_input_swim"
+
+[sub_resource type="Resource" id="Resource_SwimIdleToSwimWalk"]
+resource_name = "ToSwimWalk"
+script = ExtResource("3_0jrw7")
+target = NodePath("Submerged/SwimWalk")
+mode = 2
+expression = "abs(move_dir) > 0.1 && is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_SwimToSwimIdle"]
+resource_name = "ToSwimIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Submerged/SwimIdle")
+mode = 2
+expression = "swim_buffer_time == 0 && !is_input_swim"
+
+[sub_resource type="Resource" id="Resource_SwimWalkToSwim"]
+resource_name = "ToSwim"
+script = ExtResource("3_0jrw7")
+target = NodePath("Submerged/Swim")
+mode = 2
+expression = "is_input_swim"
+
+[sub_resource type="Resource" id="Resource_SwimWalkToSwimSpin"]
+resource_name = "ToSwimSpin"
+script = ExtResource("3_0jrw7")
+target = NodePath("Submerged/SwimSpin")
+mode = 2
+expression = "is_input_spin"
+
+[sub_resource type="Resource" id="Resource_SwimSpinToSwimIdle"]
+resource_name = "ToSwimIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Submerged/SwimIdle")
+mode = 2
+expression = "!is_input_spin && get_active_state_uptime() > 0.6"
+
+[sub_resource type="Resource" id="Resource_GroundPoundToGroundPoundStart"]
+resource_name = "ToGroundPoundStart"
+script = ExtResource("3_0jrw7")
+target = NodePath("GroundPound/GroundPoundStart")
+mode = 1
+
+[sub_resource type="Resource" id="Resource_GroundPoundStartToGroundPoundFall"]
+resource_name = "ToGroundPoundFall"
+script = ExtResource("3_0jrw7")
+target = NodePath("GroundPound/GroundPoundFall")
+mode = 1
+
+[sub_resource type="Resource" id="Resource_GroundPoundFallToGroundPoundSlam"]
+resource_name = "ToGroundPoundSlam"
+script = ExtResource("3_0jrw7")
+target = NodePath("GroundPound/GroundPoundSlam")
+mode = 2
+expression = "is_on_floor()"
+
+[sub_resource type="Resource" id="Resource_GroundPoundSlamToIdle"]
+resource_name = "ToIdle"
+script = ExtResource("3_0jrw7")
+target = NodePath("Dry/Grounded/Idle")
+mode = 2
+expression = "!is_in_water()"
+min_delay = 0.3
+
+[sub_resource type="Resource" id="Resource_DeathHitToDeathFall"]
+resource_name = "ToDeathFall"
+script = ExtResource("3_0jrw7")
+target = NodePath("DeathFall")
+min_delay = 1.0
 
 [sub_resource type="Curve" id="Curve_ndkiv"]
 _limits = [-300.0, 700.0, 0.0, 3.0]
@@ -243,7 +773,7 @@ anim_offset_max = 1.0
 atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_26jgh"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_563ve"]
 diffuse_texture = SubResource("AtlasTexture_1p630")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d635j"]
@@ -639,119 +1169,201 @@ initial_state = NodePath("Dry/Grounded/Idle")
 root_node = NodePath("..")
 sprite = NodePath("../Doll")
 animation_player = NodePath("../AnimationPlayer")
+default_sfx_bus = &"Player"
 metadata/_custom_type_script = "uid://utibsg6xkllx"
+
 [node name="Dry" type="Node" parent="StateMachine" unique_id=1790975957]
 script = ExtResource("7_je5mu")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_DryToSwimIdle")])
 always_transition = true
+
 [node name="Grounded" type="Node" parent="StateMachine/Dry" unique_id=2112507397]
 script = ExtResource("10_tb30q")
+
 [node name="Idle" type="Node" parent="StateMachine/Dry/Grounded" unique_id=616950568]
 script = ExtResource("4_4j27x")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_IdleToSpin"), SubResource("Resource_IdleToCrouch"), SubResource("Resource_IdleToFloorslide"), SubResource("Resource_IdleToWalk"), SubResource("Resource_IdleToFall"), SubResource("Resource_IdleToBaseJump")])
 sprite_animation_name = &"idle"
+
 [node name="Crouch" type="Node" parent="StateMachine/Dry/Grounded" unique_id=220392553]
 script = ExtResource("4_4j27x")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_CrouchToBackflip"), SubResource("Resource_CrouchToBackflipUp"), SubResource("Resource_CrouchToIdle")])
 sprite_animation_name = &"crouch"
 sprite_lock_flipping = true
+
 [node name="Walk" type="Node" parent="StateMachine/Dry/Grounded" unique_id=1580509400]
 script = ExtResource("4_4j27x")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_WalkToFall"), SubResource("Resource_WalkToIdle"), SubResource("Resource_WalkToCrouch"), SubResource("Resource_WalkToFloorslide"), SubResource("Resource_WalkToSpin"), SubResource("Resource_WalkToBaseJump")])
 sprite_animation_name = &"walk_start"
 sprite_chain = Array[StringName]([&"walk_loop"])
+
 [node name="Airborne" type="Node" parent="StateMachine/Dry" unique_id=338446170]
 script = ExtResource("8_k8egu")
+
 [node name="Dive" type="Node" parent="StateMachine/Dry/Airborne" unique_id=2082405443 node_paths=PackedStringArray("collision_enabled_shapes")]
 script = ExtResource("10_aln35")
 target_speed = 900.0
 launch_y_boost = 80.0
 rotation_curve = SubResource("Curve_aln35")
 y_velocity_to_rotation_offset_curve = SubResource("Curve_ioda6")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_DiveToFloorslide")])
 sprite_animation_name = &"dive"
 collision_enabled_shapes = [NodePath("../../../../DiveCollision"), NodePath("../../../../Hitboxes/Dive/CollisionShape2D")]
+sfx_enter_enabled = true
+sfx_enter_sound = SubResource("sfxrand5")
+sfx_enter_bus = &"Player"
+
 [node name="IdleJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1248860808]
 script = ExtResource("4_4j27x")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_IdleJumpToDive"), SubResource("Resource_IdleJumpToIdle"), SubResource("Resource_IdleJumpToFall")])
 sprite_animation_name = &"jump"
+
 [node name="Backflip" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1884281519]
 script = ExtResource("11_mb70y")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_BackflipToIdle"), SubResource("Resource_BackflipToDive"), SubResource("Resource_BackflipToSpin")])
 sprite_animation_name = &"jump"
 sprite_restart_if_playing = false
 sprite_loop = false
 sprite_speed_scale = 0.0
 anim_animation = "backflip"
+sfx_enter_enabled = true
+sfx_enter_sound = SubResource("sfxrand10")
+sfx_enter_bus = &"Player"
+
 [node name="BackflipUp" type="Node" parent="StateMachine/Dry/Airborne" unique_id=420233348]
 script = ExtResource("11_b6ajd")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_BackflipUpToIdle"), SubResource("Resource_BackflipUpToSpin"), SubResource("Resource_BackflipUpToDive")])
 sprite_animation_name = &"jump"
 sprite_restart_if_playing = false
 sprite_loop = false
 sprite_speed_scale = 0.0
 anim_animation = "backflip"
+sfx_enter_enabled = true
+sfx_enter_sound = SubResource("sfxrand15")
+sfx_enter_bus = &"Player"
+
 [node name="Fall" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1389110280]
 script = ExtResource("4_4j27x")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_FallToIdle"), SubResource("Resource_FallToSpin"), SubResource("Resource_FallToDive")])
 sprite_animation_name = &"fall_start"
+
 [node name="RolloutF" type="Node" parent="StateMachine/Dry/Airborne" unique_id=393936851]
 script = ExtResource("12_02rvq")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_RolloutFToIdle"), SubResource("Resource_RolloutFToDive"), SubResource("Resource_RolloutFToFall"), SubResource("Resource_RolloutFToSpin")])
 sprite_animation_name = &"jump"
 sprite_restart_if_playing = false
 sprite_loop = false
 sprite_speed_scale = 0.0
 anim_animation = "rollout_f"
+
 [node name="BaseJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1477404521]
 script = ExtResource("15_5mhew")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_BaseJumpToDive"), SubResource("Resource_BaseJumpToFall"), SubResource("Resource_BaseJumpToIdle"), SubResource("Resource_BaseJumpToJump"), SubResource("Resource_BaseJumpToDoubleJump"), SubResource("Resource_BaseJumpToTripleJump")])
 always_transition = true
 sprite_restart_if_playing = false
 sprite_loop = false
 sprite_speed_scale = 0.0
+
 [node name="Jump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" unique_id=2029960993]
 script = ExtResource("4_4j27x")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_JumpToSpin")])
 sprite_animation_name = &"jump"
+sfx_enter_enabled = true
+sfx_enter_sound = SubResource("sfxrand18")
+sfx_enter_bus = &"Player"
+
 [node name="DoubleJump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" unique_id=936922287]
 script = ExtResource("4_4j27x")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_DoubleJumpToSpin")])
 sprite_animation_name = &"double_jump"
+sfx_enter_enabled = true
+sfx_enter_sound = SubResource("sfxrand22")
+sfx_enter_bus = &"Player"
+
 [node name="TripleJump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" unique_id=702472203]
 script = ExtResource("4_4j27x")
 sprite_animation_name = &"triple_jump"
 anim_animation = "triple_jump"
+sfx_enter_enabled = true
+sfx_enter_sound = SubResource("sfxrand23")
+sfx_enter_bus = &"Player"
+
 [node name="Spin" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1685604128 node_paths=PackedStringArray("spin_hitbox")]
 script = ExtResource("14_20bnd")
 spin_hitbox = NodePath("../../../../Hitboxes/Spin")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_SpinToBaseJump"), SubResource("Resource_SpinToFall"), SubResource("Resource_SpinToIdle"), SubResource("Resource_SpinToDive")])
 sprite_animation_name = &"spin_start"
 sprite_chain = Array[StringName]([&"spin_loop"])
+sfx_enter_enabled = true
+sfx_enter_sound = SubResource("sfxrand27")
+sfx_enter_bus = &"Player"
+sfx_enter_stop_on_exit = true
+
 [node name="Floorslide" type="Node" parent="StateMachine/Dry" unique_id=1890132868 node_paths=PackedStringArray("collision_enabled_shapes")]
 script = ExtResource("6_y6elw")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_FloorslideToBackflip"), SubResource("Resource_FloorslideToRolloutF"), SubResource("Resource_FloorslideToIdle")])
 sprite_animation_name = &"floor_slide"
 sprite_offset_enabled = true
 sprite_offset_value = Vector2(0, 4)
 collision_enabled_shapes = [NodePath("../../../DiveCollision"), NodePath("../../../Hitboxes/Dive/CollisionShape2D")]
+
 [node name="Strike" type="Node" parent="StateMachine/Dry" unique_id=2014892043]
 script = ExtResource("4_4j27x")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_StrikeToIdle")])
 sprite_animation_name = &"bonk"
 sprite_lock_flipping = true
 sprite_loop = false
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres28")
+sfx_enter_bus = &"Player"
+
 [node name="Submerged" type="Node" parent="StateMachine" unique_id=1525831935]
 script = ExtResource("38_3h1ly")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_SubmergedToFall"), SubResource("Resource_SubmergedToIdleJump")])
 always_transition = true
+
 [node name="SwimIdle" type="Node" parent="StateMachine/Submerged" unique_id=203521133]
 script = ExtResource("4_4j27x")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_SwimIdleToSwimSpin"), SubResource("Resource_SwimIdleToSwim"), SubResource("Resource_SwimIdleToSwimWalk")])
 sprite_animation_name = &"swim_idle"
+
 [node name="Swim" type="Node" parent="StateMachine/Submerged" unique_id=235025815]
 script = ExtResource("39_ohvaq")
 burst_rise_speed = 150.0
 burst_rise_smoothing = 100.0
 neutral_sink_speed = 1000.0
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_SwimToSwimIdle")])
 sprite_animation_name = &"swim"
+
 [node name="SwimWalk" type="Node" parent="StateMachine/Submerged" unique_id=919158494]
 script = ExtResource("4_4j27x")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_SwimWalkToSwim"), SubResource("Resource_SwimWalkToSwimSpin")])
 sprite_animation_name = &"swim_walk"
+
 [node name="SwimSpin" type="Node" parent="StateMachine/Submerged" unique_id=1905840328 node_paths=PackedStringArray("spin_hitbox")]
 script = ExtResource("39_mjy7s")
 spin_hitbox = NodePath("../../../Hitboxes/Spin")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_SwimSpinToSwimIdle")])
 sprite_animation_name = &"spin_start"
 sprite_chain = Array[StringName]([&"spin_loop"])
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres29")
+sfx_enter_bus = &"SFX"
+sfx_enter_stop_on_exit = true
+sfx_exit_enabled = true
+sfx_exit_sound = ExtResource("sfxres30")
+sfx_exit_bus = &"SFX"
+
 [node name="GroundPound" type="Node" parent="StateMachine" unique_id=1959935352]
 script = ExtResource("4_4j27x")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_GroundPoundToGroundPoundStart")])
 is_passthrough = true
 always_transition = true
 sprite_lock_flipping = true
+
 [node name="GroundPoundStart" type="Node" parent="StateMachine/GroundPound" unique_id=1889846081]
 script = ExtResource("15_eihrn")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_GroundPoundStartToGroundPoundFall")])
 runtime = 0.3
 sprite_animation_name = &"ground_pound_start"
 sprite_restart_if_playing = false
@@ -760,8 +1372,13 @@ sprite_loop = false
 sprite_speed_scale = 0.0
 collision_mask_override = 512
 anim_animation = "ground_pound_start"
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres31")
+sfx_enter_bus = &"Player"
+
 [node name="GroundPoundFall" type="Node" parent="StateMachine/GroundPound" unique_id=2058012596 node_paths=PackedStringArray("collision_enabled_shapes")]
 script = ExtResource("16_eihrn")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_GroundPoundFallToGroundPoundSlam")])
 sprite_animation_name = &"ground_pound_fall"
 sprite_restart_if_playing = false
 sprite_lock_flipping = true
@@ -769,14 +1386,22 @@ sprite_loop = false
 sprite_speed_scale = 0.0
 collision_enabled_shapes = [NodePath("../../../GroundPoundCollision"), NodePath("../../../Hitboxes/GroundPound/CollisionShape2D")]
 collision_mask_override = 512
+
 [node name="GroundPoundSlam" type="Node" parent="StateMachine/GroundPound" unique_id=333120121]
 script = ExtResource("17_aln35")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_GroundPoundSlamToIdle")])
 collision_mask_override = 512
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres32")
+sfx_enter_bus = &"Player"
+
 [node name="DeathHit" type="Node" parent="StateMachine" unique_id=453131666 node_paths=PackedStringArray("hurt_box")]
 script = ExtResource("48_563ve")
 hurt_box = NodePath("../../Hitboxes/HurtBox")
+transitions = Array[ExtResource("3_0jrw7")]([SubResource("Resource_DeathHitToDeathFall")])
 sprite_animation_name = &"bonk"
 sprite_lock_flipping = true
+
 [node name="DeathFall" type="Node" parent="StateMachine" unique_id=1630651820]
 script = ExtResource("50_ndkiv")
 player_y_velocity_curve = SubResource("Curve_ndkiv")
@@ -784,6 +1409,10 @@ player_rotation_curve = SubResource("Curve_26jgh")
 death_screen_texture = ExtResource("51_26jgh")
 transition_out_texture = SubResource("GradientTexture2D_gmxc2")
 sprite_lock_flipping = true
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres33")
+sfx_enter_bus = &"SFX"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1248091762]
 libraries/ = SubResource("AnimationLibrary_mb70y")
 
@@ -859,11 +1488,11 @@ copy_mode = 0
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_26jgh")
+texture = SubResource("CanvasTexture_563ve")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_26jgh")
+canvas_texture = SubResource("CanvasTexture_563ve")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true
@@ -1127,392 +1756,6 @@ high_particle_amount = 8
 medium_particle_amount = 8
 low_particle_amount = 8
 metadata/_custom_type_script = "uid://c2df6xnsl5aem"
-
-[node name="ToSpin" type="Node" parent="StateMachine/Dry/Grounded/Idle" node_paths=PackedStringArray("target") unique_id=100000]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Airborne/Spin")
-mode = 3
-expression = "is_input_spin"
-
-[node name="ToIdle" type="Node" parent="StateMachine/GroundPound/GroundPoundSlam" node_paths=PackedStringArray("target") unique_id=100001]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Dry/Grounded/Idle")
-mode = 3
-expression = "!is_in_water()"
-min_delay = 0.3
-
-[node name="ToBaseJump" type="Node" parent="StateMachine/Dry/Airborne/Spin" node_paths=PackedStringArray("target") unique_id=100002]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../BaseJump")
-mode = 3
-expression = "is_on_floor() && is_action_just_pressed(\"jump\", 0.2)"
-
-[node name="ToFall" type="Node" parent="StateMachine/Dry/Grounded/Walk" node_paths=PackedStringArray("target") unique_id=100003]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Airborne/Fall")
-mode = 3
-expression = "!is_on_floor() && velocity.y >= 0"
-
-[node name="ToSpin" type="Node" parent="StateMachine/Dry/Airborne/BaseJump/Jump" node_paths=PackedStringArray("target") unique_id=100004]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Spin")
-mode = 3
-expression = "is_input_spin && velocity.y > -55"
-
-[node name="ToIdle" type="Node" parent="StateMachine/Dry/Airborne/Fall" node_paths=PackedStringArray("target") unique_id=100005]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Grounded/Idle")
-mode = 3
-expression = "is_on_floor()"
-
-[node name="ToDeathFall" type="Node" parent="StateMachine/DeathHit" node_paths=PackedStringArray("target") unique_id=100006]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../DeathFall")
-min_delay = 1.0
-
-[node name="ToDive" type="Node" parent="StateMachine/Dry/Airborne/IdleJump" node_paths=PackedStringArray("target") unique_id=100007]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Dive")
-mode = 3
-expression = "is_action_just_pressed(\"dive\") && can_dive && get_active_state_uptime() > 0"
-
-[node name="ToGroundPoundSlam" type="Node" parent="StateMachine/GroundPound/GroundPoundFall" node_paths=PackedStringArray("target") unique_id=100008]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../GroundPoundSlam")
-mode = 3
-expression = "is_on_floor()"
-
-[node name="ToDive" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" node_paths=PackedStringArray("target") unique_id=100009]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Dive")
-mode = 3
-expression = "is_action_just_pressed(\"dive\") && can_dive && get_active_state_uptime() > 0"
-
-[node name="ToIdle" type="Node" parent="StateMachine/Dry/Airborne/BackflipUp" node_paths=PackedStringArray("target") unique_id=100010]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Grounded/Idle")
-mode = 3
-expression = "is_on_floor()"
-
-[node name="ToSwim" type="Node" parent="StateMachine/Submerged/SwimWalk" node_paths=PackedStringArray("target") unique_id=100011]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Swim")
-mode = 3
-expression = "is_input_swim"
-
-[node name="ToFall" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" node_paths=PackedStringArray("target") unique_id=100012]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Fall")
-mode = 3
-expression = "velocity.y >= 0 && !is_on_floor()"
-
-[node name="ToIdle" type="Node" parent="StateMachine/Dry/Airborne/RolloutF" node_paths=PackedStringArray("target") unique_id=100013]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Grounded/Idle")
-mode = 3
-expression = "is_on_floor() && get_active_state_uptime() > 0.1
-
-&& state_machine.consume_state_buffer()"
-
-[node name="ToIdle" type="Node" parent="StateMachine/Dry/Airborne/IdleJump" node_paths=PackedStringArray("target") unique_id=100014]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Grounded/Idle")
-mode = 3
-expression = "is_on_floor()"
-
-[node name="ToIdle" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" node_paths=PackedStringArray("target") unique_id=100015]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Grounded/Idle")
-mode = 3
-expression = "is_on_floor() && !is_input_jump"
-
-[node name="ToDive" type="Node" parent="StateMachine/Dry/Airborne/RolloutF" node_paths=PackedStringArray("target") unique_id=100016]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Dive")
-mode = 3
-expression = "is_input_dive && get_active_state_uptime() > 0.2 && !is_on_floor() && can_dive"
-
-[node name="ToSwimSpin" type="Node" parent="StateMachine/Submerged/SwimIdle" node_paths=PackedStringArray("target") unique_id=100017]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../SwimSpin")
-mode = 3
-expression = "is_input_spin"
-
-[node name="ToCrouch" type="Node" parent="StateMachine/Dry/Grounded/Idle" node_paths=PackedStringArray("target") unique_id=100018]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Crouch")
-mode = 3
-expression = "is_action_pressed(\"crouch\") && abs(velocity.x) <= 50 && is_on_floor()"
-
-[node name="ToSwimIdle" type="Node" parent="StateMachine/Submerged/Swim" node_paths=PackedStringArray("target") unique_id=100019]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../SwimIdle")
-mode = 3
-expression = "swim_buffer_time == 0 && !is_input_swim"
-
-[node name="ToIdle" type="Node" parent="StateMachine/Dry/Grounded/Walk" node_paths=PackedStringArray("target") unique_id=100020]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Idle")
-mode = 3
-expression = "abs(move_dir) < 0.1 && abs(velocity.x) < 0.5"
-
-[node name="ToFloorslide" type="Node" parent="StateMachine/Dry/Grounded/Idle" node_paths=PackedStringArray("target") unique_id=100021]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Floorslide")
-mode = 3
-expression = "is_action_just_pressed(\"crouch\") && abs(velocity.x) > 50 && is_on_floor()"
-
-[node name="ToFall" type="Node" parent="StateMachine/Dry/Airborne/RolloutF" node_paths=PackedStringArray("target") unique_id=100022]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Fall")
-mode = 3
-expression = "velocity.y > 30 && 
-!is_on_floor() && 
-get_active_state_uptime() > 0.3 && 
-is_action_pressed(\"use_fludd\") &&
-get_fludd_handler().equipped_nozzle != 0"
-
-[node name="ToSpin" type="Node" parent="StateMachine/Dry/Airborne/BackflipUp" node_paths=PackedStringArray("target") unique_id=100023]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Spin")
-mode = 3
-expression = "is_input_spin && velocity.y > 155"
-
-[node name="ToSpin" type="Node" parent="StateMachine/Dry/Airborne/Fall" node_paths=PackedStringArray("target") unique_id=100024]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Spin")
-mode = 3
-expression = "is_input_spin && velocity.y > 100"
-
-[node name="ToJump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" node_paths=PackedStringArray("target") unique_id=100025]
-script = ExtResource("3_0jrw7")
-target = NodePath("../Jump")
-mode = 3
-expression = "current_jump == 1"
-
-[node name="ToIdle" type="Node" parent="StateMachine/Dry/Airborne/Backflip" node_paths=PackedStringArray("target") unique_id=100026]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Grounded/Idle")
-mode = 3
-expression = "is_on_floor()"
-
-[node name="ToIdle" type="Node" parent="StateMachine/Dry/Strike" node_paths=PackedStringArray("target") unique_id=100027]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Grounded/Idle")
-mode = 3
-expression = "is_on_floor() && state_machine.get_current_state().get_elapsed_physics_frames() > 5"
-min_delay = 0.25
-
-[node name="ToFall" type="Node" parent="StateMachine/Submerged" node_paths=PackedStringArray("target") unique_id=100028]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Dry/Airborne/Fall")
-mode = 3
-expression = "!is_in_water() && velocity.y >= 0"
-
-[node name="ToSwim" type="Node" parent="StateMachine/Submerged/SwimIdle" node_paths=PackedStringArray("target") unique_id=100029]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Swim")
-mode = 3
-expression = "is_input_swim"
-
-[node name="ToSpin" type="Node" parent="StateMachine/Dry/Airborne/RolloutF" node_paths=PackedStringArray("target") unique_id=100030]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Spin")
-mode = 3
-expression = "is_input_spin && velocity.y > -40"
-
-[node name="ToSpin" type="Node" parent="StateMachine/Dry/Airborne/BaseJump/DoubleJump" node_paths=PackedStringArray("target") unique_id=100031]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Spin")
-mode = 3
-expression = "is_input_spin && velocity.y > -55"
-
-[node name="ToSwimWalk" type="Node" parent="StateMachine/Submerged/SwimIdle" node_paths=PackedStringArray("target") unique_id=100032]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../SwimWalk")
-mode = 3
-expression = "abs(move_dir) > 0.1 && is_on_floor()"
-
-[node name="ToGroundPoundFall" type="Node" parent="StateMachine/GroundPound/GroundPoundStart" node_paths=PackedStringArray("target") unique_id=100033]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../GroundPoundFall")
-mode = 1
-
-[node name="ToFall" type="Node" parent="StateMachine/Dry/Airborne/Spin" node_paths=PackedStringArray("target") unique_id=100034]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Fall")
-mode = 3
-expression = "!is_input_spin && !is_spinning && !is_on_floor()"
-
-[node name="ToGroundPoundStart" type="Node" parent="StateMachine/GroundPound" node_paths=PackedStringArray("target") unique_id=100035]
-script = ExtResource("3_0jrw7")
-target = NodePath("../GroundPoundStart")
-mode = 1
-
-[node name="ToRolloutF" type="Node" parent="StateMachine/Dry/Floorslide" node_paths=PackedStringArray("target") unique_id=100036]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Airborne/RolloutF")
-mode = 3
-expression = "is_action_pressed(\"jump\") && is_on_floor() && get_facing_velocity() > 50
-
-&& state_machine.store_state_buffer()"
-
-[node name="ToSwimIdle" type="Node" parent="StateMachine/Submerged/SwimSpin" node_paths=PackedStringArray("target") unique_id=100037]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../SwimIdle")
-mode = 3
-expression = "!is_input_spin && get_active_state_uptime() > 0.6"
-
-[node name="ToFall" type="Node" parent="StateMachine/Dry/Airborne/IdleJump" node_paths=PackedStringArray("target") unique_id=100038]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Fall")
-mode = 3
-expression = "velocity.y > 50"
-
-[node name="ToDoubleJump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" node_paths=PackedStringArray("target") unique_id=100039]
-script = ExtResource("3_0jrw7")
-target = NodePath("../DoubleJump")
-mode = 3
-expression = "current_jump == 2"
-
-[node name="ToIdle" type="Node" parent="StateMachine/Dry/Floorslide" node_paths=PackedStringArray("target") unique_id=100040]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Grounded/Idle")
-mode = 3
-expression = "!is_crouching && abs(velocity.x) <= 5"
-
-[node name="ToBackflip" type="Node" parent="StateMachine/Dry/Grounded/Crouch" node_paths=PackedStringArray("target") unique_id=100041]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Airborne/Backflip")
-mode = 3
-expression = "is_action_just_pressed(\"jump\") && is_moving_against_facing()"
-
-[node name="ToDive" type="Node" parent="StateMachine/Dry/Airborne/Fall" node_paths=PackedStringArray("target") unique_id=100042]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Dive")
-mode = 3
-expression = "is_action_just_pressed(\"dive\") && can_dive"
-
-[node name="ToDive" type="Node" parent="StateMachine/Dry/Airborne/Backflip" node_paths=PackedStringArray("target") unique_id=100043]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Dive")
-mode = 3
-expression = "is_action_just_pressed(\"dive\")"
-
-[node name="ToSwimIdle" type="Node" parent="StateMachine/Dry" node_paths=PackedStringArray("target") unique_id=100044]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Submerged/SwimIdle")
-mode = 3
-expression = "is_in_water()"
-
-[node name="ToDive" type="Node" parent="StateMachine/Dry/Airborne/BackflipUp" node_paths=PackedStringArray("target") unique_id=100045]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Dive")
-mode = 3
-expression = "is_action_just_pressed(\"dive\") && can_dive"
-
-[node name="ToCrouch" type="Node" parent="StateMachine/Dry/Grounded/Walk" node_paths=PackedStringArray("target") unique_id=100046]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Crouch")
-mode = 3
-expression = "is_action_just_pressed(\"crouch\") && abs(velocity.x) <= 50 && is_on_floor()"
-
-[node name="ToIdle" type="Node" parent="StateMachine/Dry/Airborne/Spin" node_paths=PackedStringArray("target") unique_id=100047]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Grounded/Idle")
-mode = 3
-expression = "!is_input_spin && !is_spinning && is_on_floor()"
-
-[node name="ToBackflipUp" type="Node" parent="StateMachine/Dry/Grounded/Crouch" node_paths=PackedStringArray("target") unique_id=100048]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Airborne/BackflipUp")
-mode = 3
-expression = "is_action_just_pressed(\"jump\") && move_dir == 0"
-
-[node name="ToWalk" type="Node" parent="StateMachine/Dry/Grounded/Idle" node_paths=PackedStringArray("target") unique_id=100049]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Walk")
-mode = 3
-expression = "abs(move_dir) > 0.1 && is_on_floor()"
-
-[node name="ToIdleJump" type="Node" parent="StateMachine/Submerged" node_paths=PackedStringArray("target") unique_id=100050]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Dry/Airborne/IdleJump")
-mode = 3
-expression = "!is_in_water() && velocity.y < 0"
-
-[node name="ToFall" type="Node" parent="StateMachine/Dry/Grounded/Idle" node_paths=PackedStringArray("target") unique_id=100051]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Airborne/Fall")
-mode = 3
-expression = "velocity.y >= 0 && !is_on_floor()"
-
-[node name="ToFloorslide" type="Node" parent="StateMachine/Dry/Grounded/Walk" node_paths=PackedStringArray("target") unique_id=100052]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Floorslide")
-mode = 3
-expression = "is_action_just_pressed(\"crouch\") && is_moving_with_facing() && is_on_floor()"
-
-[node name="ToSpin" type="Node" parent="StateMachine/Dry/Airborne/Backflip" node_paths=PackedStringArray("target") unique_id=100053]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Spin")
-mode = 3
-expression = "is_input_spin && velocity.y > 155"
-
-[node name="ToSwimSpin" type="Node" parent="StateMachine/Submerged/SwimWalk" node_paths=PackedStringArray("target") unique_id=100054]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../SwimSpin")
-mode = 3
-expression = "is_input_spin"
-
-[node name="ToTripleJump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" node_paths=PackedStringArray("target") unique_id=100055]
-script = ExtResource("3_0jrw7")
-target = NodePath("../TripleJump")
-mode = 3
-expression = "current_jump == 3"
-
-[node name="ToFloorslide" type="Node" parent="StateMachine/Dry/Airborne/Dive" node_paths=PackedStringArray("target") unique_id=100056]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Floorslide")
-mode = 3
-expression = "is_on_floor()"
-
-[node name="ToBaseJump" type="Node" parent="StateMachine/Dry/Grounded/Idle" node_paths=PackedStringArray("target") unique_id=100057]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Airborne/BaseJump")
-mode = 3
-expression = "is_on_floor() && is_action_just_pressed(\"jump\", 0.2) && can_jump"
-
-[node name="ToIdle" type="Node" parent="StateMachine/Dry/Grounded/Crouch" node_paths=PackedStringArray("target") unique_id=100058]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Idle")
-mode = 3
-expression = "!is_crouching"
-
-[node name="ToDive" type="Node" parent="StateMachine/Dry/Airborne/Spin" node_paths=PackedStringArray("target") unique_id=100059]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Dive")
-mode = 3
-expression = "is_action_just_pressed(\"dive\") && can_dive"
-
-[node name="ToSpin" type="Node" parent="StateMachine/Dry/Grounded/Walk" node_paths=PackedStringArray("target") unique_id=100060]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Airborne/Spin")
-mode = 3
-expression = "is_input_spin"
-
-[node name="ToBackflip" type="Node" parent="StateMachine/Dry/Floorslide" node_paths=PackedStringArray("target") unique_id=100061]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../Airborne/Backflip")
-mode = 3
-priority = 1.0
-expression = "is_action_just_pressed(\"jump\", 0.2) && is_on_floor() && is_moving_against_facing() "
-
-[node name="ToBaseJump" type="Node" parent="StateMachine/Dry/Grounded/Walk" node_paths=PackedStringArray("target") unique_id=100062]
-script = ExtResource("3_0jrw7")
-target = NodePath("../../../Airborne/BaseJump")
-mode = 3
-expression = "is_on_floor() && is_action_just_pressed(\"jump\", 0.2) && can_jump"
 
 [connection signal="water_entered" from="Regions/WaterCheck" to="." method="_on_water_check_water_entered"]
 [connection signal="water_exited" from="Regions/WaterCheck" to="." method="_on_water_check_water_exited"]

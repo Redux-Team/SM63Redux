@@ -25,6 +25,8 @@ func _ready() -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_IN and not Engine.is_editor_hint() and OS.is_debug_build():
+		if not is_node_ready():
+			return
 		var modified: int = GdssStorage.get_latest_modified()
 		if modified == _last_modified:
 			return
@@ -47,7 +49,32 @@ func _load_bundle() -> Dictionary:
 		var compiled_modified: int = compiled.get("source_modified", 0)
 		if source_modified == 0 or compiled_modified >= source_modified:
 			return compiled["data"]
-	return GdssStorage.load_data()
+	var data: Dictionary = GdssStorage.load_data()
+	if data.get("parsed") is Dictionary and not (data.get("parsed") as Dictionary).is_empty():
+		return data
+	return _parse_sources()
+
+
+func _parse_sources() -> Dictionary:
+	var sources: PackedStringArray = GdssStorage.load_sources()
+	var has_content: bool = false
+	for source: String in sources:
+		if not source.strip_edges().is_empty():
+			has_content = true
+			break
+	if not has_content:
+		return {}
+	var parsed_data: Dictionary = GdssInterpreter.interpret_paths(GdssStorage.get_save_paths())
+	if OS.is_debug_build() and not Engine.is_editor_hint():
+		GdssStorage.write_cache(parsed_data, GdssInterpreter._global_defaults, GdssInterpreter._instance_defaults, GdssInterpreter._local_vars, GdssInterpreter.schemes, GdssInterpreter.meta)
+	return {
+		"parsed": parsed_data,
+		"global_defaults": GdssInterpreter._global_defaults.duplicate(true),
+		"instance_defaults": GdssInterpreter._instance_defaults.duplicate(true),
+		"local_vars": GdssInterpreter._local_vars.duplicate(true),
+		"schemes": GdssInterpreter.schemes.duplicate(true),
+		"meta": GdssInterpreter.meta.duplicate(true),
+	}
 
 
 func _apply_scheme_meta(data: Dictionary) -> void:
@@ -65,6 +92,7 @@ func _reload_parsed() -> void:
 	var data: Dictionary = _load_bundle()
 	if not data.has("parsed"):
 		return
+	GdssInterpreter._override_entry_cache.clear()
 	var raw: Variant = data["parsed"]
 	if not raw is Dictionary:
 		return
@@ -85,6 +113,8 @@ func _reload_parsed() -> void:
 		GdssInterpreter._global_defaults.clear()
 		for key: String in global_defaults:
 			GdssInterpreter._global_defaults[key] = global_defaults[key]
+			if not GdssInterpreter.globals.has(key):
+				GdssInterpreter.globals[key] = global_defaults[key]
 	if data.has("instance_defaults") and data["instance_defaults"] is Dictionary:
 		var instance_defaults: Dictionary = data["instance_defaults"]
 		GdssInterpreter._instance_defaults.clear()
@@ -154,13 +184,15 @@ func _on_node_added(node: Node) -> void:
 
 
 func _try_bind(canvas_item: Node) -> void:
+	var gdss_node: GdssNode = GDSS._get_gdss_nodes().get(canvas_item.get_class())
+	if not gdss_node:
+		return
 	if not GDSS.resolve_mode(canvas_item):
 		if GdssNodeHandler.is_bound(canvas_item):
 			_disconnect_node_signals(canvas_item)
 			GdssNodeHandler.unbind(canvas_item)
-		return
-	var gdss_node: GdssNode = GDSS._get_gdss_nodes().get(canvas_item.get_class())
-	if not gdss_node:
+		else:
+			GdssNodeHandler.detach_foreign_handlers(canvas_item, gdss_node)
 		return
 	GdssNodeHandler.bind(canvas_item, true, gdss_node)
 	gdss_node.update_state(canvas_item)

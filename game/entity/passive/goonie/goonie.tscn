@@ -116,6 +116,39 @@ size = Vector2(32, 3)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oohn0"]
 size = Vector2(32, 12)
 
+[sub_resource type="Resource" id="Resource_HeavyFlapToFlap"]
+script = ExtResource("3_xtefv")
+resource_name = "ToFlap"
+target = NodePath("Flap")
+mode = 2
+expression = "!has_rider()"
+
+[sub_resource type="Resource" id="Resource_FlapToGlide"]
+script = ExtResource("3_xtefv")
+resource_name = "ToGlide"
+target = NodePath("Glide")
+mode = 1
+
+[sub_resource type="Resource" id="Resource_FlapToHeavyFlap"]
+script = ExtResource("3_xtefv")
+resource_name = "ToHeavyFlap"
+target = NodePath("HeavyFlap")
+mode = 2
+expression = "has_rider()"
+
+[sub_resource type="Resource" id="Resource_GlideToHeavyFlap"]
+script = ExtResource("3_xtefv")
+resource_name = "ToHeavyFlap"
+target = NodePath("HeavyFlap")
+mode = 2
+expression = "has_rider()"
+
+[sub_resource type="Resource" id="Resource_GlideToFlap"]
+script = ExtResource("3_xtefv")
+resource_name = "ToFlap"
+target = NodePath("Flap")
+mode = 1
+
 [node name="Goonie" type="CharacterBody2D" unique_id=459377689 node_paths=PackedStringArray("ride_area", "sprite", "components_root", "state_machine")]
 collision_layer = 2
 collision_mask = 0
@@ -136,13 +169,19 @@ metadata/_custom_type_script = "uid://utibsg6xkllx"
 script = ExtResource("4_xtefv")
 runtime = 6.5
 sprite_animation_name = &"flap"
+transitions = Array[ExtResource("3_xtefv")]([SubResource("Resource_FlapToGlide"), SubResource("Resource_FlapToHeavyFlap")])
+
 [node name="Glide" type="Node" parent="StateMachine" unique_id=2019713984]
 script = ExtResource("5_xtefv")
 runtime = 1.5
 sprite_animation_name = &"glide"
+transitions = Array[ExtResource("3_xtefv")]([SubResource("Resource_GlideToHeavyFlap"), SubResource("Resource_GlideToFlap")])
+
 [node name="HeavyFlap" type="Node" parent="StateMachine" unique_id=44810290]
 script = ExtResource("6_bodhv")
 sprite_animation_name = &"heavy_flap"
+transitions = Array[ExtResource("3_xtefv")]([SubResource("Resource_HeavyFlapToFlap")])
+
 [node name="Components" type="Node" parent="." unique_id=566607527]
 
 [node name="GravityComponent" type="Node" parent="Components" unique_id=296573466]
@@ -178,31 +217,3 @@ position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_oohn0")
 one_way_collision = true
 one_way_collision_margin = 12.0
-
-[node name="ToFlap" type="Node" parent="StateMachine/HeavyFlap" node_paths=PackedStringArray("target") unique_id=100000]
-script = ExtResource("3_xtefv")
-target = NodePath("../../Flap")
-mode = 3
-expression = "!has_rider()"
-
-[node name="ToGlide" type="Node" parent="StateMachine/Flap" node_paths=PackedStringArray("target") unique_id=100001]
-script = ExtResource("3_xtefv")
-target = NodePath("../../Glide")
-mode = 1
-
-[node name="ToHeavyFlap" type="Node" parent="StateMachine/Flap" node_paths=PackedStringArray("target") unique_id=100002]
-script = ExtResource("3_xtefv")
-target = NodePath("../../HeavyFlap")
-mode = 3
-expression = "has_rider()"
-
-[node name="ToHeavyFlap" type="Node" parent="StateMachine/Glide" node_paths=PackedStringArray("target") unique_id=100003]
-script = ExtResource("3_xtefv")
-target = NodePath("../../HeavyFlap")
-mode = 3
-expression = "has_rider()"
-
-[node name="ToFlap" type="Node" parent="StateMachine/Glide" node_paths=PackedStringArray("target") unique_id=100004]
-script = ExtResource("3_xtefv")
-target = NodePath("../../Flap")
-mode = 1

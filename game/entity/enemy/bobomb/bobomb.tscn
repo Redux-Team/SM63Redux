@@ -24,6 +24,11 @@
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="25_whfh4"]
 [ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="29_ekeht"]
 
+[ext_resource type="AudioStream" uid="uid://dgmayxvw7oy3w" path="res://assets/sfx/entity/goomba/goomba_step.wav" id="sfxres1"]
+[ext_resource type="AudioStream" uid="uid://334xwjirxlct" path="res://assets/sfx/entity/bobomb/fuse.wav" id="sfxres2"]
+[ext_resource type="AudioStream" uid="uid://cnu88x3ta80kk" path="res://assets/sfx/entity/bobomb/explosion_buildup_1.wav" id="sfxres3"]
+[ext_resource type="AudioStream" uid="uid://dbtylflefgm2o" path="res://assets/sfx/entity/bobomb/explosion.wav" id="sfxres5"]
+[ext_resource type="AudioStream" uid="uid://8ybrcf2gym5t" path="res://assets/sfx/entity/bobomb/knock.wav" id="sfxres6"]
 [sub_resource type="AtlasTexture" id="AtlasTexture_ap0j0"]
 atlas = ExtResource("3_x8m5v")
 region = Rect2(0, 0, 32, 32)
@@ -370,6 +375,25 @@ point_count = 2
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_glled"]
 size = Vector2(16, 18)
 
+[sub_resource type="Resource" id="Resource_ChaseToKaboom"]
+script = ExtResource("13_i2i30")
+resource_name = "ToKaboom"
+target = NodePath("Kaboom")
+mode = 1
+
+[sub_resource type="Resource" id="Resource_StrikeToKaboom"]
+script = ExtResource("13_i2i30")
+resource_name = "ToKaboom"
+target = NodePath("Kaboom")
+mode = 2
+expression = "(is_on_floor() || is_on_wall()) && get_active_state_uptime() > 0.1"
+
+[sub_resource type="AudioStreamRandomizer" id="sfxrand4"]
+playback_mode = 1
+streams_count = 2
+stream_0/stream = ExtResource("sfxres2")
+stream_1/stream = ExtResource("sfxres3")
+
 [node name="Bobomb" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("fuse", "key", "player_check", "sprite", "components_root", "collision_shapes", "state_machine", "water_check")]
 collision_layer = 8
 collision_mask = 2
@@ -547,6 +571,10 @@ displacement = SubResource("Curve_tfdvb")
 floor_check_r = NodePath("../../FloorCheckR")
 floor_check_l = NodePath("../../FloorCheckL")
 sprite_animation_name = &"patrol"
+sfx_frame_enabled = true
+sfx_frame_sound = ExtResource("sfxres1")
+sfx_frame_bus = &"SFX"
+sfx_frame_indices = Array[int]([0, 3])
 [node name="Chase" type="Node" parent="StateMachine" unique_id=2076778657 node_paths=PackedStringArray("fuse_light", "key", "fuse")]
 script = ExtResource("19_na7jb")
 fuse_light = NodePath("../../FuseLight")
@@ -557,34 +585,37 @@ runtime = 3.25
 sprite_animation_name = &"patrol"
 sprite_speed_scale = 2.0
 sprite_chain_loop_last = false
+transitions = Array[ExtResource("13_i2i30")]([SubResource("Resource_ChaseToKaboom")])
+sfx_enter_enabled = true
+sfx_enter_sound = SubResource("sfxrand4")
+sfx_enter_bus = &"SFX"
+sfx_enter_stop_on_exit = true
+
 [node name="Kaboom" type="Node" parent="StateMachine" unique_id=1881694916 node_paths=PackedStringArray("explosion_shape", "explosion", "collision_enabled_shapes")]
 script = ExtResource("21_hy3hd")
 explosion_shape = NodePath("../../ExplosionHitbox/ExplosionShape")
 explosion = NodePath("../../Explosion")
 collision_enabled_shapes = [NodePath("../../ExplosionHitbox/ExplosionShape")]
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres5")
+sfx_enter_bus = &"SFX"
 [node name="Strike" type="Node" parent="StateMachine" unique_id=1746543687 node_paths=PackedStringArray("fuse", "key", "collision_disabled_shapes")]
 script = ExtResource("24_na7jb")
 fuse = NodePath("../../Sprite/Offset/Fuse")
 key = NodePath("../../Sprite/Offset/Key")
 sprite_animation_name = &"strike"
 collision_disabled_shapes = [NodePath("../../HurtBox/HurtboxShape")]
+transitions = Array[ExtResource("13_i2i30")]([SubResource("Resource_StrikeToKaboom")])
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres6")
+sfx_enter_bus = &"SFX"
+
 [node name="WaterCheckArea" type="Area2D" parent="." unique_id=1408411545]
 script = ExtResource("29_ekeht")
 metadata/_custom_type_script = "uid://bhoysiia8munh"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WaterCheckArea" unique_id=8270833]
 shape = SubResource("RectangleShape2D_glled")
-
-[node name="ToKaboom" type="Node" parent="StateMachine/Chase" node_paths=PackedStringArray("target") unique_id=100000]
-script = ExtResource("13_i2i30")
-target = NodePath("../../Kaboom")
-mode = 1
-
-[node name="ToKaboom" type="Node" parent="StateMachine/Strike" node_paths=PackedStringArray("target") unique_id=100001]
-script = ExtResource("13_i2i30")
-target = NodePath("../../Kaboom")
-mode = 3
-expression = "(is_on_floor() || is_on_wall()) && get_active_state_uptime() > 0.1"
 
 [connection signal="frame_changed" from="Sprite" to="." method="_on_sprite_frame_changed"]
 [connection signal="area_entered" from="PlayerCheck" to="." method="_on_player_check_area_entered"]

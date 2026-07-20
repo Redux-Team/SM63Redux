@@ -27,6 +27,7 @@
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="21_qgp4f"]
 [ext_resource type="Script" uid="uid://dnsd2a8oriy3" path="res://util/entity/forcebox.gd" id="27_bwx7d"]
 
+[ext_resource type="AudioStream" uid="uid://ba2t54uhtn3i5" path="res://assets/sfx/entity/cheep_cheep/cheep_cheep_die.wav" id="sfxres1"]
 [sub_resource type="AtlasTexture" id="AtlasTexture_3hxvc"]
 atlas = ExtResource("3_e1qem")
 region = Rect2(0, 0, 32, 32)
@@ -269,6 +270,34 @@ radius = 43.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_4q4ff"]
 radius = 171.01169
 
+[sub_resource type="Resource" id="Resource_SwimToChase"]
+script = ExtResource("9_axbdk")
+resource_name = "ToChase"
+target = NodePath("Submerged/Chase")
+mode = 2
+expression = "is_player_in_vision()"
+
+[sub_resource type="Resource" id="Resource_ChaseToSwim"]
+script = ExtResource("9_axbdk")
+resource_name = "ToSwim"
+target = NodePath("Submerged/Swim")
+mode = 2
+expression = "is_player_out_of_vision()"
+
+[sub_resource type="Resource" id="Resource_SubmergedToFlop"]
+script = ExtResource("9_axbdk")
+resource_name = "ToFlop"
+target = NodePath("Dry/Flop")
+mode = 2
+expression = "!is_in_water()"
+
+[sub_resource type="Resource" id="Resource_DryToSwim"]
+script = ExtResource("9_axbdk")
+resource_name = "ToSwim"
+target = NodePath("Submerged/Swim")
+mode = 2
+expression = "is_in_water()"
+
 [node name="CheepCheep" type="CharacterBody2D" unique_id=663921538 node_paths=PackedStringArray("entity_check_area_water", "entity_check_area_close", "entity_check_area_lost", "sprite", "components_root", "collision_shapes", "state_machine", "water_check")]
 collision_layer = 8
 collision_mask = 2
@@ -310,6 +339,8 @@ metadata/_custom_type_script = "uid://utibsg6xkllx"
 [node name="Submerged" type="Node" parent="StateMachine" unique_id=1456638796]
 script = ExtResource("10_n3erx")
 always_transition = true
+transitions = Array[ExtResource("9_axbdk")]([SubResource("Resource_SubmergedToFlop")])
+
 [node name="Swim" type="Node" parent="StateMachine/Submerged" unique_id=993447039 node_paths=PackedStringArray("water_check_l", "water_check_r", "wall_check_l", "wall_check_r")]
 script = ExtResource("11_t1a8t")
 displacement = SubResource("Curve_xq1me")
@@ -318,14 +349,20 @@ water_check_r = NodePath("../../../WaterCheckR")
 wall_check_l = NodePath("../../../WallCheckL")
 wall_check_r = NodePath("../../../WallCheckR")
 sprite_animation_name = &"swim"
+transitions = Array[ExtResource("9_axbdk")]([SubResource("Resource_SwimToChase")])
+
 [node name="Chase" type="Node" parent="StateMachine/Submerged" unique_id=832478878 node_paths=PackedStringArray("entity_check_area_lost")]
 script = ExtResource("12_b1y5l")
 entity_check_area_lost = NodePath("../../../EntityCheckAreaLost")
 sprite_animation_name = &"alert"
 sprite_chain = Array[StringName]([&"chase"])
+transitions = Array[ExtResource("9_axbdk")]([SubResource("Resource_ChaseToSwim")])
+
 [node name="Dry" type="Node" parent="StateMachine" unique_id=1978203948]
 script = ExtResource("13_xq1me")
 always_transition = true
+transitions = Array[ExtResource("9_axbdk")]([SubResource("Resource_DryToSwim")])
+
 [node name="Flop" type="Node" parent="StateMachine/Dry" unique_id=712154901]
 script = ExtResource("14_qj7y6")
 sprite_animation_name = &"idle"
@@ -334,6 +371,9 @@ script = ExtResource("15_66cei")
 friction_component = NodePath("../../Components/FrictionComponent")
 sprite_animation_name = &"strike"
 collision_disabled_shapes = [NodePath("../../HitBox/CollisionShape2D"), NodePath("../../HurtBox/CollisionShape2D")]
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres1")
+sfx_enter_bus = &"SFX"
 [node name="Components" type="Node" parent="." unique_id=729948919]
 
 [node name="GravityComponent" type="Node" parent="Components" unique_id=1208409901 node_paths=PackedStringArray("entity")]
@@ -443,29 +483,5 @@ collision_mask = 2
 position = Vector2(-1, 1)
 target_position = Vector2(-34, 0)
 collision_mask = 2
-
-[node name="ToChase" type="Node" parent="StateMachine/Submerged/Swim" node_paths=PackedStringArray("target") unique_id=100000]
-script = ExtResource("9_axbdk")
-target = NodePath("../../Chase")
-mode = 3
-expression = "is_player_in_vision()"
-
-[node name="ToSwim" type="Node" parent="StateMachine/Submerged/Chase" node_paths=PackedStringArray("target") unique_id=100001]
-script = ExtResource("9_axbdk")
-target = NodePath("../../Swim")
-mode = 3
-expression = "is_player_out_of_vision()"
-
-[node name="ToFlop" type="Node" parent="StateMachine/Submerged" node_paths=PackedStringArray("target") unique_id=100002]
-script = ExtResource("9_axbdk")
-target = NodePath("../../Dry/Flop")
-mode = 3
-expression = "!is_in_water()"
-
-[node name="ToSwim" type="Node" parent="StateMachine/Dry" node_paths=PackedStringArray("target") unique_id=100003]
-script = ExtResource("9_axbdk")
-target = NodePath("../../Submerged/Swim")
-mode = 3
-expression = "is_in_water()"
 
 [connection signal="water_entered" from="WaterCheckBody" to="." method="_on_water_check_body_water_entered"]

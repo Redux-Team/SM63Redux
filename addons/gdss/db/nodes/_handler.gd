@@ -50,6 +50,7 @@ static func purge(id: int) -> void:
 	if _registry.has(id):
 		for handler: GdssPropHandler in (_registry[id] as Dictionary).values():
 			if handler != null:
+				handler._kill_tween()
 				handler._free_gpu_ci()
 		_registry.erase(id)
 		_all_dirty = true
@@ -174,6 +175,31 @@ static func apply_mode(canvas_item: Node) -> void:
 		unbind(canvas_item)
 
 
+static func detach_foreign_handlers(node: Node, gdss_node: GdssNode = null) -> void:
+	if not (node is Control or node is Window):
+		return
+	if gdss_node == null:
+		gdss_node = GDSS._get_gdss_nodes().get(node.get_class())
+	if gdss_node == null or gdss_node.states.is_empty():
+		return
+	var control: Variant = node
+	var removed: bool = false
+	for state: String in gdss_node.states:
+		if not control.has_theme_stylebox_override(state):
+			continue
+		var sb: StyleBox = control.get_theme_stylebox(state)
+		if not sb is GdssPropHandler:
+			continue
+		var owner_node: Node = (sb as GdssPropHandler).ref
+		if owner_node != null and owner_node != node:
+			if not removed:
+				control.begin_bulk_theme_override()
+				removed = true
+			control.remove_theme_stylebox_override(state)
+	if removed:
+		control.end_bulk_theme_override()
+
+
 static func set_mode_state(node: Node, mode: GDSS.GdssMode, in_legacy_group: bool) -> void:
 	if mode == GDSS.GdssMode.INHERIT:
 		if node.has_meta(GDSS.MODE_META):
@@ -265,7 +291,10 @@ static func _obtain(canvas_item: Node, control: Variant, state: String, slot: St
 	if handler == null and not slot.is_empty():
 		var existing: StyleBox = control.get_theme_stylebox(slot) if control.has_theme_stylebox_override(slot) else null
 		if existing is GdssPropHandler:
-			handler = existing as GdssPropHandler
+			var candidate: GdssPropHandler = existing as GdssPropHandler
+			var bound: Node = candidate.ref
+			if bound == null or bound == canvas_item:
+				handler = candidate
 	if handler == null:
 		handler = GdssPropHandler.new()
 	if slots.get(state) != handler:
@@ -294,20 +323,24 @@ static func unbind(canvas_item: Node) -> void:
 	if not (canvas_item is Control or canvas_item is Window):
 		return
 	var control: Variant = canvas_item
-	_clear_overrides_for(control, gdss_node)
+	gdss_node.unbind_canvas_item(canvas_item)
 	var interp: GdssInterpreter = GdssInterpreter.get_instance() if Engine.is_editor_hint() else null
 	var slots: Dictionary = _registry.get(canvas_item.get_instance_id(), {})
 	for handler: GdssPropHandler in slots.values():
 		if handler == null:
 			continue
+		handler._kill_tween()
+		handler._reset_node_props(gdss_node, control, false)
 		handler._free_gpu_ci()
 		if is_instance_valid(interp) and interp.parsed_changed.is_connected(handler._on_parsed_changed):
 			interp.parsed_changed.disconnect(handler._on_parsed_changed)
+	control.begin_bulk_theme_override()
+	_clear_overrides_for(control, gdss_node)
 	for state: String in gdss_node.states:
 		control.remove_theme_stylebox_override(state)
+	control.end_bulk_theme_override()
 	_registry.erase(canvas_item.get_instance_id())
 	_all_dirty = true
-	gdss_node.unbind_canvas_item(canvas_item)
 	GDSS.clear_instance_vars(canvas_item)
 	if Engine.is_editor_hint() and Engine.has_singleton(&"EditorInterface"):
 		var ei: Object = Engine.get_singleton(&"EditorInterface")
@@ -352,6 +385,9 @@ static func strip_overrides() -> void:
 			continue
 		var control: Variant = canvas_item
 		_clear_overrides_for(control, gdss_node)
+		for handler: GdssPropHandler in _registry.get(id, {}).values():
+			if handler != null:
+				handler._reset_node_props(gdss_node, control, false)
 		for state: String in gdss_node.states:
 			control.remove_theme_stylebox_override(state)
 

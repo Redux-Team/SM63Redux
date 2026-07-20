@@ -11,6 +11,7 @@ const PORT_SUPERSTATE: int = 1
 enum MenuItem {
 	NEW_STATE,
 	NEW_ANNOTATION,
+	NEW_ALIAS,
 }
 
 @export var add_node_menu: PopupMenu
@@ -24,7 +25,15 @@ enum MenuItem {
 var _popup_pos: Vector2
 var _node_to_state: Dictionary[StringName, State] = {}
 var _state_to_node: Dictionary[State, StringName] = {}
+var _alias_ids: Dictionary[StringName, String] = {}
+var _routes: Dictionary = {}
 var _selected_transition: StateTransition
+var _selected_wire: Array[StringName] = []
+var _detach_from: State
+var _detach_to: State
+var _detach_superstate_child: State
+var _detach_entry: bool = false
+var _wire_drag_active: bool = false
 var _refresh_queued: bool = false
 var _save_queued: bool = false
 
@@ -36,11 +45,10 @@ func _init() -> void:
 func _ready() -> void:
 	if not state_machine_editor or not state_machine_editor._is_plugin_instance():
 		return
-	add_node_menu.clear()
-	add_node_menu.add_item("+ State", MenuItem.NEW_STATE)
-	add_node_menu.add_item("+ Annotation", MenuItem.NEW_ANNOTATION)
 	connection_request.connect(_on_connection_request)
 	disconnection_request.connect(_on_disconnection_request)
+	connection_drag_started.connect(_on_connection_drag_started)
+	connection_drag_ended.connect(_on_connection_drag_ended)
 	scroll_offset_changed.connect(_on_scroll_offset_changed)
 	connection_overlay.draw.connect(_on_overlay_draw)
 
@@ -62,11 +70,26 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		var mb: InputEventMouseButton = event
 		if mb.button_index == MOUSE_BUTTON_RIGHT and mb.pressed:
+			if _detach_from or _detach_superstate_child or _detach_entry:
+				_end_detach()
+				_refresh()
+				return
+			if _wire_drag_active:
+				return
 			_popup_pos = (mb.position + scroll_offset) / zoom
+			_rebuild_add_menu()
 			add_node_menu.position = Vector2i(mb.global_position)
 			add_node_menu.popup()
 		elif mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
 			_try_inspect_connection(mb.position)
+
+
+func _rebuild_add_menu() -> void:
+	add_node_menu.clear()
+	add_node_menu.add_item("+ State", MenuItem.NEW_STATE)
+	add_node_menu.add_item("+ Annotation", MenuItem.NEW_ANNOTATION)
+	if _single_selected_state_node():
+		add_node_menu.add_item("+ Alias", MenuItem.NEW_ALIAS)
 
 
 func _on_scroll_offset_changed(_offset: Vector2) -> void:
@@ -80,6 +103,8 @@ func _on_add_node_menu_id_pressed(id: int) -> void:
 			add_state_dialog.popup_centered()
 		MenuItem.NEW_ANNOTATION:
 			add_annotation_dialog.popup_centered()
+		MenuItem.NEW_ALIAS:
+			_add_alias(_single_selected_state_node())
 
 
 func _on_add_state_dialog_confirmed() -> void:
@@ -98,6 +123,18 @@ func _on_add_annotation_dialog_confirmed() -> void:
 		return
 	_spawn_annotation(text, _popup_pos)
 	_queue_save_layout()
+
+
+func _single_selected_state_node() -> EditorStateMachineStateNode:
+	var selected: EditorStateMachineStateNode
+	for child: Node in get_children():
+		if child is EditorStateMachineStateNode:
+			var node: EditorStateMachineStateNode = child
+			if node.selected and is_instance_valid(node.state):
+				if selected:
+					return null
+				selected = node
+	return selected
 
 
 func _selected_state_parent() -> Node:
@@ -133,35 +170,69 @@ func _add_state(parent: Node, base_name: String, pos: Vector2) -> void:
 	undo.commit_action()
 
 
-func _add_transition(from_state: State, to_state: State) -> void:
-	var sm: StateMachine = _sm()
-	if not sm:
+func _add_alias(source: EditorStateMachineStateNode) -> void:
+	if not source or not _sm():
 		return
-	if _find_transition(from_state, to_state):
-		return
-	var t: StateTransition = StateTransition.new()
-	t.name = _unique_child_name(from_state, "To" + String(to_state.name))
+	_spawn_alias_node(_new_alias_id(), source.state, _popup_pos)
+	_save_layout()
+
+
+func _new_alias_id() -> String:
+	var i: int = 1
+	while _alias_ids.values().has("a%d" % i):
+		i += 1
+	return "a%d" % i
+
+
+func _commit_transitions(state: State, action_name: String, new_transitions: Array[StateTransition]) -> void:
 	var undo: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
-	undo.create_action("Add Transition", UndoRedo.MERGE_DISABLE, sm)
-	undo.add_do_method(from_state, &"add_child", t)
-	undo.add_do_property(t, &"owner", _scene_root())
-	undo.add_do_property(t, &"target", to_state)
-	undo.add_do_reference(t)
+	undo.create_action(action_name, UndoRedo.MERGE_DISABLE, _sm())
+	undo.add_do_property(state, &"transitions", new_transitions)
+	undo.add_undo_property(state, &"transitions", state.transitions)
 	undo.add_do_method(self, &"_refresh")
-	undo.add_undo_method(from_state, &"remove_child", t)
 	undo.add_undo_method(self, &"_refresh")
 	undo.commit_action()
+
+
+func _add_transition(from_state: State, to_state: State, from_node: StringName, to_node: StringName) -> void:
+	var sm: StateMachine = _sm()
+	if not sm or _find_transition(from_state, to_state):
+		return
+	var t: StateTransition = StateTransition.new()
+	t.resource_name = _unique_transition_name(from_state, "To" + String(to_state.name))
+	t.target = sm.get_path_to(to_state)
+	var after: Array[StateTransition] = from_state.transitions.duplicate()
+	after.append(t)
+	_commit_transitions(from_state, "Add Transition", after)
 	_selected_transition = t
+	_selected_wire = [from_node, to_node]
 	EditorInterface.inspect_object(t)
 
 
 func _remove_transition(from_state: State, to_state: State) -> void:
-	var t: StateTransition = _find_transition(from_state, to_state)
-	if not t:
+	var sm: StateMachine = _sm()
+	var after: Array[StateTransition] = []
+	for t: StateTransition in from_state.transitions:
+		if not t or sm.get_node_or_null(t.target) != to_state:
+			after.append(t)
+	if after.size() == from_state.transitions.size():
 		return
+	_commit_transitions(from_state, "Remove Transition", after)
+
+
+func _retarget_transitions(from_state: State, old_to: State, new_to: State) -> void:
+	var sm: StateMachine = _sm()
+	var path: NodePath = sm.get_path_to(new_to)
 	var undo: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
-	undo.create_action("Remove Transition", UndoRedo.MERGE_DISABLE, _sm())
-	_add_remove_node_ops(undo, t)
+	undo.create_action("Move Transition", UndoRedo.MERGE_DISABLE, sm)
+	for t: StateTransition in from_state.transitions:
+		if not t or sm.get_node_or_null(t.target) != old_to:
+			continue
+		undo.add_do_property(t, &"target", path)
+		undo.add_undo_property(t, &"target", t.target)
+		if t.resource_name == "To" + String(old_to.name):
+			undo.add_do_property(t, &"resource_name", "To" + String(new_to.name))
+			undo.add_undo_property(t, &"resource_name", t.resource_name)
 	undo.add_do_method(self, &"_refresh")
 	undo.add_undo_method(self, &"_refresh")
 	undo.commit_action()
@@ -185,24 +256,36 @@ func _reparent_state(new_parent: Node, child_state: State) -> void:
 		return
 	var old_parent: Node = child_state.get_parent()
 	var old_idx: int = child_state.get_index()
+	var old_name: String = String(child_state.name)
+	var new_name: String = old_name
+	if new_parent.has_node(NodePath(old_name)):
+		new_name = _unique_child_name(new_parent, old_name)
+	var old_rel: String = String(sm.get_path_to(child_state))
+	var new_rel: String = _relpath_for_new(new_parent, new_name)
 	var targets: Dictionary = _capture_targets()
 	var initial: State = sm.initial_state
 	var undo: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
 	undo.create_action("Set Superstate", UndoRedo.MERGE_DISABLE, sm)
 	undo.add_do_method(old_parent, &"remove_child", child_state)
+	if new_name != old_name:
+		undo.add_do_property(child_state, &"name", new_name)
 	undo.add_do_method(new_parent, &"add_child", child_state)
 	undo.add_do_property(child_state, &"owner", _scene_root())
 	undo.add_do_method(self, &"_reown_subtree", child_state)
 	undo.add_do_method(self, &"_restore_targets", targets)
+	undo.add_do_method(self, &"_rekey_sidecar_paths", old_rel, new_rel)
 	if initial:
 		undo.add_do_property(sm, &"initial_state", initial)
 	undo.add_do_method(self, &"_refresh")
 	undo.add_undo_method(new_parent, &"remove_child", child_state)
+	if new_name != old_name:
+		undo.add_undo_property(child_state, &"name", old_name)
 	undo.add_undo_method(old_parent, &"add_child", child_state)
 	undo.add_undo_method(old_parent, &"move_child", child_state, old_idx)
 	undo.add_undo_property(child_state, &"owner", _scene_root())
 	undo.add_undo_method(self, &"_reown_subtree", child_state)
 	undo.add_undo_method(self, &"_restore_targets", targets)
+	undo.add_undo_method(self, &"_rekey_sidecar_paths", new_rel, old_rel)
 	if initial:
 		undo.add_undo_property(sm, &"initial_state", initial)
 	undo.add_undo_method(self, &"_refresh")
@@ -241,9 +324,19 @@ func _delete_states(states: Array[State]) -> void:
 			break
 	if clears_initial:
 		undo.add_do_property(sm, &"initial_state", null)
-	for t: StateTransition in _all_transitions():
-		if deleted.has(t.target) and not _in_deleted_ancestry(t.get_parent(), deleted):
-			_add_remove_node_ops(undo, t)
+	var all_states: Array[State] = []
+	_collect_states(sm, all_states)
+	for s: State in all_states:
+		if deleted.has(s):
+			continue
+		var kept: Array[StateTransition] = []
+		for t: StateTransition in s.transitions:
+			var target: Node = sm.get_node_or_null(t.target) if t else null
+			if not (target and deleted.has(target)):
+				kept.append(t)
+		if kept.size() != s.transitions.size():
+			undo.add_do_property(s, &"transitions", kept)
+			undo.add_undo_property(s, &"transitions", s.transitions)
 	for s: State in states:
 		if _in_deleted_ancestry(s.get_parent(), deleted):
 			continue
@@ -257,53 +350,171 @@ func _delete_states(states: Array[State]) -> void:
 
 func _on_delete_nodes_request(node_names: Array[StringName]) -> void:
 	var states_to_delete: Array[State] = []
-	var annotations_to_delete: Array[EditorStateMachineAnnotation] = []
+	var layout_dirty: bool = false
 	for node_name: StringName in node_names:
 		var node: Node = get_node_or_null(NodePath(node_name))
 		if node is EditorStateMachineStateNode:
 			var state_node: EditorStateMachineStateNode = node
-			if is_instance_valid(state_node.state):
+			if state_node.is_alias:
+				_remove_alias_node(state_node)
+				layout_dirty = true
+			elif is_instance_valid(state_node.state):
 				states_to_delete.append(state_node.state)
 		elif node is EditorStateMachineAnnotation:
-			annotations_to_delete.append(node)
+			node.free()
+			layout_dirty = true
+	if layout_dirty:
+		_save_layout()
+		_refresh()
 	if not states_to_delete.is_empty():
 		_delete_states(states_to_delete)
-	if not annotations_to_delete.is_empty():
-		for annotation: EditorStateMachineAnnotation in annotations_to_delete:
-			annotation.queue_free()
-		_queue_save_layout()
+
+
+func _remove_alias_node(node: EditorStateMachineStateNode) -> void:
+	var alias_id: String = _alias_ids.get(node.name, "")
+	_alias_ids.erase(node.name)
+	_node_to_state.erase(node.name)
+	for key: Variant in _routes.keys():
+		var route: Dictionary = _routes.get(key)
+		if String(route.get("from", "")) == alias_id:
+			route.erase("from")
+		if String(route.get("to", "")) == alias_id:
+			route.erase("to")
+		if route.is_empty():
+			_routes.erase(key)
+	node.free()
 
 
 func _on_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
-	if from_node == to_node:
-		return
 	var from_element: Node = get_node_or_null(NodePath(from_node))
 	var to_state: State = _node_to_state.get(to_node)
 	if from_element is EditorStateMachineEntryExitNode and to_state:
+		var was_entry_detach: bool = _detach_entry
+		_end_detach()
+		if was_entry_detach and to_state == _sm().initial_state:
+			_refresh()
+			return
 		_set_initial_state(to_state)
 		return
 	var from_state: State = _node_to_state.get(from_node)
 	if not from_state or not to_state:
 		return
 	if from_port == PORT_TRANSITION and to_port == PORT_TRANSITION:
-		_add_transition(from_state, to_state)
+		if _detach_from and from_state == _detach_from:
+			_finish_detach_drop(from_state, to_state, from_node, to_node)
+			return
+		_end_detach()
+		_update_route(from_state, to_state, from_node, to_node)
+		if _find_transition(from_state, to_state):
+			_refresh()
+		else:
+			_add_transition(from_state, to_state, from_node, to_node)
 	elif from_port == PORT_SUPERSTATE and to_port == PORT_SUPERSTATE:
+		var pending_child: State = _detach_superstate_child
+		_end_detach()
+		if from_state == to_state or pending_child == to_state:
+			_refresh()
+			return
+		if pending_child:
+			_detach_superstate(pending_child)
 		_set_superstate(from_state, to_state)
 
 
 func _on_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	var from_element: Node = get_node_or_null(NodePath(from_node))
 	if from_element is EditorStateMachineEntryExitNode:
-		_set_initial_state(null)
+		_detach_entry = true
+		disconnect_node(from_node, from_port, to_node, to_port)
 		return
 	var from_state: State = _node_to_state.get(from_node)
 	var to_state: State = _node_to_state.get(to_node)
 	if not from_state or not to_state:
 		return
 	if from_port == PORT_TRANSITION and to_port == PORT_TRANSITION:
-		_remove_transition(from_state, to_state)
+		_detach_from = from_state
+		_detach_to = to_state
+		disconnect_node(from_node, PORT_TRANSITION, to_node, PORT_TRANSITION)
+		connection_overlay.queue_redraw()
 	elif from_port == PORT_SUPERSTATE and to_port == PORT_SUPERSTATE:
-		_detach_superstate(to_state)
+		_detach_superstate_child = to_state
+		disconnect_node(from_node, PORT_SUPERSTATE, to_node, PORT_SUPERSTATE)
+
+
+func _on_connection_drag_started(_from_node: StringName, _from_port: int, _is_output: bool) -> void:
+	_wire_drag_active = true
+
+
+func _on_connection_drag_ended() -> void:
+	_wire_drag_active = false
+	if _detach_entry:
+		_end_detach()
+		_set_initial_state(null)
+		return
+	if _detach_superstate_child:
+		var child: State = _detach_superstate_child
+		_end_detach()
+		_detach_superstate(child)
+		return
+	if not _detach_from:
+		return
+	var from_state: State = _detach_from
+	var to_state: State = _detach_to
+	_end_detach()
+	_routes.erase(_route_key(from_state, to_state))
+	_queue_save_layout()
+	_remove_transition(from_state, to_state)
+
+
+func _finish_detach_drop(from_state: State, to_state: State, from_node: StringName, to_node: StringName) -> void:
+	var old_to: State = _detach_to
+	_end_detach()
+	if to_state == old_to:
+		_update_route(from_state, to_state, from_node, to_node)
+		_refresh()
+		return
+	_selected_transition = null
+	_selected_wire.clear()
+	_routes.erase(_route_key(from_state, old_to))
+	_update_route(from_state, to_state, from_node, to_node)
+	if _find_transition(from_state, to_state):
+		_remove_transition(from_state, old_to)
+	else:
+		_retarget_transitions(from_state, old_to, to_state)
+
+
+func _end_detach() -> void:
+	_detach_from = null
+	_detach_to = null
+	_detach_superstate_child = null
+	_detach_entry = false
+
+
+func _route_key(from_state: State, to_state: State) -> String:
+	var sm: StateMachine = _sm()
+	return "%s -> %s" % [sm.get_path_to(from_state), sm.get_path_to(to_state)]
+
+
+func _update_route(from_state: State, to_state: State, from_node: StringName, to_node: StringName) -> void:
+	var key: String = _route_key(from_state, to_state)
+	var route: Dictionary = {}
+	if _alias_ids.has(from_node):
+		route["from"] = _alias_ids.get(from_node)
+	if _alias_ids.has(to_node):
+		route["to"] = _alias_ids.get(to_node)
+	if route.is_empty():
+		_routes.erase(key)
+	else:
+		_routes[key] = route
+	_queue_save_layout()
+
+
+func _routed_endpoint(state: State, route: Dictionary, side: String) -> StringName:
+	var alias_id: String = String(route.get(side, ""))
+	if not alias_id.is_empty():
+		var node_name: StringName = StringName("alias_" + alias_id)
+		if _node_to_state.get(node_name) == state:
+			return node_name
+	return _state_to_node.get(state)
 
 
 func _add_remove_node_ops(undo: EditorUndoRedoManager, node: Node) -> void:
@@ -314,21 +525,40 @@ func _add_remove_node_ops(undo: EditorUndoRedoManager, node: Node) -> void:
 	undo.add_undo_method(parent, &"add_child", node)
 	undo.add_undo_method(parent, &"move_child", node, idx)
 	undo.add_undo_property(node, &"owner", node_owner)
+	undo.add_undo_method(self, &"_reown_subtree", node)
 	undo.add_undo_reference(node)
 
 
 func _capture_targets() -> Dictionary:
+	var sm: StateMachine = _sm()
 	var result: Dictionary = {}
-	for t: StateTransition in _all_transitions():
-		result[t] = t.target
+	var states: Array[State] = []
+	_collect_states(sm, states)
+	for s: State in states:
+		for t: StateTransition in s.transitions:
+			if not t:
+				continue
+			var target: State = sm.get_node_or_null(t.target) as State
+			if target:
+				result[t] = target
 	return result
 
 
 func _restore_targets(targets: Dictionary) -> void:
+	var sm: StateMachine = _sm()
 	for t: StateTransition in targets:
 		var target: Variant = targets.get(t)
-		if is_instance_valid(t) and is_instance_valid(target):
-			t.target = target as State
+		if is_instance_valid(target):
+			t.target = sm.get_path_to(target as Node)
+
+
+func _rekey_sidecar_paths(old_rel: String, new_rel: String) -> void:
+	var sm: StateMachine = _sm()
+	if not sm:
+		return
+	var rekeys: Dictionary = {}
+	rekeys[old_rel] = new_rel
+	sm._editor_rekey_sidecar(rekeys)
 
 
 func _reown_subtree(node: Node) -> void:
@@ -347,25 +577,24 @@ func _store_state_position(relpath: String, pos: Vector2) -> void:
 
 
 func _find_transition(from_state: State, to_state: State) -> StateTransition:
-	for child: Node in from_state.get_children():
-		if child is StateTransition and (child as StateTransition).target == to_state:
-			return child
+	var sm: StateMachine = _sm()
+	for t: StateTransition in from_state.transitions:
+		if t and sm.get_node_or_null(t.target) == to_state:
+			return t
 	return null
 
 
-func _all_transitions() -> Array[StateTransition]:
-	var result: Array[StateTransition] = []
-	_gather_transitions(_sm(), result)
-	return result
-
-
-func _gather_transitions(node: Node, out: Array[StateTransition]) -> void:
-	if not node:
-		return
-	for child: Node in node.get_children():
-		if child is StateTransition:
-			out.append(child)
-		_gather_transitions(child, out)
+func _unique_transition_name(state: State, base: String) -> String:
+	var names: Dictionary = {}
+	for t: StateTransition in state.transitions:
+		if t:
+			names[t.resource_name] = true
+	var candidate: String = base
+	var i: int = 1
+	while names.has(candidate):
+		candidate = "%s%d" % [base, i]
+		i += 1
+	return candidate
 
 
 func _collect_states(node: Node, out: Array[State]) -> void:
@@ -435,14 +664,19 @@ func _do_refresh() -> void:
 	clear_connections()
 	_node_to_state.clear()
 	_state_to_node.clear()
+	_alias_ids.clear()
 	var sm: StateMachine = _sm()
 	if not sm:
 		connection_overlay.queue_redraw()
 		return
 	var data: Dictionary = _load_sidecar()
+	_routes = data.get("routes", {}) as Dictionary
 	_build_state_nodes(data)
+	_spawn_alias_nodes(data)
 	_spawn_entry_node(data)
 	_build_connections()
+	_validate_selected_transition()
+	sm._editor_watch_states()
 	connection_overlay.queue_redraw()
 
 
@@ -456,18 +690,25 @@ func _reload() -> void:
 	clear_connections()
 	_node_to_state.clear()
 	_state_to_node.clear()
+	_alias_ids.clear()
+	_routes = {}
 	_selected_transition = null
+	_selected_wire.clear()
+	_end_detach()
 	var sm: StateMachine = _sm()
 	if not sm:
 		connection_overlay.queue_redraw()
 		return
 	var data: Dictionary = _load_sidecar()
+	_routes = data.get("routes", {}) as Dictionary
 	scroll_offset = _read_vec2(data.get("scroll_offset", []), scroll_offset)
 	zoom = float(data.get("zoom", zoom))
 	_spawn_annotations(data)
 	_build_state_nodes(data)
+	_spawn_alias_nodes(data)
 	_spawn_entry_node(data)
 	_build_connections()
+	sm._editor_watch_states()
 	connection_overlay.queue_redraw()
 
 
@@ -488,28 +729,95 @@ func _build_state_nodes(data: Dictionary) -> void:
 		node.position_offset = _read_vec2(positions.get(relpath, []), fallback)
 		node.position_offset_changed.connect(_on_state_node_moved, CONNECT_DEFERRED)
 		node.node_selected.connect(_on_state_node_selected.bind(node))
+		if not s.renamed.is_connected(_on_external_state_renamed):
+			s.renamed.connect(_on_external_state_renamed)
 		add_child(node)
 		_node_to_state[node_name] = s
 		_state_to_node[s] = node_name
 		auto_index += 1
 
 
+func _on_external_state_renamed() -> void:
+	_refresh()
+
+
+func _spawn_alias_nodes(data: Dictionary) -> void:
+	var sm: StateMachine = _sm()
+	var aliases: Dictionary = data.get("aliases", {}) as Dictionary
+	for alias_id: Variant in aliases:
+		var entry: Variant = aliases.get(alias_id)
+		if not entry is Dictionary:
+			continue
+		var alias: Dictionary = entry
+		var state: State = sm.get_node_or_null(NodePath(String(alias.get("state", "")))) as State
+		if not state:
+			continue
+		_spawn_alias_node(String(alias_id), state, _read_vec2(alias.get("position", []), Vector2.ZERO))
+
+
+func _spawn_alias_node(alias_id: String, state: State, pos: Vector2) -> void:
+	var node: EditorStateMachineStateNode = SCENE_STATE_NODE.instantiate()
+	var node_name: StringName = StringName("alias_" + alias_id)
+	node.name = node_name
+	node.state = state
+	node.editor = state_machine_editor
+	node.is_alias = true
+	node.position_offset = pos
+	node.position_offset_changed.connect(_on_state_node_moved, CONNECT_DEFERRED)
+	node.node_selected.connect(_on_state_node_selected.bind(node))
+	add_child(node)
+	_node_to_state[node_name] = state
+	_alias_ids[node_name] = alias_id
+
+
 func _build_connections() -> void:
 	var sm: StateMachine = _sm()
 	for s: State in _state_to_node:
-		var from_name: StringName = _state_to_node.get(s)
 		var parent: Node = s.get_parent()
 		if parent is State and _state_to_node.has(parent):
-			connect_node(_state_to_node.get(parent), PORT_SUPERSTATE, from_name, PORT_SUPERSTATE)
-		for child: Node in s.get_children():
-			if child is StateTransition:
-				var target: State = (child as StateTransition).target
-				if target and _state_to_node.has(target):
-					var to_name: StringName = _state_to_node.get(target)
-					if not is_node_connected(from_name, PORT_TRANSITION, to_name, PORT_TRANSITION):
-						connect_node(from_name, PORT_TRANSITION, to_name, PORT_TRANSITION)
+			connect_node(_state_to_node.get(parent), PORT_SUPERSTATE, _state_to_node.get(s), PORT_SUPERSTATE)
+		for t: StateTransition in s.transitions:
+			if not t:
+				continue
+			var target: State = sm.get_node_or_null(t.target) as State
+			if not target or not _state_to_node.has(target):
+				continue
+			var route: Dictionary = _routes.get(_route_key(s, target), {})
+			var from_name: StringName = _routed_endpoint(s, route, "from")
+			var to_name: StringName = _routed_endpoint(target, route, "to")
+			if not is_node_connected(from_name, PORT_TRANSITION, to_name, PORT_TRANSITION):
+				connect_node(from_name, PORT_TRANSITION, to_name, PORT_TRANSITION)
 	if sm.initial_state and _state_to_node.has(sm.initial_state) and get_node_or_null(^"entry"):
 		connect_node(&"entry", PORT_TRANSITION, _state_to_node.get(sm.initial_state), PORT_TRANSITION)
+
+
+func focus_transition(from_state: State, t: StateTransition, to_state: State) -> void:
+	_selected_transition = t
+	_selected_wire.clear()
+	if to_state and _state_to_node.has(from_state) and _state_to_node.has(to_state):
+		var route: Dictionary = _routes.get(_route_key(from_state, to_state), {})
+		var from_name: StringName = _routed_endpoint(from_state, route, "from")
+		var to_name: StringName = _routed_endpoint(to_state, route, "to")
+		_selected_wire = [from_name, to_name]
+		var from_card: GraphNode = get_node_or_null(NodePath(from_name)) as GraphNode
+		var to_card: GraphNode = get_node_or_null(NodePath(to_name)) as GraphNode
+		if from_card and to_card:
+			var mid: Vector2 = (from_card.position_offset + from_card.size * 0.5 + to_card.position_offset + to_card.size * 0.5) * 0.5
+			scroll_offset = mid * zoom - size * 0.5
+	connection_overlay.queue_redraw()
+
+
+func _validate_selected_transition() -> void:
+	if not _selected_transition:
+		return
+	var sm: StateMachine = _sm()
+	var states: Array[State] = []
+	_collect_states(sm, states)
+	for s: State in states:
+		if s.transitions.has(_selected_transition):
+			return
+	_selected_transition = null
+	_selected_wire.clear()
 
 
 func _spawn_entry_node(data: Dictionary) -> void:
@@ -548,6 +856,7 @@ func _on_state_node_moved() -> void:
 
 func _on_state_node_selected(node: EditorStateMachineStateNode) -> void:
 	_selected_transition = null
+	_selected_wire.clear()
 	connection_overlay.queue_redraw()
 	node._on_node_selected()
 
@@ -569,12 +878,22 @@ func _save_layout() -> void:
 	if not sm:
 		return
 	var states: Dictionary = {}
+	var aliases: Dictionary = {}
 	var annotations: Array = []
 	var entry_pos: Array = [0.0, 0.0]
 	for child: Node in get_children():
 		if child is EditorStateMachineStateNode:
 			var node: EditorStateMachineStateNode = child
-			if is_instance_valid(node.state):
+			if not is_instance_valid(node.state):
+				continue
+			if node.is_alias:
+				var alias_id: String = _alias_ids.get(node.name, "")
+				if not alias_id.is_empty():
+					aliases[alias_id] = {
+						"state": String(sm.get_path_to(node.state)),
+						"position": [node.position_offset.x, node.position_offset.y],
+					}
+			else:
 				states[String(sm.get_path_to(node.state))] = [node.position_offset.x, node.position_offset.y]
 		elif child is EditorStateMachineAnnotation:
 			var anno: EditorStateMachineAnnotation = child
@@ -583,12 +902,35 @@ func _save_layout() -> void:
 			entry_pos = [child.position_offset.x, child.position_offset.y]
 	var data: Dictionary = {
 		"states": states,
+		"aliases": aliases,
+		"routes": _pruned_routes(aliases),
 		"annotations": annotations,
 		"scroll_offset": [scroll_offset.x, scroll_offset.y],
 		"zoom": zoom,
 		"entry_position": entry_pos,
 	}
 	_save_sidecar(data)
+
+
+func _pruned_routes(aliases: Dictionary) -> Dictionary:
+	var sm: StateMachine = _sm()
+	var result: Dictionary = {}
+	for key: Variant in _routes:
+		var text: String = String(key)
+		if text.get_slice_count(" -> ") != 2:
+			continue
+		var from_rel: String = text.get_slice(" -> ", 0)
+		var to_rel: String = text.get_slice(" -> ", 1)
+		if not sm.get_node_or_null(NodePath(from_rel)) is State or not sm.get_node_or_null(NodePath(to_rel)) is State:
+			continue
+		var route: Dictionary = _routes.get(key)
+		var valid: bool = true
+		for side: String in ["from", "to"]:
+			if route.has(side) and not aliases.has(route.get(side)):
+				valid = false
+		if valid:
+			result[key] = route
+	return result
 
 
 func _sidecar_path() -> String:
@@ -655,10 +997,12 @@ func _try_inspect_connection(mouse_pos: Vector2) -> void:
 		var t: StateTransition = _find_transition(_node_to_state.get(from_name), _node_to_state.get(to_name))
 		if t:
 			_selected_transition = t
+			_selected_wire = [from_name, to_name]
 			EditorInterface.inspect_object(t)
 			connection_overlay.queue_redraw()
 			return
 	_selected_transition = null
+	_selected_wire.clear()
 	connection_overlay.queue_redraw()
 
 
@@ -678,13 +1022,9 @@ func _on_overlay_draw() -> void:
 
 
 func _is_selected_connection(from_name: StringName, to_name: StringName) -> bool:
-	if not is_instance_valid(_selected_transition):
+	if not is_instance_valid(_selected_transition) or _selected_wire.size() != 2:
 		return false
-	var src: Node = _selected_transition.get_parent()
-	var tgt: State = _selected_transition.target
-	if not src or not tgt:
-		return false
-	return _state_to_node.get(src, StringName("")) == from_name and _state_to_node.get(tgt, StringName("")) == to_name
+	return _selected_wire.get(0) == from_name and _selected_wire.get(1) == to_name
 
 
 func _draw_connection_chevron(from: GraphNode, to: GraphNode, is_selected: bool) -> void:

@@ -6,6 +6,7 @@ const STATE_ICON = preload("uid://btg8b714itoxv")
 const COLOR_OUT: Color = Color(0.114, 0.620, 0.459)
 const COLOR_IN: Color = Color(0.886, 0.294, 0.290)
 const COLOR_SUPERSTATE: Color = Color(0.498, 0.467, 0.867)
+const COLOR_ALIAS: Color = Color(1.0, 0.85, 0.1)
 
 @export var superstate_button: Button
 @export var superstate_h_box: HBoxContainer
@@ -13,16 +14,16 @@ const COLOR_SUPERSTATE: Color = Color(0.498, 0.467, 0.867)
 
 var editor: EditorStateMachineEditor
 var state: State
+var is_alias: bool = false
 
 var _script_button: Button
-var _name_label: Label
+var _title_label: Label
 
 
 func _ready() -> void:
 	if not is_instance_valid(state):
 		return
 	_setup_titlebar()
-	_setup_body()
 	_setup_slots()
 	_update_superstate_display()
 	_update_script_button()
@@ -36,23 +37,26 @@ func _setup_titlebar() -> void:
 	icon_rect.texture = STATE_ICON
 	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon_rect.custom_minimum_size = Vector2(16.0, 16.0)
+	_title_label = Label.new()
+	if is_alias:
+		_title_label.text = "(%s)" % String(state.name)
+		_title_label.modulate = COLOR_ALIAS
+	else:
+		_title_label.text = String(state.name)
+	_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_script_button = Button.new()
 	_script_button.custom_minimum_size = Vector2(16.0, 16.0)
 	_script_button.pressed.connect(_on_script_button_pressed)
 	hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	hbox.add_child(icon_rect)
+	hbox.add_child(_title_label)
 	hbox.add_child(_script_button)
-
-
-func _setup_body() -> void:
-	_name_label = get_node_or_null(^"Control") as Label
-	if _name_label:
-		_name_label.text = String(state.name)
 
 
 func _setup_slots() -> void:
 	set_slot(0, true, 0, COLOR_IN, true, 0, COLOR_OUT)
-	set_slot(1, true, 1, COLOR_SUPERSTATE, true, 1, COLOR_SUPERSTATE)
+	set_slot(1, not is_alias, 1, COLOR_SUPERSTATE, true, 1, COLOR_SUPERSTATE)
 
 
 func _update_superstate_display() -> void:
@@ -60,11 +64,12 @@ func _update_superstate_display() -> void:
 	if parent is State:
 		superstate_button.text = String((parent as State).name)
 		superstate_button.icon = STATE_ICON
+		superstate_h_box.show()
+		empty_ss_label.hide()
 	else:
-		superstate_button.text = "<none>"
-		superstate_button.icon = null
-	superstate_h_box.show()
-	empty_ss_label.hide()
+		superstate_h_box.hide()
+		empty_ss_label.show()
+	size = Vector2.ZERO
 
 
 func _update_script_button() -> void:

@@ -2,7 +2,6 @@
 class_name GdssPropHandler
 extends StyleBox
 
-static var _texture_cache: Dictionary = {}
 static var _corner_start_angles: Array[float] = [PI, PI * 1.5, 0.0, PI * 0.5]
 const _DEFAULT_SHADOW_COLOR: Color = Color(0, 0, 0, 0.4)
 
@@ -26,6 +25,26 @@ static func tween_ease(type_enum: GDSS.TransitionType) -> Tween.EaseType:
 	return _EASE_TYPES.get(GDSS.TransitionType.keys()[type_enum], Tween.EASE_IN_OUT)
 
 
+static func _resolve_trans_val(raw: Variant) -> Tween.TransitionType:
+	if raw is int or raw is float:
+		var keys: Array = GDSS.TransitionFunc.keys()
+		var index: int = int(raw)
+		if index >= 0 and index < keys.size():
+			return _TRANSITION_FUNCS.get(keys[index], Tween.TRANS_LINEAR)
+		return Tween.TRANS_LINEAR
+	return _TRANSITION_FUNCS.get(raw, Tween.TRANS_LINEAR)
+
+
+static func _resolve_ease_val(raw: Variant) -> Tween.EaseType:
+	if raw is int or raw is float:
+		var keys: Array = GDSS.TransitionType.keys()
+		var index: int = int(raw)
+		if index >= 0 and index < keys.size():
+			return _EASE_TYPES.get(keys[index], Tween.EASE_OUT)
+		return Tween.EASE_OUT
+	return _EASE_TYPES.get(raw, Tween.EASE_OUT)
+
+
 var _slot_state: String = ""
 
 var _ref_path: NodePath = NodePath()
@@ -39,6 +58,7 @@ var _entry_cache: Dictionary = {}
 var _entry_cache_dirty: bool = true
 var _entry_cache_classes: PackedStringArray = []
 var _entry_cache_variation: String = ""
+var _entry_cache_overrides: Variant = null
 # Set of prop names present in ANY state of the resolved entry. Lets _apply_overrides
 # skip node properties the stylesheet never sets (e.g. the 8 offset_transform props on
 # nodes that don't use them) instead of resolving + control.get-checking each one.
@@ -69,6 +89,11 @@ var _gpu_emitted: bool = false
 var _style_vals_cache: Dictionary = {}
 var _style_dynamic: Array[GdssProp] = []
 var _style_vals_state: String = "￿"
+var _style_vals_tween: Dictionary = {}
+var _style_dynamic_tween: Array[GdssProp] = []
+var _style_tween_state: String = "￿"
+var _style_tween_session: int = -1
+var _tween_session: int = 0
 var _nonstyle_dynamic: Array[GdssProp] = []
 var _nonstyle_state: String = "￿"
 
@@ -119,6 +144,11 @@ var current_state: String = "":
 		if _seeding:
 			current_state = s
 			return
+		if _applying:
+			if not _state_sync_queued:
+				_state_sync_queued = true
+				_sync_active_state.call_deferred()
+			return
 		var previous: String = current_state
 		if not previous.is_empty():
 			_start_transition(previous, s)
@@ -131,6 +161,7 @@ var current_state: String = "":
 var _tweened_values: Dictionary[String, Variant] = {}
 var _tween: Tween = null
 var _state_sync_queued: bool = false
+var _applied_node_props: Dictionary = {}
 
 # on_show()/on_hide() event state. _self_toggle swallows the visibility_changed our
 # own visible= writes fire (so re-showing to play an exit anim can't recurse).
@@ -141,6 +172,9 @@ var _last_visible: bool = true
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
+		if _tween != null:
+			_tween.kill()
+			_tween = null
 		if _gpu_ci.is_valid():
 			RenderingServer.free_rid(_gpu_ci)
 			_gpu_ci = RID()
@@ -259,6 +293,10 @@ func _invalidate_entry_cache() -> void:
 	_style_vals_state = "￿"
 	_style_vals_cache.clear()
 	_style_dynamic.clear()
+	_style_tween_state = "￿"
+	_style_tween_session = -1
+	_style_vals_tween.clear()
+	_style_dynamic_tween.clear()
 	_nonstyle_state = "￿"
 	_nonstyle_dynamic.clear()
 
@@ -314,8 +352,24 @@ func _clear_overrides() -> void:
 				control.remove_theme_constant_override(prop.name)
 			GdssProp.Category.FONT_SIZE:
 				control.remove_theme_font_size_override(prop.name)
+			GdssProp.Category.FONT:
+				control.remove_theme_font_override(prop.name)
 			GdssProp.Category.ICON:
 				control.remove_theme_icon_override(prop.name)
+	_reset_node_props(gdss_node, control, true)
+
+
+func _reset_node_props(gdss_node: GdssNode, control: Variant, skip_tweened: bool) -> void:
+	if _applied_node_props.is_empty():
+		return
+	var props_by_name: Dictionary = gdss_node.get_props_by_name()
+	for prop_name: String in _applied_node_props.keys():
+		if skip_tweened and _tweened_values.has(prop_name):
+			continue
+		var prop: GdssProp = props_by_name.get(prop_name)
+		if prop != null:
+			_apply_theme_prop(prop, control, gdss_node, prop.get_default_value())
+		_applied_node_props.erase(prop_name)
 
 
 func _apply_overrides(clear: bool = true) -> void:
@@ -360,20 +414,6 @@ func _apply_overrides_unwrapped(gdss_node: GdssNode, control: Variant, clear: bo
 			continue
 		if not styled.has(prop.name):
 			continue
-		# The parser fills every enabled prop with its default (for transitions/completion),
-		# so the styled set is mostly injected defaults the stylesheet never wrote. Applying
-		# one is always a no-op - either there's no override to set, or a state change already
-		# cleared the old one - so skip it without resolving. Tweened props are exempt (their
-		# live value is in _tweened_values, not the entry). The typeof guard keeps the equality
-		# safe: a user value can be a method/sentinel (Dictionary/String) while the default is
-		# a value type, and == across those types is a runtime error.
-		if not _tweened_values.has(prop.name):
-			var raw: Variant = _raw_entry_val(entry, state, prop.name)
-			if raw == null:
-				continue
-			var def: Variant = prop.get_default_value()
-			if typeof(raw) == typeof(def) and raw == def:
-				continue
 		var val: Variant = _get_val_cached(prop.name, entry, state, prop.get_default_value())
 		if val == null:
 			val = prop.get_default_value()
@@ -427,6 +467,13 @@ func _apply_theme_prop(prop: GdssProp, control: Variant, gdss_node: GdssNode, va
 					return
 				control.add_theme_icon_override(prop.name, val)
 		GdssProp.Category.NODE_PROPERTY:
+			# A $variable holding a single number can reach a Vector2 prop; splat it
+			# like the parse-time single-value shorthand.
+			if prop.type == GDSS.Type.VECTOR2 and (val is int or val is float):
+				val = Vector2(float(val), float(val))
+			var def: Variant = prop.get_default_value()
+			if not (typeof(val) == typeof(def) and val == def):
+				_applied_node_props[prop.name] = true
 			if prop.type == GDSS.Type.CURSOR:
 				control.set("mouse_default_cursor_shape", _get_cursor_shape(str(val)))
 				return
@@ -440,7 +487,8 @@ func _apply_theme_prop(prop: GdssProp, control: Variant, gdss_node: GdssNode, va
 			# GDSS exposes the 4.7 Control transforms as "transform_*"; the real node
 			# property is "offset_transform_*".
 			var node_prop: String = "offset_" + prop.name if prop.name.begins_with("transform_") else prop.name
-			if control.get(node_prop) != val:
+			var current: Variant = control.get(node_prop)
+			if typeof(current) != typeof(val) or current != val:
 				control.set(node_prop, val)
 
 
@@ -464,11 +512,21 @@ func _apply_single_override(prop: GdssProp, val: Variant) -> void:
 		return
 	if val == null:
 		val = prop.get_default_value()
+	var was_applying: bool = _applying
+	_applying = true
 	_apply_theme_prop(prop, node, gdss_node, val)
+	_applying = was_applying
+
+
+func _kill_tween() -> void:
+	if _tween != null:
+		_tween.kill()
+		_tween = null
+	_tweened_values.clear()
 
 
 func reapply() -> void:
-	_tweened_values.clear()
+	_kill_tween()
 	_invalidate_entry_cache()
 	_apply_overrides()
 	emit_changed()
@@ -579,8 +637,8 @@ func _start_transition(from_state: String, to_state: String, timing_state: Strin
 	var default_state: String = gdss_node.states[0] if gdss_node and not gdss_node.states.is_empty() else "all"
 	var resolved_from: String = from_state if not from_state.is_empty() else default_state
 
-	var trans: Tween.TransitionType = _TRANSITION_FUNCS.get(_get_parsed_val("transition_func", ts, "LINEAR"), Tween.TRANS_LINEAR)
-	var ease: Tween.EaseType = _EASE_TYPES.get(_get_parsed_val("transition_type", ts, "EASE_IN_OUT"), Tween.EASE_IN_OUT)
+	var trans: Tween.TransitionType = _resolve_trans_val(_get_parsed_val("transition_func", ts, "LINEAR"))
+	var ease: Tween.EaseType = _resolve_ease_val(_get_parsed_val("transition_type", ts, "EASE_OUT"))
 
 	var tweener_count: int = 0
 	var pending_tween: Tween = (Engine.get_main_loop() as SceneTree).create_tween()
@@ -664,6 +722,10 @@ func _start_transition(from_state: String, to_state: String, timing_state: Strin
 				var fallback: Vector2 = prop.get_default_value() if prop.get_default_value() is Vector2 else Vector2.ZERO
 				var from_val: Variant = _tweened_values.get(prop_name, _get_parsed_val(prop_name, resolved_from, fallback))
 				var to_val: Variant = _get_parsed_val(prop_name, to_state, fallback)
+				if from_val is int or from_val is float:
+					from_val = Vector2(float(from_val), float(from_val))
+				if to_val is int or to_val is float:
+					to_val = Vector2(float(to_val), float(to_val))
 				if not from_val is Vector2 or not to_val is Vector2:
 					continue
 				var from: Vector2 = from_val as Vector2
@@ -728,11 +790,13 @@ func _start_transition(from_state: String, to_state: String, timing_state: Strin
 	if _tween:
 		_tween.kill()
 	_tween = pending_tween
+	_tween_session += 1
 	_tween.finished.connect(func() -> void:
 		_tween = null
 		_tweened_values.clear()
-		_apply_overrides()
-		_safe_redraw()
+		if ref != null:
+			_apply_overrides()
+			_safe_redraw()
 		if on_finished.is_valid():
 			on_finished.call()
 	)
@@ -894,43 +958,110 @@ func _entry_styled_props(entry: Dictionary) -> Dictionary:
 func _resolve_entry() -> Dictionary:
 	if ref == null:
 		return {}
+	if not _entry_cache_dirty and not Engine.is_editor_hint():
+		return _entry_cache
 	var current_classes: PackedStringArray = ref.get_meta(GDSS.CLASSES_META, PackedStringArray()) as PackedStringArray
 	var variation: String = String((ref as Control).theme_type_variation) if ref is Control else ""
-	if not _entry_cache_dirty and _entry_cache_classes == current_classes and _entry_cache_variation == variation:
+	var override_meta: Variant = ref.get_meta(GDSS.OVERRIDES_META) if ref.has_meta(GDSS.OVERRIDES_META) else null
+	if not _entry_cache_dirty and _entry_cache_classes == current_classes and _entry_cache_variation == variation and _entry_cache_overrides == override_meta:
 		return _entry_cache
 	_styled_props_dirty = true # entry is being recomputed; its styled-prop set is stale
 	var parsed: Dictionary[String, Dictionary] = GdssInterpreter.parsed
 	var selector: String = ref.get_class()
-	if not parsed.has(selector):
-		return {}
-	var entry: Dictionary = parsed[selector]
-	var variations: Dictionary = parsed[selector].get("_variations", {})
+	var entry: Dictionary = parsed.get(selector, {})
+	var variations: Dictionary = entry.get("_variations", {}) if not entry.is_empty() else {}
 	var has_variation: bool = not variation.is_empty() and variations.has(variation)
-	if current_classes.is_empty() and not has_variation:
+	var override_entry: Dictionary = _build_override_entry(override_meta)
+	if current_classes.is_empty() and not has_variation and override_entry.is_empty():
 		_entry_cache = entry
 		_entry_cache_classes = current_classes
 		_entry_cache_variation = variation
+		_entry_cache_overrides = override_meta
 		_entry_cache_dirty = false
 		return entry
 	# Layer order (lowest to highest priority): base type -> theme_type_variation
 	# -> explicit gdss_classes. Classes win because they're the explicit runtime layer.
 	if has_variation:
-		entry = _merge_entries(entry, variations[variation])
+		entry = _merge_entries(entry, _resolve_override_patches(entry, variations[variation]))
 	for gdss_class_name: String in current_classes:
-		var override: Dictionary = _find_class_in_tree(parsed[selector].get("_classes", {}), gdss_class_name)
+		var override: Dictionary = _find_class_in_tree((parsed.get(selector, {}) as Dictionary).get("_classes", {}), gdss_class_name)
 		if not override.is_empty():
-			entry = _merge_entries(entry, override)
+			entry = _merge_entries(entry, _resolve_override_patches(entry, override))
+	if not override_entry.is_empty():
+		override_entry = _resolve_override_patches(entry, override_entry)
+		entry = _merge_entries(entry, override_entry)
+		var all_overrides: Variant = override_entry.get("all")
+		if all_overrides is Dictionary:
+			for state_key: String in entry:
+				if state_key == "all" or state_key == "_classes" or state_key == "_variations" or state_key.begins_with("on_"):
+					continue
+				if (override_entry as Dictionary).has(state_key):
+					continue
+				var state_dict: Variant = entry[state_key]
+				if not state_dict is Dictionary:
+					continue
+				for prop_name: String in (all_overrides as Dictionary):
+					(state_dict as Dictionary)[prop_name] = (all_overrides as Dictionary)[prop_name]
 	_entry_cache = entry
 	_entry_cache_classes = current_classes
 	_entry_cache_variation = variation
+	_entry_cache_overrides = override_meta
 	_entry_cache_dirty = false
 	return entry
+
+
+func _build_override_entry(override_meta: Variant) -> Dictionary:
+	if override_meta is String:
+		return GdssInterpreter.parse_override_entry(override_meta)
+	if override_meta is Dictionary:
+		return {"all": (override_meta as Dictionary).duplicate()}
+	return {}
+
+
+func _resolve_override_patches(base: Dictionary, override_entry: Dictionary) -> Dictionary:
+	var has_patch: bool = false
+	for state_key: String in override_entry:
+		var state_dict: Variant = override_entry[state_key]
+		if not state_dict is Dictionary:
+			continue
+		for prop_name: String in (state_dict as Dictionary):
+			var raw: Variant = (state_dict as Dictionary)[prop_name]
+			if raw is Dictionary and (raw as Dictionary).has("__gdss_composite4_patch__"):
+				has_patch = true
+	if not has_patch:
+		return override_entry
+	var resolved: Dictionary = override_entry.duplicate(true)
+	for state_key: String in resolved:
+		var state_dict: Variant = resolved[state_key]
+		if not state_dict is Dictionary:
+			continue
+		for prop_name: String in (state_dict as Dictionary):
+			var raw: Variant = (state_dict as Dictionary)[prop_name]
+			if not (raw is Dictionary and (raw as Dictionary).has("__gdss_composite4_patch__")):
+				continue
+			var patch: Dictionary = (raw as Dictionary)["__gdss_composite4_patch__"]
+			var scratch: Dictionary = {"value": _base_composite_value(base, state_key, prop_name)}
+			for index: Variant in patch:
+				GdssInterpreter._fold_composite_component(scratch, "value", int(index), patch[index])
+			(state_dict as Dictionary)[prop_name] = scratch.get("value")
+	return resolved
+
+
+func _base_composite_value(base: Dictionary, state_key: String, prop_name: String) -> Variant:
+	var raw: Variant = _raw_entry_val(base, state_key, prop_name)
+	if raw != null:
+		return raw if not raw is Dictionary else (raw as Dictionary).duplicate(true)
+	var prop: GdssProp = GDSS.get_db().property_list.get(prop_name)
+	return prop.get_default_value() if prop != null else Vector4i.ZERO
 
 
 func _resolve_value(raw: Variant, fallback: Variant, state_key: String = "") -> Variant:
 	if raw is Dictionary and (raw as Dictionary).has("__gdss_composite4__"):
 		var parts: Array = (raw as Dictionary)["__gdss_composite4__"]
 		return Vector4i(_resolve_composite_part(parts[0]), _resolve_composite_part(parts[1]), _resolve_composite_part(parts[2]), _resolve_composite_part(parts[3]))
+	if raw is Dictionary and (raw as Dictionary).has("__gdss_composite2__"):
+		var parts2: Array = (raw as Dictionary)["__gdss_composite2__"]
+		return Vector2(_resolve_composite_part_f(parts2.front()), _resolve_composite_part_f(parts2.back()))
 	if raw is Dictionary and (raw as Dictionary).has("__gdss_calc__"):
 		return _eval_calc((raw as Dictionary)["__gdss_calc__"])
 	raw = _resolve_sentinel(raw, fallback)
@@ -997,6 +1128,17 @@ func _resolve_composite_part(part: String) -> int:
 	if resolved is String and (resolved as String).is_valid_int():
 		return int(resolved)
 	return 0
+
+
+func _resolve_composite_part_f(part: String) -> float:
+	if part.is_valid_float():
+		return float(part)
+	var resolved: Variant = _resolve_sentinel(part, 0.0)
+	if resolved is int or resolved is float:
+		return float(resolved)
+	if resolved is String and (resolved as String).is_valid_float():
+		return float(resolved)
+	return 0.0
 
 
 func _resolve_method_args(descriptor: Dictionary, state_key: String = "") -> Array[Variant]:
@@ -1179,20 +1321,24 @@ func _get_raw_parsed_val(key: String, state: String) -> Variant:
 
 func _build_style_vals(gdss_node: GdssNode, entry: Dictionary, state: String) -> Dictionary:
 	if not _tweened_values.is_empty():
-		if _style_vals_state != state or _style_vals_cache.is_empty():
-			var fresh: Dictionary = {}
+		if _style_tween_state != state or _style_tween_session != _tween_session:
+			_style_tween_state = state
+			_style_tween_session = _tween_session
+			_style_vals_tween.clear()
+			_style_dynamic_tween.clear()
 			for prop: GdssProp in gdss_node.get_style_props():
 				var fv: Variant = _get_val_cached(prop.name, entry, state, prop.get_default_value())
-				fresh[prop.name] = fv if fv != null else prop.get_default_value()
-			return fresh
-		var out: Dictionary = _style_vals_cache.duplicate()
-		for prop: GdssProp in _style_dynamic:
+				_style_vals_tween[prop.name] = fv if fv != null else prop.get_default_value()
+				if _is_dynamic_raw(_raw_entry_val(entry, state, prop.name)):
+					_style_dynamic_tween.append(prop)
+			return _style_vals_tween
+		for prop: GdssProp in _style_dynamic_tween:
 			var dv: Variant = _get_val_cached(prop.name, entry, state, prop.get_default_value())
-			out[prop.name] = dv if dv != null else prop.get_default_value()
-		for prop: GdssProp in gdss_node.get_style_props():
-			if _tweened_values.has(prop.name):
-				out[prop.name] = _tweened_values[prop.name]
-		return out
+			_style_vals_tween[prop.name] = dv if dv != null else prop.get_default_value()
+		for key: String in _tweened_values:
+			if _style_vals_tween.has(key):
+				_style_vals_tween[key] = _tweened_values[key]
+		return _style_vals_tween
 	if _style_vals_state != state:
 		_style_vals_cache.clear()
 		_style_dynamic.clear()
@@ -1229,8 +1375,8 @@ func _is_dynamic_raw(raw: Variant) -> bool:
 		return s.begins_with("__gdss_global__") or s.begins_with("__gdss_instance__")
 	if raw is Dictionary:
 		var d: Dictionary = raw as Dictionary
-		if d.has("__gdss_composite4__"):
-			for part: Variant in d["__gdss_composite4__"]:
+		if d.has("__gdss_composite4__") or d.has("__gdss_composite2__"):
+			for part: Variant in d.get("__gdss_composite4__", d.get("__gdss_composite2__")):
 				if part is String and ((part as String).begins_with("__gdss_global__") or (part as String).begins_with("__gdss_instance__")):
 					return true
 			return false
@@ -1357,10 +1503,19 @@ func _ensure_gpu_ci(to_canvas_item: RID, want_blur: bool = false) -> void:
 		_gpu_material.shader = _get_blur_shader() if want_blur else _get_shared_shader()
 		RenderingServer.canvas_item_set_material(_gpu_ci, _gpu_material.get_rid())
 		RenderingServer.canvas_item_set_draw_behind_parent(_gpu_ci, true)
+		# Godot captures the screen texture only once per frame, before the FIRST item
+		# that reads it - every later glass panel would sample that same stale snapshot,
+		# missing anything drawn in between (and the capture point moves with culling,
+		# so it varied with scroll/zoom). Requesting an explicit full-screen backbuffer
+		# copy on this item refreshes the capture right before each glass panel draws.
+		# Region-limited copies land misplaced on the compatibility renderer, so the
+		# copy stays full-screen; its cost scales with the number of visible glass panels.
+		RenderingServer.canvas_item_set_copy_to_backbuffer(_gpu_ci, want_blur, Rect2())
 		_gpu_parent = RID()
 	elif _gpu_is_blur != want_blur:
 		_gpu_is_blur = want_blur
 		_gpu_material.shader = _get_blur_shader() if want_blur else _get_shared_shader()
+		RenderingServer.canvas_item_set_copy_to_backbuffer(_gpu_ci, want_blur, Rect2())
 		_gpu_last.clear()
 	if _gpu_parent != to_canvas_item:
 		RenderingServer.canvas_item_set_parent(_gpu_ci, to_canvas_item)
@@ -1670,7 +1825,15 @@ func _triangulate_ring(inner_size: int, outer_size: int) -> PackedInt32Array:
 
 
 func _get_rounded_rect(rect: Rect2, corner_radii: Vector4, detail: int = 8) -> PackedVector2Array:
-	var key: String = "%.2f,%.2f,%.2f,%.2f|%.2f,%.2f,%.2f,%.2f|%d" % [rect.position.x, rect.position.y, rect.size.x, rect.size.y, corner_radii.x, corner_radii.y, corner_radii.z, corner_radii.w, detail]
+	var key: int = int(rect.position.x * 100.0)
+	key = key * 92821 + int(rect.position.y * 100.0)
+	key = key * 92821 + int(rect.size.x * 100.0)
+	key = key * 92821 + int(rect.size.y * 100.0)
+	key = key * 92821 + int(corner_radii.x * 100.0)
+	key = key * 92821 + int(corner_radii.y * 100.0)
+	key = key * 92821 + int(corner_radii.z * 100.0)
+	key = key * 92821 + int(corner_radii.w * 100.0)
+	key = key * 92821 + detail
 	if _rr_cache.has(key):
 		return _rr_cache[key]
 	var corner_centers: Array[Vector2] = [

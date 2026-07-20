@@ -2,6 +2,12 @@
 class_name GdssStorage
 extends RefCounted
 
+const FORMAT_VERSION: int = 5
+
+
+static func is_current_format(raw: Variant) -> bool:
+	return raw is Dictionary and int((raw as Dictionary).get("format", 0)) == FORMAT_VERSION
+
 
 static func get_save_path() -> String:
 	return ProjectSettings.get_setting("gdss/storage/save_path", "res://theme.tgdss")
@@ -104,23 +110,7 @@ static func write_cache(parsed: Dictionary, global_defaults: Dictionary, instanc
 	if cache_file == null:
 		printerr("[GDSS] Failed to open cache file for writing: ", get_cache_path())
 		return
-	cache_file.store_var({"parsed": parsed, "global_defaults": global_defaults, "instance_defaults": instance_defaults, "local_vars": local_vars, "schemes": schemes, "meta": meta})
-	cache_file.close()
-
-
-static func save(source: String, parsed: Dictionary, global_defaults: Dictionary = {}, instance_defaults: Dictionary = {}, local_vars: Dictionary = {}, path: String = "") -> void:
-	var target: String = path if not path.is_empty() else get_save_path()
-	var file: FileAccess = FileAccess.open(target, FileAccess.WRITE)
-	if file == null:
-		printerr("[GDSS] Failed to open file for writing: ", target)
-		return
-	file.store_string(source)
-	file.close()
-	var cache_file: FileAccess = FileAccess.open(get_cache_path(), FileAccess.WRITE)
-	if cache_file == null:
-		printerr("[GDSS] Failed to open cache file for writing: ", get_cache_path())
-		return
-	cache_file.store_var({"parsed": parsed, "global_defaults": global_defaults, "instance_defaults": instance_defaults, "local_vars": local_vars, "schemes": {}, "meta": {}})
+	cache_file.store_var({"format": FORMAT_VERSION, "source_modified": get_latest_modified(), "parsed": parsed, "global_defaults": global_defaults, "instance_defaults": instance_defaults, "local_vars": local_vars, "schemes": schemes, "meta": meta})
 	cache_file.close()
 
 
@@ -141,19 +131,14 @@ static func load_data(path: String = "") -> Dictionary:
 		return result
 	var cache: Variant = cache_file.get_var()
 	cache_file.close()
-	if cache is Dictionary:
+	if is_current_format(cache) and int((cache as Dictionary).get("source_modified", 0)) >= get_latest_modified():
 		for key: String in (cache as Dictionary):
 			result[key] = (cache as Dictionary)[key]
 	return result
 
 
-static func write_compiled(source: String, data: Dictionary, source_modified: int) -> void:
-	var file: FileAccess = FileAccess.open(get_compiled_path(), FileAccess.WRITE)
-	if file == null:
-		printerr("[GDSS] Failed to write compiled theme: ", get_compiled_path())
-		return
-	file.store_var({"source": source, "data": data, "source_modified": source_modified})
-	file.close()
+static func compiled_bytes(source: String, data: Dictionary, source_modified: int) -> PackedByteArray:
+	return var_to_bytes({"format": FORMAT_VERSION, "source": source, "data": data, "source_modified": source_modified})
 
 
 static func load_compiled() -> Dictionary:
@@ -163,6 +148,7 @@ static func load_compiled() -> Dictionary:
 	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		return {}
-	var result: Variant = file.get_var()
+	var raw: PackedByteArray = file.get_buffer(file.get_length())
 	file.close()
-	return result if result is Dictionary else {}
+	var result: Variant = bytes_to_var(raw)
+	return result if is_current_format(result) else {}
