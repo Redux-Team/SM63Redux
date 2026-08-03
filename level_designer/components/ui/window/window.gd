@@ -49,6 +49,9 @@ var _backdrop_alpha: float = 0.0:
 			mat.set_shader_parameter(&"blur", backdrop_blur * v)
 var _popping_in: bool = false
 var _popping_out: bool = false
+## Bumped by every popin/popout. Both are coroutines, so a transition that gets superseded
+## mid-await has to abandon its continuation instead of writing stale state back.
+var _transition: int = 0
 
 
 static func create(control: Control) -> LDWindow:
@@ -70,8 +73,8 @@ func _ready() -> void:
 	_setup_backdrop()
 
 
-## Adds a content node to the shell up-front (kept hidden until bound). Used by
-## LDUIWindowHandler to pre-instantiate every window's content into the single shell.
+## Adds a content node to the shell (kept hidden until bound). Used by LDUIWindowHandler,
+## which builds each window's content the first time that window is opened.
 func add_content(control: Control) -> void:
 	if not control:
 		return
@@ -118,7 +121,10 @@ func _setup_backdrop() -> void:
 func popin() -> void:
 	if _popping_in:
 		return
+	_transition += 1
+	var token: int = _transition
 	_popping_in = true
+	_popping_out = false
 	
 	if _tween:
 		_tween.kill()
@@ -137,10 +143,10 @@ func popin() -> void:
 	# cache, but the container re-sort that finalizes it is deferred, so measuring this same frame
 	# can read a stale (often larger) size. Wait one frame so the panel fits the new content.
 	await get_tree().process_frame
-	if not _popping_in:
+	if token != _transition:
 		return
 	_panel.reset_size()
-
+	
 	if pop_in_centered:
 		_center_in_viewport()
 	
@@ -157,6 +163,8 @@ func popin() -> void:
 		_tween.tween_property(self, "_backdrop_alpha", 1.0, 0.3)
 	
 	await _tween.finished
+	if token != _transition:
+		return
 	_popping_in = false
 	popped_in.emit()
 
@@ -165,7 +173,13 @@ func popin() -> void:
 func popout() -> void:
 	if not visible or _popping_out:
 		return
+	_transition += 1
+	var token: int = _transition
 	_popping_out = true
+	_popping_in = false
+	
+	if _tween:
+		_tween.kill()
 	
 	if pop_out_sfx:
 		SFX.play(SFX.LD_CLOSE)
@@ -182,7 +196,8 @@ func popout() -> void:
 		_tween.tween_property(self, "_backdrop_alpha", 0.0, 0.15)
 	
 	await _tween.finished
-	
+	if token != _transition:
+		return
 	_popping_out = false
 	visible = false
 	if backdrop_enabled and _backdrop:
