@@ -1040,7 +1040,6 @@ custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Music"
 focus_mode = 0
-disabled = true
 icon = ExtResource("ic_music")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
