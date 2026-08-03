@@ -1,19 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://ckffdp04tglj1"]
+[gd_scene format=3 uid="uid://ckffdp04tglj1"]
 
 [ext_resource type="Script" uid="uid://wvt4fr8yabn8" path="res://level_designer/components/ui/layer_properties/layer_properties.gd" id="1_e2re5"]
-[ext_resource type="Script" path="res://level_designer/components/ui/layer_properties/glass_slider.gd" id="glass_slider"]
+[ext_resource type="Script" uid="uid://b4bmo11oas8f2" path="res://level_designer/components/ui/layer_properties/glass_slider.gd" id="glass_slider"]
 [ext_resource type="Texture2D" uid="uid://boi5n5utdpqmj" path="res://assets/textures/level_designer/ui_icons/add.svg" id="ic_add"]
-[ext_resource type="Texture2D" uid="uid://cyjlsmgjeixte" path="res://assets/textures/level_designer/ui_icons/up.svg" id="ic_up"]
 [ext_resource type="Texture2D" uid="uid://dtcx7p5e7ovqf" path="res://assets/textures/level_designer/ui_icons/down.svg" id="ic_down"]
 [ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="ic_remove"]
+[ext_resource type="Texture2D" uid="uid://cyjlsmgjeixte" path="res://assets/textures/level_designer/ui_icons/up.svg" id="ic_up"]
 
-[node name="LayerProperties" type="MarginContainer" unique_id=899359989 node_paths=PackedStringArray("row_container", "add_button", "move_up_button", "move_down_button", "remove_button", "count_label", "detail", "detail_rows", "blocked_label", "name_edit", "deco_layer", "parallax_slider_x", "parallax_slider_y", "parallax_label_x", "parallax_label_y", "modulate_color_picker")]
+[node name="LayerProperties" type="MarginContainer" unique_id=899359989 node_paths=PackedStringArray("row_container", "add_button", "move_up_button", "move_down_button", "remove_button", "count_label", "detail", "detail_rows", "name_edit", "deco_layer", "parallax_slider_x", "parallax_slider_y", "parallax_label_x", "parallax_label_y", "modulate_color_picker")]
 custom_minimum_size = Vector2(520, 0)
-theme_override_constants/margin_left = 14
-theme_override_constants/margin_top = 14
-theme_override_constants/margin_right = 14
-theme_override_constants/margin_bottom = 14
-metadata/gdss_mode = 1
 script = ExtResource("1_e2re5")
 row_container = NodePath("Columns/ListColumn/ListInset/ListScroll/RowList")
 add_button = NodePath("Columns/ListColumn/Toolbar/AddButton")
@@ -23,7 +18,6 @@ remove_button = NodePath("Columns/ListColumn/Toolbar/RemoveButton")
 count_label = NodePath("Columns/ListColumn/CountLabel")
 detail = NodePath("Columns/Detail")
 detail_rows = NodePath("Columns/Detail/DetailInset/Rows")
-blocked_label = NodePath("Columns/Detail/DetailInset/BlockedLabel")
 name_edit = NodePath("Columns/Detail/DetailInset/Rows/NameRow/NameEdit")
 deco_layer = NodePath("Columns/Detail/DetailInset/Rows/DecoRow/DecoLayer")
 parallax_slider_x = NodePath("Columns/Detail/DetailInset/Rows/PXRow/ParallaxSliderX")
@@ -31,43 +25,41 @@ parallax_slider_y = NodePath("Columns/Detail/DetailInset/Rows/PYRow/ParallaxSlid
 parallax_label_x = NodePath("Columns/Detail/DetailInset/Rows/PXRow/ParallaxLabelX")
 parallax_label_y = NodePath("Columns/Detail/DetailInset/Rows/PYRow/ParallaxLabelY")
 modulate_color_picker = NodePath("Columns/Detail/DetailInset/Rows/ModRow/ModulateColorPicker")
+metadata/gdss_mode = 1
 
-[node name="Columns" type="HBoxContainer" parent="."]
+[node name="Columns" type="HBoxContainer" parent="." unique_id=930721549]
 layout_mode = 2
-theme_override_constants/separation = 14
 
-[node name="ListColumn" type="VBoxContainer" parent="Columns"]
+[node name="ListColumn" type="VBoxContainer" parent="Columns" unique_id=1350276091]
 custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
 
-[node name="ListInset" type="PanelContainer" parent="Columns/ListColumn"]
+[node name="ListInset" type="PanelContainer" parent="Columns/ListColumn" unique_id=20686659]
 layout_mode = 2
 size_flags_vertical = 3
 metadata/gdss_classes = PackedStringArray("Inset")
 
-[node name="ListScroll" type="ScrollContainer" parent="Columns/ListColumn/ListInset"]
+[node name="ListScroll" type="ScrollContainer" parent="Columns/ListColumn/ListInset" unique_id=860015492]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="RowList" type="VBoxContainer" parent="Columns/ListColumn/ListInset/ListScroll"]
+[node name="RowList" type="VBoxContainer" parent="Columns/ListColumn/ListInset/ListScroll" unique_id=1365565672]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 2
 
-[node name="CountLabel" type="Label" parent="Columns/ListColumn"]
-layout_mode = 2
+[node name="CountLabel" type="Label" parent="Columns/ListColumn" unique_id=146781853]
 modulate = Color(1, 1, 1, 0.55)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 horizontal_alignment = 1
 metadata/gdss_classes = PackedStringArray("Mute")
 
-[node name="Toolbar" type="HBoxContainer" parent="Columns/ListColumn"]
+[node name="Toolbar" type="HBoxContainer" parent="Columns/ListColumn" unique_id=2047371483]
 layout_mode = 2
-theme_override_constants/separation = 8
 
-[node name="AddButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+[node name="AddButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=1017214479]
 custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
 tooltip_text = "Add Layer"
@@ -75,7 +67,7 @@ icon = ExtResource("ic_add")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="MoveUpButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+[node name="MoveUpButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=360056523]
 custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
 tooltip_text = "Move Layer Up"
@@ -83,7 +75,7 @@ icon = ExtResource("ic_up")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="MoveDownButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+[node name="MoveDownButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=1216909594]
 custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
 tooltip_text = "Move Layer Down"
@@ -91,12 +83,12 @@ icon = ExtResource("ic_down")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="Spacer" type="Control" parent="Columns/ListColumn/Toolbar"]
+[node name="Spacer" type="Control" parent="Columns/ListColumn/Toolbar" unique_id=1953457131]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="RemoveButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+[node name="RemoveButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=113921013]
 custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
 tooltip_text = "Remove Layer"
@@ -104,94 +96,90 @@ icon = ExtResource("ic_remove")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton", "Danger")
 
-[node name="Detail" type="VBoxContainer" parent="Columns"]
+[node name="Detail" type="VBoxContainer" parent="Columns" unique_id=1291195838]
 custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DetailInset" type="PanelContainer" parent="Columns/Detail"]
+[node name="DetailInset" type="PanelContainer" parent="Columns/Detail" unique_id=1344399171]
 custom_minimum_size = Vector2(0, 230)
 layout_mode = 2
 size_flags_vertical = 3
 metadata/gdss_classes = PackedStringArray("Card")
 
-[node name="Rows" type="VBoxContainer" parent="Columns/Detail/DetailInset"]
+[node name="Rows" type="VBoxContainer" parent="Columns/Detail/DetailInset" unique_id=1767334713]
 layout_mode = 2
-size_flags_vertical = 4
-theme_override_constants/separation = 10
 
-[node name="NameRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows"]
+[node name="NameRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows" unique_id=1546731296]
 layout_mode = 2
-theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/NameRow"]
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/NameRow" unique_id=1540304511]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_vertical = 1
-vertical_alignment = 1
 text = "Name"
+vertical_alignment = 1
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="NameEdit" type="LineEdit" parent="Columns/Detail/DetailInset/Rows/NameRow"]
+[node name="NameEdit" type="LineEdit" parent="Columns/Detail/DetailInset/Rows/NameRow" unique_id=1385718915]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_default_cursor_shape = 0
 placeholder_text = "Unnamed"
 
-[node name="DecoRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows"]
+[node name="DecoRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows" unique_id=1200081306]
 layout_mode = 2
-theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/DecoRow"]
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/DecoRow" unique_id=812994611]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-vertical_alignment = 1
 text = "Decoration"
+vertical_alignment = 1
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="DecoLayer" type="CheckButton" parent="Columns/Detail/DetailInset/Rows/DecoRow"]
+[node name="DecoLayer" type="CheckButton" parent="Columns/Detail/DetailInset/Rows/DecoRow" unique_id=2083685908]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 
-[node name="ModRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows"]
+[node name="ModRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows" unique_id=1919039853]
 layout_mode = 2
-theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/ModRow"]
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/ModRow" unique_id=376451622]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-vertical_alignment = 1
 text = "Modulate"
+vertical_alignment = 1
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="ModulateColorPicker" type="ColorPickerButton" parent="Columns/Detail/DetailInset/Rows/ModRow"]
+[node name="ModulateColorPicker" type="ColorPickerButton" parent="Columns/Detail/DetailInset/Rows/ModRow" unique_id=1286184696]
 custom_minimum_size = Vector2(48, 24)
 layout_mode = 2
 size_flags_vertical = 4
 color = Color(1, 1, 1, 1)
 
-[node name="ParallaxHeader" type="Label" parent="Columns/Detail/DetailInset/Rows"]
+[node name="ParallaxHeader" type="Label" parent="Columns/Detail/DetailInset/Rows" unique_id=720359033]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "Parallax"
 metadata/gdss_classes = PackedStringArray("SectionHeader")
 
-[node name="PXRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows"]
+[node name="PXRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows" unique_id=1078721786]
 layout_mode = 2
-theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/PXRow"]
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/PXRow" unique_id=1851397938]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_vertical = 1
-vertical_alignment = 1
 text = "X"
+vertical_alignment = 1
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="ParallaxSliderX" type="HSlider" parent="Columns/Detail/DetailInset/Rows/PXRow"]
+[node name="ParallaxSliderX" type="HSlider" parent="Columns/Detail/DetailInset/Rows/PXRow" unique_id=549529832]
 texture_filter = 4
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
@@ -202,27 +190,26 @@ step = 0.1
 value = 1.0
 script = ExtResource("glass_slider")
 
-[node name="ParallaxLabelX" type="Label" parent="Columns/Detail/DetailInset/Rows/PXRow"]
+[node name="ParallaxLabelX" type="Label" parent="Columns/Detail/DetailInset/Rows/PXRow" unique_id=1035066238]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_vertical = 1
-vertical_alignment = 1
 text = "1.0x"
 horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="PYRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows"]
+[node name="PYRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows" unique_id=285843324]
 layout_mode = 2
-theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/PYRow"]
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/PYRow" unique_id=370250660]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_vertical = 1
-vertical_alignment = 1
 text = "Y"
+vertical_alignment = 1
 metadata/gdss_classes = PackedStringArray("Dim")
 
-[node name="ParallaxSliderY" type="HSlider" parent="Columns/Detail/DetailInset/Rows/PYRow"]
+[node name="ParallaxSliderY" type="HSlider" parent="Columns/Detail/DetailInset/Rows/PYRow" unique_id=558127399]
 texture_filter = 4
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
@@ -233,20 +220,10 @@ step = 0.1
 value = 1.0
 script = ExtResource("glass_slider")
 
-[node name="ParallaxLabelY" type="Label" parent="Columns/Detail/DetailInset/Rows/PYRow"]
+[node name="ParallaxLabelY" type="Label" parent="Columns/Detail/DetailInset/Rows/PYRow" unique_id=825881335]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_vertical = 1
-vertical_alignment = 1
 text = "1.0x"
 horizontal_alignment = 2
-
-[node name="BlockedLabel" type="Label" parent="Columns/Detail/DetailInset"]
-layout_mode = 2
-modulate = Color(1, 1, 1, 0.6)
-text = "This layer cannot be edited."
-horizontal_alignment = 1
 vertical_alignment = 1
-autowrap_mode = 3
-metadata/gdss_classes = PackedStringArray("Mute")
-visible = false

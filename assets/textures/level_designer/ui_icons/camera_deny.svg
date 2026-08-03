@@ -1,8 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-  <rect x="1.5" y="1.5" width="21" height="21" rx="5.5" fill="#e03d3d" fill-opacity="0.16" stroke="#e03d3d" stroke-width="1.5"/>
-  <g transform="matrix(0.6,0,0,0.6,4.8,4.8)" fill="none" stroke="#e03d3d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
-    <circle cx="12" cy="13" r="3"/>
-    <line x1="2.5" y1="2.5" x2="21.5" y2="21.5"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="camera_deny.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="20.069467"
+     inkscape:cx="11.161233"
+     inkscape:cy="9.9903"
+     inkscape:window-width="1470"
+     inkscape:window-height="822"
+     inkscape:window-x="0"
+     inkscape:window-y="33"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <g
+     transform="matrix(0.6,0,0,0.6,4.8000002,4.369999)"
+     fill="none"
+     stroke="#e03d3d"
+     stroke-width="3"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     id="g1">
+    <path
+       d="M 15.105841,1.7722709 H 8.8941574 L 5.7883151,5.4992816 H 2.0613044 A 2.4846738,2.4846738 0 0 0 -0.42336932,7.9839553 V 19.164987 A 2.4846738,2.4846738 0 0 0 2.0613044,21.649661 H 21.938695 a 2.4846738,2.4846738 0 0 0 2.484674,-2.484674 V 7.9839553 A 2.4846738,2.4846738 0 0 0 21.938695,5.4992816 h -3.727011 z"
+       id="path1"
+       style="stroke-width:2.55869;stroke-dasharray:none" />
+    <circle
+       cx="12"
+       cy="12.953302"
+       r="3.727011"
+       id="circle1"
+       style="stroke-width:3.02645;stroke-dasharray:none" />
+    <line
+       x1="0.7720691"
+       y1="1.6494844"
+       x2="23.22793"
+       y2="23.783852"
+       id="line1"
+       style="stroke-width:2.48305;stroke-dasharray:none" />
   </g>
 </svg>

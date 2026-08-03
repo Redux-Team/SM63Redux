@@ -20,7 +20,6 @@ const LOCK_ICON: Texture2D = preload("res://assets/textures/level_designer/ui_ic
 
 @export var detail: VBoxContainer
 @export var detail_rows: VBoxContainer
-@export var blocked_label: Label
 @export var name_edit: LineEdit
 @export var deco_layer: CheckButton
 @export var parallax_slider_x: HSlider
@@ -248,9 +247,6 @@ func _show_detail(pos: int) -> void:
 		var item: CanvasItem = row as CanvasItem
 		if item:
 			item.visible = (not locked) or (row == mod_row)
-	blocked_label.visible = locked
-	if locked:
-		blocked_label.text = "The player's layer is fixed as Layer 0. Only its tint can be edited."
 	remove_button.disabled = locked
 	GDSS.refresh(remove_button)
 

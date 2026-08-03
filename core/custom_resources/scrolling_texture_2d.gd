@@ -44,7 +44,7 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, _tile: bool, modulate: Color, 
 	_draw_scrolled(to_canvas_item, rect, Rect2(scroll * tex_size, tex_size), modulate, transpose)
 
 
-func _draw_rect_region(to_canvas_item: RID, rect: Rect2, src_rect: Rect2, modulate: Color, transpose: bool, clip_uv: bool) -> void:
+func _draw_rect_region(to_canvas_item: RID, rect: Rect2, src_rect: Rect2, modulate: Color, transpose: bool, _clip_uv: bool) -> void:
 	if texture == null:
 		return
 	var tex_size: Vector2 = texture.get_size()

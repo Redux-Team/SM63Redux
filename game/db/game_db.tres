@@ -94,9 +94,7 @@
 [ext_resource type="Resource" uid="uid://lv8lc3too2cm" path="res://game/db/Objects/Decoration/Platforms/snowy_tiled_platform.tres" id="76_awe0f"]
 [ext_resource type="Resource" uid="uid://v3yk2lwwo751" path="res://game/db/Objects/Decoration/Platforms/cloud.tres" id="77_6fphn"]
 [ext_resource type="Resource" uid="uid://d3vfvvtqanxml" path="res://game/db/Objects/Polygon/Volumes/camera_deny_area.tres" id="78_76t45"]
-[ext_resource type="Resource" path="res://game/db/Objects/Polygon/Volumes/music_region.tres" id="146_mreg"]
 [ext_resource type="Resource" uid="uid://du05wmn6o6uhx" path="res://game/db/Objects/Decoration/Platforms/dark_platform.tres" id="79_02eb1"]
-[ext_resource type="Resource" uid="uid://p1rx0878ftm2" path="res://game/db/Objects/Polygon/Terrain/terrain_color_solid.tres" id="82_mtxdl"]
 [ext_resource type="Resource" uid="uid://dg3x7l0kphplx" path="res://game/db/Objects/Decoration/Platforms/cherry_platform.tres" id="86_0f4s0"]
 [ext_resource type="Resource" uid="uid://bsf2g2tiudu10" path="res://game/db/Objects/Decoration/Platforms/skull_platform.tres" id="87_i5201"]
 [ext_resource type="Resource" uid="uid://h6sy103i6nyq" path="res://game/db/Objects/Decoration/Platforms/snowy_platform.tres" id="88_g6paw"]
@@ -157,9 +155,9 @@
 [ext_resource type="Resource" uid="uid://dgutlwhtijc77" path="res://game/db/Objects/Item/FLUDD/turbo_nozzle.tres" id="143_1ysu7"]
 [ext_resource type="Resource" uid="uid://busbfhse2ydjh" path="res://game/db/Objects/Item/FLUDD/rocket_nozzle.tres" id="144_kjcoh"]
 [ext_resource type="Resource" uid="uid://bl2kt32lgc6gi" path="res://game/db/Objects/Polygon/Terrain/terrain_cave.tres" id="145_1ysu7"]
-[ext_resource type="Resource" path="res://game/db/Objects/Decoration/Nature/medium_cave_stem.tres" id="200_mcs"]
-[ext_resource type="Resource" path="res://game/db/Objects/Decoration/Nature/snowman.tres" id="201_swm"]
-[ext_resource type="Resource" path="res://game/db/Objects/Decoration/Nature/snoadman.tres" id="202_sdm"]
+[ext_resource type="Resource" uid="uid://cavq2y3n10073" path="res://game/db/Objects/Decoration/Nature/medium_cave_stem.tres" id="200_mcs"]
+[ext_resource type="Resource" uid="uid://38nt2u4gnvkc" path="res://game/db/Objects/Decoration/Nature/snowman.tres" id="201_swm"]
+[ext_resource type="Resource" uid="uid://d1wu4w4mp2t0v" path="res://game/db/Objects/Decoration/Nature/snoadman.tres" id="202_sdm"]
 
 [resource]
 script = ExtResource("47_j75gy")
@@ -305,12 +303,10 @@ objects = Dictionary[String, ExtResource("1_j75gy")]({
 "Item/Utility/spinning_heart": ExtResource("64_q5xve"),
 "Polygon/Terrain/terrain_cave": ExtResource("145_1ysu7"),
 "Polygon/Terrain/terrain_cherry": ExtResource("141_78wvd"),
-"Polygon/Terrain/terrain_color_solid": ExtResource("82_mtxdl"),
 "Polygon/Terrain/terrain_grass": ExtResource("45_3w7om"),
 "Polygon/Terrain/terrain_jungle": ExtResource("59_ib6pc"),
 "Polygon/Terrain/terrain_snow": ExtResource("60_rpot8"),
 "Polygon/Volumes/camera_deny_area": ExtResource("78_76t45"),
-"Polygon/Volumes/music_region": ExtResource("146_mreg"),
 "Polygon/Volumes/water": ExtResource("58_j0wnv")
 })
 properties = Dictionary[String, ExtResource("46_d7ntl")]({

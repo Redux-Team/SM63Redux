@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="GameObject" format=3]
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://d1wu4w4mp2t0v"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/snoadman.png" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://bpvmnok17nns6" path="res://assets/textures/objects/decoration/nature/snoadman.png" id="1_tex"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_rot"]
