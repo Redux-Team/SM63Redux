@@ -73,10 +73,11 @@ func delete_placed_selection() -> void:
 	)
 	history.add_undo(func() -> void:
 		for i: int in deletable.size():
-			if is_instance_valid(deletable[i]) and is_instance_valid(parents[i]):
-				parents[i].add_child(deletable[i])
+			if is_instance_valid(deletable.get(i)) and is_instance_valid(parents.get(i)):
+				parents.get(i).add_child(deletable.get(i))
 	)
 	history.commit_action()
+	history.track_detached(deletable)
 	
 	for obj: LDObject in deletable:
 		if obj.get_parent():

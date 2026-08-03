@@ -247,6 +247,7 @@ func delete_selection() -> void:
 				parents.get(i).add_child(objects.get(i))
 	)
 	history.commit_action()
+	history.track_detached(objects)
 	
 	for obj: LDObject in objects:
 		if obj.get_parent():

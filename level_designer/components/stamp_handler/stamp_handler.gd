@@ -300,6 +300,7 @@ func remove_instance(stamp_id: String, area_name: String, unique_id: String) -> 
 		instance_placed.emit(stamp, unique_id)
 	)
 	history.commit_action()
+	history.track_detached(to_remove)
 
 	stamp.remove_instance(area_name, unique_id)
 	for obj: LDObject in to_remove:
