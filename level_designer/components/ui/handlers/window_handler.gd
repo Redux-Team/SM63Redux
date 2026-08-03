@@ -146,6 +146,13 @@ func is_window_open() -> bool:
 	return _active_id != &""
 
 
+## Builds a panel ahead of its first open. Used for the object browser, whose entry list is
+## expensive enough that building it on click is a visible hitch; built early it fills in
+## over idle frames and the window opens instantly.
+func prewarm(id: StringName) -> void:
+	_get_or_create(id)
+
+
 ## The built content for `id`, or null if that window has never been opened. This is a
 ## lookup, never a build: use open()/toggle() to bring a panel into existence, or listen
 ## for content_created to wire onto one as it appears.

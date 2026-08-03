@@ -9,6 +9,10 @@ signal hide_request
 const OBJECT_GROUP_SCENE: PackedScene = preload("uid://d11ohrgxcihxx")
 const STAMP_ENTRY: PackedScene = preload("uid://cmh307lx6bbro")
 const TOOLTIP_MARGIN: float = 8.0
+## Per-frame budget for building entry nodes. Creating all ~150 at once costs ~275 ms,
+## almost all of it styling each new Control, which froze the editor for a quarter second
+## every time the list was populated.
+const BUILD_BUDGET_USEC: int = 4000
 
 
 @export var groups_v_box: VBoxContainer
@@ -21,6 +25,8 @@ var _tab_button_group: ButtonGroup = ButtonGroup.new()
 var _tooltip_anchor: Control = null
 var _showing_stamps: bool = false
 var _stamps_button: Button = null
+## Entries still waiting to be built, as {"group": LDObjectBrowserGroup, "obj": GameObject}.
+var _build_queue: Array[Dictionary] = []
 
 
 func _init() -> void:
@@ -40,10 +46,13 @@ func _ready() -> void:
 
 
 func _on_show() -> void:
+	_build_entries(0)
 	_refresh_stamps_tab()
 
 
 func _process(_delta: float) -> void:
+	_build_entries(BUILD_BUDGET_USEC)
+	
 	if not tooltip_label.visible:
 		return
 	
@@ -58,6 +67,22 @@ func _process(_delta: float) -> void:
 		raw_pos = get_global_mouse_position() + Vector2(12.0, 12.0)
 	
 	tooltip_label.global_position = _clamp_to_window(raw_pos)
+
+
+## Builds queued entries until `budget_usec` of this frame is used up. A budget of 0 or
+## less drains the whole queue, for when the list is about to become visible.
+func _build_entries(budget_usec: int) -> void:
+	if _build_queue.is_empty():
+		return
+	
+	var deadline: int = Time.get_ticks_usec() + budget_usec
+	while not _build_queue.is_empty():
+		var item: Dictionary = _build_queue.pop_front()
+		var group: LDObjectBrowserGroup = item.get("group") as LDObjectBrowserGroup
+		if is_instance_valid(group):
+			group.add_entry(item.get("obj") as GameObject)
+		if budget_usec > 0 and Time.get_ticks_usec() >= deadline:
+			return
 
 
 func _clamp_to_window(pos: Vector2) -> Vector2:
@@ -117,6 +142,7 @@ func _refresh_stamps_tab() -> void:
 
 
 func _populate_stamps_list() -> void:
+	_build_queue.clear()
 	for n: Node in groups_v_box.get_children():
 		n.queue_free()
 	_add_stamps_group(LD.get_stamp_handler().get_indexable_stamps())
@@ -126,11 +152,11 @@ func _populate_stamps_list() -> void:
 func _add_stamps_group(stamps: Array[LDStamp]) -> void:
 	if stamps.is_empty():
 		return
-
+	
 	var group_node: LDObjectBrowserGroup = OBJECT_GROUP_SCENE.instantiate()
 	group_node.set_group_name("Stamps")
 	groups_v_box.add_child(group_node)
-
+	
 	for stamp: LDStamp in stamps:
 		var entry: LDStampEntry = STAMP_ENTRY.instantiate()
 		entry.setup(stamp)
@@ -143,12 +169,13 @@ func _add_stamps_group(stamps: Array[LDStamp]) -> void:
 
 
 func populate_list(search: String = "") -> void:
+	_build_queue.clear()
 	for n: Node in groups_v_box.get_children():
 		n.queue_free()
 	
 	var query: String = search.to_lower().strip_edges()
 	var pressed: BaseButton = _tab_button_group.get_pressed_button()
-
+	
 	# When searching, surface matching stamps at the top alongside the object results.
 	if not query.is_empty():
 		var matching_stamps: Array[LDStamp] = []
@@ -156,7 +183,7 @@ func populate_list(search: String = "") -> void:
 			if _fuzzy_score(query, stamp.id.to_lower()) > 0:
 				matching_stamps.append(stamp)
 		_add_stamps_group(matching_stamps)
-
+	
 	var all_groups: Array[GameDB.GameObjectGroup] = []
 	if query.is_empty():
 		var cat_name: String = pressed.name if pressed else &""
@@ -205,7 +232,7 @@ func populate_list(search: String = "") -> void:
 		group_node.entry_focused.connect(_on_entry_focused)
 		group_node.entry_unfocused.connect(_on_entry_unhovered)
 		for item: Dictionary in scored:
-			group_node.add_entry(item.get("obj") as GameObject)
+			_build_queue.append({"group": group_node, "obj": item.get("obj")})
 	
 	var display_name: String = pressed.text if pressed else "All"
 	category_changed.emit(display_name.to_pascal_case())

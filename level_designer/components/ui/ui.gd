@@ -37,6 +37,9 @@ func _on_ready() -> void:
 	_hotbar_handler.setup()
 	_chrome_handler.setup()
 	_apply_responsive()
+	# Deferred so the handlers above are wired first: the browser announces itself as it is
+	# built, and the hotbar has to be listening by then.
+	_window_handler.prewarm.call_deferred(LDUIWindowHandler.OBJECT_BROWSER)
 
 
 ## Desktop keeps the compact scene sizing (so the chrome never runs off-screen).
