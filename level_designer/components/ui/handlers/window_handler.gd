@@ -21,13 +21,17 @@ const PICKER: StringName = &"picker"
 ## Emitted when the active window changes: the opened window's id, or &"" when the
 ## window closes. The UI chrome listens to this to highlight the matching panel button.
 signal active_changed(id: StringName)
+## Emitted the first time a window's content is built. Panels are created on demand, so
+## anything that needs to wire itself to a panel has to listen for this rather than
+## reaching for the content at startup.
+signal content_created(id: StringName, content: Control)
 
 
 @export var _window: LDWindow
 @export var _window_defs: Array[LDWindowDef]
 
 
-## Content instances, created once and reused so their state survives close/reopen.
+## Content instances, built on first open and reused so their state survives close/reopen.
 var _instances: Dictionary[StringName, Control] = {}
 var _defs: Dictionary[StringName, LDWindowDef] = {}
 ## Id of the window currently popped in (empty when nothing is open).
@@ -36,15 +40,32 @@ var _active_id: StringName = &""
 
 func _ready() -> void:
 	for def: LDWindowDef in _window_defs:
-		_defs[def.id] = def
-		var content: Control = def.scene.instantiate()
-		_instances[def.id] = content
-		_window.add_content(content)
+		_defs.set(def.id, def)
 	_window.popped_out.connect(_on_window_popped_out)
 
-	var browser: LDObjectBrowser = _instances.get(OBJECT_BROWSER) as LDObjectBrowser
+
+## Builds a window's content the first time it is needed. The panels are heavy (the object
+## browser alone is ~700 nodes) and most are never opened in a given session, so building
+## them up front cost roughly a third of the editor's startup for nothing.
+func _get_or_create(id: StringName) -> Control:
+	var existing: Control = _instances.get(id)
+	if is_instance_valid(existing):
+		return existing
+
+	var def: LDWindowDef = _defs.get(id)
+	if not def:
+		return null
+
+	var content: Control = def.scene.instantiate()
+	_instances.set(id, content)
+	_window.add_content(content)
+
+	var browser: LDObjectBrowser = content as LDObjectBrowser
 	if browser:
 		browser.category_changed.connect(_on_browser_category_changed)
+
+	content_created.emit(id, content)
+	return content
 
 
 #region Typed toggles (return the bound content)
@@ -106,8 +127,8 @@ func open(id: StringName) -> Control:
 	if _active_id != &"" and _active_id != id:
 		return null
 
-	var def: LDWindowDef = _defs[id]
-	var content: Control = _instances[id]
+	var def: LDWindowDef = _defs.get(id)
+	var content: Control = _get_or_create(id)
 	_window.bind(content, def.title, def.close_on_back_input, def.window_scale)
 	_active_id = id
 	LD.get_input_handler().set_input_priority(LD.get_ui())
@@ -125,6 +146,9 @@ func is_window_open() -> bool:
 	return _active_id != &""
 
 
+## The built content for `id`, or null if that window has never been opened. This is a
+## lookup, never a build: use open()/toggle() to bring a panel into existence, or listen
+## for content_created to wire onto one as it appears.
 func get_content(id: StringName) -> Control:
 	return _instances.get(id)
 
@@ -139,7 +163,7 @@ func get_object_browser() -> LDObjectBrowser:
 #region Pickers
 
 func open_tag_picker(title: String, on_confirm: Callable) -> void:
-	var picker: LDPickerDialog = _instances[PICKER] as LDPickerDialog
+	var picker: LDPickerDialog = _get_or_create(PICKER) as LDPickerDialog
 	picker.setup_ids(title, LD.get_tag_handler().get_all_tags())
 	_wire_picker(picker, on_confirm)
 	open(PICKER)

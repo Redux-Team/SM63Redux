@@ -16,14 +16,19 @@ func setup() -> void:
 	for button: LDHotbarButton in _hotbar_buttons:
 		button.new_object_request.connect(_on_new_object_request)
 
-	var browser: LDObjectBrowser = LD.get_ui().get_window_handler().get_object_browser()
-	if browser:
-		browser.hide_request.connect(_on_browser_hide_request)
+	# The browser is built on first open, so wire onto it when it appears rather than
+	# forcing it into existence here.
+	LD.get_ui().get_window_handler().content_created.connect(_on_window_content_created)
 
 	# Stamp previews generate asynchronously, so refresh stamp-slot icons when they change.
 	var sh: LDStampHandler = LD.get_stamp_handler()
 	sh.stamp_changed.connect(_on_stamps_changed.unbind(1))
 	sh.stamp_removed.connect(_on_stamps_changed.unbind(1))
+
+
+func _on_window_content_created(id: StringName, content: Control) -> void:
+	if id == LDUIWindowHandler.OBJECT_BROWSER:
+		(content as LDObjectBrowser).hide_request.connect(_on_browser_hide_request)
 
 
 func _on_stamps_changed() -> void:
