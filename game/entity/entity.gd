@@ -224,11 +224,15 @@ func spawn_exit_objects(shared_properties: Array = ["position", "scale", "rotati
 	
 	for packed: PackedScene in exit_objects:
 		for i: int in exit_objects.get(packed):
-			var node: Node = packed.instantiate().duplicate()
+			var node: Node = packed.instantiate()
 			Singleton.spawn_sibling(self, node, shared_properties)
 	
 	_exit_objs_spawned = true
 
 
+## Only a real death (queue_free) should leave exit objects behind. Leaving the tree because the
+## whole scene is being torn down must not spawn: the deferred add_child would be dropped and the
+## spawned nodes stranded outside the tree.
 func _exit_tree() -> void:
-	spawn_exit_objects()
+	if is_queued_for_deletion():
+		spawn_exit_objects()

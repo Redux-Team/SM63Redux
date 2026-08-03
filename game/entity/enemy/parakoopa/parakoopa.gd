@@ -6,21 +6,6 @@ extends Entity
 @export var particle_emitter: ParticleEmitter
 @export var wing_2: Texture2D
 
-var wing_emitter_1: ParticleEmitter
-var wing_emitter_2: ParticleEmitter
-
-
-func _ready() -> void:
-	super()
-	
-	wing_emitter_1 = _spawn_wing_particle()
-	wing_emitter_2 = _spawn_wing_particle()
-	
-	wing_emitter_2.direction = Vector2.LEFT
-	wing_emitter_2.texture = wing_2
-	
-	particle_emitter.queue_free()
-
 
 func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:
 	if is_queued_for_deletion():
@@ -40,17 +25,21 @@ func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:
 		source_hitbox.owner.velocity.y = -200
 		koopa_node.audio_stream_player_2d.play.call_deferred()
 	
-	Singleton.spawn_sibling(self, wing_emitter_1, ["position", "scale"])
-	Singleton.spawn_sibling(self, wing_emitter_2, ["position", "scale"])
+	_spawn_wing_particle()
 	
-	wing_emitter_1.emitting = true
-	wing_emitter_2.emitting = true
+	var wing_emitter_2: ParticleEmitter = _spawn_wing_particle()
+	wing_emitter_2.direction = Vector2.LEFT
+	wing_emitter_2.texture = wing_2
 	
 	queue_free()
 
 
+## Copies the idle in-scene emitter into the level as a one-shot wing puff. Duplicating on death
+## rather than in _ready keeps every copy parented, so a parakoopa still alive when the level
+## unloads cannot strand them outside the tree.
 func _spawn_wing_particle() -> ParticleEmitter:
 	var emitter: ParticleEmitter = particle_emitter.duplicate()
 	emitter.emitting = true
+	Singleton.spawn_sibling(self, emitter, ["position", "scale"])
 	
 	return emitter
