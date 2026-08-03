@@ -447,7 +447,7 @@ func _commit() -> void:
 					var piece: PackedVector2Array = clipped[ci]
 					if piece.size() < 3:
 						continue
-					if not game_object or not game_object.get_editor_instance():
+					if not game_object:
 						continue
 					var new_instance: LDObject = game_object.get_editor_instance()
 					if not new_instance is LDObjectPolygon:
@@ -588,7 +588,7 @@ func _commit() -> void:
 					var piece: Variant = clipped[ci]
 					if not piece is PackedVector2Array or (piece as PackedVector2Array).size() < 3:
 						continue
-					if not game_object or not game_object.get_editor_instance():
+					if not game_object:
 						continue
 					var new_instance: LDObject = game_object.get_editor_instance()
 					if not new_instance is LDObjectPolygon:

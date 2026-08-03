@@ -80,7 +80,7 @@ func is_active() -> bool:
 
 func spawn_preview(obj: GameObject) -> LDObject:
 	_destroy_preview()
-	if not obj or not obj.get_editor_instance():
+	if not obj:
 		return null
 	_preview_object = obj.get_editor_instance()
 	_preview_object.is_preview = true

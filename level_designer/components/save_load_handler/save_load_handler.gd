@@ -565,24 +565,17 @@ func _sanitize_player_layer(area: LDArea) -> void:
 			return
 
 
-func _find_game_object_by_scene(scene: PackedScene) -> GameObject:
-	for game_object: GameObject in GameDB.get_db().objects.values():
-		if game_object.get_editor_instance() == scene:
-			return game_object
-	return null
-
-
 func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB, area: LDArea) -> void:
 	var object_id: String = data.get("object_id", "")
 	if object_id.is_empty():
 		return
 
 	var game_object: GameObject = find_game_object_by_id(object_id, db)
-	if not game_object or not game_object.get_editor_instance():
+	if not game_object:
 		return
-
+	
 	var instance: LDObject = game_object.get_editor_instance()
-	if not instance or instance is not LDObject:
+	if not instance:
 		return
 
 	var pos: Vector2 = Packer.array_to_vec2(data.get("position", [0.0, 0.0]))

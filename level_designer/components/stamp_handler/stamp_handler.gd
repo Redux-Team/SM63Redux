@@ -416,7 +416,7 @@ func generate_preview(stamp: LDStamp) -> void:
 	for entry: Dictionary in stamp.objects:
 		var object_id: String = entry.get("object_id", "")
 		var game_object: GameObject = LD.get_save_load_handler().find_game_object_by_id(object_id, db)
-		if not game_object or not game_object.get_editor_instance():
+		if not game_object:
 			continue
 		var instance: LDObject = game_object.get_editor_instance()
 		var offset: Vector2 = Packer.array_to_vec2(entry.get("local_offset", [0.0, 0.0]))

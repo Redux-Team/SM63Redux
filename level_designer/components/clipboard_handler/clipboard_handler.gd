@@ -129,7 +129,7 @@ func _deserialize_object(data: Dictionary, db: GameDB, area: LDArea, offset: Vec
 	
 	var save_load: LDSaveLoadHandler = LD.get_save_load_handler()
 	var game_object: GameObject = save_load.find_game_object_by_id(object_id, db)
-	if not game_object or not game_object.get_editor_instance():
+	if not game_object:
 		return null
 	
 	var instance: LDObject = game_object.get_editor_instance()

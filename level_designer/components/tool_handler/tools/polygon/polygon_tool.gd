@@ -108,8 +108,6 @@ func _on_object_changed(obj: GameObject) -> void:
 
 
 func _begin_polygon(obj: GameObject) -> void:
-	if not obj.get_editor_instance():
-		return
 	var instance: LDObject = obj.get_editor_instance()
 	if not instance is LDObjectPolygon:
 		instance.queue_free()
@@ -225,7 +223,7 @@ func _get_closed_points(pts: PackedVector2Array) -> PackedVector2Array:
 
 
 func _is_polygon_object(obj: GameObject) -> bool:
-	if not obj or not obj.get_editor_instance():
+	if not obj:
 		return false
 	var instance: LDObject = obj.get_editor_instance()
 	var result: bool = instance is LDObjectPolygon
