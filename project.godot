@@ -76,7 +76,6 @@ folder_colors={
 [gdss]
 
 internal/initialized=true
-rendering/gpu_panels=false
 editor/use_minimap=true
 editor/show_outline=true
 storage/save_uid="uid://dms4yoqi4hhgq"

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b6cvall7q1s0u" path="res://addons/redux_dev/components/debug_dock/debug_dock.gd" id="1_16c0n"]
 
-[node name="Redux Debug" type="MarginContainer" unique_id=598569597 node_paths=PackedStringArray("mute_player", "mute_music", "mute_sfx")]
+[node name="Redux Debug" type="MarginContainer" unique_id=598569597 node_paths=PackedStringArray("mute_player", "mute_music", "mute_sfx", "gpu_panels")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,6 +12,7 @@ script = ExtResource("1_16c0n")
 mute_player = NodePath("ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer/MutePlayerCheckbox")
 mute_music = NodePath("ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer/MuteMusicCheckbox")
 mute_sfx = NodePath("ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer/MuteSFXCheckbox")
+gpu_panels = NodePath("ScrollContainer/VBoxContainer/RenderingContainer/VBoxContainer/GPUPanelsCheckbox")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=282596334]
 layout_mode = 2
@@ -54,6 +55,24 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"FlatButton"
 text = "Mute Player"
+alignment = 1
+
+[node name="RenderingContainer" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=257945603]
+layout_mode = 2
+title = "Rendering"
+title_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/RenderingContainer" unique_id=40273884]
+layout_mode = 2
+
+[node name="GPUPanelsCheckbox" type="CheckBox" parent="ScrollContainer/VBoxContainer/RenderingContainer/VBoxContainer" unique_id=16709319]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Draw GDSS panels with the GPU shader path instead of building them on the CPU.
+Off is roughly twice as cheap per styled control on GL Compatibility, but state
+transitions get more expensive. Applies on the next run."
+theme_type_variation = &"FlatButton"
+text = "GPU Panels"
 alignment = 1
 
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/HBoxContainer/RefreshPluginButton" to="." method="_on_refresh_plugin_button_pressed"]

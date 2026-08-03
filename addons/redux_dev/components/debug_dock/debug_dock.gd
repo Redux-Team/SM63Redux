@@ -8,22 +8,35 @@ const DEFAULT_VALUES: Dictionary[String, Variant] = {
 	"mute_sfx": false,
 }
 const SETTINGS_PATH: String = "res://addons/redux_dev/_local/debug_settings.json"
+## Unlike the mute flags above, this one lives in ProjectSettings because that is where
+## GDSS reads it from, and it is read once per run rather than polled.
+const GPU_PANELS_SETTING: String = "gdss/rendering/gpu_panels"
 
 
 @export var mute_player: CheckBox
 @export var mute_music: CheckBox
 @export var mute_sfx: CheckBox
+@export var gpu_panels: CheckBox
 
 
 func _ready() -> void:
 	if not is_in_dock():
 		return
-	
+
 	apply_overrides()
 	for key: String in DEFAULT_VALUES:
 		var checkbox: CheckBox = _get_checkbox(key)
 		if checkbox:
 			checkbox.toggled.connect(func(_on: bool) -> void: save_overrides())
+
+	if gpu_panels:
+		gpu_panels.set_pressed_no_signal(bool(ProjectSettings.get_setting(GPU_PANELS_SETTING, true)))
+		gpu_panels.toggled.connect(_on_gpu_panels_toggled)
+
+
+func _on_gpu_panels_toggled(enabled: bool) -> void:
+	ProjectSettings.set_setting(GPU_PANELS_SETTING, enabled)
+	ProjectSettings.save()
 
 
 func _get_checkbox(key: String) -> CheckBox:
