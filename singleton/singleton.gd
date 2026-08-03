@@ -5,7 +5,6 @@ var _input_handler: InputHandler = InputHandler.new()
 var _tree_hook: TreeHook = TreeHook.new()
 var _level_clock: LevelClock = LevelClock.new()
 var _multiplayer: MultiplayerHandler = MultiplayerHandler.new()
-var _transition_handler: TransitionHandler = TransitionHandler.new()
 
 @export var _screen_transition_rect: ColorRect
 
@@ -77,7 +76,7 @@ func get_multiplayer_handler() -> MultiplayerHandler:
 
 
 func build_screen_transition() -> TransitionBuilder:
-	return _transition_handler.build()
+	return TransitionBuilder.new(_screen_transition_rect)
 
 
 ## True while a screen transition is covering/revealing (the transition rect is shown).
@@ -86,23 +85,27 @@ func is_transitioning() -> bool:
 
 
 func spawn_sibling(root_node: Node, node: Node, _shared_properties: PackedStringArray = ["position", "scale"]) -> void:
+	var parent: Node = root_node.get_parent()
+	# The parent can already be on its way out (e.g. spawning from teardown), in which case the
+	# deferred add_child is dropped and the node would be stranded outside the tree forever.
+	if not is_instance_valid(parent) or not parent.is_inside_tree():
+		node.free()
+		return
+	
 	var index: int = root_node.get_index()
-	root_node.get_parent().add_child.call_deferred(node)
-	root_node.get_parent().move_child.call_deferred(node, index)
+	parent.add_child.call_deferred(node)
+	parent.move_child.call_deferred(node, index)
 	
 	for _prop: String in _shared_properties:
 		node.set(_prop, root_node.get(_prop))
 
 
 func instantiate_sibling(root_node: Node, scene: PackedScene, count: int = 1, spread: int = 0, _shared_properties: PackedStringArray = ["position", "scale"]) -> void:
-	var index: int = root_node.get_index()
 	for c: int in count:
-		var node: Node = scene.instantiate().duplicate()
-		root_node.get_parent().add_child.call_deferred(node)
-		root_node.get_parent().move_child.call_deferred(node, index)
-		
-		for _prop: String in _shared_properties:
-			node.set(_prop, root_node.get(_prop))
+		var node: Node = scene.instantiate()
+		spawn_sibling(root_node, node, _shared_properties)
+		if not is_instance_valid(node):
+			return
 		
 		node.position.x += randi_range(-spread, spread)
 		node.position.y += randi_range(-spread, spread)
@@ -253,20 +256,13 @@ class MultiplayerHandler:
 		client_connected.emit()
 
 
-class TransitionHandler:
-	extends Node
-	
-	func build() -> TransitionBuilder:
-		return TransitionBuilder.new(Singleton._screen_transition_rect)
-
-
 class TransitionBuilder:
 	enum TransitionType { CENTER, WAVE, FADE }
-
+	
 	const SHADER_CENTER: Shader = preload("uid://dcewkclyl2vjk")
 	const SHADER_WAVE: Shader = preload("uid://drycsk0p628ig")
 	const SHADER_FADE: Shader = preload("res://core/shader/screen_transition_fade.gdshader")
-
+	
 	var _color_rect: ColorRect
 	var _type: TransitionType = TransitionType.CENTER
 	var _out_duration: float = 0.5
@@ -288,32 +284,32 @@ class TransitionBuilder:
 	func set_type(type: TransitionType) -> TransitionBuilder:
 		_type = type
 		return self
-
-
+	
+	
 	## Wave-shaped transition (e.g. entering the shine select).
 	func set_wave() -> TransitionBuilder:
 		_type = TransitionType.WAVE
 		return self
-
-
+	
+	
 	## Mask-shaped center transition (e.g. the shine-out reveal).
 	func set_center() -> TransitionBuilder:
 		_type = TransitionType.CENTER
 		return self
-
-
+	
+	
 	## Plain fade to/from a solid color.
 	func set_fade() -> TransitionBuilder:
 		_type = TransitionType.FADE
 		return self
-
-
+	
+	
 	## Horizontal tiling count for the wave mask (higher = smaller, more repeated waves).
 	func set_wave_scale(scale: float) -> TransitionBuilder:
 		_wave_scale = scale
 		return self
-
-
+	
+	
 	func set_out_duration(duration: float) -> TransitionBuilder:
 		_out_duration = duration
 		return self
@@ -381,7 +377,7 @@ class TransitionBuilder:
 		var cover_tex: Texture2D = _out_texture if is_instance_valid(_out_texture) else _texture
 		if is_instance_valid(cover_tex):
 			mat.set_shader_parameter(&"mask_texture", cover_tex)
-
+		
 		_color_rect.show()
 		if _block_input:
 			_color_rect.mouse_filter = Control.MOUSE_FILTER_STOP
