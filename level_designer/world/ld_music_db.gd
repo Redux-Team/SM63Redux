@@ -20,6 +20,7 @@ const TRACKS: Dictionary = {
 	"editor_sunshine": {"name": "Level Editor - Sunshine", "category": "ld", "path": "res://assets/music/ld_sunshine.mp3"},
 	"editor_galaxy": {"name": "Level Editor - Galaxy", "category": "ld", "path": "res://assets/music/ld_galaxy.mp3"},
 	"editor_galaxy_2": {"name": "Level Editor - Galaxy 2", "category": "ld", "path": "res://assets/music/ld_galaxy_2.mp3"},
+	"editor_3dland": {"name": "Level Editor - 3D Land", "category": "ld", "path": "res://assets/music/ld_3dland.mp3"},
 }
 
 static var _custom: Dictionary = {}

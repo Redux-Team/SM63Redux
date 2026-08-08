@@ -989,7 +989,6 @@ expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="MusicButton" type="Button" parent="ViewportUI/PanelRail/Panels" unique_id=2117669485]
-visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Music"
