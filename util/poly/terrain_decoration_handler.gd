@@ -1,9 +1,6 @@
+@tool
 class_name DecorationHandler
 extends Node2D
-
-
-const DECORATION_EDGE_BUFFER: float = 32.0
-const MAX_DECORATIONS: int = 350
 
 
 var _canvas_items: Array[RID] = []
@@ -11,6 +8,8 @@ var _last_outer_points: PackedVector2Array = PackedVector2Array()
 var _last_holes: Array[PackedVector2Array] = []
 var _last_weightmap: Dictionary[Texture2D, float] = {}
 var _last_density: float = -1.0
+var _last_edge_buffer: float = -1.0
+var _last_max_count: int = -1
 var _last_enabled: bool = false
 var _last_rng_seed: int = -1
 
@@ -20,33 +19,38 @@ func _notification(what: int) -> void:
 		_clear()
 
 
-func rebuild(outer_points: PackedVector2Array, holes: Array[PackedVector2Array], polygon_data: PolygonData, rng_seed: int, weightmap_override: Dictionary[Texture2D, float] = {}, density_override: float = -1.0, enabled: bool = true) -> void:
+func rebuild(outer_points: PackedVector2Array, holes: Array[PackedVector2Array], style: PolygonDecorationStyle, rng_seed: int, enabled: bool = true) -> void:
 	var weightmap: Dictionary[Texture2D, float] = {}
-	if not weightmap_override.is_empty():
-		weightmap = weightmap_override
-	elif polygon_data:
-		weightmap = polygon_data.decoration_weightmap
-	var density: float = density_override if density_override > 0.0 else (polygon_data.decoration_density if polygon_data else 20.0)
-	var active: bool = enabled and not weightmap.is_empty()
-
-	if _is_same_input(outer_points, holes, weightmap, density, active, rng_seed):
+	var density: float = 0.0
+	var edge_buffer: float = 0.0
+	var max_count: int = 0
+	if style:
+		weightmap = style.weightmap
+		density = style.density
+		edge_buffer = style.edge_buffer
+		max_count = style.max_count
+	var active: bool = enabled and not weightmap.is_empty() and max_count > 0
+	
+	if _is_same_input(outer_points, holes, weightmap, density, edge_buffer, max_count, active, rng_seed):
 		return
-
+	
 	_last_outer_points = outer_points.duplicate()
 	_last_holes = holes.duplicate()
 	_last_weightmap = weightmap
 	_last_density = density
+	_last_edge_buffer = edge_buffer
+	_last_max_count = max_count
 	_last_enabled = active
 	_last_rng_seed = rng_seed
-
+	
 	_clear()
-
+	
 	if Engine.is_editor_hint():
 		return
 	if not active or outer_points.size() < 3:
 		return
 	
-	var eroded_outer: Array = Geometry2D.offset_polygon(outer_points, -DECORATION_EDGE_BUFFER)
+	var eroded_outer: Array = Geometry2D.offset_polygon(outer_points, -edge_buffer)
 	if eroded_outer.is_empty():
 		return
 	var inner_polygon: PackedVector2Array = eroded_outer.get(0)
@@ -55,7 +59,7 @@ func rebuild(outer_points: PackedVector2Array, holes: Array[PackedVector2Array],
 	
 	var eroded_holes: Array[PackedVector2Array] = []
 	for hole: PackedVector2Array in holes:
-		var eroded_hole: Array = Geometry2D.offset_polygon(hole, DECORATION_EDGE_BUFFER)
+		var eroded_hole: Array = Geometry2D.offset_polygon(hole, edge_buffer)
 		if not eroded_hole.is_empty() and (eroded_hole.get(0) as PackedVector2Array).size() >= 3:
 			eroded_holes.append(eroded_hole.get(0))
 	
@@ -77,10 +81,10 @@ func rebuild(outer_points: PackedVector2Array, holes: Array[PackedVector2Array],
 	var total_placed: int = 0
 	
 	for row: int in rows:
-		if total_placed >= MAX_DECORATIONS:
+		if total_placed >= max_count:
 			break
 		for col: int in cols:
-			if total_placed >= MAX_DECORATIONS:
+			if total_placed >= max_count:
 				break
 			rng.seed = rng_seed ^ (row * 2654435761) ^ (col * 2246822519)
 			var cell_origin: Vector2 = bounds.position + Vector2(col * cell_size, row * cell_size)
@@ -147,12 +151,16 @@ func _clear() -> void:
 	_canvas_items.clear()
 
 
-func _is_same_input(outer_points: PackedVector2Array, holes: Array[PackedVector2Array], weightmap: Dictionary[Texture2D, float], density: float, enabled: bool, rng_seed: int) -> bool:
+func _is_same_input(outer_points: PackedVector2Array, holes: Array[PackedVector2Array], weightmap: Dictionary[Texture2D, float], density: float, edge_buffer: float, max_count: int, enabled: bool, rng_seed: int) -> bool:
 	if enabled != _last_enabled:
 		return false
 	if rng_seed != _last_rng_seed:
 		return false
 	if density != _last_density:
+		return false
+	if edge_buffer != _last_edge_buffer:
+		return false
+	if max_count != _last_max_count:
 		return false
 	if weightmap != _last_weightmap:
 		return false

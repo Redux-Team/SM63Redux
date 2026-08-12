@@ -158,7 +158,7 @@ func _spawn_preview_instances() -> void:
 		poly.init_properties(game_object)
 		poly.polygon_data = target.polygon_data
 		LD.get_area().add_object(poly)
-		poly.apply_points(target._polygon.polygon.duplicate())
+		poly.apply_points(target.get_ring())
 		poly.position = target.position
 		poly.place()
 		poly.modulate.a = 0.0
@@ -261,7 +261,7 @@ func _snapshot_targets() -> void:
 	var candidates: Array[LDObject] = selected if not selected.is_empty() else LD.get_area().get_all_objects_on_layer()
 	for obj: LDObject in candidates:
 		var poly: LDObjectPolygon = obj as LDObjectPolygon
-		if poly and not poly.is_preview and poly._polygon and not poly._polygon.polygon.is_empty():
+		if poly and not poly.is_preview and not poly.get_ring().is_empty():
 			_targets.append(poly)
 
 

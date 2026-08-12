@@ -1,42 +1,47 @@
 [gd_scene format=3 uid="uid://bbikt30pixqht"]
 
-[ext_resource type="Script" uid="uid://b7bulkw3s6705" path="res://game/db/Objects/Polygon/Volumes/water_lvl.gd" id="1_7mws3"]
+[ext_resource type="Script" uid="uid://vlqjxmxsgk8p" path="res://game/object_templates/polygon/level_object_terrain.gd" id="1_terrain"]
+[ext_resource type="Script" uid="uid://caxs08dajhivo" path="res://util/poly/polygon_surface.gd" id="2_surface"]
+[ext_resource type="Script" uid="uid://bvnbumlxmk7vf" path="res://util/poly/terrain_decoration_handler.gd" id="3_deco"]
 
-[node name="Water" type="Node2D" unique_id=335077795 node_paths=PackedStringArray("_water_collision", "_polygon", "_collision", "_outline_container", "_topline_container", "_topline_shadow_container", "_static_body_2d")]
-texture_repeat = 2
-script = ExtResource("1_7mws3")
-wave_speed = 0.0
-wave_amplitude = 1.0
-splash_amplitude = 0.0
-_water_collision = NodePath("WaterArea/CollisionPolygon2D")
-_polygon = NodePath("Polygon")
-_collision = NodePath("StaticBody2D/CollisionPolygon2D")
-_outline_container = NodePath("OutlineContainer")
-_topline_container = NodePath("ToplineContainer")
-_topline_shadow_container = NodePath("Polygon/ToplineShadowContainer")
-_static_body_2d = NodePath("StaticBody2D")
+[node name="Water" type="Node2D" node_paths=PackedStringArray("applied_polygons", "surface", "collision", "static_body")]
+script = ExtResource("1_terrain")
+applied_polygons = [NodePath("WaterArea/CollisionPolygon2D")]
+surface = NodePath("PolygonSurface")
+collision = NodePath("StaticBody2D/CollisionPolygon2D")
+static_body = NodePath("StaticBody2D")
 metadata/_custom_type_script = "uid://vlqjxmxsgk8p"
 
-[node name="Polygon" type="Polygon2D" parent="." unique_id=955545888]
+[node name="PolygonSurface" type="Node2D" parent="." node_paths=PackedStringArray("fill", "shadow_container", "decorations", "outline_container", "topline_container")]
+script = ExtResource("2_surface")
+fill = NodePath("Polygon")
+shadow_container = NodePath("Polygon/ToplineShadowContainer")
+decorations = NodePath("DecorationHandler")
+outline_container = NodePath("OutlineContainer")
+topline_container = NodePath("ToplineContainer")
+
+[node name="Polygon" type="Polygon2D" parent="PolygonSurface"]
+clip_children = 2
 texture_repeat = 2
-use_parent_material = true
-color = Color(0.46666667, 0.5921569, 0.8117647, 0.53333336)
 
-[node name="ToplineShadowContainer" type="Node2D" parent="Polygon" unique_id=449835504]
+[node name="ToplineShadowContainer" type="Node2D" parent="PolygonSurface/Polygon"]
 
-[node name="OutlineContainer" type="Node2D" parent="." unique_id=1875783226]
+[node name="DecorationHandler" type="Node2D" parent="PolygonSurface"]
+script = ExtResource("3_deco")
+metadata/_custom_type_script = "uid://bvnbumlxmk7vf"
 
-[node name="ToplineContainer" type="Node2D" parent="." unique_id=2082800021]
+[node name="OutlineContainer" type="Node2D" parent="PolygonSurface"]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1252583713]
+[node name="ToplineContainer" type="Node2D" parent="PolygonSurface"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
 collision_layer = 4
 collision_mask = 0
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=714933582]
-metadata/terrain = "grass"
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
 
-[node name="WaterArea" type="Area2D" parent="." unique_id=1963312499]
+[node name="WaterArea" type="Area2D" parent="."]
 collision_layer = 4
 metadata/water = true
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="WaterArea" unique_id=370269804]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="WaterArea"]

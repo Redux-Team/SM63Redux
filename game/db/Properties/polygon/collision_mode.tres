@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LDProperty" format=3]
+
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_7pti3"]
+
+[resource]
+script = ExtResource("1_7pti3")
+key = &"collision_mode"
+label = "Collision"
+type = 7
+default_value = ""

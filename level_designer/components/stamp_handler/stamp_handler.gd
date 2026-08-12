@@ -116,7 +116,7 @@ func get_armed_stamp() -> LDStamp:
 func remove_stamp(id: String) -> void:
 	if not has_stamp(id):
 		return
-
+	
 	_dehydrate_stamp(id)
 	_stamps.erase(id)
 	stamp_removed.emit(id)
@@ -125,18 +125,18 @@ func remove_stamp(id: String) -> void:
 func rename_stamp(old_id: String, new_id: String) -> bool:
 	if not has_stamp(old_id) or has_stamp(new_id):
 		return false
-
+	
 	var stamp: LDStamp = _stamps[old_id]
 	stamp.id = new_id
 	_stamps[new_id] = stamp
 	_stamps.erase(old_id)
-
+	
 	# Re-point placed instances ("old_id:unique" -> "new_id:unique") across every area.
 	for obj: LDObject in _all_objects():
 		var linked: String = get_object_linked_stamp(obj)
 		if linked.begins_with(old_id + ":"):
 			obj.set_meta(&"linked_stamp", new_id + linked.substr(old_id.length()))
-
+	
 	stamp_changed.emit(stamp)
 	return true
 
@@ -148,7 +148,7 @@ func rename_stamp(old_id: String, new_id: String) -> bool:
 ## Returns null if nothing stampable was selected.
 func create_stamp_from_objects(objects: Array[LDObject], id: String = "") -> LDStamp:
 	var save_load: LDSaveLoadHandler = LD.get_save_load_handler()
-
+	
 	var stampable: Array[LDObject] = []
 	for obj: LDObject in objects:
 		var game_object: GameObject = save_load.find_game_object_for(obj)
@@ -156,18 +156,18 @@ func create_stamp_from_objects(objects: Array[LDObject], id: String = "") -> LDS
 			stampable.append(obj)
 	if stampable.is_empty():
 		return null
-
+	
 	var instance_pos: Vector2 = Vector2.ZERO
 	for obj: LDObject in stampable:
 		instance_pos += obj.position
 	instance_pos /= float(stampable.size())
-
+	
 	# Layers are captured relative to the stamp's lowest layer, so placing the stamp on
 	# layer N puts its objects on N, N+1, ... preserving their layer spacing.
 	var base_layer: int = _get_object_layer_index(stampable[0])
 	for obj: LDObject in stampable:
 		base_layer = mini(base_layer, _get_object_layer_index(obj))
-
+	
 	var entries: Array[Dictionary] = []
 	for obj: LDObject in stampable:
 		var data: Dictionary = save_load._serialize_object(obj)
@@ -178,25 +178,25 @@ func create_stamp_from_objects(objects: Array[LDObject], id: String = "") -> LDS
 		entries.append(data)
 	if entries.is_empty():
 		return null
-
+	
 	if id.is_empty():
 		id = suggest_stamp_id()
-
+	
 	var stamp: LDStamp = get_stamp(id)
 	var is_new: bool = stamp == null
 	if is_new:
 		stamp = LDStamp.new()
 		stamp.id = id
 		_stamps[id] = stamp
-
+	
 	stamp.objects = entries
-
+	
 	if is_new:
 		stamp_added.emit(stamp)
 	else:
 		# Existing placements should reflect the new snapshot.
 		_rehydrate_stamp(stamp)
-
+	
 	_request_preview(stamp)
 	stamp_changed.emit(stamp)
 	return stamp
@@ -230,20 +230,20 @@ func place_linked(stamp_id: String, unique_id: String, position: Vector2, layer_
 	var stamp: LDStamp = get_stamp(stamp_id)
 	if not stamp:
 		return false
-
+	
 	# A placed stamp belongs to whichever area is active at placement time, indexed within it.
 	var area: LDArea = LDLevel.get_active_area()
 	var area_name: String = area.area_name
 	if stamp.has_instance(area_name, unique_id):
 		return false
-
+	
 	var instance: Dictionary = stamp.add_instance(area_name, unique_id, position, layer_index)
 	var spawned: Array[LDObject] = _spawn_stamp_objects(stamp, position, layer_index, false, area)
-
+	
 	var address: String = stamp.get_full_address(area_name, unique_id)
 	for obj: LDObject in spawned:
 		_mark_linked_object(obj, address)
-
+	
 	var history: LDHistoryHandler = LD.get_history_handler()
 	history.begin_action("Place Stamp: " + address)
 	history.add_do(func() -> void:
@@ -265,7 +265,7 @@ func place_linked(stamp_id: String, unique_id: String, position: Vector2, layer_
 		instance_removed.emit(stamp, unique_id)
 	)
 	history.commit_action()
-
+	
 	instance_placed.emit(stamp, unique_id)
 	return true
 
@@ -274,14 +274,14 @@ func remove_instance(stamp_id: String, area_name: String, unique_id: String) -> 
 	var stamp: LDStamp = get_stamp(stamp_id)
 	if not stamp:
 		return
-
+	
 	var address: String = stamp.get_full_address(area_name, unique_id)
 	var existing: Dictionary = stamp.get_instance(area_name, unique_id)
 	var inst_pos: Vector2 = Packer.array_to_vec2(existing.get("position", [0.0, 0.0]))
 	var inst_layer: int = int(existing.get("layer_index", 0))
 	var area: LDArea = _area_for_name(area_name)
 	var to_remove: Array[LDObject] = _get_objects_at_address(address)
-
+	
 	var history: LDHistoryHandler = LD.get_history_handler()
 	history.begin_action("Remove Instance: " + address)
 	history.add_do(func() -> void:
@@ -301,12 +301,12 @@ func remove_instance(stamp_id: String, area_name: String, unique_id: String) -> 
 	)
 	history.commit_action()
 	history.track_detached(to_remove)
-
+	
 	stamp.remove_instance(area_name, unique_id)
 	for obj: LDObject in to_remove:
 		if is_instance_valid(obj) and obj.get_parent():
 			obj.get_parent().remove_child(obj)
-
+	
 	instance_removed.emit(stamp, unique_id)
 
 
@@ -389,7 +389,7 @@ func deserialize_all(data: Array) -> void:
 		if stamp.id.is_empty():
 			continue
 		_stamps[stamp.id] = stamp
-
+	
 	for stamp: LDStamp in _stamps.values():
 		_request_preview(stamp)
 
@@ -398,22 +398,22 @@ func generate_preview(stamp: LDStamp) -> void:
 	if stamp.objects.is_empty():
 		stamp.preview_texture = null
 		return
-
+	
 	var viewport: SubViewport = SubViewport.new()
 	viewport.size = Vector2i(PREVIEW_SIZE, PREVIEW_SIZE)
 	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	viewport.transparent_bg = true
 	viewport.disable_3d = true
 	add_child(viewport)
-
+	
 	var root: Node2D = Node2D.new()
 	viewport.add_child(root)
-
+	
 	var db: GameDB = GameDB.get_db()
 	var instances: Array[LDObject] = []
 	var bounds_min: Vector2 = Vector2(INF, INF)
 	var bounds_max: Vector2 = Vector2(-INF, -INF)
-
+	
 	for entry: Dictionary in stamp.objects:
 		var object_id: String = entry.get("object_id", "")
 		var game_object: GameObject = LD.get_save_load_handler().find_game_object_by_id(object_id, db)
@@ -428,25 +428,25 @@ func generate_preview(stamp: LDStamp) -> void:
 		instances.append(instance)
 		bounds_min = bounds_min.min(offset)
 		bounds_max = bounds_max.max(offset)
-
+	
 	if instances.is_empty():
 		viewport.queue_free()
 		stamp.preview_texture = null
 		return
-
+	
 	var content_size: Vector2 = (bounds_max - bounds_min).max(Vector2(1.0, 1.0))
 	var available: float = float(PREVIEW_SIZE) - PREVIEW_PADDING * 2.0
 	var scale_factor: float = minf(available / content_size.x, available / content_size.y)
-
+	
 	var center: Vector2 = (bounds_min + bounds_max) * 0.5
 	root.scale = Vector2(scale_factor, scale_factor)
 	root.position = Vector2(PREVIEW_SIZE, PREVIEW_SIZE) * 0.5 - center * scale_factor
-
+	
 	await RenderingServer.frame_post_draw
-
+	
 	var img: Image = viewport.get_texture().get_image()
 	stamp.preview_texture = ImageTexture.create_from_image(img)
-
+	
 	viewport.queue_free()
 	stamp_changed.emit(stamp)
 
@@ -462,7 +462,7 @@ func rehydrate_all() -> void:
 
 func _rehydrate_stamp(stamp: LDStamp) -> void:
 	_dehydrate_stamp(stamp.id)
-
+	
 	for area_name: String in stamp.instances:
 		var area: LDArea = _area_for_name(area_name)
 		for instance: Dictionary in stamp.get_area_instances(area_name):
@@ -471,7 +471,7 @@ func _rehydrate_stamp(stamp: LDStamp) -> void:
 			var instance_layer: int = instance.get("layer_index", 0)
 			var address: String = stamp.get_full_address(area_name, unique_id)
 			var spawned: Array[LDObject] = _spawn_stamp_objects(stamp, instance_pos, instance_layer, false, area)
-
+			
 			for obj: LDObject in spawned:
 				_mark_linked_object(obj, address)
 
@@ -510,13 +510,13 @@ func _spawn_stamp_objects(stamp: LDStamp, instance_pos: Vector2, default_layer: 
 	if not area:
 		area = LDLevel.get_active_area()
 	var save_load: LDSaveLoadHandler = LD.get_save_load_handler()
-
+	
 	for entry: Dictionary in stamp.objects:
 		var object_id: String = entry.get("object_id", "")
 		var game_object: GameObject = save_load.find_game_object_by_id(object_id, db)
 		if not game_object:
 			continue
-
+		
 		var instance: LDObject = game_object.get_editor_instance()
 		if not instance:
 			continue
@@ -524,10 +524,10 @@ func _spawn_stamp_objects(stamp: LDStamp, instance_pos: Vector2, default_layer: 
 		var local_offset: Vector2 = Packer.array_to_vec2(entry.get("local_offset", [0.0, 0.0]))
 		var obj_layer: int = default_layer + int(entry.get("layer_offset", 0))
 		var world_pos: Vector2 = instance_pos + local_offset
-
+		
 		area.add_object(instance, Vector2i(world_pos), obj_layer)
 		instance.init_properties(game_object)
-
+		
 		var props: Dictionary = entry.get("properties", {})
 		for key: String in props:
 			# The captured "position" is the object's original absolute position; the
@@ -535,25 +535,9 @@ func _spawn_stamp_objects(stamp: LDStamp, instance_pos: Vector2, default_layer: 
 			if key == "position":
 				continue
 			instance.set_property(StringName(key), Packer.deserialize_json_variant(props.get(key)))
-
-		if instance is LDObjectPolygon and entry.has("polygon_points"):
-			var poly_obj: LDObjectPolygon = instance as LDObjectPolygon
-			var points: PackedVector2Array = PackedVector2Array()
-			for p: Variant in entry.get("polygon_points", []):
-				points.append(Packer.array_to_vec2(p))
-			poly_obj.apply_points(points)
-
-		if instance is LDObjectPolygon and entry.has("polygon_holes"):
-			var poly_obj: LDObjectPolygon = instance as LDObjectPolygon
-			for hole_data: Variant in entry.get("polygon_holes", []):
-				if not hole_data is Array:
-					continue
-				var hole_points: PackedVector2Array = PackedVector2Array()
-				for p: Variant in hole_data:
-					hole_points.append(Packer.array_to_vec2(p))
-				if hole_points.size() >= 3:
-					poly_obj.add_hole(hole_points)
-
+		
+		save_load.apply_polygon_data(instance, entry)
+		
 		instance.set_meta(&"spawn_layer", obj_layer)
 		if as_preview:
 			instance.set_meta(&"preview_offset", local_offset)
@@ -564,7 +548,7 @@ func _spawn_stamp_objects(stamp: LDStamp, instance_pos: Vector2, default_layer: 
 				instance.set_property(&"position", world_pos)
 			instance.position = world_pos
 		result.append(instance)
-
+	
 	return result
 
 

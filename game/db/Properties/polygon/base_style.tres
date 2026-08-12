@@ -1,12 +1,10 @@
-[gd_resource type="Resource" script_class="LDPropertyBaseStyle" format=3]
+[gd_resource type="Resource" script_class="LDProperty" format=3]
 
-[ext_resource type="Script" path="res://game/db/Properties/polygon/base_style.gd" id="1_bs"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_658wu"]
 
 [resource]
-script = ExtResource("1_bs")
+script = ExtResource("1_658wu")
 key = &"base_style"
 label = "Base Style"
 type = 7
 default_value = ""
-visible_in_editor = true
-exclusive = false

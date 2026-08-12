@@ -1,37 +1,40 @@
 [gd_scene format=3 uid="uid://dbd65rs81qekd"]
 
 [ext_resource type="Script" uid="uid://vlqjxmxsgk8p" path="res://game/object_templates/polygon/level_object_terrain.gd" id="1_7585l"]
+[ext_resource type="Script" uid="uid://caxs08dajhivo" path="res://util/poly/polygon_surface.gd" id="2_surface"]
 [ext_resource type="Script" uid="uid://bvnbumlxmk7vf" path="res://util/poly/terrain_decoration_handler.gd" id="4_7oqal"]
 
-[node name="LevelObjectTerrain" type="Node2D" unique_id=2062997368 node_paths=PackedStringArray("_polygon", "_collision", "_outline_container", "_topline_container", "_topline_shadow_container", "_static_body_2d", "_decoration_handler")]
+[node name="LevelObjectTerrain" type="Node2D" node_paths=PackedStringArray("surface", "collision", "static_body")]
 script = ExtResource("1_7585l")
-_polygon = NodePath("Polygon")
-_collision = NodePath("StaticBody2D/CollisionPolygon2D")
-_outline_container = NodePath("OutlineContainer")
-_topline_container = NodePath("ToplineContainer")
-_topline_shadow_container = NodePath("Polygon/ToplineShadowContainer")
-_static_body_2d = NodePath("StaticBody2D")
-_decoration_handler = NodePath("DecorationHandler")
+surface = NodePath("PolygonSurface")
+collision = NodePath("StaticBody2D/CollisionPolygon2D")
+static_body = NodePath("StaticBody2D")
 metadata/_custom_type_script = "uid://vlqjxmxsgk8p"
 
-[node name="Polygon" type="Polygon2D" parent="." unique_id=1559140566]
-show_behind_parent = true
+[node name="PolygonSurface" type="Node2D" parent="." node_paths=PackedStringArray("fill", "shadow_container", "decorations", "outline_container", "topline_container")]
+script = ExtResource("2_surface")
+fill = NodePath("Polygon")
+shadow_container = NodePath("Polygon/ToplineShadowContainer")
+decorations = NodePath("DecorationHandler")
+outline_container = NodePath("OutlineContainer")
+topline_container = NodePath("ToplineContainer")
+
+[node name="Polygon" type="Polygon2D" parent="PolygonSurface"]
 clip_children = 2
 texture_repeat = 2
 
-[node name="ToplineShadowContainer" type="Node2D" parent="Polygon" unique_id=1514421114]
-visible = false
+[node name="ToplineShadowContainer" type="Node2D" parent="PolygonSurface/Polygon"]
 
-[node name="DecorationHandler" type="Node2D" parent="." unique_id=1181679300]
+[node name="DecorationHandler" type="Node2D" parent="PolygonSurface"]
 script = ExtResource("4_7oqal")
 metadata/_custom_type_script = "uid://bvnbumlxmk7vf"
 
-[node name="OutlineContainer" type="Node2D" parent="." unique_id=1150843461]
+[node name="OutlineContainer" type="Node2D" parent="PolygonSurface"]
 
-[node name="ToplineContainer" type="Node2D" parent="." unique_id=1694667729]
+[node name="ToplineContainer" type="Node2D" parent="PolygonSurface"]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=780555834]
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
 collision_layer = 514
 collision_mask = 0
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1046958450]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]

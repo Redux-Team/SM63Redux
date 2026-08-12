@@ -7,6 +7,6 @@
 [resource]
 script = ExtResource("1")
 style_name = "Grass"
-base_texture = ExtResource("2")
+texture = ExtResource("2")
 outline_texture = ExtResource("3")
 outline_width = 14.0

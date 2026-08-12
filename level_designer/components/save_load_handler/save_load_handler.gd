@@ -133,7 +133,7 @@ func _on_ready() -> void:
 	# Every area should be independently playable, so guarantee a player spawn whenever one becomes
 	# active (covers areas added/loaded without one).
 	LDLevel._inst.active_area_changed.connect(_ensure_player_spawn)
-
+	
 	# If we are returning from a playtest, deserialize it immediately
 	# and save the session so the cached state becomes our current baseline
 	if Singleton.has_meta(&"playtest"):
@@ -204,27 +204,27 @@ func load_raw_data(data: Dictionary) -> void:
 func reset_level() -> void:
 	var viewport: LDViewport = LD.get_editor_viewport()
 	var level: LDLevel = LD.get_level()
-
+	
 	viewport.clear_selection()
-
+	
 	# Back to a single fresh area (its default background comes with it).
 	level.clear_areas()
 	level.add_area("Area 1")
 	level.set_active_area_index(0, false)
 	LDMusicDB.clear_custom()
-
+	
 	# Clear the rest of the level state too, otherwise stamps/tags/scenarios linger.
 	LD.get_tag_handler().deserialize_all([])
 	LD.get_stamp_handler().deserialize_all([])
 	LD.get_scenario_handler().deserialize_all({})
-
+	
 	viewport.camera_position = Vector2.ZERO
 	viewport.camera_zoom = Vector2.ONE
-
+	
 	level_file_path = ""
 	method = -1
 	save_session()
-
+	
 	_ensure_player_spawn()
 	_mark_clean()
 
@@ -289,7 +289,7 @@ func save_session() -> void:
 			"level_file_path": AUTOSAVE_PATH,
 			"method": 0, # force binary reading next load to parse the AUTOSAVE_PATH
 		}))
-
+	
 	file_state_changed.emit()
 
 
@@ -297,11 +297,11 @@ func _serialize() -> Dictionary:
 	var level: LDLevel = LD.get_level()
 	var bg_handler: LDBackgroundHandler = LD.get_background_handler()
 	var areas_data: Array = []
-
+	
 	# Sync the active area's stored view from the live viewport before serializing.
 	if is_instance_valid(LDLevel.get_active_area()):
 		LDLevel.get_active_area().store_view()
-
+	
 	for area: LDArea in level.get_areas():
 		areas_data.append({
 			"name": area.area_name,
@@ -312,7 +312,7 @@ func _serialize() -> Dictionary:
 			"active_layer": area._active_index,
 			"layers": _serialize_area_layers(area),
 		})
-
+	
 	return {
 		"version": FORMAT_VERSION,
 		"editor": {
@@ -386,17 +386,17 @@ func _serialize_object(obj: LDObject) -> Dictionary:
 					hole_arr.append(Packer.vec2_to_array(p))
 				holes_data.append(hole_arr)
 			data["polygon_holes"] = holes_data
-		if not poly_obj.get_topline_forced().is_empty():
-			data["topline_forced"] = poly_obj.get_topline_forced().duplicate()
+		if not poly_obj.get_topline_overrides().is_empty():
+			data["topline_forced"] = poly_obj.get_topline_overrides().duplicate()
 	
 	var props: Dictionary = obj.get_property_values()
 	for key: StringName in props:
 		data["properties"][str(key)] = Packer.serialize_json_variant(props.get(key))
-
+	
 	var tags: Array[String] = LD.get_tag_handler().get_object_tags(obj)
 	if not tags.is_empty():
 		data["tags"] = tags
-
+	
 	return data
 
 
@@ -412,18 +412,18 @@ func _deserialize(data: Dictionary) -> Error:
 	
 	var viewport: LDViewport = LD.get_editor_viewport()
 	var level: LDLevel = LD.get_level()
-
+	
 	viewport.clear_selection()
 	level.clear_areas()
 	LDMusicDB.deserialize_custom(normalized.get("custom_music", {}))
-
+	
 	var db: GameDB = GameDB.get_db()
-
+	
 	# Backgrounds used to live globally under editor.background; fall back to it for areas that
 	# predate per-area backgrounds.
 	var editor_data: Dictionary = normalized.get("editor", {}) if normalized.get("editor", {}) is Dictionary else {}
 	var legacy_bg: Variant = editor_data.get("background", null)
-
+	
 	for area_entry: Variant in normalized.get("areas", []):
 		if not area_entry is Dictionary:
 			continue
@@ -446,11 +446,11 @@ func _deserialize(data: Dictionary) -> Error:
 		_deserialize_area(entry, area, db)
 		_ensure_player_spawn(area)
 		_sanitize_player_layer(area)
-
+	
 	# A level always has at least one area to edit.
 	if level.get_areas().is_empty():
 		level.add_area("Area 1")
-
+	
 	var active_area_index: int = clampi(int(editor_data.get("active_area", 0)), 0, level.get_areas().size() - 1)
 	# Legacy single-area levels stored the view globally; apply it to the active area.
 	var active_area: LDArea = level.get_areas()[active_area_index]
@@ -462,33 +462,33 @@ func _deserialize(data: Dictionary) -> Error:
 		active_area._active_index = int(editor_data.get("active_layer"))
 	# Don't store the (irrelevant) live view into the area being left while loading.
 	level.set_active_area_index(active_area_index, false)
-
+	
 	if normalized.has("editor"):
 		if editor_data.has("parallaxing_enabled"):
 			LD.get_ui().get_viewport_handler().set_parallaxing_enabled(editor_data.get("parallaxing_enabled"))
 		if editor_data.has("ghosting_enabled"):
 			LD.get_ui().get_viewport_handler().set_ghosting_enabled(editor_data.get("ghosting_enabled"))
 		LD.get_ui().get_viewport_handler().set_modulation_enabled(bool(editor_data.get("modulation_enabled", true)))
-
+	
 	# Always restore these, even when the loaded level omits the key, so stale tags/stamps/
 	# scenarios from the previous level don't carry over.
 	var tags_data: Variant = normalized.get("tags", [])
 	LD.get_tag_handler().deserialize_all(tags_data if tags_data is Array else [])
-
+	
 	var stamps_data: Variant = normalized.get("stamps", [])
 	LD.get_stamp_handler().deserialize_all(stamps_data if stamps_data is Array else [])
 	LD.get_stamp_handler().rehydrate_all()
-
+	
 	# Restore hotbar slots after stamps exist, so stamp slots resolve their preview icons.
 	var hotbar_data: Variant = normalized.get("editor", {}).get("hotbar", [])
 	if hotbar_data is Array:
 		LD.get_ui().get_hotbar_handler().deserialize_slots(hotbar_data)
-
+	
 	var scenarios_data: Variant = normalized.get("scenarios", {})
 	LD.get_scenario_handler().deserialize_all(scenarios_data if scenarios_data is Dictionary else {})
-
+	
 	_ensure_player_spawn()
-
+	
 	return OK
 
 
@@ -538,10 +538,10 @@ func _ensure_player_spawn(area: LDArea = null) -> void:
 	var game_object: GameObject = GameDB.get_db().find_game_object("player_mario")
 	if not game_object:
 		return
-
+	
 	if not area:
 		area = LDLevel.get_active_area()
-
+	
 	for obj: LDObject in area.get_all_objects():
 		if obj and obj.source_object_id == game_object.id:
 			return
@@ -569,7 +569,7 @@ func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB, area: L
 	var object_id: String = data.get("object_id", "")
 	if object_id.is_empty():
 		return
-
+	
 	var game_object: GameObject = find_game_object_by_id(object_id, db)
 	if not game_object:
 		return
@@ -577,7 +577,7 @@ func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB, area: L
 	var instance: LDObject = game_object.get_editor_instance()
 	if not instance:
 		return
-
+	
 	var pos: Vector2 = Packer.array_to_vec2(data.get("position", [0.0, 0.0]))
 	area.add_object(instance, Vector2i(pos), layer_index)
 	
@@ -593,35 +593,33 @@ func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB, area: L
 	if instance.has_property("position"):
 		instance.set_property_no_apply(&"position", pos)
 	
-	if instance is LDObjectPolygon and data.has("polygon_points"):
-		var poly_obj: LDObjectPolygon = instance as LDObjectPolygon
-		var points: PackedVector2Array = PackedVector2Array()
-		for p: Variant in data.get("polygon_points", []):
-			points.append(Packer.array_to_vec2(p))
-		poly_obj.apply_points(points)
-	
-	if instance is LDObjectPolygon and data.has("topline_forced") and data.get("topline_forced") is Dictionary:
-		(instance as LDObjectPolygon).set_topline_forced_all(data.get("topline_forced"))
-
-	if instance is LDObjectPolygon and data.has("polygon_holes"):
-		var poly_obj: LDObjectPolygon = instance as LDObjectPolygon
-		for hole_data: Variant in data.get("polygon_holes", []):
-			if not hole_data is Array:
-				continue
-			var hole_points: PackedVector2Array = PackedVector2Array()
-			for p: Variant in hole_data:
-				hole_points.append(Packer.array_to_vec2(p))
-			if hole_points.size() >= 3:
-				poly_obj.add_hole(hole_points)
+	apply_polygon_data(instance, data)
 	
 	instance.place()
-
+	
 	if data.has("tags"):
 		var tags: Array[String] = []
 		for tag: Variant in data.get("tags", []):
 			tags.append(str(tag))
 		if not tags.is_empty():
 			instance.set_meta(&"tags", tags)
+
+
+## Restores the shape a polygon object was saved with. Shared by loading, pasting and stamp
+## spawning so every route rebuilds the same outline, holes and topline overrides.
+func apply_polygon_data(instance: LDObject, data: Dictionary) -> void:
+	var poly_obj: LDObjectPolygon = instance as LDObjectPolygon
+	if not poly_obj or not data.has("polygon_points"):
+		return
+	
+	poly_obj.apply_points_and_holes(
+		Packer.array_to_packed_vec2(data.get("polygon_points")),
+		LevelObjectPolygon.parse_holes(data.get("polygon_holes"))
+	)
+	
+	var overrides: Variant = data.get("topline_forced")
+	if overrides is Dictionary:
+		poly_obj.set_topline_overrides(overrides)
 
 
 func find_game_object_for(obj: LDObject) -> GameObject:

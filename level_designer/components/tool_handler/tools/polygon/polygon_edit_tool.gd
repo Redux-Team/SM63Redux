@@ -117,11 +117,11 @@ func _on_viewport_input(event: InputEvent) -> void:
 
 
 func _is_mouse_inside_polygon() -> bool:
-	if not _editing_object or not _editing_object._polygon:
+	if not _editing_object:
 		return false
 	var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * _editing_object.get_global_transform()
 	var screen_points: PackedVector2Array = PackedVector2Array()
-	for point: Vector2 in _editing_object._polygon.polygon:
+	for point: Vector2 in _editing_object.get_ring():
 		screen_points.append(full_transform * point)
 	return Geometry2D.is_point_in_polygon(_get_screen_mouse_pos(), screen_points)
 
@@ -180,7 +180,7 @@ func _get_all_display_points() -> PackedVector2Array:
 
 
 func _update_hover(_world_pos: Vector2) -> void:
-	if not _editing_object or not _editing_object._polygon:
+	if not _editing_object:
 		return
 	if _dragging_point_index >= 0:
 		return
@@ -250,7 +250,7 @@ func _drag_point(pos: Vector2) -> void:
 		var outer_idx: int = _dragging_point_index
 		var pts: PackedVector2Array = _editing_object.get_outer_points()
 		pts[outer_idx] = local_pos
-		_editing_object.set_outer_points_only(pts)
+		_editing_object.apply_points(pts)
 	else:
 		var hole_idx: int = _point_hole_indices[_dragging_point_index]
 		var outer_pts: PackedVector2Array = _editing_object.get_outer_points()
@@ -300,14 +300,14 @@ func _end_drag_point() -> void:
 	history.add_do(func() -> void:
 		if is_instance_valid(obj):
 			obj.clear_holes()
-			obj.set_outer_points_only(new_outer)
+			obj.apply_points(new_outer)
 			for h: PackedVector2Array in new_holes:
 				obj.add_hole(h)
 	)
 	history.add_undo(func() -> void:
 		if is_instance_valid(obj):
 			obj.clear_holes()
-			obj.set_outer_points_only(old_outer)
+			obj.apply_points(old_outer)
 			for h: PackedVector2Array in old_holes:
 				obj.add_hole(h)
 	)
@@ -338,20 +338,20 @@ func _delete_point(index: int) -> void:
 		history.add_do(func() -> void:
 			if is_instance_valid(obj):
 				obj.clear_holes()
-				obj.set_outer_points_only(new_outer)
+				obj.apply_points(new_outer)
 				for h: PackedVector2Array in old_holes:
 					obj.add_hole(h)
 		)
 		history.add_undo(func() -> void:
 			if is_instance_valid(obj):
 				obj.clear_holes()
-				obj.set_outer_points_only(old_outer)
+				obj.apply_points(old_outer)
 				for h: PackedVector2Array in old_holes:
 					obj.add_hole(h)
 		)
 		history.commit_action()
 		_editing_object.clear_holes()
-		_editing_object.set_outer_points_only(new_outer)
+		_editing_object.apply_points(new_outer)
 		for h: PackedVector2Array in old_holes:
 			_editing_object.add_hole(h)
 	else:
@@ -370,7 +370,7 @@ func _delete_point(index: int) -> void:
 			history.add_undo(func() -> void:
 				if is_instance_valid(obj):
 					obj.clear_holes()
-					obj.set_outer_points_only(old_outer)
+					obj.apply_points(old_outer)
 					for h: PackedVector2Array in old_holes:
 						obj.add_hole(h)
 			)
@@ -396,7 +396,7 @@ func _delete_point(index: int) -> void:
 		history.add_undo(func() -> void:
 			if is_instance_valid(obj):
 				obj.clear_holes()
-				obj.set_outer_points_only(old_outer)
+				obj.apply_points(old_outer)
 				for h: PackedVector2Array in old_holes:
 					obj.add_hole(h)
 		)
@@ -427,20 +427,20 @@ func _insert_point_on_edge(edge_index: int, is_hole: bool, hole_idx: int, pos: V
 		history.add_do(func() -> void:
 			if is_instance_valid(obj):
 				obj.clear_holes()
-				obj.set_outer_points_only(new_outer)
+				obj.apply_points(new_outer)
 				for h: PackedVector2Array in old_holes:
 					obj.add_hole(h)
 		)
 		history.add_undo(func() -> void:
 			if is_instance_valid(obj):
 				obj.clear_holes()
-				obj.set_outer_points_only(old_outer)
+				obj.apply_points(old_outer)
 				for h: PackedVector2Array in old_holes:
 					obj.add_hole(h)
 		)
 		history.commit_action()
 		_editing_object.clear_holes()
-		_editing_object.set_outer_points_only(new_outer)
+		_editing_object.apply_points(new_outer)
 		for h: PackedVector2Array in old_holes:
 			_editing_object.add_hole(h)
 		_rebuild_vertex_buttons()
@@ -460,20 +460,20 @@ func _insert_point_on_edge(edge_index: int, is_hole: bool, hole_idx: int, pos: V
 		history.add_do(func() -> void:
 			if is_instance_valid(obj):
 				obj.clear_holes()
-				obj.set_outer_points_only(old_outer)
+				obj.apply_points(old_outer)
 				for h: PackedVector2Array in new_holes:
 					obj.add_hole(h)
 		)
 		history.add_undo(func() -> void:
 			if is_instance_valid(obj):
 				obj.clear_holes()
-				obj.set_outer_points_only(old_outer)
+				obj.apply_points(old_outer)
 				for h: PackedVector2Array in old_holes:
 					obj.add_hole(h)
 		)
 		history.commit_action()
 		_editing_object.clear_holes()
-		_editing_object.set_outer_points_only(old_outer)
+		_editing_object.apply_points(old_outer)
 		for h: PackedVector2Array in new_holes:
 			_editing_object.add_hole(h)
 		_rebuild_vertex_buttons()

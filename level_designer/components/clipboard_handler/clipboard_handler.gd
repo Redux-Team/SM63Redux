@@ -142,23 +142,7 @@ func _deserialize_object(data: Dictionary, db: GameDB, area: LDArea, offset: Vec
 	for key: String in props:
 		instance.set_property(StringName(key), Packer.deserialize_json_variant(props.get(key)))
 	
-	if instance is LDObjectPolygon and data.has("polygon_points"):
-		var poly_obj: LDObjectPolygon = instance as LDObjectPolygon
-		var points: PackedVector2Array = PackedVector2Array()
-		for p: Variant in data.get("polygon_points", []):
-			points.append(Packer.array_to_vec2(p))
-		poly_obj.apply_points(points)
-	
-	if instance is LDObjectPolygon and data.has("polygon_holes"):
-		var poly_obj: LDObjectPolygon = instance as LDObjectPolygon
-		for hole_data: Variant in data.get("polygon_holes", []):
-			if not hole_data is Array:
-				continue
-			var hole_points: PackedVector2Array = PackedVector2Array()
-			for p: Variant in hole_data:
-				hole_points.append(Packer.array_to_vec2(p))
-			if hole_points.size() >= 3:
-				poly_obj.add_hole(hole_points)
+	save_load.apply_polygon_data(instance, data)
 	
 	instance.place()
 	return instance

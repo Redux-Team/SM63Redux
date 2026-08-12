@@ -1,38 +1,48 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dpvegnirkx3t2"]
 
 [ext_resource type="Script" uid="uid://cpps8bcdccbtj" path="res://game/object_templates/polygon/ld_object_polygon.gd" id="1_joldw"]
+[ext_resource type="Script" uid="uid://caxs08dajhivo" path="res://util/poly/polygon_surface.gd" id="2_surface"]
 [ext_resource type="Script" uid="uid://bvnbumlxmk7vf" path="res://util/poly/terrain_decoration_handler.gd" id="4_fq45c"]
+[ext_resource type="Script" uid="uid://d4buwxpmqkfwr" path="res://game/object_templates/polygon/ld_polygon_overlay.gd" id="5_overlay"]
 
-[node name="LdObjectPolygon" type="Node2D" node_paths=PackedStringArray("_polygon", "_decoration_handler", "_topline_container", "_topline_shadow_container", "_outline_container", "editor_polygon", "editor_shape_area", "editor_placement_rect", "origin_marker")]
+[node name="LdObjectPolygon" type="Node2D" unique_id=1038760413 node_paths=PackedStringArray("surface", "editor_polygon", "overlay", "editor_shape_area", "editor_placement_rect", "origin_marker")]
 script = ExtResource("1_joldw")
-_polygon = NodePath("Polygon")
-_decoration_handler = NodePath("DecorationHandler")
-_topline_container = NodePath("ToplineContainer")
-_topline_shadow_container = NodePath("Polygon/ToplineShadowContainer")
-_outline_container = NodePath("OutlineContainer")
+surface = NodePath("PolygonSurface")
 editor_polygon = NodePath("EditorShapeArea/EditorShape")
+overlay = NodePath("Overlay")
 editor_shape_area = NodePath("EditorShapeArea")
 editor_placement_rect = NodePath("EditorShapeArea/EditorShape")
 origin_marker = NodePath("Origin")
 metadata/_custom_type_script = "uid://cpps8bcdccbtj"
 
-[node name="EditorShapeArea" type="Area2D" parent="."]
+[node name="PolygonSurface" type="Node2D" parent="." unique_id=1441383016 node_paths=PackedStringArray("fill", "shadow_container", "decorations", "outline_container", "topline_container")]
+script = ExtResource("2_surface")
+fill = NodePath("Polygon")
+shadow_container = NodePath("Polygon/ToplineShadowContainer")
+decorations = NodePath("DecorationHandler")
+outline_container = NodePath("OutlineContainer")
+topline_container = NodePath("ToplineContainer")
 
-[node name="EditorShape" type="CollisionPolygon2D" parent="EditorShapeArea"]
-
-[node name="Origin" type="Marker2D" parent="."]
-
-[node name="Polygon" type="Polygon2D" parent="."]
+[node name="Polygon" type="Polygon2D" parent="PolygonSurface" unique_id=967526419]
 clip_children = 2
 texture_repeat = 2
 
-[node name="ToplineShadowContainer" type="Node2D" parent="Polygon"]
-visible = false
+[node name="ToplineShadowContainer" type="Node2D" parent="PolygonSurface/Polygon" unique_id=348634389]
 
-[node name="DecorationHandler" type="Node2D" parent="."]
+[node name="DecorationHandler" type="Node2D" parent="PolygonSurface" unique_id=900369047]
 script = ExtResource("4_fq45c")
 metadata/_custom_type_script = "uid://bvnbumlxmk7vf"
 
-[node name="OutlineContainer" type="Node2D" parent="."]
+[node name="OutlineContainer" type="Node2D" parent="PolygonSurface" unique_id=1827727687]
 
-[node name="ToplineContainer" type="Node2D" parent="."]
+[node name="ToplineContainer" type="Node2D" parent="PolygonSurface" unique_id=245751941]
+
+[node name="EditorShapeArea" type="Area2D" parent="." unique_id=393317928]
+
+[node name="EditorShape" type="CollisionPolygon2D" parent="EditorShapeArea" unique_id=1972370358]
+
+[node name="Origin" type="Marker2D" parent="." unique_id=813257910]
+
+[node name="Overlay" type="Node2D" parent="." unique_id=838353709 node_paths=PackedStringArray("target")]
+script = ExtResource("5_overlay")
+target = NodePath("..")

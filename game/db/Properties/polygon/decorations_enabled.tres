@@ -1,12 +1,10 @@
-[gd_resource type="Resource" script_class="LDPropertyDecorationsEnabled" format=3]
+[gd_resource type="Resource" script_class="LDProperty" format=3]
 
-[ext_resource type="Script" path="res://game/db/Properties/polygon/decorations_enabled.gd" id="1_de"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_80eaj"]
 
 [resource]
-script = ExtResource("1_de")
+script = ExtResource("1_80eaj")
 key = &"decorations_enabled"
 label = "Decorations"
 type = 0
 default_value = true
-visible_in_editor = true
-exclusive = false

@@ -7,6 +7,6 @@
 [resource]
 script = ExtResource("1")
 style_name = "Cave"
-base_texture = ExtResource("1_ijbgn")
+texture = ExtResource("1_ijbgn")
 outline_texture = ExtResource("2_rueli")
-outline_width = 14.0
+outline_width = 16.0
