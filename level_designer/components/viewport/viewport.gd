@@ -73,9 +73,18 @@ var _touch_mode: int = 0
 var _last_pinch_distance: float = 0.0
 
 
+## The root viewport outlives the editor, so this hook has to follow tree membership rather than
+## being made once: a detached editor would otherwise still react to the window being resized.
+func _enter_tree() -> void:
+	get_viewport().size_changed.connect(_on_viewport_moved)
+
+
+func _exit_tree() -> void:
+	get_viewport().size_changed.disconnect(_on_viewport_moved)
+
+
 func _on_ready() -> void:
 	_inst = self
-	get_viewport().size_changed.connect(_on_viewport_moved)
 	viewport_moved.connect(_on_viewport_moved)
 	_on_viewport_moved(camera_position, camera_zoom)
 	set_input_priority()

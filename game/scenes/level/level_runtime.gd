@@ -82,14 +82,20 @@ func _on_kickout_requested() -> void:
 		.set_center() \
 		.set_out_texture(SHINE_MASK) \
 		.set_in_texture(MARIO_MASK) \
-		.set_destination(LEVEL_DESIGNER_SCENE) \
+		.set_swap(_return_to_editor) \
 		.done()
 
 
 func _on_back_button_pressed() -> void:
 	Singleton.get_level_clock().stop()
 	_reset_audio_effects()
-	get_tree().change_scene_to_file(LEVEL_DESIGNER_SCENE)
+	_return_to_editor()
+
+
+## Puts the editor that launched this playtest back on screen. It is normally still in memory, so
+## this costs a reattach rather than rebuilding it and reloading the level.
+func _return_to_editor() -> void:
+	Singleton.get_editor_session().resume_or_open(get_tree(), LEVEL_DESIGNER_SCENE)
 
 
 func _exit_tree() -> void:

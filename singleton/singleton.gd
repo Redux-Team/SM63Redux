@@ -5,6 +5,7 @@ var _input_handler: InputHandler = InputHandler.new()
 var _tree_hook: TreeHook = TreeHook.new()
 var _level_clock: LevelClock = LevelClock.new()
 var _multiplayer: MultiplayerHandler = MultiplayerHandler.new()
+var _editor_session: EditorSession = EditorSession.new()
 
 @export var _screen_transition_rect: ColorRect
 
@@ -73,6 +74,10 @@ func get_level_clock() -> LevelClock:
 
 func get_multiplayer_handler() -> MultiplayerHandler:
 	return _multiplayer
+
+
+func get_editor_session() -> EditorSession:
+	return _editor_session
 
 
 func build_screen_transition() -> TransitionBuilder:
@@ -273,6 +278,7 @@ class TransitionBuilder:
 	var _out_texture: Texture2D = null
 	var _in_texture: Texture2D = null
 	var _destination: String = ""
+	var _swap: Callable = Callable()
 	var _hold_duration: float = 0.5
 	var _wave_scale: float = 1.0
 	
@@ -342,6 +348,13 @@ class TransitionBuilder:
 	
 	func set_destination(path: String) -> TransitionBuilder:
 		_destination = path
+		return self
+	
+	
+	## Runs instead of loading a scene file, at the same fully-covered moment. Lets a transition
+	## swap in a scene that is already in memory (see [EditorSession]).
+	func set_swap(swap: Callable) -> TransitionBuilder:
+		_swap = swap
 		return self
 	
 	
@@ -422,7 +435,9 @@ class TransitionBuilder:
 			if is_instance_valid(reveal_tex):
 				mat.set_shader_parameter(&"mask_texture", reveal_tex)
 			hold.tween_interval(_hold_duration)
-			if _destination:
+			if _swap.is_valid():
+				hold.tween_callback(_swap)
+			elif _destination:
 				hold.tween_callback(tree.change_scene_to_file.bind(_destination))
 			hold.finished.connect(tween_in.play)
 		)
@@ -431,6 +446,71 @@ class TransitionBuilder:
 			_color_rect.hide()
 			_color_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		)
+
+
+## Keeps the level designer alive while a playtest runs. Rebuilding the editor and deserializing
+## the level back into it costs roughly a second for a thousand-object level and gets worse from
+## there; detaching and reattaching the same instance is flat and takes about a tenth of that.
+class EditorSession:
+	var _held: Node = null
+
+
+	func is_held() -> bool:
+		return is_instance_valid(_held)
+
+
+	## Detaches the current scene if it is the editor, keeps it, and opens [param scene_path] in
+	## its place. Falls back to a plain scene change when there is no editor to hold.
+	func suspend_into(tree: SceneTree, scene_path: String) -> void:
+		var editor: Node = tree.current_scene
+		if not is_instance_valid(editor) or editor is not LD:
+			tree.change_scene_to_file(scene_path)
+			return
+
+		discard()
+		(editor as LD).set_suspended(true)
+		tree.root.remove_child(editor)
+		_held = editor
+
+		var next: Node = (load(scene_path) as PackedScene).instantiate()
+		tree.root.add_child(next)
+		tree.current_scene = next
+
+
+	## Puts the held editor back in place of the current scene. Returns false when nothing is held,
+	## so the caller can fall back to loading the editor from disk.
+	func resume(tree: SceneTree) -> bool:
+		if not is_instance_valid(_held):
+			_held = null
+			return false
+
+		var editor: Node = _held
+		_held = null
+		var outgoing: Node = tree.current_scene
+
+		tree.root.add_child(editor)
+		(editor as LD).set_suspended(false)
+		tree.current_scene = editor
+		if is_instance_valid(outgoing) and outgoing != editor:
+			outgoing.queue_free()
+
+		# The handover dict only exists to rebuild an editor that was thrown away. The live one
+		# already holds this level, so leaving it set would make the next cold open restore it.
+		Singleton.remove_meta(&"playtest")
+		return true
+
+
+	## Reattaches the held editor, or loads it from disk when there is nothing held.
+	func resume_or_open(tree: SceneTree, scene_path: String) -> void:
+		if not resume(tree):
+			tree.change_scene_to_file(scene_path)
+
+
+	## Throws the held editor away, for when the next editor open has to start from scratch.
+	func discard() -> void:
+		if is_instance_valid(_held):
+			_held.queue_free()
+		_held = null
 
 
 class env:

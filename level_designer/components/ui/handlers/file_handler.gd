@@ -38,8 +38,13 @@ func setup() -> void:
 	if history and not history.history_changed.is_connected(_queue_save_buttons_update):
 		history.history_changed.connect(_queue_save_buttons_update)
 	_save_file_dialog.canceled.connect(_on_save_dialog_canceled)
-	Singleton.set_quit_guard(_on_quit_requested)
 	_update_save_buttons()
+
+
+## Claimed on every tree entry, not just the first, so the editor takes the guard back after a
+## playtest hands it over and returns.
+func _enter_tree() -> void:
+	Singleton.set_quit_guard(_on_quit_requested)
 
 
 func _exit_tree() -> void:
@@ -117,14 +122,14 @@ func _on_test_server_button_pressed() -> void:
 		.set_texture(WAVE_MASK) \
 		.set_wave_scale(4.0) \
 		.set_in_duration(0.5) \
-		.set_destination(PLAYTEST_SCENE) \
+		.set_swap(func() -> void: Singleton.get_editor_session().suspend_into(get_tree(), PLAYTEST_SCENE)) \
 		.done()
 
 
 func _on_test_client_button_pressed() -> void:
 	Singleton.get_multiplayer_handler().start_client()
 	Singleton.set_meta("playtest", LD.get_save_load_handler().get_level_data())
-	get_tree().change_scene_to_file("uid://ctssku6r3gx0a")
+	Singleton.get_editor_session().suspend_into(get_tree(), PLAYTEST_SCENE)
 
 
 #endregion

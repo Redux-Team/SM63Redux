@@ -2,7 +2,14 @@ class_name LD
 extends Node
 
 
+## Emitted when the editor is suspended or resumed. Components use it to drop the few hooks that
+## live outside the editor's own subtree, which leaving the tree does not cover on its own.
+signal suspended_changed(suspended: bool)
+
+
 static var _inst: LD
+
+var _suspended: bool = false
 
 
 @export_group("Components", "_ld_")
@@ -87,6 +94,20 @@ static func get_area() -> LDArea:
 
 static func is_ready() -> bool:
 	return is_instance_valid(_inst)
+
+
+func is_suspended() -> bool:
+	return _suspended
+
+
+## Stops the editor dead: nothing in the subtree processes, receives input, or gets notifications.
+## Used while a playtest is on screen, where the editor is kept in memory but must be inert.
+func set_suspended(value: bool) -> void:
+	if _suspended == value:
+		return
+	_suspended = value
+	process_mode = PROCESS_MODE_DISABLED if value else PROCESS_MODE_INHERIT
+	suspended_changed.emit(value)
 
 
 func _init() -> void:

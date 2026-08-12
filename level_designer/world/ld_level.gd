@@ -25,6 +25,12 @@ func _init() -> void:
 	_inst = self
 
 
+## Re-claimed on every tree entry, not just construction, so the editor can be detached during a
+## playtest and put back without leaving the static pointing at nothing.
+func _enter_tree() -> void:
+	_inst = self
+
+
 func _exit_tree() -> void:
 	if _inst == self:
 		_inst = null

@@ -27,10 +27,18 @@ func _on_ready() -> void:
 	viewport.touch_swipe_moved.connect(_on_touch_swipe_moved)
 	viewport.touch_swipe_ended.connect(_on_touch_swipe_ended)
 	
-	Singleton.get_input_handler().input_type_changed.connect(_on_input_type_changed)
-	
 	if LD.get_object_handler().get_selected_object():
 		_on_object_changed(LD.get_object_handler().get_selected_object())
+
+
+## Lives on the Singleton, so it keeps firing at a detached editor unless it is dropped on the
+## way out of the tree.
+func _enter_tree() -> void:
+	Singleton.get_input_handler().input_type_changed.connect(_on_input_type_changed)
+
+
+func _exit_tree() -> void:
+	Singleton.get_input_handler().input_type_changed.disconnect(_on_input_type_changed)
 
 
 func _on_enable() -> void:

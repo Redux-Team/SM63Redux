@@ -6,6 +6,8 @@ extends State
 @export var death_screen_texture: Texture2D
 @export var transition_out_texture: Texture2D
 
+const LEVEL_DESIGNER_SCENE: String = "uid://cf4yw3eqr2qo6"
+
 
 func _on_enter() -> void:
 	player.velocity = Vector2.ZERO
@@ -15,7 +17,7 @@ func _on_enter() -> void:
 	Singleton.build_screen_transition() \
 		.set_texture(death_screen_texture) \
 		.set_hold_duration(0.5) \
-		.set_destination("uid://cf4yw3eqr2qo6") \
+		.set_swap(func() -> void: Singleton.get_editor_session().resume_or_open(get_tree(), LEVEL_DESIGNER_SCENE)) \
 		.set_out_texture(transition_out_texture) \
 		.done()
 
