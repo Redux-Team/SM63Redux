@@ -4,6 +4,8 @@ extends LDTool
 @export var shortcut_handler: LDSelectionShortcutHandler
 
 var _is_box_selecting: bool = false
+var _canvas_xform_cache: Transform2D = Transform2D.IDENTITY
+var _canvas_xform_valid: bool = false
 var _is_shift_selecting: bool = false
 var _box_select_origin: Vector2
 var _box_select_rect: Rect2
@@ -87,13 +89,19 @@ func _on_selected_object_changed(_obj: GameObject) -> void:
 
 
 func _update_hover_states() -> void:
+	_canvas_xform_valid = false
+	# `obj in array` is a linear scan, so testing every object against the selection each frame was
+	# quadratic in the size of the selection.
+	var selected: Dictionary[LDObject, bool] = {}
+	for obj: LDObject in viewport.get_selected_objects():
+		selected[obj] = true
+
 	for obj: LDObject in _get_selectable_objects():
-		var game_obj: GameObject = GameDB.get_db().find_game_object(obj.source_object_id)
-		if not game_obj.ld_flags & (1 << GameObject.LD_SELECTABLE):
+		if not obj.ld_flags & (1 << GameObject.LD_SELECTABLE):
 			continue
 		if obj.is_preview:
 			continue
-		if obj in viewport.get_selected_objects():
+		if selected.has(obj):
 			obj.set_selection_state(LDObject.SelectionState.SELECTED)
 			continue
 		if _object_intersects_box(obj):
@@ -119,14 +127,14 @@ func _commit_box_select() -> void:
 				single.append(clicked)
 			viewport.set_selected_objects(_expand_linked_selection(single))
 		return
-
+	
 	var found: Array[LDObject] = []
 	for obj: LDObject in _get_selectable_objects():
 		if obj.is_preview:
 			continue
 		if _object_intersects_box(obj):
 			found.append(obj)
-
+	
 	if _is_shift_selecting:
 		var combined: Array[LDObject] = viewport.get_selected_objects().duplicate()
 		for obj: LDObject in found:
@@ -206,7 +214,36 @@ func _polygon_edge_intersects_box(screen_points: PackedVector2Array, box: Rect2)
 	return false
 
 
+## The viewport's canvas transform, fetched once per pass. Reading it per object cost two node
+## lookups each, which adds up when a drag re-tests thousands of objects every frame.
+func _canvas_xform() -> Transform2D:
+	if not _canvas_xform_valid:
+		_canvas_xform_cache = viewport.get_viewport().get_canvas_transform()
+		_canvas_xform_valid = true
+	return _canvas_xform_cache
+
+
+## Screen-space bounds of an object, from its cached local bounds. Four transforms regardless of
+## how many points the object has, so it is cheap enough to run against every object every frame.
+func _object_screen_rect(obj: LDObject) -> Rect2:
+	var bounds: Rect2 = obj.get_local_bounds()
+	if bounds.size == Vector2.ZERO:
+		return Rect2()
+	var xform: Transform2D = _canvas_xform() * obj.get_global_transform()
+	var rect: Rect2 = Rect2(xform * bounds.position, Vector2.ZERO)
+	rect = rect.expand(xform * (bounds.position + Vector2(bounds.size.x, 0.0)))
+	rect = rect.expand(xform * (bounds.end))
+	rect = rect.expand(xform * (bounds.position + Vector2(0.0, bounds.size.y)))
+	return rect
+
+
 func _object_intersects_box(obj: LDObject) -> bool:
+	# Cheap reject first: the exact test below walks every point of every object, which is what
+	# made dragging a selection box over a large level stall.
+	var broad_rect: Rect2 = _object_screen_rect(obj)
+	if broad_rect.size != Vector2.ZERO and not _box_select_rect.intersects(broad_rect):
+		return false
+
 	var box_corners: Array[Vector2] = [
 		_box_select_rect.position,
 		_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0),
@@ -281,16 +318,20 @@ func _get_selectable_objects() -> Array[LDObject]:
 
 
 func _get_object_at(mouse_pos: Vector2) -> LDObject:
+	_canvas_xform_valid = false
 	var all: Array[LDObject] = _get_selectable_objects()
 	for i: int in range(all.size() - 1, -1, -1):
 		var obj: LDObject = all[i]
 		if obj.is_preview:
 			continue
+		var broad_rect: Rect2 = _object_screen_rect(obj)
+		if broad_rect.size != Vector2.ZERO and not broad_rect.has_point(mouse_pos):
+			continue
 		var poly_obj: LDObjectPolygon = obj as LDObjectPolygon
-		if poly_obj and poly_obj._polygon:
+		if poly_obj:
 			var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * obj.get_global_transform()
 			var screen_points: PackedVector2Array = PackedVector2Array()
-			for point: Vector2 in poly_obj._polygon.polygon:
+			for point: Vector2 in poly_obj.get_ring():
 				screen_points.append(full_transform * point)
 			if poly_obj.polygon_data and poly_obj.polygon_data.edge_selection:
 				if _point_near_polygon_edge(mouse_pos, screen_points, 6.0):
