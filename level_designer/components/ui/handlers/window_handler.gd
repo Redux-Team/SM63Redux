@@ -2,9 +2,9 @@ class_name LDUIWindowHandler
 extends Node
 
 ## Drives a single shared LDWindow shell, binding it to one of several content scenes on
-## demand instead of keeping one window node per panel. Enforces "one window open at a
-## time" and returns the bound content node so callers can drive it, e.g.
-## LD.get_ui().get_window_handler().toggle_tag_editor().
+## demand instead of keeping one window node per panel. One window shows at a time - opening
+## another switches the shell over - and each call returns the bound content node so callers
+## can drive it, e.g. LD.get_ui().get_window_handler().toggle_tag_editor().
 
 const OBJECT_BROWSER: StringName = &"object_browser"
 const OBJECT_PROPERTIES: StringName = &"object_properties"
@@ -120,19 +120,22 @@ func toggle(id: StringName) -> Control:
 	return open(id)
 
 
-## Opens the window for `id`. No-op (returns null) if a different window is already open.
+## Opens the window for `id`. Only one window shows at a time, so opening a second one switches
+## the shell over to it rather than being ignored - a toolbar button never does nothing.
 func open(id: StringName) -> Control:
 	if not _defs.has(id):
-		return null
-	if _active_id != &"" and _active_id != id:
+		push_warning("LDUIWindowHandler: no window registered for '%s'" % id)
 		return null
 
 	var def: LDWindowDef = _defs.get(id)
 	var content: Control = _get_or_create(id)
-	_window.bind(content, def.title, def.close_on_back_input, def.window_scale)
+	var switching: bool = _active_id != &"" and _active_id != id
+
+	_window.bind(content, def)
 	_active_id = id
 	LD.get_input_handler().set_input_priority(LD.get_ui())
-	_window.popin()
+	if not switching:
+		_window.popin()
 	active_changed.emit(id)
 	return content
 

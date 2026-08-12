@@ -10,15 +10,17 @@ shader = ExtResource("1_y8b6h")
 shader_parameter/tint = Color(0, 0, 0, 0.4)
 shader_parameter/blur = 8.0
 
-[node name="LDWindow" type="CanvasLayer" unique_id=354043236 node_paths=PackedStringArray("_panel", "_content_container", "_title_label", "_backdrop")]
+[node name="LDWindow" type="CanvasLayer" node_paths=PackedStringArray("_panel", "_content_container", "_title_label", "_backdrop", "_title_bar", "_resize_grip")]
 layer = 2
 script = ExtResource("1_pd0vu")
 _panel = NodePath("Content")
 _content_container = NodePath("Content/VBoxContainer/MarginContainer/VBoxContainer/ContentContainer")
 _title_label = NodePath("Content/VBoxContainer/MarginContainer/VBoxContainer/TitleLabel")
 _backdrop = NodePath("Backdrop")
+_title_bar = NodePath("Content/Control/TitleBar")
+_resize_grip = NodePath("Content/Control/ResizeGrip")
 
-[node name="Backdrop" type="ColorRect" parent="." unique_id=1736386305]
+[node name="Backdrop" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_hd74k")
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,7 +28,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Content" type="PanelContainer" parent="." unique_id=1964419486]
+[node name="Content" type="PanelContainer" parent="."]
 texture_filter = 4
 anchors_preset = 8
 anchor_left = 0.5
@@ -42,38 +44,59 @@ theme = ExtResource("4_ldtheme")
 metadata/gdss_mode = 1
 metadata/gdss_classes = PackedStringArray("Window")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Content" unique_id=551025918]
+[node name="VBoxContainer" type="VBoxContainer" parent="Content"]
 clip_contents = true
 layout_mode = 2
-size_flags_vertical = 4
+size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Content/VBoxContainer" unique_id=47268515]
+[node name="MarginContainer" type="MarginContainer" parent="Content/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 4
+size_flags_vertical = 3
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Content/VBoxContainer/MarginContainer" unique_id=514969343]
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/VBoxContainer/MarginContainer"]
 layout_mode = 2
-size_flags_vertical = 4
+size_flags_vertical = 3
 
-[node name="TitleLabel" type="Label" parent="Content/VBoxContainer/MarginContainer/VBoxContainer" unique_id=719007059]
+[node name="TitleLabel" type="Label" parent="Content/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Window Title"
 horizontal_alignment = 1
 metadata/gdss_classes = PackedStringArray("Title")
 
-[node name="ContentContainer" type="PanelContainer" parent="Content/VBoxContainer/MarginContainer/VBoxContainer" unique_id=329307729]
+[node name="ContentContainer" type="PanelContainer" parent="Content/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_vertical = 3
 
-[node name="Control" type="Control" parent="Content" unique_id=636116786]
+[node name="Control" type="Control" parent="Content"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="CloseButton" type="Button" parent="Content/Control" unique_id=1205102099]
+[node name="TitleBar" type="Control" parent="Content/Control"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+mouse_default_cursor_shape = 13
+
+[node name="ResizeGrip" type="Control" parent="Content/Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -22.0
+offset_top = -22.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 12
+
+[node name="CloseButton" type="Button" parent="Content/Control"]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 1
 anchors_preset = 1
