@@ -58,7 +58,7 @@ func _rebuild_rings() -> void:
 		for obj: LDObject in objects:
 			for prop: LDProperty in obj.get_properties():
 				if prop.key == key:
-					ring.rotation_owner = (prop as LDPropertyRotation).rotation_owner
+					ring.rotation_owner = prop.relative_to
 					break
 			break
 		_rings.append(ring)

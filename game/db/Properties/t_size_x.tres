@@ -1,11 +1,12 @@
-[gd_resource type="Resource" script_class="LDPropertyTelescopeX" format=3 uid="uid://d3j4ktfhy214l"]
+[gd_resource type="Resource" script_class="LDProperty" format=3 uid="uid://d3j4ktfhy214l"]
 
-[ext_resource type="Script" uid="uid://c74p8giulwgqm" path="res://game/db/Properties/t_size_x.gd" id="1_jutf8"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_yt1h6"]
 
 [resource]
-script = ExtResource("1_jutf8")
+script = ExtResource("1_yt1h6")
 key = &"t_size_x"
 label = "Width"
 type = 1
 default_value = 0
-metadata/_custom_type_script = "uid://c74p8giulwgqm"
+min_value = 0.0
+max_value = 64.0

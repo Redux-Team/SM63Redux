@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="LDPropertyRNGSeed" format=3 uid="uid://b12ma52j5x2hd"]
+[gd_resource type="Resource" script_class="LDProperty" format=3 uid="uid://b12ma52j5x2hd"]
 
-[ext_resource type="Script" uid="uid://kya4fs33t4j5" path="res://game/db/Properties/rng_seed.gd" id="1_70pia"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_70pia"]
 
 [resource]
 script = ExtResource("1_70pia")
@@ -9,4 +9,5 @@ label = "RNG Seed"
 type = 1
 default_value = 0
 visible_in_editor = false
-metadata/_custom_type_script = "uid://kya4fs33t4j5"
+min_value = 0.0
+max_value = 1000000000.0

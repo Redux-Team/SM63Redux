@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="LDPropertyIsKickout" format=3 uid="uid://bjmqlk5n3fq3u"]
+[gd_resource type="Resource" script_class="LDProperty" format=3 uid="uid://bjmqlk5n3fq3u"]
 
-[ext_resource type="Script" uid="uid://d1r2apibn2k0q" path="res://game/db/Properties/shine_sprite/is_kickout.gd" id="1_fjt12"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_fjt12"]
 
 [resource]
 script = ExtResource("1_fjt12")
 key = &"kickout"
 label = "Kickout"
+type = 0
 default_value = true
-metadata/_custom_type_script = "uid://d1r2apibn2k0q"

@@ -1,11 +1,16 @@
-[gd_resource type="Resource" script_class="LDPropertyRotation" format=3 uid="uid://biih4ua68gqhe"]
+[gd_resource type="Resource" script_class="LDProperty" format=3 uid="uid://biih4ua68gqhe"]
 
-[ext_resource type="Script" uid="uid://di3amfykmckcb" path="res://game/db/Properties/rotation.gd" id="1_kjp46"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_kjp46"]
 
 [resource]
 script = ExtResource("1_kjp46")
 key = &"rotation"
 label = "Rotation"
-type = 2
 default_value = 0.0
 visible_in_editor = false
+min_value = 0.0
+max_value = 360.0
+arrow_step = 15.0
+wrap = true
+apply_mode = 1
+apply_target = NodePath("rotation_degrees")

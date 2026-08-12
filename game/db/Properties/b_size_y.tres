@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="LDPropertyBlockY" format=3 uid="uid://va740o4ucg11"]
+[gd_resource type="Resource" script_class="LDProperty" format=3 uid="uid://va740o4ucg11"]
 
-[ext_resource type="Script" uid="uid://b1myva5finvmf" path="res://game/db/Properties/b_size_y.gd" id="1_knrot"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_knrot"]
 
 [resource]
 script = ExtResource("1_knrot")
@@ -8,4 +8,8 @@ key = &"b_size_y"
 label = "Height"
 type = 1
 default_value = 32
-metadata/_custom_type_script = "uid://b1myva5finvmf"
+min_value = 32.0
+max_value = 1024.0
+step = 16.0
+apply_mode = 1
+apply_target = NodePath("block_size:y")

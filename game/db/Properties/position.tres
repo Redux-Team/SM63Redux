@@ -1,13 +1,14 @@
-[gd_resource type="Resource" script_class="LDPropertyPosition" format=3 uid="uid://eub4j18f30lj"]
+[gd_resource type="Resource" script_class="LDProperty" format=3 uid="uid://eub4j18f30lj"]
 
-[ext_resource type="Script" uid="uid://bbqpe78tlk6yc" path="res://game/db/Properties/position.gd" id="1_rdpnd"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_wws1a"]
 
 [resource]
-script = ExtResource("1_rdpnd")
+script = ExtResource("1_wws1a")
 key = &"position"
 label = "Position"
 type = 4
 default_value = Vector2(0, 0)
 visible_in_editor = false
 exclusive = true
-metadata/_custom_type_script = "uid://bbqpe78tlk6yc"
+apply_mode = 1
+apply_target = NodePath("position")

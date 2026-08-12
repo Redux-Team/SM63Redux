@@ -1,12 +1,15 @@
-[gd_resource type="Resource" script_class="LDPropertyScale" format=3 uid="uid://b2lplu0614unh"]
+[gd_resource type="Resource" script_class="LDProperty" format=3 uid="uid://b2lplu0614unh"]
 
-[ext_resource type="Script" uid="uid://o5m0xxdfdd40" path="res://game/db/Properties/scale.gd" id="1_0x20k"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_kqoir"]
 
 [resource]
-script = ExtResource("1_0x20k")
+script = ExtResource("1_kqoir")
 key = &"scale"
 label = "Scale"
 type = 4
 default_value = Vector2(1, 1)
 visible_in_editor = false
-metadata/_custom_type_script = "uid://o5m0xxdfdd40"
+step = 0.1
+arrow_step = 0.1
+apply_mode = 1
+apply_target = NodePath("scale")

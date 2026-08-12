@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="LDPropertyPlatformSpeed" format=3 uid="uid://ctlyyrjsbjt07"]
+[gd_resource type="Resource" script_class="LDProperty" format=3 uid="uid://ctlyyrjsbjt07"]
 
-[ext_resource type="Script" uid="uid://b0fxtl0hudiya" path="res://game/db/Properties/moving_platform/platform_period.gd" id="1_bqhi0"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_a0638"]
 
 [resource]
-script = ExtResource("1_bqhi0")
+script = ExtResource("1_a0638")
 key = &"platform_period"
 label = "Period"
-type = 2
 default_value = 1.0
-metadata/_custom_type_script = "uid://b0fxtl0hudiya"
+min_value = 0.0
+max_value = 50.0

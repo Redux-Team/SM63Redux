@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="LDPropertyMusicRegion" format=3 uid="uid://bp5hqk7p5mdi1"]
+[gd_resource type="Resource" script_class="LDProperty" format=3 uid="uid://bp5hqk7p5mdi1"]
 
-[ext_resource type="Script" uid="uid://cc1qsymhrrfs3" path="res://game/db/Properties/music_region.gd" id="1_7wdys"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_7wdys"]
 
 [resource]
 script = ExtResource("1_7wdys")

@@ -24,7 +24,10 @@ func load_selection(objects: Array[LDObject]) -> void:
 			continue
 		var current_value: Variant = handler.get_property_value(objects, prop.key)
 		if widget is LDOptionWidget and not objects.is_empty():
-			(widget as LDOptionWidget).set_options(objects[0].get_property_options(prop.key))
+			# A property can list fixed choices itself; the object only gets asked when it doesn't,
+			# which is how style presets read from a directory stay dynamic.
+			var choices: PackedStringArray = prop.options if not prop.options.is_empty() else objects[0].get_property_options(prop.key)
+			(widget as LDOptionWidget).set_options(choices)
 		widget.setup(prop, current_value)
 		if read_only:
 			_make_read_only(widget)

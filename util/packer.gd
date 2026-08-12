@@ -50,6 +50,25 @@ static func array_to_packed_vec2(array: Variant) -> PackedVector2Array:
 	return packed
 
 
+## Accepts any shape a point list can arrive in: already packed, an array of [x, y] pairs from a
+## save file, or the "[(x, y), (x, y)]" text a hand-edited level ends up with.
+static func to_packed_vec2(value: Variant) -> PackedVector2Array:
+	if value is PackedVector2Array:
+		return value
+	if value is Array:
+		return array_to_packed_vec2(value)
+	if value is String:
+		var result: PackedVector2Array = PackedVector2Array()
+		var pattern: RegEx = RegEx.new()
+		pattern.compile(r"\(([^)]+)\)")
+		for found: RegExMatch in pattern.search_all(value):
+			var parts: PackedStringArray = found.get_string(1).split(",")
+			if parts.size() >= 2:
+				result.append(Vector2(float(parts[0].strip_edges()), float(parts[1].strip_edges())))
+		return result
+	return PackedVector2Array()
+
+
 static func array_to_color(array: Variant) -> Color:
 	if array is Array and array.size() == 4:
 		return Color(float((array)[0]), float((array)[1]), float((array)[2]), float((array)[3]))
