@@ -2,6 +2,15 @@
 class_name GameObject
 extends Resource
 
+## One placeable thing: what it is ([member data]), what a designer can tune on it
+## ([member ld_properties]), and how it appears in the object browser. Its category and group come
+## from where the file lives, so dropping a .tres under game/db/Objects/<Category>/<Group>/ is all
+## the registration there is.
+
+
+enum LDPlacementRules { BEHIND_ALL, BEHIND_PLAYER, FRONT_PLAYER, FRONT_ALL }
+enum AuthorityMode { SERVER, PEER }
+
 enum {
 	LD_SELECTABLE,
 	LD_DELETABLE,
@@ -9,237 +18,63 @@ enum {
 	LD_COPYABLE,
 }
 
-enum LDPlacementRules {
-	BEHIND_ALL,
-	BEHIND_PLAYER,
-	FRONT_PLAYER,
-	FRONT_ALL
-}
-
-enum ObjectCategory {
-	ENTITY,
-	ITEM,
-	POLYGON,
-	HAZARDS,
-	PROPS,
-	TRIGGER,
-	ALL,
-}
-
-enum ObjectType {
-	SPRITE,
-	TELESCOPING,
-	TEXTURED_PATH,
-	CUSTOM,
-	POLYGON,
-}
-
-enum AuthorityMode {
-	SERVER,
-	PEER,
-}
-
-enum CollisionAnchor {
-	TOP,
-	BOTTOM,
-	LEFT,
-	RIGHT,
-}
-
-# These are cached to not have to do string manipulation every time we index a bunch of these resources.
-@export_storage var id: String
-@export_storage var category: ObjectCategory:
-	set(c):
-		category = c
-		category_string = get_category_name(c).to_pascal_case()
-		_update_subpath()
-@export_storage var category_string: String
-@export_storage var subpath: String:
-	set(s):
-		subpath = s
-		group_path = s.trim_suffix("/" + s.get_file())
-@export_storage var group_path: String
+const OBJECTS_ROOT: String = "res://game/db/Objects/"
 
 
-@export_group("Overrides", "")
-@export_subgroup("Entry")
+## Stable name a saved level refers to this object by. Defaults to the file name; set it explicitly
+## only when you need the file to be renamable without orphaning already-placed instances.
+@export var id: String
+@export var data: GameObjectData
+@export var ld_properties: Array[LDProperty]
+
+@export_group("Entry")
+## Defaults to the id in Title Case.
 @export var name_override: String
-## Override this to stamp different objects together, if not overriden
-## then the base ID is used.
-@export var ld_index_id: String
-## The list of properties that this object inherits.
-## If disabled, the object will exist but will not be findable in the Object Browser.
-@export var ld_indexable: bool = true
-@export_subgroup("Editor")
-@export var ld_select_tool_override: String
-@export var ld_placement_tool_override: String
-@export var ld_placement_rules: LDPlacementRules = LDPlacementRules.BEHIND_PLAYER
-@export_flags("Selectable", "Deletable", "Layerable", "Copyable") var ld_flags: int = 15
-## If disabled, this object cannot be captured into a stamp (e.g. the player spawn),
-## so it never gets duplicated when stamps are stamped or placed.
-@export var ld_stampable: bool = true
-## If enabled, the level designer guarantees only one instance of this object can
-## exist in a level - placing another removes the previous one.
-@export var ld_unique: bool = false
-@export_subgroup("Instance")
-@export var ld_editor_instance: PackedScene:
-	set(ldi):
-		ld_editor_instance = ldi
-		notify_property_list_changed()
-@export var game_instance: PackedScene:
-	set(gi):
-		game_instance = gi
-		notify_property_list_changed()
-@export_group("")
+## Defaults to whatever [member data] offers.
 @export var ld_entry_texture: Texture2D:
 	set(value):
-		if value is AtlasTexture:
-			ld_entry_texture = value
-		else:
-			ld_entry_texture = _make_entry_texture(value)
-@export var ld_properties: Array[LDProperty]
-@export var object_type: ObjectType = ObjectType.SPRITE:
-	set(t):
-		object_type = t
-		notify_property_list_changed()
+		ld_entry_texture = value if value is AtlasTexture else _make_entry_texture(value)
+## Groups several entries into one browser slot, so variants share a tile.
+@export var ld_index_id: String
+## When off, the object still loads and places but never shows up in the object browser.
+@export var ld_indexable: bool = true
 
-@export_category("Object Data")
-@export var sprite_texture: Texture2D:
-	set(value):
-		sprite_texture = value
-		if not ld_entry_texture:
-			ld_entry_texture = value
-@export var telescoping_atlas: Texture2D:
-	set(value):
-		if value is AtlasTexture:
-			telescoping_atlas = value
-		else:
-			var atlas: AtlasTexture = AtlasTexture.new()
-			atlas.atlas = value
-			telescoping_atlas = atlas
-@export var polygon_data: PolygonData
-@export_group("Path", "path_")
-@export var path_line_texture: Texture2D
-@export var path_head_texture: Texture2D:
-	set(value):
-		path_head_texture = value
-		if not ld_entry_texture:
-			ld_entry_texture = value
-@export var path_subdivide: bool = true
-@export var path_use_stem_collision: bool = false
-@export var path_stem_width: float = 16.0
-@export var path_head_collision: bool = false
-@export var path_head_collision_polygon: PackedVector2Array
-@export_group("")
-
-@export_category("Editor Data")
-@export_storage var ld_object_path: String:
-	set(p):
-		ld_object_path = p
-		_update_subpath()
-@export_subgroup("Editor Shape", "editor_shape")
-## If not set, it will default to using the [member sprite_texture]'s rect.
-@export var editor_shape_shape_override: Shape2D
-@export var editor_shape_offset: Vector2
-
-@export_category("Level Data")
-## Press this button to open the level object scene, useful for doing certain
-## things like copying a collision shape.
-@export_group("Collision", "collision")
-## If enabled and no shape is set, then it will use the [member sprite_texture]'s rect.
-@export_custom(PROPERTY_HINT_GROUP_ENABLE, "collision") var collision_enabled: bool = false
-@export var collision_shape: Shape2D
-@export var collision_polygon: PackedVector2Array
-@export var collision_offset: Vector2
-@export var collision_expand: Vector2 = Vector2.ZERO
-@export var collision_anchor: CollisionAnchor = CollisionAnchor.TOP
-@export_subgroup("One Way", "collision_")
-@export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var collision_one_way: bool = true:
-	set(value):
-		collision_one_way = value
-		notify_property_list_changed()
-@export var collision_one_way_margin: float = 1.0
-@export var collision_collapsed: bool = true
-
+@export_group("Editor")
+@export var ld_placement_rules: LDPlacementRules = LDPlacementRules.BEHIND_PLAYER
+@export_flags("Selectable", "Deletable", "Layerable", "Copyable") var ld_flags: int = 15
+## When off, this can't be captured into a stamp (e.g. the player spawn), so it never gets
+## duplicated when stamps are stamped or placed.
+@export var ld_stampable: bool = true
+## When on, the level designer keeps exactly one instance per area - placing another removes the
+## previous one.
+@export var ld_unique: bool = false
+@export var ld_select_tool_override: String
+@export var ld_placement_tool_override: String
 
 @export_group("Multiplayer", "game_")
 @export var game_multiplayer_spawnable: bool = false
 @export var game_authority_mode: AuthorityMode = AuthorityMode.SERVER
 
-@warning_ignore("unused_private_class_variable")
-@export_tool_button("Update Internal Info") var _update_internal_info: Callable:
+
+## Location under [constant OBJECTS_ROOT] without the extension, e.g. "Item/Collectible/yellow_coin".
+var object_path: String:
 	get:
-		return func() -> void:
-			_update_subpath()
+		return resource_path.trim_prefix(OBJECTS_ROOT).trim_suffix(".tres")
 
-@warning_ignore("unused_private_class_variable")
-@export_tool_button("Print Internal Info") var _print_internal_info: Callable:
+## Top-level folder, e.g. "Item".
+var category: String:
 	get:
-		return func() -> void:
-			print(
-				"get_object_name() -> ", get_object_name(), "\n",
-				"get_object_path() -> ", get_object_path(), "\n",
-				"get_category_name(category) -> ", get_category_name(category), "\n",
-				"id -> ", id, "\n",
-				"category -> ", category, "\n",
-				"category_string -> ", category_string, "\n",
-				"subpath -> ", subpath, "\n",
-				"group_path -> ", group_path, "\n",
-				"ld_object_path -> ", ld_object_path, "\n",
-			)
+		return object_path.get_slice("/", 0)
 
+## Second-level folder, e.g. "Collectible".
+var group: String:
+	get:
+		return object_path.get_slice("/", 1) if object_path.get_slice_count("/") > 2 else ""
 
-
-func _get_ignored_properties() -> PackedStringArray:
-	return [
-		"name_override", "ld_index_id", "ld_indexable", "ld_stampable", "ld_unique",
-		"ld_select_tool_override", "ld_placement_tool_override", "ld_placement_rules", "ld_flags",
-		"ld_properties", "ld_editor_instance", "game_instance", "ld_entry_texture",
-		"object_type",
-		"game_multiplayer_spawnable",
-		"game_authority_mode",
-	]
-
-
-func _get_allowed_properties() -> PackedStringArray:
-	match object_type:
-		ObjectType.SPRITE:
-			return [
-				"sprite_texture", # Object
-				"editor_shape_shape_override", "editor_shape_offset", # Editor
-				"collision_enabled", "collision_one_way", "collision_shape", "collision_polygon", "collision_offset" # Level
-			]
-		ObjectType.TELESCOPING:
-			return [
-				"telescoping_atlas",
-				"collision_enabled", "collision_anchor", "collision_expand", "collision_offset", "collision_one_way", "collision_one_way_margin"
-			]
-		ObjectType.POLYGON:
-			return [
-				"polygon_data"
-			]
-		ObjectType.TEXTURED_PATH:
-			return [
-				"path_line_texture", "path_head_texture", "path_subdivide",
-				"path_use_stem_collision", "path_stem_width",
-				"path_head_collision", "path_head_collision_polygon"
-			]
-	return []
-
-
-func _validate_property(property: Dictionary) -> void:
-	if property.usage & (PROPERTY_USAGE_CATEGORY | PROPERTY_USAGE_GROUP | PROPERTY_USAGE_SUBGROUP):
-		return
-	
-	if property.name in ["collision_one_way_margin", "collision_collapsed"]:
-		if not collision_one_way:
-			property.usage = PROPERTY_USAGE_NO_EDITOR
-		return
-	
-	if property.name in _get_allowed_properties() or property.name in _get_ignored_properties():
-		return
-	
-	property.set("usage", PROPERTY_USAGE_NO_EDITOR)
+## Everything below the category, e.g. "Collectible/yellow_coin".
+var subpath: String:
+	get:
+		return object_path.trim_prefix(category + "/")
 
 
 func get_object_name() -> String:
@@ -248,83 +83,34 @@ func get_object_name() -> String:
 	return _snake_to_title(id)
 
 
-func get_object_path() -> String:
-	return ld_object_path
+func get_entry_texture() -> Texture2D:
+	if ld_entry_texture:
+		return ld_entry_texture
+	return _make_entry_texture(data.get_entry_texture()) if data else null
 
 
 func get_editor_instance() -> LDObject:
-	if ld_editor_instance:
-		return ld_editor_instance.instantiate()
-	
-	match object_type:
-		ObjectType.SPRITE: return LDObjectSprite.from_game_object(self)
-		ObjectType.TELESCOPING: return LDObjectTelescoping.from_game_object(self)
-		ObjectType.POLYGON: return LDObjectPolygon.from_game_object(self)
-		ObjectType.TEXTURED_PATH: return LDObjectPath.from_game_object(self)
-	
-	return LDObject.new()
+	return data.create_ld_object() if data else LDObject.new()
 
 
 func get_game_instance() -> Node:
-	if game_instance:
-		return game_instance.instantiate()
-	
-	match object_type:
-		ObjectType.SPRITE: return LevelObjectSprite.from_game_object(self)
-		ObjectType.TELESCOPING: return LevelObjectTelescoping.from_game_object(self)
-		ObjectType.POLYGON: return LevelObjectTerrain.from_game_object(self)
-		ObjectType.TEXTURED_PATH: return LevelObjectPath.from_game_object(self)
-	
-	return null
-
-
-func get_index_id() -> String:
-	return ("%s:%s" % [ld_index_id, id]).to_lower()
-
-
-static func get_category_name(cat_value: ObjectCategory) -> String:
-	match cat_value:
-		ObjectCategory.ENTITY: return "ENTITY"
-		ObjectCategory.ITEM: return "ITEM"
-		ObjectCategory.POLYGON: return "POLYGON"
-		ObjectCategory.HAZARDS: return "HAZARDS"
-		ObjectCategory.PROPS: return "PROPS"
-		ObjectCategory.TRIGGER: return "TRIGGERS"
-	return ""
-
-
-static func get_category_value(cat_name: String) -> ObjectCategory:
-	match cat_name.to_upper():
-		"ENTITY": return ObjectCategory.ENTITY
-		"ITEM": return ObjectCategory.ITEM
-		"POLYGON": return ObjectCategory.POLYGON
-		"HAZARDS": return ObjectCategory.HAZARDS
-		"PROPS": return ObjectCategory.PROPS
-		"TRIGGERS": return ObjectCategory.TRIGGER
-	return ObjectCategory.ALL
+	return data.create_level_object() if data else null
 
 
 func get_placement_tool() -> String:
 	if not ld_placement_tool_override.is_empty():
 		return ld_placement_tool_override
-	
-	match object_type:
-		ObjectType.TELESCOPING: return "telescoping"
-		ObjectType.TEXTURED_PATH: return "path"
-		ObjectType.POLYGON: return "polygon"
-	return ""
+	return data.get_placement_tool() if data else ""
 
 
 func get_select_tool() -> String:
 	if not ld_select_tool_override.is_empty():
 		return ld_select_tool_override
-	
-	match object_type:
-		ObjectType.TELESCOPING: return "telescoping_edit"
-		ObjectType.TEXTURED_PATH: return "path_edit"
-		ObjectType.POLYGON: return "polygon_edit"
-	return ""
+	return data.get_select_tool() if data else ""
 
+
+func get_index_id() -> String:
+	return ("%s:%s" % [ld_index_id, id]).to_lower()
 
 
 func has_property(key: StringName) -> bool:
@@ -334,28 +120,23 @@ func has_property(key: StringName) -> bool:
 	return false
 
 
-func _update_subpath() -> void:
-	if category_string:
-		subpath = get_object_path().trim_prefix(category_string + "/")
-
-
 func _make_entry_texture(tex: Texture2D) -> Texture2D:
 	if tex == null:
 		return null
-	
+
 	var size: Vector2i = tex.get_size()
 	var atlas: AtlasTexture = AtlasTexture.new()
 	atlas.atlas = tex
-	
+
 	var pos: Vector2i = Vector2i.ZERO
-	
+
 	if size.x >= 48 and size.y >= 48:
 		pos = Vector2i((size.x - 48) >> 1, (size.y - 48) >> 1)
 	else:
 		pos = Vector2i(-((48 - size.x) >> 1), -((48 - size.y) >> 1))
-	
+
 	atlas.region = Rect2i(pos, Vector2i(48, 48))
-	
+
 	return atlas
 
 

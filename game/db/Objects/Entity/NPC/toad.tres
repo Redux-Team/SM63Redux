@@ -1,27 +1,21 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dooks7pjmro81"]
 
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="1_c3l2e"]
 [ext_resource type="Texture2D" uid="uid://ck06ti74mhr1p" path="res://assets/textures/entity/npc/toad.png" id="1_j1iht"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_xwlsj"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_j1iht"]
+
+[sub_resource type="Resource" id="Resource_e8gs0"]
+script = ExtResource("1_c3l2e")
+texture = ExtResource("1_j1iht")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c3l2e"]
 atlas = ExtResource("1_j1iht")
 region = Rect2(-7, -7, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_j1iht"]
-
 [resource]
-resource_path = "res://game/db/Objects/Entity/NPC/toad.tres"
-resource_scene_unique_id = ""
 script = ExtResource("2_j1iht")
 id = "toad"
-category_string = "Entity"
-subpath = "NPC/toad"
-group_path = "NPC"
+data = SubResource("Resource_e8gs0")
 ld_entry_texture = SubResource("AtlasTexture_c3l2e")
-sprite_texture = ExtResource("1_j1iht")
-telescoping_atlas = SubResource("AtlasTexture_j1iht")
-ld_object_path = "Entity/NPC/toad"
-_update_internal_info = Callable()
-_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

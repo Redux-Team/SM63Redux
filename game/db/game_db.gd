@@ -78,7 +78,7 @@ var _by_id: Dictionary[String, GameObject] = {}
 		return func() -> void:
 			var missing: Array[String] = []
 			for obj: GameObject in objects.values():
-				if not obj.ld_entry_texture:
+				if not obj.get_entry_texture():
 					missing.append(obj.id)
 			if missing.is_empty():
 				print("All objects have a texture.")
@@ -93,7 +93,7 @@ var _by_id: Dictionary[String, GameObject] = {}
 		return func() -> void:
 			var empty: Array[String] = []
 			for obj: GameObject in objects.values():
-				if not obj.ld_entry_texture:
+				if not obj.get_entry_texture():
 					continue
 				if obj.ld_properties.is_empty():
 					empty.append(obj.id)
@@ -195,8 +195,8 @@ static func get_db() -> GameDB:
 func get_tree() -> Array[GameObjectCategory]:
 	var cats: Dictionary[String, GameObjectCategory] = {}
 	for obj: GameObject in objects.values():
-		var cat_id: String = obj.ld_object_path.get_slice("/", 0)
-		var group_id: String = obj.ld_object_path.get_slice("/", 1)
+		var cat_id: String = obj.category
+		var group_id: String = obj.group
 		if group_id == "Nature" and not obj.ld_index_id.is_empty():
 			group_id = obj.ld_index_id.get_slice("_", 0).capitalize()
 		if cat_id not in cats:
@@ -224,22 +224,10 @@ func get_category(cat_id: String) -> GameObjectCategory:
 func get_category_names() -> Array[String]:
 	var result: Array[String] = []
 	for obj: GameObject in objects.values():
-		var cat_id: String = obj.ld_object_path.get_slice("/", 0)
+		var cat_id: String = obj.category
 		if cat_id not in result:
 			result.append(cat_id)
 	return result
-
-
-func get_from_category(cat: GameObject.ObjectCategory) -> Array[GameObject]:
-	var list: Array[GameObject]
-	if cat == GameObject.ObjectCategory.ALL:
-		return objects.values()
-	
-	for object: GameObject in objects.values():
-		if object.category == cat:
-			list.append(object)
-	
-	return list
 
 
 func populate_objects(path: String) -> void:
@@ -258,11 +246,9 @@ func populate_objects(path: String) -> void:
 			var res: Resource = load(full_path)
 			if res is GameObject:
 				var obj_path: String = full_path.trim_prefix(objects_root.trim_suffix("/") + "/").trim_suffix(".tres")
-				var category_name: String = obj_path.get_slice("/", 0)
 				var obj: GameObject = res as GameObject
-				obj.id = file_name.get_basename()
-				obj.category = GameObject.get_category_value(category_name)
-				obj.ld_object_path = obj_path
+				if obj.id.is_empty():
+					obj.id = file_name.get_basename()
 				if obj not in objects.values():
 					objects.set(obj_path, obj)
 		file_name = dir.get_next()
@@ -307,7 +293,7 @@ func populate_properties(path: String) -> void:
 func _collect_ld_eligible_basenames() -> Array[String]:
 	var result: Array[String] = []
 	for obj: GameObject in objects.values():
-		if obj.ld_entry_texture:
+		if obj.get_entry_texture():
 			result.append(obj.id)
 	return result
 

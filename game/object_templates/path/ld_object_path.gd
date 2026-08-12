@@ -18,19 +18,20 @@ var _preview_valid: bool = true
 var _stem_shapes: Array[CollisionShape2D] = []
 
 
-static func from_game_object(game_object: GameObject = null) -> LDObject:
-	if not game_object:
+static func from_data(data: GameObjectData) -> LDObject:
+	var path_data: PathData = data as PathData
+	if not path_data:
 		return null
 	
-	var instance: LDObjectPath = preload("res://game/object_templates/path/ld_object_path.tscn").instantiate()
-	instance.subdivide_path = game_object.path_subdivide
-	instance.stem_shape_width = game_object.path_stem_width
+	var instance: LDObjectPath = load("res://game/object_templates/path/ld_object_path.tscn").instantiate()
+	instance.subdivide_path = path_data.subdivide
+	instance.stem_shape_width = path_data.collision_stem_width
 	
 	if instance.stem:
-		instance.stem.texture = game_object.path_line_texture
+		instance.stem.texture = path_data.line_texture
 	
-	if game_object.path_head_texture and instance.head:
-		instance.head.diffuse_texture = game_object.path_head_texture
+	if path_data.head_texture and instance.head:
+		instance.head.diffuse_texture = path_data.head_texture
 	elif instance.head:
 		instance.head.queue_free()
 		instance.head = null
@@ -115,6 +116,7 @@ func _sync_head_shape(pos: Vector2, rot: float) -> void:
 
 
 func _sync_stem_shapes(points: PackedVector2Array) -> void:
+	invalidate_local_bounds()
 	if not stem_shape_area:
 		return
 	

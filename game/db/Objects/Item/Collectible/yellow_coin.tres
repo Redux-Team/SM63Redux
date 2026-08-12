@@ -2,35 +2,28 @@
 
 [ext_resource type="PackedScene" uid="uid://clo423ijbljko" path="res://game/object/coin/yellow_coin/yellow_coin.tscn" id="1_qmjn2"]
 [ext_resource type="Texture2D" uid="uid://b0lhe04nh8wld" path="res://assets/textures/item/collectible/yellow_coin.png" id="2_kfgj4"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="2_qmjn2"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_duoj4"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="4_7qlq4"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_kfgj4"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="5_7qlq4"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_qmjn2"]
 
+[sub_resource type="Resource" id="Resource_fm234"]
+script = ExtResource("2_qmjn2")
+texture = ExtResource("2_kfgj4")
+game_scene = ExtResource("1_qmjn2")
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_ake41"]
 atlas = ExtResource("2_kfgj4")
 region = Rect2(-15, -15, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_7qlq4"]
-
 [resource]
-resource_path = "res://game/db/Objects/Item/Collectible/yellow_coin.tres"
-resource_scene_unique_id = ""
 script = ExtResource("4_7qlq4")
 id = "yellow_coin"
-category = 1
-category_string = "Item"
-subpath = "Collectible/yellow_coin"
-group_path = "Collectible"
-name_override = "Coin"
-ld_index_id = "coin_0"
-game_instance = ExtResource("1_qmjn2")
-ld_entry_texture = SubResource("AtlasTexture_ake41")
+data = SubResource("Resource_fm234")
 ld_properties = Array[ExtResource("3_duoj4")]([ExtResource("4_kfgj4"), ExtResource("5_7qlq4"), ExtResource("6_qmjn2")])
-sprite_texture = ExtResource("2_kfgj4")
-telescoping_atlas = SubResource("AtlasTexture_7qlq4")
-ld_object_path = "Item/Collectible/yellow_coin"
-_update_internal_info = Callable()
-_print_internal_info = Callable()
+name_override = "Coin"
+ld_entry_texture = SubResource("AtlasTexture_ake41")
+ld_index_id = "coin_0"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

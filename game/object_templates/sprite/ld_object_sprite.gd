@@ -36,50 +36,34 @@ extends LDObject
 			origin_marker.owner = self
 
 
-static func from_game_object(game_object: GameObject = null) -> LDObject:
-	if not game_object:
+static func from_data(data: GameObjectData) -> LDObject:
+	var sprite_data: SpriteData = data as SpriteData
+	if not sprite_data:
 		return null
-	
-	var instance: LDObjectSprite = preload("uid://qn5edo21q3sg").instantiate()
-	instance.sprite_ref.diffuse_texture = game_object.sprite_texture
-	
+
+	var instance: LDObjectSprite = load("uid://qn5edo21q3sg").instantiate()
+	instance.sprite_ref.diffuse_texture = sprite_data.texture
+
 	var editor_shape: CollisionShape2D = instance.editor_placement_rect
-	
-	if game_object.editor_shape_shape_override:
-		editor_shape.shape = game_object.editor_shape_shape_override
-	else:
-		editor_shape.shape = Packer.get_texture_as_shape(game_object.sprite_texture)
-	
+	editor_shape.shape = sprite_data.editor_shape_override if sprite_data.editor_shape_override else Packer.get_texture_as_shape(sprite_data.texture)
+	editor_shape.position = sprite_data.editor_shape_offset
+
 	return instance
 
 
 func _on_preview() -> void:
-	set_shader_modulate(Color(1.0, 1.0, 1.0, 0.6))
+	reset_shader_modulate()
 
 
 func _on_place() -> void:
-	set_shader_modulate(Color.WHITE)
+	reset_shader_modulate()
 
 
-func set_selection_state(state: LDObject.SelectionState) -> void:
-	_set_shader_param(&"state", state)
-
-
-func set_shader_modulate(color: Color) -> void:
-	_set_shader_param(&"post_modulate", color)
-
-
-func reset_shader_modulate() -> void:
-	set_shader_modulate(Color.WHITE if not is_preview else Color(1.0, 1.0, 1.0, 0.6))
-
-
-func _set_shader_param(param: StringName, value: Variant) -> void:
-	for shader_obj: CanvasItem in shader_objects:
-		if shader_obj and shader_obj.material:
-			shader_obj.material.set_shader_parameter(param, value)
-	
-	if sprite_ref and sprite_ref.material:
-		sprite_ref.material.set_shader_parameter(param, value)
+## The sprite carries its own instance of the object shader, so it needs the parameter too.
+func set_shader_parameter(parameter: StringName, value: Variant) -> void:
+	super(parameter, value)
+	if sprite_ref and sprite_ref.material is ShaderMaterial:
+		(sprite_ref.material as ShaderMaterial).set_shader_parameter(parameter, value)
 
 
 func _setup_sprite_material(s: SmartSprite2D) -> void:

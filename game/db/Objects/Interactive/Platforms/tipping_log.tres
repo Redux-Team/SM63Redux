@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://crc4nl4nsnqah" path="res://game/object/tipping/tipping_log.tscn" id="1_gjlqv"]
 [ext_resource type="PackedScene" uid="uid://taxkdf07e5q7" path="res://game/db/Objects/Interactive/Platforms/tipping_log_ld.tscn" id="2_3hdhy"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="3_3hdhy"]
 [ext_resource type="Texture2D" uid="uid://bnjhvv0pcctk4" path="res://assets/textures/objects/decoration/platform/tipping_log_ld.png" id="3_10xex"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_jbyfo"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_3grvw"]
@@ -10,29 +11,22 @@
 [ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="8_ogb2g"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="9_vxbdi"]
 
+[sub_resource type="Resource" id="Resource_10xex"]
+script = ExtResource("3_3hdhy")
+ld_scene = ExtResource("2_3hdhy")
+game_scene = ExtResource("1_gjlqv")
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_poit2"]
 atlas = ExtResource("3_10xex")
 region = Rect2(-4, -9, 48, 48)
 margin = Rect2(3, 0, 0, 0)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_kbjqa"]
-
 [resource]
-resource_path = "res://game/db/Objects/Interactive/Platforms/tipping_log.tres"
-resource_scene_unique_id = ""
 script = ExtResource("9_vxbdi")
 id = "tipping_log"
-category = 6
-subpath = "Platforms/tipping_log"
-group_path = "Platforms"
+data = SubResource("Resource_10xex")
+ld_properties = Array[ExtResource("4_jbyfo")]([ExtResource("5_3grvw"), ExtResource("6_5uetk"), ExtResource("7_klsnu"), ExtResource("8_ogb2g")])
+ld_entry_texture = SubResource("AtlasTexture_poit2")
 ld_index_id = "tipping"
 ld_placement_tool_override = "telescoping"
-ld_editor_instance = ExtResource("2_3hdhy")
-game_instance = ExtResource("1_gjlqv")
-ld_entry_texture = SubResource("AtlasTexture_poit2")
-ld_properties = Array[ExtResource("4_jbyfo")]([ExtResource("5_3grvw"), ExtResource("6_5uetk"), ExtResource("7_klsnu"), ExtResource("8_ogb2g")])
-telescoping_atlas = SubResource("AtlasTexture_kbjqa")
-ld_object_path = "Interactive/Platforms/tipping_log"
-_update_internal_info = Callable()
-_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

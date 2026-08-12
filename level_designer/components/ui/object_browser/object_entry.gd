@@ -15,10 +15,10 @@ signal entry_selected(ref: LDObjectItemEntry)
 
 
 func _ready() -> void:
-	var has_texture: bool = obj_ref.ld_entry_texture != null
+	var has_texture: bool = obj_ref.get_entry_texture() != null
 	var show_caption: bool = not has_texture or not Device.is_desktop()
 	item_id.text = obj_ref.get_object_name()
-	preview_texture_rect.texture = obj_ref.ld_entry_texture
+	preview_texture_rect.texture = obj_ref.get_entry_texture()
 	preview_texture_rect.visible = has_texture
 	item_id.visible = show_caption
 	if not has_texture:

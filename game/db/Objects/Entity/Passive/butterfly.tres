@@ -5,39 +5,34 @@
 [ext_resource type="Texture2D" uid="uid://bop67m42up5h" path="res://assets/textures/entity/passive/butterfly_ld.png" id="1_bxlk4"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_l5p0o"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_bxlk4"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_2tfby"]
-[ext_resource type="Script" uid="uid://bsvpspsohskw0" path="res://game/db/Properties/palette.gd" id="6_nqpn7"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="3_y777j"]
+[ext_resource type="Resource" path="res://game/db/Properties/position.tres" id="5_2tfby"]
+
+[sub_resource type="Resource" id="Resource_sqldg"]
+script = ExtResource("3_y777j")
+ld_scene = ExtResource("1_8q3po")
+game_scene = ExtResource("1_40h3p")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8q3po"]
 atlas = ExtResource("1_bxlk4")
 region = Rect2(0, 0, 48, 48)
 
-[sub_resource type="Resource" id="Resource_y777j"]
-script = ExtResource("6_nqpn7")
-amount = 7
-random = 1
+[sub_resource type="Resource" id="Resource_nqpn7"]
+script = ExtResource("1_l5p0o")
 key = &"palette"
 label = "Palette"
 type = 1
 default_value = 0
-metadata/_custom_type_script = "uid://bsvpspsohskw0"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nqpn7"]
+min_value = 0.0
+max_value = 6.0
+apply_mode = 2
+apply_target = NodePath("palette_index")
+randomize_on_placement = true
 
 [resource]
-resource_path = "res://game/db/Objects/Entity/Passive/butterfly.tres"
-resource_scene_unique_id = ""
 script = ExtResource("2_bxlk4")
 id = "butterfly"
-category_string = "Entity"
-subpath = "Passive/butterfly"
-group_path = "Passive"
-ld_editor_instance = ExtResource("1_8q3po")
-game_instance = ExtResource("1_40h3p")
+data = SubResource("Resource_sqldg")
+ld_properties = Array[ExtResource("1_l5p0o")]([ExtResource("5_2tfby"), SubResource("Resource_nqpn7")])
 ld_entry_texture = SubResource("AtlasTexture_8q3po")
-ld_properties = Array[ExtResource("1_l5p0o")]([ExtResource("5_2tfby"), SubResource("Resource_y777j")])
-telescoping_atlas = SubResource("AtlasTexture_nqpn7")
-ld_object_path = "Entity/Passive/butterfly"
-_update_internal_info = Callable()
-_print_internal_info = Callable()
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

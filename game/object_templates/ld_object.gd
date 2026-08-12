@@ -4,6 +4,8 @@ class_name LDObject
 extends Node2D
 
 const OBJECT_SHADER: Shader = preload("uid://dxlbj210tsi10")
+const PREVIEW_MODULATE: Color = Color(1.0, 1.0, 1.0, 0.6)
+const DISABLED_MODULATE: Color = Color(0.5, 0.5, 0.5, 0.8)
 
 enum SelectionState {
 	HIDDEN,
@@ -18,6 +20,14 @@ enum SelectionState {
 			_on_preview()
 		else:
 			_on_place()
+## Greys the object out and stops it answering hit-tests, without removing it from the level.
+@export var disabled: bool = false:
+	set(v):
+		disabled = v
+		for area: Area2D in get_all_editor_shape_areas():
+			area.monitoring = not v
+			area.monitorable = not v
+		reset_shader_modulate()
 
 @export_group("Editor Props")
 @export var editor_shape_area: Area2D
@@ -27,6 +37,12 @@ enum SelectionState {
 @export var shader_objects: Array[CanvasItem]
 
 var source_object_id: String = ""
+var _selection_state: SelectionState = SelectionState.HIDDEN
+## Mirrored off the GameObject at init so the selection tools don't have to hit the database for
+## every object on every frame of a drag.
+var ld_flags: int = 15
+var _local_bounds: Rect2 = Rect2()
+var _local_bounds_valid: bool = false
 var _properties: Array[LDProperty] = []
 var _property_values: Dictionary[StringName, Variant] = {}
 
@@ -62,11 +78,6 @@ static func get_object_shader(local: bool = true) -> ShaderMaterial:
 	shader_material.shader = shader
 	
 	return shader_material
-
-@warning_ignore("unused_parameter")
-static func from_game_object(game_object: GameObject = null) -> LDObject:
-	return null
-
 
 func _on_preview() -> void:
 	pass
@@ -136,6 +147,7 @@ func bind_to_active_layer() -> void:
 
 func init_properties(obj: GameObject) -> void:
 	source_object_id = obj.id
+	ld_flags = obj.ld_flags
 	_properties = obj.ld_properties
 	for prop: LDProperty in _properties:
 		_property_values[prop.key] = prop.default_value
@@ -147,6 +159,7 @@ func init_properties(obj: GameObject) -> void:
 
 
 func set_property(key: StringName, value: Variant) -> void:
+	invalidate_local_bounds()
 	for prop: LDProperty in _properties:
 		if prop.key == key:
 			value = prop.clamp_value(value)
@@ -200,16 +213,34 @@ func is_telescoping_y() -> bool:
 	return _property_values.has(&"t_size_y")
 
 
+## Re-applying the same state costs a shader parameter write (and for some objects a redraw) per
+## call, and the selection tools poll this every frame, so unchanged states are dropped here.
 func set_selection_state(state: SelectionState) -> void:
-	for item: CanvasItem in shader_objects:
-		if item and item.material is ShaderMaterial:
-			(item.material as ShaderMaterial).set_shader_parameter(&"state", state)
+	if _selection_state == state:
+		return
+	_selection_state = state
+	set_shader_parameter(&"state", state)
 
 
 func set_shader_parameter(parameter: StringName, value: Variant) -> void:
 	for item: CanvasItem in shader_objects:
 		if item and item.material is ShaderMaterial:
 			(item.material as ShaderMaterial).set_shader_parameter(parameter, value)
+
+
+func set_shader_modulate(color: Color) -> void:
+	set_shader_parameter(&"post_modulate", color)
+
+
+## Re-applies whichever tint the object's current state calls for, so preview and disabled can be
+## toggled in either order without one clearing the other.
+func reset_shader_modulate() -> void:
+	if disabled:
+		set_shader_modulate(DISABLED_MODULATE)
+	elif is_preview:
+		set_shader_modulate(PREVIEW_MODULATE)
+	else:
+		set_shader_modulate(Color.WHITE)
 
 
 func get_origin_offset() -> Vector2:
@@ -224,6 +255,45 @@ func get_all_editor_shape_areas() -> Array[Area2D]:
 		if area:
 			result.append(area)
 	return result
+
+
+## Axis-aligned bounds of this object in its own space, unioned over every editor shape it owns
+## (a path's stem lives in a second area from its head). Used as a broad-phase reject before the
+## exact hit tests, so it only has to be conservative. An empty rect means "no cheap bounds
+## available" and callers should skip the reject rather than treat the object as a miss.
+func get_local_bounds() -> Rect2:
+	if not _local_bounds_valid:
+		_local_bounds = _compute_local_bounds()
+		_local_bounds_valid = true
+	return _local_bounds
+
+
+## Call when the editor shapes change size or count; the bounds are otherwise cached, because the
+## selection tools ask for them once per object per frame.
+func invalidate_local_bounds() -> void:
+	_local_bounds_valid = false
+
+
+func _compute_local_bounds() -> Rect2:
+	var bounds: Rect2 = Rect2()
+	var found: bool = false
+
+	for area: Area2D in get_all_editor_shape_areas():
+		for child: Node in area.get_children():
+			var shape: CollisionShape2D = child as CollisionShape2D
+			if not shape or shape.shape is not RectangleShape2D:
+				continue
+			var to_local: Transform2D = area.transform * shape.transform
+			var rect: Rect2 = (shape.shape as RectangleShape2D).get_rect()
+			for corner: Vector2 in [rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)]:
+				var point: Vector2 = to_local * corner
+				if found:
+					bounds = bounds.expand(point)
+				else:
+					bounds = Rect2(point, Vector2.ZERO)
+					found = true
+
+	return bounds.grow(2.0) if found else Rect2()
 
 
 func get_stamp_size() -> Vector2:

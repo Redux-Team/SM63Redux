@@ -5,32 +5,25 @@
 [ext_resource type="PackedScene" uid="uid://cm52ypeu3i6y0" path="res://game/db/Objects/Item/Collectible/shine_sprite_ld.tscn" id="1_cftkg"]
 [ext_resource type="Texture2D" uid="uid://6x6lxccsh6al" path="res://assets/textures/item/collectible/shine_sprite.png" id="1_hicyr"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_q4ysq"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="3_x0lia"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_usus5"]
 [ext_resource type="Resource" uid="uid://ysutd35tfg1i" path="res://game/db/Properties/shine_sprite/scenario_id.tres" id="6_cftkg"]
 [ext_resource type="Resource" uid="uid://bjmqlk5n3fq3u" path="res://game/db/Properties/shine_sprite/is_kickout.tres" id="7_5hoxe"]
+
+[sub_resource type="Resource" id="Resource_s0hxq"]
+script = ExtResource("3_x0lia")
+ld_scene = ExtResource("1_cftkg")
+game_scene = ExtResource("1_5hoxe")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xsgd7"]
 atlas = ExtResource("1_hicyr")
 region = Rect2(-10, -8, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_b3ba0"]
-
 [resource]
-resource_path = "res://game/db/Objects/Item/Collectible/shine_sprite.tres"
-resource_scene_unique_id = ""
 script = ExtResource("1_14b87")
 id = "shine_sprite"
-category = 1
-category_string = "Item"
-subpath = "Collectible/shine_sprite"
-group_path = "Collectible"
-ld_index_id = "shine"
-ld_editor_instance = ExtResource("1_cftkg")
-game_instance = ExtResource("1_5hoxe")
-ld_entry_texture = SubResource("AtlasTexture_xsgd7")
+data = SubResource("Resource_s0hxq")
 ld_properties = Array[ExtResource("1_q4ysq")]([ExtResource("5_usus5"), ExtResource("6_cftkg"), ExtResource("7_5hoxe")])
-telescoping_atlas = SubResource("AtlasTexture_b3ba0")
-ld_object_path = "Item/Collectible/shine_sprite"
-_update_internal_info = Callable()
-_print_internal_info = Callable()
+ld_entry_texture = SubResource("AtlasTexture_xsgd7")
+ld_index_id = "shine"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

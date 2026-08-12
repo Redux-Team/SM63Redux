@@ -14,7 +14,6 @@ extends LDObjectSprite
 ## Optional secondary Area2D that sits on top of the platform surface.
 @export var safety_net: Area2D
 
-var _selection_state: SelectionState = SelectionState.HIDDEN
 var _initial_nine_patch_size: Vector2
 
 
@@ -54,12 +53,13 @@ var _initial_nine_patch_size: Vector2
 			origin_marker.owner = self
 
 
-static func from_game_object(game_object: GameObject = null) -> LDObject:
-	if not game_object:
+static func from_data(data: GameObjectData) -> LDObject:
+	var telescoping_data: TelescopingData = data as TelescopingData
+	if not telescoping_data:
 		return null
 	
-	var instance: LDObjectTelescoping = preload("uid://c618q1hl6by83").instantiate()
-	var atlas: AtlasTexture = game_object.telescoping_atlas
+	var instance: LDObjectTelescoping = load("uid://c618q1hl6by83").instantiate()
+	var atlas: AtlasTexture = telescoping_data.atlas as AtlasTexture
 	
 	if atlas and atlas.atlas:
 		var full_size: Vector2 = atlas.atlas.get_size()
@@ -84,19 +84,21 @@ static func from_game_object(game_object: GameObject = null) -> LDObject:
 		
 		var editor_shape: CollisionShape2D = instance.editor_placement_rect
 		if editor_shape:
-			if game_object.editor_shape_shape_override:
-				editor_shape.shape = game_object.editor_shape_shape_override
+			if telescoping_data.editor_shape_override:
+				editor_shape.shape = telescoping_data.editor_shape_override
 			else:
 				var rect: RectangleShape2D = RectangleShape2D.new()
-				rect.size = Vector2(min_x, min_y) + game_object.collision_expand
+				rect.size = Vector2(min_x, min_y) + telescoping_data.collision_expand
 				rect.resource_local_to_scene = true
 				editor_shape.shape = rect
-			editor_shape.position = game_object.collision_offset
+			editor_shape.position = telescoping_data.collision_offset
 	
 	return instance
 
 
 func set_selection_state(state: SelectionState) -> void:
+	if _selection_state == state:
+		return
 	_selection_state = state
 	_sync_shader_state()
 	queue_redraw()

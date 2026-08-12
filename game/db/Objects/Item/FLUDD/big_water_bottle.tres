@@ -2,34 +2,27 @@
 
 [ext_resource type="PackedScene" uid="uid://up0h7h2731q4" path="res://game/db/Objects/Item/FLUDD/big_water_bottle.tscn" id="1_4vx2r"]
 [ext_resource type="Texture2D" uid="uid://cwf68h6bb26lc" path="res://assets/textures/item/fludd/water_bottle_big.png" id="1_jq6vl"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="2_govli"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_x57wf"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_kku21"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_kku21"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_7hgj2"]
 [ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_4vx2r"]
 
+[sub_resource type="Resource" id="Resource_3qmyo"]
+script = ExtResource("2_govli")
+texture = ExtResource("1_jq6vl")
+game_scene = ExtResource("1_4vx2r")
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_s4qyk"]
 atlas = ExtResource("1_jq6vl")
 region = Rect2(-12, -9, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_7hgj2"]
-
 [resource]
-resource_path = "res://game/db/Objects/Item/FLUDD/big_water_bottle.tres"
-resource_scene_unique_id = ""
 script = ExtResource("3_kku21")
 id = "big_water_bottle"
-category = 1
-category_string = "Item"
-subpath = "FLUDD/big_water_bottle"
-group_path = "FLUDD"
-ld_index_id = "water_bottle"
-game_instance = ExtResource("1_4vx2r")
-ld_entry_texture = SubResource("AtlasTexture_s4qyk")
+data = SubResource("Resource_3qmyo")
 ld_properties = Array[ExtResource("2_x57wf")]([ExtResource("4_kku21"), ExtResource("5_7hgj2"), ExtResource("6_4vx2r")])
-sprite_texture = ExtResource("1_jq6vl")
-telescoping_atlas = SubResource("AtlasTexture_7hgj2")
-ld_object_path = "Item/FLUDD/big_water_bottle"
-_update_internal_info = Callable()
-_print_internal_info = Callable()
+ld_entry_texture = SubResource("AtlasTexture_s4qyk")
+ld_index_id = "water_bottle"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

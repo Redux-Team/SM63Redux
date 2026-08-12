@@ -7,7 +7,7 @@ extends LevelObject
 var _initial_nine_patch_size: Vector2
 var _collision_expand: Vector2 = Vector2.ZERO
 var _collision_offset: Vector2 = Vector2.ZERO
-var _collision_anchor: GameObject.CollisionAnchor = GameObject.CollisionAnchor.TOP
+var _collision_anchor: TelescopingData.CollisionAnchor = TelescopingData.CollisionAnchor.TOP
 var _collision_collapsed: bool = false
 var t_size_x: int = 0
 var t_size_y: int = 0
@@ -36,14 +36,14 @@ func _is_y_telescoping() -> bool:
 
 func _get_anchor_offset(col_size: Vector2, visual_size: Vector2) -> Vector2:
 	match _collision_anchor:
-		GameObject.CollisionAnchor.TOP:
+		TelescopingData.CollisionAnchor.TOP:
 			# adding 2 to the y here since normally theres a padding of a transparent + outline pixel
 			return Vector2(0.0, 2.0 + (-(visual_size.y - col_size.y) / 2.0))
-		GameObject.CollisionAnchor.BOTTOM:
+		TelescopingData.CollisionAnchor.BOTTOM:
 			return Vector2(0.0, (visual_size.y - col_size.y) / 2.0)
-		GameObject.CollisionAnchor.LEFT:
+		TelescopingData.CollisionAnchor.LEFT:
 			return Vector2(-(visual_size.x - col_size.x) / 2.0, 0.0)
-		GameObject.CollisionAnchor.RIGHT:
+		TelescopingData.CollisionAnchor.RIGHT:
 			return Vector2((visual_size.x - col_size.x) / 2.0, 0.0)
 	return Vector2.ZERO
 
@@ -108,12 +108,13 @@ func _get_end_caps_size_y(expand: float = 0.0) -> float:
 	return (full_height if margins == 0.0 else margins) + expand
 
 
-static func from_game_object(game_object: GameObject = null) -> LevelObjectTelescoping:
-	if not game_object:
+static func from_data(data: GameObjectData) -> LevelObjectTelescoping:
+	var telescoping_data: TelescopingData = data as TelescopingData
+	if not telescoping_data:
 		return null
 	
-	var instance: LevelObjectTelescoping = preload("uid://dfaru2spj6lmk").instantiate()
-	var atlas: AtlasTexture = game_object.telescoping_atlas
+	var instance: LevelObjectTelescoping = load("uid://dfaru2spj6lmk").instantiate()
+	var atlas: AtlasTexture = telescoping_data.atlas as AtlasTexture
 	
 	if atlas and atlas.atlas:
 		var full_size: Vector2 = atlas.atlas.get_size()
@@ -135,13 +136,13 @@ static func from_game_object(game_object: GameObject = null) -> LevelObjectTeles
 		instance.nine_patch.position = -instance.nine_patch.size / 2.0
 		instance.nine_patch.custom_minimum_size = instance.nine_patch.size
 		instance._initial_nine_patch_size = instance.nine_patch.size
-		instance._collision_expand = game_object.collision_expand
-		instance._collision_offset = game_object.collision_offset
-		instance._collision_collapsed = game_object.collision_collapsed
-		instance._collision_anchor = game_object.collision_anchor
+		instance._collision_expand = telescoping_data.collision_expand
+		instance._collision_offset = telescoping_data.collision_offset
+		instance._collision_collapsed = telescoping_data.collision_collapsed
+		instance._collision_anchor = telescoping_data.collision_anchor
 	
 	for col: CollisionShape2D in instance.collision_shapes:
-		col.one_way_collision = game_object.collision_one_way
-		col.one_way_collision_margin = game_object.collision_one_way_margin
+		col.one_way_collision = telescoping_data.collision_one_way
+		col.one_way_collision_margin = telescoping_data.collision_one_way_margin
 	
 	return instance

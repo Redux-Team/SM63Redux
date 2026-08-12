@@ -18,26 +18,27 @@ var path_points: PackedVector2Array = PackedVector2Array()
 var _stem_shapes: Array[CollisionShape2D] = []
 
 
-static func from_game_object(game_object: GameObject = null) -> LevelObjectPath:
-	if not game_object:
+static func from_data(data: GameObjectData) -> LevelObjectPath:
+	var path_data: PathData = data as PathData
+	if not path_data:
 		return null
 	
-	var instance: LevelObjectPath = preload("res://game/object_templates/path/level_object_path.tscn").instantiate()
-	instance.subdivide_path = game_object.path_subdivide
-	instance.use_stem_shape = game_object.path_use_stem_collision
-	instance.stem_shape_width = game_object.path_stem_width
+	var instance: LevelObjectPath = load("res://game/object_templates/path/level_object_path.tscn").instantiate()
+	instance.subdivide_path = path_data.subdivide
+	instance.use_stem_shape = path_data.collision_stem
+	instance.stem_shape_width = path_data.collision_stem_width
 	
 	if instance.line2d:
-		instance.line2d.texture = game_object.path_line_texture
+		instance.line2d.texture = path_data.line_texture
 	
-	if game_object.path_head_texture and instance.head:
-		instance.head.diffuse_texture = game_object.path_head_texture
+	if path_data.head_texture and instance.head:
+		instance.head.diffuse_texture = path_data.head_texture
 	elif instance.head:
 		instance.head.queue_free()
 		instance.head = null
 	
-	if game_object.path_head_collision and not game_object.path_head_collision_polygon.is_empty() and instance.head_collision:
-		instance.head_collision.polygon = game_object.path_head_collision_polygon
+	if path_data.collision_head and not path_data.collision_head_polygon.is_empty() and instance.head_collision:
+		instance.head_collision.polygon = path_data.collision_head_polygon
 		instance.head_collision.one_way_collision = true
 	elif instance.head_static_body:
 		instance.head_static_body.queue_free()

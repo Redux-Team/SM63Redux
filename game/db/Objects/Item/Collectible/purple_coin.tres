@@ -2,30 +2,23 @@
 
 [ext_resource type="Texture2D" uid="uid://c88dd4ulynree" path="res://assets/textures/item/collectible/purple_coin.png" id="1_3dqae"]
 [ext_resource type="PackedScene" uid="uid://d2toekox286o0" path="res://game/object/coin/purple_coin/purple_coin.tscn" id="1_64ewy"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="2_64ewy"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_luoii"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_64ewy"]
+
+[sub_resource type="Resource" id="Resource_hyop4"]
+script = ExtResource("2_64ewy")
+texture = ExtResource("1_3dqae")
+game_scene = ExtResource("1_64ewy")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_luoii"]
 atlas = ExtResource("1_3dqae")
 region = Rect2(-15, -15, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_64ewy"]
-
 [resource]
-resource_path = "res://game/db/Objects/Item/Collectible/purple_coin.tres"
-resource_scene_unique_id = ""
 script = ExtResource("3_64ewy")
 id = "purple_coin"
-category = 1
-category_string = "Item"
-subpath = "Collectible/purple_coin"
-group_path = "Collectible"
-ld_index_id = "coin_3"
-game_instance = ExtResource("1_64ewy")
+data = SubResource("Resource_hyop4")
 ld_entry_texture = SubResource("AtlasTexture_luoii")
-sprite_texture = ExtResource("1_3dqae")
-telescoping_atlas = SubResource("AtlasTexture_64ewy")
-ld_object_path = "Item/Collectible/purple_coin"
-_update_internal_info = Callable()
-_print_internal_info = Callable()
+ld_index_id = "coin_3"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -3,31 +3,25 @@
 [ext_resource type="Texture2D" uid="uid://c51x4jdo8l7c0" path="res://assets/textures/entity/enemy/koopa/koopa_shell.png" id="1_e1wty"]
 [ext_resource type="PackedScene" uid="uid://bkmr76girdmrb" path="res://game/entity/enemy/koopa_shell/koopa_shell.tscn" id="1_gomim"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_jfx5r"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="2_b8qua"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_e1wty"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_02f57"]
 [ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_b8qua"]
+
+[sub_resource type="Resource" id="Resource_jwl7s"]
+script = ExtResource("2_b8qua")
+texture = ExtResource("1_e1wty")
+game_scene = ExtResource("1_gomim")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e1wty"]
 atlas = ExtResource("1_e1wty")
 region = Rect2(-8, -8, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_02f57"]
-
 [resource]
-resource_path = "res://game/db/Objects/Entity/Enemy/koopa_shell.tres"
-resource_scene_unique_id = ""
 script = ExtResource("2_e1wty")
 id = "koopa_shell"
-category_string = "Entity"
-subpath = "Enemy/koopa_shell"
-group_path = "Enemy"
-ld_index_id = "koopa2"
-game_instance = ExtResource("1_gomim")
-ld_entry_texture = SubResource("AtlasTexture_e1wty")
+data = SubResource("Resource_jwl7s")
 ld_properties = Array[ExtResource("1_jfx5r")]([ExtResource("4_02f57"), ExtResource("5_b8qua")])
-sprite_texture = ExtResource("1_e1wty")
-telescoping_atlas = SubResource("AtlasTexture_02f57")
-ld_object_path = "Entity/Enemy/koopa_shell"
-_update_internal_info = Callable()
-_print_internal_info = Callable()
+ld_entry_texture = SubResource("AtlasTexture_e1wty")
+ld_index_id = "koopa2"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
