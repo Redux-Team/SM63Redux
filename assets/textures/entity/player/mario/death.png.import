@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cretlfr32ltey"
-path="res://.godot/imported/walk_2.png-fb8b42f2232d2d19c1c6ffa84df4dfe8.ctex"
+uid="uid://cce6dbb0peayy"
+path="res://.godot/imported/death.png-e77a1320a9420778aa9c51cdc942271f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/entity/player/mario/walk_2.png"
-dest_files=["res://.godot/imported/walk_2.png-fb8b42f2232d2d19c1c6ffa84df4dfe8.ctex"]
+source_file="res://assets/textures/entity/player/mario/death.png"
+dest_files=["res://.godot/imported/death.png-e77a1320a9420778aa9c51cdc942271f.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bmaj41nmliul0"
-path="res://.godot/imported/run2.png-a9a5070cf336e92922f4895b04414046.ctex"
+uid="uid://djp4pn2tha3uv"
+path="res://.godot/imported/fall_l.png-2f1348f38c1c8bd676b9de3d82a5ffd7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/entity/player/mario/run2.png"
-dest_files=["res://.godot/imported/run2.png-a9a5070cf336e92922f4895b04414046.ctex"]
+source_file="res://assets/textures/entity/player/mario/fall_l.png"
+dest_files=["res://.godot/imported/fall_l.png-2f1348f38c1c8bd676b9de3d82a5ffd7.ctex"]
 
 [params]
 

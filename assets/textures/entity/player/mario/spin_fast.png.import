@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b3fvoxgujojvl"
-path="res://.godot/imported/dive_fall.png-9ca326767b93318ef3c163db98dd318d.ctex"
+uid="uid://dj1tgjgh6y6nr"
+path="res://.godot/imported/spin_fast.png-00afc30c9018d321daea278daa6e2cc2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/entity/player/mario/dive_fall.png"
-dest_files=["res://.godot/imported/dive_fall.png-9ca326767b93318ef3c163db98dd318d.ctex"]
+source_file="res://assets/textures/entity/player/mario/spin_fast.png"
+dest_files=["res://.godot/imported/spin_fast.png-00afc30c9018d321daea278daa6e2cc2.ctex"]
 
 [params]
 

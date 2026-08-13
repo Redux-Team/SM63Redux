@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bf02hn0t5hgfy"
-path="res://.godot/imported/run3.png-9a23c86edc3ebdb37f2f12fb3eb92455.ctex"
+uid="uid://djvye7gydqei7"
+path="res://.godot/imported/floorslide.png-ef705d6d7a92222bff9264c5d2cae011.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/entity/player/mario/run3.png"
-dest_files=["res://.godot/imported/run3.png-9a23c86edc3ebdb37f2f12fb3eb92455.ctex"]
+source_file="res://assets/textures/entity/player/mario/floorslide.png"
+dest_files=["res://.godot/imported/floorslide.png-ef705d6d7a92222bff9264c5d2cae011.ctex"]
 
 [params]
 
