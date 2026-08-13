@@ -33,6 +33,11 @@ var animation_player: AnimationPlayer
 @export_group("Sprite", "sprite_")
 ## The animation of the [SmartSprite2D].
 @export var sprite_animation_name: StringName = ""
+## Whether to enable sprite variations
+@export_subgroup("Sprite Variations", "")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var sprite_variations: bool = false
+@export var sprite_variation_list: Dictionary[StringName, StringName]
+@export_group("")
 ## If [code]true[/code], the sprite animation will restart from the beginning even if it is
 ## already playing the same animation when this state is entered.
 @export var sprite_restart_if_playing: bool = true
