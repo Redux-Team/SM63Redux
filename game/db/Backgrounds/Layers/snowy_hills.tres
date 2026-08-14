@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LDBackgroundLayer" format=3 uid="uid://svmctr0eok2o"]
+
+[ext_resource type="Script" uid="uid://pix2reyi4xnf" path="res://level_designer/world/ld_background_layer.gd" id="1_wiehv"]
+[ext_resource type="Texture2D" uid="uid://itou3ktclm05" path="res://assets/textures/world/background/mountains_0/snowy_mountains_2.png" id="2_wiehv"]
+
+[resource]
+script = ExtResource("1_wiehv")
+id = "snowy_hills"
+display_name = "Snowy Hills"
+texture = ExtResource("2_wiehv")
+parallax = 0.09
+repeat = true
+metadata/_custom_type_script = "uid://pix2reyi4xnf"

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="LDBackground" format=3 uid="uid://lbt8mh25018p"]
+
+[ext_resource type="Script" uid="uid://pix2reyi4xnf" path="res://level_designer/world/ld_background_layer.gd" id="1_wdvcd"]
+[ext_resource type="Resource" uid="uid://kceblfhsf3mg" path="res://game/db/Backgrounds/Layers/snowy_mountains.tres" id="2_b5mp5"]
+[ext_resource type="Resource" uid="uid://dfg3pxq83t42f" path="res://game/db/Backgrounds/Layers/snowy_mountains_2.tres" id="3_joiix"]
+[ext_resource type="Resource" uid="uid://svmctr0eok2o" path="res://game/db/Backgrounds/Layers/snowy_hills.tres" id="4_wdvcd"]
+[ext_resource type="Script" uid="uid://cj24lefunqvhu" path="res://level_designer/world/ld_background.gd" id="5_fnioc"]
+
+[resource]
+script = ExtResource("5_fnioc")
+preset_name = "Snowy Peaks"
+gradient_top = Color(1, 1, 1, 1)
+gradient_bottom = Color(0.30980393, 0.49019608, 0.8352941, 1)
+layers = Array[ExtResource("1_wdvcd")]([ExtResource("2_b5mp5"), ExtResource("3_joiix"), ExtResource("4_wdvcd")])
