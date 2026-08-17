@@ -2,6 +2,11 @@ class_name LDLayer
 extends CanvasGroup
 
 
+## The level's own bounds, so the editor can never dial in a scale a level cannot express.
+const SCALE_MIN: float = LevelLayer.SCALE_MIN
+const SCALE_MAX: float = LevelLayer.SCALE_MAX
+
+
 @export_group("Layer")
 @export var index: int = 0
 ## Optional user-facing name; when empty the layer is shown as "Layer <index> (<n> objects)".
@@ -15,6 +20,14 @@ extends CanvasGroup
 		elif is_instance_valid(_parallax):
 			_parallax.scroll_scale = ps
 		parallax_scale = ps
+## Scales everything placed on this layer. It rides the objects root rather than the layer itself,
+## so it stays independent of the parallax scroll and leaves the coordinates objects are placed and
+## saved in meaning what they always did.
+@export var layer_scale: Vector2 = Vector2.ONE:
+	set(ls):
+		layer_scale = ls.clamp(Vector2(SCALE_MIN, SCALE_MIN), Vector2(SCALE_MAX, SCALE_MAX))
+		if is_instance_valid(_objects_root):
+			_objects_root.scale = layer_scale
 @export var modulation: Color = Color.WHITE:
 	set(m):
 		modulation = m
@@ -59,6 +72,7 @@ func _init() -> void:
 	_parallax = Parallax2D.new()
 	add_child(_parallax)
 	_objects_root = Node2D.new()
+	_objects_root.scale = layer_scale
 	_parallax.add_child(_objects_root)
 
 

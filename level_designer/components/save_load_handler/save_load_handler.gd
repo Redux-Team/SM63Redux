@@ -353,6 +353,7 @@ func _serialize_area_layers(area: LDArea) -> Array:
 			"layer_index": layer.index,
 			"layer_name": layer.layer_name,
 			"parallax_scale": Packer.vec2_to_array(layer.parallax_scale),
+			"layer_scale": Packer.vec2_to_array(layer.layer_scale),
 			"is_decoration": layer.is_decoration,
 			"modulation": Packer.color_to_array(layer.modulation),
 			"objects": objects_data,
@@ -506,6 +507,9 @@ func _deserialize_area(entry: Dictionary, area: LDArea, db: GameDB) -> void:
 		var raw_parallax: Variant = layer_data.get("parallax_scale", null)
 		if raw_parallax != null:
 			layer.parallax_scale = Packer.array_to_vec2(raw_parallax)
+		var raw_layer_scale: Variant = layer_data.get("layer_scale", null)
+		if raw_layer_scale != null:
+			layer.layer_scale = Packer.array_to_vec2(raw_layer_scale)
 		var raw_modulate: Variant = layer_data.get("modulation", null)
 		if raw_modulate != null:
 			layer.modulation = Packer.array_to_color(raw_modulate)

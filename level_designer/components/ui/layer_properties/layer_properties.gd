@@ -26,6 +26,10 @@ const LOCK_ICON: Texture2D = preload("res://assets/textures/level_designer/ui_ic
 @export var parallax_slider_y: HSlider
 @export var parallax_label_x: Label
 @export var parallax_label_y: Label
+@export var scale_slider_x: HSlider
+@export var scale_slider_y: HSlider
+@export var scale_label_x: Label
+@export var scale_label_y: Label
 @export var modulate_color_picker: ColorPickerButton
 
 
@@ -43,6 +47,8 @@ func _ready() -> void:
 	deco_layer.toggled.connect(_on_prop_changed)
 	parallax_slider_x.value_changed.connect(_on_prop_changed)
 	parallax_slider_y.value_changed.connect(_on_prop_changed)
+	scale_slider_x.value_changed.connect(_on_prop_changed)
+	scale_slider_y.value_changed.connect(_on_prop_changed)
 	modulate_color_picker.color_changed.connect(_on_prop_changed)
 	_setup_color_picker()
 
@@ -249,7 +255,7 @@ func _show_detail(pos: int) -> void:
 			item.visible = (not locked) or (row == mod_row)
 	remove_button.disabled = locked
 	GDSS.refresh(remove_button)
-
+	
 	_setting_fields = true
 	modulate_color_picker.color = layer.modulation
 	if not locked:
@@ -259,6 +265,10 @@ func _show_detail(pos: int) -> void:
 		parallax_label_x.text = "%.1fx" % layer.parallax_scale.x
 		parallax_slider_y.value = layer.parallax_scale.y
 		parallax_label_y.text = "%.1fx" % layer.parallax_scale.y
+		scale_slider_x.value = layer.layer_scale.x
+		scale_label_x.text = "%.1fx" % layer.layer_scale.x
+		scale_slider_y.value = layer.layer_scale.y
+		scale_label_y.text = "%.1fx" % layer.layer_scale.y
 	_setting_fields = false
 
 
@@ -285,5 +295,10 @@ func _on_prop_changed(_value: Variant = null) -> void:
 	parallax_label_x.text = "%.1fx" % layer.parallax_scale.x
 	layer.parallax_scale.y = parallax_slider_y.value
 	parallax_label_y.text = "%.1fx" % layer.parallax_scale.y
+	## Assigned whole, since layer_scale clamps and pushes to the objects root in its setter and a
+	## component-wise write would slip past both.
+	layer.layer_scale = Vector2(scale_slider_x.value, scale_slider_y.value)
+	scale_label_x.text = "%.1fx" % layer.layer_scale.x
+	scale_label_y.text = "%.1fx" % layer.layer_scale.y
 
 #endregion
