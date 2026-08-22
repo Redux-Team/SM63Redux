@@ -26,6 +26,7 @@ const PLACEMENT_TOOLTIPS: Dictionary[String, String] = {
 @export var _rotate_button: Button
 @export var _scale_button: Button
 @export var _place_button: Button
+@export var _tile_button: Button
 @export var _poly_edit_button: Button
 @export var _poly_add_button: Button
 @export var _poly_cut_button: Button
@@ -61,6 +62,7 @@ func setup() -> void:
 		"rotate": _rotate_button,
 		"scale": _scale_button,
 		"place": _place_button,
+		"tile": _tile_button,
 		"polygonedit": _poly_edit_button,
 		"polygonadd": _poly_add_button,
 		"polygoncut": _poly_cut_button,
@@ -126,6 +128,10 @@ func _set_active(button: Button, active: bool) -> void:
 #region Placement button
 
 func _on_selected_object_changed(obj: GameObject) -> void:
+	## Only terrain can be drawn on the grid, so the tile tool stays out of the rail until the
+	## object browser has something it applies to.
+	if _tile_button:
+		_tile_button.visible = obj != null and obj.get_placement_tool() == "polygon"
 	if _brush_button == null:
 		return
 	var key: String = obj.get_placement_tool().to_lower() if obj else ""

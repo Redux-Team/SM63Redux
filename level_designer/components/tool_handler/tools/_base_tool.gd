@@ -40,6 +40,14 @@ func wants_overlay() -> bool:
 	return false
 
 
+## Whether this tool can already place the given object. Picking an object in the browser hands off
+## to whichever tool [method GameObject.get_placement_tool] names, and this is how a tool offering
+## a second way to build the same thing - the tile tool against terrain - says it does not need to
+## be handed off from.
+func can_place(_obj: GameObject) -> bool:
+	return false
+
+
 func get_cursor_shape() -> Control.CursorShape:
 	return Control.CURSOR_ARROW
 

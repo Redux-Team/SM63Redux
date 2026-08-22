@@ -47,6 +47,10 @@ func _on_brush_button_pressed() -> void:
 	LD.get_tool_handler().select_tool(tool_name if not tool_name.is_empty() else "brush")
 
 
+func _on_tile_button_pressed() -> void:
+	LD.get_tool_handler().select_tool("tile")
+
+
 func _on_move_button_pressed() -> void:
 	LD.get_tool_handler().select_tool("move")
 

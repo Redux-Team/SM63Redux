@@ -98,6 +98,10 @@ func _on_object_changed(obj: GameObject) -> void:
 		_preview_cursor = null
 	_clear_stroke()
 	
+	var active: LDTool = get_tool_handler().get_selected_tool()
+	if active and active != self and active.can_place(obj):
+		return
+	
 	if obj and obj.get_placement_tool():
 		get_tool_handler().select_tool(obj.get_placement_tool())
 		return
@@ -152,7 +156,7 @@ func _get_stamp_size() -> Vector2:
 func _stamp_line_to(pos: Vector2) -> void:
 	var target_cell_x: int = _pos_to_cell_x(pos)
 	var stamp_size: Vector2 = _get_stamp_size()
-
+	
 	if target_cell_x == _last_cell_x:
 		var stamp_pos: Vector2 = Vector2(_cell_x_to_pos(target_cell_x), pos.y)
 		var last_y: float = _last_cell_y.get(target_cell_x, pos.y - INF)
@@ -163,7 +167,7 @@ func _stamp_line_to(pos: Vector2) -> void:
 			_column_objects[target_cell_x].append(pos.y)
 			_last_cell_y[target_cell_x] = pos.y
 		return
-
+	
 	for cell_x: int in _columns_between(_last_cell_x, target_cell_x):
 		var stamp_pos: Vector2 = Vector2(_cell_x_to_pos(cell_x), pos.y)
 		if not _column_has_overlap(cell_x, stamp_pos.y):
@@ -172,7 +176,7 @@ func _stamp_line_to(pos: Vector2) -> void:
 				_column_objects[cell_x] = []
 			_column_objects[cell_x].append(stamp_pos.y)
 			_last_cell_y[cell_x] = stamp_pos.y
-
+	
 	_last_cell_x = target_cell_x
 
 
