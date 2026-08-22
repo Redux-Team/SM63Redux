@@ -41,6 +41,10 @@ static var _inst: LDViewport
 
 var allow_panning: bool = true
 var allow_zooming: bool = true
+## Last layer transform pushed to the grid shader. Seeded past any real value so the first frame
+## always writes.
+var _grid_origin: Vector2 = Vector2.INF
+var _grid_scale: Vector2 = Vector2.INF
 var camera_position: Vector2 = Vector2.ZERO:
 	set(cp):
 		camera_position = cp
@@ -105,6 +109,8 @@ func _bind_area(area: LDArea) -> void:
 
 
 func _process(delta: float) -> void:
+	_sync_grid_layer()
+	
 	if not has_input_priority():
 		return
 	
@@ -302,9 +308,9 @@ func navigate_active_layer(target_index: int) -> void:
 	var following: Array[LDObject] = []
 	if delta != 0 and LD.get_ui().get_viewport_handler().is_follow_enabled():
 		following = get_selected_objects().duplicate()
-
+	
 	area.set_active_layer(target_index)
-
+	
 	for obj: LDObject in following:
 		if not is_instance_valid(obj):
 			continue
@@ -312,7 +318,7 @@ func navigate_active_layer(target_index: int) -> void:
 		if not game_object or not (game_object.ld_flags & (1 << GameObject.LD_LAYERABLE)):
 			continue
 		area.move_object_to_layer(obj, obj.get_layer_index() + delta)
-
+	
 	if not following.is_empty():
 		area.refresh_layer_visuals()
 
@@ -385,6 +391,38 @@ func _on_viewport_moved(pos: Vector2 = camera_position, zoom: Vector2 = camera_z
 	mat.set_shader_parameter("screen_size", get_viewport().get_visible_rect().size)
 	
 	get_global_anchor().refresh()
+
+
+## The grid is drawn in the active layer's own coordinates, so it has to track that layer's live
+## transform: a parallaxing layer slides against the camera as it moves, and layer scaling resizes
+## its cells. Read from the node rather than recomputed, which is what keeps it exact whatever
+## [Parallax2D] does internally, and change-guarded so a still camera costs one comparison.
+func _sync_grid_layer() -> void:
+	var mat: ShaderMaterial = _viewport_grid.material as ShaderMaterial
+	if not mat or not LD.is_ready():
+		return
+	
+	var area: LDArea = LDLevel.get_active_area()
+	if not area:
+		return
+	
+	# Deliberately not get_active_layer(), which would create a layer as a side effect of drawing.
+	var active: LDLayer = null
+	for layer: LDLayer in area.layers:
+		if layer.index == area.get_active_layer_index():
+			active = layer
+			break
+	if not active:
+		return
+	
+	var xform: Transform2D = _root.get_global_transform().affine_inverse() * active.get_objects_root().get_global_transform()
+	if xform.get_origin() == _grid_origin and xform.get_scale() == _grid_scale:
+		return
+	
+	_grid_origin = xform.get_origin()
+	_grid_scale = xform.get_scale()
+	mat.set_shader_parameter("grid_offset", _grid_origin)
+	mat.set_shader_parameter("grid_scale", _grid_scale)
 
 
 func _zoom_at(pos: Vector2, zoom_delta: float) -> void:

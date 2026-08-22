@@ -18,6 +18,7 @@ shader_parameter/camera_position = Vector2(0, 0)
 shader_parameter/camera_zoom = Vector2(1, 1)
 shader_parameter/screen_size = Vector2(1152, 648)
 shader_parameter/grid_offset = Vector2(0, 0)
+shader_parameter/grid_scale = Vector2(1, 1)
 shader_parameter/grid_fade_threshold = 1.0
 
 [node name="LDViewport" type="Node" unique_id=110890990 node_paths=PackedStringArray("camera", "_viewport_grid", "_root", "_selection_overlay", "_touch_indicator", "_background_root", "_global_anchor", "_viewport_input")]
