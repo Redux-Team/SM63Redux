@@ -95,31 +95,65 @@ static func build_layer_node(layer: LDBackgroundLayer) -> Control:
 	# parallax (mirrors hills.tscn).
 	parallax.limit_end = Vector2(parallax.limit_end.x, 0.0)
 
-	if layer.repeat and layer.texture:
-		parallax.repeat_size = Vector2(layer.texture.get_width(), 0.0)
-		parallax.repeat_times = 5
+	var content: Node = layer.scene_override.instantiate() if layer.scene_override else _build_layer_sprite(layer, at_top)
+	var scene: LDBackgroundScene = content as LDBackgroundScene
+	if scene:
+		scene.background_layer = layer
+	_apply_layer_color(content, layer)
 
+	if layer.repeat:
+		var width: float = _content_width(content)
+		if width > 0.0:
+			parallax.repeat_size = Vector2(width, 0.0)
+			parallax.repeat_times = 5
+
+	parallax.add_child(content)
+	anchor.add_child(parallax)
+	return anchor
+
+
+static func _build_layer_sprite(layer: LDBackgroundLayer, at_top: bool) -> Sprite2D:
 	var sprite: Sprite2D = Sprite2D.new()
 	sprite.texture = layer.texture
-	if layer.custom_color:
-		# Desaturate the layer and recolor it by the modulate via the tint shader, leaving the
-		# node modulate white so the color isn't applied twice.
-		var mat: ShaderMaterial = ShaderMaterial.new()
-		mat.shader = TINT_SHADER
-		mat.set_shader_parameter(&"tint_color", layer.modulate)
-		sprite.material = mat
-	else:
-		sprite.modulate = layer.modulate
 	# Sit the sprite flush against its anchored edge: top edge on a top anchor, bottom edge on
 	# a bottom anchor. The layer's offset then nudges from there.
 	if layer.texture:
 		var half_height: float = layer.texture.get_height() / 2.0
 		sprite.position.y = half_height if at_top else -half_height
+	return sprite
 
-	parallax.add_child(sprite)
 
-	anchor.add_child(parallax)
-	return anchor
+static func _apply_layer_color(content: Node, layer: LDBackgroundLayer) -> void:
+	var item: CanvasItem = content as CanvasItem
+	if not item:
+		return
+	if not layer.custom_color:
+		item.modulate *= layer.modulate
+		return
+	# Desaturate the layer and recolor it by the modulate via the tint shader, leaving the
+	# node modulate white so the color isn't applied twice.
+	var mat: ShaderMaterial = ShaderMaterial.new()
+	mat.shader = TINT_SHADER
+	mat.set_shader_parameter(&"tint_color", layer.modulate)
+	item.material = mat
+	_inherit_material(item)
+
+
+static func _inherit_material(item: CanvasItem) -> void:
+	for child: Node in item.get_children():
+		var child_item: CanvasItem = child as CanvasItem
+		if not child_item or child_item.material:
+			continue
+		child_item.use_parent_material = true
+		_inherit_material(child_item)
+
+
+static func _content_width(content: Node) -> float:
+	var sprite: Sprite2D = content as Sprite2D
+	if sprite:
+		return sprite.texture.get_width() * absf(sprite.scale.x) if sprite.texture else 0.0
+	var control: Control = content as Control
+	return control.size.x * absf(control.scale.x) if control else 0.0
 
 
 ## A zero-size control pinned to the top-center or bottom-center of the parent, used as the origin

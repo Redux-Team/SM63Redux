@@ -13,6 +13,8 @@ enum Anchor { BOTTOM, TOP }
 ## Both are empty for hand-made layers.
 @export var id: String = ""
 @export var display_name: String = ""
+## A scene override for the bg layer, for more **special** backgrounds
+@export var scene_override: PackedScene
 
 @export var texture: Texture2D
 @export var parallax: float = 0.5
@@ -32,7 +34,8 @@ func serialize() -> Dictionary:
 	return {
 		"id": id,
 		"display_name": display_name,
-		"texture": _texture_uid(),
+		"texture": _resource_uid(texture),
+		"scene_override": _resource_uid(scene_override),
 		"parallax": parallax,
 		"modulate": Packer.color_to_array(modulate),
 		"custom_color": custom_color,
@@ -47,9 +50,8 @@ static func deserialize(data: Dictionary) -> LDBackgroundLayer:
 	var layer: LDBackgroundLayer = LDBackgroundLayer.new()
 	layer.id = str(data.get("id", ""))
 	layer.display_name = str(data.get("display_name", ""))
-	var uid: String = str(data.get("texture", ""))
-	if not uid.is_empty() and ResourceLoader.exists(uid):
-		layer.texture = load(uid) as Texture2D
+	layer.texture = _load_uid(str(data.get("texture", ""))) as Texture2D
+	layer.scene_override = _load_uid(str(data.get("scene_override", ""))) as PackedScene
 	layer.parallax = float(data.get("parallax", 0.5))
 	layer.modulate = Packer.array_to_color(data.get("modulate", [1.0, 1.0, 1.0, 1.0]))
 	layer.custom_color = bool(data.get("custom_color", false))
@@ -60,10 +62,16 @@ static func deserialize(data: Dictionary) -> LDBackgroundLayer:
 	return layer
 
 
-func _texture_uid() -> String:
-	if not texture or texture.resource_path.is_empty():
+static func _resource_uid(res: Resource) -> String:
+	if not res or res.resource_path.is_empty():
 		return ""
-	var uid_id: int = ResourceLoader.get_resource_uid(texture.resource_path)
+	var uid_id: int = ResourceLoader.get_resource_uid(res.resource_path)
 	if uid_id == ResourceUID.INVALID_ID:
 		return ""
 	return ResourceUID.id_to_text(uid_id)
+
+
+static func _load_uid(uid: String) -> Resource:
+	if uid.is_empty() or not ResourceLoader.exists(uid):
+		return null
+	return load(uid)

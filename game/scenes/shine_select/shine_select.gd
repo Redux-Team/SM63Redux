@@ -178,9 +178,9 @@ func _set_layer_alpha(alpha: float, node: Control) -> void:
 
 
 func _set_tinted_fade(node: Node, alpha: float) -> void:
-	var sprite: Sprite2D = node as Sprite2D
-	if sprite and sprite.material is ShaderMaterial and (sprite.material as ShaderMaterial).shader == LDBackground.TINT_SHADER:
-		(sprite.material as ShaderMaterial).set_shader_parameter(&"fade", alpha)
+	var item: CanvasItem = node as CanvasItem
+	if item and item.material is ShaderMaterial and (item.material as ShaderMaterial).shader == LDBackground.TINT_SHADER:
+		(item.material as ShaderMaterial).set_shader_parameter(&"fade", alpha)
 	for child: Node in node.get_children():
 		_set_tinted_fade(child, alpha)
 

@@ -9,10 +9,7 @@ extends LDComponent
 
 signal background_changed
 
-
 const DEFAULT_PRESET: String = "Mushroom Hills"
-
-
 
 
 func _on_ready() -> void:
