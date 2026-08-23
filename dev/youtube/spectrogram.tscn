@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://djw8eb623s4jb"]
 
-[ext_resource type="Script" uid="uid://cv27rmqd64cgk" path="res://youtube/spectrogram.gd" id="1_787wu"]
+[ext_resource type="Script" uid="uid://cv27rmqd64cgk" path="res://dev/youtube/spectrogram.gd" id="1_787wu"]
 
 [sub_resource type="Curve" id="Curve_s6ldl"]
 _limits = [0.0, 1.0, 0.0, 20000.0]

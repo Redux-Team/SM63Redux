@@ -27,6 +27,7 @@ func _process(_delta: float) -> void:
 	queue_redraw()
  
 func _draw() -> void:
+	
 	# Current frequency and bar position, used and modified in loop.
 	var cur_freq : float = min_freq
 	var cur_pos : float = 0
@@ -38,11 +39,12 @@ func _draw() -> void:
 	var step_size : float = (max_freq - min_freq) / steps
 	
 	# Draw each bar.
-	for i: int in range(0, steps):
+	for i: int in steps:
 		draw_rect(
 			Rect2(cur_pos, 0, 
 					bar_width * bar_gap_ratio,
-					scale_curve.sample(cur_freq) * height_scale * inst.get_magnitude_for_frequency_range(cur_freq, cur_freq + step_size).length()
+					scale_curve.sample(cur_freq) * height_scale * 
+						inst.get_magnitude_for_frequency_range(cur_freq, cur_freq + step_size).length()
 			), 
 			gradient.sample(float(i) / steps)
 		)

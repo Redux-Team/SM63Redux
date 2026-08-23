@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://cvskgk1tbc41j"]
+
+[ext_resource type="PackedScene" uid="uid://djw8eb623s4jb" path="res://dev/youtube/spectrogram.tscn" id="1_h8e2e"]
+[ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/music/title_welcome.mp3" id="2_oimfb"]
+
+[node name="Control" type="Control" unique_id=848610230]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Parallax2D" type="Parallax2D" parent="." unique_id=2063253881]
+scroll_scale = Vector2(0, 0)
+
+[node name="Control" type="Control" parent="Parallax2D" unique_id=634514918]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="ColorRect" type="ColorRect" parent="Parallax2D/Control" unique_id=451655366]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Spectrogram" parent="Parallax2D/Control" unique_id=70786987 instance=ExtResource("1_h8e2e")]
+layout_mode = 1
+scale = Vector2(1, -1)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+bus = &"SpectrumAnalysis"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1024934412]
+stream = ExtResource("2_oimfb")
+autoplay = true
+bus = &"SpectrumAnalysis"
