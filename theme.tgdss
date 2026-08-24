@@ -520,8 +520,8 @@ Panel, PanelContainer {
 		padding: 5 5 5 5
 	}
 
-	Tooltip {
-		bg_color: liquid_blur(4, $glass, 0.72)
+	%TooltipPanel {
+		bg_color: RED
 		border_color: alpha(WHITE, 0.16)
 		border: 1 1 1 1
 		corner_radius: 8 8 8 8
