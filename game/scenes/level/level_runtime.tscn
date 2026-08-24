@@ -18,6 +18,7 @@ level_root = NodePath("LevelRoot")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1346157520]
 
 [node name="BackButton" type="Button" parent="CanvasLayer" unique_id=2011925418]
+self_modulate = Color(1, 1, 1, 0)
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
