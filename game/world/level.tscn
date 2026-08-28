@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://dkjnplx3hhp7q"]
 
-[ext_resource type="Script" uid="uid://dtvjt7k3c8dhn" path="res://game/world/level.gd" id="1_0euo3"]
+[ext_resource type="Script" uid="uid://0uhwj12whgeb" path="res://dev/youtube/scene_in_level.gd" id="1_ja18s"]
 [ext_resource type="AudioStream" uid="uid://cmiulmppvmbql" path="res://assets/music/level_tutorial_1.mp3" id="2_81ib3"]
 [ext_resource type="Script" uid="uid://w60fapixf1o5" path="res://game/world/level_camera.gd" id="2_n8vjl"]
+[ext_resource type="PackedScene" uid="uid://cvskgk1tbc41j" path="res://dev/youtube/spectrogram_scene.tscn" id="2_xyjxn"]
 [ext_resource type="Script" uid="uid://copo5v08m41mi" path="res://game/world/music_controller.gd" id="3_fuut0"]
 [ext_resource type="Shader" uid="uid://bdjde8udebjtr" path="res://core/shader/camera_zoom_effect.gdshader" id="3_v5b65"]
 
@@ -21,7 +22,9 @@ shader_parameter/fisheye_strength = 0.0
 shader_parameter/zoom_velocity = 0.0
 
 [node name="Level" type="Node2D" unique_id=1909384183 node_paths=PackedStringArray("_level_camera", "music_player", "music_controller")]
-script = ExtResource("1_0euo3")
+script = ExtResource("1_ja18s")
+scene = ExtResource("2_xyjxn")
+instantiate_at_layer_index = 1
 _level_camera = NodePath("LevelCamera")
 music_player = NodePath("MusicPlayer")
 music_controller = NodePath("MusicController")

@@ -1,7 +1,11 @@
 [gd_scene format=3 uid="uid://cvskgk1tbc41j"]
 
-[ext_resource type="PackedScene" uid="uid://djw8eb623s4jb" path="res://dev/youtube/spectrogram.tscn" id="1_h8e2e"]
-[ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/music/title_welcome.mp3" id="2_oimfb"]
+[ext_resource type="Script" uid="uid://cv27rmqd64cgk" path="res://dev/youtube/spectrogram.gd" id="1_h71ff"]
+[ext_resource type="AudioStream" uid="uid://cmiulmppvmbql" path="res://assets/music/level_tutorial_1.mp3" id="2_h71ff"]
+
+[sub_resource type="Gradient" id="Gradient_euq31"]
+offsets = PackedFloat32Array(0, 0.34745762, 0.69491524, 1)
+colors = PackedColorArray(0.53607124, 0.6236646, 0.75709337, 1, 0.62065226, 0.51678014, 0.46150982, 1, 0.69803923, 0.79607844, 0.58431375, 1, 0.63547266, 0.6469291, 0.624085, 1)
 
 [node name="Control" type="Control" unique_id=848610230]
 layout_mode = 3
@@ -29,13 +33,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Spectrogram" parent="Parallax2D/Control" unique_id=70786987 instance=ExtResource("1_h8e2e")]
-layout_mode = 1
+[node name="Spectrogram2" type="Control" parent="Parallax2D/Control" unique_id=1327072975]
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 360.0
 scale = Vector2(1, -1)
 pivot_offset_ratio = Vector2(0.5, 0.5)
+script = ExtResource("1_h71ff")
 bus = &"SpectrumAnalysis"
+gradient = SubResource("Gradient_euq31")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1024934412]
-stream = ExtResource("2_oimfb")
+stream = ExtResource("2_h71ff")
 autoplay = true
 bus = &"SpectrumAnalysis"
