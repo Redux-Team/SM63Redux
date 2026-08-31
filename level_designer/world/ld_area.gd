@@ -301,7 +301,7 @@ func move_objects_to_layer(objects: Array[LDObject], index: int) -> void:
 	var root: Node2D = get_or_create_layer(index).get_objects_root()
 	for obj: LDObject in objects:
 		var game_object: GameObject = GameDB.get_db().find_game_object(obj.source_object_id)
-		if game_object.ld_flags & GameObject.LD_LAYERABLE:
+		if game_object and game_object.ld_flags & (1 << GameObject.LD_LAYERABLE):
 			obj.reparent(root)
 
 
