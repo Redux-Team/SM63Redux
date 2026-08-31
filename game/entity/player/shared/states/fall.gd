@@ -1,6 +1,12 @@
 extends PlayerState
 
 
+func _enter() -> void:
+	var last: State = machine.get_last_state()
+	if last and last.name in [&"DoubleJump", &"TripleJump"]:
+		sprite.play(&"double_jump_fall")
+
+
 func _next() -> StringName:
 	if player.is_on_floor():
 		return &"Idle"

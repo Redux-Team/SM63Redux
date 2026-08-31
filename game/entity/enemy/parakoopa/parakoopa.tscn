@@ -108,7 +108,7 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.37425148)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.003921569)
 
-[sub_resource type="Resource" id="Visuals_Glide"]
+[sub_resource type="Resource" id="Effects_Glide"]
 script = ExtResource("30_effects")
 animation = &"default"
 
@@ -180,7 +180,7 @@ initial_state = NodePath("Glide")
 
 [node name="Glide" type="Node" parent="StateMachine" unique_id=665780062]
 script = ExtResource("11_fewty")
-effects = SubResource("Visuals_Glide")
+effects = SubResource("Effects_Glide")
 
 [node name="ParticleEmitter" type="CPUParticles2D" parent="." unique_id=992989918]
 show_behind_parent = true

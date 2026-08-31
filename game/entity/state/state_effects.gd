@@ -5,37 +5,49 @@ extends Resource
 
 const INHERIT_BUS: StringName = &"Inherit"
 
+@export_group("Sprite")
 @export var animation: StringName = &""
-## Alternates for [member animation], picked at random on enter. Leave empty to always play
-## [member animation]; the pool includes it, so one entry gives an even coin flip between the two.
-@export var animation_variants: Array[StringName] = []
-@export var variant_no_repeat: bool = true
 @export var restart_if_playing: bool = true
 @export var speed_scale: float = 1.0
 @export var stop_on_exit: bool = false
 @export var lock_flipping: bool = false
-@export_subgroup("Offset", "offset")
-@export var offset_enabled: bool = false
-@export var offset: Vector2 = Vector2.ZERO
-@export_subgroup("Chain", "chain")
-@export var chain: Array[StringName] = []
+@export_subgroup("Variants", "variant_")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "variant_") var variant_enabled: bool = false
+@export var variant_animations: Array[StringName] = []
+@export var variant_no_repeat: bool = false
+@export var variant_follow: bool = false
+@export_subgroup("Chain", "chain_")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "chain_") var chain_enabled: bool = false
+@export var chain_animations: Array[StringName] = []
 @export var chain_loop_last: bool = true
+@export_subgroup("Offset", "offset_")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "offset_") var offset_enabled: bool = false
+@export var offset_value: Vector2 = Vector2.ZERO
 @export_subgroup("Loop", "loop_")
-@export var loop_override: bool = false
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "loop_") var loop_override: bool = false
 @export var loop_enabled: bool = true
+
 @export_group("Physics")
 @export_flags_2d_physics var collision_mask_override: int = 0
+
 @export_group("Animation Player", "player_")
 @export var player_animation: StringName = &""
 @export var player_reset_on_exit: bool = true
+
 @export_group("Sound", "sfx_")
-@export var sfx_enter: AudioStream
-@export var sfx_enter_stop_on_exit: bool = false
-@export var sfx_exit: AudioStream
-@export var sfx_frame: AudioStream
-@export var sfx_frame_indices: Array[int] = []
 @export var sfx_bus: StringName = INHERIT_BUS
 @export var sfx_spatial: bool = true
+@export_subgroup("Enter", "sfx_enter_")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sfx_enter_") var sfx_enter_enabled: bool = false
+@export var sfx_enter_sound: AudioStream
+@export var sfx_enter_stop_on_exit: bool = false
+@export_subgroup("Exit", "sfx_exit_")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sfx_exit_") var sfx_exit_enabled: bool = false
+@export var sfx_exit_sound: AudioStream
+@export_subgroup("Frame", "sfx_frame_")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sfx_frame_") var sfx_frame_enabled: bool = false
+@export var sfx_frame_sound: AudioStream
+@export var sfx_frame_indices: Array[int] = []
 
 
 func enter(state: State) -> void:
@@ -47,8 +59,8 @@ func enter(state: State) -> void:
 		(state.entity as Player).lock_flipping = true
 	_play_animation(state)
 	_play_player_animation(state)
-	if sfx_enter:
-		var player: Node = _play_sfx(state, sfx_enter)
+	if sfx_enter_enabled and sfx_enter_sound:
+		var player: Node = _play_sfx(state, sfx_enter_sound)
 		if sfx_enter_stop_on_exit:
 			state.sfx_tracked = player
 
@@ -72,12 +84,12 @@ func exit(state: State) -> void:
 		state.sprite.stop()
 	if player_reset_on_exit and not player_animation.is_empty() and state.machine.animation_player:
 		state.machine.animation_player.play(&"RESET")
-	if sfx_exit:
-		_play_sfx(state, sfx_exit)
+	if sfx_exit_enabled and sfx_exit_sound:
+		_play_sfx(state, sfx_exit_sound)
 
 
 func render_tick(state: State) -> void:
-	if not sfx_frame or sfx_frame_indices.is_empty() or not state.sprite:
+	if not sfx_frame_enabled or not sfx_frame_sound or sfx_frame_indices.is_empty() or not state.sprite:
 		return
 	
 	var frame: int = state.sprite.current_frame
@@ -86,7 +98,53 @@ func render_tick(state: State) -> void:
 	
 	state.sfx_frame_index = frame
 	if sfx_frame_indices.has(frame):
-		_play_sfx(state, sfx_frame)
+		_play_sfx(state, sfx_frame_sound)
+
+
+func advance_chain(state: State) -> void:
+	var chain: Array[StringName] = _chain()
+	if not state.sprite or state.chain_index >= chain.size():
+		return
+	
+	var next: StringName = chain.get(state.chain_index)
+	state.chain_index += 1
+	var is_last: bool = state.chain_index >= chain.size()
+	if loop_override:
+		state.sprite.looping = is_last and chain_loop_last
+	state.sprite.play(next)
+	if not is_last:
+		state.sprite.animation_finished.connect(state._on_chain_advance, CONNECT_ONE_SHOT)
+
+
+func _chain() -> Array[StringName]:
+	if not chain_enabled:
+		return [] as Array[StringName]
+	return chain_animations
+
+
+func _pool() -> Array[StringName]:
+	var pool: Array[StringName] = [animation]
+	if variant_enabled:
+		pool.append_array(variant_animations)
+	return pool
+
+
+func _pick_variant(state: State) -> StringName:
+	if not variant_enabled or variant_animations.is_empty():
+		return animation
+	
+	var pool: Array[StringName] = _pool()
+	if variant_follow and state.machine:
+		state.last_variant = pool.get(mini(state.machine.last_variant_index, pool.size() - 1))
+		return state.last_variant
+	
+	var choices: Array[StringName] = pool.duplicate()
+	if variant_no_repeat and choices.size() > 1:
+		choices.erase(state.last_variant)
+	state.last_variant = choices.pick_random()
+	if state.machine:
+		state.machine.last_variant_index = pool.find(state.last_variant)
+	return state.last_variant
 
 
 func _play_animation(state: State) -> void:
@@ -98,43 +156,11 @@ func _play_animation(state: State) -> void:
 	var chosen: StringName = _pick_variant(state)
 	state.chain_index = 0
 	if loop_override:
-		state.sprite.looping = chain.is_empty() and loop_enabled
+		state.sprite.looping = _chain().is_empty() and loop_enabled
 	state.sprite.speed_scale = speed_scale
 	state.sprite.play(chosen)
-	state.sprite.offset = offset if offset_enabled else Vector2.ZERO
-	if not chain.is_empty():
-		state.sprite.animation_finished.connect(state._on_chain_advance, CONNECT_ONE_SHOT)
-
-
-## The animation pool for this state: the base plus any variants.
-func _pool() -> Array[StringName]:
-	var pool: Array[StringName] = [animation]
-	pool.append_array(animation_variants)
-	return pool
-
-
-func _pick_variant(state: State) -> StringName:
-	if animation_variants.is_empty():
-		return animation
-	
-	var choices: Array[StringName] = _pool()
-	if variant_no_repeat and choices.size() > 1:
-		choices.erase(state.last_variant)
-	state.last_variant = choices.pick_random()
-	return state.last_variant
-
-
-func advance_chain(state: State) -> void:
-	if not state.sprite or state.chain_index >= chain.size():
-		return
-	
-	var next: StringName = chain.get(state.chain_index)
-	state.chain_index += 1
-	var is_last: bool = state.chain_index >= chain.size()
-	if loop_override:
-		state.sprite.looping = is_last and chain_loop_last
-	state.sprite.play(next)
-	if not is_last:
+	state.sprite.offset = offset_value if offset_enabled else Vector2.ZERO
+	if not _chain().is_empty():
 		state.sprite.animation_finished.connect(state._on_chain_advance, CONNECT_ONE_SHOT)
 
 

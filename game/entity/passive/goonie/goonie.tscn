@@ -116,15 +116,15 @@ size = Vector2(32, 3)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oohn0"]
 size = Vector2(32, 12)
 
-[sub_resource type="Resource" id="Visuals_Flap"]
+[sub_resource type="Resource" id="Effects_Flap"]
 script = ExtResource("30_effects")
 animation = &"flap"
 
-[sub_resource type="Resource" id="Visuals_Glide"]
+[sub_resource type="Resource" id="Effects_Glide"]
 script = ExtResource("30_effects")
 animation = &"glide"
 
-[sub_resource type="Resource" id="Visuals_HeavyFlap"]
+[sub_resource type="Resource" id="Effects_HeavyFlap"]
 script = ExtResource("30_effects")
 animation = &"heavy_flap"
 
@@ -145,17 +145,17 @@ initial_state = NodePath("Flap")
 
 [node name="Flap" type="Node" parent="StateMachine" unique_id=668680388]
 script = ExtResource("4_xtefv")
-effects = SubResource("Visuals_Flap")
+effects = SubResource("Effects_Flap")
 duration = 6.5
 
 [node name="Glide" type="Node" parent="StateMachine" unique_id=2019713984]
 script = ExtResource("5_xtefv")
-effects = SubResource("Visuals_Glide")
+effects = SubResource("Effects_Glide")
 duration = 1.5
 
 [node name="HeavyFlap" type="Node" parent="StateMachine" unique_id=44810290]
 script = ExtResource("6_bodhv")
-effects = SubResource("Visuals_HeavyFlap")
+effects = SubResource("Effects_HeavyFlap")
 
 [node name="Components" type="Node" parent="." unique_id=566607527]
 

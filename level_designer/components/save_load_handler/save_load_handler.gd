@@ -514,9 +514,6 @@ func _deserialize_area(entry: Dictionary, area: LDArea, db: GameDB) -> void:
 		var raw_modulate: Variant = layer_data.get("modulation", null)
 		if raw_modulate != null:
 			layer.modulation = Packer.array_to_color(raw_modulate)
-		# Read before the flag is set, since a decoration layer collapses onto its distance the
-		# moment it is marked as one. Levels saved before distance existed derive it from the
-		# scroll scale they were given, so they keep the depth they were authored with.
 		var derived: float = (1.0 / maxf(layer.parallax_scale.x, LDLayer.SCALE_MIN)) - 1.0
 		var distance: float = float(layer_data.get("distance", derived))
 		layer.is_decoration = layer_data.get("is_decoration", false)

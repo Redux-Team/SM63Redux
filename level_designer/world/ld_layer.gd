@@ -5,7 +5,6 @@ extends CanvasGroup
 ## The level's own bounds, so the editor can never dial in a scale a level cannot express.
 const SCALE_MIN: float = LevelLayer.SCALE_MIN
 const SCALE_MAX: float = LevelLayer.SCALE_MAX
-## The furthest a decoration layer can recede before its factor would fall under [constant SCALE_MIN].
 const DISTANCE_MAX: float = (1.0 / SCALE_MIN) - 1.0
 
 
@@ -18,9 +17,6 @@ const DISTANCE_MAX: float = (1.0 / SCALE_MIN) - 1.0
 		is_decoration = d
 		if d:
 			_apply_distance()
-## Perspective depth for decoration layers: 0 sits on the play plane and larger values recede,
-## driving both scroll and object scale as 1 / (1 + distance). Ignored on gameplay layers, which
-## keep their own parallax and scale.
 @export_custom(PROPERTY_HINT_RANGE, "0,%f,0.05" % DISTANCE_MAX) var distance: float = 0.0:
 	set(d):
 		distance = clampf(d, 0.0, DISTANCE_MAX)
@@ -68,8 +64,6 @@ var _parallax: Parallax2D
 var _objects_root: Node2D
 
 
-## Collapses [member distance] onto the scroll and object scales. Only decoration layers follow it,
-## so a gameplay layer can still be tuned axis by axis.
 func _apply_distance() -> void:
 	if not is_decoration:
 		return

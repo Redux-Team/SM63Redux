@@ -24,7 +24,6 @@ const LOCK_ICON: Texture2D = preload("res://assets/textures/level_designer/ui_ic
 @export var deco_layer: CheckButton
 @export var distance_slider: HSlider
 @export var distance_label: Label
-## Rows that only apply to decoration layers, and the per-axis rows they stand in for.
 @export var distance_rows: Array[Control] = []
 @export var manual_rows: Array[Control] = []
 @export var parallax_slider_x: HSlider
@@ -282,8 +281,6 @@ func _show_detail(pos: int) -> void:
 	_setting_fields = false
 
 
-## A decoration layer is driven by its single depth value, so it shows that instead of the four
-## per-axis rows it stands in for.
 func _apply_depth_rows(is_decoration: bool) -> void:
 	for row: Control in distance_rows:
 		row.visible = is_decoration

@@ -24,8 +24,6 @@ const LD_ERROR: AudioStream = preload("uid://7fdllxb8tiqr")
 const LD_OPEN: AudioStream = preload("uid://b41jeumeks5wp")
 const LD_SELECT: AudioStream = preload("uid://b1fnunf32dpve")
 
-## Falloff for positional sounds. The viewport is 640x360, so a source one screen away should
-## already be near silent; Godot's stock 2000px default leaves everything audible everywhere.
 const SPATIAL_MAX_DISTANCE: float = 400.0
 const SPATIAL_ATTENUATION: float = 1.5
 

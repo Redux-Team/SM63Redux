@@ -51,7 +51,10 @@ func _next() -> StringName:
 	if player.is_on_floor() and player.is_action_just_pressed("jump", player.jump_buffer_window):
 		return &"BaseJump"
 	if not player.is_input_spin and not player.is_spinning:
-		return &"Idle" if player.is_on_floor() else &"Fall"
+		if player.is_on_floor():
+			return &"Idle"
+		if player.velocity.y > 0.0:
+			return &"Fall"
 	if player.is_action_just_pressed("dive") and player.can_dive:
 		return &"Dive"
 	return &""

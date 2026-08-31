@@ -14,6 +14,7 @@ const HISTORY_SIZE: int = 20
 
 var _current: State
 var _previous: State
+var last_variant_index: int = 0
 var _stack: Array[State] = []
 var _states: Dictionary[StringName, State] = {}
 var _history: Array[StringName] = []

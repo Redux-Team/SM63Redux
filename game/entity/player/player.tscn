@@ -26,8 +26,6 @@
 [ext_resource type="Script" uid="uid://cscjl4ppceor3" path="res://game/entity/player/shared/states/backflip.gd" id="11_mb70y"]
 [ext_resource type="Script" uid="uid://bv6pacjmfysox" path="res://game/entity/player/shared/states/rollout_f.gd" id="12_02rvq"]
 [ext_resource type="Texture2D" uid="uid://bjblyiou2qe0f" path="res://assets/textures/entity/player/shared/hover_fludd_r_0.png" id="13_gqe2a"]
-[ext_resource type="Texture2D" uid="uid://p854wdvg3nbj" path="res://assets/textures/entity/player/mario/crouch_up.png" id="90_crup"]
-[ext_resource type="Texture2D" uid="uid://bw7pv1724v3n4" path="res://assets/textures/entity/player/mario/double_jump_fall.png" id="91_djf"]
 [ext_resource type="Script" uid="uid://b40633h5y42cq" path="res://game/entity/player/shared/states/spin.gd" id="14_20bnd"]
 [ext_resource type="Script" uid="uid://bisaomurugmd3" path="res://game/entity/player/shared/states/base_jump.gd" id="15_5mhew"]
 [ext_resource type="Script" uid="uid://cf26ky7vulna0" path="res://game/entity/player/shared/states/ground_pound_start.gd" id="15_eihrn"]
@@ -68,9 +66,11 @@
 [ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="81_dhqxs"]
 [ext_resource type="AudioStream" uid="uid://bffab71uf61kf" path="res://assets/sfx/player/fludd/hover.mp3" id="81_fstnu"]
 [ext_resource type="AudioStream" uid="uid://dolh40gtancy4" path="res://assets/sfx/player/fludd/hover_loop.mp3" id="82_681d1"]
+[ext_resource type="Texture2D" uid="uid://p854wdvg3nbj" path="res://assets/textures/entity/player/mario/crouch_up.png" id="90_crup"]
+[ext_resource type="Texture2D" uid="uid://bw7pv1724v3n4" path="res://assets/textures/entity/player/mario/double_jump_fall.png" id="91_djf"]
 [ext_resource type="Script" uid="uid://4hwxabxucpuh" path="res://game/entity/state/state.gd" id="es_base"]
 [ext_resource type="Script" uid="uid://dn4qb0ueyl2oj" path="res://game/entity/player/shared/states/crouch.gd" id="ps_crouch"]
-[ext_resource type="Script" path="res://game/entity/player/shared/states/crouch_up.gd" id="ps_crouch_up"]
+[ext_resource type="Script" uid="uid://ctn6i4d1wdc02" path="res://game/entity/player/shared/states/crouch_up.gd" id="ps_crouch_up"]
 [ext_resource type="Script" uid="uid://uhp6bivoni74" path="res://game/entity/player/shared/states/double_jump.gd" id="ps_double_jump"]
 [ext_resource type="Script" uid="uid://dtny7bnas3xxn" path="res://game/entity/player/shared/states/fall.gd" id="ps_fall"]
 [ext_resource type="Script" uid="uid://nkvey6hx1nru" path="res://game/entity/player/shared/states/ground_pound.gd" id="ps_ground_pound"]
@@ -108,27 +108,10 @@
 [ext_resource type="AudioStream" uid="uid://dly1p4x8t0r70" path="res://assets/sfx/player/mario/ground_pound/ground_pound_generic.wav" id="sfxres32"]
 [ext_resource type="AudioStream" uid="uid://pga7av4xfjtv" path="res://assets/music/player_death.mp3" id="sfxres33"]
 
-[sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_3h1ly"]
-cutoff_hz = 2500.0
-
-[sub_resource type="Resource" id="Effects_Idle"]
-script = ExtResource("30_effects")
-animation = &"idle"
-
-[sub_resource type="Resource" id="Effects_CrouchUp"]
-script = ExtResource("30_effects")
-animation = &"crouch_up"
-lock_flipping = true
-
-[sub_resource type="Resource" id="Effects_Crouch"]
-script = ExtResource("30_effects")
-animation = &"crouch"
-lock_flipping = true
-
-[sub_resource type="Resource" id="Effects_Walk"]
-script = ExtResource("30_effects")
-animation = &"run_loop"
-chain = Array[StringName]([&"walk_loop"])
+[sub_resource type="Curve" id="Curve_walkspeed"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 0.5), 0.0, 1.0, 0, 0, Vector2(1, 1.5), 1.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
@@ -140,6 +123,26 @@ _limits = [0.0, 1.0, -300.0, 500.0]
 _data = [Vector2(-300, 0.2696039), 0.0, 0.0, 0, 0, Vector2(500, 0.9474535), 0.0011276755, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_3h1ly"]
+cutoff_hz = 2500.0
+
+[sub_resource type="Resource" id="Effects_Idle"]
+script = ExtResource("30_effects")
+animation = &"idle"
+
+[sub_resource type="Resource" id="Effects_Crouch"]
+script = ExtResource("30_effects")
+animation = &"crouch"
+lock_flipping = true
+
+[sub_resource type="Resource" id="Effects_CrouchUp"]
+script = ExtResource("30_effects")
+animation = &"crouch_up"
+lock_flipping = true
+
+[sub_resource type="Resource" id="Effects_Walk"]
+script = ExtResource("30_effects")
+
 [sub_resource type="AudioStreamRandomizer" id="sfxrand5"]
 playback_mode = 1
 streams_count = 4
@@ -150,15 +153,17 @@ stream_3/stream = ExtResource("sfxres4")
 
 [sub_resource type="Resource" id="Effects_Dive"]
 script = ExtResource("30_effects")
+sfx_enter_enabled = true
 animation = &"dive"
 restart_if_playing = false
 offset_enabled = true
-sfx_enter = SubResource("sfxrand5")
+sfx_enter_sound = SubResource("sfxrand5")
 
 [sub_resource type="Resource" id="Effects_IdleJump"]
 script = ExtResource("30_effects")
+variant_enabled = true
 animation = &"jump_l"
-animation_variants = Array[StringName]([&"jump_r"])
+variant_animations = Array[StringName]([&"jump_r"])
 
 [sub_resource type="AudioStreamRandomizer" id="sfxrand10"]
 playback_mode = 1
@@ -170,12 +175,14 @@ stream_3/stream = ExtResource("sfxres9")
 
 [sub_resource type="Resource" id="Effects_Backflip"]
 script = ExtResource("30_effects")
+variant_enabled = true
+sfx_enter_enabled = true
 animation = &"jump_l"
-animation_variants = Array[StringName]([&"jump_r"])
+variant_animations = Array[StringName]([&"jump_r"])
 restart_if_playing = false
 speed_scale = 0.0
 player_animation = &"backflip"
-sfx_enter = SubResource("sfxrand10")
+sfx_enter_sound = SubResource("sfxrand10")
 
 [sub_resource type="AudioStreamRandomizer" id="sfxrand15"]
 playback_mode = 1
@@ -187,23 +194,29 @@ stream_3/stream = ExtResource("sfxres14")
 
 [sub_resource type="Resource" id="Effects_BackflipUp"]
 script = ExtResource("30_effects")
+variant_enabled = true
+sfx_enter_enabled = true
 animation = &"jump_l"
-animation_variants = Array[StringName]([&"jump_r"])
+variant_animations = Array[StringName]([&"jump_r"])
 restart_if_playing = false
 speed_scale = 0.0
 player_animation = &"backflip"
-sfx_enter = SubResource("sfxrand15")
+sfx_enter_sound = SubResource("sfxrand15")
 
 [sub_resource type="Resource" id="Effects_Fall"]
 script = ExtResource("30_effects")
+variant_enabled = true
+chain_enabled = true
 animation = &"fall_start_l"
-animation_variants = Array[StringName]([&"fall_start_r"])
-chain = Array[StringName]([&"fall_loop"])
+variant_animations = Array[StringName]([&"fall_start_r"])
+variant_follow = true
+chain_animations = Array[StringName]([&"fall_loop"])
 
 [sub_resource type="Resource" id="Effects_RolloutF"]
 script = ExtResource("30_effects")
+variant_enabled = true
 animation = &"jump_l"
-animation_variants = Array[StringName]([&"jump_r"])
+variant_animations = Array[StringName]([&"jump_r"])
 restart_if_playing = false
 speed_scale = 0.0
 player_animation = &"rollout_f"
@@ -216,9 +229,11 @@ stream_1/stream = ExtResource("sfxres17")
 
 [sub_resource type="Resource" id="Effects_Jump"]
 script = ExtResource("30_effects")
+variant_enabled = true
+sfx_enter_enabled = true
 animation = &"jump_l"
-animation_variants = Array[StringName]([&"jump_r"])
-sfx_enter = SubResource("sfxrand18")
+variant_animations = Array[StringName]([&"jump_r"])
+sfx_enter_sound = SubResource("sfxrand18")
 
 [sub_resource type="AudioStreamRandomizer" id="sfxrand22"]
 playback_mode = 1
@@ -229,9 +244,9 @@ stream_2/stream = ExtResource("sfxres21")
 
 [sub_resource type="Resource" id="Effects_DoubleJump"]
 script = ExtResource("30_effects")
+sfx_enter_enabled = true
 animation = &"double_jump"
-chain = Array[StringName]([&"double_jump_fall"])
-sfx_enter = SubResource("sfxrand22")
+sfx_enter_sound = SubResource("sfxrand22")
 
 [sub_resource type="AudioStreamRandomizer" id="sfxrand23"]
 playback_mode = 1
@@ -247,9 +262,10 @@ stream_7/stream = ExtResource("sfxres9")
 
 [sub_resource type="Resource" id="Effects_TripleJump"]
 script = ExtResource("30_effects")
+sfx_enter_enabled = true
 animation = &"triple_jump"
 player_animation = &"triple_jump"
-sfx_enter = SubResource("sfxrand23")
+sfx_enter_sound = SubResource("sfxrand23")
 
 [sub_resource type="AudioStreamRandomizer" id="sfxrand27"]
 playback_mode = 1
@@ -260,9 +276,10 @@ stream_2/stream = ExtResource("sfxres26")
 
 [sub_resource type="Resource" id="Effects_Spin"]
 script = ExtResource("30_effects")
+sfx_enter_enabled = true
 animation = &"spin_start"
 restart_if_playing = false
-sfx_enter = SubResource("sfxrand27")
+sfx_enter_sound = SubResource("sfxrand27")
 sfx_enter_stop_on_exit = true
 
 [sub_resource type="Resource" id="Effects_Floorslide"]
@@ -270,13 +287,14 @@ script = ExtResource("30_effects")
 animation = &"floor_slide"
 restart_if_playing = false
 offset_enabled = true
-offset = Vector2(0, 4)
+offset_value = Vector2(0, 4)
 
 [sub_resource type="Resource" id="Effects_Strike"]
 script = ExtResource("30_effects")
+sfx_enter_enabled = true
 animation = &"bonk"
 lock_flipping = true
-sfx_enter = ExtResource("sfxres28")
+sfx_enter_sound = ExtResource("sfxres28")
 
 [sub_resource type="Resource" id="Effects_SwimIdle"]
 script = ExtResource("30_effects")
@@ -295,11 +313,13 @@ restart_if_playing = false
 
 [sub_resource type="Resource" id="Effects_SwimSpin"]
 script = ExtResource("30_effects")
+sfx_enter_enabled = true
+sfx_exit_enabled = true
 animation = &"spin_start"
 restart_if_playing = false
-sfx_enter = ExtResource("sfxres29")
+sfx_enter_sound = ExtResource("sfxres29")
 sfx_enter_stop_on_exit = true
-sfx_exit = ExtResource("sfxres30")
+sfx_exit_sound = ExtResource("sfxres30")
 sfx_bus = &"SFX"
 
 [sub_resource type="Resource" id="Effects_GroundPound"]
@@ -308,13 +328,14 @@ lock_flipping = true
 
 [sub_resource type="Resource" id="Effects_GroundPoundStart"]
 script = ExtResource("30_effects")
+sfx_enter_enabled = true
 animation = &"ground_pound_start"
 restart_if_playing = false
 speed_scale = 0.0
 lock_flipping = true
 collision_mask_override = 512
 player_animation = &"ground_pound_start"
-sfx_enter = ExtResource("sfxres31")
+sfx_enter_sound = ExtResource("sfxres31")
 
 [sub_resource type="Resource" id="Effects_GroundPoundFall"]
 script = ExtResource("30_effects")
@@ -326,11 +347,12 @@ collision_mask_override = 512
 
 [sub_resource type="Resource" id="Effects_GroundPoundSlam"]
 script = ExtResource("30_effects")
+sfx_enter_enabled = true
 animation = &"ground_pound_slam"
 restart_if_playing = false
 speed_scale = 0.0
 collision_mask_override = 512
-sfx_enter = ExtResource("sfxres32")
+sfx_enter_sound = ExtResource("sfxres32")
 
 [sub_resource type="Resource" id="Effects_DeathHit"]
 script = ExtResource("30_effects")
@@ -362,10 +384,11 @@ fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="Resource" id="Effects_DeathFall"]
 script = ExtResource("30_effects")
+sfx_enter_enabled = true
 lock_flipping = true
 offset_enabled = true
 collision_mask_override = 1
-sfx_enter = ExtResource("sfxres33")
+sfx_enter_sound = ExtResource("sfxres33")
 sfx_bus = &"SFX"
 
 [sub_resource type="Animation" id="Animation_otk8c"]
@@ -511,7 +534,7 @@ anim_offset_max = 1.0
 atlas = ExtResource("51_d635j")
 region = Rect2(128, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_d041h"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_w1bew"]
 diffuse_texture = SubResource("AtlasTexture_ebtvn")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hmgs0"]
@@ -538,6 +561,14 @@ region = Rect2(128, 0, 64, 64)
 atlas = ExtResource("2_conr4")
 region = Rect2(192, 0, 64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_crup0"]
+atlas = ExtResource("90_crup")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crup1"]
+atlas = ExtResource("90_crup")
+region = Rect2(64, 0, 64, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_ckj6b"]
 atlas = ExtResource("3_4neg5")
 region = Rect2(0, 0, 64, 64)
@@ -545,6 +576,18 @@ region = Rect2(0, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_sj7k7"]
 atlas = ExtResource("2_xt77v")
 region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_djf0"]
+atlas = ExtResource("91_djf")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_djf1"]
+atlas = ExtResource("91_djf")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_djf2"]
+atlas = ExtResource("91_djf")
+region = Rect2(128, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_42p6x"]
 atlas = ExtResource("2_p5qu6")
@@ -786,53 +829,8 @@ region = Rect2(384, 0, 64, 64)
 atlas = ExtResource("3_dhej3")
 region = Rect2(448, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_crup0"]
-atlas = ExtResource("90_crup")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_crup1"]
-atlas = ExtResource("90_crup")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_djf0"]
-atlas = ExtResource("91_djf")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_djf1"]
-atlas = ExtResource("91_djf")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_djf2"]
-atlas = ExtResource("91_djf")
-region = Rect2(128, 0, 64, 64)
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_6pmmc"]
 animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_crup0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_crup1")
-}],
-"loop": 0,
-"name": &"crouch_up",
-"speed": 16.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_djf0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_djf1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_djf2")
-}],
-"loop": 1,
-"name": &"double_jump_fall",
-"speed": 12.0
-}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_hmgs0")
@@ -866,6 +864,17 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_crup0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_crup1")
+}],
+"loop": 0,
+"name": &"crouch_up",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": ExtResource("64_ndkiv")
 }],
 "loop": 1,
@@ -887,6 +896,20 @@ animations = [{
 "loop": 0,
 "name": &"double_jump",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_djf0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_djf1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_djf2")
+}],
+"loop": 0,
+"name": &"double_jump_fall",
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -1077,7 +1100,7 @@ animations = [{
 }],
 "loop": 1,
 "name": &"spin_start",
-"speed": 32.0
+"speed": 48.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -1270,6 +1293,9 @@ script = ExtResource("1_oic1i")
 turn_speed = 2.0
 midair_turn_speed = 15.0
 run_max_speed = 220.0
+walk_speed_curve = SubResource("Curve_walkspeed")
+dive_rotation_curve = SubResource("Curve_aln35")
+dive_y_velocity_to_rotation_offset_curve = SubResource("Curve_ioda6")
 debug_container = NodePath("DebugContainer")
 floor_slope_raycast = NodePath("FloorSlopeRaycast")
 spin_area = NodePath("Hitboxes/Spin")
@@ -1279,8 +1305,6 @@ _input_handler = NodePath("Handlers/InputHandler")
 _sprite_handler = NodePath("Handlers/SpriteHandler")
 _fludd_handler = NodePath("Handlers/FLUDDHandler")
 submerged_bus_effects = Array[AudioEffect]([SubResource("AudioEffectLowPassFilter_3h1ly")])
-dive_rotation_curve = SubResource("Curve_aln35")
-dive_y_velocity_to_rotation_offset_curve = SubResource("Curve_ioda6")
 sprite = NodePath("Doll")
 components_root = NodePath("Components")
 collision_shapes = [NodePath("BaseCollision"), NodePath("GroundPoundCollision"), NodePath("DiveCollision"), NodePath("Hitboxes/GroundPound/CollisionShape2D"), NodePath("Hitboxes/Dive/CollisionShape2D")]
@@ -1308,7 +1332,7 @@ effects = SubResource("Effects_Idle")
 script = ExtResource("ps_crouch")
 effects = SubResource("Effects_Crouch")
 
-[node name="CrouchUp" type="Node" parent="StateMachine/Dry/Grounded"]
+[node name="CrouchUp" type="Node" parent="StateMachine/Dry/Grounded" unique_id=877544794]
 script = ExtResource("ps_crouch_up")
 effects = SubResource("Effects_CrouchUp")
 
@@ -1485,11 +1509,11 @@ copy_mode = 0
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_d041h")
+texture = SubResource("CanvasTexture_w1bew")
 region_enabled = true
 region_rect = Rect2(128, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_d041h")
+canvas_texture = SubResource("CanvasTexture_w1bew")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true

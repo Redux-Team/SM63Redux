@@ -1,6 +1,25 @@
 extends PlayerState
 
 
+func _enter() -> void:
+	_apply_gait()
+
+
+func _tick(_delta: float) -> void:
+	_apply_gait()
+
+
+func _apply_gait() -> void:
+	var speed: float = absf(player.velocity.x)
+	var wanted: StringName = &"run_loop" if speed >= player.run_animation_speed else &"walk_loop"
+	if sprite.current_animation != wanted:
+		sprite.play(wanted)
+	
+	if player.walk_speed_curve:
+		var ratio: float = clampf(speed / maxf(player.run_max_speed, 1.0), 0.0, 1.0)
+		sprite.speed_scale = player.walk_speed_curve.sample(ratio)
+
+
 func _next() -> StringName:
 	if not player.is_on_floor() and player.velocity.y >= 0.0:
 		return &"Fall"

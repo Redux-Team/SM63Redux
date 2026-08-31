@@ -248,33 +248,38 @@ size = Vector2(14, 15)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_42vey"]
 size = Vector2(16, 16)
 
-[sub_resource type="Resource" id="Visuals_Patrol"]
+[sub_resource type="Resource" id="Effects_Patrol"]
 script = ExtResource("30_effects")
+sfx_frame_enabled = true
 animation = &"walk"
-sfx_frame = ExtResource("sfxres1")
+sfx_frame_sound = ExtResource("sfxres1")
 sfx_frame_indices = Array[int]([0, 3])
 
-[sub_resource type="Resource" id="Visuals_Alert"]
+[sub_resource type="Resource" id="Effects_Alert"]
 script = ExtResource("30_effects")
-sfx_enter = ExtResource("sfxres2")
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres2")
 
-[sub_resource type="Resource" id="Visuals_Chase"]
+[sub_resource type="Resource" id="Effects_Chase"]
 script = ExtResource("30_effects")
+sfx_frame_enabled = true
 animation = &"walk"
 speed_scale = 1.5
-sfx_frame = ExtResource("sfxres1")
+sfx_frame_sound = ExtResource("sfxres1")
 sfx_frame_indices = Array[int]([0, 3])
 
-[sub_resource type="Resource" id="Visuals_Squish"]
+[sub_resource type="Resource" id="Effects_Squish"]
 script = ExtResource("30_effects")
+sfx_enter_enabled = true
 animation = &"squish"
 speed_scale = 1.5
-sfx_enter = ExtResource("sfxres3")
+sfx_enter_sound = ExtResource("sfxres3")
 
-[sub_resource type="Resource" id="Visuals_Strike"]
+[sub_resource type="Resource" id="Effects_Strike"]
 script = ExtResource("30_effects")
+sfx_enter_enabled = true
 player_animation = &"strike_hit"
-sfx_enter = ExtResource("sfxres4")
+sfx_enter_sound = ExtResource("sfxres4")
 
 [node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("player_check", "sprite", "components_root", "machine", "water_check")]
 collision_layer = 8
@@ -300,27 +305,27 @@ animation_player = NodePath("../AnimationPlayer")
 script = ExtResource("3_tx7nd")
 [node name="Patrol" type="Node" parent="StateMachine/Wander" unique_id=392367863 node_paths=PackedStringArray("floor_check_l", "floor_check_r")]
 script = ExtResource("5_4grvk")
-effects = SubResource("Visuals_Patrol")
+effects = SubResource("Effects_Patrol")
 displacement = SubResource("Curve_g7wuw")
 floor_check_l = NodePath("../../../FloorCheckL")
 floor_check_r = NodePath("../../../FloorCheckR")
 
 [node name="Alert" type="Node" parent="StateMachine/Wander" unique_id=1129696963]
 script = ExtResource("4_x5cu4")
-effects = SubResource("Visuals_Alert")
+effects = SubResource("Effects_Alert")
 
 [node name="Chase" type="Node" parent="StateMachine" unique_id=1835913114]
 script = ExtResource("11_fb4me")
-effects = SubResource("Visuals_Chase")
+effects = SubResource("Effects_Chase")
 
 [node name="Squish" type="Node" parent="StateMachine" unique_id=354975756 node_paths=PackedStringArray("hit_box")]
 script = ExtResource("12_6f57m")
-effects = SubResource("Visuals_Squish")
+effects = SubResource("Effects_Squish")
 hit_box = NodePath("../../HitBox")
 
 [node name="Strike" type="Node" parent="StateMachine" unique_id=440686515 node_paths=PackedStringArray("hit_box")]
 script = ExtResource("14_xvu80")
-effects = SubResource("Visuals_Strike")
+effects = SubResource("Effects_Strike")
 hit_box = NodePath("../../HitBox")
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]

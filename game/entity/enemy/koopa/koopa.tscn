@@ -129,7 +129,7 @@ point_count = 4
 resource_local_to_scene = true
 size = Vector2(18, 26)
 
-[sub_resource type="Resource" id="Visuals_Patrol"]
+[sub_resource type="Resource" id="Effects_Patrol"]
 script = ExtResource("30_effects")
 animation = &"default"
 
@@ -213,7 +213,7 @@ initial_state = NodePath("Patrol")
 
 [node name="Patrol" type="Node" parent="StateMachine" unique_id=530492825]
 script = ExtResource("12_4agb1")
-effects = SubResource("Visuals_Patrol")
+effects = SubResource("Effects_Patrol")
 displacement = SubResource("Curve_4agb1")
 
 [node name="WaterCheckArea" type="Area2D" parent="." unique_id=1539458646]

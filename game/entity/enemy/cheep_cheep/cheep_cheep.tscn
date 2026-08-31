@@ -270,23 +270,25 @@ radius = 43.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_4q4ff"]
 radius = 171.01169
 
-[sub_resource type="Resource" id="Visuals_Swim"]
+[sub_resource type="Resource" id="Effects_Swim"]
 script = ExtResource("30_effects")
 animation = &"swim"
 
-[sub_resource type="Resource" id="Visuals_Chase"]
+[sub_resource type="Resource" id="Effects_Chase"]
 script = ExtResource("30_effects")
+chain_enabled = true
 animation = &"alert"
-chain = Array[StringName]([&"chase"])
+chain_animations = Array[StringName]([&"chase"])
 
-[sub_resource type="Resource" id="Visuals_Flop"]
+[sub_resource type="Resource" id="Effects_Flop"]
 script = ExtResource("30_effects")
 animation = &"idle"
 
-[sub_resource type="Resource" id="Visuals_Strike"]
+[sub_resource type="Resource" id="Effects_Strike"]
 script = ExtResource("30_effects")
+sfx_enter_enabled = true
 animation = &"strike"
-sfx_enter = ExtResource("sfxres1")
+sfx_enter_sound = ExtResource("sfxres1")
 
 [node name="CheepCheep" type="CharacterBody2D" unique_id=663921538 node_paths=PackedStringArray("entity_check_area_water", "entity_check_area_close", "entity_check_area_lost", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
 collision_layer = 8
@@ -335,11 +337,11 @@ water_check_l = NodePath("../../../WaterCheckL")
 water_check_r = NodePath("../../../WaterCheckR")
 wall_check_l = NodePath("../../../WallCheckL")
 wall_check_r = NodePath("../../../WallCheckR")
-effects = SubResource("Visuals_Swim")
+effects = SubResource("Effects_Swim")
 
 [node name="Chase" type="Node" parent="StateMachine/Submerged" unique_id=832478878 node_paths=PackedStringArray("entity_check_area_lost")]
 script = ExtResource("12_b1y5l")
-effects = SubResource("Visuals_Chase")
+effects = SubResource("Effects_Chase")
 entity_check_area_lost = NodePath("../../../EntityCheckAreaLost")
 
 [node name="Dry" type="Node" parent="StateMachine" unique_id=1978203948]
@@ -347,11 +349,11 @@ script = ExtResource("13_xq1me")
 
 [node name="Flop" type="Node" parent="StateMachine/Dry" unique_id=712154901]
 script = ExtResource("14_qj7y6")
-effects = SubResource("Visuals_Flop")
+effects = SubResource("Effects_Flop")
 
 [node name="Strike" type="Node" parent="StateMachine" unique_id=2058756983 node_paths=PackedStringArray("friction_component", "hit_box_shape", "hurt_box_shape")]
 script = ExtResource("15_66cei")
-effects = SubResource("Visuals_Strike")
+effects = SubResource("Effects_Strike")
 friction_component = NodePath("../../Components/FrictionComponent")
 hit_box_shape = NodePath("../../HitBox/CollisionShape2D")
 hurt_box_shape = NodePath("../../HurtBox/CollisionShape2D")

@@ -11,49 +11,47 @@ signal swimming_changed(swimming: bool)
 const BUFFER_ACTIONS: PackedStringArray = ["jump"]
 var buffer_dictionary: Dictionary[String, float]
 
-@export_group("Movement Variables")
-@export_subgroup("Horizontal Movement")
+@export_group("Movement")
+@export_subgroup("Ground")
 @export var walk_acceleration: float = 20.0
 @export var turn_speed: float = 2.5
-@export var midair_turn_speed: float = 1.0
-@export var air_resistance: float = 1.0
-@export_subgroup("Vertical Movement")
-@export var jump_strength: float = 340.0
-@export var double_jump_strength: float = 420.0
-@export var triple_jump_strength: float = 500.0
-@export var jump_chain_time: float = 0.15
-@export_subgroup("Underwater Movement")
-@export var water_resistance: float = 0.6
-@export var swim_up_strength: float = 150.0
-@export var water_y_cap: float = 35.0
-@export var water_sink_rate: float = 0.125
-@export var water_drag_x: float = 1.001
-
-@export_group("Speed Limits")
-@export var run_max_speed: float = 250.0
-@export var midair_max_speed: float = 190.0
-@export var terminal_velocity_x: float = 500.0
-@export var terminal_velocity_y: float = 725.0
-@export_group("Ground")
 @export var ground_friction_flat: float = 0.3
 @export var ground_friction_divisor: float = 1.15
 @export var slope_normal_threshold: float = 0.999
 @export var slope_stick_speed: float = 0.5
 @export var dry_friction: float = 0.4
-
-@export_group("Air Control")
+@export_subgroup("Air")
+@export var midair_turn_speed: float = 1.0
+@export var air_resistance: float = 1.0
 @export var air_control_normal: float = 0.85
 @export var air_control_spin: float = 0.35
 @export var air_turn_boost: float = 2.8
 @export var air_turn_boost_spin: float = 1.4
 @export var air_turn_speed_threshold: float = 10.0
 @export var air_over_speed_decel: float = 0.1
+@export_subgroup("Underwater")
+@export var water_resistance: float = 0.6
+@export var swim_up_strength: float = 150.0
+@export var water_y_cap: float = 35.0
+@export var water_sink_rate: float = 0.125
+@export var water_drag_x: float = 1.001
+@export_subgroup("Limits")
+@export var run_max_speed: float = 250.0
+@export var midair_max_speed: float = 190.0
+@export var terminal_velocity_x: float = 500.0
+@export var terminal_velocity_y: float = 725.0
 
 @export_group("Jump")
-## How much upward speed survives releasing jump while still rising. 1.0 disables the cut.
-@export_range(0.0, 1.0) var jump_cut_multiplier: float = 0.45
-@export var jump_buffer_window: float = 0.2
+@export_subgroup("Strength")
+@export var jump_strength: float = 340.0
+@export var double_jump_strength: float = 420.0
+@export var triple_jump_strength: float = 500.0
 @export var triple_jump_min_speed: float = 120.0
+@export_subgroup("Feel")
+@export var jump_chain_time: float = 0.15
+@export_range(0.0, 1.0) var jump_cut_multiplier: float = 0.6
+@export var jump_buffer_window: float = 0.2
+@export_subgroup("Exits")
 @export var jump_spin_min_speed: float = -55.0
 @export var fall_spin_min_speed: float = 100.0
 @export var idle_jump_fall_speed: float = 50.0
@@ -95,7 +93,8 @@ var buffer_dictionary: Dictionary[String, float]
 @export var dive_rollout_jump_velocity: float = -214.0
 @export var dive_reset_decel: float = 5.0
 
-@export_group("Floor Slide")
+@export_group("Moves")
+@export_subgroup("Floor Slide")
 @export var slide_flat_angle: float = 90.0
 @export var slide_max_nosedive_angle: float = 45.0
 @export var slide_angle_lerp_speed: float = 0.5
@@ -107,8 +106,7 @@ var buffer_dictionary: Dictionary[String, float]
 @export var slide_terminal_y_divisor: float = 1.5
 @export var slide_exit_speed: float = 5.0
 @export var slide_rollout_min_speed: float = 50.0
-
-@export_group("Spin")
+@export_subgroup("Spin")
 @export var spin_gravity_scale: float = 0.67
 @export var spin_fast_duration: float = 0.25
 @export var spin_gravity_resume_time: float = 0.1
@@ -116,15 +114,13 @@ var buffer_dictionary: Dictionary[String, float]
 @export var spin_rise_from_fall: float = -35.0
 @export var spin_rise_boost: float = 50.0
 @export var spin_fall_cap: float = 270.0
-
-@export_group("Backflip")
+@export_subgroup("Backflip")
 @export var backflip_x_boost: float = 280.0
 @export var backflip_y_velocity: float = -400.0
 @export var backflip_up_x_boost: float = 50.0
 @export var backflip_up_y_velocity: float = -475.0
 @export var backflip_spin_min_speed: float = 155.0
-
-@export_group("Rollout")
+@export_subgroup("Rollout")
 @export var rollout_x_clamp: float = 625.0
 @export var rollout_y_velocity: float = -200.0
 @export var rollout_dive_lock_time: float = 0.275
@@ -133,8 +129,7 @@ var buffer_dictionary: Dictionary[String, float]
 @export var rollout_fall_time: float = 0.3
 @export var rollout_fall_min_speed: float = 30.0
 @export var rollout_spin_min_speed: float = -40.0
-
-@export_group("Ground Pound")
+@export_subgroup("Ground Pound")
 @export var gp_start_rise_speed: float = -38.0
 @export var gp_start_duration: float = 0.3
 @export var gp_fall_speed: float = 800.0
@@ -143,39 +138,61 @@ var buffer_dictionary: Dictionary[String, float]
 @export var gp_slam_exit_delay: float = 0.3
 
 @export_group("Swim")
+@export_subgroup("Burst")
+## Peak upward velocity applied during the swim burst (pixels/sec, positive = up in velocity space).
 @export var swim_burst_rise_speed: float = 150.0
+## How quickly velocity lerps toward the burst target each tick during the active burst window.
+## Lower = smoother ramp-up, higher = snappier.
 @export var swim_burst_rise_smoothing: float = 100.0
+## How quickly upward velocity bleeds off toward neutral float after the burst ends.
+## Lower = floatier tail, higher = quicker stop.
 @export var swim_rise_decay_smoothing: float = 0.05
-@export var swim_neutral_sink_speed: float = 1000.0
-@export var swim_neutral_sink_smoothing: float = 0.1
+## How long the active burst window lasts before handing off descent control to Submerged.
 @export var swim_burst_duration: float = 0.2
+## How long the player's swim input is buffered after this state fires,
+## preventing an immediate re-trigger from a held input.
 @export var swim_input_buffer_time: float = 0.35
+@export_subgroup("Drift")
+## Neutral downward drift velocity while submerged and not actively swimming.
+## Kept low so the player feels weightless rather than sinking.
+@export var swim_neutral_sink_speed: float = 1000.0
+## How quickly velocity lerps toward swim_neutral_sink_speed once the burst has fully decayed.
+@export var swim_neutral_sink_smoothing: float = 0.1
 @export var swim_down_speed: float = 140.0
 @export var swim_down_lerp: float = 0.2
 @export var swim_hold_lerp: float = 0.08
 @export var swim_drift_speed: float = 20.0
 @export var swim_drift_lerp: float = 0.1
+@export_subgroup("Handling")
 @export var swim_turn_threshold: float = 10.0
 @export var swim_slope_speed: float = 5.0
+@export var swim_spin_exit_delay: float = 0.6
+@export_subgroup("Exit")
 @export var swim_exit_boost: float = 2.5
 @export var swim_exit_boost_cap: float = -300.0
-@export var swim_spin_exit_delay: float = 0.6
+
+@export_group("Thresholds")
+@export_subgroup("Movement")
+@export var crouch_max_speed: float = 50.0
+@export var move_input_threshold: float = 0.1
+@export var walk_stop_speed: float = 0.5
+@export_subgroup("Animation")
+@export var run_animation_speed: float = 150.0
+@export var walk_speed_curve: Curve
+@export_subgroup("Strike")
+@export var strike_grounded_frames: int = 5
+@export var strike_exit_delay: float = 0.25
 
 @export_group("Death")
+@export_subgroup("Impact")
 @export var death_z_index: int = 10
 @export var death_camera_zoom: float = 2.0
 @export var death_shake_strength: float = 40.0
 @export var death_shake_time: float = 0.2
+@export_subgroup("Sequence")
 @export var death_fall_delay: float = 1.0
 @export var death_transition_delay: float = 2.0
 @export var death_screen_hold: float = 0.5
-
-@export_group("Transitions")
-@export var crouch_max_speed: float = 50.0
-@export var move_input_threshold: float = 0.1
-@export var walk_stop_speed: float = 0.5
-@export var strike_grounded_frames: int = 5
-@export var strike_exit_delay: float = 0.25
 
 @export_group("FLUDD")
 @export_subgroup("Hover")

@@ -1,16 +1,6 @@
 extends PlayerState
 
 
-## How quickly velocity lerps toward the burst target each tick during the active burst window.
-
-## How quickly upward velocity bleeds off toward neutral float after the burst ends.
-
-## Neutral downward drift velocity while submerged and not actively swimming.
-
-
-
-## How long the player's swim input is buffered after this state fires,
-
 var _burst_timer: float = 0.0
 
 

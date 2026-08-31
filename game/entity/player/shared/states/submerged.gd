@@ -24,7 +24,7 @@ func _tick(delta: float) -> void:
 
 func _next() -> StringName:
 	if not player.is_in_water():
-		return &"Fall" if player.velocity.y >= 0.0 else &"IdleJump"
+		return &"Fall" if player.velocity.y > 0.0 else &"IdleJump"
 	return &"SwimIdle" if is_current() else &""
 
 
