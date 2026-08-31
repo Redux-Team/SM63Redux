@@ -298,8 +298,8 @@ func _commit() -> void:
 	if _points.size() < 3:
 		return
 	
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Polygon Cut")
+	var do_actions: Array[Callable] = []
+	var undo_actions: Array[Callable] = []
 	
 	for target: LDObjectPolygon in _targets:
 		if not is_instance_valid(target):
@@ -318,7 +318,7 @@ func _commit() -> void:
 			CutCase.HOLE:
 				var new_holes: Array[PackedVector2Array] = old_holes.duplicate()
 				new_holes.append(_world_to_local(target, _points))
-				history.add_do(func() -> void:
+				do_actions.append(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
@@ -326,7 +326,7 @@ func _commit() -> void:
 						for h: PackedVector2Array in new_holes:
 							obj.add_hole(h)
 				)
-				history.add_undo(func() -> void:
+				undo_actions.append(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
@@ -334,10 +334,6 @@ func _commit() -> void:
 						for h: PackedVector2Array in old_holes:
 							obj.add_hole(h)
 				)
-				obj.clear_holes()
-				obj.apply_points(old_pts)
-				for h: PackedVector2Array in new_holes:
-					obj.add_hole(h)
 			
 			CutCase.BRIDGE:
 				var holes_world: Array[PackedVector2Array] = _holes_to_world(target)
@@ -354,7 +350,7 @@ func _commit() -> void:
 				var cleaned_merged: PackedVector2Array = TerrainPolygon.clean_polygon(merged_hole)
 				if cleaned_merged.size() >= 3:
 					new_holes.append(_world_to_local(target, cleaned_merged))
-				history.add_do(func() -> void:
+				do_actions.append(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
@@ -362,7 +358,7 @@ func _commit() -> void:
 						for h: PackedVector2Array in new_holes:
 							obj.add_hole(h)
 				)
-				history.add_undo(func() -> void:
+				undo_actions.append(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
@@ -370,10 +366,6 @@ func _commit() -> void:
 						for h: PackedVector2Array in old_holes:
 							obj.add_hole(h)
 				)
-				obj.clear_holes()
-				obj.apply_points(old_pts)
-				for h: PackedVector2Array in new_holes:
-					obj.add_hole(h)
 			
 			CutCase.REMOVE_HOLE:
 				var holes_world: Array[PackedVector2Array] = _holes_to_world(target)
@@ -393,11 +385,11 @@ func _commit() -> void:
 				var clipped: Array = Geometry2D.clip_polygons(target_world, combined_cut)
 				
 				if clipped.is_empty():
-					history.add_do(func() -> void:
+					do_actions.append(func() -> void:
 						if is_instance_valid(obj) and obj.is_inside_tree():
 							obj.get_parent().remove_child(obj)
 					)
-					history.add_undo(func() -> void:
+					undo_actions.append(func() -> void:
 						if is_instance_valid(obj) and not obj.is_inside_tree():
 							parent.add_child(obj)
 							obj.modulate.a = 1.0
@@ -406,7 +398,6 @@ func _commit() -> void:
 							for h: PackedVector2Array in old_holes:
 								obj.add_hole(h)
 					)
-					target.get_parent().remove_child(target)
 					continue
 				
 				var piece_holes: Array[Array] = []
@@ -420,7 +411,7 @@ func _commit() -> void:
 				
 				var new_outer: PackedVector2Array = _world_to_local(target, TerrainPolygon.clean_polygon(clipped[0]))
 				var first_holes: Array[PackedVector2Array] = piece_holes[0]
-				history.add_do(func() -> void:
+				do_actions.append(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
@@ -428,7 +419,7 @@ func _commit() -> void:
 						for h: PackedVector2Array in first_holes:
 							obj.add_hole(h)
 				)
-				history.add_undo(func() -> void:
+				undo_actions.append(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
@@ -436,10 +427,6 @@ func _commit() -> void:
 						for h: PackedVector2Array in old_holes:
 							obj.add_hole(h)
 				)
-				obj.clear_holes()
-				obj.apply_points(new_outer)
-				for h: PackedVector2Array in first_holes:
-					obj.add_hole(h)
 				
 				var game_object: GameObject = GameDB.get_db().find_game_object(target.source_object_id)
 				
@@ -476,11 +463,11 @@ func _commit() -> void:
 					new_poly.polygon_data = target.polygon_data
 					new_poly.place()
 					new_poly.set_property("position", centroid)
-					history.add_do(func() -> void:
+					do_actions.append(func() -> void:
 						if is_instance_valid(new_poly) and not new_poly.is_inside_tree():
 							parent.add_child(new_poly)
 					)
-					history.add_undo(func() -> void:
+					undo_actions.append(func() -> void:
 						if is_instance_valid(new_poly) and new_poly.is_inside_tree():
 							new_poly.get_parent().remove_child(new_poly)
 					)
@@ -494,7 +481,7 @@ func _commit() -> void:
 						new_holes.append(old_holes[i])
 					else:
 						new_holes.append(_world_to_local(target, _points))
-				history.add_do(func() -> void:
+				do_actions.append(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
@@ -502,7 +489,7 @@ func _commit() -> void:
 						for h: PackedVector2Array in new_holes:
 							obj.add_hole(h)
 				)
-				history.add_undo(func() -> void:
+				undo_actions.append(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
@@ -510,21 +497,17 @@ func _commit() -> void:
 						for h: PackedVector2Array in old_holes:
 							obj.add_hole(h)
 				)
-				obj.clear_holes()
-				obj.apply_points(old_pts)
-				for h: PackedVector2Array in new_holes:
-					obj.add_hole(h)
 			
 			CutCase.SLICE:
 				var target_world: PackedVector2Array = _polygon_to_world(target)
 				var clipped: Array = Geometry2D.clip_polygons(target_world, _points)
 				
 				if clipped.is_empty():
-					history.add_do(func() -> void:
+					do_actions.append(func() -> void:
 						if is_instance_valid(obj) and obj.is_inside_tree():
 							obj.get_parent().remove_child(obj)
 					)
-					history.add_undo(func() -> void:
+					undo_actions.append(func() -> void:
 						if is_instance_valid(obj) and not obj.is_inside_tree():
 							parent.add_child(obj)
 							obj.modulate.a = 1.0
@@ -533,7 +516,6 @@ func _commit() -> void:
 							for h: PackedVector2Array in old_holes:
 								obj.add_hole(h)
 					)
-					target.get_parent().remove_child(target)
 					continue
 				
 				var piece_holes: Array[Array] = []
@@ -561,7 +543,7 @@ func _commit() -> void:
 				var first_local: PackedVector2Array = _world_to_local(target, TerrainPolygon.clean_polygon(clipped[0]))
 				var first_holes: Array[PackedVector2Array] = piece_holes[0]
 				
-				history.add_do(func() -> void:
+				do_actions.append(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
@@ -569,7 +551,7 @@ func _commit() -> void:
 						for h: PackedVector2Array in first_holes:
 							obj.add_hole(h)
 				)
-				history.add_undo(func() -> void:
+				undo_actions.append(func() -> void:
 					if is_instance_valid(obj):
 						obj.modulate.a = 1.0
 						obj.clear_holes()
@@ -577,10 +559,6 @@ func _commit() -> void:
 						for h: PackedVector2Array in old_holes:
 							obj.add_hole(h)
 				)
-				obj.clear_holes()
-				obj.apply_points(first_local)
-				for h: PackedVector2Array in first_holes:
-					obj.add_hole(h)
 				
 				var game_object: GameObject = GameDB.get_db().find_game_object(target.source_object_id)
 				var valid_piece_idx: int = 1
@@ -620,23 +598,23 @@ func _commit() -> void:
 					new_poly.place()
 					new_poly.polygon_data = target.polygon_data
 					new_poly.set_property("position", centroid)
-					history.add_do(func() -> void:
+					do_actions.append(func() -> void:
 						if is_instance_valid(new_poly) and not new_poly.is_inside_tree():
 							parent.add_child(new_poly)
 					)
-					history.add_undo(func() -> void:
+					undo_actions.append(func() -> void:
 						if is_instance_valid(new_poly) and new_poly.is_inside_tree():
 							new_poly.get_parent().remove_child(new_poly)
 					)
 					valid_piece_idx += 1
 	
-	history.commit_action()
+	LD.get_history_handler().push("Polygon Cut",
+		func() -> void:
+			for action: Callable in do_actions:
+				action.call(),
+		func() -> void:
+			for action: Callable in undo_actions:
+				action.call()
+	)
 	_points = PackedVector2Array()
 	get_tool_handler().select_tool("select")
-
-
-func _is_cut_fully_inside(target: PackedVector2Array, cut: PackedVector2Array) -> bool:
-	for p: Vector2 in cut:
-		if not Geometry2D.is_point_in_polygon(p, target):
-			return false
-	return true

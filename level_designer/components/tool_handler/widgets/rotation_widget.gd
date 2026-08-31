@@ -139,22 +139,16 @@ func _reset_rotation(objects: Array[LDObject], ring: RingState) -> void:
 	for obj: LDObject in objects:
 		old_rotations.append(obj.get_property(ring.property_key) if obj.get_property(ring.property_key) != null else 0.0)
 	
-	var history: LDHistoryHandler = get_history()
-	history.begin_action("Reset Rotation")
-	history.add_do(func() -> void:
-		for obj: LDObject in objects:
-			if is_instance_valid(obj):
-				obj.set_property(ring.property_key, 0.0)
+	get_history().push("Reset Rotation",
+		func() -> void:
+			for obj: LDObject in objects:
+				if is_instance_valid(obj):
+					obj.set_property(ring.property_key, 0.0),
+		func() -> void:
+			for i: int in objects.size():
+				if is_instance_valid(objects.get(i)):
+					objects.get(i).set_property(ring.property_key, old_rotations.get(i))
 	)
-	history.add_undo(func() -> void:
-		for i: int in objects.size():
-			if is_instance_valid(objects.get(i)):
-				objects.get(i).set_property(ring.property_key, old_rotations.get(i))
-	)
-	history.commit_action()
-	
-	for obj: LDObject in objects:
-		obj.set_property(ring.property_key, 0.0)
 	request_redraw()
 
 
@@ -164,19 +158,16 @@ func _commit_rotation(objects: Array[LDObject], ring: RingState) -> void:
 	for obj: LDObject in objects:
 		new_rotations.append(obj.get_property(ring.property_key) if obj.get_property(ring.property_key) != null else 0.0)
 	
-	var history: LDHistoryHandler = get_history()
-	history.begin_action("Rotate Objects")
-	history.add_do(func() -> void:
-		for i: int in objects.size():
-			if is_instance_valid(objects.get(i)):
-				objects.get(i).set_property(ring.property_key, new_rotations.get(i))
+	get_history().push("Rotate Objects",
+		func() -> void:
+			for i: int in objects.size():
+				if is_instance_valid(objects.get(i)):
+					objects.get(i).set_property(ring.property_key, new_rotations.get(i)),
+		func() -> void:
+			for i: int in objects.size():
+				if is_instance_valid(objects.get(i)):
+					objects.get(i).set_property(ring.property_key, old_rotations.get(i))
 	)
-	history.add_undo(func() -> void:
-		for i: int in objects.size():
-			if is_instance_valid(objects.get(i)):
-				objects.get(i).set_property(ring.property_key, old_rotations.get(i))
-	)
-	history.commit_action()
 
 
 func _get_center_screen(objects: Array[LDObject]) -> Vector2:

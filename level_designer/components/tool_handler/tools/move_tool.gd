@@ -86,27 +86,21 @@ func end_drag() -> void:
 	var instance_starts: Dictionary[String, Vector2] = _linked_instance_starts.duplicate()
 	var gh: LDStampHandler = LD.get_stamp_handler()
 
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Move Objects")
-	history.add_do(func() -> void:
-		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = new_positions[i]
-		for address: String in instance_starts:
-			gh.set_instance_position_by_address(address, instance_starts[address] + delta)
+	LD.get_history_handler().push("Move Objects",
+		func() -> void:
+			for i: int in objects.size():
+				if is_instance_valid(objects[i]):
+					objects[i].position = new_positions[i]
+			for address: String in instance_starts:
+				gh.set_instance_position_by_address(address, instance_starts[address] + delta),
+		func() -> void:
+			for i: int in objects.size():
+				if is_instance_valid(objects[i]):
+					objects[i].position = old_positions[i]
+			for address: String in instance_starts:
+				gh.set_instance_position_by_address(address, instance_starts[address])
 	)
-	history.add_undo(func() -> void:
-		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].position = old_positions[i]
-		for address: String in instance_starts:
-			gh.set_instance_position_by_address(address, instance_starts[address])
-	)
-	history.commit_action()
-
-	for address: String in instance_starts:
-		gh.set_instance_position_by_address(address, instance_starts[address] + delta)
-
+	
 	_is_dragging = false
 	_objects.clear()
 	_drag_start_positions.clear()

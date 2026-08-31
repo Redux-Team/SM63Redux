@@ -79,9 +79,6 @@ func _commit() -> void:
 	if _points.size() < 3:
 		return
 	
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Polygon Add")
-	
 	var accumulated: PackedVector2Array = _points
 	var affected_targets: Array[LDObjectPolygon] = []
 	var old_points_map: Dictionary = {}
@@ -108,7 +105,6 @@ func _commit() -> void:
 				new_holes_from_merge.append(hole_pts)
 	
 	if affected_targets.is_empty():
-		history.commit_action()
 		_points = PackedVector2Array()
 		get_tool_handler().select_tool("select")
 		return
@@ -152,26 +148,8 @@ func _commit() -> void:
 				if piece is PackedVector2Array and (piece as PackedVector2Array).size() >= 3:
 					new_holes.append(_world_to_local(primary, piece))
 	
-	history.add_do(func() -> void:
-		if is_instance_valid(primary_obj):
-			primary_obj.modulate.a = 1.0
-			primary_obj.clear_holes()
-			primary_obj.apply_points(primary_new)
-			for h: PackedVector2Array in new_holes:
-				primary_obj.add_hole(h)
-	)
-	history.add_undo(func() -> void:
-		if is_instance_valid(primary_obj):
-			primary_obj.modulate.a = 1.0
-			primary_obj.clear_holes()
-			primary_obj.apply_points(primary_old)
-			for h: PackedVector2Array in primary_old_holes:
-				primary_obj.add_hole(h)
-	)
-	primary_obj.clear_holes()
-	primary_obj.apply_points(primary_new)
-	for h: PackedVector2Array in new_holes:
-		primary_obj.add_hole(h)
+	var redundant_dos: Array[Callable] = []
+	var redundant_undos: Array[Callable] = []
 	
 	for i: int in range(1, affected_targets.size()):
 		var redundant: LDObjectPolygon = affected_targets[i]
@@ -181,11 +159,11 @@ func _commit() -> void:
 		var redundant_old_holes: Array[PackedVector2Array] = old_holes_map[redundant]
 		var redundant_parent: Node = redundant.get_parent()
 		var redundant_obj: LDObjectPolygon = redundant
-		history.add_do(func() -> void:
+		redundant_dos.append(func() -> void:
 			if is_instance_valid(redundant_obj) and redundant_obj.is_inside_tree():
 				redundant_obj.get_parent().remove_child(redundant_obj)
 		)
-		history.add_undo(func() -> void:
+		redundant_undos.append(func() -> void:
 			if is_instance_valid(redundant_obj) and not redundant_obj.is_inside_tree():
 				redundant_parent.add_child(redundant_obj)
 				redundant_obj.modulate.a = 1.0
@@ -194,8 +172,27 @@ func _commit() -> void:
 				for h: PackedVector2Array in redundant_old_holes:
 					redundant_obj.add_hole(h)
 		)
-		redundant.get_parent().remove_child(redundant)
 	
-	history.commit_action()
+	LD.get_history_handler().push("Polygon Add",
+		func() -> void:
+			if is_instance_valid(primary_obj):
+				primary_obj.modulate.a = 1.0
+				primary_obj.clear_holes()
+				primary_obj.apply_points(primary_new)
+				for h: PackedVector2Array in new_holes:
+					primary_obj.add_hole(h)
+			for redundant_do: Callable in redundant_dos:
+				redundant_do.call(),
+		func() -> void:
+			if is_instance_valid(primary_obj):
+				primary_obj.modulate.a = 1.0
+				primary_obj.clear_holes()
+				primary_obj.apply_points(primary_old)
+				for h: PackedVector2Array in primary_old_holes:
+					primary_obj.add_hole(h)
+			for redundant_undo: Callable in redundant_undos:
+				redundant_undo.call()
+	)
+	
 	_points = PackedVector2Array()
 	get_tool_handler().select_tool("select")

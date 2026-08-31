@@ -244,29 +244,24 @@ func place_linked(stamp_id: String, unique_id: String, position: Vector2, layer_
 	for obj: LDObject in spawned:
 		_mark_linked_object(obj, address)
 	
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Place Stamp: " + address)
-	history.add_do(func() -> void:
-		if not stamp.has_instance(area_name, unique_id):
-			if not stamp.instances.has(area_name):
-				stamp.instances[area_name] = []
-			stamp.instances[area_name].append(instance)
-		for obj: LDObject in spawned:
-			if is_instance_valid(obj) and not obj.get_parent():
-				var obj_layer: int = obj.get_meta(&"spawn_layer", layer_index)
-				area.add_object(obj, Vector2i(obj.position), obj_layer)
-		instance_placed.emit(stamp, unique_id)
+	LD.get_history_handler().push("Place Stamp: " + address,
+		func() -> void:
+			if not stamp.has_instance(area_name, unique_id):
+				if not stamp.instances.has(area_name):
+					stamp.instances[area_name] = []
+				stamp.instances[area_name].append(instance)
+			for obj: LDObject in spawned:
+				if is_instance_valid(obj) and not obj.get_parent():
+					var obj_layer: int = obj.get_meta(&"spawn_layer", layer_index)
+					area.add_object(obj, Vector2i(obj.position), obj_layer)
+			instance_placed.emit(stamp, unique_id),
+		func() -> void:
+			stamp.remove_instance(area_name, unique_id)
+			for obj: LDObject in spawned:
+				if is_instance_valid(obj) and obj.get_parent():
+					obj.get_parent().remove_child(obj)
+			instance_removed.emit(stamp, unique_id)
 	)
-	history.add_undo(func() -> void:
-		stamp.remove_instance(area_name, unique_id)
-		for obj: LDObject in spawned:
-			if is_instance_valid(obj) and obj.get_parent():
-				obj.get_parent().remove_child(obj)
-		instance_removed.emit(stamp, unique_id)
-	)
-	history.commit_action()
-	
-	instance_placed.emit(stamp, unique_id)
 	return true
 
 
@@ -283,31 +278,22 @@ func remove_instance(stamp_id: String, area_name: String, unique_id: String) -> 
 	var to_remove: Array[LDObject] = _get_objects_at_address(address)
 	
 	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Remove Instance: " + address)
-	history.add_do(func() -> void:
-		stamp.remove_instance(area_name, unique_id)
-		for obj: LDObject in to_remove:
-			if is_instance_valid(obj) and obj.get_parent():
-				obj.get_parent().remove_child(obj)
-		instance_removed.emit(stamp, unique_id)
+	history.push("Remove Instance: " + address,
+		func() -> void:
+			stamp.remove_instance(area_name, unique_id)
+			for obj: LDObject in to_remove:
+				if is_instance_valid(obj) and obj.get_parent():
+					obj.get_parent().remove_child(obj)
+			instance_removed.emit(stamp, unique_id),
+		func() -> void:
+			stamp.add_instance(area_name, unique_id, inst_pos, inst_layer)
+			for obj: LDObject in to_remove:
+				if is_instance_valid(obj) and not obj.get_parent():
+					var obj_layer: int = obj.get_meta(&"spawn_layer", inst_layer)
+					area.add_object(obj, Vector2i(obj.position), obj_layer)
+			instance_placed.emit(stamp, unique_id)
 	)
-	history.add_undo(func() -> void:
-		stamp.add_instance(area_name, unique_id, inst_pos, inst_layer)
-		for obj: LDObject in to_remove:
-			if is_instance_valid(obj) and not obj.get_parent():
-				var obj_layer: int = obj.get_meta(&"spawn_layer", inst_layer)
-				area.add_object(obj, Vector2i(obj.position), obj_layer)
-		instance_placed.emit(stamp, unique_id)
-	)
-	history.commit_action()
 	history.track_detached(to_remove)
-	
-	stamp.remove_instance(area_name, unique_id)
-	for obj: LDObject in to_remove:
-		if is_instance_valid(obj) and obj.get_parent():
-			obj.get_parent().remove_child(obj)
-	
-	instance_removed.emit(stamp, unique_id)
 
 
 func get_object_linked_stamp(obj: LDObject) -> String:

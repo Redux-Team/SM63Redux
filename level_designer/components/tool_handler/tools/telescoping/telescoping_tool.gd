@@ -171,17 +171,14 @@ func _commit_sizing() -> void:
 	if placed.has_property(&"position"):
 		placed.set_property(&"position", placed.position)
 	
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Place Telescoping Object")
-	history.add_do(func() -> void:
-		if is_instance_valid(placed):
-			placed.show()
+	LD.get_history_handler().push("Place Telescoping Object",
+		func() -> void:
+			if is_instance_valid(placed):
+				placed.show(),
+		func() -> void:
+			if is_instance_valid(placed):
+				placed.hide()
 	)
-	history.add_undo(func() -> void:
-		if is_instance_valid(placed):
-			placed.hide()
-	)
-	history.commit_action()
 	
 	placed.place()
 	_sizing_object = null

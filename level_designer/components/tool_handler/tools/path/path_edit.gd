@@ -207,17 +207,14 @@ func _end_drag_point() -> void:
 	var old_points: PackedVector2Array = _drag_start_points.duplicate()
 	var obj: LDObjectPath = _editing_object
 	
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Move Path Point")
-	history.add_do(func() -> void:
-		if is_instance_valid(obj):
-			obj.apply_points(new_points)
+	LD.get_history_handler().push("Move Path Point",
+		func() -> void:
+			if is_instance_valid(obj):
+				obj.apply_points(new_points),
+		func() -> void:
+			if is_instance_valid(obj):
+				obj.apply_points(old_points)
 	)
-	history.add_undo(func() -> void:
-		if is_instance_valid(obj):
-			obj.apply_points(old_points)
-	)
-	history.commit_action()
 	
 	_dragging_point_index = -1
 	set_cursor_shape(Control.CURSOR_ARROW)
@@ -235,19 +232,15 @@ func _delete_point(index: int) -> void:
 	var new_points: PackedVector2Array = pts.duplicate()
 	var obj: LDObjectPath = _editing_object
 	
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Delete Path Point")
-	history.add_do(func() -> void:
-		if is_instance_valid(obj):
-			obj.apply_points(new_points)
+	LD.get_history_handler().push("Delete Path Point",
+		func() -> void:
+			if is_instance_valid(obj):
+				obj.apply_points(new_points),
+		func() -> void:
+			if is_instance_valid(obj):
+				obj.apply_points(old_points)
 	)
-	history.add_undo(func() -> void:
-		if is_instance_valid(obj):
-			obj.apply_points(old_points)
-	)
-	history.commit_action()
 	
-	_editing_object.apply_points(new_points)
 	_hovered_point_index = -1
 	_rebuild_vertex_buttons()
 
@@ -265,19 +258,15 @@ func _insert_point_on_edge(edge_index: int, pos: Vector2) -> void:
 	new_points.insert(edge_index + 1, local_pos)
 	var obj: LDObjectPath = _editing_object
 	
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Insert Path Point")
-	history.add_do(func() -> void:
-		if is_instance_valid(obj):
-			obj.apply_points(new_points)
+	LD.get_history_handler().push("Insert Path Point",
+		func() -> void:
+			if is_instance_valid(obj):
+				obj.apply_points(new_points),
+		func() -> void:
+			if is_instance_valid(obj):
+				obj.apply_points(old_points)
 	)
-	history.add_undo(func() -> void:
-		if is_instance_valid(obj):
-			obj.apply_points(old_points)
-	)
-	history.commit_action()
 	
-	_editing_object.apply_points(new_points)
 	_rebuild_vertex_buttons()
 	_begin_drag_point(edge_index + 1)
 

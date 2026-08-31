@@ -91,21 +91,17 @@ func _toggle_edge(index: int) -> void:
 	var new_state: bool = not old_state
 	var obj: LDObjectPolygon = _editing_object
 	var had_key: bool = obj.get_topline_overrides().has(key)
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Toggle Topline Edge")
-	history.add_do(func() -> void:
-		if is_instance_valid(obj):
-			obj.set_topline_override(key, new_state)
+	LD.get_history_handler().push("Toggle Topline Edge",
+		func() -> void:
+			if is_instance_valid(obj):
+				obj.set_topline_override(key, new_state),
+		func() -> void:
+			if is_instance_valid(obj):
+				if had_key:
+					obj.set_topline_override(key, old_state)
+				else:
+					obj.clear_topline_override(key)
 	)
-	history.add_undo(func() -> void:
-		if is_instance_valid(obj):
-			if had_key:
-				obj.set_topline_override(key, old_state)
-			else:
-				obj.clear_topline_override(key)
-	)
-	history.commit_action()
-	obj.set_topline_override(key, new_state)
 	_rebuild_handles()
 
 

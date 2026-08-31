@@ -173,25 +173,22 @@ func _commit_drag(obj: LDObjectTelescoping) -> void:
 	var new_units: int = _get_current_units(obj)
 	var new_pos: Vector2 = obj.global_position
 	
-	var history: LDHistoryHandler = get_history()
-	history.begin_action("Resize Telescoping Object")
-	history.add_do(func() -> void:
-		if is_instance_valid(obj):
-			obj.set_property(prop_name, new_units)
-			obj.global_position = new_pos
-			if obj.has_property(&"position"):
-				obj.set_property(&"position", new_pos)
-			_sync_buttons()
+	get_history().push("Resize Telescoping Object",
+		func() -> void:
+			if is_instance_valid(obj):
+				obj.set_property(prop_name, new_units)
+				obj.global_position = new_pos
+				if obj.has_property(&"position"):
+					obj.set_property(&"position", new_pos)
+				_sync_buttons(),
+		func() -> void:
+			if is_instance_valid(obj):
+				obj.set_property(prop_name, old_units)
+				obj.global_position = old_pos
+				if obj.has_property(&"position"):
+					obj.set_property(&"position", old_pos)
+				_sync_buttons()
 	)
-	history.add_undo(func() -> void:
-		if is_instance_valid(obj):
-			obj.set_property(prop_name, old_units)
-			obj.global_position = old_pos
-			if obj.has_property(&"position"):
-				obj.set_property(&"position", old_pos)
-			_sync_buttons()
-	)
-	history.commit_action()
 
 
 func _get_handle_at(obj: LDObjectTelescoping) -> int:

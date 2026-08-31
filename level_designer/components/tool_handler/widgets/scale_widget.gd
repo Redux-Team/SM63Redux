@@ -376,31 +376,23 @@ func _reset_scale() -> void:
 	var old_positions: Array[Vector2] = _drag_start_positions.duplicate()
 	var is_single: bool = _bound_objects.size() == 1
 	
-	var history: LDHistoryHandler = get_history()
-	history.begin_action("Reset Scale")
-	history.add_do(func() -> void:
-		for i: int in _bound_objects.size():
-			var obj: LDObject = _bound_objects.get(i)
-			if is_instance_valid(obj):
-				obj.set_property(&"scale", Vector2.ONE if is_single else old_scales.get(i))
-				if not SCALE_FROM_CENTER:
-					obj.set_property(&"position", old_positions.get(i))
+	get_history().push("Reset Scale",
+		func() -> void:
+			for i: int in _bound_objects.size():
+				var obj: LDObject = _bound_objects.get(i)
+				if is_instance_valid(obj):
+					obj.set_property(&"scale", Vector2.ONE if is_single else old_scales.get(i))
+					if not SCALE_FROM_CENTER:
+						obj.set_property(&"position", old_positions.get(i)),
+		func() -> void:
+			for i: int in _bound_objects.size():
+				var obj: LDObject = _bound_objects.get(i)
+				if is_instance_valid(obj):
+					obj.set_property(&"scale", old_scales.get(i))
+					if not SCALE_FROM_CENTER:
+						obj.set_property(&"position", old_positions.get(i))
 	)
-	history.add_undo(func() -> void:
-		for i: int in _bound_objects.size():
-			var obj: LDObject = _bound_objects.get(i)
-			if is_instance_valid(obj):
-				obj.set_property(&"scale", old_scales.get(i))
-				if not SCALE_FROM_CENTER:
-					obj.set_property(&"position", old_positions.get(i))
-	)
-	history.commit_action()
 	
-	for i: int in _bound_objects.size():
-		var obj: LDObject = _bound_objects.get(i)
-		obj.set_property(&"scale", Vector2.ONE if is_single else old_scales.get(i))
-		if not SCALE_FROM_CENTER:
-			obj.set_property(&"position", old_positions.get(i))
 	_sync_panel()
 
 
@@ -415,22 +407,19 @@ func _commit_scale() -> void:
 		var pos: Variant = obj.get_property(&"position")
 		new_positions.append(pos if pos != null else Vector2.ZERO)
 	
-	var history: LDHistoryHandler = get_history()
-	history.begin_action("Scale Objects")
-	history.add_do(func() -> void:
-		for i: int in _bound_objects.size():
-			var obj: LDObject = _bound_objects.get(i)
-			if is_instance_valid(obj):
-				obj.set_property(&"scale", new_scales.get(i))
-				if not SCALE_FROM_CENTER:
-					obj.set_property(&"position", new_positions.get(i))
+	get_history().push("Scale Objects",
+		func() -> void:
+			for i: int in _bound_objects.size():
+				var obj: LDObject = _bound_objects.get(i)
+				if is_instance_valid(obj):
+					obj.set_property(&"scale", new_scales.get(i))
+					if not SCALE_FROM_CENTER:
+						obj.set_property(&"position", new_positions.get(i)),
+		func() -> void:
+			for i: int in _bound_objects.size():
+				var obj: LDObject = _bound_objects.get(i)
+				if is_instance_valid(obj):
+					obj.set_property(&"scale", old_scales.get(i))
+					if not SCALE_FROM_CENTER:
+						obj.set_property(&"position", old_positions.get(i))
 	)
-	history.add_undo(func() -> void:
-		for i: int in _bound_objects.size():
-			var obj: LDObject = _bound_objects.get(i)
-			if is_instance_valid(obj):
-				obj.set_property(&"scale", old_scales.get(i))
-				if not SCALE_FROM_CENTER:
-					obj.set_property(&"position", old_positions.get(i))
-	)
-	history.commit_action()

@@ -90,19 +90,16 @@ func _paste_internal(data: Array[Dictionary], offset: Vector2) -> void:
 	if spawned.is_empty():
 		return
 	
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Paste Objects")
-	history.add_do(func() -> void:
-		for obj: LDObject in spawned:
-			if is_instance_valid(obj) and not obj.get_parent():
-				area.add_object(obj, Vector2i(obj.position), area._active_index)
+	LD.get_history_handler().push("Paste Objects",
+		func() -> void:
+			for obj: LDObject in spawned:
+				if is_instance_valid(obj) and not obj.get_parent():
+					area.add_object(obj, Vector2i(obj.position), area._active_index),
+		func() -> void:
+			for obj: LDObject in spawned:
+				if is_instance_valid(obj) and obj.get_parent():
+					obj.get_parent().remove_child(obj)
 	)
-	history.add_undo(func() -> void:
-		for obj: LDObject in spawned:
-			if is_instance_valid(obj) and obj.get_parent():
-				obj.get_parent().remove_child(obj)
-	)
-	history.commit_action()
 	
 	LD.get_editor_viewport().set_selected_objects(spawned)
 

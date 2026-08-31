@@ -55,23 +55,17 @@ func delete_placed_selection() -> void:
 		parents.append(obj.get_parent())
 
 	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Delete Objects")
-	history.add_do(func() -> void:
-		for obj: LDObject in deletable:
-			if is_instance_valid(obj) and obj.get_parent():
-				obj.get_parent().remove_child(obj)
+	history.push("Delete Objects",
+		func() -> void:
+			for obj: LDObject in deletable:
+				if is_instance_valid(obj) and obj.get_parent():
+					obj.get_parent().remove_child(obj),
+		func() -> void:
+			for i: int in deletable.size():
+				if is_instance_valid(deletable.get(i)) and is_instance_valid(parents.get(i)):
+					parents.get(i).add_child(deletable.get(i))
 	)
-	history.add_undo(func() -> void:
-		for i: int in deletable.size():
-			if is_instance_valid(deletable.get(i)) and is_instance_valid(parents.get(i)):
-				parents.get(i).add_child(deletable.get(i))
-	)
-	history.commit_action()
 	history.track_detached(deletable)
-	
-	for obj: LDObject in deletable:
-		if obj.get_parent():
-			obj.get_parent().remove_child(obj)
 
 
 ## Snapshots the current selection into a stamp. Pass `id` to name it (or to replace an
@@ -160,22 +154,16 @@ func set_property_on_selection(key: StringName, value: Variant) -> void:
 	for obj: LDObject in objects:
 		old_values.append(obj.get_property(key))
 	
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Set Property: " + key)
-	history.add_do(func() -> void:
-		for obj: LDObject in objects:
-			if is_instance_valid(obj):
-				obj.set_property(key, value)
+	LD.get_history_handler().push("Set Property: " + key,
+		func() -> void:
+			for obj: LDObject in objects:
+				if is_instance_valid(obj):
+					obj.set_property(key, value),
+		func() -> void:
+			for i: int in objects.size():
+				if is_instance_valid(objects[i]):
+					objects[i].set_property(key, old_values[i])
 	)
-	history.add_undo(func() -> void:
-		for i: int in objects.size():
-			if is_instance_valid(objects[i]):
-				objects[i].set_property(key, old_values[i])
-	)
-	history.commit_action()
-	
-	for obj: LDObject in objects:
-		obj.set_property(key, value)
 
 
 func _get_property_default(obj: LDObject, key: StringName) -> Variant:

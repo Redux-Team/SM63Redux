@@ -189,11 +189,19 @@ func _commit_stroke() -> void:
 	if plans.is_empty():
 		return
 	
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Erase Tiles" if erasing else "Paint Tiles")
+	var dos: Array[Callable] = []
+	var undos: Array[Callable] = []
 	for plan: Plan in plans:
-		_rewrite(plan.targets, plan.cells, history)
-	history.commit_action()
+		_rewrite(plan.targets, plan.cells, dos, undos)
+	
+	LD.get_history_handler().push("Erase Tiles" if erasing else "Paint Tiles",
+		func() -> void:
+			for step: Callable in dos:
+				step.call(),
+		func() -> void:
+			for step: Callable in undos:
+				step.call()
+	)
 	
 	_refresh_preview()
 
@@ -384,7 +392,7 @@ func _survey(reach: Rect2i) -> Array[Patch]:
 ## Applies a cell set back onto the polygons that fed it. Extra regions spawn new objects and
 ## regions that vanished take their object with them, so a cut that splits terrain in two and an
 ## edit that joins two pieces back together both land in one action.
-func _rewrite(targets: Array[LDObjectPolygon], cells: Dictionary[Vector2i, bool], history: LDHistoryHandler) -> void:
+func _rewrite(targets: Array[LDObjectPolygon], cells: Dictionary[Vector2i, bool], dos: Array[Callable], undos: Array[Callable]) -> void:
 	var shapes: Array[TileGrid.Shape] = TileGrid.trace(cells)
 	var template: LDObjectPolygon = targets.get(0) if not targets.is_empty() else null
 	var source: GameObject = _game_object
@@ -393,14 +401,14 @@ func _rewrite(targets: Array[LDObjectPolygon], cells: Dictionary[Vector2i, bool]
 	
 	for i: int in maxi(shapes.size(), targets.size()):
 		if i >= shapes.size():
-			_remove(targets.get(i), history)
+			_remove(targets.get(i), dos, undos)
 		elif i < targets.size():
-			_reshape(targets.get(i), shapes.get(i), history)
+			_reshape(targets.get(i), shapes.get(i), dos, undos)
 		else:
-			_spawn(shapes.get(i), source, template, history)
+			_spawn(shapes.get(i), source, template, dos, undos)
 
 
-func _reshape(poly: LDObjectPolygon, shape: TileGrid.Shape, history: LDHistoryHandler) -> void:
+func _reshape(poly: LDObjectPolygon, shape: TileGrid.Shape, dos: Array[Callable], undos: Array[Callable]) -> void:
 	var old_outer: PackedVector2Array = poly.get_outer_points().duplicate()
 	var old_holes: Array[PackedVector2Array] = poly.get_holes().duplicate()
 	var new_outer: PackedVector2Array = _to_local(poly, shape.outer)
@@ -408,18 +416,17 @@ func _reshape(poly: LDObjectPolygon, shape: TileGrid.Shape, history: LDHistoryHa
 	for hole: PackedVector2Array in shape.holes:
 		new_holes.append(_to_local(poly, hole))
 	
-	history.add_do(func() -> void:
+	dos.append(func() -> void:
 		if is_instance_valid(poly):
 			poly.apply_points_and_holes(new_outer, new_holes)
 	)
-	history.add_undo(func() -> void:
+	undos.append(func() -> void:
 		if is_instance_valid(poly):
 			poly.apply_points_and_holes(old_outer, old_holes)
 	)
-	poly.apply_points_and_holes(new_outer, new_holes)
 
 
-func _spawn(shape: TileGrid.Shape, source: GameObject, template: LDObjectPolygon, history: LDHistoryHandler) -> void:
+func _spawn(shape: TileGrid.Shape, source: GameObject, template: LDObjectPolygon, dos: Array[Callable], undos: Array[Callable]) -> void:
 	if not source:
 		return
 	var instance: LDObject = source.get_editor_instance()
@@ -447,12 +454,12 @@ func _spawn(shape: TileGrid.Shape, source: GameObject, template: LDObjectPolygon
 	poly.set_property(&"position", origin)
 	
 	var parent: Node = poly.get_parent()
-	history.track_detached([poly])
-	history.add_do(func() -> void:
+	LD.get_history_handler().track_detached([poly])
+	dos.append(func() -> void:
 		if is_instance_valid(poly) and not poly.is_inside_tree():
 			parent.add_child(poly)
 	)
-	history.add_undo(func() -> void:
+	undos.append(func() -> void:
 		if is_instance_valid(poly) and poly.is_inside_tree():
 			_deselect(poly)
 			poly.get_parent().remove_child(poly)
@@ -461,24 +468,22 @@ func _spawn(shape: TileGrid.Shape, source: GameObject, template: LDObjectPolygon
 
 ## Drops a region that was erased away entirely. The object is handed to the history handler
 ## rather than freed, since an undo can still bring it back and nothing else owns it meanwhile.
-func _remove(poly: LDObjectPolygon, history: LDHistoryHandler) -> void:
+func _remove(poly: LDObjectPolygon, dos: Array[Callable], undos: Array[Callable]) -> void:
 	var parent: Node = poly.get_parent()
 	var old_outer: PackedVector2Array = poly.get_outer_points().duplicate()
 	var old_holes: Array[PackedVector2Array] = poly.get_holes().duplicate()
 	
-	history.track_detached([poly])
-	history.add_do(func() -> void:
+	LD.get_history_handler().track_detached([poly])
+	dos.append(func() -> void:
 		if is_instance_valid(poly) and poly.is_inside_tree():
 			_deselect(poly)
 			poly.get_parent().remove_child(poly)
 	)
-	history.add_undo(func() -> void:
+	undos.append(func() -> void:
 		if is_instance_valid(poly) and not poly.is_inside_tree():
 			parent.add_child(poly)
 			poly.apply_points_and_holes(old_outer, old_holes)
 	)
-	_deselect(poly)
-	parent.remove_child(poly)
 
 
 func _deselect(poly: LDObjectPolygon) -> void:

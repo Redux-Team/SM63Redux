@@ -164,18 +164,15 @@ func _commit_polygon() -> void:
 	
 	var placed: LDObjectPolygon = _active_object
 	var parent: Node = placed.get_parent()
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Place Polygon")
-	history.add_do(func() -> void:
-		if is_instance_valid(placed) and not placed.is_inside_tree():
-			parent.add_child(placed)
+	LD.get_history_handler().push("Place Polygon",
+		func() -> void:
+			if is_instance_valid(placed) and not placed.is_inside_tree():
+				parent.add_child(placed),
+		func() -> void:
+			if is_instance_valid(placed) and placed.is_inside_tree():
+				viewport.clear_selection()
+				placed.get_parent().remove_child(placed)
 	)
-	history.add_undo(func() -> void:
-		if is_instance_valid(placed) and placed.is_inside_tree():
-			viewport.clear_selection()
-			placed.get_parent().remove_child(placed)
-	)
-	history.commit_action()
 	
 	placed.place()
 	_active_object = null

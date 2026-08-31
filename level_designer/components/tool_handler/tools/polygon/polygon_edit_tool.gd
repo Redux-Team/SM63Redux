@@ -295,23 +295,20 @@ func _end_drag_point() -> void:
 				idx += 1
 		old_holes.append(hole_pts)
 	
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Move Polygon Point")
-	history.add_do(func() -> void:
-		if is_instance_valid(obj):
-			obj.clear_holes()
-			obj.apply_points(new_outer)
-			for h: PackedVector2Array in new_holes:
-				obj.add_hole(h)
+	LD.get_history_handler().push("Move Polygon Point",
+		func() -> void:
+			if is_instance_valid(obj):
+				obj.clear_holes()
+				obj.apply_points(new_outer)
+				for h: PackedVector2Array in new_holes:
+					obj.add_hole(h),
+		func() -> void:
+			if is_instance_valid(obj):
+				obj.clear_holes()
+				obj.apply_points(old_outer)
+				for h: PackedVector2Array in old_holes:
+					obj.add_hole(h)
 	)
-	history.add_undo(func() -> void:
-		if is_instance_valid(obj):
-			obj.clear_holes()
-			obj.apply_points(old_outer)
-			for h: PackedVector2Array in old_holes:
-				obj.add_hole(h)
-	)
-	history.commit_action()
 	
 	_dragging_point_index = -1
 	set_cursor_shape(Control.CURSOR_ARROW)
@@ -333,49 +330,37 @@ func _delete_point(index: int) -> void:
 		var new_outer: PackedVector2Array = old_outer.duplicate()
 		new_outer.remove_at(outer_idx)
 		
-		var history: LDHistoryHandler = LD.get_history_handler()
-		history.begin_action("Delete Polygon Point")
-		history.add_do(func() -> void:
-			if is_instance_valid(obj):
-				obj.clear_holes()
-				obj.apply_points(new_outer)
-				for h: PackedVector2Array in old_holes:
-					obj.add_hole(h)
-		)
-		history.add_undo(func() -> void:
-			if is_instance_valid(obj):
-				obj.clear_holes()
-				obj.apply_points(old_outer)
-				for h: PackedVector2Array in old_holes:
-					obj.add_hole(h)
-		)
-		history.commit_action()
-		_editing_object.clear_holes()
-		_editing_object.apply_points(new_outer)
-		for h: PackedVector2Array in old_holes:
-			_editing_object.add_hole(h)
-	else:
-		var hole_idx: int = _point_hole_indices[index]
-		var hole: PackedVector2Array = _editing_object.get_hole(hole_idx)
-		var hi: int = hole_idx
-		
-		var history: LDHistoryHandler = LD.get_history_handler()
-		
-		if hole.size() <= 3:
-			history.begin_action("Remove Hole")
-			history.add_do(func() -> void:
+		LD.get_history_handler().push("Delete Polygon Point",
+			func() -> void:
 				if is_instance_valid(obj):
-					obj.remove_hole(hi)
-			)
-			history.add_undo(func() -> void:
+					obj.clear_holes()
+					obj.apply_points(new_outer)
+					for h: PackedVector2Array in old_holes:
+						obj.add_hole(h),
+			func() -> void:
 				if is_instance_valid(obj):
 					obj.clear_holes()
 					obj.apply_points(old_outer)
 					for h: PackedVector2Array in old_holes:
 						obj.add_hole(h)
+		)
+	else:
+		var hole_idx: int = _point_hole_indices[index]
+		var hole: PackedVector2Array = _editing_object.get_hole(hole_idx)
+		var hi: int = hole_idx
+		
+		if hole.size() <= 3:
+			LD.get_history_handler().push("Remove Hole",
+				func() -> void:
+					if is_instance_valid(obj):
+						obj.remove_hole(hi),
+				func() -> void:
+					if is_instance_valid(obj):
+						obj.clear_holes()
+						obj.apply_points(old_outer)
+						for h: PackedVector2Array in old_holes:
+							obj.add_hole(h)
 			)
-			history.commit_action()
-			_editing_object.remove_hole(hole_idx)
 			_hovered_point_index = -1
 			_rebuild_vertex_buttons()
 			return
@@ -388,20 +373,17 @@ func _delete_point(index: int) -> void:
 		var new_hole: PackedVector2Array = hole.duplicate()
 		new_hole.remove_at(local_idx)
 		
-		history.begin_action("Delete Hole Point")
-		history.add_do(func() -> void:
-			if is_instance_valid(obj):
-				obj.set_hole(hi, new_hole)
+		LD.get_history_handler().push("Delete Hole Point",
+			func() -> void:
+				if is_instance_valid(obj):
+					obj.set_hole(hi, new_hole),
+			func() -> void:
+				if is_instance_valid(obj):
+					obj.clear_holes()
+					obj.apply_points(old_outer)
+					for h: PackedVector2Array in old_holes:
+						obj.add_hole(h)
 		)
-		history.add_undo(func() -> void:
-			if is_instance_valid(obj):
-				obj.clear_holes()
-				obj.apply_points(old_outer)
-				for h: PackedVector2Array in old_holes:
-					obj.add_hole(h)
-		)
-		history.commit_action()
-		_editing_object.set_hole(hole_idx, new_hole)
 	
 	_hovered_point_index = -1
 	_rebuild_vertex_buttons()
@@ -422,27 +404,20 @@ func _insert_point_on_edge(edge_index: int, is_hole: bool, hole_idx: int, pos: V
 				return
 		var new_outer: PackedVector2Array = old_outer.duplicate()
 		new_outer.insert(edge_index + 1, local_pos)
-		var history: LDHistoryHandler = LD.get_history_handler()
-		history.begin_action("Insert Polygon Point")
-		history.add_do(func() -> void:
-			if is_instance_valid(obj):
-				obj.clear_holes()
-				obj.apply_points(new_outer)
-				for h: PackedVector2Array in old_holes:
-					obj.add_hole(h)
+		LD.get_history_handler().push("Insert Polygon Point",
+			func() -> void:
+				if is_instance_valid(obj):
+					obj.clear_holes()
+					obj.apply_points(new_outer)
+					for h: PackedVector2Array in old_holes:
+						obj.add_hole(h),
+			func() -> void:
+				if is_instance_valid(obj):
+					obj.clear_holes()
+					obj.apply_points(old_outer)
+					for h: PackedVector2Array in old_holes:
+						obj.add_hole(h)
 		)
-		history.add_undo(func() -> void:
-			if is_instance_valid(obj):
-				obj.clear_holes()
-				obj.apply_points(old_outer)
-				for h: PackedVector2Array in old_holes:
-					obj.add_hole(h)
-		)
-		history.commit_action()
-		_editing_object.clear_holes()
-		_editing_object.apply_points(new_outer)
-		for h: PackedVector2Array in old_holes:
-			_editing_object.add_hole(h)
 		_rebuild_vertex_buttons()
 		_begin_drag_point(edge_index + 1)
 	else:
@@ -455,27 +430,20 @@ func _insert_point_on_edge(edge_index: int, is_hole: bool, hole_idx: int, pos: V
 		hole.insert(edge_index + 1, local_pos)
 		var new_holes: Array[PackedVector2Array] = old_holes.duplicate()
 		new_holes[hole_idx] = hole
-		var history: LDHistoryHandler = LD.get_history_handler()
-		history.begin_action("Insert Hole Point")
-		history.add_do(func() -> void:
-			if is_instance_valid(obj):
-				obj.clear_holes()
-				obj.apply_points(old_outer)
-				for h: PackedVector2Array in new_holes:
-					obj.add_hole(h)
+		LD.get_history_handler().push("Insert Hole Point",
+			func() -> void:
+				if is_instance_valid(obj):
+					obj.clear_holes()
+					obj.apply_points(old_outer)
+					for h: PackedVector2Array in new_holes:
+						obj.add_hole(h),
+			func() -> void:
+				if is_instance_valid(obj):
+					obj.clear_holes()
+					obj.apply_points(old_outer)
+					for h: PackedVector2Array in old_holes:
+						obj.add_hole(h)
 		)
-		history.add_undo(func() -> void:
-			if is_instance_valid(obj):
-				obj.clear_holes()
-				obj.apply_points(old_outer)
-				for h: PackedVector2Array in old_holes:
-					obj.add_hole(h)
-		)
-		history.commit_action()
-		_editing_object.clear_holes()
-		_editing_object.apply_points(old_outer)
-		for h: PackedVector2Array in new_holes:
-			_editing_object.add_hole(h)
 		_rebuild_vertex_buttons()
 		
 		var inserted_global_idx: int = old_outer.size()

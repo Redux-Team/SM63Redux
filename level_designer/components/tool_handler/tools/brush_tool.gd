@@ -219,20 +219,17 @@ func _commit_stroke() -> void:
 		obj._first_placement()
 	
 	var placed: Array[LDObject] = _stroke.duplicate()
-	var history: LDHistoryHandler = LD.get_history_handler()
 	
-	history.begin_action("Place Objects")
-	history.add_do(func() -> void:
-		for obj: LDObject in placed:
-			if is_instance_valid(obj):
-				obj.show()
+	LD.get_history_handler().push("Place Objects",
+		func() -> void:
+			for obj: LDObject in placed:
+				if is_instance_valid(obj):
+					obj.show(),
+		func() -> void:
+			for obj: LDObject in placed:
+				if is_instance_valid(obj):
+					obj.hide()
 	)
-	history.add_undo(func() -> void:
-		for obj: LDObject in placed:
-			if is_instance_valid(obj):
-				obj.hide()
-	)
-	history.commit_action()
 	
 	_stroke.clear()
 	_column_objects.clear()

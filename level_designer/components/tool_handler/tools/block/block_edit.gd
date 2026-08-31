@@ -189,29 +189,26 @@ func _end_drag() -> void:
 	var old_pos: Vector2 = _drag_start_object_pos
 	var old_size: Vector2 = _drag_start_size
 	
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.begin_action("Resize Block")
-	history.add_do(func() -> void:
-		if is_instance_valid(obj):
-			obj.global_position = new_pos
-			if obj.has_property(&"b_size_x"):
-				obj.set_property(&"b_size_x", new_sx)
-			if obj.has_property(&"b_size_y"):
-				obj.set_property(&"b_size_y", new_sy)
-			if obj.has_property(&"position"):
-				obj.set_property(&"position", new_pos)
+	LD.get_history_handler().push("Resize Block",
+		func() -> void:
+			if is_instance_valid(obj):
+				obj.global_position = new_pos
+				if obj.has_property(&"b_size_x"):
+					obj.set_property(&"b_size_x", new_sx)
+				if obj.has_property(&"b_size_y"):
+					obj.set_property(&"b_size_y", new_sy)
+				if obj.has_property(&"position"):
+					obj.set_property(&"position", new_pos),
+		func() -> void:
+			if is_instance_valid(obj):
+				obj.global_position = old_pos
+				if obj.has_property(&"b_size_x"):
+					obj.set_property(&"b_size_x", int(old_size.x))
+				if obj.has_property(&"b_size_y"):
+					obj.set_property(&"b_size_y", int(old_size.y))
+				if obj.has_property(&"position"):
+					obj.set_property(&"position", old_pos)
 	)
-	history.add_undo(func() -> void:
-		if is_instance_valid(obj):
-			obj.global_position = old_pos
-			if obj.has_property(&"b_size_x"):
-				obj.set_property(&"b_size_x", int(old_size.x))
-			if obj.has_property(&"b_size_y"):
-				obj.set_property(&"b_size_y", int(old_size.y))
-			if obj.has_property(&"position"):
-				obj.set_property(&"position", old_pos)
-	)
-	history.commit_action()
 	
 	_drag_corner = -1
 	set_cursor_shape(Control.CURSOR_ARROW)
