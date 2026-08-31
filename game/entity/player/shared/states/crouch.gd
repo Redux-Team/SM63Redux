@@ -8,5 +8,5 @@ func _next() -> StringName:
 		if is_zero_approx(player.move_dir):
 			return &"BackflipUp"
 	if not player.is_crouching:
-		return &"Idle"
+		return &"CrouchUp"
 	return &""

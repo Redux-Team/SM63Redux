@@ -178,6 +178,22 @@ func play(animation_name: StringName = current_animation) -> void:
 	playing = true
 
 
+func play_at_frame(animation_name: StringName, frame: int) -> void:
+	play(animation_name)
+	if not diffuse_frames or not diffuse_frames.has_animation(animation_name):
+		return
+	
+	var count: int = diffuse_frames.get_frame_count(animation_name)
+	if count <= 0:
+		return
+	
+	var wrapped: int = posmod(frame, count)
+	var fps: float = diffuse_frames.get_animation_speed(animation_name)
+	if fps > 0.0:
+		_playback_time = float(wrapped) / fps
+	current_frame = wrapped
+
+
 func stop() -> void:
 	playing = false
 

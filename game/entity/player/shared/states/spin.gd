@@ -4,13 +4,15 @@ extends PlayerState
 @export var spin_hitbox: HitBox
 
 var _gravity_suspended: bool = false
+var _slowed: bool = false
 
 
 func _enter() -> void:
 	player.set_gravity_scale_factor(player.spin_gravity_scale)
 	player.is_spinning = true
-	spin_hitbox.enable(player.spin_hitbox_time)
+	spin_hitbox.enable(player.spin_fast_duration)
 	_gravity_suspended = false
+	_slowed = false
 	
 	if not player.is_on_floor():
 		player.set_gravity_enabled(false)
@@ -22,6 +24,10 @@ func _enter() -> void:
 
 
 func _tick(_delta: float) -> void:
+	if not _slowed and time >= player.spin_fast_duration:
+		_slowed = true
+		sprite.play_at_frame(&"spin_loop", sprite.current_frame)
+	
 	if _gravity_suspended and time >= player.spin_gravity_resume_time:
 		_gravity_suspended = false
 		player.set_gravity_enabled(true)

@@ -26,6 +26,8 @@
 [ext_resource type="Script" uid="uid://cscjl4ppceor3" path="res://game/entity/player/shared/states/backflip.gd" id="11_mb70y"]
 [ext_resource type="Script" uid="uid://bv6pacjmfysox" path="res://game/entity/player/shared/states/rollout_f.gd" id="12_02rvq"]
 [ext_resource type="Texture2D" uid="uid://bjblyiou2qe0f" path="res://assets/textures/entity/player/shared/hover_fludd_r_0.png" id="13_gqe2a"]
+[ext_resource type="Texture2D" uid="uid://p854wdvg3nbj" path="res://assets/textures/entity/player/mario/crouch_up.png" id="90_crup"]
+[ext_resource type="Texture2D" uid="uid://bw7pv1724v3n4" path="res://assets/textures/entity/player/mario/double_jump_fall.png" id="91_djf"]
 [ext_resource type="Script" uid="uid://b40633h5y42cq" path="res://game/entity/player/shared/states/spin.gd" id="14_20bnd"]
 [ext_resource type="Script" uid="uid://bisaomurugmd3" path="res://game/entity/player/shared/states/base_jump.gd" id="15_5mhew"]
 [ext_resource type="Script" uid="uid://cf26ky7vulna0" path="res://game/entity/player/shared/states/ground_pound_start.gd" id="15_eihrn"]
@@ -68,6 +70,7 @@
 [ext_resource type="AudioStream" uid="uid://dolh40gtancy4" path="res://assets/sfx/player/fludd/hover_loop.mp3" id="82_681d1"]
 [ext_resource type="Script" uid="uid://4hwxabxucpuh" path="res://game/entity/state/state.gd" id="es_base"]
 [ext_resource type="Script" uid="uid://dn4qb0ueyl2oj" path="res://game/entity/player/shared/states/crouch.gd" id="ps_crouch"]
+[ext_resource type="Script" path="res://game/entity/player/shared/states/crouch_up.gd" id="ps_crouch_up"]
 [ext_resource type="Script" uid="uid://uhp6bivoni74" path="res://game/entity/player/shared/states/double_jump.gd" id="ps_double_jump"]
 [ext_resource type="Script" uid="uid://dtny7bnas3xxn" path="res://game/entity/player/shared/states/fall.gd" id="ps_fall"]
 [ext_resource type="Script" uid="uid://nkvey6hx1nru" path="res://game/entity/player/shared/states/ground_pound.gd" id="ps_ground_pound"]
@@ -111,6 +114,11 @@ cutoff_hz = 2500.0
 [sub_resource type="Resource" id="Effects_Idle"]
 script = ExtResource("30_effects")
 animation = &"idle"
+
+[sub_resource type="Resource" id="Effects_CrouchUp"]
+script = ExtResource("30_effects")
+animation = &"crouch_up"
+lock_flipping = true
 
 [sub_resource type="Resource" id="Effects_Crouch"]
 script = ExtResource("30_effects")
@@ -190,6 +198,7 @@ sfx_enter = SubResource("sfxrand15")
 script = ExtResource("30_effects")
 animation = &"fall_start_l"
 animation_variants = Array[StringName]([&"fall_start_r"])
+chain = Array[StringName]([&"fall_loop"])
 
 [sub_resource type="Resource" id="Effects_RolloutF"]
 script = ExtResource("30_effects")
@@ -221,6 +230,7 @@ stream_2/stream = ExtResource("sfxres21")
 [sub_resource type="Resource" id="Effects_DoubleJump"]
 script = ExtResource("30_effects")
 animation = &"double_jump"
+chain = Array[StringName]([&"double_jump_fall"])
 sfx_enter = SubResource("sfxrand22")
 
 [sub_resource type="AudioStreamRandomizer" id="sfxrand23"]
@@ -252,8 +262,6 @@ stream_2/stream = ExtResource("sfxres26")
 script = ExtResource("30_effects")
 animation = &"spin_start"
 restart_if_playing = false
-chain = Array[StringName]([&"spin_loop"])
-chain_loop_last = false
 sfx_enter = SubResource("sfxrand27")
 sfx_enter_stop_on_exit = true
 
@@ -289,8 +297,6 @@ restart_if_playing = false
 script = ExtResource("30_effects")
 animation = &"spin_start"
 restart_if_playing = false
-chain = Array[StringName]([&"spin_loop"])
-chain_loop_last = false
 sfx_enter = ExtResource("sfxres29")
 sfx_enter_stop_on_exit = true
 sfx_exit = ExtResource("sfxres30")
@@ -780,8 +786,53 @@ region = Rect2(384, 0, 64, 64)
 atlas = ExtResource("3_dhej3")
 region = Rect2(448, 0, 64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_crup0"]
+atlas = ExtResource("90_crup")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crup1"]
+atlas = ExtResource("90_crup")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_djf0"]
+atlas = ExtResource("91_djf")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_djf1"]
+atlas = ExtResource("91_djf")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_djf2"]
+atlas = ExtResource("91_djf")
+region = Rect2(128, 0, 64, 64)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_6pmmc"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_crup0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_crup1")
+}],
+"loop": 0,
+"name": &"crouch_up",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_djf0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_djf1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_djf2")
+}],
+"loop": 1,
+"name": &"double_jump_fall",
+"speed": 12.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_hmgs0")
@@ -855,7 +906,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_sbpf8")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"fall_start_l",
 "speed": 5.0
 }, {
@@ -869,7 +920,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_krv0b")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"fall_start_r",
 "speed": 5.0
 }, {
@@ -1256,6 +1307,10 @@ effects = SubResource("Effects_Idle")
 [node name="Crouch" type="Node" parent="StateMachine/Dry/Grounded" unique_id=220392553]
 script = ExtResource("ps_crouch")
 effects = SubResource("Effects_Crouch")
+
+[node name="CrouchUp" type="Node" parent="StateMachine/Dry/Grounded"]
+script = ExtResource("ps_crouch_up")
+effects = SubResource("Effects_CrouchUp")
 
 [node name="Walk" type="Node" parent="StateMachine/Dry/Grounded" unique_id=1580509400]
 script = ExtResource("ps_walk")

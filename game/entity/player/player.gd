@@ -110,7 +110,7 @@ var buffer_dictionary: Dictionary[String, float]
 
 @export_group("Spin")
 @export var spin_gravity_scale: float = 0.67
-@export var spin_hitbox_time: float = 0.3
+@export var spin_fast_duration: float = 0.25
 @export var spin_gravity_resume_time: float = 0.1
 @export var spin_duration: float = 0.5
 @export var spin_rise_from_fall: float = -35.0
