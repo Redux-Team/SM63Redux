@@ -133,8 +133,8 @@ func open(id: StringName) -> Control:
 
 	_window.bind(content, def)
 	_active_id = id
-	LD.get_input_handler().set_input_priority(LD.get_ui())
 	if not switching:
+		LD.capture_input()
 		_window.popin()
 	active_changed.emit(id)
 	return content
@@ -199,7 +199,7 @@ func _on_browser_category_changed(category_name: String) -> void:
 
 func _on_window_popped_out() -> void:
 	if _active_id != &"":
-		LD.get_input_handler().remove_input_priority(LD.get_ui())
+		LD.release_input()
 		_active_id = &""
 		active_changed.emit(&"")
 

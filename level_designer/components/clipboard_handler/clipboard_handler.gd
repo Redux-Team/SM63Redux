@@ -1,5 +1,5 @@
 class_name LDClipboardHandler
-extends LDComponent
+extends Node
 
 signal clipboard_changed
 

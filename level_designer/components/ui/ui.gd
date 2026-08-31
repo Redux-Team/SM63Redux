@@ -1,5 +1,5 @@
 class_name LDUI
-extends LDComponent
+extends Node
 
 ## Facade over the level designer's UI. Holds no logic itself - every concern lives in a
 ## dedicated handler, reachable via the get_*_handler() accessors (mirrors how the LD
@@ -30,7 +30,7 @@ const MOBILE_SEPARATION: int = 8
 @export var _chrome_handler: LDUIChromeHandler
 
 
-func _on_ready() -> void:
+func setup() -> void:
 	# Handlers that touch level/area state wait until everything is ready.
 	_toolbar_handler.setup()
 	_file_handler.setup()

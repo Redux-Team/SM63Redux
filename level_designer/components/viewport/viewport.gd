@@ -1,6 +1,5 @@
-@warning_ignore_start("unused_signal")
 class_name LDViewport
-extends LDComponent
+extends Node
 
 
 const SNAPPING_SIZE: int = 4
@@ -12,8 +11,6 @@ const SWIPE_DISMISS_THRESHOLD: float = 6.0
 signal viewport_moved(pos: Vector2, zoom: Vector2)
 signal viewport_input(event: InputEvent)
 signal selection_changed(objects: Array[LDObject])
-signal object_hovered(object: LDObject)
-signal object_unhovered(object: LDObject)
 signal touch_tap(pos: Vector2)
 signal touch_swipe_began(pos: Vector2)
 signal touch_swipe_moved(pos: Vector2)
@@ -23,9 +20,6 @@ signal touch_swipe_ended
 const LINEAR_PAN_SPEED: float = 10.0
 const CAMERA_ZOOM_MIN: Vector2 = Vector2(0.05, 0.05)
 const CAMERA_ZOOM_MAX: Vector2 = Vector2(4.0, 4.0)
-
-
-static var _inst: LDViewport
 
 
 @export var camera: Camera2D
@@ -87,11 +81,9 @@ func _exit_tree() -> void:
 	get_viewport().size_changed.disconnect(_on_viewport_moved)
 
 
-func _on_ready() -> void:
-	_inst = self
+func setup() -> void:
 	viewport_moved.connect(_on_viewport_moved)
 	_on_viewport_moved(camera_position, camera_zoom)
-	set_input_priority()
 	
 	LDLevel._inst.active_area_changed.connect(_bind_area)
 	_bind_area(LDLevel.get_active_area())
@@ -111,7 +103,7 @@ func _bind_area(area: LDArea) -> void:
 func _process(delta: float) -> void:
 	_sync_grid_layer()
 	
-	if not has_input_priority():
+	if LD.has_input_capture():
 		return
 	
 	if allow_panning:
@@ -134,11 +126,6 @@ func _process(delta: float) -> void:
 		if _hold_timer >= HOLD_THRESHOLD_SEC and not _touch_moved:
 			_touch_mode = 2
 			touch_swipe_began.emit(_touch_start_pos)
-
-
-func _input(event: InputEvent) -> void:
-	if event is InputEventMagnifyGesture:
-		LD.get_input_handler().dispatch(event)
 
 
 func _on_viewport_input(event: InputEvent) -> void:
@@ -367,10 +354,6 @@ func refocus_camera(pos: Vector2 = Vector2.INF, zoom: Vector2 = Vector2.INF, enf
 	allow_zooming = true
 	is_refocusing = false
 	viewport_moved.emit(camera_position, camera_zoom)
-
-
-static func get_instance() -> LDViewport:
-	return _inst
 
 
 func _on_layer_created(_layer: LDLayer) -> void:

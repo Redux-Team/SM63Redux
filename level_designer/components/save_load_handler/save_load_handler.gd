@@ -1,5 +1,5 @@
 class_name LDSaveLoadHandler
-extends LDComponent
+extends Node
 
 
 const BINARY_EXTENSION: String = ".63rl"
@@ -129,7 +129,7 @@ func _enter_tree() -> void:
 	method = session.get("method", -1)
 
 
-func _on_ready() -> void:
+func setup() -> void:
 	# Every area should be independently playable, so guarantee a player spawn whenever one becomes
 	# active (covers areas added/loaded without one).
 	LDLevel._inst.active_area_changed.connect(_ensure_player_spawn)

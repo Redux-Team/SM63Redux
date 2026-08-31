@@ -1,5 +1,5 @@
 class_name LDScenarioHandler
-extends LDComponent
+extends Node
 
 ## Owns the level's scenarios: a single COMMON baseline plus numbered scenarios (1..N)
 ## that override which layers / object stamps are enabled. Mirrors LDStampHandler.
@@ -18,7 +18,7 @@ var _scenarios: Dictionary[int, LDScenario] = {}
 var _save_timer: Timer = null
 
 
-func _on_ready() -> void:
+func setup() -> void:
 	_ensure_common()
 	_save_timer = Timer.new()
 	_save_timer.one_shot = true

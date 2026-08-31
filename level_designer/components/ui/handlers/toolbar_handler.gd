@@ -207,17 +207,12 @@ func _open_name_dialog(title: String, ok_text: String, default_name: String, exi
 	name_edit.select_all()
 
 
-## Pops a dialog while taking editor input priority, so keyboard typing (e.g. WASD in a
-## name field) can't drive the viewport. Priority is released when the dialog leaves.
+## Pops a dialog while it captures editor input, so keyboard typing (e.g. WASD in a name field)
+## can't drive the viewport. The capture is released when the dialog leaves.
 func _open_input_locked_dialog(dialog: Window) -> void:
 	add_child(dialog)
-	# Only take/release priority if the UI doesn't already hold it (e.g. a window is open),
-	# otherwise closing this dialog would hand input back to the viewport too early.
-	if not LD.get_input_handler().has_input_priority(LD.get_ui()):
-		LD.get_input_handler().set_input_priority(LD.get_ui())
-		dialog.tree_exited.connect(func() -> void:
-			LD.get_input_handler().remove_input_priority(LD.get_ui())
-		)
+	LD.capture_input()
+	dialog.tree_exited.connect(LD.release_input)
 	dialog.popup_centered()
 
 #endregion

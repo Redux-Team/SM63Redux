@@ -2,18 +2,15 @@ class_name LD
 extends Node
 
 
-## Emitted when the editor is suspended or resumed. Components use it to drop the few hooks that
-## live outside the editor's own subtree, which leaving the tree does not cover on its own.
-signal suspended_changed(suspended: bool)
-
-
 static var _inst: LD
 
 var _suspended: bool = false
+## How many UI surfaces are currently capturing keyboard input. Counted rather than flagged so a
+## dialog opened over a window releases only its own claim.
+var _input_captures: int = 0
 
 
 @export_group("Components", "_ld_")
-@export var _ld_input_handler: LDInputHandler
 @export var _ld_object_handler: LDObjectHandler
 @export var _ld_stamp_handler: LDStampHandler
 @export var _ld_tag_handler: LDTagHandler
@@ -30,10 +27,6 @@ var _suspended: bool = false
 
 static func get_instance() -> LD:
 	return _inst
-
-
-static func get_input_handler() -> LDInputHandler:
-	return get_instance()._ld_input_handler
 
 
 static func get_object_handler() -> LDObjectHandler:
@@ -96,8 +89,21 @@ static func is_ready() -> bool:
 	return is_instance_valid(_inst)
 
 
-func is_suspended() -> bool:
-	return _suspended
+## Claims keyboard input for a UI surface, so typing in it cannot also drive the viewport.
+## Every call must be paired with [method release_input].
+static func capture_input() -> void:
+	get_instance()._input_captures += 1
+
+
+static func release_input() -> void:
+	var ld: LD = get_instance()
+	ld._input_captures = maxi(ld._input_captures - 1, 0)
+
+
+## Whether a UI surface is holding keyboard input. The viewport and its shortcuts stay quiet
+## while this is true.
+static func has_input_capture() -> bool:
+	return get_instance()._input_captures > 0
 
 
 ## Stops the editor dead: nothing in the subtree processes, receives input, or gets notifications.
@@ -107,7 +113,6 @@ func set_suspended(value: bool) -> void:
 		return
 	_suspended = value
 	process_mode = PROCESS_MODE_DISABLED if value else PROCESS_MODE_INHERIT
-	suspended_changed.emit(value)
 
 
 func _init() -> void:
@@ -122,6 +127,17 @@ func _ready() -> void:
 	level.add_area("Area 1")
 	level.set_active_area_index(0)
 
+	# Explicit boot order: every handler here may use the ones above it.
+	_ld_stamp_handler.setup()
+	_ld_scenario_handler.setup()
+	_ld_tag_handler.setup()
+	_ld_tool_handler.setup()
+	_ld_music_handler.setup()
+	_ld_save_load_handler.setup()
+	_ld_background_handler.setup()
+	_ld_ui.setup()
+	_ld_viewport.setup()
+
 
 func _exit_tree() -> void:
-	get_save_load_handler()
+	get_save_load_handler().save_session()

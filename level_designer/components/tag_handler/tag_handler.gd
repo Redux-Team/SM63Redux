@@ -1,5 +1,5 @@
 class_name LDTagHandler
-extends LDComponent
+extends Node
 
 ## Owns the level's tags: pure named labels applied to objects via a `tags` meta
 ## (Array[String]). Scenarios target tags to enable/disable the objects carrying them.
@@ -14,7 +14,7 @@ signal tag_changed(tag: String)
 var _tags: Dictionary[String, bool] = {}
 
 
-func _on_ready() -> void:
+func setup() -> void:
 	# Persist tags into the session as soon as they change, so they survive an
 	# editor reload even if the user never explicitly saves the level.
 	tag_added.connect(_persist_session.unbind(1))

@@ -17,7 +17,6 @@ func get_tool_name() -> String:
 
 func _on_ready() -> void:
 	get_tool_handler().add_tool(self)
-	get_tool_handler().select_tool(self)
 	
 	LD.get_editor_viewport().viewport_moved.connect(_on_viewport_moved)
 	LD.get_object_handler().selected_object_changed.connect(_on_object_changed)

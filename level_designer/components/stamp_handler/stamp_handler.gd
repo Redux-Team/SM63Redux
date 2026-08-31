@@ -1,5 +1,5 @@
 class_name LDStampHandler
-extends LDComponent
+extends Node
 
 const PREVIEW_SIZE: int = 128
 const PREVIEW_PADDING: float = 8.0
@@ -17,7 +17,7 @@ var _stamps: Dictionary[String, LDStamp] = {}
 var _armed_stamp: LDStamp = null
 
 
-func _on_ready() -> void:
+func setup() -> void:
 	# Persist stamps into the session as soon as they change, so they survive an
 	# editor reload even if the user never explicitly saves the level.
 	stamp_added.connect(_persist_session.unbind(1))

@@ -1,5 +1,5 @@
 class_name LDBackgroundHandler
-extends LDComponent
+extends Node
 
 ## Edits the active area's background and renders it into the viewport background root. Each area
 ## owns its own LDBackground (either one of the LDBackgroundDB presets or a freely edited "Custom"
@@ -12,7 +12,7 @@ signal background_changed
 const DEFAULT_PRESET: String = "Mushroom Hills"
 
 
-func _on_ready() -> void:
+func setup() -> void:
 	background_changed.connect(_persist_session)
 	LDLevel._inst.active_area_changed.connect(_on_active_area_changed)
 	_rebuild()

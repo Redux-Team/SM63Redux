@@ -1,5 +1,5 @@
 class_name LDToolHandler
-extends LDComponent
+extends Node
 
 ## Emitted whenever the active tool changes. Carries the new tool's get_tool_name()
 ## (empty string if nothing is selected). The UI chrome listens to this to highlight
@@ -10,7 +10,7 @@ var _selected_tool: LDTool
 var _bound_tools: Dictionary[String, LDTool]
 
 
-func _on_ready() -> void:
+func setup() -> void:
 	select_tool("select")
 
 

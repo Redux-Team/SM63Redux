@@ -1,5 +1,5 @@
 class_name LDMusicHandler
-extends LDComponent
+extends Node
 
 
 const SILENCE_DB: float = -40.0
@@ -23,7 +23,7 @@ var _preview_ducked: bool = false
 var _fade: Tween
 
 
-func _on_ready() -> void:
+func setup() -> void:
 	_base_volume_db = audio_stream_player.volume_db
 	_looping = LDEditorConfig.get_ld_loop()
 	song_label.self_modulate = Color.TRANSPARENT

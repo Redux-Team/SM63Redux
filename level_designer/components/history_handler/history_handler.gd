@@ -1,5 +1,5 @@
 class_name LDHistoryHandler
-extends LDComponent
+extends Node
 
 signal history_changed
 
@@ -8,10 +8,6 @@ var _undo_redo: UndoRedo = UndoRedo.new()
 ## Objects detached by a delete action. The undo lambdas can re-add them, so they cannot be
 ## freed at delete time; ownership sits here until the handler itself goes away.
 var _detached: Array[Node] = []
-
-
-func _on_ready() -> void:
-	pass
 
 
 ## UndoRedo is an Object, not RefCounted, so it has to be freed by hand or it (and every
@@ -39,7 +35,7 @@ func track_detached(nodes: Array) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if not LD.get_input_handler().get_node_with_input_priority() is LDViewport:
+	if LD.has_input_capture():
 		return
 	
 	if not event is InputEventKey or not event.is_pressed() or event.echo:
