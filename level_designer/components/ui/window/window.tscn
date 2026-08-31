@@ -10,15 +10,13 @@ shader = ExtResource("1_y8b6h")
 shader_parameter/tint = Color(0, 0, 0, 0.4)
 shader_parameter/blur = 8.0
 
-[node name="LDWindow" type="CanvasLayer" node_paths=PackedStringArray("_panel", "_content_container", "_title_label", "_backdrop", "_title_bar", "_resize_grip")]
+[node name="LDWindow" type="CanvasLayer" node_paths=PackedStringArray("_panel", "_content_container", "_title_label", "_backdrop")]
 layer = 2
 script = ExtResource("1_pd0vu")
 _panel = NodePath("Content")
 _content_container = NodePath("Content/VBoxContainer/MarginContainer/VBoxContainer/ContentContainer")
 _title_label = NodePath("Content/VBoxContainer/MarginContainer/VBoxContainer/TitleLabel")
 _backdrop = NodePath("Backdrop")
-_title_bar = NodePath("Content/Control/TitleBar")
-_resize_grip = NodePath("Content/Control/ResizeGrip")
 
 [node name="Backdrop" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_hd74k")
@@ -74,27 +72,6 @@ size_flags_vertical = 3
 [node name="Control" type="Control" parent="Content"]
 layout_mode = 2
 mouse_filter = 2
-
-[node name="TitleBar" type="Control" parent="Content/Control"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 40.0
-grow_horizontal = 2
-mouse_default_cursor_shape = 13
-
-[node name="ResizeGrip" type="Control" parent="Content/Control"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -22.0
-offset_top = -22.0
-grow_horizontal = 0
-grow_vertical = 0
-mouse_default_cursor_shape = 12
 
 [node name="CloseButton" type="Button" parent="Content/Control"]
 custom_minimum_size = Vector2(28, 28)

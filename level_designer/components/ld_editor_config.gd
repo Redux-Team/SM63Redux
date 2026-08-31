@@ -8,7 +8,6 @@ class_name LDEditorConfig
 const CONFIG_PATH: String = "user://ld_editor.cfg"
 const VIEWPORT_SECTION: String = "viewport"
 const MUSIC_SECTION: String = "music"
-const WINDOWS_SECTION: String = "windows"
 
 const PAN_SPEED_DEFAULT: float = 4.0
 const PAN_SPEED_MIN: float = 1.0
@@ -19,7 +18,6 @@ static var _config: ConfigFile
 static var _pan_speed: float = PAN_SPEED_DEFAULT
 static var _ld_playlist: Array[String] = []
 static var _ld_loop: bool = false
-static var _window_rects: Dictionary[StringName, Rect2] = {}
 
 
 static func _ensure_loaded() -> void:
@@ -33,8 +31,6 @@ static func _ensure_loaded() -> void:
 	else:
 		_ld_playlist.assign(LDMusicDB.get_track_ids_in(LDMusicDB.CATEGORY_LD))
 	_ld_loop = bool(_config.get_value(MUSIC_SECTION, "ld_loop", false))
-	for key: String in _config.get_section_keys(WINDOWS_SECTION) if _config.has_section(WINDOWS_SECTION) else PackedStringArray():
-		_window_rects.set(StringName(key), _config.get_value(WINDOWS_SECTION, key, Rect2()))
 
 
 ## Camera pan speed used by WASD navigation in the editor viewport.
@@ -79,20 +75,4 @@ static func set_ld_loop(value: bool) -> void:
 	_ensure_loaded()
 	_ld_loop = value
 	_config.set_value(MUSIC_SECTION, "ld_loop", value)
-	_config.save(CONFIG_PATH)
-
-
-## Where a level designer window was last left. A zero-size rect means it has never been placed,
-## so the window should size itself to its content and centre instead.
-static func get_window_rect(id: StringName) -> Rect2:
-	_ensure_loaded()
-	return _window_rects.get(id, Rect2())
-
-
-static func set_window_rect(id: StringName, rect: Rect2) -> void:
-	_ensure_loaded()
-	if _window_rects.get(id, Rect2()) == rect:
-		return
-	_window_rects.set(id, rect)
-	_config.set_value(WINDOWS_SECTION, String(id), rect)
 	_config.save(CONFIG_PATH)
