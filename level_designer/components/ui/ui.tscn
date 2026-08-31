@@ -42,7 +42,6 @@
 [ext_resource type="Texture2D" uid="uid://bcwxbcnfeorko" path="res://assets/textures/level_designer/ui_icons/parallax.svg" id="ic_parallax"]
 [ext_resource type="Texture2D" uid="uid://6gsw2a3tl24c" path="res://assets/textures/level_designer/ui_icons/paste.svg" id="ic_paste"]
 [ext_resource type="Texture2D" uid="uid://x3thrperd2h" path="res://assets/textures/level_designer/ui_icons/place.svg" id="ic_place"]
-[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/tile.svg" id="ic_tile"]
 [ext_resource type="Texture2D" uid="uid://t56qffjb1o1v" path="res://assets/textures/level_designer/ui_icons/poly_add.svg" id="ic_poly_add"]
 [ext_resource type="Texture2D" uid="uid://bfgi7fllhubb1" path="res://assets/textures/level_designer/ui_icons/poly_cut.svg" id="ic_poly_cut"]
 [ext_resource type="Texture2D" uid="uid://dgwk8rteoin2n" path="res://assets/textures/level_designer/ui_icons/poly_edit.svg" id="ic_poly_edit"]
@@ -61,6 +60,7 @@
 [ext_resource type="Texture2D" uid="uid://biiwxx0evmvuj" path="res://assets/textures/level_designer/ui_icons/tags.svg" id="ic_tags"]
 [ext_resource type="Texture2D" uid="uid://bjde8tocexeq5" path="res://assets/textures/level_designer/ui_icons/test.svg" id="ic_test"]
 [ext_resource type="Texture2D" uid="uid://bv2rdcprprwg4" path="res://assets/textures/level_designer/ui_icons/test_client.svg" id="ic_test_client"]
+[ext_resource type="Texture2D" uid="uid://nbdvk7pss2q6" path="res://assets/textures/level_designer/ui_icons/tile.svg" id="ic_tile"]
 [ext_resource type="Texture2D" uid="uid://cnmqrty555op" path="res://assets/textures/level_designer/ui_icons/topline.svg" id="ic_topline"]
 [ext_resource type="Texture2D" uid="uid://noedtsilxu8q" path="res://assets/textures/level_designer/ui_icons/undo.svg" id="ic_undo"]
 
