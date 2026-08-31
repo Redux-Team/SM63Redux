@@ -13,11 +13,11 @@ func _tick(delta: float) -> void:
 		speed_up(player.move_dir)
 	
 	if Input.is_action_pressed("swim_down") and player.swim_buffer_time <= 0.0 and not player.get_fludd_handler().is_hover_active():
-		player.velocity.y = lerpf(player.velocity.y, 140, 0.2)
+		player.velocity.y = lerpf(player.velocity.y, player.swim_down_speed, player.swim_down_lerp)
 	elif player.swim_buffer_time > 0.0:
-		player.velocity.y = lerpf(player.velocity.y, 0.0, 0.08)
+		player.velocity.y = lerpf(player.velocity.y, 0.0, player.swim_hold_lerp)
 	else:
-		player.velocity.y = lerpf(player.velocity.y, 20.0, 0.1)
+		player.velocity.y = lerpf(player.velocity.y, player.swim_drift_speed, player.swim_drift_lerp)
 	
 	_handle_ground_pound()
 
@@ -35,15 +35,15 @@ func speed_up(move_dir: float) -> void:
 	var accel: float = player.walk_acceleration * resistance
 	var friction: float = player.get_effective_friction() * resistance
 	
-	if sign(player.velocity.x) != sign(move_dir) and abs(player.velocity.x) > 10.0:
+	if sign(player.velocity.x) != sign(move_dir) and abs(player.velocity.x) > player.swim_turn_threshold:
 		var turn_factor: float = lerpf(1.0, player.turn_speed, clamp(friction, 0.0, 1.0))
 		accel *= turn_factor
 	
 	player.velocity.x = move_toward(player.velocity.x, target_speed, accel)
 	
 	var floor_normal: Vector2 = player.get_floor_normal()
-	if floor_normal.y < 0.999 and player.velocity.y >= 0.0:
-		player.velocity.y = max(player.velocity.y, 5.0 * resistance)
+	if floor_normal.y < player.slope_normal_threshold and player.velocity.y >= 0.0:
+		player.velocity.y = max(player.velocity.y, player.swim_slope_speed * resistance)
 
 
 func _handle_ground_pound() -> void:
@@ -54,4 +54,4 @@ func _handle_ground_pound() -> void:
 func _exit() -> void:
 	# little boost for exiting the water
 	if player.velocity.y < 0:
-		player.velocity.y = max(player.velocity.y * 2.5, -300)
+		player.velocity.y = max(player.velocity.y * player.swim_exit_boost, player.swim_exit_boost_cap)

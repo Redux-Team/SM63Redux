@@ -1,45 +1,6 @@
 extends PlayerState
 
 
-@export var target_speed: float = 1250.0
-@export var time_to_target_speed: float = 0.058
-@export var launch_y_boost: float = 90.0
-@export var neutral_launch_y_cap: float = -180.0
-@export var launch_y_min: float = -220
-@export var launch_y_max: float = 300.0
-
-@export_group("Ground Pound Conversion")
-@export var gp_conversion_window: float = 0.1
-@export var gp_redirect_angle_deg: float = 36.0
-
-@export_group("Ground Physics")
-@export var ground_flat_decel: float = 6.42
-@export var ground_proportional_decel: float = 0.0196
-@export var landing_friction_multiplier: float = 2.0
-@export var slide_stop_threshold: float = 30.0
-
-@export_group("Air Control")
-@export var air_control_multiplier: float = 0.35
-@export var air_resistance: float = 0.0
-
-@export_group("Rotation")
-@export var air_rotation_blend: float = 0.2
-@export var ground_rotation_blend: float = 0.15
-@export var ground_rotation_blend_fast: float = 0.3
-@export var landing_rotation_smooth_duration: float = 0.3
-@export var grounded_angle_deg: float = 90.0
-@export var rotation_curve: Curve
-
-@export_group("Rotation Helpers")
-@export var y_velocity_to_rotation_offset_curve: Curve
-@export var y_velocity_curve_min: float = -300.0
-@export var y_velocity_curve_max: float = 300.0
-
-@export_group("Recovery")
-@export var slide_stop_duration: float = 0.133
-@export var rollout_jump_velocity: float = -214.0
-
-
 var dive_timer: float = 0.0
 var gp_conversion_timer: float = 0.0
 var dive_resetting: bool = false
@@ -66,7 +27,7 @@ func _enter() -> void:
 	landing_timer = 0.0
 	air_rotation_timer = 0.0
 	was_grounded_last_frame = player.is_on_floor()
-	gp_conversion_timer = gp_conversion_window if not player.is_on_floor() else 0.0
+	gp_conversion_timer = player.dive_gp_conversion_window if not player.is_on_floor() else 0.0
 	
 	apply_dive_impulse()
 	rotation_time_offset = get_rotation_time_offset_from_velocity(player.velocity.y)
@@ -118,15 +79,15 @@ func apply_dive_impulse() -> void:
 	if sign(player.velocity.x) != facing:
 		player.velocity.x = 0.0
 	
-	var speed_difference: float = target_speed - current_speed
-	player.velocity.x += (speed_difference / (time_to_target_speed * 60.0)) * facing
+	var speed_difference: float = player.dive_target_speed - current_speed
+	player.velocity.x += (speed_difference / (player.dive_time_to_target_speed * 60.0)) * facing
 	
 	if from_state == &"Idle":
-		player.velocity.y = max(neutral_launch_y_cap, player.velocity.y + launch_y_boost)
+		player.velocity.y = max(player.dive_neutral_launch_y_cap, player.velocity.y + player.dive_launch_y_boost)
 	else:
-		player.velocity.y += launch_y_boost
+		player.velocity.y += player.dive_launch_y_boost
 	
-	player.velocity.y = clamp(player.velocity.y, launch_y_min, launch_y_max)
+	player.velocity.y = clamp(player.velocity.y, player.dive_launch_y_min, player.dive_launch_y_max)
 	
 	if player.is_on_floor() and player.floor_slope_raycast and player.floor_slope_raycast.is_colliding():
 		body_rotation = get_slope_angle()
@@ -135,18 +96,18 @@ func apply_dive_impulse() -> void:
 func apply_ground_dive_physics(delta: float) -> void:
 	apply_ground_friction(delta)
 	
-	if abs(player.velocity.x) < slide_stop_threshold and not Input.is_action_pressed("dive"):
+	if abs(player.velocity.x) < player.dive_slide_stop_threshold and not Input.is_action_pressed("dive"):
 		begin_dive_reset()
 
 
 func apply_ground_friction(delta: float) -> void:
-	var friction_multiplier: float = landing_friction_multiplier if just_landed else 1.0
+	var friction_multiplier: float = player.dive_landing_friction_multiplier if just_landed else 1.0
 	just_landed = false
 	
 	var velocity_sign: float = sign(player.velocity.x)
 	var speed: float = abs(player.velocity.x)
-	speed = max(0.0, speed - ground_flat_decel * friction_multiplier * delta * 60.0)
-	speed = max(0.0, speed - speed * ground_proportional_decel * friction_multiplier)
+	speed = max(0.0, speed - player.dive_ground_flat_decel * friction_multiplier * delta * 60.0)
+	speed = max(0.0, speed - speed * player.dive_ground_proportional_decel * friction_multiplier)
 	player.velocity.x = speed * velocity_sign
 
 
@@ -154,36 +115,36 @@ func apply_air_dive_physics(delta: float) -> void:
 	if abs(player.move_dir) > 0.0:
 		apply_dive_air_control(delta)
 	
-	player.velocity.x *= (1.0 - air_resistance)
+	player.velocity.x *= (1.0 - player.dive_air_resistance)
 
 
 func apply_dive_air_control(delta: float) -> void:
 	var max_speed: float = player.run_max_speed
-	var dive_accel: float = player.walk_acceleration * air_control_multiplier
+	var dive_accel: float = player.walk_acceleration * player.dive_air_control
 	var vx: float = player.velocity.x
 	var dir: float = player.move_dir
 	
 	if abs(vx) < max_speed or sign(vx) != sign(dir):
 		vx = move_toward(vx, max_speed * dir, dive_accel * delta * 60.0)
 	else:
-		vx = move_toward(vx, max_speed * sign(vx), dive_accel * delta * 3.0)
+		vx = move_toward(vx, max_speed * sign(vx), dive_accel * delta * player.dive_over_speed_decel)
 	
 	player.velocity.x = vx
 
 
 func get_air_rotation_angle() -> float:
-	var rotation_curve_min: float = rotation_curve.min_domain if rotation_curve else 0.0
-	var rotation_curve_max: float = rotation_curve.max_domain if rotation_curve else 1.0
+	var rotation_curve_min: float = player.dive_rotation_curve.min_domain if player.dive_rotation_curve else 0.0
+	var rotation_curve_max: float = player.dive_rotation_curve.max_domain if player.dive_rotation_curve else 1.0
 	
 	var rotation_time: float = clamp(rotation_time_offset + air_rotation_timer, rotation_curve_min, rotation_curve_max)
 	
 	var curve_value: float
-	if rotation_curve:
-		curve_value = rotation_curve.sample(rotation_time)
+	if player.dive_rotation_curve:
+		curve_value = player.dive_rotation_curve.sample(rotation_time)
 	else:
 		curve_value = inverse_lerp(rotation_curve_min, rotation_curve_max, rotation_time)
 	
-	return deg_to_rad(lerp(90.0, 180.0, curve_value))
+	return deg_to_rad(lerp(player.dive_rotation_min_deg, player.dive_rotation_max_deg, curve_value))
 
 
 func update_dive_rotation(delta: float) -> void:
@@ -198,9 +159,9 @@ func update_dive_rotation(delta: float) -> void:
 		if player.floor_slope_raycast and player.floor_slope_raycast.is_colliding():
 			target_angle = get_slope_angle()
 		else:
-			target_angle = deg_to_rad(grounded_angle_deg)
+			target_angle = deg_to_rad(player.dive_grounded_angle_deg)
 		
-		var lerp_speed: float = ground_rotation_blend if landing_timer < landing_rotation_smooth_duration else ground_rotation_blend_fast
+		var lerp_speed: float = player.dive_ground_rotation_blend if landing_timer < player.dive_landing_rotation_smooth_duration else player.dive_ground_rotation_blend_fast
 		body_rotation = lerp_angle(body_rotation, target_angle, lerp_speed)
 	else:
 		landing_timer = 0.0
@@ -212,7 +173,7 @@ func update_dive_rotation(delta: float) -> void:
 
 func get_slope_angle() -> float:
 	if not player.floor_slope_raycast or not player.floor_slope_raycast.is_colliding():
-		return deg_to_rad(grounded_angle_deg)
+		return deg_to_rad(player.dive_grounded_angle_deg)
 	
 	var normal: Vector2 = player.floor_slope_raycast.get_collision_normal()
 	return normal.angle() + PI / 2.0
@@ -225,7 +186,7 @@ func begin_dive_reset() -> void:
 
 func update_dive_reset(delta: float) -> void:
 	dive_reset_timer += delta
-	var progress: float = dive_reset_timer / slide_stop_duration
+	var progress: float = dive_reset_timer / player.dive_slide_stop_duration
 	
 	if progress >= 1.0:
 		dive_resetting = false
@@ -239,7 +200,7 @@ func update_dive_reset(delta: float) -> void:
 		body_rotation += (PI / 2.0) * float(facing)
 	
 	player.sprite.local_rotation = rad_to_deg(body_rotation)
-	player.velocity.x = move_toward(player.velocity.x, 0.0, 5.0)
+	player.velocity.x = move_toward(player.velocity.x, 0.0, player.dive_reset_decel)
 
 
 func try_convert_to_ground_pound() -> bool:
@@ -247,7 +208,7 @@ func try_convert_to_ground_pound() -> bool:
 		return false
 	
 	var speed: float = player.velocity.length()
-	var angle_rad: float = deg_to_rad(gp_redirect_angle_deg)
+	var angle_rad: float = deg_to_rad(player.dive_gp_redirect_angle_deg)
 	
 	if player.velocity.x <= 0.0:
 		angle_rad = PI - angle_rad
@@ -257,7 +218,7 @@ func try_convert_to_ground_pound() -> bool:
 
 
 func can_rollout() -> bool:
-	return player.is_on_floor() and abs(player.velocity.x) >= slide_stop_threshold and not dive_resetting
+	return player.is_on_floor() and abs(player.velocity.x) >= player.dive_slide_stop_threshold and not dive_resetting
 
 
 func detect_landing() -> void:
@@ -272,9 +233,9 @@ func detect_landing() -> void:
 
 func get_rotation_time_offset_from_velocity(y_vel: float) -> float:
 	var clamped_y: float
-	if y_velocity_to_rotation_offset_curve:
-		clamped_y = clamp(y_vel, y_velocity_to_rotation_offset_curve.min_domain, y_velocity_to_rotation_offset_curve.max_domain)
-		return y_velocity_to_rotation_offset_curve.sample(clamped_y)
+	if player.dive_y_velocity_to_rotation_offset_curve:
+		clamped_y = clamp(y_vel, player.dive_y_velocity_to_rotation_offset_curve.min_domain, player.dive_y_velocity_to_rotation_offset_curve.max_domain)
+		return player.dive_y_velocity_to_rotation_offset_curve.sample(clamped_y)
 	
-	clamped_y = clamp(y_vel, y_velocity_curve_min, y_velocity_curve_max)
-	return inverse_lerp(y_velocity_curve_min, y_velocity_curve_max, clamped_y) * rotation_curve.max_domain
+	clamped_y = clamp(y_vel, player.dive_y_velocity_curve_min, player.dive_y_velocity_curve_max)
+	return inverse_lerp(player.dive_y_velocity_curve_min, player.dive_y_velocity_curve_max, clamped_y) * player.dive_rotation_curve.max_domain

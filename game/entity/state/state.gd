@@ -13,6 +13,7 @@ var sfx_frame_index: int = -1
 var sfx_tracked: Node
 var chain_index: int = 0
 var mask_backup: int = -1
+var last_variant: StringName = &""
 
 
 func _bind() -> void:

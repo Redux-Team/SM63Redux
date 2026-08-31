@@ -2,25 +2,12 @@
 
 [ext_resource type="Script" uid="uid://c7gtlwcfr4qrc" path="res://game/entity/player/player.gd" id="1_oic1i"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="2_51d5m"]
-[ext_resource type="Script" path="res://game/entity/state/state_machine.gd" id="2_cawmy"]
+[ext_resource type="Script" uid="uid://ckt07dpulg2mq" path="res://game/entity/state/state_machine.gd" id="2_cawmy"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_cjmyu"]
 [ext_resource type="Texture2D" uid="uid://2gs8g3k5v6ti" path="res://assets/textures/entity/player/mario/crouch.png" id="2_conr4"]
 [ext_resource type="Texture2D" uid="uid://ccsrslfjf3xxe" path="res://assets/textures/entity/player/mario/idle.png" id="2_heu0c"]
 [ext_resource type="Texture2D" uid="uid://dgg1yuf23icvc" path="res://assets/textures/entity/player/mario/fall.png" id="2_p5qu6"]
 [ext_resource type="Texture2D" uid="uid://deg5x0i51ydp8" path="res://assets/textures/entity/player/mario/double_jump.png" id="2_xt77v"]
-[ext_resource type="Script" path="res://game/entity/state/state.gd" id="es_base"]
-[ext_resource type="Script" path="res://game/entity/state/state_effects.gd" id="30_effects"]
-[ext_resource type="Script" path="res://game/entity/player/shared/states/idle.gd" id="ps_idle"]
-[ext_resource type="Script" path="res://game/entity/player/shared/states/crouch.gd" id="ps_crouch"]
-[ext_resource type="Script" path="res://game/entity/player/shared/states/walk.gd" id="ps_walk"]
-[ext_resource type="Script" path="res://game/entity/player/shared/states/idle_jump.gd" id="ps_idle_jump"]
-[ext_resource type="Script" path="res://game/entity/player/shared/states/fall.gd" id="ps_fall"]
-[ext_resource type="Script" path="res://game/entity/player/shared/states/jump.gd" id="ps_jump"]
-[ext_resource type="Script" path="res://game/entity/player/shared/states/double_jump.gd" id="ps_double_jump"]
-[ext_resource type="Script" path="res://game/entity/player/shared/states/strike.gd" id="ps_strike"]
-[ext_resource type="Script" path="res://game/entity/player/shared/states/swim_idle.gd" id="ps_swim_idle"]
-[ext_resource type="Script" path="res://game/entity/player/shared/states/swim_walk.gd" id="ps_swim_walk"]
-[ext_resource type="Script" path="res://game/entity/player/shared/states/ground_pound.gd" id="ps_ground_pound"]
 [ext_resource type="Texture2D" uid="uid://bc3bs1gchjslq" path="res://assets/textures/entity/player/mario/dive.png" id="3_4neg5"]
 [ext_resource type="Texture2D" uid="uid://bh1yfcvnqwa4k" path="res://assets/textures/entity/player/mario/walk.png" id="3_dhej3"]
 [ext_resource type="Script" uid="uid://bu5gt1lwfutvu" path="res://game/entity/player/shared/handlers/input_handler.gd" id="3_je5mu"]
@@ -28,7 +15,6 @@
 [ext_resource type="Script" uid="uid://cr0v7cui52ho8" path="res://game/entity/player/player_debug.gd" id="4_kn1iv"]
 [ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="4_o0v17"]
 [ext_resource type="Texture2D" uid="uid://uypneyqh43dv" path="res://assets/textures/entity/player/mario/triple_jump.png" id="5_0rdsw"]
-[ext_resource type="Script" uid="uid://2tpewb2vj0d3" path="res://game/entity/player/shared/handlers/movement_handler.gd" id="6_0jrw7"]
 [ext_resource type="Script" uid="uid://bc37gx5nk2itj" path="res://game/entity/player/shared/states/floorslide.gd" id="6_y6elw"]
 [ext_resource type="Script" uid="uid://drrqaswaoenmg" path="res://game/entity/player/shared/states/dry.gd" id="7_je5mu"]
 [ext_resource type="Script" uid="uid://dx5p37ei2616j" path="res://game/entity/player/shared/handlers/sprite_handler.gd" id="7_tb30q"]
@@ -48,6 +34,7 @@
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="19_1wiqr"]
 [ext_resource type="Script" uid="uid://c02oltfntb3q8" path="res://game/entity/player/mp_player.gd" id="19_ntea6"]
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="20_1wiqr"]
+[ext_resource type="Script" uid="uid://dir75hkr2361s" path="res://game/entity/state/state_effects.gd" id="30_effects"]
 [ext_resource type="Script" uid="uid://oxowxqwt4py6" path="res://game/entity/player/shared/states/submerged.gd" id="38_3h1ly"]
 [ext_resource type="Script" uid="uid://kvimrb1ymehh" path="res://game/entity/player/shared/states/swim_spin.gd" id="39_mjy7s"]
 [ext_resource type="Script" uid="uid://dkr10jumwrvmd" path="res://game/entity/player/shared/states/swim_up.gd" id="39_ohvaq"]
@@ -79,6 +66,18 @@
 [ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="81_dhqxs"]
 [ext_resource type="AudioStream" uid="uid://bffab71uf61kf" path="res://assets/sfx/player/fludd/hover.mp3" id="81_fstnu"]
 [ext_resource type="AudioStream" uid="uid://dolh40gtancy4" path="res://assets/sfx/player/fludd/hover_loop.mp3" id="82_681d1"]
+[ext_resource type="Script" uid="uid://4hwxabxucpuh" path="res://game/entity/state/state.gd" id="es_base"]
+[ext_resource type="Script" uid="uid://dn4qb0ueyl2oj" path="res://game/entity/player/shared/states/crouch.gd" id="ps_crouch"]
+[ext_resource type="Script" uid="uid://uhp6bivoni74" path="res://game/entity/player/shared/states/double_jump.gd" id="ps_double_jump"]
+[ext_resource type="Script" uid="uid://dtny7bnas3xxn" path="res://game/entity/player/shared/states/fall.gd" id="ps_fall"]
+[ext_resource type="Script" uid="uid://nkvey6hx1nru" path="res://game/entity/player/shared/states/ground_pound.gd" id="ps_ground_pound"]
+[ext_resource type="Script" uid="uid://bo5t227gdf07k" path="res://game/entity/player/shared/states/idle.gd" id="ps_idle"]
+[ext_resource type="Script" uid="uid://cyj0786820s74" path="res://game/entity/player/shared/states/idle_jump.gd" id="ps_idle_jump"]
+[ext_resource type="Script" uid="uid://bnbyeuh75nmoj" path="res://game/entity/player/shared/states/jump.gd" id="ps_jump"]
+[ext_resource type="Script" uid="uid://bg1m88hu1l2ur" path="res://game/entity/player/shared/states/strike.gd" id="ps_strike"]
+[ext_resource type="Script" uid="uid://c1484f8qy8ep0" path="res://game/entity/player/shared/states/swim_idle.gd" id="ps_swim_idle"]
+[ext_resource type="Script" uid="uid://61v31jiep2f7" path="res://game/entity/player/shared/states/swim_walk.gd" id="ps_swim_walk"]
+[ext_resource type="Script" uid="uid://cbyl5qt23in03" path="res://game/entity/player/shared/states/walk.gd" id="ps_walk"]
 [ext_resource type="AudioStream" uid="uid://ddyxdiykdet7b" path="res://assets/sfx/player/mario/dive/dive_0.wav" id="sfxres1"]
 [ext_resource type="AudioStream" uid="uid://vvilx4sjryos" path="res://assets/sfx/player/mario/dive/dive_1.wav" id="sfxres2"]
 [ext_resource type="AudioStream" uid="uid://cv0wy731vhj3o" path="res://assets/sfx/player/mario/dive/dive_2.wav" id="sfxres3"]
@@ -109,6 +108,20 @@
 [sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_3h1ly"]
 cutoff_hz = 2500.0
 
+[sub_resource type="Resource" id="Effects_Idle"]
+script = ExtResource("30_effects")
+animation = &"idle"
+
+[sub_resource type="Resource" id="Effects_Crouch"]
+script = ExtResource("30_effects")
+animation = &"crouch"
+lock_flipping = true
+
+[sub_resource type="Resource" id="Effects_Walk"]
+script = ExtResource("30_effects")
+animation = &"run_loop"
+chain = Array[StringName]([&"walk_loop"])
+
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
 _data = [Vector2(0, -1.3932585), 0.0, 0.9746846, 0, 0, Vector2(1.5965666, -0.05618429), 0.0, 0.0, 0, 0]
@@ -127,6 +140,18 @@ stream_1/stream = ExtResource("sfxres2")
 stream_2/stream = ExtResource("sfxres3")
 stream_3/stream = ExtResource("sfxres4")
 
+[sub_resource type="Resource" id="Effects_Dive"]
+script = ExtResource("30_effects")
+animation = &"dive"
+restart_if_playing = false
+offset_enabled = true
+sfx_enter = SubResource("sfxrand5")
+
+[sub_resource type="Resource" id="Effects_IdleJump"]
+script = ExtResource("30_effects")
+animation = &"jump_l"
+animation_variants = Array[StringName]([&"jump_r"])
+
 [sub_resource type="AudioStreamRandomizer" id="sfxrand10"]
 playback_mode = 1
 streams_count = 4
@@ -134,6 +159,15 @@ stream_0/stream = ExtResource("sfxres6")
 stream_1/stream = ExtResource("sfxres7")
 stream_2/stream = ExtResource("sfxres8")
 stream_3/stream = ExtResource("sfxres9")
+
+[sub_resource type="Resource" id="Effects_Backflip"]
+script = ExtResource("30_effects")
+animation = &"jump_l"
+animation_variants = Array[StringName]([&"jump_r"])
+restart_if_playing = false
+speed_scale = 0.0
+player_animation = &"backflip"
+sfx_enter = SubResource("sfxrand10")
 
 [sub_resource type="AudioStreamRandomizer" id="sfxrand15"]
 playback_mode = 1
@@ -143,11 +177,39 @@ stream_1/stream = ExtResource("sfxres12")
 stream_2/stream = ExtResource("sfxres13")
 stream_3/stream = ExtResource("sfxres14")
 
+[sub_resource type="Resource" id="Effects_BackflipUp"]
+script = ExtResource("30_effects")
+animation = &"jump_l"
+animation_variants = Array[StringName]([&"jump_r"])
+restart_if_playing = false
+speed_scale = 0.0
+player_animation = &"backflip"
+sfx_enter = SubResource("sfxrand15")
+
+[sub_resource type="Resource" id="Effects_Fall"]
+script = ExtResource("30_effects")
+animation = &"fall_start_l"
+animation_variants = Array[StringName]([&"fall_start_r"])
+
+[sub_resource type="Resource" id="Effects_RolloutF"]
+script = ExtResource("30_effects")
+animation = &"jump_l"
+animation_variants = Array[StringName]([&"jump_r"])
+restart_if_playing = false
+speed_scale = 0.0
+player_animation = &"rollout_f"
+
 [sub_resource type="AudioStreamRandomizer" id="sfxrand18"]
 playback_mode = 1
 streams_count = 2
 stream_0/stream = ExtResource("sfxres16")
 stream_1/stream = ExtResource("sfxres17")
+
+[sub_resource type="Resource" id="Effects_Jump"]
+script = ExtResource("30_effects")
+animation = &"jump_l"
+animation_variants = Array[StringName]([&"jump_r"])
+sfx_enter = SubResource("sfxrand18")
 
 [sub_resource type="AudioStreamRandomizer" id="sfxrand22"]
 playback_mode = 1
@@ -155,6 +217,11 @@ streams_count = 3
 stream_0/stream = ExtResource("sfxres19")
 stream_1/stream = ExtResource("sfxres20")
 stream_2/stream = ExtResource("sfxres21")
+
+[sub_resource type="Resource" id="Effects_DoubleJump"]
+script = ExtResource("30_effects")
+animation = &"double_jump"
+sfx_enter = SubResource("sfxrand22")
 
 [sub_resource type="AudioStreamRandomizer" id="sfxrand23"]
 playback_mode = 1
@@ -168,12 +235,103 @@ stream_5/stream = ExtResource("sfxres8")
 stream_6/stream = ExtResource("sfxres14")
 stream_7/stream = ExtResource("sfxres9")
 
+[sub_resource type="Resource" id="Effects_TripleJump"]
+script = ExtResource("30_effects")
+animation = &"triple_jump"
+player_animation = &"triple_jump"
+sfx_enter = SubResource("sfxrand23")
+
 [sub_resource type="AudioStreamRandomizer" id="sfxrand27"]
 playback_mode = 1
 streams_count = 3
 stream_0/stream = ExtResource("sfxres24")
 stream_1/stream = ExtResource("sfxres25")
 stream_2/stream = ExtResource("sfxres26")
+
+[sub_resource type="Resource" id="Effects_Spin"]
+script = ExtResource("30_effects")
+animation = &"spin_start"
+restart_if_playing = false
+chain = Array[StringName]([&"spin_loop"])
+chain_loop_last = false
+sfx_enter = SubResource("sfxrand27")
+sfx_enter_stop_on_exit = true
+
+[sub_resource type="Resource" id="Effects_Floorslide"]
+script = ExtResource("30_effects")
+animation = &"floor_slide"
+restart_if_playing = false
+offset_enabled = true
+offset = Vector2(0, 4)
+
+[sub_resource type="Resource" id="Effects_Strike"]
+script = ExtResource("30_effects")
+animation = &"bonk"
+lock_flipping = true
+sfx_enter = ExtResource("sfxres28")
+
+[sub_resource type="Resource" id="Effects_SwimIdle"]
+script = ExtResource("30_effects")
+animation = &"swim_idle"
+
+[sub_resource type="Resource" id="Effects_Swim"]
+script = ExtResource("30_effects")
+animation = &"swim"
+restart_if_playing = false
+offset_enabled = true
+
+[sub_resource type="Resource" id="Effects_SwimWalk"]
+script = ExtResource("30_effects")
+animation = &"swim_idle"
+restart_if_playing = false
+
+[sub_resource type="Resource" id="Effects_SwimSpin"]
+script = ExtResource("30_effects")
+animation = &"spin_start"
+restart_if_playing = false
+chain = Array[StringName]([&"spin_loop"])
+chain_loop_last = false
+sfx_enter = ExtResource("sfxres29")
+sfx_enter_stop_on_exit = true
+sfx_exit = ExtResource("sfxres30")
+sfx_bus = &"SFX"
+
+[sub_resource type="Resource" id="Effects_GroundPound"]
+script = ExtResource("30_effects")
+lock_flipping = true
+
+[sub_resource type="Resource" id="Effects_GroundPoundStart"]
+script = ExtResource("30_effects")
+animation = &"ground_pound_start"
+restart_if_playing = false
+speed_scale = 0.0
+lock_flipping = true
+collision_mask_override = 512
+player_animation = &"ground_pound_start"
+sfx_enter = ExtResource("sfxres31")
+
+[sub_resource type="Resource" id="Effects_GroundPoundFall"]
+script = ExtResource("30_effects")
+animation = &"ground_pound_fall"
+restart_if_playing = false
+speed_scale = 0.0
+lock_flipping = true
+collision_mask_override = 512
+
+[sub_resource type="Resource" id="Effects_GroundPoundSlam"]
+script = ExtResource("30_effects")
+animation = &"ground_pound_slam"
+restart_if_playing = false
+speed_scale = 0.0
+collision_mask_override = 512
+sfx_enter = ExtResource("sfxres32")
+
+[sub_resource type="Resource" id="Effects_DeathHit"]
+script = ExtResource("30_effects")
+animation = &"death"
+restart_if_playing = false
+speed_scale = 0.0
+lock_flipping = true
 
 [sub_resource type="Curve" id="Curve_ndkiv"]
 _limits = [-300.0, 700.0, 0.0, 3.0]
@@ -195,6 +353,14 @@ width = 256
 height = 256
 fill = 1
 fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Resource" id="Effects_DeathFall"]
+script = ExtResource("30_effects")
+lock_flipping = true
+offset_enabled = true
+collision_mask_override = 1
+sfx_enter = ExtResource("sfxres33")
+sfx_bus = &"SFX"
 
 [sub_resource type="Animation" id="Animation_otk8c"]
 length = 0.001
@@ -339,7 +505,7 @@ anim_offset_max = 1.0
 atlas = ExtResource("51_d635j")
 region = Rect2(128, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_enjxo"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_d041h"]
 diffuse_texture = SubResource("AtlasTexture_ebtvn")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hmgs0"]
@@ -1045,168 +1211,7 @@ point_count = 3
 offsets = PackedFloat32Array(0, 0.13851352, 0.5709459, 1)
 colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0.9459459, 1, 1, 1, 0)
 
-[sub_resource type="Resource" id="Effects_Idle"]
-script = ExtResource("30_effects")
-animation = &"idle"
-
-[sub_resource type="Resource" id="Effects_Crouch"]
-script = ExtResource("30_effects")
-animation = &"crouch"
-lock_flipping = true
-
-[sub_resource type="Resource" id="Effects_Walk"]
-script = ExtResource("30_effects")
-animation = &"run_loop"
-chain = Array[StringName]([&"walk_loop"])
-
-[sub_resource type="Resource" id="Effects_Dive"]
-script = ExtResource("30_effects")
-animation = &"dive"
-restart_if_playing = false
-offset_enabled = true
-sfx_enter = SubResource("sfxrand5")
-
-[sub_resource type="Resource" id="Effects_IdleJump"]
-script = ExtResource("30_effects")
-animation = &"jump_l"
-
-[sub_resource type="Resource" id="Effects_Backflip"]
-script = ExtResource("30_effects")
-animation = &"jump_l"
-restart_if_playing = false
-speed_scale = 0.0
-player_animation = &"backflip"
-sfx_enter = SubResource("sfxrand10")
-
-[sub_resource type="Resource" id="Effects_BackflipUp"]
-script = ExtResource("30_effects")
-animation = &"jump_l"
-restart_if_playing = false
-speed_scale = 0.0
-player_animation = &"backflip"
-sfx_enter = SubResource("sfxrand15")
-
-[sub_resource type="Resource" id="Effects_Fall"]
-script = ExtResource("30_effects")
-animation = &"fall_start_l"
-
-[sub_resource type="Resource" id="Effects_RolloutF"]
-script = ExtResource("30_effects")
-animation = &"jump_l"
-restart_if_playing = false
-speed_scale = 0.0
-player_animation = &"rollout_f"
-
-[sub_resource type="Resource" id="Effects_Jump"]
-script = ExtResource("30_effects")
-animation = &"jump_l"
-sfx_enter = SubResource("sfxrand18")
-
-[sub_resource type="Resource" id="Effects_DoubleJump"]
-script = ExtResource("30_effects")
-animation = &"double_jump"
-sfx_enter = SubResource("sfxrand22")
-
-[sub_resource type="Resource" id="Effects_TripleJump"]
-script = ExtResource("30_effects")
-animation = &"triple_jump"
-player_animation = &"triple_jump"
-sfx_enter = SubResource("sfxrand23")
-
-[sub_resource type="Resource" id="Effects_Spin"]
-script = ExtResource("30_effects")
-animation = &"spin_start"
-restart_if_playing = false
-chain = Array[StringName]([&"spin_loop"])
-chain_loop_last = false
-sfx_enter = SubResource("sfxrand27")
-sfx_enter_stop_on_exit = true
-
-[sub_resource type="Resource" id="Effects_Floorslide"]
-script = ExtResource("30_effects")
-animation = &"floor_slide"
-restart_if_playing = false
-offset_enabled = true
-offset = Vector2(0, 4)
-
-[sub_resource type="Resource" id="Effects_Strike"]
-script = ExtResource("30_effects")
-animation = &"bonk"
-lock_flipping = true
-sfx_enter = ExtResource("sfxres28")
-
-[sub_resource type="Resource" id="Effects_SwimIdle"]
-script = ExtResource("30_effects")
-animation = &"swim_idle"
-
-[sub_resource type="Resource" id="Effects_Swim"]
-script = ExtResource("30_effects")
-animation = &"swim"
-restart_if_playing = false
-offset_enabled = true
-
-[sub_resource type="Resource" id="Effects_SwimWalk"]
-script = ExtResource("30_effects")
-animation = &"swim_idle"
-restart_if_playing = false
-
-[sub_resource type="Resource" id="Effects_SwimSpin"]
-script = ExtResource("30_effects")
-animation = &"spin_start"
-restart_if_playing = false
-chain = Array[StringName]([&"spin_loop"])
-chain_loop_last = false
-sfx_enter = ExtResource("sfxres29")
-sfx_enter_stop_on_exit = true
-sfx_exit = ExtResource("sfxres30")
-sfx_bus = &"SFX"
-
-[sub_resource type="Resource" id="Effects_GroundPound"]
-script = ExtResource("30_effects")
-lock_flipping = true
-
-[sub_resource type="Resource" id="Effects_GroundPoundStart"]
-script = ExtResource("30_effects")
-animation = &"ground_pound_start"
-restart_if_playing = false
-lock_flipping = true
-speed_scale = 0.0
-collision_mask_override = 512
-player_animation = &"ground_pound_start"
-sfx_enter = ExtResource("sfxres31")
-
-[sub_resource type="Resource" id="Effects_GroundPoundFall"]
-script = ExtResource("30_effects")
-animation = &"ground_pound_fall"
-restart_if_playing = false
-lock_flipping = true
-speed_scale = 0.0
-collision_mask_override = 512
-
-[sub_resource type="Resource" id="Effects_GroundPoundSlam"]
-script = ExtResource("30_effects")
-animation = &"ground_pound_slam"
-restart_if_playing = false
-speed_scale = 0.0
-collision_mask_override = 512
-sfx_enter = ExtResource("sfxres32")
-
-[sub_resource type="Resource" id="Effects_DeathHit"]
-script = ExtResource("30_effects")
-animation = &"death"
-restart_if_playing = false
-lock_flipping = true
-speed_scale = 0.0
-
-[sub_resource type="Resource" id="Effects_DeathFall"]
-script = ExtResource("30_effects")
-lock_flipping = true
-offset_enabled = true
-collision_mask_override = 1
-sfx_enter = ExtResource("sfxres33")
-sfx_bus = &"SFX"
-
-[node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "heal_particles", "_input_handler", "_movement_handler", "_sprite_handler", "_fludd_handler", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
+[node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "heal_particles", "_input_handler", "_sprite_handler", "_fludd_handler", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
 process_mode = 3
 collision_mask = 2
 floor_snap_length = 7.0
@@ -1220,10 +1225,11 @@ spin_area = NodePath("Hitboxes/Spin")
 spin_shape = NodePath("Hitboxes/Spin/CollisionShape2D")
 heal_particles = NodePath("HealParticles")
 _input_handler = NodePath("Handlers/InputHandler")
-_movement_handler = NodePath("Handlers/MovementHandler")
 _sprite_handler = NodePath("Handlers/SpriteHandler")
 _fludd_handler = NodePath("Handlers/FLUDDHandler")
 submerged_bus_effects = Array[AudioEffect]([SubResource("AudioEffectLowPassFilter_3h1ly")])
+dive_rotation_curve = SubResource("Curve_aln35")
+dive_y_velocity_to_rotation_offset_curve = SubResource("Curve_ioda6")
 sprite = NodePath("Doll")
 components_root = NodePath("Components")
 collision_shapes = [NodePath("BaseCollision"), NodePath("GroundPoundCollision"), NodePath("DiveCollision"), NodePath("Hitboxes/GroundPound/CollisionShape2D"), NodePath("Hitboxes/Dive/CollisionShape2D")]
@@ -1261,10 +1267,6 @@ script = ExtResource("8_k8egu")
 [node name="Dive" type="Node" parent="StateMachine/Dry/Airborne" unique_id=2082405443]
 script = ExtResource("10_aln35")
 effects = SubResource("Effects_Dive")
-target_speed = 900.0
-launch_y_boost = 80.0
-rotation_curve = SubResource("Curve_aln35")
-y_velocity_to_rotation_offset_curve = SubResource("Curve_ioda6")
 
 [node name="IdleJump" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1248860808]
 script = ExtResource("ps_idle_jump")
@@ -1303,8 +1305,8 @@ effects = SubResource("Effects_TripleJump")
 
 [node name="Spin" type="Node" parent="StateMachine/Dry/Airborne" unique_id=1685604128 node_paths=PackedStringArray("spin_hitbox")]
 script = ExtResource("14_20bnd")
-effects = SubResource("Effects_Spin")
 spin_hitbox = NodePath("../../../../Hitboxes/Spin")
+effects = SubResource("Effects_Spin")
 
 [node name="Floorslide" type="Node" parent="StateMachine/Dry" unique_id=1890132868]
 script = ExtResource("6_y6elw")
@@ -1324,9 +1326,6 @@ effects = SubResource("Effects_SwimIdle")
 [node name="Swim" type="Node" parent="StateMachine/Submerged" unique_id=235025815]
 script = ExtResource("39_ohvaq")
 effects = SubResource("Effects_Swim")
-burst_rise_speed = 150.0
-burst_rise_smoothing = 100.0
-neutral_sink_speed = 1000.0
 
 [node name="SwimWalk" type="Node" parent="StateMachine/Submerged" unique_id=919158494]
 script = ExtResource("ps_swim_walk")
@@ -1334,8 +1333,8 @@ effects = SubResource("Effects_SwimWalk")
 
 [node name="SwimSpin" type="Node" parent="StateMachine/Submerged" unique_id=1905840328 node_paths=PackedStringArray("spin_hitbox")]
 script = ExtResource("39_mjy7s")
-effects = SubResource("Effects_SwimSpin")
 spin_hitbox = NodePath("../../../Hitboxes/Spin")
+effects = SubResource("Effects_SwimSpin")
 
 [node name="GroundPound" type="Node" parent="StateMachine" unique_id=1959935352]
 script = ExtResource("ps_ground_pound")
@@ -1355,16 +1354,16 @@ effects = SubResource("Effects_GroundPoundSlam")
 
 [node name="DeathHit" type="Node" parent="StateMachine" unique_id=453131666 node_paths=PackedStringArray("hurt_box")]
 script = ExtResource("48_563ve")
-effects = SubResource("Effects_DeathHit")
 hurt_box = NodePath("../../Hitboxes/HurtBox")
+effects = SubResource("Effects_DeathHit")
 
 [node name="DeathFall" type="Node" parent="StateMachine" unique_id=1630651820]
 script = ExtResource("50_ndkiv")
-effects = SubResource("Effects_DeathFall")
 player_y_velocity_curve = SubResource("Curve_ndkiv")
 player_rotation_curve = SubResource("Curve_26jgh")
 death_screen_texture = ExtResource("51_26jgh")
 transition_out_texture = SubResource("GradientTexture2D_gmxc2")
+effects = SubResource("Effects_DeathFall")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1248091762]
 libraries/ = SubResource("AnimationLibrary_mb70y")
@@ -1374,9 +1373,6 @@ libraries/ = SubResource("AnimationLibrary_mb70y")
 [node name="InputHandler" type="Node" parent="Handlers" unique_id=1160390861]
 script = ExtResource("3_je5mu")
 
-[node name="MovementHandler" type="Node" parent="Handlers" unique_id=429814395]
-script = ExtResource("6_0jrw7")
-
 [node name="SpriteHandler" type="Node" parent="Handlers" unique_id=657794481 node_paths=PackedStringArray("_player", "_doll")]
 script = ExtResource("7_tb30q")
 _player = NodePath("../..")
@@ -1384,13 +1380,6 @@ _doll = NodePath("../../Doll")
 
 [node name="FLUDDHandler" type="Node" parent="Handlers" unique_id=468241504 node_paths=PackedStringArray("_spray_particles", "player", "_hover_fludd_particles", "_hover_sfx", "_spray_loop_sfx")]
 script = ExtResource("51_h6qgx")
-fludd_x_speed_cap = 120.0
-dive_fludd_force = 10.0
-dive_fludd_x_factor = 1.0
-dive_fludd_y_factor = 0.0
-slide_fludd_force = 50.0
-submerged_fludd_target_velocity = -1000.0
-submerged_fludd_ease_weight = 0.5
 nozzle_switch_sfx = ExtResource("52_j002l")
 _spray_particles = NodePath("../../CanvasGroup/HoverFluddParticles")
 player = NodePath("../..")
@@ -1441,11 +1430,11 @@ copy_mode = 0
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_enjxo")
+texture = SubResource("CanvasTexture_d041h")
 region_enabled = true
 region_rect = Rect2(128, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_enjxo")
+canvas_texture = SubResource("CanvasTexture_d041h")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true

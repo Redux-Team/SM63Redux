@@ -6,6 +6,6 @@ func _next() -> StringName:
 		return &"Dive"
 	if player.is_on_floor():
 		return &"Idle"
-	if player.velocity.y > 50.0:
+	if player.velocity.y > player.idle_jump_fall_speed:
 		return &"Fall"
 	return &""

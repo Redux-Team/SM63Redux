@@ -4,7 +4,7 @@ extends PlayerState
 func _tick(delta: float) -> void:
 	if is_zero_approx(player.move_dir) and not player.is_diving:
 		var friction: FrictionComponent = player.get_component(FrictionComponent)
-		friction.apply(0.4)
+		friction.apply(player.dry_friction)
 	
 	player.is_falling = player.velocity.y > 0
 	_update_jump_chain(delta)

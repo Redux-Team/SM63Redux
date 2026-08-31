@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="ic_remove"]
 [ext_resource type="Texture2D" uid="uid://cyjlsmgjeixte" path="res://assets/textures/level_designer/ui_icons/up.svg" id="ic_up"]
 
-[node name="LayerProperties" type="MarginContainer" unique_id=899359989 node_paths=PackedStringArray("row_container", "add_button", "move_up_button", "move_down_button", "remove_button", "count_label", "detail", "detail_rows", "name_edit", "deco_layer", "parallax_slider_x", "parallax_slider_y", "parallax_label_x", "parallax_label_y", "scale_slider_x", "scale_slider_y", "scale_label_x", "scale_label_y", "modulate_color_picker")]
+[node name="LayerProperties" type="MarginContainer" unique_id=899359989 node_paths=PackedStringArray("row_container", "add_button", "move_up_button", "move_down_button", "remove_button", "count_label", "detail", "detail_rows", "name_edit", "deco_layer", "distance_slider", "distance_label", "distance_rows", "manual_rows", "parallax_slider_x", "parallax_slider_y", "parallax_label_x", "parallax_label_y", "scale_slider_x", "scale_slider_y", "scale_label_x", "scale_label_y", "modulate_color_picker")]
 custom_minimum_size = Vector2(520, 0)
 script = ExtResource("1_e2re5")
 row_container = NodePath("Columns/ListColumn/ListInset/ListScroll/RowList")
@@ -20,6 +20,10 @@ detail = NodePath("Columns/Detail")
 detail_rows = NodePath("Columns/Detail/DetailInset/Rows")
 name_edit = NodePath("Columns/Detail/DetailInset/Rows/NameRow/NameEdit")
 deco_layer = NodePath("Columns/Detail/DetailInset/Rows/DecoRow/DecoLayer")
+distance_slider = NodePath("Columns/Detail/DetailInset/Rows/DistRow/DistanceSlider")
+distance_label = NodePath("Columns/Detail/DetailInset/Rows/DistRow/DistanceLabel")
+distance_rows = [NodePath("Columns/Detail/DetailInset/Rows/DistanceHeader"), NodePath("Columns/Detail/DetailInset/Rows/DistRow")]
+manual_rows = [NodePath("Columns/Detail/DetailInset/Rows/ParallaxHeader"), NodePath("Columns/Detail/DetailInset/Rows/PXRow"), NodePath("Columns/Detail/DetailInset/Rows/PYRow"), NodePath("Columns/Detail/DetailInset/Rows/ScaleHeader"), NodePath("Columns/Detail/DetailInset/Rows/SXRow"), NodePath("Columns/Detail/DetailInset/Rows/SYRow")]
 parallax_slider_x = NodePath("Columns/Detail/DetailInset/Rows/PXRow/ParallaxSliderX")
 parallax_slider_y = NodePath("Columns/Detail/DetailInset/Rows/PYRow/ParallaxSliderY")
 parallax_label_x = NodePath("Columns/Detail/DetailInset/Rows/PXRow/ParallaxLabelX")
@@ -165,6 +169,41 @@ custom_minimum_size = Vector2(48, 24)
 layout_mode = 2
 size_flags_vertical = 4
 color = Color(1, 1, 1, 1)
+
+[node name="DistanceHeader" type="Label" parent="Columns/Detail/DetailInset/Rows"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Distance"
+metadata/gdss_classes = PackedStringArray("SectionHeader")
+
+[node name="DistRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/DistRow"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "Depth"
+vertical_alignment = 1
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="DistanceSlider" type="HSlider" parent="Columns/Detail/DetailInset/Rows/DistRow"]
+texture_filter = 4
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 9.0
+step = 0.05
+script = ExtResource("glass_slider")
+
+[node name="DistanceLabel" type="Label" parent="Columns/Detail/DetailInset/Rows/DistRow"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "1.0x"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="ParallaxHeader" type="Label" parent="Columns/Detail/DetailInset/Rows" unique_id=720359033]
 layout_mode = 2

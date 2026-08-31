@@ -22,6 +22,11 @@ const LOCK_ICON: Texture2D = preload("res://assets/textures/level_designer/ui_ic
 @export var detail_rows: VBoxContainer
 @export var name_edit: LineEdit
 @export var deco_layer: CheckButton
+@export var distance_slider: HSlider
+@export var distance_label: Label
+## Rows that only apply to decoration layers, and the per-axis rows they stand in for.
+@export var distance_rows: Array[Control] = []
+@export var manual_rows: Array[Control] = []
 @export var parallax_slider_x: HSlider
 @export var parallax_slider_y: HSlider
 @export var parallax_label_x: Label
@@ -45,6 +50,7 @@ func _ready() -> void:
 	remove_button.pressed.connect(_on_remove)
 	name_edit.text_changed.connect(_on_name_changed)
 	deco_layer.toggled.connect(_on_prop_changed)
+	distance_slider.value_changed.connect(_on_prop_changed)
 	parallax_slider_x.value_changed.connect(_on_prop_changed)
 	parallax_slider_y.value_changed.connect(_on_prop_changed)
 	scale_slider_x.value_changed.connect(_on_prop_changed)
@@ -253,6 +259,8 @@ func _show_detail(pos: int) -> void:
 		var item: CanvasItem = row as CanvasItem
 		if item:
 			item.visible = (not locked) or (row == mod_row)
+	if not locked:
+		_apply_depth_rows(layer.is_decoration)
 	remove_button.disabled = locked
 	GDSS.refresh(remove_button)
 	
@@ -261,6 +269,8 @@ func _show_detail(pos: int) -> void:
 	if not locked:
 		name_edit.text = layer.layer_name
 		deco_layer.button_pressed = layer.is_decoration
+		distance_slider.value = layer.distance
+		distance_label.text = "%.2fx" % (1.0 / (1.0 + layer.distance))
 		parallax_slider_x.value = layer.parallax_scale.x
 		parallax_label_x.text = "%.1fx" % layer.parallax_scale.x
 		parallax_slider_y.value = layer.parallax_scale.y
@@ -270,6 +280,15 @@ func _show_detail(pos: int) -> void:
 		scale_slider_y.value = layer.layer_scale.y
 		scale_label_y.text = "%.1fx" % layer.layer_scale.y
 	_setting_fields = false
+
+
+## A decoration layer is driven by its single depth value, so it shows that instead of the four
+## per-axis rows it stands in for.
+func _apply_depth_rows(is_decoration: bool) -> void:
+	for row: Control in distance_rows:
+		row.visible = is_decoration
+	for row: Control in manual_rows:
+		row.visible = not is_decoration
 
 
 func _on_name_changed(_text: String) -> void:
@@ -291,6 +310,12 @@ func _on_prop_changed(_value: Variant = null) -> void:
 	if layer.index == _area().get_player_layer_index():
 		return
 	layer.is_decoration = deco_layer.button_pressed
+	_apply_depth_rows(layer.is_decoration)
+	if layer.is_decoration:
+		layer.distance = distance_slider.value
+		distance_label.text = "%.2fx" % (1.0 / (1.0 + layer.distance))
+		return
+	
 	layer.parallax_scale.x = parallax_slider_x.value
 	parallax_label_x.text = "%.1fx" % layer.parallax_scale.x
 	layer.parallax_scale.y = parallax_slider_y.value

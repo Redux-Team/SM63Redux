@@ -18,6 +18,7 @@ enum FluddContext {
 }
 
 const FLUDD_POWER_MAX: float = 100.0
+const FLUDD_FUEL_MAX: float = 100.0
 
 
 signal fludd_fuel_changed(fuel_amount: float)
@@ -25,31 +26,9 @@ signal fludd_power_changed(power_amount: float)
 signal fludd_nozzle_changed(nozzle: FluddNozzle)
 
 
-@export var fludd_force: float = 200.0
-@export var fludd_impulse: float = 1.3
-@export var fludd_consume_rate: float = 1.0
-@export var fludd_x_speed_cap: float = 80.0
-@export var fludd_x_clamp_weight: float = 0.1
 
-@export_group("Hover Dive FLUDD")
-@export var dive_fludd_force: float = 0.92
-@export var dive_fludd_x_factor: float = 0.5
-@export var dive_fludd_y_factor: float = 1.0
-@export var dive_fludd_upward_bias: float = 0.0
-@export var dive_fludd_dampen_y: float = 0.02
-@export var dive_fludd_dampen_x: float = 0.03
 
-@export_group("Hover Floor Slide FLUDD")
-@export var slide_fludd_force: float = 0.92
-@export var slide_fludd_x_factor: float = 1.0
-@export var slide_fludd_y_factor: float = 0.0
-@export var slide_fludd_upward_bias: float = 0.0
-@export var slide_fludd_dampen_x: float = 0.03
 
-@export_group("Submerged FLUDD")
-@export var submerged_fludd_target_velocity: float = -270.0
-@export var submerged_fludd_ease_weight: float = 0.1
-@export var submerged_fludd_ease_halflife: float = 0.3
 
 @export_group("")
 @export var nozzle_switch_sfx: AudioStream
@@ -57,11 +36,11 @@ signal fludd_nozzle_changed(nozzle: FluddNozzle)
 @export var player: Player
 @export var fludd_fuel: float = 100.0:
 	set(ff):
-		fludd_fuel = clamp(ff, 0, 100)
+		fludd_fuel = clamp(ff, 0.0, FLUDD_FUEL_MAX)
 		fludd_fuel_changed.emit(fludd_fuel)
 @export var fludd_power: float = 100.0:
 	set(fp):
-		fludd_power = clamp(fp, 0, 100)
+		fludd_power = clamp(fp, 0.0, FLUDD_POWER_MAX)
 		fludd_power_changed.emit(fludd_power)
 @export var equipped_nozzle: FluddNozzle:
 	set(en):
@@ -116,8 +95,8 @@ func _tick_sfx() -> void:
 func _tick_refill() -> void:
 	if (player.is_on_floor() or player.is_in_water()) and not is_equal_approx(fludd_power, FLUDD_POWER_MAX):
 		fludd_power = FLUDD_POWER_MAX
-	if player.is_in_water() and not is_equal_approx(fludd_fuel, 100.0):
-		fludd_fuel = 100.0
+	if player.is_in_water() and not is_equal_approx(fludd_fuel, FLUDD_FUEL_MAX):
+		fludd_fuel = FLUDD_FUEL_MAX
 
 
 func _update_spray_angle() -> void:
@@ -187,13 +166,13 @@ func _hover_fludd_logic() -> void:
 		_hover_sfx.play()
 	
 	if player.velocity.y < 0.0 and fludd_power == FLUDD_POWER_MAX and not player.is_on_floor():
-		player.velocity.y *= fludd_impulse
-		player.velocity.y = max(player.velocity.y, -500)
-	elif player.velocity.y < -50.0:
-		var fludd_velocity_factor: float = lerpf(0.3, 0.8, fludd_power / FLUDD_POWER_MAX)
-		player.velocity.y = min(lerpf(player.velocity.y, -fludd_force * fludd_velocity_factor, 0.57), player.velocity.y)
+		player.velocity.y *= player.fludd_impulse
+		player.velocity.y = max(player.velocity.y, player.fludd_impulse_speed_cap)
+	elif player.velocity.y < player.fludd_hover_min_rise_speed:
+		var fludd_velocity_factor: float = lerpf(player.fludd_lift_factor_min, player.fludd_lift_factor_max, fludd_power / FLUDD_POWER_MAX)
+		player.velocity.y = min(lerpf(player.velocity.y, -player.fludd_force * fludd_velocity_factor, player.fludd_lift_weight), player.velocity.y)
 	else:
-		player.velocity.y = lerpf(player.velocity.y, -200.0, 0.1)
+		player.velocity.y = lerpf(player.velocity.y, player.fludd_fall_target_speed, player.fludd_fall_weight)
 
 
 func _hover_dive_fludd_logic(delta: float) -> void:
@@ -201,10 +180,10 @@ func _hover_dive_fludd_logic(delta: float) -> void:
 	_hover_active = true
 	
 	var fps: float = delta * 60.0
-	player.velocity.y *= 1.0 - dive_fludd_dampen_y * fps
-	player.velocity.x *= 1.0 - dive_fludd_dampen_x * fps
-	player.velocity.y += (sin(_dive_rotation) * dive_fludd_force * dive_fludd_y_factor - dive_fludd_upward_bias) * pow(fps, 2.0)
-	player.velocity.x += cos(_dive_rotation) * dive_fludd_force * dive_fludd_x_factor * pow(fps, 2.0) * float(player.get_facing())
+	player.velocity.y *= 1.0 - player.dive_fludd_dampen_y * fps
+	player.velocity.x *= 1.0 - player.dive_fludd_dampen_x * fps
+	player.velocity.y += (sin(_dive_rotation) * player.dive_fludd_force * player.dive_fludd_y_factor - player.dive_fludd_upward_bias) * pow(fps, 2.0)
+	player.velocity.x += cos(_dive_rotation) * player.dive_fludd_force * player.dive_fludd_x_factor * pow(fps, 2.0) * float(player.get_facing())
 
 
 func _hover_floor_slide_fludd_logic(delta: float) -> void:
@@ -212,18 +191,18 @@ func _hover_floor_slide_fludd_logic(delta: float) -> void:
 	_hover_active = true
 	
 	var fps: float = delta * 60.0
-	player.velocity.x *= 1.0 - slide_fludd_dampen_x * fps
-	player.velocity.y -= slide_fludd_upward_bias * pow(fps, 2.0)
-	player.velocity.x += cos(_dive_rotation) * slide_fludd_force * slide_fludd_x_factor * pow(fps, 2.0) * float(player.get_facing())
-	player.velocity.y += sin(_dive_rotation) * slide_fludd_force * slide_fludd_y_factor * pow(fps, 2.0)
+	player.velocity.x *= 1.0 - player.slide_fludd_dampen_x * fps
+	player.velocity.y -= player.slide_fludd_upward_bias * pow(fps, 2.0)
+	player.velocity.x += cos(_dive_rotation) * player.slide_fludd_force * player.slide_fludd_x_factor * pow(fps, 2.0) * float(player.get_facing())
+	player.velocity.y += sin(_dive_rotation) * player.slide_fludd_force * player.slide_fludd_y_factor * pow(fps, 2.0)
 
 
 func _hover_submerged_fludd_logic(delta: float) -> void:
 	player.is_using_hover_fludd = true
 	_hover_active = true
 	
-	var t: float = 1.0 - pow(0.5, delta / submerged_fludd_ease_halflife)
-	player.velocity.y = lerpf(player.velocity.y, submerged_fludd_target_velocity, t)
+	var t: float = 1.0 - pow(0.5, delta / player.submerged_fludd_ease_halflife)
+	player.velocity.y = lerpf(player.velocity.y, player.submerged_fludd_target_velocity, t)
 
 
 func _rocket_fludd_logic(_delta: float) -> void:
@@ -237,27 +216,27 @@ func _turbo_fludd_logic(_delta: float) -> void:
 func _handle_grounded_launch() -> void:
 	if player.machine.is_active(&"Grounded"):
 		player.machine.change_state(&"IdleJump")
-		player.velocity.y = -50.0
+		player.velocity.y = player.fludd_launch_speed
 
 
 func _apply_x_speed_clamp(delta: float) -> void:
-	player.effective_midair_max_speed = fludd_x_speed_cap
-	if absf(player.velocity.x) > fludd_x_speed_cap:
+	player.effective_midair_max_speed = player.fludd_x_speed_cap
+	if absf(player.velocity.x) > player.fludd_x_speed_cap:
 		var sign_x: float = signf(player.velocity.x)
-		player.velocity.x = lerpf(player.velocity.x, sign_x * fludd_x_speed_cap, fludd_x_clamp_weight * delta * 20.0)
+		player.velocity.x = lerpf(player.velocity.x, sign_x * player.fludd_x_speed_cap, player.fludd_x_clamp_weight * delta * player.fludd_x_clamp_rate)
 	
 	if player.move_dir == 0.0:
-		player.velocity.x = lerpf(player.velocity.x, 0.0, fludd_x_clamp_weight * delta * 20.0)
+		player.velocity.x = lerpf(player.velocity.x, 0.0, player.fludd_x_clamp_weight * delta * player.fludd_x_clamp_rate)
 
 
 func _consume_fludd(delta: float) -> void:
-	var power_drain: float = (45.0 * fludd_consume_rate) * delta
+	var power_drain: float = (player.fludd_power_drain_rate * player.fludd_consume_rate) * delta
 	
 	if not player.is_on_floor():
 		fludd_power -= power_drain
 	
 	if not player.is_in_water():
-		fludd_fuel -= 0.05 * power_drain
+		fludd_fuel -= player.fludd_fuel_drain_ratio * power_drain
 
 
 func set_dive_rotation(rotation: float, context: FluddContext) -> void:
@@ -286,7 +265,7 @@ func _input(event: InputEvent) -> void:
 		if successful_switch:
 			SFX.build()\
 				.set_stream(nozzle_switch_sfx)\
-				.set_db(-10)\
+				.set_db(player.fludd_switch_sfx_db)\
 				.set_bus(&"Player")\
 				.play()
 	if event is InputEventKey:

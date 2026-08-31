@@ -6,6 +6,10 @@ extends Resource
 const INHERIT_BUS: StringName = &"Inherit"
 
 @export var animation: StringName = &""
+## Alternates for [member animation], picked at random on enter. Leave empty to always play
+## [member animation]; the pool includes it, so one entry gives an even coin flip between the two.
+@export var animation_variants: Array[StringName] = []
+@export var variant_no_repeat: bool = true
 @export var restart_if_playing: bool = true
 @export var speed_scale: float = 1.0
 @export var stop_on_exit: bool = false
@@ -88,17 +92,36 @@ func render_tick(state: State) -> void:
 func _play_animation(state: State) -> void:
 	if animation.is_empty() or not state.sprite:
 		return
-	if not restart_if_playing and state.sprite.playing and state.sprite.current_animation == animation:
+	if not restart_if_playing and state.sprite.playing and _pool().has(StringName(state.sprite.current_animation)):
 		return
 	
+	var chosen: StringName = _pick_variant(state)
 	state.chain_index = 0
 	if loop_override:
 		state.sprite.looping = chain.is_empty() and loop_enabled
 	state.sprite.speed_scale = speed_scale
-	state.sprite.play(animation)
+	state.sprite.play(chosen)
 	state.sprite.offset = offset if offset_enabled else Vector2.ZERO
 	if not chain.is_empty():
 		state.sprite.animation_finished.connect(state._on_chain_advance, CONNECT_ONE_SHOT)
+
+
+## The animation pool for this state: the base plus any variants.
+func _pool() -> Array[StringName]:
+	var pool: Array[StringName] = [animation]
+	pool.append_array(animation_variants)
+	return pool
+
+
+func _pick_variant(state: State) -> StringName:
+	if animation_variants.is_empty():
+		return animation
+	
+	var choices: Array[StringName] = _pool()
+	if variant_no_repeat and choices.size() > 1:
+		choices.erase(state.last_variant)
+	state.last_variant = choices.pick_random()
+	return state.last_variant
 
 
 func advance_chain(state: State) -> void:

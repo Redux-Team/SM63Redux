@@ -1,18 +1,16 @@
 extends PlayerState
 
 
-const EXIT_DELAY: float = 0.6
-
 @export var spin_hitbox: HitBox
 
 
 func _enter() -> void:
-	spin_hitbox.enable(0.3)
+	spin_hitbox.enable(player.spin_hitbox_time)
 	if not player.is_on_floor():
 		if player.velocity.y > 0:
-			player.velocity.y = -35
+			player.velocity.y = player.spin_rise_from_fall
 		else:
-			player.velocity.y -= 50
+			player.velocity.y -= player.spin_rise_boost
 
 
 func _tick(_delta: float) -> void:
@@ -27,4 +25,4 @@ func _exit() -> void:
 
 
 func _next() -> StringName:
-	return &"SwimIdle" if not player.is_input_spin and time > EXIT_DELAY else &""
+	return &"SwimIdle" if not player.is_input_spin and time > player.swim_spin_exit_delay else &""

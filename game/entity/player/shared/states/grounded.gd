@@ -19,12 +19,12 @@ func _speed_up(dir: float) -> void:
 	
 	player.velocity.x = move_toward(player.velocity.x, target, accel)
 	
-	if player.get_local_floor_normal().y < 0.999 and player.velocity.y >= 0.0:
-		player.velocity.y = 0.5
+	if player.get_local_floor_normal().y < player.slope_normal_threshold and player.velocity.y >= 0.0:
+		player.velocity.y = player.slope_stick_speed
 
 
 func _apply_friction() -> void:
 	var speed: float = abs(player.velocity.x)
-	speed = max(0.0, speed - 0.3)
-	speed /= 1.15
+	speed = max(0.0, speed - player.ground_friction_flat)
+	speed /= player.ground_friction_divisor
 	player.velocity.x = speed * sign(player.velocity.x)

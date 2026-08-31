@@ -4,7 +4,7 @@ extends PlayerState
 
 func _enter() -> void:
 	var phase: int = player.current_jump + 1
-	if phase == 3 and (abs(player.velocity.x) < 120 or not player.is_moving_with_facing()):
+	if phase == 3 and (abs(player.velocity.x) < player.triple_jump_min_speed or not player.is_moving_with_facing()):
 		phase = 2
 	
 	phase = min(phase, 3)

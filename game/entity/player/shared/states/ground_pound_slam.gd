@@ -1,8 +1,6 @@
 extends PlayerState
 
 
-const EXIT_DELAY: float = 0.3
-
 var _ready_at: float = -1.0
 
 
@@ -22,4 +20,4 @@ func _next() -> StringName:
 		if not player.is_in_water():
 			_ready_at = time
 		return &""
-	return &"Idle" if time - _ready_at >= EXIT_DELAY else &""
+	return &"Idle" if time - _ready_at >= player.gp_slam_exit_delay else &""

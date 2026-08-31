@@ -12,10 +12,10 @@ func _enter() -> void:
 	player.velocity = Vector2.ZERO
 	sprite.lock_flipping = true
 	LevelCamera.get_instance().freeze()
-	await get_tree().create_timer(2).timeout
+	await get_tree().create_timer(player.death_transition_delay).timeout
 	Singleton.build_screen_transition() \
 		.set_texture(death_screen_texture) \
-		.set_hold_duration(0.5) \
+		.set_hold_duration(player.death_screen_hold) \
 		.set_swap(func() -> void: Singleton.get_editor_session().resume_or_open(get_tree(), LEVEL_DESIGNER_SCENE)) \
 		.set_out_texture(transition_out_texture) \
 		.done()

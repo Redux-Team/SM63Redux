@@ -1,9 +1,6 @@
 extends PlayerState
 
 
-const GROUNDED_MIN_FRAMES: int = 5
-const EXIT_DELAY: float = 0.25
-
 var _grounded_at: float = -1.0
 
 
@@ -13,7 +10,7 @@ func _enter() -> void:
 
 func _next() -> StringName:
 	if _grounded_at < 0.0:
-		if player.is_on_floor() and frames > GROUNDED_MIN_FRAMES:
+		if player.is_on_floor() and frames > player.strike_grounded_frames:
 			_grounded_at = time
 		return &""
-	return &"Idle" if time - _grounded_at >= EXIT_DELAY else &""
+	return &"Idle" if time - _grounded_at >= player.strike_exit_delay else &""
