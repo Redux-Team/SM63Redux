@@ -1,12 +1,27 @@
 extends PlayerState
 
 
+var _footstep_frame: int = -1
+
+
 func _enter() -> void:
+	_footstep_frame = -1
 	_apply_gait()
 
 
 func _tick(_delta: float) -> void:
 	_apply_gait()
+
+
+func _render_tick(_delta: float) -> void:
+	var frame: int = sprite.current_frame
+	if frame == _footstep_frame:
+		return
+	
+	_footstep_frame = frame
+	var frames: PackedInt32Array = player.footstep_frames.get(sprite.current_animation, PackedInt32Array())
+	if frames.has(frame):
+		player.play_footstep()
 
 
 func _apply_gait() -> void:

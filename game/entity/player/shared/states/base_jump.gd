@@ -1,12 +1,14 @@
 class_name BaseJump
 extends PlayerState
 
+@export var jump_particles: AnimatedParticles
 
 func _enter() -> void:
 	var phase: int = player.current_jump + 1
 	if phase == 3 and (abs(player.velocity.x) < player.triple_jump_min_speed or not player.is_moving_with_facing()):
 		phase = 2
 	
+	jump_particles.burst()
 	phase = min(phase, 3)
 	
 	var strengths: Array[float] = [0.0, player.jump_strength, player.double_jump_strength, player.triple_jump_strength]

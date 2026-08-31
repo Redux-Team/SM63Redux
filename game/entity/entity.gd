@@ -104,6 +104,10 @@ func is_on_anything() -> bool:
 	return is_on_floor() or is_on_wall() or is_on_ceiling()
 
 
+func get_terrain() -> StringName:
+	return &""
+
+
 func is_in_water() -> bool:
 	if not water_check:
 		push_error("Tried checking if submerged without water check area!")

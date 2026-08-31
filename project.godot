@@ -294,6 +294,11 @@ use_fludd={
 2d_physics/layer_10="Ground Pound"
 2d_physics/layer_11="Spin"
 2d_physics/layer_13="Camera Deny"
+2d_physics/layer_25="Grass"
+2d_physics/layer_26="Snow"
+2d_physics/layer_27="Cloud"
+2d_physics/layer_28="Ice"
+2d_physics/layer_29="Metal"
 
 [rendering]
 

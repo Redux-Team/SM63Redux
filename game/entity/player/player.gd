@@ -9,6 +9,7 @@ signal swimming_changed(swimming: bool)
 
 
 const BUFFER_ACTIONS: PackedStringArray = ["jump"]
+const FOOTSTEP_LAYER_FIRST: int = 25
 var buffer_dictionary: Dictionary[String, float]
 
 @export_group("Movement")
@@ -49,7 +50,7 @@ var buffer_dictionary: Dictionary[String, float]
 @export var triple_jump_min_speed: float = 120.0
 @export_subgroup("Feel")
 @export var jump_chain_time: float = 0.15
-@export_range(0.0, 1.0) var jump_cut_multiplier: float = 0.6
+@export_range(0.0, 1.0) var jump_cut_multiplier: float = 0.75
 @export var jump_buffer_window: float = 0.2
 @export_subgroup("Exits")
 @export var jump_spin_min_speed: float = -55.0
@@ -232,6 +233,15 @@ var buffer_dictionary: Dictionary[String, float]
 @export var submerged_fludd_target_velocity: float = -1000.0
 @export var submerged_fludd_ease_weight: float = 0.5
 @export var submerged_fludd_ease_halflife: float = 0.3
+
+@export_group("Footsteps", "footstep_")
+@export var footstep_bank: SFXBank
+@export var footstep_particles: AnimatedParticles
+@export var footstep_terrains: Array[StringName] = [&"grass", &"snow", &"cloud", &"ice", &"metal"]
+@export var footstep_frames: Dictionary[StringName, PackedInt32Array] = {
+	&"walk_loop": PackedInt32Array([0, 4]),
+	&"run_loop": PackedInt32Array([0, 4]),
+}
 
 @export_group("Internal")
 @export var debug_container: Control
@@ -448,11 +458,26 @@ func reset_jump_timer() -> void:
 	jump_buffer_timer = 0
 
 
-func get_terrain() -> String:
-	if floor_slope_raycast.is_colliding():
-		return floor_slope_raycast.get_collider().get_meta(&"terrain", "generic")
+func get_terrain() -> StringName:
+	if not floor_slope_raycast.is_colliding():
+		return &""
 	
-	return ""
+	var collider: CollisionObject2D = floor_slope_raycast.get_collider() as CollisionObject2D
+	if not collider:
+		return &""
+	
+	for i: int in footstep_terrains.size():
+		if collider.get_collision_layer_value(FOOTSTEP_LAYER_FIRST + i):
+			return footstep_terrains.get(i)
+	
+	return StringName(collider.get_meta(&"terrain", ""))
+
+
+func play_footstep() -> void:
+	if footstep_bank:
+		footstep_bank.play_sfx_at(global_position, footstep_bank.bank_group, self, sprite)
+	if footstep_particles and abs(velocity.x) > 160:
+		footstep_particles.burst()
 
 
 func _on_water_check_water_entered() -> void:
