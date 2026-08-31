@@ -177,6 +177,9 @@ func _queue_save_buttons_update() -> void:
 
 func _update_save_buttons() -> void:
 	_save_buttons_update_queued = false
+	if not is_inside_tree():
+		return
+	
 	var handler: LDSaveLoadHandler = LD.get_save_load_handler()
 	if is_instance_valid(_save_new_button):
 		_save_new_button.visible = handler.has_loaded_file()

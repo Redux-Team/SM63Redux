@@ -24,6 +24,11 @@ const LD_ERROR: AudioStream = preload("uid://7fdllxb8tiqr")
 const LD_OPEN: AudioStream = preload("uid://b41jeumeks5wp")
 const LD_SELECT: AudioStream = preload("uid://b1fnunf32dpve")
 
+## Falloff for positional sounds. The viewport is 640x360, so a source one screen away should
+## already be near silent; Godot's stock 2000px default leaves everything audible everywhere.
+const SPATIAL_MAX_DISTANCE: float = 400.0
+const SPATIAL_ATTENUATION: float = 1.5
+
 #const UI_WINDOW_OPEN: AudioStream
 
 
@@ -34,11 +39,11 @@ static func play(source: Variant, bus: StringName = &"SFX") -> void:
 		_play_stream(source, bus)
 
 
-static func play_at(source: Variant, at: Variant, bus: StringName = &"Master") -> void:
+static func play_at(source: Variant, at: Variant, bus: StringName = &"Master", max_distance: float = SPATIAL_MAX_DISTANCE, attenuation: float = SPATIAL_ATTENUATION) -> void:
 	if source is SFXBank:
 		(source as SFXBank).play_sfx_at(at, bus)
 	elif source is AudioStream:
-		_play_stream_at(source, at, bus)
+		_play_stream_at(source, at, bus, max_distance, attenuation)
 
 
 static func stop_group(group: StringName) -> void:
@@ -54,8 +59,8 @@ static func play_tracked(source: AudioStream, bus: StringName = &"SFX") -> Audio
 
 
 ## Positional variant of [method play_tracked]. Returns the [AudioStreamPlayer2D].
-static func play_tracked_at(source: AudioStream, at: Variant, bus: StringName = &"SFX") -> AudioStreamPlayer2D:
-	return _play_stream_at(source, at, bus)
+static func play_tracked_at(source: AudioStream, at: Variant, bus: StringName = &"SFX", max_distance: float = SPATIAL_MAX_DISTANCE, attenuation: float = SPATIAL_ATTENUATION) -> AudioStreamPlayer2D:
+	return _play_stream_at(source, at, bus, max_distance, attenuation)
 
 
 static func _play_stream(stream: AudioStream, bus: StringName) -> AudioStreamPlayer:
@@ -68,10 +73,12 @@ static func _play_stream(stream: AudioStream, bus: StringName) -> AudioStreamPla
 	return player
 
 
-static func _play_stream_at(stream: AudioStream, at: Variant, bus: StringName) -> AudioStreamPlayer2D:
+static func _play_stream_at(stream: AudioStream, at: Variant, bus: StringName, max_distance: float = SPATIAL_MAX_DISTANCE, attenuation: float = SPATIAL_ATTENUATION) -> AudioStreamPlayer2D:
 	var player: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
 	player.stream = stream
 	player.bus = bus
+	player.max_distance = max_distance
+	player.attenuation = attenuation
 	player.finished.connect(player.queue_free)
 	if at is Node2D:
 		(at as Node2D).add_child(player)

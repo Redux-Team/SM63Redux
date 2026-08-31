@@ -28,13 +28,20 @@ static func get_ui_scale() -> float:
 	return TOUCH_SCALE if touch else DESKTOP_SCALE
 
 
+func _enter_tree() -> void:
+	get_viewport().size_changed.connect(_rescale_chrome)
+
+
+func _exit_tree() -> void:
+	get_viewport().size_changed.disconnect(_rescale_chrome)
+
+
 func setup() -> void:
 	# Handlers that touch level/area state wait until everything is ready.
 	_toolbar_handler.setup()
 	_file_handler.setup()
 	_hotbar_handler.setup()
 	_chrome_handler.setup()
-	get_viewport().size_changed.connect(_rescale_chrome)
 	_rescale_chrome()
 	# Deferred so the handlers above are wired first: the browser announces itself as it is
 	# built, and the hotbar has to be listening by then.

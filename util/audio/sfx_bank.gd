@@ -18,6 +18,9 @@ static var all_banks: Array[SFXBank] = []
 @export var interval: float = 0.0 ## Minimum time in seconds between plays. In frame-driven mode, acts as a cooldown buffer.
 @export var overwrite_group: bool = false ## Stops all other banks in the same group before playing.
 @export var bank_group: StringName ## Group identifier used for overwrite and is_in_group checks.
+@export_group("Spatial")
+@export var max_distance: float = SFX.SPATIAL_MAX_DISTANCE ## Distance at which a positional play falls silent.
+@export var attenuation: float = SFX.SPATIAL_ATTENUATION ## Falloff exponent for positional plays.
 @export_group("Terrain SFX")
 @export var terrain_exclusive: bool = false ## If true, only terrain SFX play; base sound_effects are ignored.
 @export var terrain_sfx_entries: Dictionary[StringName, Array] ## Map of terrain key to Array[AudioStream].
@@ -93,6 +96,8 @@ func play_sfx_at(at: Variant, bus: StringName = bank_group, entity: Entity = nul
 	var player: AudioStreamPlayer2D = _get_available_2d_player()
 	if player == null:
 		return
+	player.max_distance = max_distance
+	player.attenuation = attenuation
 	if at is Node2D:
 		var target: Node2D = at as Node2D
 		if player.get_parent() != target:

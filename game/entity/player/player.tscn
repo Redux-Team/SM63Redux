@@ -1064,7 +1064,6 @@ script = ExtResource("30_effects")
 animation = &"dive"
 restart_if_playing = false
 offset_enabled = true
-collision_mask_override = 1
 sfx_enter = SubResource("sfxrand5")
 
 [sub_resource type="Resource" id="Effects_IdleJump"]
@@ -1129,7 +1128,6 @@ animation = &"floor_slide"
 restart_if_playing = false
 offset_enabled = true
 offset = Vector2(0, 4)
-collision_mask_override = 1
 
 [sub_resource type="Resource" id="Effects_Strike"]
 script = ExtResource("30_effects")
@@ -1146,7 +1144,6 @@ script = ExtResource("30_effects")
 animation = &"swim"
 restart_if_playing = false
 offset_enabled = true
-collision_mask_override = 1
 
 [sub_resource type="Resource" id="Effects_SwimWalk"]
 script = ExtResource("30_effects")

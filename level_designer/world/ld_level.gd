@@ -38,7 +38,7 @@ func _exit_tree() -> void:
 
 ## Returns the currently active area.
 static func get_active_area() -> LDArea:
-	return _inst._active_area
+	return _inst._active_area if is_instance_valid(_inst) else null
 
 
 ## All areas in creation order.
