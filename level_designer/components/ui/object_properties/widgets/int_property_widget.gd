@@ -9,7 +9,6 @@ extends LDPropertyWidget
 
 func _ready() -> void:
 	spin_box.rounded = true
-	spin_box.step = 1.0
 	spin_box.value_changed.connect(func(val: float) -> void:
 		_update_reset_button(int(val))
 		value_changed.emit(_key, int(val))
