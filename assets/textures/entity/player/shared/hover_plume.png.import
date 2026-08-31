@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjblyiou2qe0f"
-path="res://.godot/imported/hover_fludd_r_0.png-cbacdc07029fb336e339c805e424a5ec.ctex"
+uid="uid://b6ggmnpu414cl"
+path="res://.godot/imported/hover_plume.png-9731b29c8c4f05a7f18e2d61d04b40e2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/entity/player/shared/hover_fludd_r_0.png"
-dest_files=["res://.godot/imported/hover_fludd_r_0.png-cbacdc07029fb336e339c805e424a5ec.ctex"]
+source_file="res://assets/textures/entity/player/shared/hover_plume.png"
+dest_files=["res://.godot/imported/hover_plume.png-9731b29c8c4f05a7f18e2d61d04b40e2.ctex"]
 
 [params]
 
