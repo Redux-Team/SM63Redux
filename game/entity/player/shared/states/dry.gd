@@ -27,5 +27,5 @@ func _update_jump_chain(delta: float) -> void:
 
 
 func _handle_ground_pound() -> void:
-	if not player.is_on_floor() and player.is_input_ground_pound:
+	if not player.is_on_floor() and player.is_input_ground_pound and player.can_ground_pound:
 		machine.change_state(&"GroundPoundStart")
