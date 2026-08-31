@@ -17,7 +17,7 @@ var source_object_id: String = ""
 func init_from_data(obj_data: Dictionary) -> void:
 	data = obj_data
 	source_object_id = obj_data.get("object_id", "")
-	properties = obj_data.get("properties")
+	properties = obj_data.get("properties", {})
 	_pre_init()
 	_handle_properties()
 	
