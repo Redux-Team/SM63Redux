@@ -17,16 +17,6 @@ func select_object(object: GameObject) -> void:
 	selected_object_changed.emit(object)
 
 
-func find_object(id: String) -> LDObject:
-	var objects: Array[LDObject] = LD.get_area().get_all_objects()
-	
-	for obj: LDObject in objects:
-		if obj.source_object_id == id:
-			return obj
-	
-	return null
-
-
 func get_placed_selection() -> Array[LDObject]:
 	return LD.get_editor_viewport().get_selected_objects()
 
