@@ -256,6 +256,12 @@ func is_hover_active() -> bool:
 	return _hover_active
 
 
+## Whether the equipped nozzle is currently spraying. Nozzle logic sets [member _hover_active], so
+## rocket and turbo start driving the plume as soon as their logic does the same.
+func is_spraying() -> bool:
+	return _hover_active
+
+
 func _input(event: InputEvent) -> void:
 	# FluddNozzle.NONE should never be false, throw an error if it is
 	assert(held_nozzles.get(FluddNozzle.NONE))

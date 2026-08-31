@@ -78,6 +78,9 @@
 [ext_resource type="Script" uid="uid://df82mcnubnp0h" path="res://core/custom_nodes/2d/animated_particles.gd" id="110_anpar"]
 [ext_resource type="Texture2D" uid="uid://ch0tm1w60yxfi" path="res://assets/textures/particle/player/jump.png" id="111_42p6x"]
 [ext_resource type="Texture2D" uid="uid://bt7xxfmjvaf27" path="res://assets/textures/particle/player/ground_pound.png" id="112_gdvj3"]
+[ext_resource type="Texture2D" uid="uid://b6ggmnpu414cl" path="res://assets/textures/entity/player/shared/hover_plume.png" id="114_k6hol"]
+[ext_resource type="Texture2D" uid="uid://dmlcedkbvu5y7" path="res://assets/textures/entity/player/shared/rocket_plume.png" id="115_kdve7"]
+[ext_resource type="Texture2D" uid="uid://dn5qbmjbs18gu" path="res://assets/textures/entity/player/shared/turbo_plume.png" id="116_f27fj"]
 [ext_resource type="Script" uid="uid://4hwxabxucpuh" path="res://game/entity/state/state.gd" id="es_base"]
 [ext_resource type="Texture2D" uid="uid://b8krqecnutylk" path="res://assets/textures/entity/player/shared/rocket_fludd_crouch.png" id="nz_rocket_crouch"]
 [ext_resource type="Texture2D" uid="uid://d6mt2r2x57aw" path="res://assets/textures/entity/player/shared/rocket_fludd_crouch_up.png" id="nz_rocket_crouch_up"]
@@ -559,12 +562,12 @@ scale_curve = SubResource("CurveTexture_kw6gy")
 color_ramp = SubResource("GradientTexture1D_kw6gy")
 anim_offset_max = 1.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3jg1m"]
-atlas = ExtResource("70_6saf5")
+[sub_resource type="AtlasTexture" id="AtlasTexture_1p630"]
+atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_m2rg5"]
-diffuse_texture = SubResource("AtlasTexture_3jg1m")
+[sub_resource type="CanvasTexture" id="CanvasTexture_kdve7"]
+diffuse_texture = SubResource("AtlasTexture_1p630")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hmgs0"]
 atlas = ExtResource("51_d635j")
@@ -650,6 +653,10 @@ region = Rect2(64, 0, 64, 64)
 atlas = ExtResource("69_gmxc2")
 region = Rect2(128, 0, 64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_3jg1m"]
+atlas = ExtResource("70_6saf5")
+region = Rect2(0, 0, 64, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_cmrqc"]
 atlas = ExtResource("58_mjy7s")
 region = Rect2(0, 0, 64, 64)
@@ -668,10 +675,6 @@ region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ql0th"]
 atlas = ExtResource("73_8odgw")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1p630"]
-atlas = ExtResource("2_heu0c")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_v2l3k"]
@@ -1206,12 +1209,12 @@ animations = [{
 "speed": 14.0
 }]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3nfkn"]
-atlas = ExtResource("105_cmrqc")
-region = Rect2(0, 0, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_opceb"]
+atlas = ExtResource("100_sbpf8")
+region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_k6hol"]
-diffuse_texture = SubResource("AtlasTexture_3nfkn")
+[sub_resource type="CanvasTexture" id="CanvasTexture_f27fj"]
+diffuse_texture = SubResource("AtlasTexture_opceb")
 
 [sub_resource type="Resource" id="Resource_v2l3k"]
 script = ExtResource("101_krv0b")
@@ -1256,7 +1259,7 @@ animation = &"hover:dive"
 
 [sub_resource type="Resource" id="Resource_3jg1m"]
 script = ExtResource("101_krv0b")
-offset = Vector2(0, -1)
+offset = Vector2(-1, -1)
 
 [sub_resource type="Resource" id="Resource_n3xeb"]
 script = ExtResource("101_krv0b")
@@ -1438,9 +1441,9 @@ region = Rect2(0, 0, 64, 64)
 atlas = ExtResource("102_sa3a5")
 region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_opceb"]
-atlas = ExtResource("100_sbpf8")
-region = Rect2(64, 0, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_3nfkn"]
+atlas = ExtResource("105_cmrqc")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ko4c2"]
 atlas = ExtResource("104_3jg1m")
@@ -1800,7 +1803,89 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_p7vsf"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_fbvjr"]
+atlas = ExtResource("114_k6hol")
+region = Rect2(0, 0, 16, 32)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_lou6s"]
+diffuse_texture = SubResource("AtlasTexture_fbvjr")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_is4m5"]
+atlas = ExtResource("114_k6hol")
+region = Rect2(16, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4qybm"]
+atlas = ExtResource("114_k6hol")
+region = Rect2(32, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qppe4"]
+atlas = ExtResource("115_kdve7")
+region = Rect2(0, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nx3nd"]
+atlas = ExtResource("115_kdve7")
+region = Rect2(16, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ngukv"]
+atlas = ExtResource("115_kdve7")
+region = Rect2(32, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lettu"]
+atlas = ExtResource("116_f27fj")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mwgd8"]
+atlas = ExtResource("116_f27fj")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5bmbv"]
+atlas = ExtResource("116_f27fj")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m2rg5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fbvjr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_is4m5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4qybm")
+}],
+"loop": 1,
+"name": &"hover",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qppe4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nx3nd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ngukv")
+}],
+"loop": 1,
+"name": &"rocket",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lettu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mwgd8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5bmbv")
+}],
+"loop": 1,
+"name": &"turbo",
+"speed": 12.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dhqxs"]
 size = Vector2(10, 28)
@@ -2270,9 +2355,11 @@ libraries/ = SubResource("AnimationLibrary_mb70y")
 [node name="InputHandler" type="Node" parent="Handlers" unique_id=1160390861]
 script = ExtResource("3_je5mu")
 
-[node name="SpriteHandler" type="Node" parent="Handlers" unique_id=657794481 node_paths=PackedStringArray("fludd_sprite", "_player", "_doll")]
+[node name="SpriteHandler" type="Node" parent="Handlers" unique_id=657794481 node_paths=PackedStringArray("fludd_sprite", "plume_sprite", "plume_particles", "_player", "_doll")]
 script = ExtResource("7_tb30q")
 fludd_sprite = NodePath("../../Doll/Fludd")
+plume_sprite = NodePath("../../Doll/Fludd/Plume")
+plume_particles = NodePath("../../CanvasGroup/HoverFluddParticles")
 _player = NodePath("../..")
 _doll = NodePath("../../Doll")
 
@@ -2328,31 +2415,29 @@ copy_mode = 0
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source", "subsprites")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_m2rg5")
+texture = SubResource("CanvasTexture_kdve7")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_m2rg5")
+canvas_texture = SubResource("CanvasTexture_kdve7")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 subsprites = [NodePath("Fludd")]
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
-current_animation = "floor_slide"
+current_animation = "idle"
 current_frame = 0
 speed_scale = 1.0
 playing = false
 
 [node name="Fludd" type="Sprite2D" parent="Doll" unique_id=99316911 node_paths=PackedStringArray("subsprites")]
 show_behind_parent = true
-position = Vector2(-2, 3)
-rotation = 1.5707964
-texture = SubResource("CanvasTexture_k6hol")
+position = Vector2(-6, -1)
+texture = SubResource("CanvasTexture_f27fj")
 region_enabled = true
-region_rect = Rect2(0, 0, 64, 64)
+region_rect = Rect2(64, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_k6hol")
-local_rotation = 90.0
+canvas_texture = SubResource("CanvasTexture_f27fj")
 subsprites = [NodePath("Plume")]
 follow_root = true
 follow_default = &"hover:default"
@@ -2381,20 +2466,25 @@ follow_poses = Dictionary[StringName, Array]({
 follow_record = true
 animated = true
 diffuse_frames = SubResource("SpriteFrames_51d5m")
-current_animation = "hover:dive"
+current_animation = "hover:default"
 current_frame = 0
 speed_scale = 1.0
 playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="Plume" type="Sprite2D" parent="Doll/Fludd" unique_id=1277754178]
+visible = false
 show_behind_parent = true
-position = Vector2(-3, -1.9999998)
-texture = SubResource("CanvasTexture_p7vsf")
+position = Vector2(-6, 13)
+texture = SubResource("CanvasTexture_lou6s")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 32)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_p7vsf")
+canvas_texture = SubResource("CanvasTexture_lou6s")
 follow_origin = Vector2(-3, -1.9999998)
-current_animation = ""
+animated = true
+diffuse_frames = SubResource("SpriteFrames_m2rg5")
+current_animation = "hover"
 current_frame = 0
 speed_scale = 1.0
 playing = false
