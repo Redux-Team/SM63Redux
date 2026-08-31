@@ -110,6 +110,7 @@ var buffer_dictionary: Dictionary[String, float]
 @export_subgroup("Spin")
 @export var spin_gravity_scale: float = 0.67
 @export var spin_fast_duration: float = 0.25
+@export var spin_speed_scale_curve: Curve
 @export var spin_gravity_resume_time: float = 0.1
 @export var spin_duration: float = 0.5
 @export var spin_rise_from_fall: float = -35.0
@@ -178,11 +179,13 @@ var buffer_dictionary: Dictionary[String, float]
 @export var move_input_threshold: float = 0.1
 @export var walk_stop_speed: float = 0.5
 @export_subgroup("Animation")
-@export var run_animation_speed: float = 150.0
+@export_range(0.0, 1.0, 0.01) var run_animation_input: float = 0.7
+@export var walk_animation_stop_speed: float = 30.0
 @export var walk_speed_curve: Curve
 @export_subgroup("Strike")
 @export var strike_grounded_frames: int = 5
 @export var strike_exit_delay: float = 0.25
+@export var swim_strike_duration: float = 0.6
 
 @export_group("Death")
 @export_subgroup("Impact")
@@ -302,6 +305,7 @@ var can_jump: bool = true
 var can_spin: bool = false
 var can_walk: bool = true
 var can_dive: bool = true
+var can_ground_pound: bool = true
 var can_use_fludd: bool = true
 
 var jump_chain_timer: float = 0.0
@@ -473,10 +477,25 @@ func get_terrain() -> StringName:
 	return StringName(collider.get_meta(&"terrain", ""))
 
 
+func get_spin_speed_scale(elapsed: float) -> float:
+	if not spin_speed_scale_curve:
+		return 1.0
+	
+	var ratio: float = clampf(elapsed / maxf(spin_fast_duration, 0.001), 0.0, 1.0)
+	return spin_speed_scale_curve.sample(lerpf(spin_speed_scale_curve.min_domain, spin_speed_scale_curve.max_domain, ratio))
+
+
+func enter_slow_spin() -> void:
+	var frames_res: SpriteFrames = sprite.diffuse_frames
+	var rate: float = sprite.speed_scale * frames_res.get_animation_speed(sprite.current_animation)
+	sprite.play_at_frame(&"spin_loop", sprite.current_frame)
+	sprite.speed_scale = rate / maxf(frames_res.get_animation_speed(&"spin_loop"), 0.001)
+
+
 func play_footstep() -> void:
 	if footstep_bank:
 		footstep_bank.play_sfx_at(global_position, footstep_bank.bank_group, self, sprite)
-	if footstep_particles and abs(velocity.x) > 160:
+	if footstep_particles and abs(velocity.x) > 20:
 		footstep_particles.burst()
 
 
