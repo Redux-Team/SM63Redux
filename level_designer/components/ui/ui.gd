@@ -6,21 +6,12 @@ extends Node
 ## singleton exposes its subsystem handlers).
 
 
-## The editor chrome is sized compact for desktop by default (scene values) and
-## scaled UP on touch/mobile. Font size lives on the editor Theme so one property
-## scales every label/button; button min-sizes scale in code and their icons
-## follow automatically via expand_icon.
-## Not a const: GDScript forbids mutating a const resource's properties, and we
-## tweak default_font_size at runtime. It's still the shared cached instance the
-## scenes reference, so the change propagates to all UI text.
-var _editor_theme: Theme = preload("res://level_designer/ld_editor_theme.tres")
-const DESKTOP_FONT_SIZE: int = 14
-const MOBILE_FONT_SIZE: int = 18
-const MOBILE_BUTTON_SCALE: float = 1.65
-const MOBILE_MIN_TARGET: float = 44.0
-const MOBILE_SEPARATION: int = 8
+## Chrome and windows are authored at 1:1 for touch and shrunk on desktop, where the
+## game's 640x360 stretch would otherwise blow the editor up to fill the screen.
+const DESKTOP_SCALE: float = 0.6
+const TOUCH_SCALE: float = 1.0
 
-@export var _canvas_layer: CanvasLayer
+@export var _chrome: Control
 @export_group("Handlers")
 @export var _window_handler: LDUIWindowHandler
 @export var _viewport_handler: LDUIViewportHandler
@@ -30,40 +21,35 @@ const MOBILE_SEPARATION: int = 8
 @export var _chrome_handler: LDUIChromeHandler
 
 
+## Uniform scale for every editor surface. One knob: chrome reads it here, windows read it
+## when they pop in.
+static func get_ui_scale() -> float:
+	var touch: bool = Device.is_mobile() or Singleton.get_input_handler().is_using_touch()
+	return TOUCH_SCALE if touch else DESKTOP_SCALE
+
+
 func setup() -> void:
 	# Handlers that touch level/area state wait until everything is ready.
 	_toolbar_handler.setup()
 	_file_handler.setup()
 	_hotbar_handler.setup()
 	_chrome_handler.setup()
-	_apply_responsive()
+	get_viewport().size_changed.connect(_rescale_chrome)
+	_rescale_chrome()
 	# Deferred so the handlers above are wired first: the browser announces itself as it is
 	# built, and the hotbar has to be listening by then.
 	_window_handler.prewarm.call_deferred(LDUIWindowHandler.OBJECT_BROWSER)
 
 
-## Desktop keeps the compact scene sizing (so the chrome never runs off-screen).
-## On touch/mobile, scale the whole chrome up: bigger tap targets, wider spacing,
-## and a larger base font (via the shared editor Theme). Driven off
-## Device.is_mobile() / live touch state — one hook adapts the entire UI.
-func _apply_responsive() -> void:
-	var touch: bool = Device.is_mobile() or Singleton.get_input_handler().is_using_touch()
-	_editor_theme.default_font_size = MOBILE_FONT_SIZE if touch else DESKTOP_FONT_SIZE
-	if touch:
-		_scale_chrome(_canvas_layer)
-
-
-func _scale_chrome(node: Node) -> void:
-	for child: Node in node.get_children():
-		if child is BaseButton:
-			var control: Control = child as Control
-			var size: Vector2 = control.custom_minimum_size
-			control.custom_minimum_size = Vector2(
-				maxf(size.x * MOBILE_BUTTON_SCALE, MOBILE_MIN_TARGET),
-				maxf(size.y * MOBILE_BUTTON_SCALE, MOBILE_MIN_TARGET))
-		elif child is BoxContainer:
-			(child as BoxContainer).add_theme_constant_override(&"separation", MOBILE_SEPARATION)
-		_scale_chrome(child)
+## Chrome anchors full-rect, so shrinking it would shrink the region its rails anchor to.
+## Grow the rect by the inverse of the scale instead: it renders smaller but still spans
+## the whole screen.
+func _rescale_chrome() -> void:
+	var ui_scale: float = get_ui_scale()
+	var view: Vector2 = get_viewport().get_visible_rect().size
+	_chrome.scale = Vector2(ui_scale, ui_scale)
+	_chrome.offset_right = view.x * (1.0 / ui_scale - 1.0)
+	_chrome.offset_bottom = view.y * (1.0 / ui_scale - 1.0)
 
 
 func get_window_handler() -> LDUIWindowHandler:
@@ -88,7 +74,3 @@ func get_hotbar_handler() -> LDUIHotbarHandler:
 
 func get_chrome_handler() -> LDUIChromeHandler:
 	return _chrome_handler
-
-
-func get_canvas_layer() -> CanvasLayer:
-	return _canvas_layer
