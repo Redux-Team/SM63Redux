@@ -83,10 +83,10 @@ func _on_viewport_input(event: InputEvent) -> void:
 	
 	if event is InputEventMouseMotion:
 		if _drag_corner >= 0:
-			_drag_resize(_get_snapped_mouse_pos())
+			_drag_resize(viewport.get_snapped_mouse())
 			_sync_handle_buttons()
 		else:
-			_update_hover(_get_screen_mouse_pos())
+			_update_hover(viewport.get_screen_mouse())
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
@@ -108,7 +108,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and _pending_block_drag:
 		_pending_block_drag = false
 		var move: LDToolMove = _get_move_tool()
-		if move and move.try_begin_drag(_get_screen_mouse_pos(), [_editing_object]):
+		if move and move.try_begin_drag(viewport.get_screen_mouse(), [_editing_object]):
 			move.return_tool = "block_edit"
 			get_tool_handler().select_tool("move")
 		return
@@ -135,10 +135,10 @@ func _is_mouse_inside_block() -> bool:
 	var center: Vector2 = _editing_object.global_position
 	var world_rect: Rect2 = Rect2(center - size * 0.5, size)
 	var screen_rect: Rect2 = Rect2(
-		_world_to_screen(world_rect.position),
-		_world_to_screen(world_rect.position + world_rect.size) - _world_to_screen(world_rect.position)
+		viewport.world_to_screen(world_rect.position),
+		viewport.world_to_screen(world_rect.position + world_rect.size) - viewport.world_to_screen(world_rect.position)
 	)
-	return screen_rect.has_point(_get_screen_mouse_pos())
+	return screen_rect.has_point(viewport.get_screen_mouse())
 
 
 func _get_move_tool() -> LDToolMove:
@@ -303,23 +303,9 @@ func _get_corner_screen_positions() -> Array[Vector2]:
 	var center: Vector2 = _editing_object.global_position
 	var corners: Array[Vector2] = []
 	for i: int in 4:
-		corners.append(_world_to_screen(center + (CORNER_ANCHORS[i] - Vector2(0.5, 0.5)) * size))
+		corners.append(viewport.world_to_screen(center + (CORNER_ANCHORS[i] - Vector2(0.5, 0.5)) * size))
 	return corners
 
 
 func _is_block(obj: LDObject) -> bool:
 	return obj != null and (obj.has_property(&"b_size_x") or obj.has_property(&"b_size_y"))
-
-
-func _world_to_screen(world_pos: Vector2) -> Vector2:
-	var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * viewport.get_root().get_global_transform()
-	return full_transform * world_pos
-
-
-func _get_screen_mouse_pos() -> Vector2:
-	return viewport.get_selection_overlay().get_local_mouse_position()
-
-
-func _get_snapped_mouse_pos() -> Vector2:
-	var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * viewport.get_root().get_global_transform()
-	return (full_transform.affine_inverse() * _get_screen_mouse_pos()).snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))

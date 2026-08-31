@@ -60,8 +60,7 @@ func update_drag(mouse_pos: Vector2) -> void:
 	if not _is_dragging:
 		return
 	
-	var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * viewport.get_root().get_global_transform()
-	var world_mouse: Vector2 = full_transform.affine_inverse() * mouse_pos
+	var world_mouse: Vector2 = viewport.screen_to_world(mouse_pos)
 	
 	for i: int in _objects.size():
 		var new_pos: Vector2 = world_mouse + _drag_offsets[i]
@@ -147,8 +146,7 @@ func _begin_drag(mouse_pos: Vector2, objects: Array[LDObject], return_to_select:
 	_drag_start_positions.clear()
 	_drag_offsets.clear()
 	
-	var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * viewport.get_root().get_global_transform()
-	var world_mouse: Vector2 = full_transform.affine_inverse() * mouse_pos
+	var world_mouse: Vector2 = viewport.screen_to_world(mouse_pos)
 	
 	for obj: LDObject in _objects:
 		_drag_start_positions.append(obj.position)

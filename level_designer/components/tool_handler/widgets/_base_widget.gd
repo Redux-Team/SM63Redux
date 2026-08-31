@@ -109,15 +109,11 @@ func _begin_move_handoff(return_tool: String, objects: Array[LDObject]) -> void:
 
 
 func world_to_screen(world_pos: Vector2) -> Vector2:
-	var vp: LDViewport = _tool.viewport
-	var xform: Transform2D = vp.get_viewport().get_canvas_transform() * vp.get_root().get_global_transform()
-	return xform * world_pos
+	return _tool.viewport.world_to_screen(world_pos)
 
 
 func screen_to_world(screen_pos: Vector2) -> Vector2:
-	var vp: LDViewport = _tool.viewport
-	var xform: Transform2D = vp.get_viewport().get_canvas_transform() * vp.get_root().get_global_transform()
-	return xform.affine_inverse() * screen_pos
+	return _tool.viewport.screen_to_world(screen_pos)
 
 
 func get_screen_mouse_pos() -> Vector2:

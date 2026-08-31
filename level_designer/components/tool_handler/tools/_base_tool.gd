@@ -24,13 +24,13 @@ func _ready() -> void:
 
 
 func _on_enable() -> void:
-	viewport._viewport_input.mouse_default_cursor_shape = get_cursor_shape()
+	viewport.set_cursor_shape(get_cursor_shape())
 	if wants_overlay():
 		viewport.get_selection_overlay().queue_redraw()
 
 
 func _on_disable() -> void:
-	viewport._viewport_input.mouse_default_cursor_shape = Control.CURSOR_ARROW
+	viewport.set_cursor_shape(Control.CURSOR_ARROW)
 	if wants_overlay():
 		viewport.get_selection_overlay().queue_redraw()
 	_destroy_preview()
@@ -53,7 +53,7 @@ func get_cursor_shape() -> Control.CursorShape:
 
 
 func set_cursor_shape(cursor_shape: Control.CursorShape) -> void:
-	viewport._viewport_input.mouse_default_cursor_shape = cursor_shape
+	viewport.set_cursor_shape(cursor_shape)
 
 
 func draw_overlay(_draw_node: CanvasItem) -> void:

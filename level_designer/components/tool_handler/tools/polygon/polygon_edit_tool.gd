@@ -62,9 +62,9 @@ func _on_viewport_input(event: InputEvent) -> void:
 		return
 	
 	if event is InputEventMouseMotion:
-		_update_hover(_get_world_mouse_pos())
+		_update_hover(viewport.get_world_mouse())
 		if _dragging_point_index >= 0:
-			_drag_point(_get_snapped_mouse_pos())
+			_drag_point(viewport.get_snapped_mouse())
 			_sync_vertex_buttons()
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -81,7 +81,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 					_begin_drag_point(_hovered_point_index)
 			elif _hovered_edge_index >= 0:
 				_last_click_index = -1
-				_insert_point_on_edge(_hovered_edge_index, _hovered_edge_is_hole, _hovered_edge_hole_idx, _get_snapped_mouse_pos())
+				_insert_point_on_edge(_hovered_edge_index, _hovered_edge_is_hole, _hovered_edge_hole_idx, viewport.get_snapped_mouse())
 			elif _is_mouse_inside_polygon():
 				_pending_polygon_drag = true
 			else:
@@ -97,13 +97,13 @@ func _on_viewport_input(event: InputEvent) -> void:
 		if _pending_polygon_drag:
 			_pending_polygon_drag = false
 			var move: LDToolMove = _get_move_tool()
-			if move and move.try_begin_drag(_get_screen_mouse_pos(), [_editing_object]):
+			if move and move.try_begin_drag(viewport.get_screen_mouse(), [_editing_object]):
 				move.return_tool = "polygon_edit"
 				get_tool_handler().select_tool("move")
 			return
-		_update_hover(_get_world_mouse_pos())
+		_update_hover(viewport.get_world_mouse())
 		if _dragging_point_index >= 0:
-			_drag_point(_get_snapped_mouse_pos())
+			_drag_point(viewport.get_snapped_mouse())
 			_sync_vertex_buttons()
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
@@ -123,7 +123,7 @@ func _is_mouse_inside_polygon() -> bool:
 	var screen_points: PackedVector2Array = PackedVector2Array()
 	for point: Vector2 in _editing_object.get_ring():
 		screen_points.append(full_transform * point)
-	return Geometry2D.is_point_in_polygon(_get_screen_mouse_pos(), screen_points)
+	return Geometry2D.is_point_in_polygon(viewport.get_screen_mouse(), screen_points)
 
 
 func _get_move_tool() -> LDToolMove:
@@ -193,7 +193,7 @@ func _update_hover(_world_pos: Vector2) -> void:
 	
 	var all_points: PackedVector2Array = _get_all_display_points()
 	for i: int in all_points.size():
-		if _world_to_screen(global_xform * all_points[i]).distance_to(_get_screen_mouse_pos()) <= POINT_GRAB_RADIUS:
+		if viewport.world_to_screen(global_xform * all_points[i]).distance_to(viewport.get_screen_mouse()) <= POINT_GRAB_RADIUS:
 			_hovered_point_index = i
 			set_cursor_shape(Control.CURSOR_POINTING_HAND)
 			_sync_vertex_button_states()
@@ -202,9 +202,9 @@ func _update_hover(_world_pos: Vector2) -> void:
 	
 	var outer_points: PackedVector2Array = _editing_object.get_outer_points()
 	for i: int in outer_points.size():
-		var a: Vector2 = _world_to_screen(global_xform * outer_points[i])
-		var b: Vector2 = _world_to_screen(global_xform * outer_points[(i + 1) % outer_points.size()])
-		if _point_near_segment(_get_screen_mouse_pos(), a, b, POINT_GRAB_RADIUS):
+		var a: Vector2 = viewport.world_to_screen(global_xform * outer_points[i])
+		var b: Vector2 = viewport.world_to_screen(global_xform * outer_points[(i + 1) % outer_points.size()])
+		if _point_near_segment(viewport.get_screen_mouse(), a, b, POINT_GRAB_RADIUS):
 			_hovered_edge_index = i
 			_hovered_edge_is_hole = false
 			_hovered_edge_hole_idx = -1
@@ -216,9 +216,9 @@ func _update_hover(_world_pos: Vector2) -> void:
 	for hi: int in _editing_object.get_hole_count():
 		var hole: PackedVector2Array = _editing_object.get_hole(hi)
 		for i: int in hole.size():
-			var a: Vector2 = _world_to_screen(global_xform * hole[i])
-			var b: Vector2 = _world_to_screen(global_xform * hole[(i + 1) % hole.size()])
-			if _point_near_segment(_get_screen_mouse_pos(), a, b, POINT_GRAB_RADIUS):
+			var a: Vector2 = viewport.world_to_screen(global_xform * hole[i])
+			var b: Vector2 = viewport.world_to_screen(global_xform * hole[(i + 1) % hole.size()])
+			if _point_near_segment(viewport.get_screen_mouse(), a, b, POINT_GRAB_RADIUS):
 				_hovered_edge_index = i
 				_hovered_edge_is_hole = true
 				_hovered_edge_hole_idx = hi
@@ -473,7 +473,7 @@ func _rebuild_vertex_buttons() -> void:
 		btn.size = Vector2(VERTEX_BUTTON_SIZE, VERTEX_BUTTON_SIZE)
 		btn.focus_mode = Control.FOCUS_NONE
 		btn.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var screen_pos: Vector2 = _world_to_screen(global_xform * all_points[i])
+		var screen_pos: Vector2 = viewport.world_to_screen(global_xform * all_points[i])
 		btn.position = screen_pos - Vector2(half, half)
 		overlay.add_child(btn)
 		_vertex_buttons.append(btn)
@@ -495,7 +495,7 @@ func _sync_vertex_buttons() -> void:
 	var half: float = VERTEX_BUTTON_SIZE * 0.5
 	
 	for i: int in mini(_vertex_buttons.size(), all_points.size()):
-		var screen_pos: Vector2 = _world_to_screen(global_xform * all_points[i])
+		var screen_pos: Vector2 = viewport.world_to_screen(global_xform * all_points[i])
 		_vertex_buttons[i].position = screen_pos - Vector2(half, half)
 
 
@@ -545,12 +545,12 @@ func _sync_edge_preview_button() -> void:
 	
 	var a: Vector2 = global_xform * points[_hovered_edge_index]
 	var b: Vector2 = global_xform * points[(_hovered_edge_index + 1) % points.size()]
-	var snapped_world: Vector2 = _get_snapped_mouse_pos()
+	var snapped_world: Vector2 = viewport.get_snapped_mouse()
 	var ab: Vector2 = b - a
 	var t: float = clampf((snapped_world - a).dot(ab) / ab.dot(ab), 0.0, 1.0)
 	var projected: Vector2 = a + t * ab
 	var half: float = VERTEX_BUTTON_SIZE * 0.5
-	_edge_preview_button.position = _world_to_screen(projected) - Vector2(half, half)
+	_edge_preview_button.position = viewport.world_to_screen(projected) - Vector2(half, half)
 	_edge_preview_button.visible = true
 
 
@@ -558,21 +558,3 @@ func _point_near_segment(point: Vector2, a: Vector2, b: Vector2, threshold: floa
 	var ab: Vector2 = b - a
 	var t: float = clampf((point - a).dot(ab) / ab.dot(ab), 0.0, 1.0)
 	return point.distance_to(a + t * ab) <= threshold
-
-
-func _world_to_screen(world_pos: Vector2) -> Vector2:
-	var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * viewport.get_root().get_global_transform()
-	return full_transform * world_pos
-
-
-func _get_world_mouse_pos() -> Vector2:
-	var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * viewport.get_root().get_global_transform()
-	return full_transform.affine_inverse() * _get_screen_mouse_pos()
-
-
-func _get_screen_mouse_pos() -> Vector2:
-	return viewport.get_selection_overlay().get_local_mouse_position()
-
-
-func _get_snapped_mouse_pos() -> Vector2:
-	return _get_world_mouse_pos().snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))

@@ -56,7 +56,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 		return
 	
 	if event is InputEventMouseMotion:
-		var pos: Vector2 = _get_snapped_mouse_pos()
+		var pos: Vector2 = viewport.get_snapped_mouse()
 		if _preview_cursor:
 			_preview_cursor.position = pos
 		if _is_sizing:
@@ -64,7 +64,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed and not viewport.is_panning():
-			_begin_sizing(_get_snapped_mouse_pos())
+			_begin_sizing(viewport.get_snapped_mouse())
 		elif not event.pressed and _is_sizing:
 			_commit_sizing()
 
@@ -199,7 +199,3 @@ func _cancel_sizing() -> void:
 
 func _is_telescoping_object(obj: GameObject) -> bool:
 	return obj != null and (obj.has_property(&"t_size_x") or obj.has_property(&"t_size_y"))
-
-
-func _get_snapped_mouse_pos() -> Vector2:
-	return viewport.get_root().get_local_mouse_position().snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))

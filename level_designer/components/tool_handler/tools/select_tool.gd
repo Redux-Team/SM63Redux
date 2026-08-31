@@ -42,7 +42,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
-			var mouse_pos: Vector2 = _get_mouse_pos()
+			var mouse_pos: Vector2 = viewport.get_screen_mouse()
 			var move: LDToolMove = _get_move_tool()
 			if move and move.try_begin_drag(mouse_pos, viewport.get_selected_objects()):
 				_move_tool = move
@@ -67,7 +67,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 			_overlay.hide_box()
 	
 	if event is InputEventMouseMotion and _is_box_selecting:
-		_box_select_rect = Rect2(_box_select_origin, _get_mouse_pos() - _box_select_origin).abs()
+		_box_select_rect = Rect2(_box_select_origin, viewport.get_screen_mouse() - _box_select_origin).abs()
 		_overlay.show_box(_box_select_rect)
 		_update_hover_states()
 
@@ -362,10 +362,6 @@ func _get_move_tool() -> LDToolMove:
 	return get_tool_handler().get_tool_list().filter(func(t: LDTool) -> bool:
 		return t is LDToolMove
 	).front() as LDToolMove
-
-
-func _get_mouse_pos() -> Vector2:
-	return _overlay.get_local_mouse_position()
 
 
 func _on_touch_tap(pos: Vector2) -> void:

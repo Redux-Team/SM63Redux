@@ -42,13 +42,13 @@ func _on_viewport_input(event: InputEvent) -> void:
 		return
 
 	if event is InputEventMouseMotion:
-		LD.get_stamp_handler().position_preview(_ghost, _get_snapped_mouse_pos())
+		LD.get_stamp_handler().position_preview(_ghost, viewport.get_snapped_mouse())
 
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			get_tool_handler().select_tool("select")
 		elif event.button_index == MOUSE_BUTTON_LEFT and not viewport.is_panning():
-			_place_at(_get_snapped_mouse_pos())
+			_place_at(viewport.get_snapped_mouse())
 
 
 func _place_at(pos: Vector2) -> void:
@@ -65,7 +65,7 @@ func _spawn_ghost() -> void:
 	_clear_ghost()
 	if not _armed_stamp:
 		return
-	_ghost = LD.get_stamp_handler().spawn_preview(_armed_stamp, _get_snapped_mouse_pos())
+	_ghost = LD.get_stamp_handler().spawn_preview(_armed_stamp, viewport.get_snapped_mouse())
 
 
 func _clear_ghost() -> void:
@@ -73,7 +73,3 @@ func _clear_ghost() -> void:
 		if is_instance_valid(obj):
 			obj.queue_free()
 	_ghost.clear()
-
-
-func _get_snapped_mouse_pos() -> Vector2:
-	return viewport.get_root().get_local_mouse_position().snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))

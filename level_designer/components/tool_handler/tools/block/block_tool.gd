@@ -50,7 +50,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 		return
 	
 	if event is InputEventMouseMotion:
-		var pos: Vector2 = _get_snapped_mouse_pos()
+		var pos: Vector2 = viewport.get_snapped_mouse()
 		if not _is_dragging:
 			if _active_object:
 				var default_x: float = float(_active_object.get_property(&"b_size_x") if _active_object.has_property(&"b_size_x") else LDViewport.SNAPPING_SIZE)
@@ -64,7 +64,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 			if viewport.is_panning():
 				return
 			if not _is_dragging:
-				_origin = _get_snapped_mouse_pos()
+				_origin = viewport.get_snapped_mouse()
 				_is_dragging = true
 				if _active_object:
 					_active_object.position = _origin
@@ -91,7 +91,7 @@ func _spawn_block_preview(obj: GameObject) -> void:
 	_active_object = spawn_preview(obj)
 	_is_dragging = false
 	if _active_object:
-		_active_object.position = _get_snapped_mouse_pos()
+		_active_object.position = viewport.get_snapped_mouse()
 
 
 func _update_block(pos: Vector2) -> void:
@@ -150,7 +150,3 @@ func _cancel() -> void:
 	_destroy_preview()
 	_active_object = null
 	_is_dragging = false
-
-
-func _get_snapped_mouse_pos() -> Vector2:
-	return viewport.get_root().get_local_mouse_position().snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))

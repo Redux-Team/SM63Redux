@@ -55,8 +55,7 @@ func _draw() -> void:
 
 func _to_screen(points: PackedVector2Array) -> PackedVector2Array:
 	var vp: LDViewport = LD.get_editor_viewport()
-	var full_transform: Transform2D = vp.get_viewport().get_canvas_transform() * vp.get_root().get_global_transform()
 	var result: PackedVector2Array = PackedVector2Array()
 	for p: Vector2 in points:
-		result.append(full_transform * p)
+		result.append(vp.world_to_screen(p))
 	return result

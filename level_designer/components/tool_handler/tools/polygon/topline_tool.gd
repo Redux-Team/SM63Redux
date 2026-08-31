@@ -69,12 +69,12 @@ func _on_viewport_input(event: InputEvent) -> void:
 	if Singleton.get_input_handler().is_using_touch():
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		var screen_mouse: Vector2 = _get_screen_mouse_pos()
+		var screen_mouse: Vector2 = viewport.get_screen_mouse()
 		var global_xform: Transform2D = _editing_object.get_global_transform()
 		var best: int = -1
 		var best_dist: float = GRAB_RADIUS
 		for i: int in _edges.size():
-			var mid_screen: Vector2 = _world_to_screen(global_xform * (_edges[i].get("mid") as Vector2))
+			var mid_screen: Vector2 = viewport.world_to_screen(global_xform * (_edges[i].get("mid") as Vector2))
 			var d: float = mid_screen.distance_to(screen_mouse)
 			if d <= best_dist:
 				best_dist = d
@@ -123,7 +123,7 @@ func _rebuild_handles() -> void:
 		handle.focus_mode = Control.FOCUS_NONE
 		handle.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		handle.modulate = Color.WHITE if bool(_edges.get(i).get("on")) else Color(0.5, 0.5, 0.55, 0.6)
-		var mid_screen: Vector2 = _world_to_screen(global_xform * (_edges.get(i).get("mid") as Vector2))
+		var mid_screen: Vector2 = viewport.world_to_screen(global_xform * (_edges.get(i).get("mid") as Vector2))
 		handle.position = mid_screen - Vector2(half, half)
 		overlay.add_child(handle)
 		_handles.append(handle)
@@ -135,7 +135,7 @@ func _sync_handles() -> void:
 	var global_xform: Transform2D = _editing_object.get_global_transform()
 	var half: float = HANDLE_SIZE * 0.5
 	for i: int in mini(_handles.size(), _edges.size()):
-		var mid_screen: Vector2 = _world_to_screen(global_xform * (_edges[i].get("mid") as Vector2))
+		var mid_screen: Vector2 = viewport.world_to_screen(global_xform * (_edges[i].get("mid") as Vector2))
 		_handles[i].position = mid_screen - Vector2(half, half)
 
 
@@ -145,12 +145,3 @@ func _clear_handles() -> void:
 			handle.queue_free()
 	_handles.clear()
 	_edges.clear()
-
-
-func _world_to_screen(world_pos: Vector2) -> Vector2:
-	var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * viewport.get_root().get_global_transform()
-	return full_transform * world_pos
-
-
-func _get_screen_mouse_pos() -> Vector2:
-	return viewport.get_selection_overlay().get_local_mouse_position()

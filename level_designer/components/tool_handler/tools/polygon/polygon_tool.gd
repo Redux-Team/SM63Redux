@@ -71,14 +71,14 @@ func _on_viewport_input(event: InputEvent) -> void:
 		return
 	
 	if event is InputEventMouseMotion:
-		_cursor_pos = _get_snapped_mouse_pos()
+		_cursor_pos = viewport.get_snapped_mouse()
 		if _active_object:
 			_update_preview()
 	
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if not viewport.is_panning():
-				var pos: Vector2 = _get_snapped_mouse_pos()
+				var pos: Vector2 = viewport.get_snapped_mouse()
 				var test_points: PackedVector2Array = _points.duplicate()
 				test_points.append(pos)
 				if _check_valid(test_points) and _check_min_distance(pos):
@@ -226,7 +226,3 @@ func _is_polygon_object(obj: GameObject) -> bool:
 	var result: bool = instance is LDObjectPolygon
 	instance.queue_free()
 	return result
-
-
-func _get_snapped_mouse_pos() -> Vector2:
-	return viewport.get_root().get_local_mouse_position().snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))

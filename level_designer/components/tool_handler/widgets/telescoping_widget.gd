@@ -238,7 +238,6 @@ func _update_cursor(obj: LDObjectTelescoping) -> void:
 
 func _screen_dist_to_world(screen_dist: float, is_x: bool) -> float:
 	var vp: LDViewport = get_ld_viewport()
-	var xform: Transform2D = vp.get_viewport().get_canvas_transform() * vp.get_root().get_global_transform()
-	var origin: Vector2 = xform.affine_inverse() * Vector2.ZERO
-	var unit: Vector2 = xform.affine_inverse() * (Vector2(screen_dist, 0.0) if is_x else Vector2(0.0, screen_dist))
+	var origin: Vector2 = vp.screen_to_world(Vector2.ZERO)
+	var unit: Vector2 = vp.screen_to_world(Vector2(screen_dist, 0.0) if is_x else Vector2(0.0, screen_dist))
 	return (unit - origin).length() * signf(screen_dist)

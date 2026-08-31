@@ -90,13 +90,13 @@ func _on_viewport_input(event: InputEvent) -> void:
 		return
 	
 	if event is InputEventMouseMotion:
-		_cursor_pos = _get_snapped_mouse_pos()
+		_cursor_pos = viewport.get_snapped_mouse()
 		_update_draw_node()
 	
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if not viewport.is_panning():
-				var pos: Vector2 = _get_snapped_mouse_pos()
+				var pos: Vector2 = viewport.get_snapped_mouse()
 				var test: PackedVector2Array = _points.duplicate()
 				test.append(pos)
 				if _check_valid(test) and _check_min_distance(pos):
@@ -346,10 +346,6 @@ func _setup_draw_node(_node: LDPolygonBooleanDrawNode) -> void:
 
 @abstract func _compute_preview_results(points: PackedVector2Array) -> Array[PackedVector2Array]
 @abstract func _commit() -> void
-
-
-func _get_snapped_mouse_pos() -> Vector2:
-	return viewport.get_root().get_local_mouse_position().snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
 
 
 func _local_to_world(poly: LDObjectPolygon, points: PackedVector2Array) -> PackedVector2Array:

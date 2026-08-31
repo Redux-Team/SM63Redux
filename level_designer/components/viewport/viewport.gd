@@ -30,7 +30,7 @@ const CAMERA_ZOOM_MAX: Vector2 = Vector2(4.0, 4.0)
 @export var _touch_indicator: LDTouchSwipeIndicator
 @export var _background_root: Control
 @export var _global_anchor: LDViewportGlobalAnchor
-@warning_ignore("unused_private_class_variable") @export var _viewport_input: Control
+@export var _viewport_input: Control
 
 
 var allow_panning: bool = true
@@ -53,13 +53,13 @@ var is_mouse_panning: bool = false:
 	set(mp):
 		is_mouse_panning = mp
 		if mp:
-			_viewport_input.mouse_default_cursor_shape = Control.CURSOR_MOVE
+			set_cursor_shape(Control.CURSOR_MOVE)
 		else:
 			var tool: LDTool = LD.get_tool_handler().get_selected_tool()
 			if tool:
 				tool.set_cursor_shape(tool.get_cursor_shape())
 			else:
-				_viewport_input.mouse_default_cursor_shape = Control.CURSOR_ARROW
+				set_cursor_shape(Control.CURSOR_ARROW)
 
 var _bound_area: LDArea
 var _selected_objects: Array[LDObject] = []
@@ -246,6 +246,39 @@ func get_root() -> LDViewportRoot:
 ## Returns the background root node.
 func get_background_root() -> Control:
 	return _background_root
+
+
+## Screen position of a point in world space, and back. Every tool goes through these rather
+## than composing canvas transforms itself.
+func world_to_screen(world_pos: Vector2) -> Vector2:
+	return _world_transform() * world_pos
+
+
+func screen_to_world(screen_pos: Vector2) -> Vector2:
+	return _world_transform().affine_inverse() * screen_pos
+
+
+func get_screen_mouse() -> Vector2:
+	return _viewport_input.get_global_mouse_position()
+
+
+func get_world_mouse() -> Vector2:
+	return _root.get_local_mouse_position()
+
+
+## World mouse position rounded to the editor grid.
+func get_snapped_mouse() -> Vector2:
+	return get_world_mouse().snapped(Vector2(SNAPPING_SIZE, SNAPPING_SIZE))
+
+
+## Cursor shown while the pointer is over the level. Tools set this on enable and reset it on
+## disable; [LDTool] does both for them.
+func set_cursor_shape(shape: Control.CursorShape) -> void:
+	_viewport_input.mouse_default_cursor_shape = shape
+
+
+func _world_transform() -> Transform2D:
+	return get_viewport().get_canvas_transform() * _root.get_global_transform()
 
 
 ## Returns the selection overlay node.

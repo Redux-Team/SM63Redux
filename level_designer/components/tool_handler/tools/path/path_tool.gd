@@ -71,7 +71,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 		return
 	
 	if event is InputEventMouseMotion:
-		_cursor_pos = _get_snapped_mouse_pos()
+		_cursor_pos = viewport.get_snapped_mouse()
 		if not _head_placed and _active_object:
 			_active_object.apply_points(PackedVector2Array([_cursor_pos]))
 		elif _head_placed and _active_object:
@@ -80,7 +80,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if viewport.is_panning():
 			return
-		var pos: Vector2 = _get_snapped_mouse_pos()
+		var pos: Vector2 = viewport.get_snapped_mouse()
 		if not _head_placed:
 			_place_head(pos)
 		else:
@@ -220,7 +220,3 @@ func _is_path_object(obj: GameObject) -> bool:
 	var result: bool = instance is LDObjectPath
 	instance.queue_free()
 	return result
-
-
-func _get_snapped_mouse_pos() -> Vector2:
-	return viewport.get_root().get_local_mouse_position().snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))

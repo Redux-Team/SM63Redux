@@ -61,7 +61,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 		return
 	
 	if event is InputEventMouseMotion:
-		var pos: Vector2 = _get_snapped_mouse_pos()
+		var pos: Vector2 = viewport.get_snapped_mouse()
 		if _preview_cursor:
 			_preview_cursor.position = pos
 		if _is_painting and not viewport.is_panning():
@@ -72,7 +72,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 			if viewport.is_panning():
 				return
 			_is_painting = true
-			_stroke_origin = _get_snapped_mouse_pos()
+			_stroke_origin = viewport.get_snapped_mouse()
 			_column_objects.clear()
 			_last_cell_x = _pos_to_cell_x(_stroke_origin)
 			_last_cell_y.clear()
@@ -274,19 +274,10 @@ func _columns_between(from_x: int, to_x: int) -> Array[int]:
 	return columns
 
 
-func _get_snapped_mouse_pos() -> Vector2:
-	return LD.get_editor_viewport().get_root().get_local_mouse_position().snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
-
-
-func _screen_to_world(pos: Vector2) -> Vector2:
-	var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * viewport.get_root().get_global_transform()
-	return full_transform.affine_inverse() * pos
-
-
 func _on_touch_tap(pos: Vector2) -> void:
 	if not is_active():
 		return
-	var world_pos: Vector2 = _screen_to_world(pos).snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
+	var world_pos: Vector2 = viewport.screen_to_world(pos).snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
 	_stroke_origin = world_pos
 	_column_objects.clear()
 	_last_cell_x = _pos_to_cell_x(world_pos)
@@ -302,7 +293,7 @@ func _on_touch_tap(pos: Vector2) -> void:
 func _on_touch_swipe_began(pos: Vector2) -> void:
 	if not is_active():
 		return
-	var world_pos: Vector2 = _screen_to_world(pos).snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
+	var world_pos: Vector2 = viewport.screen_to_world(pos).snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
 	_is_painting = true
 	_stroke_origin = world_pos
 	_column_objects.clear()
@@ -318,7 +309,7 @@ func _on_touch_swipe_began(pos: Vector2) -> void:
 func _on_touch_swipe_moved(pos: Vector2) -> void:
 	if not is_active() or not _is_painting:
 		return
-	var world_pos: Vector2 = _screen_to_world(pos).snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
+	var world_pos: Vector2 = viewport.screen_to_world(pos).snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
 	_stamp_line_to(world_pos)
 
 
