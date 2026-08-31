@@ -50,6 +50,7 @@
 [ext_resource type="Texture2D" uid="uid://kx2d7seigvff" path="res://assets/textures/entity/player/mario/ground_pound_fall.png" id="58_mjy7s"]
 [ext_resource type="Texture2D" uid="uid://cbnwad05e1yti" path="res://assets/textures/entity/player/mario/ground_pound_slam.png" id="59_ohvaq"]
 [ext_resource type="Texture2D" uid="uid://dar3mdwnuhg0i" path="res://assets/textures/entity/player/mario/jumpl.png" id="60_5ygwk"]
+[ext_resource type="AudioStream" uid="uid://b04rk3ffi85np" path="res://assets/sfx/player/death_hit.mp3" id="60_cpfge"]
 [ext_resource type="Texture2D" uid="uid://dyhvdtvga7w8k" path="res://assets/textures/entity/player/mario/swim_up.png" id="62_fx7qh"]
 [ext_resource type="Texture2D" uid="uid://cce6dbb0peayy" path="res://assets/textures/entity/player/mario/death.png" id="64_ndkiv"]
 [ext_resource type="Texture2D" uid="uid://d0ybvaiwv7bs6" path="res://assets/textures/entity/player/mario/run.png" id="65_ejgj1"]
@@ -182,7 +183,6 @@ stream_3/stream = ExtResource("sfxres9")
 script = ExtResource("30_effects")
 animation = &"jump_l"
 restart_if_playing = false
-speed_scale = 0.0
 variant_enabled = true
 variant_animations = Array[StringName]([&"jump_r"])
 player_animation = &"backflip"
@@ -201,7 +201,6 @@ stream_3/stream = ExtResource("sfxres14")
 script = ExtResource("30_effects")
 animation = &"jump_l"
 restart_if_playing = false
-speed_scale = 0.0
 variant_enabled = true
 variant_animations = Array[StringName]([&"jump_r"])
 player_animation = &"backflip"
@@ -345,8 +344,6 @@ sfx_enter_sound = ExtResource("sfxres31")
 [sub_resource type="Resource" id="Effects_GroundPoundFall"]
 script = ExtResource("30_effects")
 animation = &"ground_pound_fall"
-restart_if_playing = false
-speed_scale = 0.0
 lock_flipping = true
 collision_mask_override = 512
 
@@ -365,6 +362,8 @@ animation = &"death"
 restart_if_playing = false
 speed_scale = 0.0
 lock_flipping = true
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("60_cpfge")
 
 [sub_resource type="Curve" id="Curve_ndkiv"]
 _limits = [-300.0, 700.0, 0.0, 3.0]
@@ -393,6 +392,7 @@ lock_flipping = true
 offset_enabled = true
 collision_mask_override = 1
 sfx_bus = &"SFX"
+sfx_spatial = false
 sfx_enter_enabled = true
 sfx_enter_sound = ExtResource("sfxres33")
 
@@ -535,12 +535,12 @@ scale_curve = SubResource("CurveTexture_kw6gy")
 color_ramp = SubResource("GradientTexture1D_kw6gy")
 anim_offset_max = 1.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_f1k64"]
-atlas = ExtResource("3_dhej3")
-region = Rect2(256, 0, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_d80p0"]
+atlas = ExtResource("58_mjy7s")
+region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_sj7k7"]
-diffuse_texture = SubResource("AtlasTexture_f1k64")
+[sub_resource type="CanvasTexture" id="CanvasTexture_gdvj3"]
+diffuse_texture = SubResource("AtlasTexture_d80p0")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hmgs0"]
 atlas = ExtResource("51_d635j")
@@ -633,10 +633,6 @@ region = Rect2(0, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_cmrqc"]
 atlas = ExtResource("58_mjy7s")
 region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_d80p0"]
-atlas = ExtResource("58_mjy7s")
-region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vxtrd"]
 atlas = ExtResource("59_ohvaq")
@@ -822,6 +818,10 @@ region = Rect2(128, 0, 64, 64)
 atlas = ExtResource("3_dhej3")
 region = Rect2(192, 0, 64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1k64"]
+atlas = ExtResource("3_dhej3")
+region = Rect2(256, 0, 64, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_nrgrv"]
 atlas = ExtResource("3_dhej3")
 region = Rect2(320, 0, 64, 64)
@@ -969,7 +969,7 @@ animations = [{
 }],
 "loop": 1,
 "name": &"ground_pound_fall",
-"speed": 5.0
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -1654,8 +1654,8 @@ effects = SubResource("Effects_DeathHit")
 script = ExtResource("50_ndkiv")
 player_y_velocity_curve = SubResource("Curve_ndkiv")
 player_rotation_curve = SubResource("Curve_26jgh")
-death_screen_texture = ExtResource("51_26jgh")
-transition_out_texture = SubResource("GradientTexture2D_gmxc2")
+death_screen_texture = SubResource("GradientTexture2D_gmxc2")
+transition_out_texture = ExtResource("51_26jgh")
 effects = SubResource("Effects_DeathFall")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1248091762]
@@ -1723,17 +1723,17 @@ copy_mode = 0
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_sj7k7")
+texture = SubResource("CanvasTexture_gdvj3")
 region_enabled = true
-region_rect = Rect2(256, 0, 64, 64)
+region_rect = Rect2(64, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_sj7k7")
+canvas_texture = SubResource("CanvasTexture_gdvj3")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
-current_animation = "walk_loop"
-current_frame = 4
+current_animation = "ground_pound_fall"
+current_frame = 1
 speed_scale = 1.0
 playing = false
 
@@ -1999,6 +1999,7 @@ sprite_frames = SubResource("SpriteFrames_ckj6b")
 amount = 2
 emission_radius = 1.0
 spread = 60.0
+angles = PackedFloat32Array()
 speed_min = 8.0
 speed_max = 22.0
 scale_min = 0.6
@@ -2012,6 +2013,7 @@ script = ExtResource("110_anpar")
 sprite_frames = SubResource("SpriteFrames_sj7k7")
 amount = 1
 spread = 0.0
+angles = PackedFloat32Array()
 metadata/_custom_type_script = "uid://df82mcnubnp0h"
 
 [node name="GroundPoundStars" type="Node2D" parent="." unique_id=60216133]
@@ -2023,7 +2025,7 @@ amount = 4
 spread_mode = 2
 direction = 45.0
 spread = 180.0
-angles = [30.0, 150.0, 210.0, 330.0]
+angles = PackedFloat32Array(30, 150, 210, 330)
 speed_min = 30.0
 speed_max = 30.0
 metadata/_custom_type_script = "uid://df82mcnubnp0h"
