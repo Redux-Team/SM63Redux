@@ -4,12 +4,12 @@ extends PlayerState
 func _tick(delta: float) -> void:
 	player.swim_buffer_time = max(player.swim_buffer_time - delta, 0.0)
 	
-	if abs(player.move_dir) == 0:
+	if abs(player.move_dir) == 0 or not player.can_walk:
 		var friction_component: FrictionComponent = player.get_component(FrictionComponent)
 		if friction_component:
 			friction_component.apply(1.0, true)
 	
-	if abs(player.move_dir) > 0 and not player.is_crouching:
+	if abs(player.move_dir) > 0 and not player.is_crouching and player.can_walk:
 		speed_up(player.move_dir)
 	
 	if Input.is_action_pressed("swim_down") and player.swim_buffer_time <= 0.0 and not player.get_fludd_handler().is_hover_active():
@@ -47,7 +47,7 @@ func speed_up(move_dir: float) -> void:
 
 
 func _handle_ground_pound() -> void:
-	if not player.is_on_floor() and player.is_input_ground_pound:
+	if not player.is_on_floor() and player.is_input_ground_pound and player.can_ground_pound:
 		machine.change_state(&"GroundPoundStart")
 
 
