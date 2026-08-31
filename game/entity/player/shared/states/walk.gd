@@ -25,13 +25,18 @@ func _render_tick(_delta: float) -> void:
 
 
 func _apply_gait() -> void:
-	var speed: float = absf(player.velocity.x)
-	var wanted: StringName = &"run_loop" if speed >= player.run_animation_speed else &"walk_loop"
+	var input: float = absf(player.move_dir)
+	var wanted: StringName = sprite.current_animation
+	if input >= player.move_input_threshold:
+		wanted = &"run_loop" if input >= player.run_animation_input else &"walk_loop"
+	elif absf(player.velocity.x) <= player.walk_animation_stop_speed:
+		wanted = &"walk_loop"
+	
 	if sprite.current_animation != wanted:
 		sprite.play(wanted)
 	
 	if player.walk_speed_curve:
-		var ratio: float = clampf(speed / maxf(player.run_max_speed, 1.0), 0.0, 1.0)
+		var ratio: float = clampf(absf(player.velocity.x) / maxf(player.run_max_speed, 1.0), 0.0, 1.0)
 		sprite.speed_scale = player.walk_speed_curve.sample(ratio)
 
 

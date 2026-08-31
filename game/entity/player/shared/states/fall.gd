@@ -8,7 +8,7 @@ func _enter() -> void:
 	
 	if last.name in [&"DoubleJump", &"TripleJump"]:
 		sprite.play(&"double_jump_fall")
-	elif not _fell_from_air(last):
+	elif last.name == &"Spin" or not _fell_from_air(last):
 		sprite.play(&"fall_loop")
 
 
