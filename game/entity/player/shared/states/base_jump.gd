@@ -1,12 +1,8 @@
-@tool
 class_name BaseJump
-extends State
+extends PlayerState
 
 
-func _pre_enter() -> void:
-	if is_active():
-		return
-	
+func _enter() -> void:
 	var phase: int = player.current_jump + 1
 	if phase == 3 and (abs(player.velocity.x) < 120 or not player.is_moving_with_facing()):
 		phase = 2
@@ -21,5 +17,21 @@ func _pre_enter() -> void:
 	player.can_jump = false
 
 
-func _on_exit() -> void:
+func _exit() -> void:
 	player.can_jump = true
+
+
+func _next() -> StringName:
+	if player.is_action_just_pressed("dive") and player.can_dive and time > 0.0:
+		return &"Dive"
+	if player.velocity.y >= 0.0 and not player.is_on_floor():
+		return &"Fall"
+	if player.is_on_floor() and not player.is_input_jump:
+		return &"Idle"
+	
+	if is_current():
+		match player.current_jump:
+			1: return &"Jump"
+			2: return &"DoubleJump"
+			3: return &"TripleJump"
+	return &""

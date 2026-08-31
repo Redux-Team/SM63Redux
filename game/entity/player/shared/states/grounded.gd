@@ -1,16 +1,15 @@
-@tool
-extends State
+extends PlayerState
 
 
-func _on_physics_tick(_delta: float) -> void:
-	if abs(player.move_dir) > 0.0 and not state_machine.get_current_state().get_internal_name() == "crouch":
+func _tick(_delta: float) -> void:
+	if absf(player.move_dir) > 0.0 and not machine.get_state_name() == &"Crouch":
 		_speed_up(player.move_dir)
 	else:
 		_apply_friction()
 	
 	player.velocity.y = 0.0
- 
- 
+
+
 func _speed_up(dir: float) -> void:
 	var target: float = player.run_max_speed * dir
 	var accel: float = player.walk_acceleration
@@ -22,8 +21,8 @@ func _speed_up(dir: float) -> void:
 	
 	if player.get_local_floor_normal().y < 0.999 and player.velocity.y >= 0.0:
 		player.velocity.y = 0.5
- 
- 
+
+
 func _apply_friction() -> void:
 	var speed: float = abs(player.velocity.x)
 	speed = max(0.0, speed - 0.3)

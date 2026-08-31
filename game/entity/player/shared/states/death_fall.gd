@@ -1,5 +1,4 @@
-@tool
-extends State
+extends PlayerState
 
 @export var player_y_velocity_curve: Curve
 @export var player_rotation_curve: Curve
@@ -9,7 +8,7 @@ extends State
 const LEVEL_DESIGNER_SCENE: String = "uid://cf4yw3eqr2qo6"
 
 
-func _on_enter() -> void:
+func _enter() -> void:
 	player.velocity = Vector2.ZERO
 	sprite.lock_flipping = true
 	LevelCamera.get_instance().freeze()
@@ -22,7 +21,7 @@ func _on_enter() -> void:
 		.done()
 
 
-func _on_physics_tick(_delta: float) -> void:
-	player.velocity.y = player_y_velocity_curve.sample(get_elapsed_time())
-	player.sprite.local_rotation = -rad_to_deg(player_rotation_curve.sample(get_elapsed_time()))
+func _tick(_delta: float) -> void:
+	player.velocity.y = player_y_velocity_curve.sample(time)
+	player.sprite.local_rotation = -rad_to_deg(player_rotation_curve.sample(time))
 	player.move_and_slide()

@@ -66,8 +66,8 @@ func damage(amount: float, type: HitBox.DamageType) -> void:
 	damaged.emit(amount, type)
 	
 	if _hp <= 0:
-		if entity.state_machine and death_state:
-			entity.state_machine.change_state.call_deferred(death_state.get_internal_name())
+		if death_state:
+			entity.machine.change_state.call_deferred(death_state.name)
 		died.emit()
 		_dead = true
 

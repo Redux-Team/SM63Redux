@@ -1,9 +1,8 @@
-@tool
-extends State
+extends PlayerState
 
 
-func _on_physics_tick(_delta: float) -> void:
-	if abs(player.move_dir) > 0 and not player.is_diving:
+func _tick(_delta: float) -> void:
+	if absf(player.move_dir) > 0.0 and not player.is_diving:
 		air_move(player.move_dir)
 	
 	player.velocity.y = min(player.velocity.y, player.terminal_velocity_y)
@@ -12,7 +11,7 @@ func _on_physics_tick(_delta: float) -> void:
 func air_move(move_dir: float) -> void:
 	var accel: float = player.midair_turn_speed
 	var max_speed: float = player.effective_midair_max_speed
-	var is_spinning: bool = state_machine.get_current_state().get_internal_name() == "spin"
+	var is_spinning: bool = machine.get_state_name() == &"Spin"
 	var accel_mult: float = 0.35 if is_spinning and not player.is_on_floor() else 0.85
 	
 	if sign(player.velocity.x) != sign(move_dir) and abs(player.velocity.x) > 10.0:

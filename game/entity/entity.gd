@@ -7,7 +7,7 @@ extends CharacterBody2D
 @export var sprite: SmartSprite2D
 @export var components_root: Node
 @export var collision_shapes: Array[CollisionShape2D]
-@export var state_machine: StateMachine
+@export var machine: StateMachine
 @export var exit_objects: Dictionary[PackedScene, int]
 @export var water_check: WaterCheckArea
 @export var step_height: float = 4.0
@@ -202,7 +202,7 @@ func enable() -> void:
 
 
 func get_active_state_uptime() -> float:
-	return state_machine.get_current_state().get_elapsed_time()
+	return machine.get_state().time if machine and machine.get_state() else 0.0
 
 
 func move_and_slide_with_gravity() -> void:

@@ -1,5 +1,5 @@
-@tool
-extends State
+extends CheepCheepState
+
 
 const PERIOD: float = 6.0
 const AMPLITUDE: float = 45.0
@@ -15,7 +15,7 @@ var _t: float = 0.0
 var _boost: float = 1.0
 
 
-func _on_physics_tick(delta: float) -> void:
+func _tick(delta: float) -> void:
 	var p: float = pingpong(_t, 1.0) * 2.0 - 1.0
 	
 	if (p > 0.0 and (wall_check_r.is_colliding() or not water_check_r.is_in_water())) \
@@ -25,5 +25,9 @@ func _on_physics_tick(delta: float) -> void:
 	_t += _boost * delta / PERIOD
 	_boost = lerpf(_boost, 1.0, delta * 4.0)
 	
-	entity.velocity.x = AMPLITUDE * displacement.sample(p)
-	sprite.flip_h = entity.velocity.x < 0.0
+	cheep_cheep.velocity.x = AMPLITUDE * displacement.sample(p)
+	sprite.flip_h = cheep_cheep.velocity.x < 0.0
+
+
+func _next() -> StringName:
+	return &"Chase" if cheep_cheep.is_player_in_vision() else &""

@@ -75,8 +75,8 @@ func process(hitbox: HitBox, hurtbox: HurtBox, entity: Entity) -> void:
 		entity.velocity = _resolve_knockback(hitbox, hurtbox, entity.velocity)
 		
 		var state: StringName = _resolve_damage_state(hitbox, hurtbox)
-		if not state.is_empty() and entity.state_machine:
-			entity.state_machine.change_state(state)
+		if not state.is_empty() and entity.machine:
+			entity.machine.change_state(state)
 	
 	if disable_on_hit:
 		var duration: float = hitbox.override_disable_duration if hitbox.override_disable_on_hit else disable_on_hit_duration

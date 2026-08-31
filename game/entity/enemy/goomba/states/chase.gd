@@ -1,23 +1,19 @@
-@tool
-extends State
+extends GoombaState
+
 
 const CHASE_VELOCITY: float = 80.0
 
-var goomba: Goomba:
-	get:
-		return entity as Goomba
+
+func _enter() -> void:
+	goomba.velocity.x = _chase_vector()
 
 
-func _on_enter() -> void:
-	entity.velocity.x = get_chase_vector()
+func _tick(_delta: float) -> void:
+	sprite.flip_h = goomba.velocity.x < 0.0
+	goomba.velocity.x = clampf(goomba.velocity.x + _chase_vector() / 8.0, -CHASE_VELOCITY, CHASE_VELOCITY)
 
 
-func _on_physics_tick(_delta: float) -> void:
-	sprite.flip_h = entity.velocity.x < 0
-	
-	entity.velocity.x += get_chase_vector() / 8
-	entity.velocity.x = clampf(entity.velocity.x, -CHASE_VELOCITY, CHASE_VELOCITY)
-
-
-func get_chase_vector() -> float:
-	return CHASE_VELOCITY * sign(entity.target.global_position.x - entity.global_position.x)
+func _chase_vector() -> float:
+	if not is_instance_valid(goomba.target):
+		return 0.0
+	return CHASE_VELOCITY * signf(goomba.target.global_position.x - goomba.global_position.x)

@@ -12,7 +12,8 @@
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="9_c5yfi"]
 [ext_resource type="AudioStream" uid="uid://bepvphyfaeuk5" path="res://assets/sfx/entity/koopa/shell_kick.ogg" id="10_fbhtv"]
 [ext_resource type="Script" uid="uid://df10cddrlgnp2" path="res://game/entity/enemy/parakoopa/states/glide.gd" id="11_fewty"]
-[ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="11_vpirj"]
+[ext_resource type="Script" path="res://game/entity/state/state_machine.gd" id="11_vpirj"]
+[ext_resource type="Script" path="res://game/entity/state/state_effects.gd" id="30_effects"]
 [ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="15_jwbcl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_12vaq"]
@@ -107,7 +108,11 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.37425148)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.003921569)
 
-[node name="Parakoopa" type="CharacterBody2D" unique_id=2116805297 node_paths=PackedStringArray("particle_emitter", "sprite")]
+[sub_resource type="Resource" id="Visuals_Glide"]
+script = ExtResource("30_effects")
+animation = &"default"
+
+[node name="Parakoopa" type="CharacterBody2D" unique_id=2116805297 node_paths=PackedStringArray("particle_emitter", "sprite", "machine")]
 collision_layer = 8
 collision_mask = 514
 script = ExtResource("1_1egjl")
@@ -116,6 +121,7 @@ shell = ExtResource("3_42bhg")
 particle_emitter = NodePath("ParticleEmitter")
 wing_2 = ExtResource("5_3sn6r")
 sprite = NodePath("Sprite")
+machine = NodePath("StateMachine")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=858682115]
 texture = SubResource("CanvasTexture_fewty")
@@ -167,15 +173,15 @@ shape = SubResource("RectangleShape2D_rqgyx")
 stream = ExtResource("10_fbhtv")
 bus = &"SFX"
 
-[node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("initial_state", "sprite")]
+[node name="StateMachine" type="Node" parent="." unique_id=1845144149 node_paths=PackedStringArray("entity", "initial_state")]
 script = ExtResource("11_vpirj")
+entity = NodePath("..")
 initial_state = NodePath("Glide")
-root_node = NodePath("..")
-sprite = NodePath("../Sprite")
-metadata/_custom_type_script = "uid://utibsg6xkllx"
+
 [node name="Glide" type="Node" parent="StateMachine" unique_id=665780062]
 script = ExtResource("11_fewty")
-sprite_animation_name = &"default"
+effects = SubResource("Visuals_Glide")
+
 [node name="ParticleEmitter" type="CPUParticles2D" parent="." unique_id=992989918]
 show_behind_parent = true
 light_mask = 2

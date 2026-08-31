@@ -1,28 +1,34 @@
-@tool
-extends State
+extends GoombaState
+
+
+const POP_DELAY: float = 0.2
+const POP_VELOCITY: float = -280.0
 
 @export var hit_box: HitBox
 
-var goomba: Goomba:
-	get:
-		return entity as Goomba
-var p: Player
-var finished: bool = false
+var _popped: bool = false
 
 
-func _on_enter() -> void:
-	p = goomba.squished_by
-	hit_box.set_deferred("monitoring", false)
-	hit_box.set_deferred("monitorable", false)
-	sprite.animation_finished.connect(func() -> void:
-		owner.queue_free()
-	)
-	await get_tree().create_timer(0.2).timeout
-	finished = true
-	if not p.state_machine.get_current_state().get_internal_name().begins_with("ground_pound"):
-		p.velocity.y = -280
+func _enter() -> void:
+	_popped = false
+	hit_box.set_deferred(&"monitoring", false)
+	hit_box.set_deferred(&"monitorable", false)
+	sprite.animation_finished.connect(goomba.queue_free, CONNECT_ONE_SHOT)
 
 
-func _on_physics_tick(_delta: float) -> void:
-	if not finished and not p.state_machine.get_current_state().get_internal_name().begins_with("ground_pound"):
-		p.velocity.y = 0
+func _tick(_delta: float) -> void:
+	if _popped or _is_ground_pounding():
+		return
+	
+	if time < POP_DELAY:
+		goomba.squished_by.velocity.y = 0.0
+		return
+	
+	_popped = true
+	goomba.squished_by.velocity.y = POP_VELOCITY
+
+
+func _is_ground_pounding() -> bool:
+	if not is_instance_valid(goomba.squished_by):
+		return true
+	return goomba.squished_by.machine.get_state_name().begins_with("GroundPound")

@@ -1,6 +1,9 @@
-@tool
 extends State
 
 
-func _on_physics_tick(_delta: float) -> void:
-	entity.velocity.y = 10 * sin(get_elapsed_time() * 2)
+const BOB_AMPLITUDE: float = 10.0
+const BOB_SPEED: float = 2.0
+
+
+func _tick(_delta: float) -> void:
+	entity.velocity.y = BOB_AMPLITUDE * sin(time * BOB_SPEED)

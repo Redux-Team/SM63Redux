@@ -1,7 +1,0 @@
-# %s -> %s
-@tool
-extends StateTransition
-
-# func _should_transition(machine: StateMachine) -> bool (true)
-# func _on_before_transition(machine: StateMachine) -> void:
-# func _on_after_transition(machine: StateMachine) -> void:

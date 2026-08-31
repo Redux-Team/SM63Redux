@@ -1,30 +1,37 @@
-@tool
-extends State
-
-enum AlertState {
-	JUMP,
-	FALL,
-	LANDED
-}
-
-var alert_state: AlertState = AlertState.JUMP
+extends GoombaState
 
 
-func _on_enter() -> void:
-	if entity.is_on_floor():
-		if entity.is_in_water():
-			entity.local_velocity = Vector2(-30, -50)
-		else:
-			entity.local_velocity = Vector2(-30, -200)
+const HOP: Vector2 = Vector2(-30.0, -200.0)
+const HOP_IN_WATER: Vector2 = Vector2(-30.0, -50.0)
+const HOP_IN_AIR: Vector2 = Vector2(-30.0, 10.0)
+const LANDING_MIN_FRAMES: int = 5
+const LANDING_DELAY: float = 0.1
+
+var _landed_at: float = -1.0
+
+
+func _enter() -> void:
+	_landed_at = -1.0
+	if not goomba.is_on_floor():
+		goomba.local_velocity = HOP_IN_AIR
 	else:
-		entity.local_velocity = Vector2(-30, 10)
-	sprite.play("alert_jump")
+		goomba.local_velocity = HOP_IN_WATER if goomba.is_in_water() else HOP
+	sprite.play(&"alert_jump")
 
 
-func _on_physics_tick(_delta: float) -> void:
-	if not entity.is_on_floor() and entity.velocity.y > 0:
-		sprite.play("alert_fall")
-	if entity.is_on_floor() and get_elapsed_physics_frames() > 5:
-		sprite.play("alert_landed")
-		await get_tree().create_timer(0.1).timeout
-		done()
+func _tick(_delta: float) -> void:
+	if _landed_at >= 0.0:
+		return
+	
+	if not goomba.is_on_floor() and goomba.velocity.y > 0.0:
+		sprite.play(&"alert_fall")
+	
+	if goomba.is_on_floor() and frames > LANDING_MIN_FRAMES:
+		sprite.play(&"alert_landed")
+		_landed_at = time
+
+
+func _next() -> StringName:
+	if _landed_at >= 0.0 and time - _landed_at >= LANDING_DELAY:
+		return &"Chase"
+	return &""

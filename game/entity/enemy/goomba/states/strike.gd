@@ -1,24 +1,37 @@
-@tool
-extends State
+extends GoombaState
+
+
+const GROUND_DELAY: float = 0.1
+const WATER_TIMEOUT: float = 1.0
 
 @export var hit_box: HitBox
 
-
-func _on_enter() -> void:
-	sprite.play("strike")
-	hit_box.set_deferred("monitorable", false)
-	hit_box.set_deferred("monitoring", false)
+var _finishing: bool = false
 
 
-func _on_physics_tick(_delta: float) -> void:
-	if not entity.is_in_water() and entity.is_on_floor() and get_elapsed_time() > 0.1:
-		sprite.play("squish")
-		await sprite.animation_finished
-		entity.queue_free()
-	elif entity.is_in_water():
-		if get_elapsed_time() > 1.0:
-			entity.queue_free()
-		elif entity.is_on_anything() and get_elapsed_time() > 0.1:
-			sprite.play("squish")
-			await sprite.animation_finished
-			entity.queue_free()
+func _enter() -> void:
+	_finishing = false
+	sprite.play(&"strike")
+	hit_box.set_deferred(&"monitorable", false)
+	hit_box.set_deferred(&"monitoring", false)
+
+
+func _tick(_delta: float) -> void:
+	if _finishing or time <= GROUND_DELAY:
+		return
+	
+	if not goomba.is_in_water():
+		if goomba.is_on_floor():
+			_pop()
+		return
+	
+	if time > WATER_TIMEOUT:
+		goomba.queue_free()
+	elif goomba.is_on_anything():
+		_pop()
+
+
+func _pop() -> void:
+	_finishing = true
+	sprite.play(&"squish")
+	sprite.animation_finished.connect(goomba.queue_free, CONNECT_ONE_SHOT)

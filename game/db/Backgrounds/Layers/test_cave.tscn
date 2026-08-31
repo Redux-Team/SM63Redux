@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://c654o7lp1mqms"]
+
+[ext_resource type="Script" uid="uid://dfs83ynrmcicl" path="res://game/db/Backgrounds/Layers/test_cave.gd" id="1_0slxj"]
+[ext_resource type="PackedScene" uid="uid://rqp8lvd0eucc" path="res://_local/cavebgtest.glb" id="2_5own4"]
+
+[sub_resource type="Environment" id="Environment_1pbdy"]
+background_energy_multiplier = 0.0
+
+[node name="TestCave" type="Node2D" unique_id=2118747810 node_paths=PackedStringArray("container", "world_camera")]
+script = ExtResource("1_0slxj")
+container = NodePath("SubViewportContainer")
+world_camera = NodePath("SubViewportContainer/SubViewport/Node3D/Camera3D")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=262227873]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1267462015]
+transparent_bg = true
+handle_input_locally = false
+use_occlusion_culling = true
+scaling_3d_mode = 5
+anisotropic_filtering_level = 0
+size = Vector2i(640, 360)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="Node3D" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=1424516415]
+
+[node name="cavebgtest" parent="SubViewportContainer/SubViewport/Node3D" unique_id=1621700519 instance=ExtResource("2_5own4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -74.600525, -29.878456, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/Node3D" unique_id=755832321]
+environment = SubResource("Environment_1pbdy")
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/Node3D" unique_id=936451624]
+transform = Transform3D(-0.076133855, 0.01091604, 0.9970379, -0.024931815, 0.9996066, -0.012847958, -0.9967859, -0.025836127, -0.07583175, -27.470226, -8.716075, -0.3679695)
+keep_aspect = 0
+fov = 69.5
+far = 306.41
+
+[node name="SpotLight3D" type="SpotLight3D" parent="SubViewportContainer/SubViewport/Node3D/Camera3D" unique_id=507980870]
+transform = Transform3D(0.9999979, 0.0019286852, -0.0006300509, -0.0019121636, 0.9996795, 0.025244057, 0.0006785318, -0.02524279, 0.9996812, 0.05523181, -3.3426938, 0.41286087)
+light_color = Color(0.52, 0.5680001, 1, 1)
+light_energy = 16.0
+spot_range = 111.395

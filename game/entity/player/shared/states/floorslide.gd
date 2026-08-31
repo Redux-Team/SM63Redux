@@ -1,5 +1,4 @@
-@tool
-extends State
+extends PlayerState
 
 
 const SLIDE_ANGLE_LERP_SPEED: float = 0.5
@@ -18,10 +17,10 @@ var time_since_grounded: float = 0.0
 var last_slope_angle: float = 0.0
 
 
-func _on_enter() -> void:
+func _enter() -> void:
 	player.lock_flipping = true
 	player.set_friction_scale_factor(1.6)
-	entered_from_dive = get_last_state().get_internal_name() == "dive"
+	entered_from_dive = machine.get_last_state() != null and machine.get_last_state().name == &"Dive"
 	time_since_grounded = 0.0
 	
 	if entered_from_dive:
@@ -34,7 +33,17 @@ func _on_enter() -> void:
 	last_slope_angle = body_rotation
 
 
-func _on_exit() -> void:
+func _next() -> StringName:
+	if player.is_action_just_pressed("jump", 0.2) and player.is_on_floor() and player.is_moving_against_facing():
+		return &"Backflip"
+	if player.is_action_pressed("jump") and player.is_on_floor() and player.get_facing_velocity() > 50.0:
+		return &"RolloutF"
+	if not player.is_crouching and absf(player.velocity.x) <= 5.0:
+		return &"Idle"
+	return &""
+
+
+func _exit() -> void:
 	player.lock_flipping = false
 	player.set_friction_scale_factor(1.0)
 	body_rotation = 0.0
@@ -42,7 +51,7 @@ func _on_exit() -> void:
 	player.get_fludd_handler().set_dive_rotation(body_rotation, PlayerFluddHandler.FluddContext.NONE)
 
 
-func _on_physics_tick(delta: float) -> void:
+func _tick(delta: float) -> void:
 	player.get_fludd_handler().set_dive_rotation(body_rotation, PlayerFluddHandler.FluddContext.FLOOR_SLIDE)
 	
 	if player.is_on_floor():
@@ -59,7 +68,7 @@ func _on_physics_tick(delta: float) -> void:
 		player.velocity *= vector
 
 
-func _on_render_tick(_delta: float) -> void:
+func _render_tick(_delta: float) -> void:
 	update_slide_rotation()
 
 

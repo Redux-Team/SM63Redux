@@ -1,12 +1,5 @@
-@tool
-extends State
+extends PlayerState
 
 
-func _on_enter() -> void:
-	player.velocity.y = -player.double_jump_strength
-	player.jump_chain_timer = player.jump_chain_time
-	
-	await get_tree().physics_frame
-	if not is_active():
-		return
-	player.current_jump += 1
+func _next() -> StringName:
+	return &"Spin" if player.is_input_spin and player.velocity.y > -55.0 else &""

@@ -166,8 +166,8 @@ func _tick_nozzle(delta: float) -> void:
 func _can_use_fludd() -> bool:
 	return fludd_power > 0 and \
 		fludd_fuel > 0 and \
-		player.state_machine.get_current_state().get_internal_name() not in [
-			"spin", "strike", "crouch", "rollout_f", "ground_pound_fall", "ground_pound_start", "ground_pound_slam"
+		player.machine.get_state_name() not in [
+			&"Spin", &"Strike", &"Crouch", &"RolloutF", &"GroundPoundFall", &"GroundPoundStart", &"GroundPoundSlam"
 		]
 
 
@@ -235,8 +235,8 @@ func _turbo_fludd_logic(_delta: float) -> void:
 
 
 func _handle_grounded_launch() -> void:
-	if player.state_machine.is_state_active("grounded"):
-		player.state_machine.change_state("idle_jump")
+	if player.machine.is_active(&"Grounded"):
+		player.machine.change_state(&"IdleJump")
 		player.velocity.y = -50.0
 
 

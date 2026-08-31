@@ -10,14 +10,14 @@
 [ext_resource type="Texture2D" uid="uid://f8cxbh7t5qfy" path="res://assets/textures/entity/enemy/cheep_cheep/cheep_cheep_strike.png" id="6_gthq1"]
 [ext_resource type="Texture2D" uid="uid://dbe1s3md2arrg" path="res://assets/textures/entity/enemy/cheep_cheep/cheep_cheep_swim.png" id="7_spxvw"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="8_m5an3"]
-[ext_resource type="Script" uid="uid://3y7t4ymugnxu" path="res://addons/redux_dev/components/state_machine/state_transition.gd" id="9_axbdk"]
+[ext_resource type="Script" path="res://game/entity/state/state_effects.gd" id="30_effects"]
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="9_gthq1"]
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="9_spxvw"]
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="10_fscfo"]
 [ext_resource type="Script" uid="uid://cnis6m3nb24on" path="res://game/entity/enemy/cheep_cheep/states/submerged.gd" id="10_n3erx"]
 [ext_resource type="Script" uid="uid://l4wqjc546w2" path="res://game/entity/enemy/cheep_cheep/states/swim.gd" id="11_t1a8t"]
 [ext_resource type="Script" uid="uid://lix0lfy2elqu" path="res://game/entity/enemy/cheep_cheep/states/chase.gd" id="12_b1y5l"]
-[ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="12_imbt5"]
+[ext_resource type="Script" path="res://game/entity/state/state_machine.gd" id="12_imbt5"]
 [ext_resource type="Script" uid="uid://ceobnxgg033t3" path="res://game/entity/enemy/cheep_cheep/states/dry.gd" id="13_xq1me"]
 [ext_resource type="Script" uid="uid://c54stsmwcotyv" path="res://game/entity/enemy/cheep_cheep/states/flop.gd" id="14_qj7y6"]
 [ext_resource type="Script" uid="uid://d31u80a7usfqn" path="res://game/entity/enemy/cheep_cheep/states/strike.gd" id="15_66cei"]
@@ -270,35 +270,25 @@ radius = 43.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_4q4ff"]
 radius = 171.01169
 
-[sub_resource type="Resource" id="Resource_SwimToChase"]
-script = ExtResource("9_axbdk")
-resource_name = "ToChase"
-target = NodePath("Submerged/Chase")
-mode = 2
-expression = "is_player_in_vision()"
+[sub_resource type="Resource" id="Visuals_Swim"]
+script = ExtResource("30_effects")
+animation = &"swim"
 
-[sub_resource type="Resource" id="Resource_ChaseToSwim"]
-script = ExtResource("9_axbdk")
-resource_name = "ToSwim"
-target = NodePath("Submerged/Swim")
-mode = 2
-expression = "is_player_out_of_vision()"
+[sub_resource type="Resource" id="Visuals_Chase"]
+script = ExtResource("30_effects")
+animation = &"alert"
+chain = Array[StringName]([&"chase"])
 
-[sub_resource type="Resource" id="Resource_SubmergedToFlop"]
-script = ExtResource("9_axbdk")
-resource_name = "ToFlop"
-target = NodePath("Dry/Flop")
-mode = 2
-expression = "!is_in_water()"
+[sub_resource type="Resource" id="Visuals_Flop"]
+script = ExtResource("30_effects")
+animation = &"idle"
 
-[sub_resource type="Resource" id="Resource_DryToSwim"]
-script = ExtResource("9_axbdk")
-resource_name = "ToSwim"
-target = NodePath("Submerged/Swim")
-mode = 2
-expression = "is_in_water()"
+[sub_resource type="Resource" id="Visuals_Strike"]
+script = ExtResource("30_effects")
+animation = &"strike"
+sfx_enter = ExtResource("sfxres1")
 
-[node name="CheepCheep" type="CharacterBody2D" unique_id=663921538 node_paths=PackedStringArray("entity_check_area_water", "entity_check_area_close", "entity_check_area_lost", "sprite", "components_root", "collision_shapes", "state_machine", "water_check")]
+[node name="CheepCheep" type="CharacterBody2D" unique_id=663921538 node_paths=PackedStringArray("entity_check_area_water", "entity_check_area_close", "entity_check_area_lost", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_ya6ph")
@@ -308,7 +298,7 @@ entity_check_area_lost = NodePath("EntityCheckAreaLost")
 sprite = NodePath("Sprite")
 components_root = NodePath("Components")
 collision_shapes = [NodePath("CollisionShape2D"), NodePath("HitBox/CollisionShape2D"), NodePath("HurtBox/CollisionShape2D")]
-state_machine = NodePath("StateMachine")
+machine = NodePath("StateMachine")
 exit_objects = Dictionary[PackedScene, int]({
 ExtResource("2_i3vhm"): 1,
 ExtResource("3_dbaom"): 1
@@ -330,16 +320,13 @@ speed_scale = 1.0
 playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
-[node name="StateMachine" type="Node" parent="." unique_id=903449368 node_paths=PackedStringArray("initial_state", "sprite")]
+[node name="StateMachine" type="Node" parent="." unique_id=903449368 node_paths=PackedStringArray("entity", "initial_state")]
 script = ExtResource("12_imbt5")
+entity = NodePath("..")
 initial_state = NodePath("Submerged/Swim")
-root_node = NodePath("..")
-sprite = NodePath("../Sprite")
-metadata/_custom_type_script = "uid://utibsg6xkllx"
+
 [node name="Submerged" type="Node" parent="StateMachine" unique_id=1456638796]
 script = ExtResource("10_n3erx")
-always_transition = true
-transitions = Array[ExtResource("9_axbdk")]([SubResource("Resource_SubmergedToFlop")])
 
 [node name="Swim" type="Node" parent="StateMachine/Submerged" unique_id=993447039 node_paths=PackedStringArray("water_check_l", "water_check_r", "wall_check_l", "wall_check_r")]
 script = ExtResource("11_t1a8t")
@@ -348,32 +335,27 @@ water_check_l = NodePath("../../../WaterCheckL")
 water_check_r = NodePath("../../../WaterCheckR")
 wall_check_l = NodePath("../../../WallCheckL")
 wall_check_r = NodePath("../../../WallCheckR")
-sprite_animation_name = &"swim"
-transitions = Array[ExtResource("9_axbdk")]([SubResource("Resource_SwimToChase")])
+effects = SubResource("Visuals_Swim")
 
 [node name="Chase" type="Node" parent="StateMachine/Submerged" unique_id=832478878 node_paths=PackedStringArray("entity_check_area_lost")]
 script = ExtResource("12_b1y5l")
+effects = SubResource("Visuals_Chase")
 entity_check_area_lost = NodePath("../../../EntityCheckAreaLost")
-sprite_animation_name = &"alert"
-sprite_chain = Array[StringName]([&"chase"])
-transitions = Array[ExtResource("9_axbdk")]([SubResource("Resource_ChaseToSwim")])
 
 [node name="Dry" type="Node" parent="StateMachine" unique_id=1978203948]
 script = ExtResource("13_xq1me")
-always_transition = true
-transitions = Array[ExtResource("9_axbdk")]([SubResource("Resource_DryToSwim")])
 
 [node name="Flop" type="Node" parent="StateMachine/Dry" unique_id=712154901]
 script = ExtResource("14_qj7y6")
-sprite_animation_name = &"idle"
-[node name="Strike" type="Node" parent="StateMachine" unique_id=2058756983 node_paths=PackedStringArray("friction_component", "collision_disabled_shapes")]
+effects = SubResource("Visuals_Flop")
+
+[node name="Strike" type="Node" parent="StateMachine" unique_id=2058756983 node_paths=PackedStringArray("friction_component", "hit_box_shape", "hurt_box_shape")]
 script = ExtResource("15_66cei")
+effects = SubResource("Visuals_Strike")
 friction_component = NodePath("../../Components/FrictionComponent")
-sprite_animation_name = &"strike"
-collision_disabled_shapes = [NodePath("../../HitBox/CollisionShape2D"), NodePath("../../HurtBox/CollisionShape2D")]
-sfx_enter_enabled = true
-sfx_enter_sound = ExtResource("sfxres1")
-sfx_enter_bus = &"SFX"
+hit_box_shape = NodePath("../../HitBox/CollisionShape2D")
+hurt_box_shape = NodePath("../../HurtBox/CollisionShape2D")
+
 [node name="Components" type="Node" parent="." unique_id=729948919]
 
 [node name="GravityComponent" type="Node" parent="Components" unique_id=1208409901 node_paths=PackedStringArray("entity")]

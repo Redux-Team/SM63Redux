@@ -1,8 +1,7 @@
-@tool
-extends State
+extends PlayerState
 
 
-func _on_physics_tick(delta: float) -> void:
+func _tick(delta: float) -> void:
 	player.swim_buffer_time = max(player.swim_buffer_time - delta, 0.0)
 	
 	if abs(player.move_dir) == 0:
@@ -21,6 +20,12 @@ func _on_physics_tick(delta: float) -> void:
 		player.velocity.y = lerpf(player.velocity.y, 20.0, 0.1)
 	
 	_handle_ground_pound()
+
+
+func _next() -> StringName:
+	if not player.is_in_water():
+		return &"Fall" if player.velocity.y >= 0.0 else &"IdleJump"
+	return &"SwimIdle" if is_current() else &""
 
 
 func speed_up(move_dir: float) -> void:
@@ -43,10 +48,10 @@ func speed_up(move_dir: float) -> void:
 
 func _handle_ground_pound() -> void:
 	if not player.is_on_floor() and player.is_input_ground_pound:
-		state_machine.change_state(&"GroundPoundStart")
+		machine.change_state(&"GroundPoundStart")
 
 
-func _on_exit() -> void:
+func _exit() -> void:
 	# little boost for exiting the water
 	if player.velocity.y < 0:
 		player.velocity.y = max(player.velocity.y * 2.5, -300)

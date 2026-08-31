@@ -186,8 +186,8 @@ func get_fludd_handler() -> PlayerFluddHandler:
 	return _fludd_handler
 
 
-func is_state(state_name: String) -> bool:
-	return state_machine.get_current_state().get_internal_name() == state_name
+func is_state(state_name: StringName) -> bool:
+	return machine.get_state_name() == state_name
 
 
 func is_action_pressed(action: String) -> bool:

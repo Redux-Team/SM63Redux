@@ -1,5 +1,4 @@
-@tool
-extends State
+extends PlayerState
 
 
 @export var target_speed: float = 1250.0
@@ -51,15 +50,15 @@ var landing_timer: float = 0.0
 var body_rotation: float = 0.0
 var air_rotation_timer: float = 0.0
 var rotation_time_offset: float = 0.0
-var from_state: StringName = ""
+var from_state: StringName = &""
 
 
-func _on_enter() -> void:
+func _enter() -> void:
 	player.current_jump = 0
 	player.is_diving = true
 	player.lock_flipping = true
 	player.is_falling = false
-	from_state = get_last_state().get_internal_name()
+	from_state = machine.get_last_state().name if machine.get_last_state() else &""
 	dive_timer = 0.0
 	dive_resetting = false
 	dive_reset_timer = 0.0
@@ -75,13 +74,13 @@ func _on_enter() -> void:
 	player.sprite.local_rotation = rad_to_deg(body_rotation)
 
 
-func _on_exit() -> void:
+func _exit() -> void:
 	player.is_diving = false
 	player.lock_flipping = false
 	player.sprite.local_rotation = 0.0
 
 
-func _on_physics_tick(delta: float) -> void:
+func _tick(delta: float) -> void:
 	dive_timer += delta
 	
 	if gp_conversion_timer > 0.0:
@@ -102,13 +101,14 @@ func _on_physics_tick(delta: float) -> void:
 
 
 
-func _on_render_tick(delta: float) -> void:
+func _render_tick(delta: float) -> void:
+	if not dive_resetting:
+		player.sprite.local_rotation = rad_to_deg(body_rotation)
 	update_dive_rotation(delta)
 
 
-func _sprite_rules() -> void:
-	if not dive_resetting:
-		player.sprite.local_rotation = rad_to_deg(body_rotation)
+func _next() -> StringName:
+	return &"Floorslide" if player.is_on_floor() else &""
 
 
 func apply_dive_impulse() -> void:
@@ -121,7 +121,7 @@ func apply_dive_impulse() -> void:
 	var speed_difference: float = target_speed - current_speed
 	player.velocity.x += (speed_difference / (time_to_target_speed * 60.0)) * facing
 	
-	if from_state == "idle":
+	if from_state == &"Idle":
 		player.velocity.y = max(neutral_launch_y_cap, player.velocity.y + launch_y_boost)
 	else:
 		player.velocity.y += launch_y_boost

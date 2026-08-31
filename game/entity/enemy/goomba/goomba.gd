@@ -8,18 +8,17 @@ var squished_by: Player
 
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
-	if area.has_meta("player") and not state_machine.get_current_state().get_internal_name() in ["squish", "strike"]:
-		var player: Player = area.owner
-		var relative: int = sign(player.global_position.x - global_position.x)
-		sprite.flip_h = false if relative >= 0 else true
-		target = player
-		state_machine.change_state("alert")
-		player_check.set_deferred("monitoring", false)
+	if not area.has_meta("player") or machine.get_state_name() in [&"Squish", &"Strike"]:
+		return
+	
+	var player: Player = area.owner
+	sprite.flip_h = player.global_position.x < global_position.x
+	target = player
+	machine.change_state(&"Alert")
+	player_check.set_deferred("monitoring", false)
 
 
 func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:
 	if source_hitbox.damage_type == HitBox.DamageType.SQUISH:
-		var player: Player = source_hitbox.owner
-		squished_by = player
-		
-		state_machine.change_state("squish")
+		squished_by = source_hitbox.owner
+		machine.change_state(&"Squish")

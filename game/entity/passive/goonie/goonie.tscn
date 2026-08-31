@@ -4,13 +4,13 @@
 [ext_resource type="Texture2D" uid="uid://dcq1kqe3c5wbk" path="res://assets/textures/entity/passive/goonie_flap.png" id="2_dma5t"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="2_kaxjy"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="2_pbwgp"]
-[ext_resource type="Script" uid="uid://3y7t4ymugnxu" path="res://addons/redux_dev/components/state_machine/state_transition.gd" id="3_xtefv"]
+[ext_resource type="Script" path="res://game/entity/state/state_effects.gd" id="30_effects"]
 [ext_resource type="Texture2D" uid="uid://di1d8ih6gfgmm" path="res://assets/textures/entity/passive/goonie_glide.png" id="4_1cx3s"]
 [ext_resource type="Script" uid="uid://uyk8qmuneqcb" path="res://game/entity/passive/goonie/state_machine/states/flap.gd" id="4_xtefv"]
 [ext_resource type="Script" uid="uid://4y5435fv7w4g" path="res://game/entity/passive/goonie/state_machine/states/glide.gd" id="5_xtefv"]
 [ext_resource type="Script" uid="uid://cpfwdp3pr6hbk" path="res://game/entity/passive/goonie/state_machine/states/heavy_flap.gd" id="6_bodhv"]
 [ext_resource type="Script" uid="uid://dvxkxevaf2f45" path="res://core/custom_nodes/2d/ride_area.gd" id="6_bslqv"]
-[ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="7_i5hl1"]
+[ext_resource type="Script" path="res://game/entity/state/state_machine.gd" id="7_i5hl1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0v6xk"]
 atlas = ExtResource("2_dma5t")
@@ -116,40 +116,19 @@ size = Vector2(32, 3)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oohn0"]
 size = Vector2(32, 12)
 
-[sub_resource type="Resource" id="Resource_HeavyFlapToFlap"]
-script = ExtResource("3_xtefv")
-resource_name = "ToFlap"
-target = NodePath("Flap")
-mode = 2
-expression = "!has_rider()"
+[sub_resource type="Resource" id="Visuals_Flap"]
+script = ExtResource("30_effects")
+animation = &"flap"
 
-[sub_resource type="Resource" id="Resource_FlapToGlide"]
-script = ExtResource("3_xtefv")
-resource_name = "ToGlide"
-target = NodePath("Glide")
-mode = 1
+[sub_resource type="Resource" id="Visuals_Glide"]
+script = ExtResource("30_effects")
+animation = &"glide"
 
-[sub_resource type="Resource" id="Resource_FlapToHeavyFlap"]
-script = ExtResource("3_xtefv")
-resource_name = "ToHeavyFlap"
-target = NodePath("HeavyFlap")
-mode = 2
-expression = "has_rider()"
+[sub_resource type="Resource" id="Visuals_HeavyFlap"]
+script = ExtResource("30_effects")
+animation = &"heavy_flap"
 
-[sub_resource type="Resource" id="Resource_GlideToHeavyFlap"]
-script = ExtResource("3_xtefv")
-resource_name = "ToHeavyFlap"
-target = NodePath("HeavyFlap")
-mode = 2
-expression = "has_rider()"
-
-[sub_resource type="Resource" id="Resource_GlideToFlap"]
-script = ExtResource("3_xtefv")
-resource_name = "ToFlap"
-target = NodePath("Flap")
-mode = 1
-
-[node name="Goonie" type="CharacterBody2D" unique_id=459377689 node_paths=PackedStringArray("ride_area", "sprite", "components_root", "state_machine")]
+[node name="Goonie" type="CharacterBody2D" unique_id=459377689 node_paths=PackedStringArray("ride_area", "sprite", "components_root", "machine")]
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_jfxkd")
@@ -157,30 +136,26 @@ heavy_flap_angle = 45.0
 ride_area = NodePath("RideArea")
 sprite = NodePath("SmartSprite2D")
 components_root = NodePath("Components")
-state_machine = NodePath("StateMachine")
+machine = NodePath("StateMachine")
 
-[node name="StateMachine" type="Node" parent="." unique_id=242288983 node_paths=PackedStringArray("initial_state", "sprite")]
+[node name="StateMachine" type="Node" parent="." unique_id=242288983 node_paths=PackedStringArray("entity", "initial_state")]
 script = ExtResource("7_i5hl1")
+entity = NodePath("..")
 initial_state = NodePath("Flap")
-root_node = NodePath("..")
-sprite = NodePath("../SmartSprite2D")
-metadata/_custom_type_script = "uid://utibsg6xkllx"
+
 [node name="Flap" type="Node" parent="StateMachine" unique_id=668680388]
 script = ExtResource("4_xtefv")
-runtime = 6.5
-sprite_animation_name = &"flap"
-transitions = Array[ExtResource("3_xtefv")]([SubResource("Resource_FlapToGlide"), SubResource("Resource_FlapToHeavyFlap")])
+effects = SubResource("Visuals_Flap")
+duration = 6.5
 
 [node name="Glide" type="Node" parent="StateMachine" unique_id=2019713984]
 script = ExtResource("5_xtefv")
-runtime = 1.5
-sprite_animation_name = &"glide"
-transitions = Array[ExtResource("3_xtefv")]([SubResource("Resource_GlideToHeavyFlap"), SubResource("Resource_GlideToFlap")])
+effects = SubResource("Visuals_Glide")
+duration = 1.5
 
 [node name="HeavyFlap" type="Node" parent="StateMachine" unique_id=44810290]
 script = ExtResource("6_bodhv")
-sprite_animation_name = &"heavy_flap"
-transitions = Array[ExtResource("3_xtefv")]([SubResource("Resource_HeavyFlapToFlap")])
+effects = SubResource("Visuals_HeavyFlap")
 
 [node name="Components" type="Node" parent="." unique_id=566607527]
 

@@ -1,10 +1,11 @@
-@tool
-extends State
+extends PlayerState
+
+const FALL_DELAY: float = 1.0
 
 @export var hurt_box: HurtBox
 
 
-func _on_enter() -> void:
+func _enter() -> void:
 	Level.get_instance().stop_music()
 	player.collision_mask = 0
 	player.z_index = 10
@@ -20,3 +21,7 @@ func _on_enter() -> void:
 	hurt_box.stop_blink()
 	hurt_box.queue_free()
 	LevelCamera.get_instance().shake(40, 0.2)
+
+
+func _next() -> StringName:
+	return &"DeathFall" if time >= FALL_DELAY else &""

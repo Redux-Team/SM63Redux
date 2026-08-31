@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://bu0cpqsoc43la"]
 
 [ext_resource type="Script" uid="uid://gx548aea8dxr" path="res://game/entity/enemy/goomba/goomba.gd" id="1_hysx3"]
-[ext_resource type="Script" uid="uid://utibsg6xkllx" path="res://addons/redux_dev/components/state_machine/state_machine.gd" id="2_e0p0p"]
+[ext_resource type="Script" path="res://game/entity/state/state_machine.gd" id="2_e0p0p"]
 [ext_resource type="PackedScene" uid="uid://tf6mq1quvwdw" path="res://game/object/coin/yellow_coin/yellow_coin_spawn.tscn" id="2_onrng"]
 [ext_resource type="PackedScene" uid="uid://dssc62dfv747q" path="res://game/entity/enemy/_shared/scenes/poof.tscn" id="3_7e3mf"]
 [ext_resource type="Texture2D" uid="uid://djgg3rgm58230" path="res://assets/textures/entity/enemy/goomba/goomba_walk.png" id="3_hysx3"]
-[ext_resource type="Script" uid="uid://3y7t4ymugnxu" path="res://addons/redux_dev/components/state_machine/state_transition.gd" id="3_ios8m"]
-[ext_resource type="Script" uid="uid://dyjrhpdveexsr" path="res://addons/redux_dev/components/state_machine/state.gd" id="3_tx7nd"]
+[ext_resource type="Script" path="res://game/entity/state/state_effects.gd" id="30_effects"]
+[ext_resource type="Script" path="res://game/entity/state/state.gd" id="3_tx7nd"]
 [ext_resource type="Texture2D" uid="uid://dtakiqymwlidq" path="res://assets/textures/entity/enemy/goomba/goomba_alert.png" id="4_kyaey"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_whnfo"]
 [ext_resource type="Script" uid="uid://ckuqr7ws7p6tk" path="res://game/entity/enemy/goomba/states/alert.gd" id="4_x5cu4"]
@@ -248,75 +248,81 @@ size = Vector2(14, 15)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_42vey"]
 size = Vector2(16, 16)
 
-[sub_resource type="Resource" id="Resource_AlertToChase"]
-script = ExtResource("3_ios8m")
-resource_name = "ToChase"
-target = NodePath("Chase")
-mode = 1
+[sub_resource type="Resource" id="Visuals_Patrol"]
+script = ExtResource("30_effects")
+animation = &"walk"
+sfx_frame = ExtResource("sfxres1")
+sfx_frame_indices = Array[int]([0, 3])
 
-[node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("player_check", "sprite", "components_root", "state_machine", "water_check")]
+[sub_resource type="Resource" id="Visuals_Alert"]
+script = ExtResource("30_effects")
+sfx_enter = ExtResource("sfxres2")
+
+[sub_resource type="Resource" id="Visuals_Chase"]
+script = ExtResource("30_effects")
+animation = &"walk"
+speed_scale = 1.5
+sfx_frame = ExtResource("sfxres1")
+sfx_frame_indices = Array[int]([0, 3])
+
+[sub_resource type="Resource" id="Visuals_Squish"]
+script = ExtResource("30_effects")
+animation = &"squish"
+speed_scale = 1.5
+sfx_enter = ExtResource("sfxres3")
+
+[sub_resource type="Resource" id="Visuals_Strike"]
+script = ExtResource("30_effects")
+player_animation = &"strike_hit"
+sfx_enter = ExtResource("sfxres4")
+
+[node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("player_check", "sprite", "components_root", "machine", "water_check")]
 collision_layer = 8
 collision_mask = 514
 script = ExtResource("1_hysx3")
 player_check = NodePath("PlayerCheck")
 sprite = NodePath("SmartSprite2D")
 components_root = NodePath("Components")
-state_machine = NodePath("StateMachine")
+machine = NodePath("StateMachine")
 exit_objects = Dictionary[PackedScene, int]({
 ExtResource("2_onrng"): 1,
 ExtResource("3_7e3mf"): 1
 })
 water_check = NodePath("WaterCheckArea")
 
-[node name="StateMachine" type="Node" parent="." unique_id=48097513 node_paths=PackedStringArray("initial_state", "sprite", "animation_player")]
+[node name="StateMachine" type="Node" parent="." unique_id=48097513 node_paths=PackedStringArray("entity", "initial_state", "animation_player")]
 script = ExtResource("2_e0p0p")
+entity = NodePath("..")
 initial_state = NodePath("Wander/Patrol")
-root_node = NodePath("..")
-sprite = NodePath("../SmartSprite2D")
 animation_player = NodePath("../AnimationPlayer")
-metadata/_custom_type_script = "uid://utibsg6xkllx"
+
 [node name="Wander" type="Node" parent="StateMachine" unique_id=288151632]
 script = ExtResource("3_tx7nd")
-[node name="Patrol" type="Node" parent="StateMachine/Wander" unique_id=392367863 node_paths=PackedStringArray("floor_check_r", "floor_check_l")]
+[node name="Patrol" type="Node" parent="StateMachine/Wander" unique_id=392367863 node_paths=PackedStringArray("floor_check_l", "floor_check_r")]
 script = ExtResource("5_4grvk")
+effects = SubResource("Visuals_Patrol")
 displacement = SubResource("Curve_g7wuw")
-floor_check_r = NodePath("../../../FloorCheckR")
 floor_check_l = NodePath("../../../FloorCheckL")
-sprite_animation_name = &"walk"
-sfx_frame_enabled = true
-sfx_frame_sound = ExtResource("sfxres1")
-sfx_frame_bus = &"SFX"
-sfx_frame_indices = Array[int]([0, 3])
+floor_check_r = NodePath("../../../FloorCheckR")
+
 [node name="Alert" type="Node" parent="StateMachine/Wander" unique_id=1129696963]
 script = ExtResource("4_x5cu4")
-transitions = Array[ExtResource("3_ios8m")]([SubResource("Resource_AlertToChase")])
-sfx_enter_enabled = true
-sfx_enter_sound = ExtResource("sfxres2")
-sfx_enter_bus = &"SFX"
+effects = SubResource("Visuals_Alert")
 
 [node name="Chase" type="Node" parent="StateMachine" unique_id=1835913114]
 script = ExtResource("11_fb4me")
-sprite_animation_name = &"walk"
-sprite_speed_scale = 1.5
-sfx_frame_enabled = true
-sfx_frame_sound = ExtResource("sfxres1")
-sfx_frame_bus = &"SFX"
-sfx_frame_indices = Array[int]([0, 3])
+effects = SubResource("Visuals_Chase")
+
 [node name="Squish" type="Node" parent="StateMachine" unique_id=354975756 node_paths=PackedStringArray("hit_box")]
 script = ExtResource("12_6f57m")
+effects = SubResource("Visuals_Squish")
 hit_box = NodePath("../../HitBox")
-sprite_animation_name = &"squish"
-sprite_speed_scale = 1.5
-sfx_enter_enabled = true
-sfx_enter_sound = ExtResource("sfxres3")
-sfx_enter_bus = &"SFX"
+
 [node name="Strike" type="Node" parent="StateMachine" unique_id=440686515 node_paths=PackedStringArray("hit_box")]
 script = ExtResource("14_xvu80")
+effects = SubResource("Visuals_Strike")
 hit_box = NodePath("../../HitBox")
-anim_animation = "strike_hit"
-sfx_enter_enabled = true
-sfx_enter_sound = ExtResource("sfxres4")
-sfx_enter_bus = &"SFX"
+
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(0, -7)
 texture = SubResource("CanvasTexture_a7n3c")

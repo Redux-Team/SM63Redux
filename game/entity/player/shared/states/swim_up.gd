@@ -1,5 +1,4 @@
-@tool
-extends State
+extends PlayerState
 
 ## Peak upward velocity applied during the swim burst (pixels/sec, positive = up in velocity space).
 @export var burst_rise_speed: float = 450.0
@@ -29,14 +28,14 @@ extends State
 var _burst_timer: float = 0.0
 
 
-func _on_enter() -> void:
+func _enter() -> void:
 	_burst_timer = burst_duration
 	player.swim_buffer_time = swim_input_buffer_time
 	# Consume the buffered swim press so it can't immediately re-trigger another swim.
 	player.swim_input_timer = 0.0
 
 
-func _on_physics_tick(delta: float) -> void:
+func _tick(delta: float) -> void:
 	player.swim_buffer_time = max(player.swim_buffer_time - delta, 0.0)
 	_burst_timer = max(_burst_timer - delta, 0.0)
 	
@@ -46,6 +45,11 @@ func _on_physics_tick(delta: float) -> void:
 		player.velocity.y = lerpf(player.velocity.y, 0.0, rise_decay_smoothing)
 	else:
 		player.velocity.y = lerpf(player.velocity.y, neutral_sink_speed, neutral_sink_smoothing)
-	
-	if _burst_timer <= 0.0 and player.swim_buffer_time <= 0.0:
-		state_machine.change_state(&"Submerged")
+
+
+func _next() -> StringName:
+	if player.swim_buffer_time > 0.0:
+		return &""
+	if not player.is_input_swim or _burst_timer <= 0.0:
+		return &"SwimIdle"
+	return &""
