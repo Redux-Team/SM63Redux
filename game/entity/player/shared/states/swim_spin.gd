@@ -8,6 +8,7 @@ var _slowed: bool = false
 
 func _enter() -> void:
 	_slowed = false
+	sprite.speed_scale = player.get_spin_speed_scale(0.0)
 	spin_hitbox.enable(player.spin_fast_duration)
 	if not player.is_on_floor():
 		if player.velocity.y > 0:
@@ -17,9 +18,11 @@ func _enter() -> void:
 
 
 func _tick(_delta: float) -> void:
-	if not _slowed and time >= player.spin_fast_duration:
-		_slowed = true
-		sprite.play_at_frame(&"spin_loop", sprite.current_frame)
+	if not _slowed:
+		sprite.speed_scale = player.get_spin_speed_scale(time)
+		if time >= player.spin_fast_duration:
+			_slowed = true
+			player.enter_slow_spin()
 	
 	if player.is_on_floor():
 		player.lock_flipping = false
