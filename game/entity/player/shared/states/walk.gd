@@ -19,8 +19,8 @@ func _render_tick(_delta: float) -> void:
 		return
 	
 	_footstep_frame = frame
-	var frames: PackedInt32Array = player.footstep_frames.get(sprite.current_animation, PackedInt32Array())
-	if frames.has(frame):
+	var trigger_frames: PackedInt32Array = player.footstep_frames.get(sprite.current_animation, PackedInt32Array())
+	if trigger_frames.has(frame):
 		player.play_footstep()
 
 

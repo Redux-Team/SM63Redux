@@ -108,8 +108,8 @@ func _get_end_caps_size_y(expand: float = 0.0) -> float:
 	return (full_height if margins == 0.0 else margins) + expand
 
 
-static func from_data(data: GameObjectData) -> LevelObjectTelescoping:
-	var telescoping_data: TelescopingData = data as TelescopingData
+static func from_data(object_data: GameObjectData) -> LevelObjectTelescoping:
+	var telescoping_data: TelescopingData = object_data as TelescopingData
 	if not telescoping_data:
 		return null
 	

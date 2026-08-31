@@ -283,10 +283,10 @@ func _compute_local_bounds() -> Rect2:
 			var shape: CollisionShape2D = child as CollisionShape2D
 			if not shape or shape.shape is not RectangleShape2D:
 				continue
-			var to_local: Transform2D = area.transform * shape.transform
+			var local_transform: Transform2D = area.transform * shape.transform
 			var rect: Rect2 = (shape.shape as RectangleShape2D).get_rect()
 			for corner: Vector2 in [rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)]:
-				var point: Vector2 = to_local * corner
+				var point: Vector2 = local_transform * corner
 				if found:
 					bounds = bounds.expand(point)
 				else:

@@ -39,7 +39,7 @@ static func deserialize(data: Variant) -> LDMusic:
 	var music: LDMusic = LDMusic.new()
 	var entries: Variant = data
 	if data is Dictionary:
-		music.underwater_mode = int((data as Dictionary).get("underwater_mode", UnderwaterMode.MUFFLE))
+		music.underwater_mode = int((data as Dictionary).get("underwater_mode", UnderwaterMode.MUFFLE)) as UnderwaterMode
 		entries = (data as Dictionary).get("subtracks", [])
 	if entries is Array:
 		for entry: Variant in entries:

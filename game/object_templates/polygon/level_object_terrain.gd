@@ -29,8 +29,8 @@ var collision_mode: String = ""
 var _semisolid_shapes: Array[CollisionShape2D] = []
 
 
-static func from_data(data: GameObjectData) -> LevelObjectTerrain:
-	var polygon_style: PolygonData = data as PolygonData
+static func from_data(object_data: GameObjectData) -> LevelObjectTerrain:
+	var polygon_style: PolygonData = object_data as PolygonData
 	if not polygon_style:
 		return null
 	

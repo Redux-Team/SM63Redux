@@ -321,12 +321,11 @@ func _get_half_size_screen() -> Vector2:
 	if _bound_objects.is_empty():
 		return Vector2.ZERO
 	var center_world: Vector2 = _get_center_world()
-	if _bound_objects.size() > 1:
-		var corner_world: Vector2 = center_world + (BASE_RECT_SIZE * 0.5)
-		return world_to_screen(corner_world) - world_to_screen(center_world)
-	var obj: LDObject = _bound_objects.get(0)
-	var avg_scale: Vector2 = _get_average_scale()
-	var corner_world: Vector2 = center_world + _get_object_base_half_size(obj) * avg_scale
+	var corner_world: Vector2 = center_world + (BASE_RECT_SIZE * 0.5)
+	if _bound_objects.size() == 1:
+		var obj: LDObject = _bound_objects.get(0)
+		corner_world = center_world + _get_object_base_half_size(obj) * _get_average_scale()
+	
 	return world_to_screen(corner_world) - world_to_screen(center_world)
 
 

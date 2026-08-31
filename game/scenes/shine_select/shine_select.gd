@@ -121,8 +121,8 @@ func _bg_dict_for(area_name: String) -> Dictionary:
 ## same are "the same" and are kept rather than re-faded. Only visual fields count - the id and
 ## display name are editor metadata, so a preset-background layer and an identical picker-added one
 ## still match.
-func _layer_signature(layer: LDBackgroundLayer) -> String:
-	var data: Dictionary = layer.serialize()
+func _layer_signature(background_layer: LDBackgroundLayer) -> String:
+	var data: Dictionary = background_layer.serialize()
 	data.erase("id")
 	data.erase("display_name")
 	return str(data)
@@ -156,14 +156,14 @@ func _build_initial_background(bg_dict: Dictionary) -> void:
 	bg_layer.add_child(backdrop)
 
 	if bg:
-		for layer: LDBackgroundLayer in bg.layers:
-			var node: Control = _spawn_layer(layer)
-			_layers.append({"sig": _layer_signature(layer), "node": node, "tween": null})
+		for background_layer: LDBackgroundLayer in bg.layers:
+			var node: Control = _spawn_layer(background_layer)
+			_layers.append({"sig": _layer_signature(background_layer), "node": node, "tween": null})
 
 
 ## Builds one parallax layer node into bg_layer and returns it (no tracking - caller records it).
-func _spawn_layer(layer: LDBackgroundLayer) -> Control:
-	var node: Control = LDBackground.build_layer_node(layer)
+func _spawn_layer(background_layer: LDBackgroundLayer) -> Control:
+	var node: Control = LDBackground.build_layer_node(background_layer)
 	bg_layer.add_child(node)
 	_apply_parallax_scroll(node)
 	return node
@@ -222,8 +222,8 @@ func _maybe_swap_background() -> void:
 	var available: Array[Dictionary] = _layers.duplicate()
 	var kept: Array[Dictionary] = []
 	if bg:
-		for layer: LDBackgroundLayer in bg.layers:
-			var sig: String = _layer_signature(layer)
+		for background_layer: LDBackgroundLayer in bg.layers:
+			var sig: String = _layer_signature(background_layer)
 			var matched: int = -1
 			for i: int in available.size():
 				if available[i].get("sig") == sig:
@@ -233,7 +233,7 @@ func _maybe_swap_background() -> void:
 				kept.append(available[matched])
 				available.remove_at(matched)
 			else:
-				var node: Control = _spawn_layer(layer)
+				var node: Control = _spawn_layer(background_layer)
 				_set_layer_alpha(0.0, node)
 				kept.append({"sig": sig, "node": node, "tween": _fade_layer(node, 1.0, false)})
 
@@ -258,8 +258,8 @@ func _maybe_swap_background() -> void:
 func _apply_parallax_scroll(node: Node) -> void:
 	for child: Node in node.get_children():
 		if child is Parallax2D:
-			var layer: Parallax2D = child as Parallax2D
-			layer.autoscroll.x += BACKGROUND_SCROLL * layer.scroll_scale.x
+			var parallax: Parallax2D = child as Parallax2D
+			parallax.autoscroll.x += BACKGROUND_SCROLL * parallax.scroll_scale.x
 		_apply_parallax_scroll(child)
 
 

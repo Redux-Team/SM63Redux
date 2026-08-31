@@ -6,8 +6,8 @@ extends LevelObject
 @export var collision_polygon: CollisionPolygon2D
 
 
-static func from_data(data: GameObjectData) -> LevelObjectSprite:
-	var sprite_data: SpriteData = data as SpriteData
+static func from_data(object_data: GameObjectData) -> LevelObjectSprite:
+	var sprite_data: SpriteData = object_data as SpriteData
 	if not sprite_data:
 		return null
 

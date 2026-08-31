@@ -562,12 +562,12 @@ scale_curve = SubResource("CurveTexture_kw6gy")
 color_ramp = SubResource("GradientTexture1D_kw6gy")
 anim_offset_max = 1.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1p630"]
-atlas = ExtResource("2_heu0c")
+[sub_resource type="AtlasTexture" id="AtlasTexture_26jgh"]
+atlas = ExtResource("65_ejgj1")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_kdve7"]
-diffuse_texture = SubResource("AtlasTexture_1p630")
+diffuse_texture = SubResource("AtlasTexture_26jgh")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hmgs0"]
 atlas = ExtResource("51_d635j")
@@ -677,6 +677,10 @@ region = Rect2(64, 0, 64, 64)
 atlas = ExtResource("73_8odgw")
 region = Rect2(0, 0, 64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_1p630"]
+atlas = ExtResource("2_heu0c")
+region = Rect2(0, 0, 64, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_v2l3k"]
 atlas = ExtResource("60_5ygwk")
 region = Rect2(0, 0, 64, 64)
@@ -692,10 +696,6 @@ region = Rect2(0, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_m2rg5"]
 atlas = ExtResource("76_wsr8k")
 region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_26jgh"]
-atlas = ExtResource("65_ejgj1")
-region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gmxc2"]
 atlas = ExtResource("65_ejgj1")
@@ -1263,33 +1263,35 @@ offset = Vector2(-1, -1)
 
 [sub_resource type="Resource" id="Resource_n3xeb"]
 script = ExtResource("101_krv0b")
+offset = Vector2(-1, 0)
 
 [sub_resource type="Resource" id="Resource_m2rg5"]
 script = ExtResource("101_krv0b")
-offset = Vector2(0, -1)
+offset = Vector2(-1, -1)
 
 [sub_resource type="Resource" id="Resource_k6hol"]
 script = ExtResource("101_krv0b")
-offset = Vector2(0, -2)
+offset = Vector2(-1, -2)
 
 [sub_resource type="Resource" id="Resource_ont6s"]
 script = ExtResource("101_krv0b")
-offset = Vector2(0, -1)
+offset = Vector2(-1, -1)
 
 [sub_resource type="Resource" id="Resource_p7vsf"]
 script = ExtResource("101_krv0b")
+offset = Vector2(-1, 0)
 
 [sub_resource type="Resource" id="Resource_kdve7"]
 script = ExtResource("101_krv0b")
-offset = Vector2(0, -1)
+offset = Vector2(-1, -1)
 
 [sub_resource type="Resource" id="Resource_f27fj"]
 script = ExtResource("101_krv0b")
-offset = Vector2(0, -2)
+offset = Vector2(-1, -2)
 
 [sub_resource type="Resource" id="Resource_ckiah"]
 script = ExtResource("101_krv0b")
-offset = Vector2(0, -1)
+offset = Vector2(-1, -1)
 
 [sub_resource type="Resource" id="Resource_cmrqc"]
 script = ExtResource("101_krv0b")
@@ -1403,19 +1405,35 @@ offset = Vector2(-1, -1)
 
 [sub_resource type="Resource" id="Resource_tqdqa"]
 script = ExtResource("101_krv0b")
-offset = Vector2(0, -1)
+offset = Vector2(-1, -1)
+
+[sub_resource type="Resource" id="Resource_3xuna"]
+script = ExtResource("101_krv0b")
+offset = Vector2(-1, 0)
 
 [sub_resource type="Resource" id="Resource_sloyf"]
 script = ExtResource("101_krv0b")
-offset = Vector2(0, 1)
+offset = Vector2(-1, 1)
+
+[sub_resource type="Resource" id="Resource_3fsxb"]
+script = ExtResource("101_krv0b")
+offset = Vector2(-1, 0)
 
 [sub_resource type="Resource" id="Resource_lou6s"]
 script = ExtResource("101_krv0b")
-offset = Vector2(0, -1)
+offset = Vector2(-1, -1)
+
+[sub_resource type="Resource" id="Resource_j8dis"]
+script = ExtResource("101_krv0b")
+offset = Vector2(-1, 0)
 
 [sub_resource type="Resource" id="Resource_o0m62"]
 script = ExtResource("101_krv0b")
-offset = Vector2(0, 1)
+offset = Vector2(-1, 1)
+
+[sub_resource type="Resource" id="Resource_3yv7w"]
+script = ExtResource("101_krv0b")
+offset = Vector2(-1, 0)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hp8pt"]
 atlas = ExtResource("101_fcy6w")
@@ -2181,6 +2199,8 @@ script = ExtResource("1_oic1i")
 turn_speed = 2.0
 midair_turn_speed = 15.0
 run_max_speed = 220.0
+dive_launch_y_boost = 40.0
+dive_launch_y_min = -600.0
 dive_rotation_curve = SubResource("Curve_aln35")
 dive_y_velocity_to_rotation_offset_curve = SubResource("Curve_ioda6")
 spin_fast_duration = 0.5
@@ -2425,14 +2445,14 @@ rotation_source = NodePath("..")
 subsprites = [NodePath("Fludd")]
 animated = true
 diffuse_frames = SubResource("SpriteFrames_6pmmc")
-current_animation = "idle"
+current_animation = "run_loop"
 current_frame = 0
 speed_scale = 1.0
 playing = false
 
 [node name="Fludd" type="Sprite2D" parent="Doll" unique_id=99316911 node_paths=PackedStringArray("subsprites")]
 show_behind_parent = true
-position = Vector2(-6, -1)
+position = Vector2(-6, 0)
 texture = SubResource("CanvasTexture_f27fj")
 region_enabled = true
 region_rect = Rect2(64, 0, 64, 64)
@@ -2461,7 +2481,7 @@ follow_poses = Dictionary[StringName, Array]({
 &"spin_loop": [SubResource("Resource_woak8"), SubResource("Resource_dl333"), SubResource("Resource_dauob"), SubResource("Resource_8ne3h"), SubResource("Resource_k6iy8"), SubResource("Resource_3bupy"), SubResource("Resource_rytxr"), SubResource("Resource_dhwyu")],
 &"swim": [SubResource("Resource_e60mc"), SubResource("Resource_0d8i1"), SubResource("Resource_n2nx3"), SubResource("Resource_gdd4s"), SubResource("Resource_ie8qq")],
 &"swim_idle": [SubResource("Resource_khqwn"), SubResource("Resource_nrgrv"), SubResource("Resource_d6ot2"), SubResource("Resource_7h3q2"), SubResource("Resource_f1k64")],
-&"walk_loop": [SubResource("Resource_tqdqa"), null, SubResource("Resource_sloyf"), null, SubResource("Resource_lou6s"), null, SubResource("Resource_o0m62")]
+&"walk_loop": [SubResource("Resource_tqdqa"), SubResource("Resource_3xuna"), SubResource("Resource_sloyf"), SubResource("Resource_3fsxb"), SubResource("Resource_lou6s"), SubResource("Resource_j8dis"), SubResource("Resource_o0m62"), SubResource("Resource_3yv7w")]
 })
 follow_record = true
 animated = true

@@ -105,8 +105,8 @@ func setup() -> void:
 func _on_tool_changed(tool_name: String) -> void:
 	var key: String = tool_name.to_lower().remove_char(95)
 	var is_placement: bool = PLACEMENT_ICONS.has(key)
-	for name: String in _tool_buttons:
-		_set_active(_tool_buttons.get(name), name == key or (name == "brush" and is_placement))
+	for button_name: String in _tool_buttons:
+		_set_active(_tool_buttons.get(button_name), button_name == key or (button_name == "brush" and is_placement))
 
 
 func _on_active_window_changed(id: StringName) -> void:

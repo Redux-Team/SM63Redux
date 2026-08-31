@@ -154,9 +154,9 @@ var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
 		if pose:
 			pose.frame = f
 			_follow_root_sprite()
-@export_tool_button("Previous Frame") var _follow_prev: Callable = _step_follow_frame.bind(-1)
-@export_tool_button("Next Frame") var _follow_next: Callable = _step_follow_frame.bind(1)
-@export_tool_button("Clear Frame Pose") var _follow_clear: Callable = _clear_follow_pose
+@export_tool_button("Previous Frame") var follow_previous: Callable = _step_follow_frame.bind(-1)
+@export_tool_button("Next Frame") var follow_next: Callable = _step_follow_frame.bind(1)
+@export_tool_button("Clear Frame Pose") var follow_clear: Callable = _clear_follow_pose
 
 @export_group("Animated")
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "Animated") var animated: bool:
@@ -206,20 +206,20 @@ func _ready() -> void:
 	_follow_applied_rotation = rotation_degrees
 
 
-func get_pose(animation: StringName, frame: int) -> SubspritePose:
+func get_pose(animation: StringName, frame_index: int) -> SubspritePose:
 	var frames_poses: Array = follow_poses.get(animation, [])
-	if frame < 0 or frame >= frames_poses.size():
+	if frame_index < 0 or frame_index >= frames_poses.size():
 		return null
 	
-	return frames_poses.get(frame)
+	return frames_poses.get(frame_index)
 
 
-func set_pose(animation: StringName, frame: int, pose: SubspritePose) -> void:
+func set_pose(animation: StringName, frame_index: int, pose: SubspritePose) -> void:
 	var frames_poses: Array = follow_poses.get(animation, [])
-	while frames_poses.size() <= frame:
+	while frames_poses.size() <= frame_index:
 		frames_poses.append(null)
 	
-	frames_poses.set(frame, pose)
+	frames_poses.set(frame_index, pose)
 	follow_poses.set(animation, frames_poses)
 
 
@@ -408,7 +408,7 @@ func play(animation_name: StringName = current_animation) -> void:
 	playing = true
 
 
-func play_at_frame(animation_name: StringName, frame: int) -> void:
+func play_at_frame(animation_name: StringName, frame_index: int) -> void:
 	play(animation_name)
 	if not diffuse_frames or not diffuse_frames.has_animation(animation_name):
 		return
@@ -417,7 +417,7 @@ func play_at_frame(animation_name: StringName, frame: int) -> void:
 	if count <= 0:
 		return
 	
-	var wrapped: int = posmod(frame, count)
+	var wrapped: int = posmod(frame_index, count)
 	var fps: float = diffuse_frames.get_animation_speed(animation_name)
 	if fps > 0.0:
 		_playback_time = float(wrapped) / fps
