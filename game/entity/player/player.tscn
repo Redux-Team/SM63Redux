@@ -2355,10 +2355,11 @@ libraries/ = SubResource("AnimationLibrary_mb70y")
 [node name="InputHandler" type="Node" parent="Handlers" unique_id=1160390861]
 script = ExtResource("3_je5mu")
 
-[node name="SpriteHandler" type="Node" parent="Handlers" unique_id=657794481 node_paths=PackedStringArray("fludd_sprite", "plume_sprite", "_player", "_doll")]
+[node name="SpriteHandler" type="Node" parent="Handlers" unique_id=657794481 node_paths=PackedStringArray("fludd_sprite", "plume_sprite", "plume_particles", "_player", "_doll")]
 script = ExtResource("7_tb30q")
 fludd_sprite = NodePath("../../Doll/Fludd")
 plume_sprite = NodePath("../../Doll/Fludd/Plume")
+plume_particles = NodePath("../../CanvasGroup/HoverFluddParticles")
 _player = NodePath("../..")
 _doll = NodePath("../../Doll")
 

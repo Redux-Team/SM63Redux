@@ -17,6 +17,8 @@ extends Node
 	PlayerFluddHandler.FluddNozzle.TURBO: &"turbo",
 }
 @export var plume_offsets: Dictionary[int, Vector2]
+## Kept on top of the plume sprite so the spray emits from wherever the plume is drawn.
+@export var plume_particles: GPUParticles2D
 @export_group("Internal")
 @export var _player: Player
 @export var _doll: SmartSprite2D
@@ -65,6 +67,9 @@ func _on_fludd_nozzle_changed(nozzle: PlayerFluddHandler.FluddNozzle) -> void:
 func _update_plume() -> void:
 	if not plume_sprite:
 		return
+	
+	if plume_particles:
+		plume_particles.global_position = plume_sprite.global_position
 	
 	var fludd: PlayerFluddHandler = _player.get_fludd_handler()
 	var spraying: bool = fludd != null and fludd.is_spraying()
