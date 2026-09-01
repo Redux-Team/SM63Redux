@@ -10,7 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://cwxgel8xnrt2m" path="res://assets/sfx/object/breakable_box/box_break.wav" id="4_prsgq"]
 [ext_resource type="Texture2D" uid="uid://2vcfa37p1h7t" path="res://assets/textures/objects/interactive/interactable/breakable_box_particles.png" id="5_3wji2"]
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="5_key8f"]
-[ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="6_po2cq"]
+[ext_resource type="Script" uid="uid://df82mcnubnp0h" path="res://core/custom_nodes/2d/animated_particles.gd" id="7_debris"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_8nl6k"]
 diffuse_texture = ExtResource("2_qhjox")
@@ -91,12 +91,12 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="BreakableBox" type="Node2D" unique_id=1219245977 node_paths=PackedStringArray("break_sfx", "particle_emitter", "sprite", "collision_shape_2d", "hurt_box")]
+[node name="BreakableBox" type="Node2D" unique_id=1219245977 node_paths=PackedStringArray("break_sfx", "debris", "sprite", "collision_shape_2d", "hurt_box")]
 script = ExtResource("1_qhjox")
 break_sfx = NodePath("BreakSFX")
 textures = Array[Texture2D]([ExtResource("2_qhjox"), ExtResource("3_ju08t"), ExtResource("3_8nl6k")])
 break_sfx_list = Array[AudioStream]([ExtResource("4_prsgq")])
-particle_emitter = NodePath("ParticleEmitter")
+debris = NodePath("Debris")
 sprite = NodePath("Sprite")
 collision_shape_2d = NodePath("StaticBody2D/CollisionShape2D")
 hurt_box = NodePath("HurtBox")
@@ -124,7 +124,7 @@ shape = SubResource("RectangleShape2D_4xhut")
 debug_color = Color(0.68833333, 0.7, 0, 0.41960785)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=664497308]
-collision_layer = 2
+collision_layer = 514
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1498151830]
@@ -134,29 +134,22 @@ shape = SubResource("RectangleShape2D_3wji2")
 stream = ExtResource("4_prsgq")
 bus = &"SFX"
 
-[node name="ParticleEmitter" type="CPUParticles2D" parent="." unique_id=1781001774]
-emitting = false
-texture = SubResource("AtlasTexture_tmrtw")
-lifetime = 2.0
-one_shot = true
-explosiveness = 1.0
-randomness = 0.15
-emission_shape = 3
-emission_rect_extents = Vector2(8, 8)
-spread = 180.0
-initial_velocity_min = 20.0
-initial_velocity_max = 50.0
-angular_velocity_min = -720.0
-angular_velocity_max = 720.0
-scale_amount_curve = SubResource("Curve_3wji2")
-color_ramp = SubResource("Gradient_po2cq")
-script = ExtResource("6_po2cq")
-high_particle_amount = 8
-medium_particle_amount = 8
-low_particle_amount = 8
-animated = true
+[node name="Debris" type="Node2D" parent="." unique_id=1781001774]
+script = ExtResource("7_debris")
 sprite_frames = SubResource("SpriteFrames_m2ut4")
-metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+amount = 10
+emission_radius = 9.0
+spread = 180.0
+speed_min = 45.0
+speed_max = 130.0
+gravity = Vector2(0, 420)
+damping = 30.0
+scale_min = 0.8
+scale_max = 1.25
+speed_scale_min = 0.7
+speed_scale_max = 1.4
+random_start_frame = true
+random_flip = true
+metadata/_custom_type_script = "uid://df82mcnubnp0h"
 
 [connection signal="damaged" from="HurtBox" to="." method="_on_hurt_box_damaged"]
-[connection signal="finished" from="ParticleEmitter" to="." method="_on_particle_emitter_finished"]
