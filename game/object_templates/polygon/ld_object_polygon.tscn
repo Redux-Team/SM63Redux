@@ -40,6 +40,7 @@ metadata/_custom_type_script = "uid://bvnbumlxmk7vf"
 [node name="EditorShapeArea" type="Area2D" parent="." unique_id=393317928]
 
 [node name="EditorShape" type="CollisionPolygon2D" parent="EditorShapeArea" unique_id=1972370358]
+disabled = true
 
 [node name="Origin" type="Marker2D" parent="." unique_id=813257910]
 
