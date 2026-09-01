@@ -174,6 +174,8 @@ var current_animation: String:
 		apply_frame(current_animation, current_frame)
 var current_frame: int:
 	set(cf):
+		if current_frame == cf:
+			return
 		current_frame = cf
 		apply_frame(current_animation, current_frame)
 		frame_changed.emit()

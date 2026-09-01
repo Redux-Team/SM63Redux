@@ -2,7 +2,7 @@ shader_type canvas_item;
 render_mode unshaded;
 
 
-uniform sampler2D SCREEN_TEXTURE: hint_screen_texture, filter_linear_mipmap;
+uniform sampler2D SCREEN_TEXTURE: hint_screen_texture, filter_linear;
 uniform vec4 fill_color: source_color = vec4(0.54, 0.70, 0.83, 0.63);
 uniform vec4 outline_color: source_color = vec4(0.47, 0.59, 0.81, 0.63);
 uniform float outline_width: hint_range(0.0, 20.0) = 4.0;

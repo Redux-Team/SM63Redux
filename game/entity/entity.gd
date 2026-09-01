@@ -11,6 +11,9 @@ extends CharacterBody2D
 @export var exit_objects: Dictionary[PackedScene, int]
 @export var water_check: WaterCheckArea
 @export var step_height: float = 4.0
+## Objects off screen are suspended by [LevelCuller]. Turn this off for anything that must keep
+## running out of view, such as a platform carrying the player or a timed hazard.
+@export var cull_when_offscreen: bool = true
 
 
 var data: Dictionary

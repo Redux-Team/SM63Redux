@@ -29,6 +29,7 @@ size = Vector2(38, 4)
 
 [node name="MovingPlatform" type="Node2D" unique_id=2073047360 node_paths=PackedStringArray("platform_nine_patch", "platform_collision_shape", "platform_container", "preview_container", "path_drawer")]
 script = ExtResource("1_7bkp1")
+cull_when_offscreen = false
 platform_nine_patch = NodePath("Preview/NinePatchRect")
 platform_collision_shape = NodePath("Preview/CollisionShape2D")
 platform_container = NodePath("OrbitPlatforms")

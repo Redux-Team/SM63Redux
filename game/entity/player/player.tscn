@@ -303,6 +303,7 @@ stream_2/stream = ExtResource("sfxres26")
 script = ExtResource("30_effects")
 animation = &"spin_fast"
 restart_if_playing = false
+lock_flipping = true
 sfx_enter_enabled = true
 sfx_enter_sound = SubResource("sfxrand27")
 sfx_enter_stop_on_exit = true
@@ -340,6 +341,7 @@ restart_if_playing = false
 script = ExtResource("30_effects")
 animation = &"spin_fast"
 restart_if_playing = false
+lock_flipping = true
 sfx_bus = &"SFX"
 sfx_enter_enabled = true
 sfx_enter_sound = ExtResource("sfxres29")
@@ -2336,8 +2338,9 @@ effects = SubResource("Effects_SwimSpin")
 script = ExtResource("ps_swim_strike")
 effects = SubResource("Effects_SwimStrike")
 
-[node name="GroundPound" type="Node" parent="StateMachine" unique_id=1959935352]
+[node name="GroundPound" type="Node" parent="StateMachine" unique_id=1959935352 node_paths=PackedStringArray("ground_pound_hitbox")]
 script = ExtResource("ps_ground_pound")
+ground_pound_hitbox = NodePath("../../Hitboxes/GroundPound")
 effects = SubResource("Effects_GroundPound")
 
 [node name="GroundPoundStart" type="Node" parent="StateMachine/GroundPound" unique_id=1889846081]
@@ -2415,8 +2418,8 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 [node name="CanvasGroup" type="CanvasGroup" parent="." unique_id=477917490]
 material = SubResource("ShaderMaterial_fstnu")
 position = Vector2(2, -20)
-fit_margin = 1024.0
-use_mipmaps = true
+fit_margin = 48.0
+use_mipmaps = false
 
 [node name="HoverFluddParticles" type="GPUParticles2D" parent="CanvasGroup" unique_id=239998492]
 material = SubResource("ShaderMaterial_681d1")
@@ -2428,10 +2431,6 @@ lifetime = 0.5
 fixed_fps = 0
 visibility_rect = Rect2(-14, 0, 26, 211)
 process_material = SubResource("ParticleProcessMaterial_kyrvb")
-
-[node name="BackBufferCopy" type="BackBufferCopy" parent="CanvasGroup" unique_id=931585958]
-visible = false
-copy_mode = 0
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source", "subsprites")]
 position = Vector2(2, -7)
@@ -2677,7 +2676,6 @@ target_position = Vector2(0, 27)
 collision_mask = 515
 
 [node name="DebugContainer" type="VBoxContainer" parent="." unique_id=1243358989 node_paths=PackedStringArray("debug_label")]
-visible = false
 z_index = 1
 offset_left = -47.0
 offset_top = -32.0
