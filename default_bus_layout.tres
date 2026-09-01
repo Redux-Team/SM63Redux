@@ -1,5 +1,9 @@
 [gd_resource type="AudioBusLayout" format=3 uid="uid://dnbqnrs3tfb81"]
 
+[sub_resource type="AudioEffectSpectrumAnalyzer" id="AudioEffectSpectrumAnalyzer_j3pel"]
+resource_name = "SpectrumAnalyzer"
+fft_size = 1
+
 [resource]
 bus/1/name = &"Music"
 bus/1/solo = false
@@ -19,3 +23,11 @@ bus/3/mute = false
 bus/3/bypass_fx = false
 bus/3/volume_db = 0.0694828
 bus/3/send = &"Master"
+bus/4/name = &"SpectrumAnalysis"
+bus/4/solo = false
+bus/4/mute = false
+bus/4/bypass_fx = false
+bus/4/volume_db = 0.0
+bus/4/send = &"Master"
+bus/4/effect/0/effect = SubResource("AudioEffectSpectrumAnalyzer_j3pel")
+bus/4/effect/0/enabled = true
