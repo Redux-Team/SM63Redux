@@ -83,12 +83,10 @@ var buffer_dictionary: Dictionary[String, float]
 @export var dive_ground_rotation_blend_fast: float = 0.3
 @export var dive_landing_rotation_smooth_duration: float = 0.3
 @export var dive_grounded_angle_deg: float = 90.0
-@export var dive_rotation_min_deg: float = 90.0
-@export var dive_rotation_max_deg: float = 180.0
+@export var dive_rotation_min_deg: float = -60.0
+@export var dive_rotation_max_deg: float = 85.0
 @export var dive_rotation_curve: Curve
 @export var dive_y_velocity_to_rotation_offset_curve: Curve
-@export var dive_y_velocity_curve_min: float = -300.0
-@export var dive_y_velocity_curve_max: float = 300.0
 @export_subgroup("Recovery")
 @export var dive_slide_stop_duration: float = 0.133
 @export var dive_rollout_jump_velocity: float = -214.0
