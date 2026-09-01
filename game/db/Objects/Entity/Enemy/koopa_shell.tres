@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://rd08kjhcdyie"]
 
 [ext_resource type="Texture2D" uid="uid://c51x4jdo8l7c0" path="res://assets/textures/entity/enemy/koopa/koopa_shell.png" id="1_e1wty"]
-[ext_resource type="PackedScene" uid="uid://bkmr76girdmrb" path="res://game/entity/enemy/koopa_shell/koopa_shell.tscn" id="1_gomim"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_jfx5r"]
 [ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="2_b8qua"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_e1wty"]
@@ -11,7 +10,7 @@
 [sub_resource type="Resource" id="Resource_jwl7s"]
 script = ExtResource("2_b8qua")
 texture = ExtResource("1_e1wty")
-game_scene = ExtResource("1_gomim")
+game_scene_uid = "uid://bkmr76girdmrb"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e1wty"]
 atlas = ExtResource("1_e1wty")

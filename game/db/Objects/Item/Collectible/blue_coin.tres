@@ -2,14 +2,13 @@
 
 [ext_resource type="Texture2D" uid="uid://22oj4efhkg7d" path="res://assets/textures/item/collectible/blue_coin.png" id="1_5yiej"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_j4fw6"]
-[ext_resource type="PackedScene" uid="uid://bxwafrripj1kp" path="res://game/object/coin/blue_coin/blue_coin.tscn" id="1_p8txe"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_5yiej"]
 [ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="2_p8txe"]
 
 [sub_resource type="Resource" id="Resource_jyefi"]
 script = ExtResource("2_p8txe")
 texture = ExtResource("1_5yiej")
-game_scene = ExtResource("1_p8txe")
+game_scene_uid = "uid://bxwafrripj1kp"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2dhij"]
 atlas = ExtResource("1_5yiej")

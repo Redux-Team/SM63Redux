@@ -34,11 +34,11 @@ func play(music: LDMusic) -> void:
 	_mode = music.underwater_mode
 	_ensure_muffle_bus()
 	for subtrack: LDMusicSubtrack in music.subtracks:
-		var stream: AudioStream = LDMusicDB.get_stream(subtrack.track_id)
+		var stream: AudioStream = LDMusicDB.get_looped_stream(subtrack.track_id)
 		if stream == null:
 			continue
 		var player: AudioStreamPlayer = AudioStreamPlayer.new()
-		player.stream = _looped(stream, LDMusicDB.get_loop_start(subtrack.track_id))
+		player.stream = stream
 		player.bus = _muffle_bus_name() if _muffle_eligible(subtrack) else bus
 		var mix: float = 1.0 if _is_active(subtrack) else 0.0
 		player.volume_db = _mix_db(mix, subtrack.volume_db)
@@ -200,16 +200,3 @@ func _remove_muffle_bus() -> void:
 		AudioServer.remove_bus(idx)
 
 
-func _looped(stream: AudioStream, loop_start: float) -> AudioStream:
-	var copy: AudioStream = stream.duplicate() as AudioStream
-	if copy is AudioStreamOggVorbis:
-		(copy as AudioStreamOggVorbis).loop = true
-		(copy as AudioStreamOggVorbis).loop_offset = loop_start
-	elif copy is AudioStreamMP3:
-		(copy as AudioStreamMP3).loop = true
-		(copy as AudioStreamMP3).loop_offset = loop_start
-	elif copy is AudioStreamWAV:
-		var wav: AudioStreamWAV = copy as AudioStreamWAV
-		wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
-		wav.loop_begin = int(loop_start * float(wav.mix_rate))
-	return copy

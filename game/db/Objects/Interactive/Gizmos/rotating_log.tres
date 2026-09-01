@@ -1,7 +1,5 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://dyffq4cv4sjv6"]
 
-[ext_resource type="PackedScene" uid="uid://cpc5pk3l3hhhf" path="res://game/object/rotating_log/rotating_log.tscn" id="1_g8ynb"]
-[ext_resource type="PackedScene" uid="uid://ch0ms1l0n7m27" path="res://game/db/Objects/Interactive/Gizmos/rotating_log_ld.tscn" id="2_tc4k5"]
 [ext_resource type="Texture2D" uid="uid://ola1dbcoju0j" path="res://assets/textures/objects/decoration/platform/rotating_log_ld.png" id="3_irvk1"]
 [ext_resource type="Script" uid="uid://cb1ouljyhrjdx" path="res://game/object_data/telescoping_data.gd" id="3_tc4k5"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_7opct"]
@@ -15,8 +13,8 @@
 script = ExtResource("3_tc4k5")
 collision_collapsed = false
 collision_one_way = false
-ld_scene = ExtResource("2_tc4k5")
-game_scene = ExtResource("1_g8ynb")
+ld_scene_uid = "uid://ch0ms1l0n7m27"
+game_scene_uid = "uid://cpc5pk3l3hhhf"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nheia"]
 atlas = ExtResource("3_irvk1")

@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://d3vfvvtqanxml"]
 
-[ext_resource type="PackedScene" uid="uid://dmeenft0pq1ex" path="res://game/db/Objects/Polygon/Volumes/camera_deny_area_lvl.tscn" id="1_game"]
 [ext_resource type="Texture2D" uid="uid://ct38lwgs5ogov" path="res://assets/textures/level_designer/ui_icons/camera_deny.svg" id="1_ld"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_go"]
@@ -19,7 +18,7 @@ script = ExtResource("4_pd")
 line_mode = 1
 base = SubResource("PolygonBaseStyle_style")
 collision_mode = 2
-game_scene = ExtResource("1_game")
+game_scene_uid = "uid://dmeenft0pq1ex"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_entry"]
 atlas = ExtResource("1_ld")

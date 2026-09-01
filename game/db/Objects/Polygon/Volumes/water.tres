@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bvje86cos0jfb"]
 
-[ext_resource type="PackedScene" uid="uid://bbikt30pixqht" path="res://game/db/Objects/Polygon/Volumes/water_lvl.tscn" id="1_game"]
 [ext_resource type="Texture2D" uid="uid://dbr74mgobfpsu" path="res://assets/textures/volume/water/water_ld.png" id="1_ld"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_go"]
@@ -25,7 +24,7 @@ line_mode = 1
 terrain_type = "water"
 base = SubResource("PolygonBaseStyle_style")
 collision_mode = 2
-game_scene = ExtResource("1_game")
+game_scene_uid = "uid://bbikt30pixqht"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_entry"]
 atlas = ExtResource("1_ld")

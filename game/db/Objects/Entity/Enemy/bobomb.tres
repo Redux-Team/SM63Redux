@@ -2,7 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://dv78fbvcq267j" path="res://assets/textures/entity/enemy/bobomb/bobomb_ld.png" id="1_7nxe1"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_c4row"]
-[ext_resource type="PackedScene" uid="uid://bb7m3g4mv00m5" path="res://game/entity/enemy/bobomb/bobomb.tscn" id="1_mddn3"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_x7ysr"]
 [ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="2_mddn3"]
 [ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_mddn3"]
@@ -12,7 +11,7 @@
 script = ExtResource("2_mddn3")
 texture = ExtResource("1_7nxe1")
 collision_enabled = true
-game_scene = ExtResource("1_mddn3")
+game_scene_uid = "uid://bb7m3g4mv00m5"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mddn3"]
 atlas = ExtResource("1_7nxe1")

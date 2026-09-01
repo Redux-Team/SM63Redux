@@ -23,6 +23,7 @@ const TRACKS: Dictionary = {
 }
 
 static var _custom: Dictionary = {}
+static var _looped_streams: Dictionary[String, AudioStream] = {}
 static var _loop_points: LDMusicLoopPoints
 
 
@@ -86,9 +87,38 @@ static func get_loop_start(id: String) -> float:
 	return 0.0
 
 
+## Loop-configured copy of a track, built once and held. Both halves of building it, the load() and
+## the duplicate(), rescan the whole file, so deriving one per play costs milliseconds on the main
+## thread. Holding the copy also pins the source so it cannot be evicted and re-read.
+static func get_looped_stream(id: String) -> AudioStream:
+	if _looped_streams.has(id):
+		return _looped_streams.get(id)
+	
+	var base: AudioStream = get_stream(id)
+	if base == null:
+		return null
+	
+	var copy: AudioStream = base.duplicate() as AudioStream
+	var loop_start: float = get_loop_start(id)
+	if copy is AudioStreamOggVorbis:
+		(copy as AudioStreamOggVorbis).loop = true
+		(copy as AudioStreamOggVorbis).loop_offset = loop_start
+	elif copy is AudioStreamMP3:
+		(copy as AudioStreamMP3).loop = true
+		(copy as AudioStreamMP3).loop_offset = loop_start
+	elif copy is AudioStreamWAV:
+		var wav: AudioStreamWAV = copy as AudioStreamWAV
+		wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
+		wav.loop_begin = int(loop_start * float(wav.mix_rate))
+	
+	_looped_streams.set(id, copy)
+	return copy
+
+
 static func set_custom_loop_start(id: String, value: float) -> void:
 	if _custom.has(id):
 		(_custom.get(id) as Dictionary).set("loop_start", maxf(0.0, value))
+		_looped_streams.erase(id)
 
 
 static func add_custom(bytes: PackedByteArray, track_name: String, format: String) -> String:
@@ -102,6 +132,8 @@ static func add_custom(bytes: PackedByteArray, track_name: String, format: Strin
 
 
 static func clear_custom() -> void:
+	for id: String in _custom:
+		_looped_streams.erase(id)
 	_custom.clear()
 
 

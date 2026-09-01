@@ -1,7 +1,5 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bhsgnm1s34g02"]
 
-[ext_resource type="PackedScene" uid="uid://bppwwwruvw60p" path="res://game/object/breakable_glass/breakable_glass.tscn" id="1_onfi0"]
-[ext_resource type="PackedScene" uid="uid://d337ges7cje64" path="res://game/db/Objects/Interactive/Interactable/breakable_glass_ld.tscn" id="2_ocypg"]
 [ext_resource type="Texture2D" uid="uid://csab8p3wucepo" path="res://assets/textures/objects/interactive/interactable/breakable_glass_0.png" id="3_iaaom"]
 [ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="3_ocypg"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_pioss"]
@@ -13,8 +11,8 @@
 
 [sub_resource type="Resource" id="Resource_iaaom"]
 script = ExtResource("3_ocypg")
-ld_scene = ExtResource("2_ocypg")
-game_scene = ExtResource("1_onfi0")
+ld_scene_uid = "uid://d337ges7cje64"
+game_scene_uid = "uid://bppwwwruvw60p"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_em4cj"]
 atlas = ExtResource("3_iaaom")
