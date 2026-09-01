@@ -3,11 +3,14 @@ extends LevelObject
 @export var break_sfx: AudioStreamPlayer2D
 @export var textures: Array[Texture2D]
 @export var break_sfx_list: Array[AudioStream]
-@export var particle_emitter: ParticleEmitter
+@export var debris: AnimatedParticles
 @export var sprite: SmartSprite2D
 @export var collision_shape_2d: CollisionShape2D
 @export var hurt_box: HurtBox
 @export var coin: PackedScene
+
+## Kept alive after breaking so the debris and the break sound finish rather than being cut off.
+@export var cleanup_delay: float = 2.0
 
 var coin_amount: int = 5
 
@@ -22,12 +25,9 @@ func destroy() -> void:
 	break_sfx.play()
 	collision_shape_2d.set_deferred(&"disabled", true)
 	hurt_box.disable()
-	particle_emitter.emitting = true
+	debris.burst()
 	Singleton.instantiate_sibling(self, coin, coin_amount, 12, ["position"])
-
-
-func _on_particle_emitter_finished() -> void:
-	queue_free()
+	get_tree().create_timer(cleanup_delay).timeout.connect(queue_free)
 
 
 func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:

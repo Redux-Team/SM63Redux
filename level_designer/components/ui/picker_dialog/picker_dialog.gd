@@ -23,7 +23,7 @@ func setup(title: String, stamps: Array[LDStamp]) -> void:
 	setup_ids(title, ids)
 
 
-func setup_ids(title: String, ids: Array[String]) -> void:
+func setup_ids(_title: String, ids: Array[String]) -> void:
 	option_button.clear()
 	for id: String in ids:
 		option_button.add_item(id)

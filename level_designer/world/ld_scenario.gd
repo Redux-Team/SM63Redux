@@ -69,7 +69,10 @@ func set_background_override(data: Variant) -> void:
 
 
 func get_background_override() -> Variant:
-	return background_override if not background_override.is_empty() else null
+	if background_override.is_empty():
+		return null
+	
+	return background_override
 
 
 func set_music_override(layers: Variant) -> void:
@@ -82,7 +85,10 @@ func set_music_override(layers: Variant) -> void:
 
 
 func get_music_override() -> Variant:
-	return music_override if music_override_enabled else null
+	if not music_override_enabled:
+		return null
+	
+	return music_override
 
 
 func serialize() -> Dictionary:

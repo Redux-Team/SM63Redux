@@ -55,10 +55,10 @@ func _input(event: InputEvent) -> void:
 
 ## Records one undoable step and performs it. [param do] runs immediately and on every redo,
 ## [param undo] reverses it. Callers must not apply the change themselves as well.
-func push(action_name: String, do: Callable, undo: Callable) -> void:
+func push(action_name: String, do: Callable, undo_action: Callable) -> void:
 	_undo_redo.create_action(action_name)
 	_undo_redo.add_do_method(do)
-	_undo_redo.add_undo_method(undo)
+	_undo_redo.add_undo_method(undo_action)
 	_undo_redo.commit_action(true)
 	history_changed.emit()
 

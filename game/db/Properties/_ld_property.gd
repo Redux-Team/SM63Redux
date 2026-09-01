@@ -30,7 +30,7 @@ enum Apply { NONE, PROPERTY, SHADER_PARAM, METHOD }
 @export var step: float = 1.0
 @export var arrow_step: float = 1.0
 ## Values run off one end and reappear at the other instead of stopping at it.
-@export var wrap: bool = false
+@export var wrap_value: bool = false
 
 @export_group("Options")
 ## Fixed choices for an OPTION property. Leave it empty to let the object list them at runtime
@@ -93,14 +93,17 @@ func clamp_value(value: Variant) -> Variant:
 	match type:
 		Type.INT, Type.FLOAT:
 			var numeric: float = float(result)
-			if wrap and is_bounded():
+			if wrap_value and is_bounded():
 				numeric = wrapf(numeric, min_value, max_value)
 			else:
 				if is_finite(min_value):
 					numeric = maxf(numeric, min_value)
 				if is_finite(max_value):
 					numeric = minf(numeric, max_value)
-			return int(numeric) if type == Type.INT else numeric
+			if type == Type.INT:
+				return int(numeric)
+			
+			return numeric
 		Type.VECTOR2:
 			var vector: Vector2 = result
 			if is_finite(min_value):
@@ -140,7 +143,7 @@ func _validate_property(property: Dictionary) -> void:
 			hidden = not numeric and type != Type.VECTOR2
 		&"step", &"arrow_step":
 			hidden = not numeric and type != Type.VECTOR2
-		&"wrap", &"randomize_on_placement":
+		&"wrap_value", &"randomize_on_placement":
 			hidden = not numeric
 		&"options":
 			hidden = type != Type.OPTION

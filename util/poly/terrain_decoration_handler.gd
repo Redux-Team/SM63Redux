@@ -80,13 +80,33 @@ func rebuild(outer_points: PackedVector2Array, holes: Array[PackedVector2Array],
 	var placements: Dictionary[Texture2D, Array] = {}
 	var total_placed: int = 0
 	
+	var textures: Array = weightmap.keys()
+	var chances: Array = weightmap.values()
+	
 	for row: int in rows:
 		if total_placed >= max_count:
 			break
 		for col: int in cols:
 			if total_placed >= max_count:
 				break
-			rng.seed = rng_seed ^ (row * 2654435761) ^ (col * 2246822519)
+			
+			# Only a few percent of cells can ever win a placement, and the dice depend on the cell
+			# rather than the point, so rolling them first skips the point-in-polygon test for the
+			# rest. Same seeds, so the result is identical.
+			var cell_seed: int = rng_seed ^ (row * 2654435761) ^ (col * 2246822519)
+			var any_winner: bool = false
+			for index: int in textures.size():
+				if not textures.get(index):
+					continue
+				rng.seed = cell_seed ^ (index * 374761393)
+				if rng.randf() * 100.0 <= float(chances.get(index)):
+					any_winner = true
+					break
+			
+			if not any_winner:
+				continue
+			
+			rng.seed = cell_seed
 			var cell_origin: Vector2 = bounds.position + Vector2(col * cell_size, row * cell_size)
 			var point: Vector2 = cell_origin + Vector2(rng.randf() * cell_size, rng.randf() * cell_size)
 			

@@ -153,8 +153,8 @@ func open_create_stamp_dialog() -> void:
 	for stamp: LDStamp in LD.get_stamp_handler().get_all_stamps():
 		existing.append(stamp.id)
 	_open_name_dialog("Create Stamp", "Create", LD.get_stamp_handler().suggest_stamp_id(),
-		existing, "Or replace existing:", func(name: String) -> void:
-			LD.get_object_handler().create_stamp_from_selection(name)
+		existing, "Or replace existing:", func(chosen_name: String) -> void:
+			LD.get_object_handler().create_stamp_from_selection(chosen_name)
 	)
 
 

@@ -280,10 +280,12 @@ func save_session() -> void:
 		}))
 	else:
 		# If the file hasn't been saved locally yet, back it up to the emergency state
-		var autosave_file: FileAccess = FileAccess.open(AUTOSAVE_PATH, FileAccess.WRITE)
-		if autosave_file:
-			autosave_file.store_buffer(var_to_bytes(_serialize()))
-			autosave_file.close()
+		var level_data: Dictionary = _serialize()
+		if not level_data.is_empty():
+			var autosave_file: FileAccess = FileAccess.open(AUTOSAVE_PATH, FileAccess.WRITE)
+			if autosave_file:
+				autosave_file.store_buffer(var_to_bytes(level_data))
+				autosave_file.close()
 		
 		session_file.store_string(JSON.stringify({
 			"level_file_path": AUTOSAVE_PATH,
@@ -296,6 +298,9 @@ func save_session() -> void:
 func _serialize() -> Dictionary:
 	var level: LDLevel = LD.get_level()
 	var bg_handler: LDBackgroundHandler = LD.get_background_handler()
+	if not is_instance_valid(level) or not is_instance_valid(bg_handler):
+		return {}
+	
 	var areas_data: Array = []
 	
 	# Sync the active area's stored view from the live viewport before serializing.

@@ -31,7 +31,7 @@ func serialize() -> Dictionary:
 static func deserialize(data: Dictionary) -> LDMusicSubtrack:
 	var subtrack: LDMusicSubtrack = LDMusicSubtrack.new()
 	subtrack.track_id = str(data.get("track_id", ""))
-	subtrack.trigger = int(data.get("trigger", Trigger.ALWAYS))
+	subtrack.trigger = int(data.get("trigger", Trigger.ALWAYS)) as Trigger
 	subtrack.region_id = str(data.get("region_id", ""))
 	subtrack.volume_db = float(data.get("volume_db", 0.0))
 	subtrack.fade_time = float(data.get("fade_time", 1.0))

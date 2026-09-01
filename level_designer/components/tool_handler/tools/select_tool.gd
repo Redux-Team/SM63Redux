@@ -137,9 +137,7 @@ func _commit_box_select() -> void:
 	
 	if _is_shift_selecting:
 		var combined: Array[LDObject] = viewport.get_selected_objects().duplicate()
-		for obj: LDObject in found:
-			if obj not in combined:
-				combined.append(obj)
+		combined.append_array(found)
 		viewport.set_selected_objects(_expand_linked_selection(combined))
 	else:
 		viewport.set_selected_objects(_expand_linked_selection(found))
@@ -150,12 +148,15 @@ func _commit_box_select() -> void:
 func _expand_linked_selection(objects: Array[LDObject]) -> Array[LDObject]:
 	var gh: LDStampHandler = LD.get_stamp_handler()
 	var result: Array[LDObject] = []
+	var seen: Dictionary[LDObject, bool] = {}
 	for obj: LDObject in objects:
 		if gh.is_linked_readonly(obj):
 			for member: LDObject in gh.get_linked_instance_objects(obj):
-				if member not in result:
+				if not seen.has(member):
+					seen.set(member, true)
 					result.append(member)
-		elif obj not in result:
+		elif not seen.has(obj):
+			seen.set(obj, true)
 			result.append(obj)
 	return result
 

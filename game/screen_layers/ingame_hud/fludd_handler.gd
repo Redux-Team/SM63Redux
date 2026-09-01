@@ -77,7 +77,7 @@ func set_fuel_percent(percentage: float) -> void:
 	else:
 		fuel_rect.show()
 		var height: float = lerpf(MIN_HEIGHT, MAX_HEIGHT, percentage / 100.0)
-		fuel_rect.size.y = height
+		fuel_rect.set_deferred(&"size", Vector2(fuel_rect.size.x, height))
 		fuel_rect.position.y = 9.5 + (MAX_HEIGHT - height)
 	fuel_label.text = "%s%%" % roundi(percentage)
 	if percentage >= 99.5:

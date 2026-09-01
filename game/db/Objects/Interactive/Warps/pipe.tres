@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://eipogn3jdakv"]
 
-[ext_resource type="PackedScene" uid="uid://bsr474tp5tovf" path="res://game/object/pipe/pipe.tscn" id="1_dcwx1"]
 [ext_resource type="Texture2D" uid="uid://bvhnsfmnwobe3" path="res://assets/textures/objects/interactive/warps/pipe.png" id="2_s70tf"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_qxcq1"]
 [ext_resource type="Script" uid="uid://cb1ouljyhrjdx" path="res://game/object_data/telescoping_data.gd" id="3_s70tf"]
@@ -19,7 +18,7 @@ script = ExtResource("3_s70tf")
 atlas = SubResource("AtlasTexture_mp52l")
 collision_collapsed = false
 collision_one_way = false
-game_scene = ExtResource("1_dcwx1")
+game_scene_uid = "uid://bsr474tp5tovf"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i1eyc"]
 atlas = ExtResource("2_s70tf")

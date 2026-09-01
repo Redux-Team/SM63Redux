@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://enlwdtgbab6g"]
 
-[ext_resource type="PackedScene" uid="uid://clo423ijbljko" path="res://game/object/coin/yellow_coin/yellow_coin.tscn" id="1_qmjn2"]
 [ext_resource type="Texture2D" uid="uid://b0lhe04nh8wld" path="res://assets/textures/item/collectible/yellow_coin.png" id="2_kfgj4"]
 [ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="2_qmjn2"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_duoj4"]
@@ -12,7 +11,7 @@
 [sub_resource type="Resource" id="Resource_fm234"]
 script = ExtResource("2_qmjn2")
 texture = ExtResource("2_kfgj4")
-game_scene = ExtResource("1_qmjn2")
+game_scene_uid = "uid://clo423ijbljko"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ake41"]
 atlas = ExtResource("2_kfgj4")

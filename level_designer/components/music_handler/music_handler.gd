@@ -61,19 +61,7 @@ func _play_id(id: String) -> void:
 func _apply_loop(stream: AudioStream, id: String) -> AudioStream:
 	if stream == null or not _looping:
 		return stream
-	var copy: AudioStream = stream.duplicate() as AudioStream
-	var loop_start: float = LDMusicDB.get_loop_start(id)
-	if copy is AudioStreamOggVorbis:
-		(copy as AudioStreamOggVorbis).loop = true
-		(copy as AudioStreamOggVorbis).loop_offset = loop_start
-	elif copy is AudioStreamMP3:
-		(copy as AudioStreamMP3).loop = true
-		(copy as AudioStreamMP3).loop_offset = loop_start
-	elif copy is AudioStreamWAV:
-		var wav: AudioStreamWAV = copy as AudioStreamWAV
-		wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
-		wav.loop_begin = int(loop_start * float(wav.mix_rate))
-	return copy
+	return LDMusicDB.get_looped_stream(id)
 
 
 func get_current_id() -> String:

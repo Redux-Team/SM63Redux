@@ -32,6 +32,7 @@ var _purple_coins_collected: Dictionary[String, int]
 var _active_area: LevelArea
 var _player: Player
 var _loaded: bool = false
+var _culler: LevelCuller
 var _progress: LevelProgress = LevelProgress.new()
 
 @export var _level_camera: LevelCamera
@@ -156,6 +157,10 @@ func load_from_dict(data: Dictionary, scenario_index: int = 0) -> Error:
 	if not data.has("version"):
 		return ERR_INVALID_DATA
 
+	_culler = LevelCuller.new()
+	_culler.name = "Culler"
+	add_child(_culler)
+
 	var normalized: Dictionary = _normalize(data)
 	if not normalized.has("areas"):
 		return ERR_INVALID_DATA
@@ -256,6 +261,12 @@ func _start_adaptive_music(music: LDMusic) -> void:
 		music_controller = MusicController.new()
 		music_controller.name = "MusicController"
 		add_child(music_controller)
+	
+	# Build the loop-configured streams while the load screen is still up; the first play would
+	# otherwise pay for them half a second in, once the player is already controllable.
+	for subtrack: LDMusicSubtrack in music.subtracks:
+		LDMusicDB.get_looped_stream(subtrack.track_id)
+	
 	create_tween().tween_callback(func() -> void:
 		music_controller.play(music)
 		if is_instance_valid(_player):
@@ -544,11 +555,15 @@ func _instantiate_object(data: Dictionary, layer: LevelLayer, _area: LevelArea) 
 	var level_object: LevelObject = instance as LevelObject
 	if level_object:
 		level_object.init_from_data(data)
+		if level_object.cull_when_offscreen:
+			_culler.track(level_object)
 		return
 	
 	var entity: Entity = instance as Entity
 	if entity:
 		entity.init_from_data(data)
+		if entity is not Player and entity.cull_when_offscreen:
+			_culler.track(entity)
 
 
 func _clear() -> void:

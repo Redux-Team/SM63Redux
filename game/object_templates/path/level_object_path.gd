@@ -18,8 +18,8 @@ var path_points: PackedVector2Array = PackedVector2Array()
 var _stem_shapes: Array[CollisionShape2D] = []
 
 
-static func from_data(data: GameObjectData) -> LevelObjectPath:
-	var path_data: PathData = data as PathData
+static func from_data(object_data: GameObjectData) -> LevelObjectPath:
+	var path_data: PathData = object_data as PathData
 	if not path_data:
 		return null
 	

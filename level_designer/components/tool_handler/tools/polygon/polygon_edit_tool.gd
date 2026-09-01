@@ -61,12 +61,6 @@ func _on_viewport_input(event: InputEvent) -> void:
 	if Singleton.get_input_handler().is_using_touch():
 		return
 	
-	if event is InputEventMouseMotion:
-		_update_hover(viewport.get_world_mouse())
-		if _dragging_point_index >= 0:
-			_drag_point(viewport.get_snapped_mouse())
-			_sync_vertex_buttons()
-	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			if _hovered_point_index >= 0:
@@ -235,6 +229,10 @@ func _update_hover(_world_pos: Vector2) -> void:
 func _begin_drag_point(index: int) -> void:
 	_dragging_point_index = index
 	_drag_start_points = _get_all_display_points().duplicate()
+	# Rescattering decorations dominates the cost of every motion event, so they are suppressed
+	# until release. Set on the surface directly; _sync_style() would restore the saved property.
+	if _editing_object:
+		_editing_object.surface.decorations_enabled = false
 	set_cursor_shape(Control.CURSOR_DRAG)
 
 
@@ -270,6 +268,9 @@ func _drag_point(pos: Vector2) -> void:
 func _end_drag_point() -> void:
 	if not _editing_object or _dragging_point_index < 0:
 		return
+	
+	_editing_object.surface.decorations_enabled = _editing_object.get_decorations_enabled()
+	_editing_object.apply_points(_editing_object.get_outer_points())
 	
 	var new_outer: PackedVector2Array = _editing_object.get_outer_points().duplicate()
 	var new_holes: Array[PackedVector2Array] = _editing_object.get_holes().duplicate()

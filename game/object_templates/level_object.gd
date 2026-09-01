@@ -6,6 +6,9 @@ extends Node2D
 @export var body: CollisionObject2D
 @export var terrain_type: String
 @export var palette_objects: Array[CanvasItem]
+## Objects off screen are suspended by [LevelCuller]. Turn this off for anything that must keep
+## running out of view, such as a platform carrying the player or a timed hazard.
+@export var cull_when_offscreen: bool = true
 
 signal initialized
 

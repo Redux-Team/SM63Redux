@@ -33,5 +33,5 @@ func _reposition_knob(_value: float = 0.0) -> void:
 	if _knob == null:
 		return
 	var span: float = max_value - min_value
-	var ratio: float = (value - min_value) / span if span > 0.0 else 0.0
-	_knob.position = Vector2(ratio * (size.x - KNOB), (size.y - KNOB) * 0.5)
+	var fill_ratio: float = (value - min_value) / span if span > 0.0 else 0.0
+	_knob.position = Vector2(fill_ratio * (size.x - KNOB), (size.y - KNOB) * 0.5)

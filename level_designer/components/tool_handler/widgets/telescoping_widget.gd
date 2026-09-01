@@ -12,7 +12,6 @@ const POINT_GRAB_RADIUS: float = 18.0
 var _dragging_idx: int = -1
 var _hovered_idx: int = -1
 var _drag_start_units: int = 0
-var _drag_start_screen_pos: Vector2 = Vector2.ZERO
 var _drag_start_endpoint_screen: Vector2 = Vector2.ZERO
 var _drag_start_object_pos: Vector2 = Vector2.ZERO
 var _pending_object_drag: bool = false

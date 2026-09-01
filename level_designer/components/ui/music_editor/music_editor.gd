@@ -427,7 +427,7 @@ func _apply_underwater_ui() -> void:
 
 
 func _on_underwater_selected(index: int) -> void:
-	_music().underwater_mode = int(underwater_option.get_item_metadata(index))
+	_music().underwater_mode = int(underwater_option.get_item_metadata(index)) as LDMusic.UnderwaterMode
 	_mark_custom()
 	_select_active_preset()
 
@@ -697,12 +697,13 @@ func _update_play_button() -> void:
 	play_button.text = "⏸" if active else "▶"
 
 
-func _update_time(position: float, length: float) -> void:
-	time_label.text = _format_time(position) + " / " + _format_time(length)
+func _update_time(time_position: float, length: float) -> void:
+	time_label.text = _format_time(time_position) + " / " + _format_time(length)
 
 
 func _format_time(seconds: float) -> String:
 	var total: int = int(seconds)
+	@warning_ignore("integer_division")
 	var minutes: int = total / 60
 	var remainder: int = total % 60
 	return "%d:%02d" % [minutes, remainder]
@@ -747,7 +748,7 @@ func _build_layer_row(layer: LDMusicSubtrack) -> HBoxContainer:
 		trigger_option.set_item_metadata(trigger_option.item_count - 1, trigger)
 	_select_trigger(trigger_option, layer.trigger)
 	trigger_option.item_selected.connect(func(index: int) -> void:
-		layer.trigger = int(trigger_option.get_item_metadata(index))
+		layer.trigger = int(trigger_option.get_item_metadata(index)) as LDMusicSubtrack.Trigger
 		_mark_custom()
 		_refresh()
 	)

@@ -11,6 +11,6 @@ visible_in_editor = false
 min_value = 0.0
 max_value = 360.0
 arrow_step = 15.0
-wrap = true
+wrap_value = true
 apply_mode = 1
 apply_target = NodePath("rotation_degrees")

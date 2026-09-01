@@ -208,6 +208,12 @@ func _string_property(key: StringName) -> String:
 	return str(value) if value != null else ""
 
 
+## The saved setting, as opposed to [member PolygonSurface.decorations_enabled], which tools may
+## suppress temporarily while dragging.
+func get_decorations_enabled() -> bool:
+	return _bool_property(&"decorations_enabled", true)
+
+
 func _bool_property(key: StringName, fallback: bool) -> bool:
 	var value: Variant = get_property(key)
 	return bool(value) if value != null else fallback
@@ -218,6 +224,9 @@ func _int_property(key: StringName) -> int:
 	return int(value) if value != null else 0
 
 
+## The editor shape is only ever read as a point array for select/move hit-tests, so EditorShape
+## ships disabled: registering its convex pieces with the physics server costs far more per rebuild
+## than the hit-tests ever save.
 func _on_surface_rebuilt() -> void:
 	if editor_polygon and _preview_valid:
 		editor_polygon.polygon = surface.get_ring()

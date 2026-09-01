@@ -18,11 +18,23 @@ var APPLIERS: Dictionary[String, Callable] = {
 }
 
 
+## The debug file is re-read on an interval rather than every frame; it is a synchronous read
+## and JSON parse, which does not belong in the render loop.
+const POLL_INTERVAL: float = 0.5
+
+var _poll_time: float = 0.0
+
+
 func _ready() -> void:
 	_debug_fetch()
 
 
 func _process(delta: float) -> void:
+	_poll_time += delta
+	if _poll_time < POLL_INTERVAL:
+		return
+	
+	_poll_time = 0.0
 	if is_inside_tree():
 		_debug_fetch()
 
