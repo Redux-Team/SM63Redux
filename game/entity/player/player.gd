@@ -477,6 +477,15 @@ func get_terrain() -> StringName:
 	return StringName(collider.get_meta(&"terrain", ""))
 
 
+func get_debug_text() -> String:
+	var debug_text: String = ""
+	debug_text += "State: %s\n" % machine.get_state()
+	debug_text += "Animation: %s\n" % sprite.current_animation
+	debug_text += "Velocity: %s\n" % velocity
+	
+	return debug_text
+
+
 func get_spin_speed_scale(elapsed: float) -> float:
 	if not spin_speed_scale_curve:
 		return 1.0

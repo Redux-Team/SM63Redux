@@ -12,7 +12,6 @@
 [ext_resource type="Texture2D" uid="uid://bh1yfcvnqwa4k" path="res://assets/textures/entity/player/mario/walk.png" id="3_dhej3"]
 [ext_resource type="Script" uid="uid://bu5gt1lwfutvu" path="res://game/entity/player/shared/handlers/input_handler.gd" id="3_je5mu"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="3_qhcb0"]
-[ext_resource type="Script" uid="uid://cr0v7cui52ho8" path="res://game/entity/player/player_debug.gd" id="4_kn1iv"]
 [ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="4_o0v17"]
 [ext_resource type="Texture2D" uid="uid://uypneyqh43dv" path="res://assets/textures/entity/player/mario/triple_jump.png" id="5_0rdsw"]
 [ext_resource type="Script" uid="uid://bc37gx5nk2itj" path="res://game/entity/player/shared/states/floorslide.gd" id="6_y6elw"]
@@ -81,6 +80,7 @@
 [ext_resource type="Texture2D" uid="uid://b6ggmnpu414cl" path="res://assets/textures/entity/player/shared/hover_plume.png" id="114_k6hol"]
 [ext_resource type="Texture2D" uid="uid://dmlcedkbvu5y7" path="res://assets/textures/entity/player/shared/rocket_plume.png" id="115_kdve7"]
 [ext_resource type="Texture2D" uid="uid://dn5qbmjbs18gu" path="res://assets/textures/entity/player/shared/turbo_plume.png" id="116_f27fj"]
+[ext_resource type="Script" uid="uid://dh843etuxv6e4" path="res://game/entity_components/entity_debug_component.gd" id="ed_debug"]
 [ext_resource type="Script" uid="uid://4hwxabxucpuh" path="res://game/entity/state/state.gd" id="es_base"]
 [ext_resource type="Texture2D" uid="uid://b8krqecnutylk" path="res://assets/textures/entity/player/shared/rocket_fludd_crouch.png" id="nz_rocket_crouch"]
 [ext_resource type="Texture2D" uid="uid://d6mt2r2x57aw" path="res://assets/textures/entity/player/shared/rocket_fludd_crouch_up.png" id="nz_rocket_crouch_up"]
@@ -568,7 +568,7 @@ anim_offset_max = 1.0
 atlas = ExtResource("65_ejgj1")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_kdve7"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_lou6s"]
 diffuse_texture = SubResource("AtlasTexture_26jgh")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hmgs0"]
@@ -1215,7 +1215,7 @@ animations = [{
 atlas = ExtResource("100_sbpf8")
 region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_f27fj"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ckiah"]
 diffuse_texture = SubResource("AtlasTexture_opceb")
 
 [sub_resource type="Resource" id="Resource_v2l3k"]
@@ -1827,7 +1827,7 @@ animations = [{
 atlas = ExtResource("114_k6hol")
 region = Rect2(0, 0, 16, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_lou6s"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ont6s"]
 diffuse_texture = SubResource("AtlasTexture_fbvjr")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_is4m5"]
@@ -1969,21 +1969,6 @@ properties/4/replication_mode = 1
 properties/5/path = NodePath(".:rotation")
 properties/5/spawn = true
 properties/5/replication_mode = 1
-
-[sub_resource type="GDScript" id="GDScript_aln35"]
-script/source = "extends Label
-
-@export var player: Player
-
-
-func _ready() -> void:
-	hide()
-
-
-func _process(_delta: float) -> void:
-	show()
-	text = str(player.state_machine.get_current_state())
-"
 
 [sub_resource type="Curve" id="Curve_k0v5e"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.07763975, 1), 0.30232516, 0.30232516, 0, 0, Vector2(1, 0.48322988), 0.0, 0.0, 0, 0]
@@ -2415,11 +2400,15 @@ max_hp = 8.0
 entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
+[node name="EntityDebugComponent" type="Node" parent="Components" unique_id=1079797540 node_paths=PackedStringArray("label", "entity")]
+script = ExtResource("ed_debug")
+label = NodePath("../../DebugContainer/DebugLabel")
+entity = NodePath("../..")
+
 [node name="CanvasGroup" type="CanvasGroup" parent="." unique_id=477917490]
 material = SubResource("ShaderMaterial_fstnu")
 position = Vector2(2, -20)
 fit_margin = 48.0
-use_mipmaps = false
 
 [node name="HoverFluddParticles" type="GPUParticles2D" parent="CanvasGroup" unique_id=239998492]
 material = SubResource("ShaderMaterial_681d1")
@@ -2434,11 +2423,11 @@ process_material = SubResource("ParticleProcessMaterial_kyrvb")
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source", "subsprites")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_kdve7")
+texture = SubResource("CanvasTexture_lou6s")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_kdve7")
+canvas_texture = SubResource("CanvasTexture_lou6s")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 subsprites = [NodePath("Fludd")]
@@ -2452,11 +2441,11 @@ playing = false
 [node name="Fludd" type="Sprite2D" parent="Doll" unique_id=99316911 node_paths=PackedStringArray("subsprites")]
 show_behind_parent = true
 position = Vector2(-6, 0)
-texture = SubResource("CanvasTexture_f27fj")
+texture = SubResource("CanvasTexture_ckiah")
 region_enabled = true
 region_rect = Rect2(64, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_f27fj")
+canvas_texture = SubResource("CanvasTexture_ckiah")
 subsprites = [NodePath("Plume")]
 follow_root = true
 follow_default = &"hover:default"
@@ -2495,11 +2484,11 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 visible = false
 show_behind_parent = true
 position = Vector2(-6, 13)
-texture = SubResource("CanvasTexture_lou6s")
+texture = SubResource("CanvasTexture_ont6s")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 32)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_lou6s")
+canvas_texture = SubResource("CanvasTexture_ont6s")
 follow_origin = Vector2(-3, -1.9999998)
 animated = true
 diffuse_frames = SubResource("SpriteFrames_m2rg5")
@@ -2675,7 +2664,7 @@ position = Vector2(2, 0)
 target_position = Vector2(0, 27)
 collision_mask = 515
 
-[node name="DebugContainer" type="VBoxContainer" parent="." unique_id=1243358989 node_paths=PackedStringArray("debug_label")]
+[node name="DebugContainer" type="VBoxContainer" parent="." unique_id=1243358989]
 z_index = 1
 offset_left = -47.0
 offset_top = -32.0
@@ -2683,13 +2672,13 @@ offset_right = 52.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
-script = ExtResource("4_kn1iv")
-debug_label = NodePath("DebugLabel")
 
 [node name="DebugLabel" type="Label" parent="DebugContainer" unique_id=1388430990]
-visible = false
 layout_mode = 2
 theme_type_variation = &"DebugLabel"
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 10
 text = "Current State: Idle"
 horizontal_alignment = 1
 
@@ -2712,22 +2701,6 @@ theme_override_constants/outline_size = 4
 text = "MP %s"
 horizontal_alignment = 1
 vertical_alignment = 2
-
-[node name="StateLabel" type="Label" parent="." unique_id=287046668 node_paths=PackedStringArray("player")]
-process_mode = 4
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -20.0
-offset_top = -40.0
-offset_right = 27.0
-offset_bottom = -25.0
-grow_horizontal = 2
-theme_override_constants/outline_size = 4
-text = "<state>"
-horizontal_alignment = 1
-script = SubResource("GDScript_aln35")
-player = NodePath("..")
 
 [node name="HealParticles" type="CPUParticles2D" parent="." unique_id=1970630858]
 position = Vector2(2, 15)
