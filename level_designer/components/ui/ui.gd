@@ -12,6 +12,8 @@ const DESKTOP_SCALE: float = 0.8
 const TOUCH_SCALE: float = 1.0
 
 @export var _chrome: Control
+@export var _top_bar_left: Control
+@export var _top_bar_right: Control
 @export_group("Handlers")
 @export var _window_handler: LDUIWindowHandler
 @export var _viewport_handler: LDUIViewportHandler
@@ -57,6 +59,15 @@ func _rescale_chrome() -> void:
 	_chrome.scale = Vector2(ui_scale, ui_scale)
 	_chrome.offset_right = view.x * (1.0 / ui_scale - 1.0)
 	_chrome.offset_bottom = view.y * (1.0 / ui_scale - 1.0)
+
+
+## The two chrome bars the song announcement has to fit between.
+func get_top_bar_left() -> Control:
+	return _top_bar_left
+
+
+func get_top_bar_right() -> Control:
+	return _top_bar_right
 
 
 func get_window_handler() -> LDUIWindowHandler:

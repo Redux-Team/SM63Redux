@@ -335,9 +335,11 @@ physical_keycode = 4194309
 [sub_resource type="Shortcut" id="Shortcut_nm1lm"]
 events = [SubResource("InputEventKey_8wigk")]
 
-[node name="UI" type="Node" unique_id=2080364698 node_paths=PackedStringArray("_chrome", "_window_handler", "_viewport_handler", "_toolbar_handler", "_file_handler", "_hotbar_handler", "_chrome_handler")]
+[node name="UI" type="Node" unique_id=2080364698 node_paths=PackedStringArray("_chrome", "_top_bar_left", "_top_bar_right", "_window_handler", "_viewport_handler", "_toolbar_handler", "_file_handler", "_hotbar_handler", "_chrome_handler")]
 script = ExtResource("1_8w51u")
 _chrome = NodePath("ViewportUI/Chrome")
+_top_bar_left = NodePath("ViewportUI/Chrome/TopBarL")
+_top_bar_right = NodePath("ViewportUI/Chrome/TopBarR")
 _window_handler = NodePath("WindowHandler")
 _viewport_handler = NodePath("ViewportHandler")
 _toolbar_handler = NodePath("ToolbarHandler")
