@@ -462,6 +462,13 @@ func reset_jump_timer() -> void:
 	jump_buffer_timer = 0
 
 
+func request_pound_cancel() -> void:
+	if is_input_ground_pound or not machine.is_active(&"GroundPound"):
+		return
+	
+	machine.change_state(&"Fall")
+
+
 func get_terrain() -> StringName:
 	if not floor_slope_raycast.is_colliding():
 		return &""

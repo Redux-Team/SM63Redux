@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://2vcfa37p1h7t" path="res://assets/textures/objects/interactive/interactable/breakable_box_particles.png" id="5_3wji2"]
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="5_key8f"]
 [ext_resource type="Script" uid="uid://df82mcnubnp0h" path="res://core/custom_nodes/2d/animated_particles.gd" id="7_debris"]
+[ext_resource type="Script" path="res://game/entity_components/pound_cancel_component.gd" id="8_sustain"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_8nl6k"]
 diffuse_texture = ExtResource("2_qhjox")
@@ -122,6 +123,10 @@ metadata/_custom_type_script = "uid://3ara7t8dqmih"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=113921858]
 shape = SubResource("RectangleShape2D_4xhut")
 debug_color = Color(0.68833333, 0.7, 0, 0.41960785)
+
+[node name="PoundCancel" type="Node" parent="." unique_id=664497309 node_paths=PackedStringArray("hurt_box")]
+script = ExtResource("8_sustain")
+hurt_box = NodePath("../HurtBox")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=664497308]
 collision_layer = 514

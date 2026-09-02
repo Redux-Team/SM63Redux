@@ -30,9 +30,5 @@ func destroy() -> void:
 	get_tree().create_timer(cleanup_delay).timeout.connect(queue_free)
 
 
-func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:
-	if source_hitbox.owner is Player:
-		var player: Player = source_hitbox.owner as Player
-		if player.machine.get_state_name().begins_with("GroundPound"):
-			player.velocity.y /= 2
+func _on_hurt_box_damaged(_source_hitbox: HitBox) -> void:
 	destroy()
