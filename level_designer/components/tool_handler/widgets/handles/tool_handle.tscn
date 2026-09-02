@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://level_designer/components/tool_handler/widgets/handles/tool_handle.gd" id="1_handle"]
+
+[node name="ToolHandle" type="Control" unique_id=1400100001 node_paths=PackedStringArray("_texture")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 12.0
+offset_bottom = 12.0
+mouse_filter = 2
+script = ExtResource("1_handle")
+_texture = NodePath("Texture")
+
+[node name="Texture" type="TextureRect" parent="." unique_id=1400100002]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5

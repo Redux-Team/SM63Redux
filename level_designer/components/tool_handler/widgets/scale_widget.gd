@@ -3,9 +3,7 @@ extends LDToolWidget
 
 
 const SCALE_FROM_CENTER: bool = false
-const HANDLE_GRAB_RADIUS: float = 12.0
 const BASE_RECT_SIZE: Vector2 = Vector2(80.0, 80.0)
-const DOUBLE_CLICK_THRESHOLD: float = 0.3
 
 
 enum HandleIndex {
@@ -21,14 +19,7 @@ enum HandleIndex {
 
 
 @export var scale_panel: Panel
-@export var top_left_button: Button
-@export var top_button: Button
-@export var top_right_button: Button
-@export var left_button: Button
-@export var right_button: Button
-@export var bottom_left_button: Button
-@export var bottom_button: Button
-@export var bottom_right_button: Button
+@export var grips: LDToolHandleSet
 
 @export var scale_x_label: Label
 @export var scale_x_label_2: Label
@@ -44,7 +35,6 @@ var _drag_start_scales: Array[Vector2] = []
 var _drag_start_positions: Array[Vector2] = []
 var _drag_anchor_positions: Array[Vector2] = []
 var _drag_start_half_size: Vector2 = Vector2.ZERO
-var _last_click_time: float = 0.0
 var _hovered_handle: int = -1
 var _baseline_scales: Array[Vector2] = []
 var _pending_object_drag: bool = false
@@ -60,6 +50,10 @@ func _on_activate() -> void:
 func _on_deactivate() -> void:
 	hide()
 	_detach_from_overlay()
+	_is_dragging = false
+	_did_drag = false
+	_pending_object_drag = false
+	_hovered_handle = -1
 	_drag_start_scales.clear()
 	_drag_start_positions.clear()
 	_drag_anchor_positions.clear()
@@ -79,6 +73,7 @@ func _capture_baseline() -> void:
 
 
 func _on_input(event: InputEvent) -> void:
+	_sync_panel()
 	var center: Vector2 = _get_center_screen()
 	var half: Vector2 = _get_half_size_screen()
 	
@@ -115,9 +110,9 @@ func _on_input(event: InputEvent) -> void:
 			_sync_panel()
 		else:
 			var prev: int = _hovered_handle
-			_hovered_handle = _get_handle_at(mouse_pos, center, half)
+			_hovered_handle = grips.find_at(mouse_pos)
 			if _hovered_handle != prev:
-				_update_button_states()
+				_update_handle_states()
 			_update_cursor(center, half)
 	
 	if event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
@@ -125,13 +120,13 @@ func _on_input(event: InputEvent) -> void:
 		if mb.pressed:
 			if get_ld_viewport().is_panning():
 				return
-			var hit: int = _get_handle_at(get_screen_mouse_pos(), center, half)
+			var hit: int = grips.find_at(get_screen_mouse_pos())
 			if hit >= 0:
 				_is_dragging = true
 				_did_drag = false
 				_active_handle = hit as HandleIndex
 				_drag_start_mouse = get_screen_mouse_pos()
-				_drag_start_half_size = _get_half_size_screen()
+				_drag_start_half_size = half
 				_drag_start_scales.clear()
 				_drag_start_positions.clear()
 				_drag_anchor_positions.clear()
@@ -145,7 +140,7 @@ func _on_input(event: InputEvent) -> void:
 					_drag_start_positions.append(start_pos)
 					_drag_anchor_positions.append(start_pos - dir * _get_object_base_half_size(obj) * start_scale)
 				_hovered_handle = -1
-				_update_button_states()
+				_update_handle_states()
 			elif _is_mouse_inside_rect(center, half):
 				_pending_object_drag = true
 			else:
@@ -154,14 +149,11 @@ func _on_input(event: InputEvent) -> void:
 			if _is_dragging:
 				if _did_drag:
 					_commit_scale()
-				else:
-					var now: float = Time.get_ticks_msec() / 1000.0
-					if now - _last_click_time <= DOUBLE_CLICK_THRESHOLD:
-						_reset_scale()
-					_last_click_time = now
+				elif is_double_click(_active_handle as int):
+					_reset_scale()
 				_is_dragging = false
 				_did_drag = false
-				_update_button_states()
+				_update_handle_states()
 			_pending_object_drag = false
 
 
@@ -212,37 +204,20 @@ func _sync_panel() -> void:
 	scale_panel.size = half * 2.0
 	scale_panel.global_position = center - half
 	
-	_reposition_buttons(half)
+	_place_grips(center, half)
 	_update_label()
 
 
-func _reposition_buttons(half: Vector2) -> void:
-	var s: Vector2 = half * 2.0
-	_place_button(top_left_button, Vector2(0.0, 0.0))
-	_place_button(top_button, Vector2(half.x, 0.0))
-	_place_button(top_right_button, Vector2(s.x, 0.0))
-	_place_button(left_button, Vector2(0.0, half.y))
-	_place_button(right_button, Vector2(s.x, half.y))
-	_place_button(bottom_left_button, Vector2(0.0, s.y))
-	_place_button(bottom_button, Vector2(half.x, s.y))
-	_place_button(bottom_right_button, Vector2(s.x, s.y))
+func _place_grips(center: Vector2, half: Vector2) -> void:
+	grips.resize_to(8)
+	var zoom: float = get_camera_zoom()
+	for i: int in 8:
+		grips.place(i, _get_handle_pos(i as HandleIndex, center, half), zoom)
+	_update_handle_states()
 
 
-func _place_button(btn: Button, anchor: Vector2) -> void:
-	btn.position = anchor - btn.size * 0.5
-
-
-func _update_button_states() -> void:
-	var buttons: Array[Button] = _get_buttons()
-	for i: int in buttons.size():
-		var btn: Button = buttons.get(i)
-		btn.button_pressed = _is_dragging and i == _active_handle as int
-		btn.set(&"theme_override_styles/normal", null)
-		if not _is_dragging:
-			btn.set_pressed_no_signal(false)
-			btn.mouse_exited.emit()
-			if i == _hovered_handle:
-				btn.mouse_entered.emit()
+func _update_handle_states() -> void:
+	grips.set_active(_hovered_handle, int(_active_handle) if _is_dragging else -1)
 
 
 func _update_label() -> void:
@@ -266,13 +241,6 @@ func _update_label() -> void:
 	
 	scale_x_label_2.text = scale_x_label.text
 	scale_y_label_2.text = scale_y_label.text
-
-
-func _get_handle_at(mouse_pos: Vector2, center: Vector2, half: Vector2) -> int:
-	for i: int in 8:
-		if mouse_pos.distance_to(_get_handle_pos(i as HandleIndex, center, half)) <= HANDLE_GRAB_RADIUS:
-			return i
-	return -1
 
 
 func _get_handle_pos(handle: HandleIndex, center: Vector2, half: Vector2) -> Vector2:
@@ -320,13 +288,14 @@ func _get_handle_direction(handle: HandleIndex) -> Vector2:
 func _get_half_size_screen() -> Vector2:
 	if _bound_objects.is_empty():
 		return Vector2.ZERO
-	var center_world: Vector2 = _get_center_world()
-	var corner_world: Vector2 = center_world + (BASE_RECT_SIZE * 0.5)
+	var obj: LDObject = null
+	var offset: Vector2 = BASE_RECT_SIZE * 0.5
 	if _bound_objects.size() == 1:
-		var obj: LDObject = _bound_objects.get(0)
-		corner_world = center_world + _get_object_base_half_size(obj) * _get_average_scale()
+		obj = _bound_objects.get(0)
+		offset = _get_object_base_half_size(obj) * _get_average_scale()
 	
-	return world_to_screen(corner_world) - world_to_screen(center_world)
+	var center_world: Vector2 = _get_center_world()
+	return world_to_screen(center_world + offset, obj) - world_to_screen(center_world, obj)
 
 
 func _get_average_scale() -> Vector2:
@@ -339,25 +308,23 @@ func _get_average_scale() -> Vector2:
 	return sum / float(_bound_objects.size())
 
 
+## Centre of the bound objects in the space the editor works in. Each object's position is lifted
+## out of its own layer first, so a selection spanning layers of different distances still averages
+## points that mean the same thing.
 func _get_center_world() -> Vector2:
 	if _bound_objects.is_empty():
 		return Vector2.ZERO
+	var ld_viewport: LDViewport = get_ld_viewport()
 	var sum: Vector2 = Vector2.ZERO
 	for obj: LDObject in _bound_objects:
-		sum += obj.global_position + obj.get_origin_offset()
+		sum += ld_viewport.layer_to_world(obj) * (obj.position + obj.get_origin_offset())
 	return sum / float(_bound_objects.size())
 
 
 func _get_center_screen() -> Vector2:
+	if _bound_objects.is_empty():
+		return Vector2.ZERO
 	return world_to_screen(_get_center_world())
-
-
-func _get_buttons() -> Array[Button]:
-	return [
-		top_left_button, top_button, top_right_button,
-		left_button, right_button,
-		bottom_left_button, bottom_button, bottom_right_button,
-	]
 
 
 func _get_object_base_half_size(obj: LDObject) -> Vector2:
@@ -371,21 +338,22 @@ func _get_object_base_half_size(obj: LDObject) -> Vector2:
 
 
 func _reset_scale() -> void:
+	var targets: Array[LDObject] = _bound_objects.duplicate()
 	var old_scales: Array[Vector2] = _drag_start_scales.duplicate()
 	var old_positions: Array[Vector2] = _drag_start_positions.duplicate()
-	var is_single: bool = _bound_objects.size() == 1
+	var is_single: bool = targets.size() == 1
 	
 	get_history().push("Reset Scale",
 		func() -> void:
-			for i: int in _bound_objects.size():
-				var obj: LDObject = _bound_objects.get(i)
+			for i: int in targets.size():
+				var obj: LDObject = targets.get(i)
 				if is_instance_valid(obj):
 					obj.set_property(&"scale", Vector2.ONE if is_single else old_scales.get(i))
 					if not SCALE_FROM_CENTER:
 						obj.set_property(&"position", old_positions.get(i)),
 		func() -> void:
-			for i: int in _bound_objects.size():
-				var obj: LDObject = _bound_objects.get(i)
+			for i: int in targets.size():
+				var obj: LDObject = targets.get(i)
 				if is_instance_valid(obj):
 					obj.set_property(&"scale", old_scales.get(i))
 					if not SCALE_FROM_CENTER:
@@ -396,11 +364,12 @@ func _reset_scale() -> void:
 
 
 func _commit_scale() -> void:
+	var targets: Array[LDObject] = _bound_objects.duplicate()
 	var old_scales: Array[Vector2] = _drag_start_scales.duplicate()
 	var old_positions: Array[Vector2] = _drag_start_positions.duplicate()
 	var new_scales: Array[Vector2] = []
 	var new_positions: Array[Vector2] = []
-	for obj: LDObject in _bound_objects:
+	for obj: LDObject in targets:
 		var val: Variant = obj.get_property(&"scale")
 		new_scales.append(val if val != null else Vector2.ONE)
 		var pos: Variant = obj.get_property(&"position")
@@ -408,15 +377,15 @@ func _commit_scale() -> void:
 	
 	get_history().push("Scale Objects",
 		func() -> void:
-			for i: int in _bound_objects.size():
-				var obj: LDObject = _bound_objects.get(i)
+			for i: int in targets.size():
+				var obj: LDObject = targets.get(i)
 				if is_instance_valid(obj):
 					obj.set_property(&"scale", new_scales.get(i))
 					if not SCALE_FROM_CENTER:
 						obj.set_property(&"position", new_positions.get(i)),
 		func() -> void:
-			for i: int in _bound_objects.size():
-				var obj: LDObject = _bound_objects.get(i)
+			for i: int in targets.size():
+				var obj: LDObject = targets.get(i)
 				if is_instance_valid(obj):
 					obj.set_property(&"scale", old_scales.get(i))
 					if not SCALE_FROM_CENTER:

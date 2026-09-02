@@ -1,8 +1,23 @@
 [gd_scene format=3 uid="uid://gtms80khkvap"]
 
 [ext_resource type="Script" uid="uid://ckq48oybpdnyg" path="res://level_designer/components/tool_handler/widgets/rotation_widget.gd" id="1_s4mi5"]
+[ext_resource type="Script" path="res://level_designer/components/tool_handler/widgets/handles/tool_handle_set.gd" id="2_set"]
+[ext_resource type="PackedScene" path="res://level_designer/components/tool_handler/widgets/handles/tool_handle.tscn" id="3_handle"]
+[ext_resource type="Resource" path="res://assets/textures/level_designer/tool_widgets/rotation_knob.tres" id="4_knob"]
 
-[node name="RotationWidget" type="Control" unique_id=574581918]
+[node name="RotationWidget" type="Control" unique_id=574581918 node_paths=PackedStringArray("knobs")]
 layout_mode = 3
 anchors_preset = 0
+mouse_filter = 2
 script = ExtResource("1_s4mi5")
+render_space = 0
+knobs = NodePath("Knobs")
+
+[node name="Knobs" type="Control" parent="." unique_id=1719003403]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("2_set")
+handle_scene = ExtResource("3_handle")
+style = ExtResource("4_knob")
+render_space = 0
