@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="LDToolWidgetStyle" format=3]
+
+[ext_resource type="Script" path="res://level_designer/components/tool_handler/widgets/tool_widget_style.gd" id="1_style"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/tool_widgets/polygon_vertex_preview.svg" id="2_normal"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/tool_widgets/polygon_vertex_preview_hover.svg" id="3_hover"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/tool_widgets/polygon_vertex_preview_pressed.svg" id="4_pressed"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/tool_widgets/polygon_vertex_preview_hover_pressed.svg" id="5_hover_pressed"]
+
+[resource]
+script = ExtResource("1_style")
+normal = ExtResource("2_normal")
+hover = ExtResource("3_hover")
+pressed = ExtResource("4_pressed")
+hover_pressed = ExtResource("5_hover_pressed")
+size = Vector2(12, 12)
+grab_radius = 18.0
+min_screen_size = Vector2(6, 6)
+max_screen_size = Vector2(48, 48)
+tint = Color(1, 1, 1, 1)
+tint_disabled = Color(0.5, 0.5, 0.55, 0.6)

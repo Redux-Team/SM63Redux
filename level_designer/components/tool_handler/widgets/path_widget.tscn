@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://level_designer/components/tool_handler/widgets/path_widget.gd" id="1_widget"]
+[ext_resource type="Script" path="res://level_designer/components/tool_handler/widgets/handles/tool_handle_set.gd" id="2_set"]
+[ext_resource type="PackedScene" path="res://level_designer/components/tool_handler/widgets/handles/tool_handle.tscn" id="3_handle"]
+[ext_resource type="Resource" path="res://assets/textures/level_designer/tool_widgets/path_node.tres" id="4_node"]
+[ext_resource type="Resource" path="res://assets/textures/level_designer/tool_widgets/path_head.tres" id="5_head"]
+[ext_resource type="Resource" path="res://assets/textures/level_designer/tool_widgets/path_node_preview.tres" id="6_preview"]
+
+[node name="PathWidget" type="Control" unique_id=1471200001 node_paths=PackedStringArray("nodes", "edge_preview")]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_widget")
+nodes = NodePath("Nodes")
+edge_preview = NodePath("EdgePreview")
+head_style = ExtResource("5_head")
+
+[node name="Nodes" type="Control" parent="." unique_id=1471200002]
+layout_mode = 1
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("2_set")
+handle_scene = ExtResource("3_handle")
+style = ExtResource("4_node")
+
+[node name="EdgePreview" type="Control" parent="." unique_id=1471200003]
+layout_mode = 1
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("2_set")
+handle_scene = ExtResource("3_handle")
+style = ExtResource("6_preview")

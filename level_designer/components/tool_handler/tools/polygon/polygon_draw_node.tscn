@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://41gjbbjrav5i" path="res://level_designer/components/tool_handler/tools/polygon/polygon_draw_node.gd" id="1_pdraw"]
+
+[node name="PolygonBooleanDrawNode" type="Node2D" unique_id=1400300001]
+script = ExtResource("1_pdraw")

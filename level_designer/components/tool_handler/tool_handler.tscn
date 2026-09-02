@@ -23,6 +23,10 @@
 [ext_resource type="Script" uid="uid://cwyob4iwf4fwj" path="res://level_designer/components/tool_handler/tools/place_tool.gd" id="21_place"]
 [ext_resource type="Script" uid="uid://yfx4j13brlh1" path="res://level_designer/components/tool_handler/tools/tile/tile_tool.gd" id="22_tile"]
 [ext_resource type="Script" uid="uid://dgrkj8njjurt6" path="res://level_designer/components/tool_handler/tools/polygon/topline_tool.gd" id="30_topline"]
+[ext_resource type="PackedScene" path="res://level_designer/components/tool_handler/widgets/polygon_widget.tscn" id="40_polywg"]
+[ext_resource type="PackedScene" path="res://level_designer/components/tool_handler/widgets/topline_widget.tscn" id="41_toplwg"]
+[ext_resource type="PackedScene" path="res://level_designer/components/tool_handler/widgets/path_widget.tscn" id="42_pathwg"]
+[ext_resource type="PackedScene" path="res://level_designer/components/tool_handler/widgets/block_widget.tscn" id="43_blokwg"]
 
 [node name="ToolHandler" type="Node" unique_id=1124731823]
 script = ExtResource("1_0flew")
@@ -57,8 +61,12 @@ visible = false
 [node name="PolygonTool" type="Node" parent="." unique_id=518739612]
 script = ExtResource("7_pkfdl")
 
-[node name="PolygonEditTool" type="Node" parent="PolygonTool" unique_id=1275946004]
+[node name="PolygonEditTool" type="Node" parent="PolygonTool" unique_id=1275946004 node_paths=PackedStringArray("_widget")]
 script = ExtResource("8_c517l")
+_widget = NodePath("PolygonWidget")
+
+[node name="PolygonWidget" parent="PolygonTool/PolygonEditTool" unique_id=1512399001 instance=ExtResource("40_polywg")]
+visible = false
 
 [node name="PolygonAddTool" type="Node" parent="PolygonTool" unique_id=489637869]
 script = ExtResource("10_u22y6")
@@ -66,8 +74,12 @@ script = ExtResource("10_u22y6")
 [node name="PolygonCutTool" type="Node" parent="PolygonTool" unique_id=1318500431]
 script = ExtResource("11_4dp4y")
 
-[node name="ToplineTool" type="Node" parent="PolygonTool" unique_id=595002501]
+[node name="ToplineTool" type="Node" parent="PolygonTool" unique_id=595002501 node_paths=PackedStringArray("_widget")]
 script = ExtResource("30_topline")
+_widget = NodePath("ToplineWidget")
+
+[node name="ToplineWidget" parent="PolygonTool/ToplineTool" unique_id=1400499001 instance=ExtResource("41_toplwg")]
+visible = false
 
 [node name="TileTool" type="Node" parent="PolygonTool" unique_id=860295706]
 script = ExtResource("22_tile")
@@ -75,14 +87,22 @@ script = ExtResource("22_tile")
 [node name="PathTool" type="Node" parent="." unique_id=2075599837]
 script = ExtResource("12_4dp4y")
 
-[node name="PathEditTool" type="Node" parent="PathTool" unique_id=1803315856]
+[node name="PathEditTool" type="Node" parent="PathTool" unique_id=1803315856 node_paths=PackedStringArray("_widget")]
 script = ExtResource("13_lxvty")
+_widget = NodePath("PathWidget")
+
+[node name="PathWidget" parent="PathTool/PathEditTool" unique_id=1471299001 instance=ExtResource("42_pathwg")]
+visible = false
 
 [node name="BlockTool" type="Node" parent="." unique_id=87140422]
 script = ExtResource("14_vdxla")
 
-[node name="BlockEdit" type="Node" parent="BlockTool" unique_id=2110672232]
+[node name="BlockEdit" type="Node" parent="BlockTool" unique_id=2110672232 node_paths=PackedStringArray("_widget")]
 script = ExtResource("15_ila05")
+_widget = NodePath("BlockWidget")
+
+[node name="BlockWidget" parent="BlockTool/BlockEdit" unique_id=1400299001 instance=ExtResource("43_blokwg")]
+visible = false
 
 [node name="TelescopingTool" type="Node" parent="." unique_id=1533412199]
 script = ExtResource("5_1k6i0")

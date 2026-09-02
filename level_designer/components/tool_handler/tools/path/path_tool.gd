@@ -38,7 +38,7 @@ func _on_disable() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if not is_active():
+	if not is_active() or LD.has_input_capture():
 		return
 	if not event is InputEventKey or not event.is_pressed() or event.echo:
 		return
@@ -47,7 +47,7 @@ func _input(event: InputEvent) -> void:
 		KEY_ENTER:
 			if _head_placed and _points.size() >= 1:
 				var commit_points: PackedVector2Array = _points.duplicate()
-				if _cursor_pos != Vector2.ZERO and (commit_points.is_empty() or commit_points[commit_points.size() - 1] != _cursor_pos):
+				if _cursor_pos != Vector2.ZERO and (commit_points.is_empty() or commit_points.get(commit_points.size() - 1) != _cursor_pos):
 					if _check_min_distance_all(_cursor_pos, commit_points):
 						commit_points.append(_cursor_pos)
 				if commit_points.size() >= 1:
@@ -162,7 +162,7 @@ func _update_preview() -> void:
 	
 	var preview_points: PackedVector2Array = _points.duplicate()
 	if _head_placed and _cursor_pos != Vector2.ZERO:
-		if preview_points.is_empty() or preview_points[preview_points.size() - 1] != _cursor_pos:
+		if preview_points.is_empty() or preview_points.get(preview_points.size() - 1) != _cursor_pos:
 			preview_points.append(_cursor_pos)
 	
 	_is_valid = preview_points.size() >= 2
@@ -176,7 +176,7 @@ func _commit_path() -> void:
 	
 	var local_points: PackedVector2Array = PackedVector2Array()
 	for p: Vector2 in _points:
-		local_points.append(_active_object.to_local(p))
+		local_points.append(world_to_object(_active_object, p))
 	
 	_active_object.apply_points(local_points)
 	_active_object.set_preview_valid(true)
