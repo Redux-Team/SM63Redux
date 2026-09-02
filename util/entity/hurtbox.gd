@@ -42,6 +42,10 @@ func _on_area_entered(area: Area2D) -> void:
 		return
 	var hitbox: HitBox = area as HitBox
 	
+	# An object's own hitbox overlaps its own hurtboxes, so anything whose two boxes ever accept
+	# each other would hit itself the moment it woke up.
+	if hitbox.owner == owner:
+		return
 	if not hitbox.is_valid():
 		return
 	if hitbox.hitbox_ids.any(func(id: String) -> bool: return id in ignored_hitbox_ids):

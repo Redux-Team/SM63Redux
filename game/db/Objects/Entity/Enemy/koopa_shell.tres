@@ -3,12 +3,21 @@
 [ext_resource type="Texture2D" uid="uid://c51x4jdo8l7c0" path="res://assets/textures/entity/enemy/koopa/koopa_shell.png" id="1_e1wty"]
 [ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_forms/sprite_form.gd" id="2_b8qua"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_e1wty"]
+[ext_resource type="Script" uid="uid://dnf6ofgbhm3yc" path="res://game/object_traits/object_trait.gd" id="3_trait"]
+[ext_resource type="Script" uid="uid://bcxvtb8s0kr4t" path="res://game/object_traits/setup_trait.gd" id="4_setup"]
 
 [sub_resource type="Resource" id="Resource_jwl7s"]
 script = ExtResource("2_b8qua")
 texture = ExtResource("1_e1wty")
-game_scene_uid = "uid://bkmr76girdmrb"
+game_scene_uid = "uid://cobjo5kj7heeo"
 allow_rotation = false
+
+[sub_resource type="Resource" id="Setup_Shell"]
+script = ExtResource("4_setup")
+values = Dictionary[StringName, Variant]({
+&"form": 2
+})
+metadata/_custom_type_script = "uid://bcxvtb8s0kr4t"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e1wty"]
 atlas = ExtResource("1_e1wty")
@@ -18,6 +27,7 @@ region = Rect2(-8, -8, 48, 48)
 script = ExtResource("2_e1wty")
 id = "koopa_shell"
 form = SubResource("Resource_jwl7s")
+traits = Array[ExtResource("3_trait")]([SubResource("Setup_Shell")])
 ld_entry_texture = SubResource("AtlasTexture_e1wty")
 ld_index_id = "koopa2"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"
