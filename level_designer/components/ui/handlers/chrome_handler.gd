@@ -3,6 +3,7 @@ extends Node
 
 
 const ACTIVE_CLASS: StringName = &"Active"
+const BAR_ANIM_DURATION: float = 0.22
 const PLACEMENT_ICONS: Dictionary[String, Texture2D] = {
 	"brush": preload("res://assets/textures/level_designer/ui_icons/brush.svg"),
 	"block": preload("res://assets/textures/level_designer/ui_icons/block.svg"),
@@ -20,6 +21,8 @@ const PLACEMENT_TOOLTIPS: Dictionary[String, String] = {
 
 
 @export_group("Tool rail")
+@export var _tool_bar: BoxContainer
+@export var _tool_bar_clip: Control
 @export var _select_button: Button
 @export var _brush_button: Button
 @export var _move_button: Button
@@ -52,6 +55,9 @@ const PLACEMENT_TOOLTIPS: Dictionary[String, String] = {
 
 var _tool_buttons: Dictionary[String, Button] = {}
 var _poly_buttons: Array[Button] = []
+var _tool_shown: Dictionary[Button, bool] = {}
+var _bar_tween: Tween
+var _bar_dirty: bool = false
 
 
 func setup() -> void:
@@ -69,6 +75,7 @@ func setup() -> void:
 		"topline": _topline_button,
 	}
 	_poly_buttons = [_poly_edit_button, _poly_add_button, _poly_cut_button, _topline_button]
+	_tool_bar_clip.custom_minimum_size.y = _bar_length()
 	var tools: LDToolHandler = LD.get_tool_handler()
 	if tools and not tools.tool_changed.is_connected(_on_tool_changed):
 		tools.tool_changed.connect(_on_tool_changed)
@@ -130,8 +137,7 @@ func _set_active(button: Button, active: bool) -> void:
 func _on_selected_object_changed(obj: GameObject) -> void:
 	## Only terrain can be drawn on the grid, so the tile tool stays out of the rail until the
 	## object browser has something it applies to.
-	if _tile_button:
-		_tile_button.visible = obj != null and obj.get_placement_tool() == "polygon"
+	_set_tool_visible(_tile_button, obj != null and obj.get_placement_tool() == "polygon")
 	if _brush_button == null:
 		return
 	var key: String = obj.get_placement_tool().to_lower() if obj else ""
@@ -155,8 +161,7 @@ func _on_selection_changed(objects: Array[LDObject]) -> void:
 		var poly: LDObjectPolygon = objects.front() as LDObjectPolygon
 		supports_topline = poly.polygon_data != null and poly.polygon_data.line_mode == PolygonForm.LineMode.TOPLINE
 	for button: Button in _poly_buttons:
-		if button:
-			button.visible = is_polygon
+		_set_tool_visible(button, is_polygon)
 	_set_disabled(_topline_button, is_polygon and not supports_topline)
 	var any_rotatable: bool = false
 	var any_scalable: bool = false
@@ -167,10 +172,8 @@ func _on_selection_changed(objects: Array[LDObject]) -> void:
 				any_rotatable = true
 			if prop_key == "scale":
 				any_scalable = true
-	if _rotate_button:
-		_rotate_button.visible = any_rotatable
-	if _scale_button:
-		_scale_button.visible = any_scalable
+	_set_tool_visible(_rotate_button, any_rotatable)
+	_set_tool_visible(_scale_button, any_scalable)
 	_set_disabled(_properties_button, not LD.get_object_handler().has_editable_properties(objects))
 
 
@@ -186,8 +189,7 @@ func _on_clipboard_changed() -> void:
 
 
 func _on_armed_stamp_changed(stamp: LDStamp) -> void:
-	if _place_button:
-		_place_button.visible = stamp != null
+	_set_tool_visible(_place_button, stamp != null)
 
 
 func _set_disabled(button: Button, value: bool) -> void:
@@ -195,5 +197,65 @@ func _set_disabled(button: Button, value: bool) -> void:
 		return
 	button.disabled = value
 	GDSS.refresh(button)
+
+
+func _set_tool_visible(button: Button, value: bool) -> void:
+	if button == null or _tool_shown.get_or_add(button, button.visible) == value:
+		return
+	_tool_shown.set(button, value)
+	if not _bar_dirty:
+		_bar_dirty = true
+		_animate_bar.call_deferred()
+
+
+func _animate_bar() -> void:
+	_bar_dirty = false
+	if is_instance_valid(_bar_tween):
+		_bar_tween.kill()
+	for button: Button in _tool_shown:
+		var shown: bool = _tool_shown.get(button)
+		if shown or not _tool_trails(button):
+			button.visible = shown
+	var target: float = _bar_length()
+	if not Settings.get_bool(&"display/ui_animations"):
+		_tool_bar_clip.custom_minimum_size.y = target
+		_on_bar_settled()
+		return
+	_bar_tween = create_tween()
+	_bar_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_bar_tween.tween_property(_tool_bar_clip, ^"custom_minimum_size:y", target, BAR_ANIM_DURATION)
+	_bar_tween.finished.connect(_on_bar_settled)
+
+
+func _bar_length() -> float:
+	var total: float = 0.0
+	var count: int = 0
+	for child: Node in _tool_bar.get_children():
+		var item: Control = child as Control
+		if item == null:
+			continue
+		var button: Button = child as Button
+		if not (_tool_shown.get(button, item.visible) if button else item.visible):
+			continue
+		total += item.get_combined_minimum_size().y
+		count += 1
+	return total + _tool_bar.get_theme_constant(&"separation") * maxi(count - 1, 0)
+
+
+func _tool_trails(button: Button) -> bool:
+	var after: bool = false
+	for child: Node in _tool_bar.get_children():
+		var other: Button = child as Button
+		if other == button:
+			after = true
+			continue
+		if after and other != null and _tool_shown.get(other, other.visible):
+			return false
+	return true
+
+
+func _on_bar_settled() -> void:
+	for button: Button in _tool_shown:
+		button.visible = _tool_shown.get(button)
 
 #endregion
