@@ -22,6 +22,7 @@ const LOCK_ICON: Texture2D = preload("res://assets/textures/level_designer/ui_ic
 @export var detail_rows: VBoxContainer
 @export var name_edit: LineEdit
 @export var deco_layer: CheckButton
+@export var distance_row: HBoxContainer
 @export var distance_slider: HSlider
 @export var distance_label: Label
 @export var modulate_color_picker: ColorPickerButton
@@ -253,8 +254,13 @@ func _show_detail(pos: int) -> void:
 		name_edit.text = layer.layer_name
 		deco_layer.button_pressed = layer.is_decoration
 		distance_slider.value = layer.distance
-		distance_label.text = "%.1f" % layer.distance
+		distance_label.text = "%.1fx" % layer.distance
 	_setting_fields = false
+	_sync_distance_row(locked)
+
+
+func _sync_distance_row(locked: bool) -> void:
+	distance_row.visible = not locked and deco_layer.button_pressed
 
 
 func _on_name_changed(_text: String) -> void:
@@ -277,6 +283,7 @@ func _on_prop_changed(_value: Variant = null) -> void:
 		return
 	layer.is_decoration = deco_layer.button_pressed
 	layer.distance = distance_slider.value
-	distance_label.text = "%.1f" % layer.distance
+	distance_label.text = "%.1fx" % layer.distance
+	_sync_distance_row(false)
 
 #endregion

@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="ic_remove"]
 [ext_resource type="Texture2D" uid="uid://cyjlsmgjeixte" path="res://assets/textures/level_designer/ui_icons/up.svg" id="ic_up"]
 
-[node name="LayerProperties" type="MarginContainer" unique_id=899359989 node_paths=PackedStringArray("row_container", "add_button", "move_up_button", "move_down_button", "remove_button", "count_label", "detail", "detail_rows", "name_edit", "deco_layer", "distance_slider", "distance_label", "modulate_color_picker")]
+[node name="LayerProperties" type="MarginContainer" unique_id=899359989 node_paths=PackedStringArray("row_container", "add_button", "move_up_button", "move_down_button", "remove_button", "count_label", "detail", "detail_rows", "name_edit", "deco_layer", "distance_row", "distance_slider", "distance_label", "modulate_color_picker")]
 custom_minimum_size = Vector2(520, 0)
 script = ExtResource("1_e2re5")
 row_container = NodePath("Columns/ListColumn/ListInset/ListScroll/RowList")
@@ -20,6 +20,7 @@ detail = NodePath("Columns/Detail")
 detail_rows = NodePath("Columns/Detail/DetailInset/Rows")
 name_edit = NodePath("Columns/Detail/DetailInset/Rows/NameRow/NameEdit")
 deco_layer = NodePath("Columns/Detail/DetailInset/Rows/DecoRow/DecoLayer")
+distance_row = NodePath("Columns/Detail/DetailInset/Rows/DistRow")
 distance_slider = NodePath("Columns/Detail/DetailInset/Rows/DistRow/DistanceSlider")
 distance_label = NodePath("Columns/Detail/DetailInset/Rows/DistRow/DistanceLabel")
 modulate_color_picker = NodePath("Columns/Detail/DetailInset/Rows/ModRow/ModulateColorPicker")
@@ -125,6 +126,24 @@ size_flags_horizontal = 3
 mouse_default_cursor_shape = 0
 placeholder_text = "Unnamed"
 
+[node name="ModRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows" unique_id=1919039853]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/ModRow" unique_id=376451622]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Modulate"
+vertical_alignment = 1
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="ModulateColorPicker" type="ColorPickerButton" parent="Columns/Detail/DetailInset/Rows/ModRow" unique_id=1286184696]
+custom_minimum_size = Vector2(48, 24)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(1, 1, 1, 1)
+
 [node name="DecoRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows" unique_id=1200081306]
 layout_mode = 2
 
@@ -164,27 +183,9 @@ step = 0.1
 script = ExtResource("glass_slider")
 
 [node name="DistanceLabel" type="Label" parent="Columns/Detail/DetailInset/Rows/DistRow"]
-custom_minimum_size = Vector2(40, 0)
+custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
 size_flags_vertical = 1
-text = "0.0"
+text = "0.0x"
 horizontal_alignment = 2
 vertical_alignment = 1
-
-[node name="ModRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows" unique_id=1919039853]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/ModRow" unique_id=376451622]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-text = "Modulate"
-vertical_alignment = 1
-metadata/gdss_classes = PackedStringArray("Dim")
-
-[node name="ModulateColorPicker" type="ColorPickerButton" parent="Columns/Detail/DetailInset/Rows/ModRow" unique_id=1286184696]
-custom_minimum_size = Vector2(48, 24)
-layout_mode = 2
-size_flags_vertical = 4
-color = Color(1, 1, 1, 1)
