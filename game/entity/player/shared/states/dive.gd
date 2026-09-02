@@ -3,8 +3,6 @@ extends PlayerState
 
 var _previous_state_name: StringName = &""
 var _body_rotation: float = 0.0
-var _rotation_time_offset: float = 0.0
-var _air_rotation_timer: float = 0.0
 var _landing_timer: float = 0.0
 var _was_grounded: bool = false
 var _just_landed: bool = false
@@ -21,11 +19,9 @@ func _enter() -> void:
 	_reset_timer = 0.0
 	_just_landed = false
 	_landing_timer = 0.0
-	_air_rotation_timer = 0.0
 	_was_grounded = player.is_on_floor()
 	
 	_apply_impulse()
-	_rotation_time_offset = _get_rotation_time_offset(player.velocity.y)
 	_body_rotation = _get_air_rotation_angle() if not player.is_on_floor() else _get_slope_angle()
 	player.sprite.local_rotation = rad_to_deg(_body_rotation)
 
@@ -137,7 +133,6 @@ func _update_rotation(delta: float) -> void:
 		return
 	
 	if player.is_on_floor():
-		_air_rotation_timer = 0.0
 		_landing_timer += delta
 		
 		var target_angle: float
@@ -150,8 +145,7 @@ func _update_rotation(delta: float) -> void:
 		_body_rotation = lerp_angle(_body_rotation, target_angle, lerp_speed)
 	else:
 		_landing_timer = 0.0
-		_body_rotation = _get_air_rotation_angle()
-		_air_rotation_timer += delta
+		_body_rotation = lerp_angle(_body_rotation, _get_air_rotation_angle(), player.dive_air_rotation_blend)
 	
 	player.sprite.local_rotation = rad_to_deg(_body_rotation)
 
@@ -175,19 +169,13 @@ func _update_reset(delta: float) -> void:
 	player.velocity.x = move_toward(player.velocity.x, 0.0, player.dive_reset_decel)
 
 
+## The dive angle tracks the velocity vector rather than a timed curve, so the body points where the
+## player is actually travelling.
 func _get_air_rotation_angle() -> float:
-	var rotation_curve_min: float = player.dive_rotation_curve.min_domain if player.dive_rotation_curve else 0.0
-	var rotation_curve_max: float = player.dive_rotation_curve.max_domain if player.dive_rotation_curve else 1.0
+	var facing: float = -1.0 if player.sprite.flip_h else 1.0
+	var heading: float = rad_to_deg(Vector2(player.velocity.x * facing, player.velocity.y).angle())
 	
-	var rotation_time: float = clamp(_rotation_time_offset + _air_rotation_timer, rotation_curve_min, rotation_curve_max)
-	
-	var curve_value: float
-	if player.dive_rotation_curve:
-		curve_value = player.dive_rotation_curve.sample(rotation_time)
-	else:
-		curve_value = inverse_lerp(rotation_curve_min, rotation_curve_max, rotation_time)
-	
-	return deg_to_rad(lerp(player.dive_rotation_min_deg, player.dive_rotation_max_deg, curve_value))
+	return deg_to_rad(clamp(heading, player.dive_rotation_min_deg, player.dive_rotation_max_deg))
 
 
 func _get_slope_angle() -> float:
@@ -196,13 +184,3 @@ func _get_slope_angle() -> float:
 	
 	var normal: Vector2 = player.floor_slope_raycast.get_collision_normal()
 	return normal.angle() + PI / 2.0
-
-
-func _get_rotation_time_offset(y_velocity: float) -> float:
-	var clamped_y_velocity: float
-	if player.dive_y_velocity_to_rotation_offset_curve:
-		clamped_y_velocity = clamp(y_velocity, player.dive_y_velocity_to_rotation_offset_curve.min_domain, player.dive_y_velocity_to_rotation_offset_curve.max_domain)
-		return player.dive_y_velocity_to_rotation_offset_curve.sample(clamped_y_velocity)
-	
-	clamped_y_velocity = clamp(y_velocity, player.dive_y_velocity_curve_min, player.dive_y_velocity_curve_max)
-	return inverse_lerp(player.dive_y_velocity_curve_min, player.dive_y_velocity_curve_max, clamped_y_velocity) * player.dive_rotation_curve.max_domain

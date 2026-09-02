@@ -496,10 +496,10 @@ tracks/0/path = NodePath("Doll:local_rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6333),
-"transitions": PackedFloat32Array(0.3, 1),
+"times": PackedFloat32Array(0, 0.36666667),
+"transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [0.0, 360.0]
+"values": [0.0, 365.0]
 }
 
 [sub_resource type="Animation" id="Animation_aln35"]
