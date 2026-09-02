@@ -445,7 +445,7 @@ func _serialize_area_layers(area: LDArea) -> Array:
 
 
 func _serialize_object(obj: LDObject) -> Dictionary:
-	var game_object: GameObject = find_game_object_for(obj)
+	var game_object: GameObject = GameDB.get_object(obj.source_object_id)
 	if not game_object:
 		return {}
 	
@@ -630,7 +630,7 @@ func _normalize(data: Dictionary) -> Dictionary:
 
 
 func _ensure_player_spawn(area: LDArea = null) -> void:
-	var game_object: GameObject = GameDB.get_db().find_game_object("player_mario")
+	var game_object: GameObject = GameDB.get_object("player_mario")
 	if not game_object:
 		return
 	
@@ -660,12 +660,12 @@ func _sanitize_player_layer(area: LDArea) -> void:
 			return
 
 
-func _deserialize_object(data: Dictionary, layer_index: int, db: GameDB, area: LDArea) -> void:
+func _deserialize_object(data: Dictionary, layer_index: int, area: LDArea) -> void:
 	var object_id: String = data.get("object_id", "")
 	if object_id.is_empty():
 		return
 	
-	var game_object: GameObject = find_game_object_by_id(object_id, db)
+	var game_object: GameObject = GameDB.get_object(object_id)
 	if not game_object:
 		return
 	

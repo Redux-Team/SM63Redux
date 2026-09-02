@@ -11,4 +11,4 @@ default_value = Vector2(0, 0)
 visible_in_editor = false
 exclusive = true
 apply_mode = 1
-apply_target = NodePath("position")
+apply_target = &"position"

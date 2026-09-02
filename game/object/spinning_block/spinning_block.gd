@@ -3,15 +3,12 @@ extends LevelObject
 @export var rect: Control
 @export var spinning_block: RectangleShape2D
 
-var b_size_x: float
-var b_size_y: float
 var block_size: Vector2
 var b_rotate_speed: float
 var b_wait_time: float
 
 
 func _on_init() -> void:
-	block_size = Vector2(b_size_x, b_size_y)
 	_update_size()
 
 

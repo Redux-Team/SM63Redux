@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_773t6")
 key = &"b_size_x"
+group = &"Size"
 label = "Width"
 type = 1
 default_value = 32
@@ -12,4 +13,4 @@ min_value = 32.0
 max_value = 1024.0
 step = 16.0
 apply_mode = 1
-apply_target = NodePath("block_size:x")
+apply_target = &"block_size:x"

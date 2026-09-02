@@ -1,11 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bywn2c1kw0pxn"]
 
-[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="1_1hlkq"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_forms/sprite_form.gd" id="1_1hlkq"]
 [ext_resource type="Texture2D" uid="uid://cgf8cokpn8q8s" path="res://assets/textures/objects/decoration/nature/small_rock.png" id="1_2ewqi"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_1hlkq"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_mr6qr"]
-[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_o5bpm"]
-[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_hvqoe"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_8leef"]
 
 [sub_resource type="Resource" id="Resource_mr6qr"]
@@ -19,8 +15,8 @@ region = Rect2(1, -28, 48, 48)
 [resource]
 script = ExtResource("6_8leef")
 id = "small_rock"
-data = SubResource("Resource_mr6qr")
-ld_properties = Array[ExtResource("2_1hlkq")]([ExtResource("3_mr6qr"), ExtResource("4_o5bpm"), ExtResource("5_hvqoe")])
+form = SubResource("Resource_mr6qr")
 ld_entry_texture = SubResource("AtlasTexture_mjm7j")
 ld_index_id = "grass_rock_00"
+ld_group_override = "Grass"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

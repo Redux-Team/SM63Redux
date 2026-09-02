@@ -1,6 +1,6 @@
 @tool
-class_name PolygonData
-extends GameObjectData
+class_name PolygonForm
+extends ObjectForm
 
 ## Everything an editor polygon and its in-game counterpart need to look and behave the same.
 ## Art lives in the three style sub-resources so a level designer can swap any of them for a
@@ -41,13 +41,27 @@ const COLLISION_MODE_NAMES: PackedStringArray = ["Solid", "Semisolid", "None"]
 
 @export_group("Editor")
 @export var edge_selection: bool = false
+## Terrain lets the designer pick its look and its solidity per placed polygon. A trigger volume -
+## water, a music region - has neither to offer, so it turns these off and the panel stays empty.
+@export var designer_styles: bool = true
+@export var designer_collision: bool = true
 
 
-## Maps a level designer's [PolygonData.COLLISION_MODE_NAMES] pick back to a mode, falling
+## Maps a level designer's [PolygonForm.COLLISION_MODE_NAMES] pick back to a mode, falling
 ## back to the object's own default for the empty "Default" choice.
 static func parse_collision_mode(mode_name: String, fallback: CollisionMode) -> CollisionMode:
 	var index: int = COLLISION_MODE_NAMES.find(mode_name)
 	return (index as CollisionMode) if index >= 0 else fallback
+
+
+func properties() -> Array[LDProperty]:
+	var keys: PackedStringArray = PackedStringArray(["position"])
+	if designer_collision:
+		keys.append("collision_mode")
+	if designer_styles:
+		keys.append_array(PackedStringArray(["rng_seed", "base_style", "topline_style", "decorations_enabled", "decoration_set"]))
+	
+	return LDPropertyLibrary.get_properties(keys)
 
 
 func get_placement_tool() -> String:

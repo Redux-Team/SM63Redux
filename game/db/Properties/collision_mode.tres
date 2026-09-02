@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_7pti3")
 key = &"collision_mode"
+group = &"Collision"
 label = "Collision"
 type = 7
 default_value = ""

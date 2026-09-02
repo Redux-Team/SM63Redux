@@ -1,12 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://mc28hvrisysy"]
 
 [ext_resource type="Texture2D" uid="uid://dccmhnd2miw7u" path="res://assets/textures/objects/decoration/platform/mossy_platform_ld.png" id="1_bhagq"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_qwygr"]
-[ext_resource type="Script" uid="uid://cb1ouljyhrjdx" path="res://game/object_data/telescoping_data.gd" id="2_ye0ju"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_ye0ju"]
-[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_6fdn1"]
-[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_qwyde"]
-[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="6_vbrrp"]
+[ext_resource type="Script" uid="uid://cb1ouljyhrjdx" path="res://game/object_forms/telescoping_form.gd" id="2_ye0ju"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_8d2fv"]
 [ext_resource type="Texture2D" uid="uid://bod3m0ctbcq2j" path="res://assets/textures/objects/decoration/platform/mossy_platform.png" id="8_7558l"]
 
@@ -25,8 +20,7 @@ region = Rect2(-7, -15, 48, 48)
 [resource]
 script = ExtResource("7_8d2fv")
 id = "mossy_platform"
-data = SubResource("Resource_6fdn1")
-ld_properties = Array[ExtResource("2_qwygr")]([ExtResource("3_ye0ju"), ExtResource("4_6fdn1"), ExtResource("5_qwyde"), ExtResource("6_vbrrp")])
+form = SubResource("Resource_6fdn1")
 ld_entry_texture = SubResource("AtlasTexture_se8nq")
 ld_index_id = "platform"
 ld_placement_tool_override = "telescoping"

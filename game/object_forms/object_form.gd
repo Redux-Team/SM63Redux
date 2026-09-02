@@ -1,17 +1,21 @@
 @tool
-class_name GameObjectData
+class_name ObjectForm
 extends Resource
 
-## What an object *is*: the half of a [GameObject] that knows how to build it, both in the level
-## designer and in the game. Each kind of object is a subclass carrying only its own fields, so
-## nothing has to declare properties it will never use.
+## What an object *is*: the half of a [GameObject] that knows how to build it, in the level designer
+## and in the game. A form is exclusive - an object is a sprite, or a path, or a polygon, never two -
+## because each one is a different node edited with a different tool, so the combinations that would
+## make no sense cannot be spelled. Anything additive belongs on [member GameObject.traits] instead.
 ##
-## Setting a scene here overrides the procedural build for that half, which is how a hand-authored
-## object opts out. An object that is nothing but a pair of scenes can use this base class directly.
+## Each half can opt out of being built procedurally by naming a scene. The two are a ladder rather
+## than a pair: most objects author neither, some author only the game half (an enemy the designer
+## places as a plain sprite), and the hand-made ones author both.
+##
+## Scenes are stored as uids and loaded only when an object is actually built, so opening the object
+## database does not pull in every scene in the game along with its textures and audio.
 
 
-## Scenes are stored as uids and loaded only when an object is actually built, so opening the
-## object database does not pull in every scene in the game along with its textures and audio.
+## Scenes are stored as uids and loaded only when an object is actually built.
 @export_storage var ld_scene_uid: String
 @export_storage var game_scene_uid: String
 
@@ -33,6 +37,12 @@ extends Resource
 ## this resource alive, the scene files are only pulled in for objects that actually get built.
 var _ld_scene: PackedScene
 var _game_scene: PackedScene
+
+
+## The fields every object built from this form gets, before its traits and its own additions. A
+## decoration says nothing about properties precisely because this answers for it.
+func properties() -> Array[LDProperty]:
+	return LDPropertyLibrary.get_properties(PackedStringArray(["position"]))
 
 
 func create_ld_object() -> LDObject:

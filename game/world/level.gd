@@ -539,7 +539,7 @@ func _instantiate_object(data: Dictionary, layer: LevelLayer, _area: LevelArea) 
 	if object_id.is_empty():
 		return
 	
-	var game_object: GameObject = GameDB.get_db().find_game_object(object_id)
+	var game_object: GameObject = GameDB.get_object(object_id)
 	if not game_object:
 		return
 	

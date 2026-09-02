@@ -108,7 +108,7 @@ func _on_click() -> void:
 		return
 
 	if _slot_data.size() == 1:
-		var game_object: GameObject = GameDB.get_db().find_game_object(_slot_data.front().get("object_id", ""))
+		var game_object: GameObject = GameDB.get_object(_slot_data.front().get("object_id", ""))
 		if game_object:
 			LD.get_object_handler().select_object(game_object)
 			LD.get_tool_handler().select_tool("brush")
@@ -154,7 +154,7 @@ func _update_icon() -> void:
 		return
 
 	if _slot_data.size() == 1:
-		var game_object: GameObject = GameDB.get_db().find_game_object(_slot_data.front().get("object_id", ""))
+		var game_object: GameObject = GameDB.get_object(_slot_data.front().get("object_id", ""))
 		if game_object:
 			icon = game_object.get_entry_texture()
 			return

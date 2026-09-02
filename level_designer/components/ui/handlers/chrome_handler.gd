@@ -153,7 +153,7 @@ func _on_selection_changed(objects: Array[LDObject]) -> void:
 	var supports_topline: bool = false
 	if is_polygon:
 		var poly: LDObjectPolygon = objects.front() as LDObjectPolygon
-		supports_topline = poly.polygon_data != null and poly.polygon_data.line_mode == PolygonData.LineMode.TOPLINE
+		supports_topline = poly.polygon_data != null and poly.polygon_data.line_mode == PolygonForm.LineMode.TOPLINE
 	for button: Button in _poly_buttons:
 		if button:
 			button.visible = is_polygon

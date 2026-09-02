@@ -1,10 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bvgvx4o7bwrq8"]
 
 [ext_resource type="Texture2D" uid="uid://bpc21ojqsoemb" path="res://assets/textures/objects/decoration/nature/tall_snowy_mushroom_ld.png" id="1_ld"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
-[ext_resource type="Script" uid="uid://dbn5ed02uly7n" path="res://game/object_data/path_data.gd" id="3_w0ati"]
-[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="4_path"]
+[ext_resource type="Script" uid="uid://dbn5ed02uly7n" path="res://game/object_forms/path_form.gd" id="3_w0ati"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="5_go"]
 [ext_resource type="Texture2D" uid="uid://dr3hvvu5207o0" path="res://assets/textures/objects/decoration/nature/tall_snowy_mushroom_stem.png" id="6_stem"]
 [ext_resource type="Texture2D" uid="uid://dw0gslxxtjnct" path="res://assets/textures/objects/decoration/nature/tall_snowy_mushroom_head.png" id="7_head"]
@@ -23,8 +20,8 @@ region = Rect2(0, 0, 48, 48)
 [resource]
 script = ExtResource("5_go")
 id = "tall_snowy_mushroom"
-data = SubResource("Resource_o12km")
-ld_properties = Array[ExtResource("2_prop")]([ExtResource("3_pos"), ExtResource("4_path")])
+form = SubResource("Resource_o12km")
 ld_entry_texture = SubResource("AtlasTexture_3ftqo")
 ld_index_id = "snow_mushroom_08"
+ld_group_override = "Snow"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -26,7 +26,7 @@ func copy() -> void:
 	
 	_clipboard.clear()
 	for obj: LDObject in objects:
-		var game_object: GameObject = GameDB.get_db().find_game_object(obj.source_object_id)
+		var game_object: GameObject = GameDB.get_object(obj.source_object_id)
 		if not game_object or not game_object.ld_flags & (1 << GameObject.LD_COPYABLE):
 			continue
 		var data: Dictionary = _serialize_object(obj)
@@ -57,7 +57,7 @@ func duplicate_objects() -> void:
 	
 	var temp: Array[Dictionary] = []
 	for obj: LDObject in objects:
-		var game_object: GameObject = GameDB.get_db().find_game_object(obj.source_object_id)
+		var game_object: GameObject = GameDB.get_object(obj.source_object_id)
 		if not game_object or not game_object.ld_flags & (1 << GameObject.LD_COPYABLE):
 			continue
 		var data: Dictionary = _serialize_object(obj)
@@ -71,17 +71,15 @@ func _paste_internal(data: Array[Dictionary], offset: Vector2) -> void:
 	if data.is_empty():
 		return
 	
-	var db: GameDB = GameDB.get_db()
 	var area: LDArea = LDLevel.get_active_area()
-	var save_load: LDSaveLoadHandler = LD.get_save_load_handler()
 	var spawned: Array[LDObject] = []
 	
 	for entry: Dictionary in data:
 		var object_id: String = entry.get("object_id", "")
-		var game_object: GameObject = save_load.find_game_object_by_id(object_id, db)
+		var game_object: GameObject = GameDB.get_object(object_id)
 		if not game_object or not game_object.ld_flags & (1 << GameObject.LD_COPYABLE):
 			continue
-		var obj: LDObject = _deserialize_object(entry, db, area)
+		var obj: LDObject = _deserialize_object(entry, area)
 		if not obj:
 			continue
 		obj.position += offset
@@ -119,13 +117,13 @@ func _serialize_object(obj: LDObject) -> Dictionary:
 	return LD.get_save_load_handler()._serialize_object(obj)
 
 
-func _deserialize_object(data: Dictionary, db: GameDB, area: LDArea, offset: Vector2 = Vector2.ZERO) -> LDObject:
+func _deserialize_object(data: Dictionary, area: LDArea, offset: Vector2 = Vector2.ZERO) -> LDObject:
 	var object_id: String = data.get("object_id", "")
 	if object_id.is_empty():
 		return null
 	
 	var save_load: LDSaveLoadHandler = LD.get_save_load_handler()
-	var game_object: GameObject = save_load.find_game_object_by_id(object_id, db)
+	var game_object: GameObject = GameDB.get_object(object_id)
 	if not game_object:
 		return null
 	

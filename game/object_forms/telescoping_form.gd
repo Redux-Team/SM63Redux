@@ -1,10 +1,15 @@
 @tool
-class_name TelescopingData
-extends GameObjectData
+class_name TelescopingForm
+extends ObjectForm
 
 
 enum CollisionAnchor { TOP, BOTTOM, LEFT, RIGHT }
+enum Axis { HORIZONTAL, VERTICAL }
 
+
+## Which way the object stretches. It decides which size field the designer is given, and the
+## telescoping tool reads that same field back, so the two can no longer disagree.
+@export var axis: Axis = Axis.HORIZONTAL
 
 ## Nine-patch source: the atlas region marks the stretchable middle, the margin around it the caps.
 ## A plain texture assigned here is wrapped into a full-size region automatically.
@@ -22,6 +27,11 @@ enum CollisionAnchor { TOP, BOTTOM, LEFT, RIGHT }
 @export var collision_collapsed: bool = true
 @export var collision_one_way: bool = true
 @export var collision_one_way_margin: float = 1.0
+
+
+func properties() -> Array[LDProperty]:
+	var size_key: String = "t_size_x" if axis == Axis.HORIZONTAL else "t_size_y"
+	return LDPropertyLibrary.get_properties(PackedStringArray(["position", "rotation", "scale", size_key]))
 
 
 func get_entry_texture() -> Texture2D:

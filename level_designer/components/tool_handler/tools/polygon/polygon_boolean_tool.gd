@@ -147,7 +147,7 @@ func _spawn_preview_instances() -> void:
 	for target: LDObjectPolygon in _targets:
 		if not is_instance_valid(target):
 			continue
-		var game_object: GameObject = GameDB.get_db().find_game_object(target.source_object_id)
+		var game_object: GameObject = GameDB.get_object(target.source_object_id)
 		if not game_object:
 			continue
 		var instance: LDObject = game_object.get_editor_instance()
@@ -192,7 +192,7 @@ func _update_preview_instances(results: Array[PackedVector2Array], preview: Pack
 		
 		var pieces: Array[PackedVector2Array] = _get_results_for_target(results, 0, target_world)
 		var pool: Array = _preview_instances.get(target, [])
-		var game_object: GameObject = GameDB.get_db().find_game_object(target.source_object_id)
+		var game_object: GameObject = GameDB.get_object(target.source_object_id)
 		
 		while pool.size() < pieces.size():
 			if not game_object:

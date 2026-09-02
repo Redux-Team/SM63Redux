@@ -43,7 +43,7 @@ func delete_placed_selection() -> void:
 
 	var deletable: Array[LDObject] = []
 	for obj: LDObject in loose:
-		var game_obj: GameObject = GameDB.get_db().find_game_object(obj.source_object_id)
+		var game_obj: GameObject = GameDB.get_object(obj.source_object_id)
 		if game_obj and game_obj.ld_flags & (1 << GameObject.LD_DELETABLE):
 			deletable.append(obj)
 

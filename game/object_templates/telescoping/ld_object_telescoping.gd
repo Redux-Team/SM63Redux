@@ -53,8 +53,8 @@ var _initial_nine_patch_size: Vector2
 			origin_marker.owner = self
 
 
-static func from_data(data: GameObjectData) -> LDObject:
-	var telescoping_data: TelescopingData = data as TelescopingData
+static func from_data(data: ObjectForm) -> LDObject:
+	var telescoping_data: TelescopingForm = data as TelescopingForm
 	if not telescoping_data:
 		return null
 	

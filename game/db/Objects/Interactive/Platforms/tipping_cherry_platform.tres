@@ -1,18 +1,14 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cwjppj6rey6s"]
 
 [ext_resource type="Texture2D" uid="uid://c6cvfdstlyj6i" path="res://assets/textures/objects/decoration/platform/tipping_platform_cherry_ld.png" id="3_hhxvw"]
-[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="3_y0qru"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_dn12f"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_g0jen"]
-[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="6_hxjqf"]
-[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="7_ugbf6"]
-[ext_resource type="Resource" uid="uid://jcepd4xhp34u" path="res://game/db/Properties/disabled.tres" id="8_1uj8w"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_forms/sprite_form.gd" id="3_y0qru"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="9_jny03"]
 
 [sub_resource type="Resource" id="Resource_hhxvw"]
 script = ExtResource("3_y0qru")
 ld_scene_uid = "uid://kd03uj0tg4kr"
 game_scene_uid = "uid://crc4nl4nsnqah"
+allow_rotation = false
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i3aap"]
 atlas = ExtResource("3_hhxvw")
@@ -21,8 +17,8 @@ region = Rect2(0, 0, 48, 48)
 [resource]
 script = ExtResource("9_jny03")
 id = "tipping_cherry_platform"
-data = SubResource("Resource_hhxvw")
-ld_properties = Array[ExtResource("4_dn12f")]([ExtResource("5_g0jen"), ExtResource("6_hxjqf"), ExtResource("7_ugbf6"), ExtResource("8_1uj8w")])
+form = SubResource("Resource_hhxvw")
+ld_shared_properties = PackedStringArray("t_size_x", "disabled")
 ld_entry_texture = SubResource("AtlasTexture_i3aap")
 ld_index_id = "tipping_3"
 ld_placement_tool_override = "telescoping"

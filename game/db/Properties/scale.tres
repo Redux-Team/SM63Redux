@@ -12,4 +12,4 @@ visible_in_editor = false
 step = 0.1
 arrow_step = 0.1
 apply_mode = 1
-apply_target = NodePath("scale")
+apply_target = &"scale"

@@ -106,7 +106,7 @@ func place(first: bool = false) -> void:
 func _enforce_uniqueness() -> void:
 	if source_object_id.is_empty() or not LD.is_ready():
 		return
-	var game_object: GameObject = GameDB.get_db().find_game_object(source_object_id)
+	var game_object: GameObject = GameDB.get_object(source_object_id)
 	if not game_object or not game_object.ld_unique:
 		return
 	var area: LDArea = _owning_area()

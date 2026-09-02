@@ -95,7 +95,7 @@ func _clamp_to_window(pos: Vector2) -> Vector2:
 
 
 func _populate_category_buttons() -> void:
-	for cat_name: String in GameDB.get_db().get_category_names():
+	for cat_name: String in GameDB.get_category_names():
 		var button: Button = Button.new()
 		button.text = cat_name.to_pascal_case()
 		button.name = cat_name
@@ -188,14 +188,14 @@ func populate_list(search: String = "") -> void:
 	if query.is_empty():
 		var cat_name: String = pressed.name if pressed else &""
 		if cat_name.is_empty() or cat_name == "__ld_stamps__":
-			for cat: GameDB.GameObjectCategory in GameDB.get_db().get_tree():
+			for cat: GameDB.GameObjectCategory in GameDB.get_categories():
 				all_groups.append_array(cat.get_groups())
 		else:
-			var cat: GameDB.GameObjectCategory = GameDB.get_db().get_category(cat_name)
+			var cat: GameDB.GameObjectCategory = GameDB.get_category(cat_name)
 			if cat:
 				all_groups = cat.get_groups()
 	else:
-		for cat: GameDB.GameObjectCategory in GameDB.get_db().get_tree():
+		for cat: GameDB.GameObjectCategory in GameDB.get_categories():
 			all_groups.append_array(cat.get_groups())
 	
 	for group: GameDB.GameObjectGroup in all_groups:

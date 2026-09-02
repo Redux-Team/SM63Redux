@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_80eaj")
 key = &"decorations_enabled"
+group = &"Appearance"
 label = "Decorations"
 type = 0
 default_value = true

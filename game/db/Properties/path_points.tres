@@ -10,4 +10,4 @@ type = 6
 default_value = PackedVector2Array()
 visible_in_editor = false
 apply_mode = 3
-apply_target = NodePath("apply_points")
+apply_target = &"apply_points"

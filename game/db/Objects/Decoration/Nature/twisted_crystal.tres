@@ -1,10 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bcmc5jcdbslq4"]
 
 [ext_resource type="Texture2D" uid="uid://bm40gkvgdsxt8" path="res://assets/textures/objects/decoration/nature/twisted_crystal_ld.png" id="1_ld"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
-[ext_resource type="Script" uid="uid://dbn5ed02uly7n" path="res://game/object_data/path_data.gd" id="3_66ii8"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
-[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="4_path"]
+[ext_resource type="Script" uid="uid://dbn5ed02uly7n" path="res://game/object_forms/path_form.gd" id="3_66ii8"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="5_go"]
 [ext_resource type="Texture2D" uid="uid://bxqt3au4e86eq" path="res://assets/textures/objects/decoration/nature/twisted_crystal_stem.png" id="6_stem"]
 [ext_resource type="Texture2D" uid="uid://btelfxilgfuv0" path="res://assets/textures/objects/decoration/nature/twisted_crystal.png" id="7_head"]
@@ -22,8 +19,8 @@ region = Rect2(-12, -15, 48, 48)
 [resource]
 script = ExtResource("5_go")
 id = "twisted_crystal"
-data = SubResource("Resource_dd6w4")
-ld_properties = Array[ExtResource("2_prop")]([ExtResource("3_pos"), ExtResource("4_path")])
+form = SubResource("Resource_dd6w4")
 ld_entry_texture = SubResource("AtlasTexture_66ii8")
 ld_index_id = "crystal_twisted_04"
+ld_group_override = "Crystal"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

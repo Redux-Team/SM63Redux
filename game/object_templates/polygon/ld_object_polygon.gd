@@ -11,7 +11,7 @@ const STYLE_PROPERTIES: Array[StringName] = [
 ]
 
 
-@export var polygon_data: PolygonData:
+@export var polygon_data: PolygonForm:
 	set(d):
 		polygon_data = d
 		if surface:
@@ -30,8 +30,8 @@ var _bounds: Rect2 = Rect2()
 var _pulse: Tween
 
 
-static func from_data(data: GameObjectData) -> LDObject:
-	var polygon_style: PolygonData = data as PolygonData
+static func from_data(data: ObjectForm) -> LDObject:
+	var polygon_style: PolygonForm = data as PolygonForm
 	if not polygon_style:
 		return null
 	
@@ -180,7 +180,7 @@ func get_property_options(key: StringName) -> PackedStringArray:
 			for style: PolygonDecorationStyle in PolygonStyleDB.get_decoration_styles():
 				result.append(style.style_name)
 		&"collision_mode":
-			result.append_array(PolygonData.COLLISION_MODE_NAMES)
+			result.append_array(PolygonForm.COLLISION_MODE_NAMES)
 		_:
 			return PackedStringArray()
 	return result

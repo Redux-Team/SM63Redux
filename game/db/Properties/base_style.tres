@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_658wu")
 key = &"base_style"
+group = &"Appearance"
 label = "Base Style"
 type = 7
 default_value = ""

@@ -1,15 +1,15 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cp7abjc4l1sfn"]
 
-[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="2_vyvfr"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_forms/sprite_form.gd" id="2_vyvfr"]
 [ext_resource type="Texture2D" uid="uid://cawur2ekoqo4o" path="res://assets/textures/item/fludd/fludd_box_rocket.png" id="3_lk3jw"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="4_6px77"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="5_bmuyi"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_234e8"]
 
 [sub_resource type="Resource" id="Resource_xtdie"]
 script = ExtResource("2_vyvfr")
 texture = ExtResource("3_lk3jw")
 game_scene_uid = "uid://da7yy7qfbwkkt"
+allow_rotation = false
+allow_scale = false
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wxuox"]
 atlas = ExtResource("3_lk3jw")
@@ -18,8 +18,7 @@ region = Rect2(-4, -6, 48, 48)
 [resource]
 script = ExtResource("6_234e8")
 id = "rocket_fludd_box"
-data = SubResource("Resource_xtdie")
-ld_properties = Array[ExtResource("4_6px77")]([ExtResource("5_bmuyi")])
+form = SubResource("Resource_xtdie")
 name_override = "Rocket FLUDD Box"
 ld_entry_texture = SubResource("AtlasTexture_wxuox")
 ld_index_id = "fludd"

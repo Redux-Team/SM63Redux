@@ -16,6 +16,19 @@ var data: Dictionary
 var properties: Dictionary = {}
 var source_object_id: String = ""
 
+## Greyed out and inert in the level designer, stopped here. One field, meaning the same thing on
+## both sides because each implements it in its own terms.
+var disabled: bool = false:
+	set(value):
+		disabled = value
+		set_process(not value)
+		set_physics_process(not value)
+		set_process_internal(not value)
+
+## The object's own field definitions, taken from the database on init so the values a level saved
+## can be coerced and applied through the very definitions the designer edited them with.
+var _schema: Array[LDProperty] = []
+
 
 func init_from_data(obj_data: Dictionary) -> void:
 	data = obj_data
@@ -38,36 +51,65 @@ func get_property(key: StringName, default: Variant = null) -> Variant:
 
 
 func set_property(key: StringName, value: Variant) -> void:
-	properties[key] = value
+	properties.set(key, value)
 	_on_property_changed(key, value)
+
 
 ## Main property method to be overridden, if necessary. This will go property by property. Call super()
 ## to let the superclass handle the property (if applicable).
+##
+## A field that declares what it does is applied through its own definition, in the same terms the
+## level designer applies it. Anything else is set on the node by name, which is how a hand-authored
+## scene's exported fields get filled in.
 func _handle_property(property_name: String, property_value: Variant) -> void:
-	if property_name in ["position", "scale"]:
-		set(property_name, Packer.array_to_vec2(property_value))
-	elif property_name == "rotation":
-		rotation_degrees = property_value
-	elif property_name == "disabled":
-		set_process(not property_value)
-		set_physics_process(not property_value)
-		set_process_internal(not property_value)
-	elif property_name == "palette":
-		for obj: CanvasItem in palette_objects:
-			obj.material.set_shader_parameter(&"palette_index", property_value)
-	else:
-		set(property_name, property_value)
+	var prop: LDProperty = _find_property(property_name)
+	if prop and prop.apply_mode != LDProperty.Apply.NONE:
+		prop.apply(self, property_value)
+		return
+	
+	set(property_name, property_value)
+
 
 ## Overrides the full property logic of the object.
+##
+## Every field the object declares is run, not only the ones this level happened to save, so a field
+## added to an object after a level was written arrives with its default instead of being skipped.
 func _handle_properties() -> void:
-	for prop_name: String in properties:
-		_handle_property(prop_name, properties.get(prop_name))
+	var game_object: GameObject = GameDB.get_object(source_object_id)
+	_schema = game_object.get_properties() if game_object else []
+	
+	var declared: Dictionary[StringName, bool] = {}
+	for prop: LDProperty in _schema:
+		declared.set(prop.key, true)
+		var value: Variant = prop.coerce(properties.get(prop.key, prop.default_value))
+		properties.set(prop.key, value)
+		_handle_property(prop.key, value)
+	
+	# Anything the level saved that the object no longer declares still reaches the node, so pulling
+	# a field out of the database doesn't silently drop data a script is still reading.
+	for saved_key: Variant in properties.keys():
+		if not declared.has(StringName(saved_key)):
+			_handle_property(str(saved_key), properties.get(saved_key))
+
+
+## Uniform-driven fields (a palette index, say) reach the object through this, named to match the
+## editor object's own setter so [constant LDProperty.Apply.SHADER_PARAM] works on both sides.
+func set_shader_parameter(parameter: StringName, value: Variant) -> void:
+	for item: CanvasItem in palette_objects:
+		if item and item.material is ShaderMaterial:
+			(item.material as ShaderMaterial).set_shader_parameter(parameter, value)
+
+
+## Shape [CollisionTrait] falls back to when an object asks for collision without describing one.
+func get_default_collision_shape() -> Shape2D:
+	return null
 
 
 ## Called before properties are set
 func _pre_init() -> void:
 	if not Singleton.get_multiplayer_handler().is_server():
 		set_process(false)
+
 
 ## Called after properties are set
 func _on_init() -> void:
@@ -76,3 +118,10 @@ func _on_init() -> void:
 
 func _on_property_changed(_key: StringName, _value: Variant) -> void:
 	pass
+
+
+func _find_property(property_name: String) -> LDProperty:
+	for prop: LDProperty in _schema:
+		if prop.key == property_name:
+			return prop
+	return null

@@ -1,11 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cyxo0l1jdatyq"]
 
-[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="1_esdll"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_forms/sprite_form.gd" id="1_esdll"]
 [ext_resource type="Texture2D" uid="uid://cpnx0yn5ps358" path="res://assets/textures/objects/decoration/hints/arrow_invisibility.png" id="1_n146p"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_esdll"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_vy7xq"]
-[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_7el48"]
-[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_hbsoi"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_b23uh"]
 
 [sub_resource type="Resource" id="Resource_vy7xq"]
@@ -19,8 +15,7 @@ region = Rect2(-10, -15, 48, 48)
 [resource]
 script = ExtResource("6_b23uh")
 id = "arrow_invisibility"
-data = SubResource("Resource_vy7xq")
-ld_properties = Array[ExtResource("2_esdll")]([ExtResource("3_vy7xq"), ExtResource("4_7el48"), ExtResource("5_hbsoi")])
+form = SubResource("Resource_vy7xq")
 name_override = "Invisibility Arrow"
 ld_entry_texture = SubResource("AtlasTexture_6pbe7")
 ld_index_id = "arrow_2"

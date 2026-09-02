@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_vr7xx")
 key = &"topline_style"
+group = &"Appearance"
 label = "Topline Style"
 type = 7
 default_value = ""

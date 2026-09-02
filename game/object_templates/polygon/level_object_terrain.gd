@@ -7,7 +7,7 @@ extends LevelObjectPolygon
 ## along the toplines, or nothing at all.
 
 
-@export var polygon_data: PolygonData:
+@export var polygon_data: PolygonForm:
 	set(d):
 		polygon_data = d
 		if surface:
@@ -29,8 +29,8 @@ var collision_mode: String = ""
 var _semisolid_shapes: Array[CollisionShape2D] = []
 
 
-static func from_data(object_data: GameObjectData) -> LevelObjectTerrain:
-	var polygon_style: PolygonData = object_data as PolygonData
+static func from_data(object_data: ObjectForm) -> LevelObjectTerrain:
+	var polygon_style: PolygonForm = object_data as PolygonForm
 	if not polygon_style:
 		return null
 	
@@ -42,9 +42,9 @@ static func from_data(object_data: GameObjectData) -> LevelObjectTerrain:
 
 func _on_init() -> void:
 	if not polygon_data and not source_object_id.is_empty():
-		var game_object: GameObject = GameDB.get_db().find_game_object(source_object_id)
+		var game_object: GameObject = GameDB.get_object(source_object_id)
 		if game_object:
-			polygon_data = game_object.data as PolygonData
+			polygon_data = game_object.data as PolygonForm
 	
 	super._on_init()
 	
@@ -76,14 +76,14 @@ func _sync_collision() -> void:
 			shape.queue_free()
 	_semisolid_shapes.clear()
 	
-	var mode: PolygonData.CollisionMode = surface.get_collision_mode()
-	var solid: bool = mode == PolygonData.CollisionMode.SOLID
+	var mode: PolygonForm.CollisionMode = surface.get_collision_mode()
+	var solid: bool = mode == PolygonForm.CollisionMode.SOLID
 	
 	if collision:
 		collision.disabled = not solid
 		collision.polygon = surface.get_ring() if solid else PackedVector2Array()
 	
-	if mode == PolygonData.CollisionMode.SEMISOLID:
+	if mode == PolygonForm.CollisionMode.SEMISOLID:
 		_build_semisolid()
 
 

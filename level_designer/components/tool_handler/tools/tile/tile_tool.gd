@@ -279,7 +279,7 @@ func _refresh_preview() -> void:
 		var template: LDObjectPolygon = plan.targets.get(0) if not plan.targets.is_empty() else null
 		var source: GameObject = _game_object
 		if template:
-			source = GameDB.get_db().find_game_object(template.source_object_id)
+			source = GameDB.get_object(template.source_object_id)
 		if not source:
 			continue
 		for target: LDObjectPolygon in plan.targets:
@@ -397,7 +397,7 @@ func _rewrite(targets: Array[LDObjectPolygon], cells: Dictionary[Vector2i, bool]
 	var template: LDObjectPolygon = targets.get(0) if not targets.is_empty() else null
 	var source: GameObject = _game_object
 	if template:
-		source = GameDB.get_db().find_game_object(template.source_object_id)
+		source = GameDB.get_object(template.source_object_id)
 	
 	for i: int in maxi(shapes.size(), targets.size()):
 		if i >= shapes.size():

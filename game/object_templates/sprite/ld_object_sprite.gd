@@ -41,17 +41,17 @@ var _sprite_covered: bool = false
 			origin_marker.owner = self
 
 
-static func from_data(data: GameObjectData) -> LDObject:
-	var sprite_data: SpriteData = data as SpriteData
-	if not sprite_data:
+static func from_data(form: ObjectForm) -> LDObject:
+	var sprite_form: SpriteForm = form as SpriteForm
+	if not sprite_form:
 		return null
 
 	var instance: LDObjectSprite = load("uid://qn5edo21q3sg").instantiate()
-	instance.sprite_ref.diffuse_texture = sprite_data.texture
+	instance.sprite_ref.diffuse_texture = sprite_form.texture
 
 	var editor_shape: CollisionShape2D = instance.editor_placement_rect
-	editor_shape.shape = sprite_data.editor_shape_override if sprite_data.editor_shape_override else Packer.get_texture_as_shape(sprite_data.texture)
-	editor_shape.position = sprite_data.editor_shape_offset
+	editor_shape.shape = sprite_form.editor_shape_override if sprite_form.editor_shape_override else Packer.get_texture_as_shape(sprite_form.texture)
+	editor_shape.position = sprite_form.editor_shape_offset
 
 	return instance
 

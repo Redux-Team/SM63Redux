@@ -18,8 +18,8 @@ var _preview_valid: bool = true
 var _stem_shapes: Array[CollisionShape2D] = []
 
 
-static func from_data(data: GameObjectData) -> LDObject:
-	var path_data: PathData = data as PathData
+static func from_data(data: ObjectForm) -> LDObject:
+	var path_data: PathForm = data as PathForm
 	if not path_data:
 		return null
 	

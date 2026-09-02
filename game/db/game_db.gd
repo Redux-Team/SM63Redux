@@ -1,315 +1,199 @@
 @tool
-@warning_ignore_start("unused_private_class_variable")
 class_name GameDB
-extends Resource
 
-static var _inst: GameDB
-
-@export var objects: Dictionary[String, GameObject]
-@export var properties: Dictionary[String, LDProperty]
-@export_dir var objects_root: String
-@export_dir var properties_root: String
-
-var _by_id: Dictionary[String, GameObject] = {}
-
-@export_tool_button("Auto-populate objects") var _populate_objects: Callable:
-	get:
-		return func() -> void:
-			populate_objects(objects_root)
-			_by_id.clear()
-
-
-@export_tool_button("Auto-populate properties") var _populate_props: Callable:
-	get:
-		return func() -> void:
-			populate_properties(properties_root)
-
-
-@export_tool_button("Repopulate objects (clean)") var _repopulate_objects: Callable:
-	get:
-		return func() -> void:
-			objects.clear()
-			populate_objects.call(objects_root)
-			_by_id.clear()
-
-@export_category("Debug")
-@export_dir var ld_object_objects_root: String
-@export_dir var level_object_objects_root: String
-
-
-@export_tool_button("Find missing LD objects") var _find_missing_ld: Callable:
-	get:
-		return func() -> void:
-			var game_files: Array[String] = _collect_ld_eligible_basenames()
-			var skipped: int = objects.size() - game_files.size()
-			var ld_files: Array[String] = _collect_basenames(ld_object_objects_root, "tscn")
-			var missing: Array[String] = []
-			for name: String in game_files:
-				if name not in ld_files:
-					missing.append(name)
-			if missing.is_empty():
-				print("No missing LD objects. (skipped %d)" % skipped)
-			else:
-				print("Missing LD objects (%d, skipped %d):" % [missing.size(), skipped])
-				for name: String in missing:
-					print("  - ", name)
-
-
-@export_tool_button("Find missing Level objects") var _find_missing_level: Callable:
-	get:
-		return func() -> void:
-			var game_files: Array[String] = _collect_ld_eligible_basenames()
-			var skipped: int = objects.size() - game_files.size()
-			var level_files: Array[String] = _collect_basenames(level_object_objects_root, "tscn")
-			var missing: Array[String] = []
-			for name: String in game_files:
-				if name not in level_files:
-					missing.append(name)
-			if missing.is_empty():
-				print("No missing Level objects. (skipped %d)" % skipped)
-			else:
-				print("Missing Level objects (%d, skipped %d):" % [missing.size(), skipped])
-				for name: String in missing:
-					print("  - ", name)
-
-
-@export_tool_button("Find objects without texture") var _find_missing_texture: Callable:
-	get:
-		return func() -> void:
-			var missing: Array[String] = []
-			for obj: GameObject in objects.values():
-				if not obj.get_entry_texture():
-					missing.append(obj.id)
-			if missing.is_empty():
-				print("All objects have a texture.")
-			else:
-				print("Objects without texture (%d):" % missing.size())
-				for name: String in missing:
-					print("  - ", name)
-
-
-@export_tool_button("Find proprety-less GameObjects") var _find_empty_objects: Callable:
-	get:
-		return func() -> void:
-			var empty: Array[String] = []
-			for obj: GameObject in objects.values():
-				if not obj.get_entry_texture():
-					continue
-				if obj.ld_properties.is_empty():
-					empty.append(obj.id)
-			if empty.is_empty():
-				print("No empty GameObjects.")
-			else:
-				print("Empty GameObjects (%d):" % empty.size())
-				for name: String in empty:
-					print("  - ", name)
-
-
-@export var migration_dict: Dictionary[String, String]
-
-@export_tool_button("Migrate properties") var _migrate_properties: Callable:
-	get:
-		return func() -> void:
-			var migrated: int = 0
-			for obj: GameObject in objects.values():
-				var has_changed: bool = false
-				for from_key: String in migration_dict.keys():
-					var to_key: String = migration_dict.get(from_key)
-					if not obj.get(from_key) == null:
-						obj.set(to_key, obj.get(from_key))
-						has_changed = true
-				if has_changed:
-					ResourceSaver.save(obj)
-					migrated += 1
-			print("Property migration complete: %d objects updated." % migrated)
+## Registry of every placeable object. The folder *is* the database: an object exists because a
+## [GameObject] resource sits somewhere under [constant GameObject.OBJECTS_ROOT], its id is that
+## file's name, and its browser category and group are the folders above it. There is no generated
+## index, so there is nothing to refresh by hand and nothing that can drift out of date - adding a
+## file adds an object and deleting one removes it.
+##
+## A scan only lists directories, so nothing an object references (textures, scenes, styles) is
+## touched by it. Resources load the first time something asks for one, which means loading a level
+## pulls in the handful of objects it actually places rather than all of them. The object browser
+## is the one caller that needs every object, and it goes through [method get_categories].
+##
+## Files whose name starts with "_" are skipped, so shared sub-resources can sit beside the objects
+## that use them.
 
 
 class GameObjectGroup:
 	var _id: String
-	var _objects: Dictionary[String, GameObject] = {}
-
-
+	var _objects: Array[GameObject] = []
+	
+	
 	func get_name() -> String:
 		return _id
-
-
-	func get_object(obj_id: String) -> GameObject:
-		return _objects.get(obj_id, null)
-
-
-	func get_object_names() -> Array[String]:
-		var result: Array[String] = []
-		result.assign(_objects.keys())
-		return result
-
-
+	
+	
 	func get_objects() -> Array[GameObject]:
-		var result: Array[GameObject] = []
-		result.assign(_objects.values())
-		
-		result.sort_custom(func(a: GameObject, b: GameObject) -> bool:
-			return a.get_index_id() < b.get_index_id()
-		)
-		
-		return result
+		return _objects
 
 
 class GameObjectCategory:
 	var _id: String
-	var _groups: Dictionary[String, GameObjectGroup] = {}
-
-
+	var _groups: Array[GameObjectGroup] = []
+	
+	
 	func get_name() -> String:
 		return _id
-
-
-	func get_group(group_id: String) -> GameObjectGroup:
-		return _groups.get(group_id, null)
-
-
-	func get_group_names() -> Array[String]:
-		var result: Array[String] = []
-		result.assign(_groups.keys())
-		return result
-
-
+	
+	
 	func get_groups() -> Array[GameObjectGroup]:
-		var result: Array[GameObjectGroup] = []
-		result.assign(_groups.values())
-		return result
+		return _groups
 
 
-	func get_objects() -> Array[GameObject]:
-		var result: Array[GameObject] = []
-		for group: GameObjectGroup in _groups.values():
-			result.append_array(group.get_objects())
-		return result
+## Object id -> the file it lives in, filled in by the scan and never holding a loaded resource.
+static var _paths: Dictionary[String, String] = {}
+## Objects loaded so far, kept alive so repeated placements don't re-read the file.
+static var _objects: Dictionary[String, GameObject] = {}
+## Browser tree, built on first use because grouping and sorting need every object loaded.
+static var _tree: Array[GameObjectCategory] = []
+static var _scanned: bool = false
 
 
-static func get_db() -> GameDB:
-	if not _inst:
-		_inst = load("uid://860ancqo5p43")
-	return _inst
+## The object with this id, loaded on first use. Null when nothing under
+## [constant GameObject.OBJECTS_ROOT] is named after it.
+static func get_object(id: String) -> GameObject:
+	var cached: GameObject = _objects.get(id)
+	if cached:
+		return cached
+	
+	_ensure_scanned()
+	var path: String = _paths.get(id, "")
+	if path.is_empty():
+		return null
+	
+	var obj: GameObject = load(path) as GameObject
+	if obj:
+		_objects.set(id, obj)
+	
+	return obj
 
 
-func get_tree() -> Array[GameObjectCategory]:
-	var cats: Dictionary[String, GameObjectCategory] = {}
-	for obj: GameObject in objects.values():
-		var cat_id: String = obj.category
-		var group_id: String = obj.group
-		if group_id == "Nature" and not obj.ld_index_id.is_empty():
-			group_id = obj.ld_index_id.get_slice("_", 0).capitalize()
-		if cat_id not in cats:
-			var cat: GameObjectCategory = GameObjectCategory.new()
-			cat._id = cat_id
-			cats[cat_id] = cat
-		var category: GameObjectCategory = cats.get(cat_id)
-		if group_id not in category._groups:
-			var group: GameObjectGroup = GameObjectGroup.new()
-			group._id = group_id
-			category._groups[group_id] = group
-		category._groups.get(group_id)._objects[obj.id] = obj
-	var result: Array[GameObjectCategory] = []
-	result.assign(cats.values())
+## Every known object id, in scan order (alphabetical by path). Costs no resource loads.
+static func get_object_ids() -> Array[String]:
+	_ensure_scanned()
+	var result: Array[String] = []
+	result.assign(_paths.keys())
 	return result
 
 
-func get_category(cat_id: String) -> GameObjectCategory:
-	for cat: GameObjectCategory in get_tree():
-		if cat._id == cat_id:
-			return cat
+## The file backing an id, without loading it.
+static func get_object_path(id: String) -> String:
+	_ensure_scanned()
+	return _paths.get(id, "")
+
+
+## Browser categories, each holding its groups and their objects. Building this loads every object,
+## because the browser shows all of them; the level and the game only ever go through
+## [method get_object].
+static func get_categories() -> Array[GameObjectCategory]:
+	if not _tree.is_empty():
+		return _tree
+	
+	_ensure_scanned()
+	var categories: Dictionary[String, GameObjectCategory] = {}
+	for id: String in _paths:
+		var obj: GameObject = get_object(id)
+		if not obj:
+			continue
+		
+		if not categories.has(obj.category):
+			var category: GameObjectCategory = GameObjectCategory.new()
+			category._id = obj.category
+			categories.set(obj.category, category)
+		
+		_get_or_add_group(categories.get(obj.category), _browser_group(obj))._objects.append(obj)
+	
+	for category: GameObjectCategory in categories.values():
+		for group: GameObjectGroup in category._groups:
+			group._objects.sort_custom(func(a: GameObject, b: GameObject) -> bool:
+				return a.get_index_id() < b.get_index_id()
+			)
+	
+	_tree.assign(categories.values())
+	
+	return _tree
+
+
+static func get_category(category_id: String) -> GameObjectCategory:
+	for category: GameObjectCategory in get_categories():
+		if category._id == category_id:
+			return category
 	return null
 
 
-func get_category_names() -> Array[String]:
+## Category names straight off the folder layout, so the browser's tabs cost no resource loads.
+static func get_category_names() -> Array[String]:
+	_ensure_scanned()
 	var result: Array[String] = []
-	for obj: GameObject in objects.values():
-		var cat_id: String = obj.category
-		if cat_id not in result:
-			result.append(cat_id)
+	for path: String in _paths.values():
+		var category: String = path.trim_prefix(GameObject.OBJECTS_ROOT).get_slice("/", 0)
+		if category not in result:
+			result.append(category)
 	return result
 
 
-func populate_objects(path: String) -> void:
+## Drops everything and re-reads the folder tree. Only the editor needs this, after objects are
+## added or removed while the project is open.
+static func refresh() -> void:
+	_paths.clear()
+	_objects.clear()
+	_tree.clear()
+	_scanned = false
+	_ensure_scanned()
+
+
+static func _ensure_scanned() -> void:
+	if _scanned:
+		return
+	
+	_scanned = true
+	_scan(GameObject.OBJECTS_ROOT)
+
+
+static func _scan(path: String) -> void:
 	var dir: DirAccess = DirAccess.open(path)
 	if not dir:
 		return
 	
-	dir.list_dir_begin()
-	var file_name: String = dir.get_next()
+	var directories: PackedStringArray = dir.get_directories()
+	directories.sort()
+	for sub_dir: String in directories:
+		_scan(path.path_join(sub_dir))
 	
-	while file_name != "":
+	var files: PackedStringArray = dir.get_files()
+	files.sort()
+	for file_name: String in files:
+		if file_name.begins_with("_") or not file_name.ends_with(".tres"):
+			continue
+		
+		var id: String = file_name.get_basename()
 		var full_path: String = path.path_join(file_name)
-		if dir.current_is_dir():
-			populate_objects(full_path)
-		elif file_name.ends_with(".tres"):
-			var res: Resource = load(full_path)
-			if res is GameObject:
-				var obj_path: String = full_path.trim_prefix(objects_root.trim_suffix("/") + "/").trim_suffix(".tres")
-				var obj: GameObject = res as GameObject
-				if obj.id.is_empty():
-					obj.id = file_name.get_basename()
-				if obj not in objects.values():
-					objects.set(obj_path, obj)
-		file_name = dir.get_next()
+		# Two files of the same name are two objects claiming one id, and whichever lost would
+		# just vanish from the browser, so say so rather than picking one.
+		if _paths.has(id):
+			push_error("GameDB: duplicate object id \"%s\" (%s and %s); keeping the first." % [
+				id, _paths.get(id), full_path
+			])
+			continue
+		
+		_paths.set(id, full_path)
 
 
-func find_game_object(id: String) -> GameObject:
-	if _by_id.is_empty() and not objects.is_empty():
-		_rebuild_by_id()
-	return _by_id.get(id, null)
-
-
-## Builds the id -> GameObject lookup so find_game_object is O(1) instead of an O(n) scan per call
-## (the per-object scans dominated level load / editor rebuild time). Rebuilt after a (re)populate.
-func _rebuild_by_id() -> void:
-	_by_id.clear()
-	for obj: GameObject in objects.values():
-		_by_id.set(obj.id, obj)
-
-
-func populate_properties(path: String) -> void:
-	var dir: DirAccess = DirAccess.open(path)
-	if not dir:
-		return
+static func _get_or_add_group(category: GameObjectCategory, group_id: String) -> GameObjectGroup:
+	for existing: GameObjectGroup in category._groups:
+		if existing._id == group_id:
+			return existing
 	
-	dir.list_dir_begin()
-	var file_name: String = dir.get_next()
+	var group: GameObjectGroup = GameObjectGroup.new()
+	group._id = group_id
+	category._groups.append(group)
 	
-	while file_name != "":
-		var full_path: String = path.path_join(file_name)
-		if dir.current_is_dir():
-			populate_properties(full_path)
-		elif file_name.ends_with(".tres"):
-			var res: Resource = load(full_path)
-			if res is LDProperty:
-				var prop: LDProperty = res as LDProperty
-				var prop_path: String = full_path.trim_prefix(properties_root.trim_suffix("/") + "/").trim_suffix(".tres")
-				if prop_path not in properties:
-					properties.set(prop_path, prop)
-		file_name = dir.get_next()
+	return group
 
 
-func _collect_ld_eligible_basenames() -> Array[String]:
-	var result: Array[String] = []
-	for obj: GameObject in objects.values():
-		if obj.get_entry_texture():
-			result.append(obj.id)
-	return result
-
-
-func _collect_basenames(path: String, extension: String) -> Array[String]:
-	var result: Array[String] = []
-	var dir: DirAccess = DirAccess.open(path)
-	if not dir:
-		return result
-	dir.list_dir_begin()
-	var file_name: String = dir.get_next()
-	while file_name != "":
-		var full_path: String = path.path_join(file_name)
-		if dir.current_is_dir():
-			result.append_array(_collect_basenames(full_path, extension))
-		elif file_name.ends_with("." + extension):
-			result.append(file_name.get_basename())
-		file_name = dir.get_next()
-	return result
+## An object's browser section is the folder it lives in unless it names one, which is how the
+## nature decorations sort themselves by theme out of the single folder they share.
+static func _browser_group(obj: GameObject) -> String:
+	return obj.ld_group_override if not obj.ld_group_override.is_empty() else obj.group

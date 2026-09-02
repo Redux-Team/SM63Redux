@@ -21,7 +21,7 @@ const DEFAULT_TOPLINE_THRESHOLD: float = 0.55
 @export var topline_container: Node2D
 
 
-var data: PolygonData:
+var data: PolygonForm:
 	set(d):
 		if data and data.changed.is_connected(rebuild):
 			data.changed.disconnect(rebuild)
@@ -140,9 +140,9 @@ func get_decoration_style() -> PolygonDecorationStyle:
 	return preset if preset else (data.decoration if data else null)
 
 
-func get_collision_mode() -> PolygonData.CollisionMode:
-	var fallback: PolygonData.CollisionMode = data.collision_mode if data else PolygonData.CollisionMode.NONE
-	return PolygonData.parse_collision_mode(collision_mode_name, fallback)
+func get_collision_mode() -> PolygonForm.CollisionMode:
+	var fallback: PolygonForm.CollisionMode = data.collision_mode if data else PolygonForm.CollisionMode.NONE
+	return PolygonForm.parse_collision_mode(collision_mode_name, fallback)
 
 
 func get_topline_threshold() -> float:
@@ -210,9 +210,9 @@ func rebuild() -> void:
 	if decorations:
 		decorations.rebuild(_outer, _holes, get_decoration_style(), rng_seed, decorations_enabled)
 	
-	var line_mode: PolygonData.LineMode = data.line_mode if data else PolygonData.LineMode.NONE
-	if _outer.size() >= 3 and line_mode != PolygonData.LineMode.NONE:
-		if line_mode == PolygonData.LineMode.TOPLINE:
+	var line_mode: PolygonForm.LineMode = data.line_mode if data else PolygonForm.LineMode.NONE
+	if _outer.size() >= 3 and line_mode != PolygonForm.LineMode.NONE:
+		if line_mode == PolygonForm.LineMode.TOPLINE:
 			_build_toplines()
 		if base:
 			_build_outlines(base.make_outline_style())

@@ -2,11 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bvhnsfmnwobe3" path="res://assets/textures/objects/interactive/warps/pipe.png" id="2_s70tf"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="3_qxcq1"]
-[ext_resource type="Script" uid="uid://cb1ouljyhrjdx" path="res://game/object_data/telescoping_data.gd" id="3_s70tf"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="4_8xm01"]
-[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_etmg4"]
-[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="6_tpfk8"]
-[ext_resource type="Resource" uid="uid://cmrdgbqp43tvo" path="res://game/db/Properties/t_size_y.tres" id="7_1iw1g"]
+[ext_resource type="Script" uid="uid://cb1ouljyhrjdx" path="res://game/object_forms/telescoping_form.gd" id="3_s70tf"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="9_vv0oi"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mp52l"]
@@ -19,6 +15,7 @@ atlas = SubResource("AtlasTexture_mp52l")
 collision_collapsed = false
 collision_one_way = false
 game_scene_uid = "uid://bsr474tp5tovf"
+axis = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i1eyc"]
 atlas = ExtResource("2_s70tf")
@@ -33,13 +30,12 @@ default_value = 0
 min_value = 0.0
 max_value = 7.0
 apply_mode = 2
-apply_target = NodePath("palette_index")
+apply_target = &"palette_index"
 
 [resource]
 script = ExtResource("9_vv0oi")
 id = "pipe"
-data = SubResource("Resource_qxcq1")
-ld_properties = Array[ExtResource("3_qxcq1")]([ExtResource("4_8xm01"), ExtResource("5_etmg4"), ExtResource("6_tpfk8"), ExtResource("7_1iw1g"), SubResource("Resource_dcwx1")])
+form = SubResource("Resource_qxcq1")
 ld_entry_texture = SubResource("AtlasTexture_i1eyc")
 ld_placement_tool_override = "telescoping"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,14 +1,15 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://c58m38fqamx21"]
 
 [ext_resource type="Texture2D" uid="uid://22oj4efhkg7d" path="res://assets/textures/item/collectible/blue_coin.png" id="1_5yiej"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_j4fw6"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="2_5yiej"]
-[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="2_p8txe"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_forms/sprite_form.gd" id="2_p8txe"]
 
 [sub_resource type="Resource" id="Resource_jyefi"]
 script = ExtResource("2_p8txe")
 texture = ExtResource("1_5yiej")
 game_scene_uid = "uid://bxwafrripj1kp"
+allow_rotation = false
+allow_scale = false
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2dhij"]
 atlas = ExtResource("1_5yiej")
@@ -17,7 +18,7 @@ region = Rect2(-15, -15, 48, 48)
 [resource]
 script = ExtResource("2_5yiej")
 id = "blue_coin"
-data = SubResource("Resource_jyefi")
+form = SubResource("Resource_jyefi")
 ld_entry_texture = SubResource("AtlasTexture_2dhij")
 ld_index_id = "coin_2"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

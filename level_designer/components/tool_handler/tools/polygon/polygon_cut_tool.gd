@@ -428,7 +428,7 @@ func _commit() -> void:
 							obj.add_hole(h)
 				)
 				
-				var game_object: GameObject = GameDB.get_db().find_game_object(target.source_object_id)
+				var game_object: GameObject = GameDB.get_object(target.source_object_id)
 				
 				for ci: int in range(1, clipped.size()):
 					var piece: PackedVector2Array = clipped[ci]
@@ -560,7 +560,7 @@ func _commit() -> void:
 							obj.add_hole(h)
 				)
 				
-				var game_object: GameObject = GameDB.get_db().find_game_object(target.source_object_id)
+				var game_object: GameObject = GameDB.get_object(target.source_object_id)
 				var valid_piece_idx: int = 1
 				for ci: int in range(1, clipped.size()):
 					var piece: Variant = clipped[ci]

@@ -1,6 +1,6 @@
 @tool
-class_name PathData
-extends GameObjectData
+class_name PathForm
+extends ObjectForm
 
 
 @export var line_texture: Texture2D
@@ -13,6 +13,10 @@ extends GameObjectData
 @export var collision_stem_width: float = 16.0
 @export var collision_head: bool = false
 @export var collision_head_polygon: PackedVector2Array
+
+
+func properties() -> Array[LDProperty]:
+	return LDPropertyLibrary.get_properties(PackedStringArray(["position", "path_points"]))
 
 
 func get_entry_texture() -> Texture2D:

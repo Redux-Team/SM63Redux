@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="1_5s2g4"]
 [ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_r1t5l"]
-[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="2_1xexh"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_forms/sprite_form.gd" id="2_1xexh"]
 [ext_resource type="Texture2D" uid="uid://bxvc5b2qfwmxl" path="res://assets/textures/entity/player/mario/ld_preview.png" id="3_1xexh"]
 [ext_resource type="Texture2D" uid="uid://ccsrslfjf3xxe" path="res://assets/textures/entity/player/mario/idle.png" id="5_e20s5"]
 
@@ -10,6 +10,8 @@
 script = ExtResource("2_1xexh")
 texture = ExtResource("3_1xexh")
 game_scene_uid = "uid://b4nw5k2oa3ro0"
+allow_rotation = false
+allow_scale = false
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e20s5"]
 atlas = ExtResource("5_e20s5")
@@ -23,13 +25,12 @@ type = 4
 default_value = Vector2(0, 0)
 exclusive = true
 apply_mode = 1
-apply_target = NodePath("position")
+apply_target = &"position"
 
 [resource]
 script = ExtResource("1_5s2g4")
 id = "player_mario"
-data = SubResource("Resource_pqh2h")
-ld_properties = Array[ExtResource("1_r1t5l")]([SubResource("Resource_e20s5")])
+form = SubResource("Resource_pqh2h")
 ld_entry_texture = SubResource("AtlasTexture_e20s5")
 ld_indexable = false
 ld_flags = 1

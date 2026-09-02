@@ -151,7 +151,7 @@ func create_stamp_from_objects(objects: Array[LDObject], id: String = "") -> LDS
 	
 	var stampable: Array[LDObject] = []
 	for obj: LDObject in objects:
-		var game_object: GameObject = save_load.find_game_object_for(obj)
+		var game_object: GameObject = GameDB.get_object(obj.source_object_id)
 		if game_object and game_object.ld_stampable:
 			stampable.append(obj)
 	if stampable.is_empty():
@@ -395,14 +395,13 @@ func generate_preview(stamp: LDStamp) -> void:
 	var root: Node2D = Node2D.new()
 	viewport.add_child(root)
 	
-	var db: GameDB = GameDB.get_db()
 	var instances: Array[LDObject] = []
 	var bounds_min: Vector2 = Vector2(INF, INF)
 	var bounds_max: Vector2 = Vector2(-INF, -INF)
 	
 	for entry: Dictionary in stamp.objects:
 		var object_id: String = entry.get("object_id", "")
-		var game_object: GameObject = LD.get_save_load_handler().find_game_object_by_id(object_id, db)
+		var game_object: GameObject = GameDB.get_object(object_id)
 		if not game_object:
 			continue
 		var instance: LDObject = game_object.get_editor_instance()
@@ -492,14 +491,13 @@ func position_preview(instances: Array[LDObject], instance_pos: Vector2) -> void
 
 func _spawn_stamp_objects(stamp: LDStamp, instance_pos: Vector2, default_layer: int = 0, as_preview: bool = false, area: LDArea = null) -> Array[LDObject]:
 	var result: Array[LDObject] = []
-	var db: GameDB = GameDB.get_db()
 	if not area:
 		area = LDLevel.get_active_area()
 	var save_load: LDSaveLoadHandler = LD.get_save_load_handler()
 	
 	for entry: Dictionary in stamp.objects:
 		var object_id: String = entry.get("object_id", "")
-		var game_object: GameObject = save_load.find_game_object_by_id(object_id, db)
+		var game_object: GameObject = GameDB.get_object(object_id)
 		if not game_object:
 			continue
 		

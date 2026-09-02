@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_ar42l")
 key = &"decoration_set"
+group = &"Appearance"
 label = "Decoration Set"
 type = 7
 default_value = ""
