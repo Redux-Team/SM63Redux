@@ -7,12 +7,13 @@
 shader = ExtResource("2_74ahl")
 shader_parameter/mask_scale = 1.0
 
-[node name="Singleton" type="Node" unique_id=1257631613 node_paths=PackedStringArray("_screen_transition_rect")]
+[node name="Singleton" type="Node" unique_id=1257631613 node_paths=PackedStringArray("_screen_transition_rect", "_debug_label")]
 script = ExtResource("1_287bc")
 _screen_transition_rect = NodePath("TransitionLayer/AspectRatioContainer/ColorRect")
+_debug_label = NodePath("DebugLayer/DebugLabel")
 
 [node name="TransitionLayer" type="CanvasLayer" parent="." unique_id=819180442]
-layer = 99
+layer = 98
 
 [node name="AspectRatioContainer" type="AspectRatioContainer" parent="TransitionLayer" unique_id=786831383]
 anchors_preset = 15
@@ -29,3 +30,21 @@ material = SubResource("ShaderMaterial_6he5r")
 layout_mode = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
+
+[node name="DebugLayer" type="CanvasLayer" parent="." unique_id=1473448237]
+layer = 99
+
+[node name="DebugLabel" type="Label" parent="DebugLayer" unique_id=653413106]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -48.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = 17.0
+grow_horizontal = 0
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 10
+text = "<debug>"
+horizontal_alignment = 2

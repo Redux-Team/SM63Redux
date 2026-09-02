@@ -2194,7 +2194,6 @@ animations = [{
 }]
 
 [node name="Player" type="CharacterBody2D" unique_id=1446177947 node_paths=PackedStringArray("footstep_particles", "debug_container", "floor_slope_raycast", "spin_area", "spin_shape", "heal_particles", "_input_handler", "_sprite_handler", "_fludd_handler", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
-process_mode = 3
 collision_mask = 2
 floor_snap_length = 7.0
 script = ExtResource("1_oic1i")
@@ -2371,6 +2370,7 @@ transition_out_texture = ExtResource("51_26jgh")
 effects = SubResource("Effects_DeathFall")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1248091762]
+callback_mode_process = 0
 libraries/ = SubResource("AnimationLibrary_mb70y")
 
 [node name="Handlers" type="Node" parent="." unique_id=1643054592]
