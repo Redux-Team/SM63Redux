@@ -1,6 +1,8 @@
 extends LDTool
 
+
 const MIN_POINT_DISTANCE: float = 8.0
+
 
 var _active_object: LDObjectPolygon
 var _points: PackedVector2Array
@@ -44,12 +46,7 @@ func _input(event: InputEvent) -> void:
 	
 	match event.keycode:
 		KEY_ENTER:
-			var commit_points: PackedVector2Array = _points.duplicate()
-			if _cursor_pos != Vector2.ZERO and (commit_points.is_empty() or commit_points[commit_points.size() - 1] != _cursor_pos):
-				var test_points: PackedVector2Array = commit_points.duplicate()
-				test_points.append(_cursor_pos)
-				if test_points.size() >= 3 and _check_valid(test_points):
-					commit_points.append(_cursor_pos)
+			var commit_points: PackedVector2Array = _get_commit_points()
 			if commit_points.size() >= 3 and _check_valid(commit_points):
 				_points = commit_points
 				_commit_polygon()
@@ -88,6 +85,19 @@ func _on_viewport_input(event: InputEvent) -> void:
 				_commit_polygon()
 			else:
 				_cancel_polygon()
+
+
+## The points drawn so far plus the one under the cursor when that closes a usable shape, which is
+## what the user is looking at and therefore what a commit has to act on.
+func _get_commit_points() -> PackedVector2Array:
+	var preview: PackedVector2Array = _points.duplicate()
+	if _cursor_pos == Vector2.ZERO or (not preview.is_empty() and preview.get(preview.size() - 1) == _cursor_pos):
+		return preview
+	var test: PackedVector2Array = preview.duplicate()
+	test.append(_cursor_pos)
+	if test.size() < 3 or _check_valid(test):
+		return test
+	return preview
 
 
 func _check_min_distance(pos: Vector2) -> bool:
@@ -141,7 +151,7 @@ func _update_preview() -> void:
 		return
 	
 	var preview_points: PackedVector2Array = _points.duplicate()
-	if _cursor_pos != Vector2.ZERO and (preview_points.is_empty() or preview_points[preview_points.size() - 1] != _cursor_pos):
+	if _cursor_pos != Vector2.ZERO and (preview_points.is_empty() or preview_points.get(preview_points.size() - 1) != _cursor_pos):
 		preview_points.append(_cursor_pos)
 	
 	_is_valid = preview_points.size() < 3 or _check_valid(preview_points)
@@ -157,7 +167,7 @@ func _commit_polygon() -> void:
 	
 	var local_points: PackedVector2Array = PackedVector2Array()
 	for p: Vector2 in _points:
-		local_points.append(_active_object.to_local(p))
+		local_points.append(world_to_object(_active_object, p))
 	
 	_active_object.apply_points(local_points)
 	_active_object.set_preview_valid(true)
@@ -198,25 +208,17 @@ func _check_valid(points: PackedVector2Array) -> bool:
 		return true
 	
 	for i: int in count:
-		var a1: Vector2 = points[i]
-		var a2: Vector2 = points[(i + 1) % count]
+		var a1: Vector2 = points.get(i)
+		var a2: Vector2 = points.get((i + 1) % count)
 		for j: int in range(i + 2, count):
 			if j == count - 1 and i == 0:
 				continue
-			var b1: Vector2 = points[j]
-			var b2: Vector2 = points[(j + 1) % count]
+			var b1: Vector2 = points.get(j)
+			var b2: Vector2 = points.get((j + 1) % count)
 			if Geometry2D.segment_intersects_segment(a1, a2, b1, b2) != null:
 				return false
 	
 	return true
-
-
-func _get_closed_points(pts: PackedVector2Array) -> PackedVector2Array:
-	if pts.is_empty():
-		return pts
-	var closed: PackedVector2Array = pts.duplicate()
-	closed.append(pts[0])
-	return closed
 
 
 func _is_polygon_object(obj: GameObject) -> bool:

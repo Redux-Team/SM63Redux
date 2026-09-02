@@ -106,7 +106,7 @@ func _draw() -> void:
 	var base: Color = LDPalette.accent()
 	var outer_color: Color = Color(base.r, base.g, base.b, outer_opacity * _outer_alpha)
 	draw_arc(_pos, max_radius, 0.0, TAU, 64, outer_color, outer_width)
-
+	
 	if _fill_alpha > 0.0 and _fill_radius > 0.0:
 		var base_color: Color = Color(base.r, base.g, base.b, circle_color.a * _fill_alpha)
 		draw_circle(_pos, _fill_radius, base_color)

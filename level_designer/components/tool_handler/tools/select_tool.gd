@@ -11,7 +11,6 @@ var _is_shift_selecting: bool = false
 var _box_select_origin: Vector2
 var _box_select_rect: Rect2
 var _overlay: LDSelectionOverlay
-var _move_tool: LDToolMove
 
 
 func get_tool_name() -> String:
@@ -37,23 +36,18 @@ func _on_viewport_input(event: InputEvent) -> void:
 	if shortcut_handler:
 		shortcut_handler.handle_input(event)
 	
-	if event is InputEventKey and event.is_pressed() and not event.echo:
-		if event.keycode == KEY_BACKSPACE or event.keycode == KEY_DELETE:
-			_delete_selected()
-	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			var mouse_pos: Vector2 = viewport.get_screen_mouse()
-			var move: LDToolMove = _get_move_tool()
+			var move: LDToolMove = get_move_tool()
 			if move and move.try_begin_drag(mouse_pos, viewport.get_selected_objects()):
-				_move_tool = move
 				get_tool_handler().select_tool("move")
 				return
 			
 			var clicked: LDObject = _get_object_at(mouse_pos)
 			if clicked:
 				var game_object: GameObject = GameDB.get_object(clicked.source_object_id)
-				if game_object.get_select_tool():
+				if game_object and game_object.get_select_tool():
 					viewport.set_selected_objects([clicked])
 					get_tool_handler().select_tool(game_object.get_select_tool())
 					return
@@ -73,15 +67,11 @@ func _on_viewport_input(event: InputEvent) -> void:
 		_queue_hover_update()
 
 
-func _on_enable() -> void:
-	if _move_tool and not _move_tool.is_dragging():
-		_move_tool = null
-
-
 func _on_disable() -> void:
 	_overlay.hide_box()
 	_is_box_selecting = false
 	_hover_update_queued = false
+	super()
 
 
 func _on_selected_object_changed(_obj: GameObject) -> void:
@@ -112,8 +102,8 @@ func _update_hover_states() -> void:
 	# quadratic in the size of the selection.
 	var selected: Dictionary[LDObject, bool] = {}
 	for obj: LDObject in viewport.get_selected_objects():
-		selected[obj] = true
-
+		selected.set(obj, true)
+	
 	for obj: LDObject in _get_selectable_objects():
 		if not obj.ld_flags & (1 << GameObject.LD_SELECTABLE):
 			continue
@@ -180,15 +170,11 @@ func _expand_linked_selection(objects: Array[LDObject]) -> Array[LDObject]:
 	return result
 
 
-func _delete_selected() -> void:
-	LD.get_object_handler().delete_placed_selection()
-
-
 func _point_near_polygon_edge(point: Vector2, screen_points: PackedVector2Array, threshold: float) -> bool:
 	var count: int = screen_points.size()
 	for i: int in count:
-		var a: Vector2 = screen_points[i]
-		var b: Vector2 = screen_points[(i + 1) % count]
+		var a: Vector2 = screen_points.get(i)
+		var b: Vector2 = screen_points.get((i + 1) % count)
 		if Geometry2D.get_closest_point_to_segment(point, a, b).distance_to(point) <= threshold:
 			return true
 	return false
@@ -201,12 +187,12 @@ func _polygon_edge_intersects_box(screen_points: PackedVector2Array, box: Rect2)
 		box.position, Vector2(box_end.x, box.position.y), box_end, Vector2(box.position.x, box_end.y),
 	]
 	for i: int in count:
-		var a: Vector2 = screen_points[i]
-		var b: Vector2 = screen_points[(i + 1) % count]
+		var a: Vector2 = screen_points.get(i)
+		var b: Vector2 = screen_points.get((i + 1) % count)
 		if box.has_point(a):
 			return true
 		for e: int in 4:
-			if Geometry2D.segment_intersects_segment(a, b, corners[e], corners[(e + 1) % 4]) != null:
+			if Geometry2D.segment_intersects_segment(a, b, corners.get(e), corners.get((e + 1) % 4)) != null:
 				return true
 	return false
 
@@ -217,7 +203,7 @@ func _fill_polygon_hit_points(obj: LDObject, local: PackedVector2Array) -> void:
 	var xform: Transform2D = object_screen_xform(obj)
 	_hit_points.resize(local.size())
 	for i: int in local.size():
-		_hit_points[i] = xform * local[i]
+		_hit_points.set(i, xform * local.get(i))
 
 
 func _object_intersects_box(obj: LDObject) -> bool:
@@ -257,22 +243,20 @@ func _object_intersects_box(obj: LDObject) -> bool:
 		# the whole test collapses to one rect overlap against two transformed corners.
 		if is_zero_approx(xform.x.y) and is_zero_approx(xform.y.x):
 			for offset: int in range(0, local_points.size(), 4):
-				var a: Vector2 = xform * local_points[offset]
-				var b: Vector2 = xform * local_points[offset + 2]
+				var a: Vector2 = xform * local_points.get(offset)
+				var b: Vector2 = xform * local_points.get(offset + 2)
 				if _box_select_rect.intersects(Rect2(a, b - a).abs(), true):
 					return true
 			return false
 		_hit_points.resize(local_points.size())
 		for i: int in local_points.size():
-			_hit_points[i] = xform * local_points[i]
+			_hit_points.set(i, xform * local_points.get(i))
 		for offset: int in range(0, _hit_points.size(), 4):
 			if quad_intersects_rect(_hit_points, offset, _box_select_rect):
 				return true
 		return false
 	
-	var half: Vector2 = obj.get_stamp_size() * 0.5
-	return _box_select_rect.intersects(
-		viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size()))
+	return _box_select_rect.intersects(object_stamp_screen_rect(obj))
 
 
 func _get_selectable_objects() -> Array[LDObject]:
@@ -285,7 +269,7 @@ func _get_object_at(mouse_pos: Vector2) -> LDObject:
 	begin_hit_pass()
 	var all: Array[LDObject] = _get_selectable_objects()
 	for i: int in range(all.size() - 1, -1, -1):
-		var obj: LDObject = all[i]
+		var obj: LDObject = all.get(i)
 		if obj.is_preview or obj.disabled:
 			continue
 		# A point query rejects on the cached bounds far more often than it hits, so unlike the box
@@ -303,20 +287,13 @@ func _get_object_at(mouse_pos: Vector2) -> LDObject:
 				return obj
 			continue
 		if obj.get_shape_points().is_empty():
-			var half: Vector2 = obj.get_stamp_size() * 0.5
-			if viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size()).has_point(mouse_pos):
+			if object_stamp_screen_rect(obj).has_point(mouse_pos):
 				return obj
 			continue
 		if object_shapes_have_point(obj, mouse_pos):
 			return obj
 	
 	return null
-
-
-func _get_move_tool() -> LDToolMove:
-	return get_tool_handler().get_tool_list().filter(func(t: LDTool) -> bool:
-		return t is LDToolMove
-	).front() as LDToolMove
 
 
 func _on_touch_tap(pos: Vector2) -> void:

@@ -107,19 +107,19 @@ func _on_disable() -> void:
 func _input(event: InputEvent) -> void:
 	if not is_active():
 		return
-	if event is InputEventKey and event.is_pressed() and not event.echo and event.keycode == KEY_ESCAPE:
-		if _is_painting:
-			_reset_stroke()
-			_refresh_preview()
-		else:
-			get_tool_handler().select_tool("select")
-		get_viewport().set_input_as_handled()
+	var key: InputEventKey = event as InputEventKey
+	if not key or not key.pressed or key.echo or key.keycode != KEY_ESCAPE:
+		return
+	if _is_painting:
+		_reset_stroke()
+		_refresh_preview()
+	else:
+		get_tool_handler().select_tool("select")
+	get_viewport().set_input_as_handled()
 
 
 func _on_viewport_input(event: InputEvent) -> void:
-	if not is_active():
-		return
-	if get_viewport().is_input_handled():
+	if not is_active() or get_viewport().is_input_handled():
 		return
 	if Singleton.get_input_handler().is_using_touch():
 		return
@@ -133,14 +133,15 @@ func _on_viewport_input(event: InputEvent) -> void:
 				_cells.set(step, true)
 		_hover = cell
 		_refresh_preview()
+		return
 	
-	if event is InputEventMouseButton and _is_stroke_button(event.button_index):
-		if event.pressed and not _is_painting:
-			if viewport.is_panning():
-				return
-			_begin_stroke(event.button_index)
-		elif not event.pressed and _is_painting and event.button_index == _stroke_button:
-			_commit_stroke()
+	var button: InputEventMouseButton = event as InputEventMouseButton
+	if not button or not _is_stroke_button(button.button_index):
+		return
+	if button.pressed and not _is_painting and not viewport.is_panning():
+		_begin_stroke(button.button_index)
+	elif not button.pressed and _is_painting and button.button_index == _stroke_button:
+		_commit_stroke()
 
 
 ## The preview polygons already carry the shape and its art, so the overlay only outlines the reach
@@ -150,14 +151,12 @@ func draw_overlay(draw_node: CanvasItem) -> void:
 	if not _game_object:
 		return
 	
-	var xform: Transform2D = _world_to_screen()
+	var xform: Transform2D = viewport.world_transform()
 	var tint: Color = Color(LDPalette.danger() if _is_erasing else LDPalette.add_color(), OUTLINE_ALPHA)
 	for ring: PackedVector2Array in _brush_rings:
 		if ring.size() < 3:
 			continue
-		var screen: PackedVector2Array = PackedVector2Array()
-		for point: Vector2 in ring:
-			screen.append(xform * point)
+		var screen: PackedVector2Array = _transformed(xform, ring)
 		screen.append(screen.get(0))
 		draw_node.draw_polyline(screen, tint, OUTLINE_WIDTH, true)
 
@@ -182,17 +181,13 @@ func _commit_stroke() -> void:
 	if brush.is_empty() or not _game_object:
 		return
 	
-	var plans: Array[Plan] = []
-	for plan: Plan in _plan(brush, erasing):
-		if not plan.is_noop():
-			plans.append(plan)
-	if plans.is_empty():
-		return
-	
 	var dos: Array[Callable] = []
 	var undos: Array[Callable] = []
-	for plan: Plan in plans:
-		_rewrite(plan.targets, plan.cells, dos, undos)
+	for plan: Plan in _plan(brush, erasing):
+		if not plan.is_noop():
+			_rewrite(plan.targets, plan.cells, dos, undos)
+	if dos.is_empty():
+		return
 	
 	LD.get_history_handler().push("Erase Tiles" if erasing else "Paint Tiles",
 		func() -> void:
@@ -331,10 +326,7 @@ func _take_preview(index: int, source: GameObject, template: LDObjectPolygon) ->
 
 func _shape_preview(preview: LDObjectPolygon, shape: TileGrid.Shape) -> void:
 	preview.position = _shape_origin(shape)
-	var holes: Array[PackedVector2Array] = []
-	for hole: PackedVector2Array in shape.holes:
-		holes.append(_to_local(preview, hole))
-	preview.apply_points_and_holes(_to_local(preview, shape.outer), holes)
+	preview.apply_points_and_holes(_to_local(preview, shape.outer), _to_local_rings(preview, shape.holes))
 
 
 func _park_previews(used: int) -> void:
@@ -412,9 +404,7 @@ func _reshape(poly: LDObjectPolygon, shape: TileGrid.Shape, dos: Array[Callable]
 	var old_outer: PackedVector2Array = poly.get_outer_points().duplicate()
 	var old_holes: Array[PackedVector2Array] = poly.get_holes().duplicate()
 	var new_outer: PackedVector2Array = _to_local(poly, shape.outer)
-	var new_holes: Array[PackedVector2Array] = []
-	for hole: PackedVector2Array in shape.holes:
-		new_holes.append(_to_local(poly, hole))
+	var new_holes: Array[PackedVector2Array] = _to_local_rings(poly, shape.holes)
 	
 	dos.append(func() -> void:
 		if is_instance_valid(poly):
@@ -444,10 +434,7 @@ func _spawn(shape: TileGrid.Shape, source: GameObject, template: LDObjectPolygon
 		poly.polygon_data = template.polygon_data
 		poly.set_topline_overrides(template.get_topline_overrides())
 	
-	var holes: Array[PackedVector2Array] = []
-	for hole: PackedVector2Array in shape.holes:
-		holes.append(_to_local(poly, hole))
-	poly.apply_points_and_holes(_to_local(poly, shape.outer), holes)
+	poly.apply_points_and_holes(_to_local(poly, shape.outer), _to_local_rings(poly, shape.holes))
 	poly.place()
 	## place() re-applies every property default, position included, so the object has to be put
 	## back where its points were measured from.
@@ -527,24 +514,19 @@ func _shape_origin(shape: TileGrid.Shape) -> Vector2:
 	return origin
 
 
-## The node every object on the active layer is positioned against. Layers hang off a [Parallax2D]
-## whose transform moves with the camera, so this - not the viewport root - is the one space where
-## a cell means the same thing from one camera position to the next, and it is the space object
-## positions and saved points are already written in.
-func _grid_root() -> Node2D:
-	return LD.get_area().get_active_layer().get_objects_root()
-
-
-func _grid_transform(poly: LDObjectPolygon) -> Transform2D:
-	return _grid_root().get_global_transform().affine_inverse() * poly.get_global_transform()
-
-
 func _to_world(poly: LDObjectPolygon, points: PackedVector2Array) -> PackedVector2Array:
-	return _transformed(_grid_transform(poly), points)
+	return _transformed(poly.transform, points)
 
 
 func _to_local(poly: LDObjectPolygon, points: PackedVector2Array) -> PackedVector2Array:
-	return _transformed(_grid_transform(poly).affine_inverse(), points)
+	return _transformed(poly.transform.affine_inverse(), points)
+
+
+func _to_local_rings(poly: LDObjectPolygon, rings: Array[PackedVector2Array]) -> Array[PackedVector2Array]:
+	var result: Array[PackedVector2Array] = []
+	for ring: PackedVector2Array in rings:
+		result.append(_to_local(poly, ring))
+	return result
 
 
 func _transformed(xform: Transform2D, points: PackedVector2Array) -> PackedVector2Array:
@@ -554,12 +536,8 @@ func _transformed(xform: Transform2D, points: PackedVector2Array) -> PackedVecto
 	return result
 
 
-func _world_to_screen() -> Transform2D:
-	return viewport.get_viewport().get_canvas_transform() * _grid_root().get_global_transform()
-
-
 func _cell_at_cursor() -> Vector2i:
-	return TileGrid.world_to_cell(_grid_root().get_local_mouse_position())
+	return TileGrid.world_to_cell(viewport.get_world_mouse())
 
 
 func _is_stroke_button(button_index: int) -> bool:

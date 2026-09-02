@@ -45,15 +45,14 @@ func _exit_tree() -> void:
 
 
 func _on_enable() -> void:
-	var obj: GameObject = LD.get_object_handler().get_selected_object()
-	_on_object_changed(obj)
+	super()
+	_on_object_changed(LD.get_object_handler().get_selected_object())
 
 
 func _on_disable() -> void:
-	if _preview_cursor:
-		_preview_cursor.queue_free()
-		_preview_cursor = null
+	_destroy_cursor()
 	_clear_stroke()
+	super()
 
 
 func _on_viewport_input(event: InputEvent) -> void:
@@ -80,11 +79,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 			_column_objects.clear()
 			_last_cell_x = _pos_to_cell_x(_stroke_origin)
 			_last_cell_y.clear()
-			var start_pos: Vector2 = Vector2(_cell_x_to_pos(_last_cell_x), _stroke_origin.y)
-			_add_stroke_preview(start_pos)
-			if not _column_objects.has(_last_cell_x):
-				_column_objects[_last_cell_x] = []
-			_column_objects[_last_cell_x].append(start_pos.y)
+			_stamp_at(_last_cell_x, _stroke_origin.y)
 		else:
 			if _is_painting:
 				_commit_stroke()
@@ -96,9 +91,7 @@ func _on_viewport_moved(_pos: Vector2, _zoom: Vector2) -> void:
 
 
 func _on_object_changed(obj: GameObject) -> void:
-	if _preview_cursor:
-		_preview_cursor.queue_free()
-		_preview_cursor = null
+	_destroy_cursor()
 	_clear_stroke()
 	
 	var active: LDTool = get_tool_handler().get_selected_tool()
@@ -114,21 +107,6 @@ func _on_object_changed(obj: GameObject) -> void:
 		_spawn_cursor(obj)
 
 
-func _is_polygon_object(obj: GameObject) -> bool:
-	if not obj:
-		return false
-	var instance: LDObject = obj.get_editor_instance()
-	var result: bool = instance is LDObjectPolygon
-	instance.queue_free()
-	return result
-
-
-func _is_telescoping_object(obj: GameObject) -> bool:
-	if not obj:
-		return false
-	return obj.has_property(&"t_size_x") or obj.has_property(&"t_size_y")
-
-
 func _cache_stamp_size(obj: GameObject) -> void:
 	if not obj:
 		_cached_stamp_size = Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE)
@@ -136,6 +114,12 @@ func _cache_stamp_size(obj: GameObject) -> void:
 	var temp: LDObject = obj.get_editor_instance()
 	_cached_stamp_size = temp.get_stamp_size()
 	temp.free()
+
+
+func _destroy_cursor() -> void:
+	if _preview_cursor:
+		_preview_cursor.queue_free()
+		_preview_cursor = null
 
 
 func _spawn_cursor(obj: GameObject) -> void:
@@ -161,26 +145,25 @@ func _stamp_line_to(pos: Vector2) -> void:
 	var stamp_size: Vector2 = _get_stamp_size()
 	
 	if target_cell_x == _last_cell_x:
-		var stamp_pos: Vector2 = Vector2(_cell_x_to_pos(target_cell_x), pos.y)
 		var last_y: float = _last_cell_y.get(target_cell_x, pos.y - INF)
 		if absf(pos.y - last_y) >= stamp_size.y and not _column_has_overlap(target_cell_x, pos.y):
-			_add_stroke_preview(stamp_pos)
-			if not _column_objects.has(target_cell_x):
-				_column_objects[target_cell_x] = []
-			_column_objects[target_cell_x].append(pos.y)
-			_last_cell_y[target_cell_x] = pos.y
+			_stamp_at(target_cell_x, pos.y)
 		return
 	
 	for cell_x: int in _columns_between(_last_cell_x, target_cell_x):
-		var stamp_pos: Vector2 = Vector2(_cell_x_to_pos(cell_x), pos.y)
-		if not _column_has_overlap(cell_x, stamp_pos.y):
-			_add_stroke_preview(stamp_pos)
-			if not _column_objects.has(cell_x):
-				_column_objects[cell_x] = []
-			_column_objects[cell_x].append(stamp_pos.y)
-			_last_cell_y[cell_x] = stamp_pos.y
+		if not _column_has_overlap(cell_x, pos.y):
+			_stamp_at(cell_x, pos.y)
 	
 	_last_cell_x = target_cell_x
+
+
+## Drops one preview in a column and records the entry the overlap tests read back.
+func _stamp_at(cell_x: int, y: float) -> void:
+	_add_stroke_preview(Vector2(_cell_x_to_pos(cell_x), y))
+	var column: Array = _column_objects.get(cell_x, [])
+	column.append(y)
+	_column_objects.set(cell_x, column)
+	_last_cell_y.set(cell_x, y)
 
 
 func _add_stroke_preview(pos: Vector2) -> void:
@@ -193,7 +176,7 @@ func _add_stroke_preview(pos: Vector2) -> void:
 	preview.source_object_id = obj.id
 	LD.get_area().add_object(preview, Vector2i(pos))
 	
-	match obj.ld_placement_rules: 
+	match obj.ld_placement_rules:
 		GameObject.LDPlacementRules.BEHIND_ALL:
 			preview.get_parent().move_child(preview, 0)
 		GameObject.LDPlacementRules.FRONT_ALL:
@@ -232,17 +215,28 @@ func _commit_stroke() -> void:
 		obj._first_placement()
 	
 	var placed: Array[LDObject] = _stroke.duplicate()
+	var parents: Array[Node] = []
+	var indices: Array[int] = []
+	for obj: LDObject in placed:
+		parents.append(obj.get_parent())
+		indices.append(obj.get_index())
 	
-	LD.get_history_handler().push("Place Objects",
+	var history: LDHistoryHandler = LD.get_history_handler()
+	history.push("Place Objects",
+		func() -> void:
+			for i: int in placed.size():
+				var obj: LDObject = placed.get(i)
+				var parent: Node = parents.get(i)
+				if not is_instance_valid(obj) or obj.get_parent() or not is_instance_valid(parent):
+					continue
+				parent.add_child(obj)
+				parent.move_child(obj, mini(indices.get(i), parent.get_child_count() - 1)),
 		func() -> void:
 			for obj: LDObject in placed:
-				if is_instance_valid(obj):
-					obj.show(),
-		func() -> void:
-			for obj: LDObject in placed:
-				if is_instance_valid(obj):
-					obj.hide()
+				if is_instance_valid(obj) and obj.get_parent():
+					obj.get_parent().remove_child(obj)
 	)
+	history.track_detached(placed)
 	
 	_stroke.clear()
 	_column_objects.clear()
@@ -255,13 +249,15 @@ func _clear_stroke() -> void:
 	_stroke.clear()
 	_column_objects.clear()
 	_last_cell_y.clear()
+	_is_painting = false
 
 
 func _column_has_overlap(cell_x: int, y: float) -> bool:
-	if not _column_objects.has(cell_x):
+	var column: Array = _column_objects.get(cell_x, [])
+	if column.is_empty():
 		return false
 	var stamp_size: Vector2 = _get_stamp_size()
-	for existing_y: float in _column_objects[cell_x]:
+	for existing_y: float in column:
 		if absf(y - existing_y) < stamp_size.y:
 			return true
 	return false
@@ -296,11 +292,7 @@ func _on_touch_tap(pos: Vector2) -> void:
 	_column_objects.clear()
 	_last_cell_x = _pos_to_cell_x(world_pos)
 	_last_cell_y.clear()
-	var start_pos: Vector2 = Vector2(_cell_x_to_pos(_last_cell_x), world_pos.y)
-	_add_stroke_preview(start_pos)
-	if not _column_objects.has(_last_cell_x):
-		_column_objects[_last_cell_x] = []
-	_column_objects[_last_cell_x].append(start_pos.y)
+	_stamp_at(_last_cell_x, world_pos.y)
 	_commit_stroke()
 
 
@@ -313,11 +305,7 @@ func _on_touch_swipe_began(pos: Vector2) -> void:
 	_column_objects.clear()
 	_last_cell_x = _pos_to_cell_x(world_pos)
 	_last_cell_y.clear()
-	var start_pos: Vector2 = Vector2(_cell_x_to_pos(_last_cell_x), world_pos.y)
-	_add_stroke_preview(start_pos)
-	if not _column_objects.has(_last_cell_x):
-		_column_objects[_last_cell_x] = []
-	_column_objects[_last_cell_x].append(start_pos.y)
+	_stamp_at(_last_cell_x, world_pos.y)
 
 
 func _on_touch_swipe_moved(pos: Vector2) -> void:
@@ -338,17 +326,11 @@ func _on_touch_swipe_ended() -> void:
 func _on_input_type_changed() -> void:
 	if not is_active():
 		return
+	_destroy_cursor()
+	var obj: GameObject = LD.get_object_handler().get_selected_object()
+	if not obj:
+		return
 	if Singleton.get_input_handler().is_using_touch():
-		if _preview_cursor:
-			_preview_cursor.queue_free()
-			_preview_cursor = null
-		var obj: GameObject = LD.get_object_handler().get_selected_object()
-		if obj:
-			_cache_stamp_size(obj)
+		_cache_stamp_size(obj)
 	else:
-		if _preview_cursor:
-			_preview_cursor.queue_free()
-			_preview_cursor = null
-		var obj: GameObject = LD.get_object_handler().get_selected_object()
-		if obj:
-			_spawn_cursor(obj)
+		_spawn_cursor(obj)
