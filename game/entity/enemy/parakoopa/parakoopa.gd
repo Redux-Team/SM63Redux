@@ -4,7 +4,7 @@ extends Entity
 @export var koopa: PackedScene
 @export var shell: PackedScene
 @export var particle_emitter: ParticleEmitter
-@export var wing_2: Texture2D
+@export var back_wing_texture: Texture2D
 
 
 func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:
@@ -12,24 +12,24 @@ func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:
 		return
 	
 	if source_hitbox.damage_type == HitBox.DamageType.STRIKE:
-		var shell_node: KoopaShell = shell.instantiate()
-		Singleton.spawn_sibling(self, shell_node, ["position", "scale"])
+		var shell_instance: KoopaShell = shell.instantiate()
+		Singleton.spawn_sibling(self, shell_instance, ["position", "scale"])
 		
-		shell_node.velocity = velocity
-		shell_node.audio_stream_player_2d.play()
+		shell_instance.velocity = velocity
+		shell_instance.sfx_player.play()
 	
-	if source_hitbox.damage_type == HitBox.DamageType.SQUISH and source_hitbox.owner is Player and not source_hitbox.owner.is_on_floor():
-		var koopa_node: Koopa = koopa.instantiate()
-		Singleton.spawn_sibling(self, koopa_node, ["position", "scale"])
+	if source_hitbox.is_airborne_squish():
+		var koopa_instance: Koopa = koopa.instantiate()
+		Singleton.spawn_sibling(self, koopa_instance, ["position", "scale"])
 		
-		source_hitbox.owner.velocity.y = -200
-		koopa_node.audio_stream_player_2d.play.call_deferred()
+		koopa_instance.sfx_player.play.call_deferred()
+	
+	source_hitbox.bounce_squisher()
 	
 	_spawn_wing_particle()
-	
-	var wing_emitter_2: ParticleEmitter = _spawn_wing_particle()
-	wing_emitter_2.direction = Vector2.LEFT
-	wing_emitter_2.texture = wing_2
+	var back_wing: ParticleEmitter = _spawn_wing_particle()
+	back_wing.direction = Vector2.LEFT
+	back_wing.texture = back_wing_texture
 	
 	queue_free()
 

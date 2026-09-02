@@ -21,14 +21,14 @@ func _process(_delta: float) -> void:
 	rect.rotation_degrees = _calc_degrees(Singleton.get_level_clock().get_elapsed_time())
 
 
-func _calc_degrees(t: float) -> float:
+func _calc_degrees(elapsed: float) -> float:
 	var cycle: float = 1.0 / absf(b_rotate_speed)
 	var wait_cycle: float = cycle + b_wait_time
-	var phase: float = fmod(t, wait_cycle)
-	var increment: int = floori(t / wait_cycle)
+	var phase: float = fmod(elapsed, wait_cycle)
+	var increment: int = floori(elapsed / wait_cycle)
 	var base: float = 90.0 * increment * sign(b_rotate_speed)
-	var t_norm: float = clampf((phase - b_wait_time) / cycle, 0.0, 1.0)
-	return wrapf(base + 90.0 * sign(b_rotate_speed) * t_norm, 0.0, 360.0)
+	var progress: float = clampf((phase - b_wait_time) / cycle, 0.0, 1.0)
+	return wrapf(base + 90.0 * sign(b_rotate_speed) * progress, 0.0, 360.0)
 
 
 func _update_size() -> void:

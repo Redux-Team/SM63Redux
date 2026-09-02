@@ -2,13 +2,13 @@ extends PlayerState
 
 
 func _enter() -> void:
-	var last: State = machine.get_last_state()
-	if not last:
+	var previous_state: State = machine.get_last_state()
+	if not previous_state:
 		return
 	
-	if last.name in [&"DoubleJump", &"TripleJump"]:
+	if previous_state.name in [&"DoubleJump", &"TripleJump"]:
 		sprite.play(&"double_jump_fall")
-	elif last.name == &"Spin" or not _fell_from_air(last):
+	elif previous_state.name == &"Spin" or not _fell_from_air(previous_state):
 		sprite.play(&"fall_loop")
 
 

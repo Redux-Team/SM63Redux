@@ -33,9 +33,22 @@ enum DamageType {
 @export var override_disable_target: HurtBoxComponent.DisableTarget = HurtBoxComponent.DisableTarget.HURTBOX
 
 
+const SQUISH_BOUNCE_VELOCITY: float = -200.0
+
+
 func _init() -> void:
 	collision_layer = 1 << 4
 	collision_mask = 1 << 5
+
+
+func is_airborne_squish() -> bool:
+	var player: Player = owner as Player
+	return damage_type == DamageType.SQUISH and player != null and not player.is_on_floor()
+
+
+func bounce_squisher() -> void:
+	if is_airborne_squish():
+		(owner as Player).velocity.y = SQUISH_BOUNCE_VELOCITY
 
 
 func is_valid() -> bool:

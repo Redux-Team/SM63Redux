@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b1quu6mgsgbeb" path="res://game/entity/enemy/bobomb/bobomb.gd" id="1_txf1e"]
 [ext_resource type="PackedScene" uid="uid://tf6mq1quvwdw" path="res://game/object/coin/yellow_coin/yellow_coin_spawn.tscn" id="2_ccar4"]
-[ext_resource type="Script" path="res://game/entity/state/state_machine.gd" id="2_wyvl3"]
+[ext_resource type="Script" uid="uid://ckt07dpulg2mq" path="res://game/entity/state/state_machine.gd" id="2_wyvl3"]
 [ext_resource type="Texture2D" uid="uid://dxjm81n5gdd4w" path="res://assets/textures/entity/enemy/bobomb/bobomb_walk.png" id="3_x8m5v"]
 [ext_resource type="Texture2D" uid="uid://30eyyko6soks" path="res://assets/textures/entity/enemy/bobomb/bobomb_strike.png" id="4_ap0j0"]
 [ext_resource type="Texture2D" uid="uid://c6mg7sixneubo" path="res://assets/textures/entity/enemy/bobomb/bobomb_fuse.png" id="5_a0onm"]
@@ -10,25 +10,27 @@
 [ext_resource type="Texture2D" uid="uid://0oiraixfutpi" path="res://assets/textures/entity/enemy/bobomb/bobomb_fuse_unlit.png" id="6_6sje6"]
 [ext_resource type="Texture2D" uid="uid://bxrc68naxvjh2" path="res://assets/textures/particle/entity/bobomb_explosion.png" id="7_na7jb"]
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="12_200vj"]
-[ext_resource type="Script" path="res://game/entity/state/state_effects.gd" id="30_effects"]
 [ext_resource type="Script" uid="uid://bd8l4ri83uu5a" path="res://game/entity/enemy/_shared/states/patrol.gd" id="14_qw5am"]
 [ext_resource type="Script" uid="uid://dnsd2a8oriy3" path="res://util/entity/forcebox.gd" id="16_glled"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="17_gjan8"]
 [ext_resource type="Script" uid="uid://w00kyf4l0eer" path="res://game/entity/enemy/bobomb/states/chase.gd" id="19_na7jb"]
+[ext_resource type="Script" path="res://game/entity_components/player_detector_component.gd" id="detector"]
 [ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_components/health_component.gd" id="21_fyph1"]
 [ext_resource type="Script" uid="uid://ciewso6hi85f2" path="res://game/entity/enemy/bobomb/states/kaboom.gd" id="21_hy3hd"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="22_rkigm"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="23_psol5"]
 [ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="24_4fmyw"]
+[ext_resource type="AudioStream" uid="uid://tl771jy7cpjh" path="res://assets/sfx/entity/bobomb/explosion_buildup_2.wav" id="24_ekeht"]
 [ext_resource type="Script" uid="uid://dmjeu88gcicx4" path="res://game/entity/enemy/bobomb/states/strike.gd" id="24_na7jb"]
 [ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="25_whfh4"]
 [ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="29_ekeht"]
-
+[ext_resource type="Script" uid="uid://dir75hkr2361s" path="res://game/entity/state/state_effects.gd" id="30_effects"]
 [ext_resource type="AudioStream" uid="uid://dgmayxvw7oy3w" path="res://assets/sfx/entity/goomba/goomba_step.wav" id="sfxres1"]
 [ext_resource type="AudioStream" uid="uid://334xwjirxlct" path="res://assets/sfx/entity/bobomb/fuse.wav" id="sfxres2"]
 [ext_resource type="AudioStream" uid="uid://cnu88x3ta80kk" path="res://assets/sfx/entity/bobomb/explosion_buildup_1.wav" id="sfxres3"]
 [ext_resource type="AudioStream" uid="uid://dbtylflefgm2o" path="res://assets/sfx/entity/bobomb/explosion.wav" id="sfxres5"]
 [ext_resource type="AudioStream" uid="uid://8ybrcf2gym5t" path="res://assets/sfx/entity/bobomb/knock.wav" id="sfxres6"]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_ap0j0"]
 atlas = ExtResource("3_x8m5v")
 region = Rect2(0, 0, 32, 32)
@@ -95,7 +97,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xjsdp")
 }],
-"loop": true,
+"loop": 1,
 "name": &"patrol",
 "speed": 8.0
 }, {
@@ -103,7 +105,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ibfi8")
 }],
-"loop": true,
+"loop": 1,
 "name": &"strike",
 "speed": 5.0
 }]
@@ -133,7 +135,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_jixoj")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -147,7 +149,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_cem5c")
 }],
-"loop": true,
+"loop": 1,
 "name": &"fuse",
 "speed": 8.0
 }]
@@ -181,7 +183,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_swvkj")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -198,7 +200,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_200vj")
 }],
-"loop": true,
+"loop": 1,
 "name": &"spin",
 "speed": 5.0
 }]
@@ -318,7 +320,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_hvh85")
 }],
-"loop": false,
+"loop": 0,
 "name": &"default",
 "speed": 18.0
 }]
@@ -367,20 +369,38 @@ _limits = [-1.0, 1.0, -1.0, 1.0]
 _data = [Vector2(-1, -1), 0.0, 0.0, 0, 0, Vector2(-0.35, -1), 0.0, 0.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 4
 
+[sub_resource type="Resource" id="Effects_Patrol"]
+script = ExtResource("30_effects")
+animation = &"patrol"
+sfx_frame_enabled = true
+sfx_frame_sound = ExtResource("sfxres1")
+sfx_frame_indices = Array[int]([0, 3])
+
 [sub_resource type="Curve" id="Curve_na7jb"]
 _limits = [2.0, 5.0, 0.0, 1.0]
 _data = [Vector2(0.1400778, 2.922131), 0.0, -0.20538904, 0, 0, Vector2(0.99221784, 4.552459), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_glled"]
-size = Vector2(16, 18)
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_2cer1"]
+playback_mode = 1
+streams_count = 2
+stream_0/stream = ExtResource("sfxres3")
+stream_1/stream = ExtResource("24_ekeht")
 
-[sub_resource type="Resource" id="Effects_Patrol"]
+[sub_resource type="AudioStreamSynchronized" id="AudioStreamSynchronized_q3mta"]
+stream_count = 2
+stream_0/stream = ExtResource("sfxres2")
+stream_0/volume = 0.0
+stream_1/stream = SubResource("AudioStreamRandomizer_2cer1")
+stream_1/volume = 0.0
+
+[sub_resource type="Resource" id="Effects_Chase"]
 script = ExtResource("30_effects")
-sfx_frame_enabled = true
 animation = &"patrol"
-sfx_frame_sound = ExtResource("sfxres1")
-sfx_frame_indices = Array[int]([0, 3])
+speed_scale = 2.0
+sfx_enter_enabled = true
+sfx_enter_sound = SubResource("AudioStreamSynchronized_q3mta")
+sfx_enter_stop_on_exit = true
 
 [sub_resource type="Resource" id="Effects_Kaboom"]
 script = ExtResource("30_effects")
@@ -389,31 +409,19 @@ sfx_enter_sound = ExtResource("sfxres5")
 
 [sub_resource type="Resource" id="Effects_Strike"]
 script = ExtResource("30_effects")
-sfx_enter_enabled = true
 animation = &"strike"
+sfx_enter_enabled = true
 sfx_enter_sound = ExtResource("sfxres6")
 
-[sub_resource type="AudioStreamRandomizer" id="sfxrand4"]
-playback_mode = 1
-streams_count = 2
-stream_0/stream = ExtResource("sfxres2")
-stream_1/stream = ExtResource("sfxres3")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_glled"]
+size = Vector2(16, 18)
 
-[sub_resource type="Resource" id="Effects_Chase"]
-script = ExtResource("30_effects")
-sfx_enter_enabled = true
-animation = &"patrol"
-speed_scale = 2.0
-sfx_enter_sound = SubResource("sfxrand4")
-sfx_enter_stop_on_exit = true
-
-[node name="Bobomb" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("fuse", "key", "player_check", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
+[node name="Bobomb" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("fuse", "key", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_txf1e")
 fuse = NodePath("Sprite/Offset/Fuse")
 key = NodePath("Sprite/Offset/Key")
-player_check = NodePath("PlayerCheck")
 sprite = NodePath("Sprite")
 components_root = NodePath("Components")
 collision_shapes = [NodePath("HurtBox/HurtboxShape"), NodePath("ExplosionHitbox/ExplosionShape")]
@@ -502,6 +510,12 @@ script = ExtResource("23_psol5")
 entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
 
+[node name="PlayerDetectorComponent" type="Node" parent="Components" unique_id=393505336 node_paths=PackedStringArray("entity", "detection_area")]
+script = ExtResource("detector")
+entity = NodePath("../..")
+detection_area = NodePath("../../PlayerCheck")
+ignored_states = Array[StringName]([&"Strike", &"Kaboom"])
+
 [node name="PlayerCheck" type="Area2D" parent="." unique_id=393505335]
 collision_layer = 0
 monitorable = false
@@ -579,33 +593,33 @@ initial_state = NodePath("Patrol")
 
 [node name="Patrol" type="Node" parent="StateMachine" unique_id=1281863027 node_paths=PackedStringArray("floor_check_l", "floor_check_r")]
 script = ExtResource("14_qw5am")
-effects = SubResource("Effects_Patrol")
 displacement = SubResource("Curve_tfdvb")
 floor_check_l = NodePath("../../FloorCheckL")
 floor_check_r = NodePath("../../FloorCheckR")
+effects = SubResource("Effects_Patrol")
 
 [node name="Chase" type="Node" parent="StateMachine" unique_id=2076778657 node_paths=PackedStringArray("fuse_light", "key", "fuse")]
 script = ExtResource("19_na7jb")
-effects = SubResource("Effects_Chase")
-fuse_time = 3.25
+chase_speed = 180.0
 fuse_light = NodePath("../../FuseLight")
 modulate_speed_curve = SubResource("Curve_na7jb")
 key = NodePath("../../Sprite/Offset/Key")
 fuse = NodePath("../../Sprite/Offset/Fuse")
+effects = SubResource("Effects_Chase")
 
 [node name="Kaboom" type="Node" parent="StateMachine" unique_id=1881694916 node_paths=PackedStringArray("explosion_shape", "explosion", "hurtbox_shape")]
 script = ExtResource("21_hy3hd")
-effects = SubResource("Effects_Kaboom")
 explosion_shape = NodePath("../../ExplosionHitbox/ExplosionShape")
 explosion = NodePath("../../Explosion")
 hurtbox_shape = NodePath("../../HurtBox/HurtboxShape")
+effects = SubResource("Effects_Kaboom")
 
 [node name="Strike" type="Node" parent="StateMachine" unique_id=1746543687 node_paths=PackedStringArray("fuse", "key", "hurtbox_shape")]
 script = ExtResource("24_na7jb")
-effects = SubResource("Effects_Strike")
 fuse = NodePath("../../Sprite/Offset/Fuse")
 key = NodePath("../../Sprite/Offset/Key")
 hurtbox_shape = NodePath("../../HurtBox/HurtboxShape")
+effects = SubResource("Effects_Strike")
 
 [node name="WaterCheckArea" type="Area2D" parent="." unique_id=1408411545]
 script = ExtResource("29_ekeht")
@@ -615,4 +629,3 @@ metadata/_custom_type_script = "uid://bhoysiia8munh"
 shape = SubResource("RectangleShape2D_glled")
 
 [connection signal="frame_changed" from="Sprite" to="." method="_on_sprite_frame_changed"]
-[connection signal="area_entered" from="PlayerCheck" to="." method="_on_player_check_area_entered"]

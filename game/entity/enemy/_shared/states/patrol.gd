@@ -8,15 +8,15 @@ const AMPLITUDE: float = 35.0
 @export var floor_check_l: RayCast2D
 @export var floor_check_r: RayCast2D
 
-var phase_shift: float = 0.0
+var _phase_shift: float = 0.0
 
 
 func _tick(_delta: float) -> void:
 	if _is_blocked():
-		phase_shift += PI
+		_phase_shift += PI
 	
 	sprite.flip_h = entity.velocity.x < 0.0
-	entity.velocity.x = AMPLITUDE * displacement.sample(sin(time / PERIOD + phase_shift))
+	entity.velocity.x = AMPLITUDE * displacement.sample(sin(time / PERIOD + _phase_shift))
 
 
 func _is_blocked() -> bool:

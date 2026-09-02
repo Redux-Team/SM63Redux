@@ -2,8 +2,8 @@ class_name BobombState
 extends State
 
 
-var bobomb: BobOmb
+var bobomb: Bobomb
 
 
 func _bind() -> void:
-	bobomb = entity as BobOmb
+	bobomb = entity as Bobomb

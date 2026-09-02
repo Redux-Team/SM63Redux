@@ -99,11 +99,11 @@ size = Vector2(10, 8)
 resource_local_to_scene = true
 size = Vector2(16, 17)
 
-[node name="KoopaShell" type="CharacterBody2D" unique_id=77586061 node_paths=PackedStringArray("audio_stream_player_2d", "hurt_box_r", "sprite", "components_root", "water_check")]
+[node name="KoopaShell" type="CharacterBody2D" unique_id=77586061 node_paths=PackedStringArray("sfx_player", "hurt_box_r", "sprite", "components_root", "water_check")]
 collision_mask = 514
 floor_block_on_wall = false
 script = ExtResource("1_0swk3")
-audio_stream_player_2d = NodePath("AudioStreamPlayer2D")
+sfx_player = NodePath("AudioStreamPlayer2D")
 hurt_box_r = NodePath("HurtBoxR")
 sprite = NodePath("Sprite")
 components_root = NodePath("Components")

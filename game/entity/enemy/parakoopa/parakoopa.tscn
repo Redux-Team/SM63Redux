@@ -119,7 +119,7 @@ script = ExtResource("1_1egjl")
 koopa = ExtResource("2_fewty")
 shell = ExtResource("3_42bhg")
 particle_emitter = NodePath("ParticleEmitter")
-wing_2 = ExtResource("5_3sn6r")
+back_wing_texture = ExtResource("5_3sn6r")
 sprite = NodePath("Sprite")
 machine = NodePath("StateMachine")
 

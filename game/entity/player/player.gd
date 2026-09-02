@@ -8,22 +8,23 @@ extends Entity
 signal swimming_changed(swimming: bool)
 
 
-const BUFFER_ACTIONS: PackedStringArray = ["jump"]
+const BUFFERED_ACTIONS: PackedStringArray = ["jump"]
 const FOOTSTEP_LAYER_FIRST: int = 25
-var buffer_dictionary: Dictionary[String, float]
+## How long a swim (jump-underwater) press stays buffered. Buffering it means the state machine
+## still sees the press even if it samples on a frame after the one-frame "just pressed".
+const SWIM_INPUT_BUFFER_TIME: float = 0.12
 
 @export_group("Movement")
 @export_subgroup("Ground")
 @export var walk_acceleration: float = 20.0
-@export var turn_speed: float = 2.5
+@export var turn_acceleration_multiplier: float = 2.5
 @export var ground_friction_flat: float = 0.3
 @export var ground_friction_divisor: float = 1.15
 @export var slope_normal_threshold: float = 0.999
 @export var slope_stick_speed: float = 0.5
 @export var dry_friction: float = 0.4
 @export_subgroup("Air")
-@export var midair_turn_speed: float = 1.0
-@export var air_resistance: float = 1.0
+@export var air_acceleration: float = 1.0
 @export var air_control_normal: float = 0.85
 @export var air_control_spin: float = 0.35
 @export var air_turn_boost: float = 2.8
@@ -32,10 +33,6 @@ var buffer_dictionary: Dictionary[String, float]
 @export var air_over_speed_decel: float = 0.1
 @export_subgroup("Underwater")
 @export var water_resistance: float = 0.6
-@export var swim_up_strength: float = 150.0
-@export var water_y_cap: float = 35.0
-@export var water_sink_rate: float = 0.125
-@export var water_drag_x: float = 1.001
 @export_subgroup("Limits")
 @export var run_max_speed: float = 250.0
 @export var midair_max_speed: float = 190.0
@@ -65,9 +62,6 @@ var buffer_dictionary: Dictionary[String, float]
 @export var dive_neutral_launch_y_cap: float = -180.0
 @export var dive_launch_y_min: float = -220.0
 @export var dive_launch_y_max: float = 300.0
-@export_subgroup("Ground Pound Conversion")
-@export var dive_gp_conversion_window: float = 0.1
-@export var dive_gp_redirect_angle_deg: float = 36.0
 @export_subgroup("Ground Physics")
 @export var dive_ground_flat_decel: float = 6.42
 @export var dive_ground_proportional_decel: float = 0.0196
@@ -78,18 +72,18 @@ var buffer_dictionary: Dictionary[String, float]
 @export var dive_air_resistance: float = 0.0
 @export var dive_over_speed_decel: float = 3.0
 @export_subgroup("Rotation")
-@export var dive_air_rotation_blend: float = 0.2
 @export var dive_ground_rotation_blend: float = 0.15
 @export var dive_ground_rotation_blend_fast: float = 0.3
 @export var dive_landing_rotation_smooth_duration: float = 0.3
 @export var dive_grounded_angle_deg: float = 90.0
-@export var dive_rotation_min_deg: float = -60.0
-@export var dive_rotation_max_deg: float = 85.0
+@export var dive_rotation_min_deg: float = 90.0
+@export var dive_rotation_max_deg: float = 180.0
 @export var dive_rotation_curve: Curve
 @export var dive_y_velocity_to_rotation_offset_curve: Curve
+@export var dive_y_velocity_curve_min: float = -300.0
+@export var dive_y_velocity_curve_max: float = 300.0
 @export_subgroup("Recovery")
 @export var dive_slide_stop_duration: float = 0.133
-@export var dive_rollout_jump_velocity: float = -214.0
 @export var dive_reset_decel: float = 5.0
 
 @export_group("Moves")
@@ -130,12 +124,12 @@ var buffer_dictionary: Dictionary[String, float]
 @export var rollout_fall_min_speed: float = 30.0
 @export var rollout_spin_min_speed: float = -40.0
 @export_subgroup("Ground Pound")
-@export var gp_start_rise_speed: float = -38.0
-@export var gp_start_duration: float = 0.3
-@export var gp_fall_speed: float = 800.0
-@export var gp_water_slow_lerp: float = 0.08
-@export var gp_water_swim_speed: float = 50.0
-@export var gp_slam_exit_delay: float = 0.3
+@export var ground_pound_start_rise_speed: float = -38.0
+@export var ground_pound_start_duration: float = 0.3
+@export var ground_pound_fall_speed: float = 800.0
+@export var ground_pound_water_slow_lerp: float = 0.08
+@export var ground_pound_water_swim_speed: float = 50.0
+@export var ground_pound_slam_exit_delay: float = 0.3
 
 @export_group("Swim")
 @export_subgroup("Burst")
@@ -177,7 +171,7 @@ var buffer_dictionary: Dictionary[String, float]
 @export var move_input_threshold: float = 0.1
 @export var walk_stop_speed: float = 0.5
 @export_subgroup("Animation")
-@export_range(0.0, 1.0, 0.01) var run_animation_input: float = 0.7
+@export_range(0.0, 1.0, 0.01) var run_animation_input_threshold: float = 0.7
 @export var walk_animation_stop_speed: float = 30.0
 @export var walk_speed_curve: Curve
 @export_subgroup("Strike")
@@ -232,7 +226,6 @@ var buffer_dictionary: Dictionary[String, float]
 @export var slide_fludd_dampen_x: float = 0.03
 @export_subgroup("Submerged")
 @export var submerged_fludd_target_velocity: float = -1000.0
-@export var submerged_fludd_ease_weight: float = 0.5
 @export var submerged_fludd_ease_halflife: float = 0.3
 
 @export_group("Footsteps", "footstep_")
@@ -245,72 +238,37 @@ var buffer_dictionary: Dictionary[String, float]
 }
 
 @export_group("Internal")
-@export var debug_container: Control
 @export var floor_slope_raycast: RayCast2D
-@export var spin_area: Area2D
-@export var spin_shape: CollisionShape2D
 @export var heal_particles: ParticleEmitter
-
-
-@export var _input_handler: PlayerInputHandler
-@export var _sprite_handler: PlayerSpriteHandler
-@export var _fludd_handler: PlayerFluddHandler
 @export var submerged_bus_effects: Array[AudioEffect]
+@export var _fludd_handler: PlayerFluddHandler
+## lock the sprite flipping
+@export var lock_flipping: bool = false
 
 
 var effective_midair_max_speed: float = 0.0
-var _move_dir_raw: float = 0.0
-var move_dir: float:
-	get:
-		return _move_dir_raw
-	set(v):
-		_move_dir_raw = v
-var run_speed_percent: float = 0.0
-var current_jump: int = 0
-var slide_friction: float = 1.0
-var jump_buffer_time: float = 0.15
-var jump_buffer_timer: float = 0.0
-var swim_buffer_time: float = 0.0
+var move_input: float = 0.0
+var jump_chain_index: int = 0
+var jump_chain_timer: float = 0.0
+var swim_hold_timer: float = 0.0
+var swim_input_timer: float = 0.0
+var action_hold_times: Dictionary[String, float]
 
-var is_dry: bool = true
-var is_running: bool = false
 var is_spinning: bool = false
 var is_crouching: bool = false
 var is_diving: bool = false
-var is_falling: bool = false
-var is_swimming: bool = false
 
-var is_using_hover_fludd: bool = false
-
-var is_input_jump: bool = false:
-	get:
-		if not can_jump or is_in_water(): 
-			jump_buffer_timer = 0
-			return false
-		return jump_buffer_timer > 0.0
 var is_input_dive: bool = false
 var is_input_ground_pound: bool = false
 var is_input_spin: bool = false
-## How long a swim (jump-underwater) press stays buffered. Buffering it means the state machine
-## still sees the press even if it samples on a frame after the one-frame "just pressed".
-const SWIM_INPUT_BUFFER: float = 0.12
-var swim_input_timer: float = 0.0
 var is_input_swim: bool:
 	get:
 		return swim_input_timer > 0.0
 
 var can_jump: bool = true
-var can_spin: bool = false
 var can_walk: bool = true
 var can_dive: bool = true
 var can_ground_pound: bool = true
-var can_use_fludd: bool = true
-
-var jump_chain_timer: float = 0.0
-## lock the sprite flipping
-@export var lock_flipping: bool = false
-
-var cam: Camera2D
 
 
 func _ready() -> void:
@@ -323,25 +281,23 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	_move_dir_raw = Input.get_axis("move_left", "move_right")
+	move_input = Input.get_axis("move_left", "move_right")
 	is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
 	is_input_dive = Input.is_action_pressed("dive") and not is_on_floor()
 	is_input_ground_pound = Input.is_action_pressed("ground_pound")
 	is_input_spin = Input.is_action_pressed("spin")
-
+	
 	if Input.is_action_just_pressed("jump"):
-		jump_buffer_timer = jump_buffer_time if can_jump else 0.0
-		swim_input_timer = SWIM_INPUT_BUFFER
+		swim_input_timer = SWIM_INPUT_BUFFER_TIME
 	swim_input_timer = max(swim_input_timer - delta, 0.0)
 	
-	for action: String in BUFFER_ACTIONS:
-		if Input.is_action_pressed(action):
-			if buffer_dictionary.has(action):
-				buffer_dictionary.set(action, buffer_dictionary.get(action, 0.0) + delta)
-			else:
-				buffer_dictionary.set(action, 0)
-		elif Input.is_action_just_released(action):
-			buffer_dictionary.erase(action)
+	for action: String in BUFFERED_ACTIONS:
+		if not Input.is_action_pressed(action):
+			action_hold_times.erase(action)
+		elif action_hold_times.has(action):
+			action_hold_times.set(action, action_hold_times.get(action) + delta)
+		else:
+			action_hold_times.set(action, 0.0)
 
 
 func get_facing() -> int:
@@ -353,8 +309,8 @@ func get_facing_velocity() -> float:
 
 
 func get_local_floor_normal() -> Vector2:
-	var gc: GravityComponent = get_component(GravityComponent)
-	return get_floor_normal().rotated(-gc.get_angle()) if gc else get_floor_normal()
+	var gravity_component: GravityComponent = get_component(GravityComponent)
+	return get_floor_normal().rotated(-gravity_component.get_angle()) if gravity_component else get_floor_normal()
 
 
 func get_effective_friction() -> float:
@@ -364,36 +320,8 @@ func get_effective_friction() -> float:
 	return 1.0
 
 
-func get_gravity_scale_factor() -> float:
-	var gravity_component: GravityComponent = get_component(GravityComponent)
-	if gravity_component:
-		return gravity_component.scale_factor
-	return 1.0
-
-
-func get_gravity_relative_move_dir() -> float:
-	var gc: GravityComponent = get_component(GravityComponent)
-	if not gc:
-		return move_dir
-	var angle: float = gc.get_angle()
-	var input_vec: Vector2 = Vector2(move_dir, 0.0).rotated(-angle)
-	return input_vec.x
-
-
-func get_input_handler() -> PlayerInputHandler:
-	return _input_handler
-
-
-func get_sprite_handler() -> PlayerSpriteHandler:
-	return _sprite_handler
-
-
 func get_fludd_handler() -> PlayerFluddHandler:
 	return _fludd_handler
-
-
-func is_state(state_name: StringName) -> bool:
-	return machine.get_state_name() == state_name
 
 
 func is_action_pressed(action: String) -> bool:
@@ -402,24 +330,17 @@ func is_action_pressed(action: String) -> bool:
 
 func is_action_just_pressed(action: String, buffer: float = 0.0) -> bool:
 	if buffer > 0:
-		if action in BUFFER_ACTIONS and buffer_dictionary.has(action):
-			return buffer_dictionary.get(action) < buffer and Input.is_action_pressed(action)
+		if action in BUFFERED_ACTIONS and action_hold_times.has(action):
+			return action_hold_times.get(action) < buffer and Input.is_action_pressed(action)
 	return Input.is_action_just_pressed(action)
 
 
 func is_moving_with_facing() -> bool:
-	return (sign(move_dir) == 1 and not sprite.flip_h) or (sign(move_dir) == -1 and sprite.flip_h)
+	return signf(move_input) == float(get_facing())
 
 
 func is_moving_against_facing() -> bool:
-	return (sign(move_dir) == 1 and sprite.flip_h) or (sign(move_dir) == -1 and not sprite.flip_h)
-
-
-func is_gravity_enabled() -> bool:
-	var gravity_component: GravityComponent = get_component(GravityComponent)
-	if gravity_component:
-		return gravity_component.enabled
-	return false
+	return signf(move_input) == float(-get_facing())
 
 
 func set_gravity_enabled(enabled: bool) -> void:
@@ -449,15 +370,11 @@ func add_fludd_power(amount: float) -> void:
 	get_fludd_handler().fludd_power += amount
 
 
-func resist(val: float, sub: float, div: float) -> float:
-	var s: float = sign(val)
-	val = max(0.0, abs(val) - sub)
-	val /= div
-	return val * s
-
-
-func reset_jump_timer() -> void:
-	jump_buffer_timer = 0
+func request_pound_cancel() -> void:
+	if is_input_ground_pound or not machine.is_active(&"GroundPound"):
+		return
+	
+	machine.change_state(&"Fall")
 
 
 func get_terrain() -> StringName:
@@ -475,6 +392,15 @@ func get_terrain() -> StringName:
 	return StringName(collider.get_meta(&"terrain", ""))
 
 
+func get_debug_text() -> String:
+	var debug_text: String = ""
+	debug_text += "State: %s\n" % machine.get_state()
+	debug_text += "Animation: %s\n" % sprite.current_animation
+	debug_text += "Velocity: %s\n" % velocity
+	
+	return debug_text
+
+
 func get_spin_speed_scale(elapsed: float) -> float:
 	if not spin_speed_scale_curve:
 		return 1.0
@@ -484,10 +410,10 @@ func get_spin_speed_scale(elapsed: float) -> float:
 
 
 func enter_slow_spin() -> void:
-	var frames_res: SpriteFrames = sprite.diffuse_frames
-	var rate: float = sprite.speed_scale * frames_res.get_animation_speed(sprite.current_animation)
+	var sprite_frames: SpriteFrames = sprite.diffuse_frames
+	var current_fps: float = sprite.speed_scale * sprite_frames.get_animation_speed(sprite.current_animation)
 	sprite.play_at_frame(&"spin_loop", sprite.current_frame)
-	sprite.speed_scale = rate / maxf(frames_res.get_animation_speed(&"spin_loop"), 0.001)
+	sprite.speed_scale = current_fps / maxf(sprite_frames.get_animation_speed(&"spin_loop"), 0.001)
 
 
 func play_footstep() -> void:
@@ -498,14 +424,12 @@ func play_footstep() -> void:
 
 
 func _on_water_check_water_entered() -> void:
-	is_swimming = true
 	swimming_changed.emit(true)
 	for effect: AudioEffect in submerged_bus_effects:
 		AudioServer.add_bus_effect(0, effect)
 
 
 func _on_water_check_water_exited() -> void:
-	is_swimming = false
 	swimming_changed.emit(false)
 	for i: int in submerged_bus_effects.size():
 		AudioServer.remove_bus_effect(0, 0)

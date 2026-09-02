@@ -23,6 +23,11 @@ enum {
 		preview = p
 		_update_preview()
 @export var lock_flipping: bool = false
+## Draws the sprite unflipped while [member flip_h] keeps tracking the real facing direction.
+@export var hide_flipping: bool = false:
+	set(h):
+		hide_flipping = h
+		_apply_hidden_flip(flip_h)
 @export var flip_with_velocity: bool = true
 @export var autoplay: bool = false
 
@@ -335,6 +340,8 @@ func _notification(what: int) -> void:
 func _set(property: StringName, value: Variant) -> bool:
 	# Subsprite horizontal handling
 	if property == "flip_h":
+		if not lock_flipping:
+			_apply_hidden_flip(value)
 		for subsprite: SmartSprite2D in subsprites:
 			subsprite.flip_h = value
 			if subsprite.follow_root:
@@ -360,6 +367,10 @@ func _set(property: StringName, value: Variant) -> bool:
 		return true
 	
 	return property == "flip_h" and lock_flipping
+
+
+func _apply_hidden_flip(flipped: bool) -> void:
+	scale.x = absf(scale.x) * (-1.0 if hide_flipping and flipped else 1.0)
 
 
 func _process(delta: float) -> void:

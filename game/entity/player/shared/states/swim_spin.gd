@@ -3,11 +3,11 @@ extends PlayerState
 
 @export var spin_hitbox: HitBox
 
-var _slowed: bool = false
+var _slow_spin_started: bool = false
 
 
 func _enter() -> void:
-	_slowed = false
+	_slow_spin_started = false
 	sprite.speed_scale = player.get_spin_speed_scale(0.0)
 	spin_hitbox.enable(player.spin_fast_duration)
 	if not player.is_on_floor():
@@ -18,15 +18,15 @@ func _enter() -> void:
 
 
 func _tick(_delta: float) -> void:
-	if not _slowed:
+	if not _slow_spin_started:
 		sprite.speed_scale = player.get_spin_speed_scale(time)
 		if time >= player.spin_fast_duration:
-			_slowed = true
+			_slow_spin_started = true
 			player.enter_slow_spin()
 	
 	if player.is_on_floor():
 		player.lock_flipping = false
-	if not Input.is_action_pressed("swim_down"):
+	if not player.is_action_pressed("swim_down"):
 		player.velocity.y = min(player.velocity.y, 0)
 
 

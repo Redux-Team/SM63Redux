@@ -1,7 +1,8 @@
 extends LevelObject
 
 @export var sprite: SmartSprite2D
-@export var audio_stream_player_2d: AudioStreamPlayer2D
+@export var sfx_player: AudioStreamPlayer2D
+@export var particle_emitter: CPUParticles2D
 
 var _collected: bool = false
 
@@ -16,8 +17,8 @@ func _on_area_2d_body_entered(colliding_body: Node2D) -> void:
 	_collected = true
 
 	sprite.hide()
-	audio_stream_player_2d.stop()
-	$ParticleEmitter.emitting = false
+	sfx_player.stop()
+	particle_emitter.emitting = false
 
 	var level: Level = Level.get_instance()
 	if not level:

@@ -6,6 +6,6 @@ func _next() -> StringName:
 		return &"SwimSpin"
 	if player.is_input_swim:
 		return &"Swim"
-	if absf(player.move_dir) > player.move_input_threshold and player.is_on_floor():
+	if absf(player.move_input) > player.move_input_threshold and player.is_on_floor():
 		return &"SwimWalk"
 	return &""

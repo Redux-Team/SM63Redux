@@ -133,12 +133,12 @@ size = Vector2(18, 26)
 script = ExtResource("30_effects")
 animation = &"default"
 
-[node name="Koopa" type="CharacterBody2D" unique_id=2116805297 node_paths=PackedStringArray("audio_stream_player_2d", "sprite", "components_root", "machine", "water_check")]
+[node name="Koopa" type="CharacterBody2D" unique_id=2116805297 node_paths=PackedStringArray("sfx_player", "sprite", "components_root", "machine", "water_check")]
 collision_layer = 8
 collision_mask = 514
 script = ExtResource("1_v8hjw")
 shell = ExtResource("2_feb77")
-audio_stream_player_2d = NodePath("AudioStreamPlayer2D")
+sfx_player = NodePath("AudioStreamPlayer2D")
 sprite = NodePath("Sprite")
 components_root = NodePath("Components")
 machine = NodePath("StateMachine")

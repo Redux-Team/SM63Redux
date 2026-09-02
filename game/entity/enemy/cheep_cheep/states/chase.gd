@@ -3,15 +3,13 @@ extends CheepCheepState
 
 const CHASE_SPEED: float = 50.0
 
-@export var entity_check_area_lost: EntityCheckArea
-
 
 func _tick(_delta: float) -> void:
-	var p: Player = entity_check_area_lost.get_closest_player(cheep_cheep.global_position)
-	if not p:
+	var player: Player = cheep_cheep.lost_vision_area.get_closest_player(cheep_cheep.global_position)
+	if not player:
 		return
 	
-	var direction: Vector2 = cheep_cheep.global_position.direction_to(p.global_position)
+	var direction: Vector2 = cheep_cheep.global_position.direction_to(player.global_position)
 	cheep_cheep.velocity = direction * CHASE_SPEED
 	sprite.local_rotation = rad_to_deg(asin(direction.y))
 

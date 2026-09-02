@@ -17,7 +17,8 @@
 [ext_resource type="Texture2D" uid="uid://bpp7wgte6dq0l" path="res://assets/textures/entity/enemy/goomba/goomba_squish.png" id="7_phpar"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="10_d6enh"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="11_8wobc"]
-[ext_resource type="Script" uid="uid://ptqlxnwadjpm" path="res://game/entity/enemy/goomba/states/chase.gd" id="11_fb4me"]
+[ext_resource type="Script" path="res://game/entity/enemy/_shared/states/chase.gd" id="shared_chase"]
+[ext_resource type="Script" path="res://game/entity_components/player_detector_component.gd" id="detector"]
 [ext_resource type="Script" uid="uid://bu81quiseko6w" path="res://game/entity/enemy/goomba/states/squish.gd" id="12_6f57m"]
 [ext_resource type="Script" uid="uid://bxmdlmivclqhf" path="res://game/entity/enemy/goomba/states/strike.gd" id="14_xvu80"]
 [ext_resource type="Texture2D" uid="uid://djcybawlcos34" path="res://assets/textures/entity/enemy/goomba/goomba_hit.png" id="20_4grvk"]
@@ -281,11 +282,10 @@ sfx_enter_enabled = true
 player_animation = &"strike_hit"
 sfx_enter_sound = ExtResource("sfxres4")
 
-[node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("player_check", "sprite", "components_root", "machine", "water_check")]
+[node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("sprite", "components_root", "machine", "water_check")]
 collision_layer = 8
 collision_mask = 514
 script = ExtResource("1_hysx3")
-player_check = NodePath("PlayerCheck")
 sprite = NodePath("SmartSprite2D")
 components_root = NodePath("Components")
 machine = NodePath("StateMachine")
@@ -315,8 +315,9 @@ script = ExtResource("4_x5cu4")
 effects = SubResource("Effects_Alert")
 
 [node name="Chase" type="Node" parent="StateMachine" unique_id=1835913114]
-script = ExtResource("11_fb4me")
+script = ExtResource("shared_chase")
 effects = SubResource("Effects_Chase")
+snap_to_speed_on_enter = true
 
 [node name="Squish" type="Node" parent="StateMachine" unique_id=354975756 node_paths=PackedStringArray("hit_box")]
 script = ExtResource("12_6f57m")
@@ -390,6 +391,13 @@ base_friction = 0.5
 entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
 
+[node name="PlayerDetectorComponent" type="Node" parent="Components" unique_id=1423924392 node_paths=PackedStringArray("entity", "detection_area")]
+script = ExtResource("detector")
+entity = NodePath("../..")
+detection_area = NodePath("../../PlayerCheck")
+alert_state = &"Alert"
+ignored_states = Array[StringName]([&"Squish", &"Strike"])
+
 [node name="PlayerCheck" type="Area2D" parent="." unique_id=1423924391]
 visible = false
 collision_layer = 0
@@ -444,5 +452,4 @@ metadata/_custom_type_script = "uid://bhoysiia8munh"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WaterCheckArea" unique_id=749598814]
 shape = SubResource("RectangleShape2D_42vey")
 
-[connection signal="area_entered" from="PlayerCheck" to="." method="_on_area_2d_area_entered"]
 [connection signal="damaged" from="HurtBox" to="." method="_on_hurt_box_damaged"]

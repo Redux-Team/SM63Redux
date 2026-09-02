@@ -5,7 +5,7 @@ extends LevelObject
 @export var break_sfx_list: Array[AudioStream]
 @export var debris: AnimatedParticles
 @export var sprite: SmartSprite2D
-@export var collision_shape_2d: CollisionShape2D
+@export var collision_shape: CollisionShape2D
 @export var hurt_box: HurtBox
 @export var coin: PackedScene
 
@@ -23,16 +23,12 @@ func destroy() -> void:
 	sprite.hide()
 	break_sfx.stream = break_sfx_list.pick_random()
 	break_sfx.play()
-	collision_shape_2d.set_deferred(&"disabled", true)
+	collision_shape.set_deferred(&"disabled", true)
 	hurt_box.disable()
 	debris.burst()
 	Singleton.instantiate_sibling(self, coin, coin_amount, 12, ["position"])
 	get_tree().create_timer(cleanup_delay).timeout.connect(queue_free)
 
 
-func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:
-	if source_hitbox.owner is Player:
-		var player: Player = source_hitbox.owner as Player
-		if player.machine.get_state_name().begins_with("GroundPound"):
-			player.velocity.y /= 2
+func _on_hurt_box_damaged(_source_hitbox: HitBox) -> void:
 	destroy()
