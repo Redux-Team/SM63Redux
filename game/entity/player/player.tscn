@@ -103,6 +103,7 @@
 [ext_resource type="Script" uid="uid://bq04d84ls7hwp" path="res://game/entity/player/shared/states/swim_strike.gd" id="ps_swim_strike"]
 [ext_resource type="Script" uid="uid://61v31jiep2f7" path="res://game/entity/player/shared/states/swim_walk.gd" id="ps_swim_walk"]
 [ext_resource type="Script" uid="uid://cbyl5qt23in03" path="res://game/entity/player/shared/states/walk.gd" id="ps_walk"]
+[ext_resource type="Script" uid="uid://qjm5x183mmd3" path="res://game/entity_components/rewind_component.gd" id="rw_rewind"]
 [ext_resource type="AudioStream" uid="uid://ddyxdiykdet7b" path="res://assets/sfx/player/mario/dive/dive_0.wav" id="sfxres1"]
 [ext_resource type="AudioStream" uid="uid://vvilx4sjryos" path="res://assets/sfx/player/mario/dive/dive_1.wav" id="sfxres2"]
 [ext_resource type="AudioStream" uid="uid://cv0wy731vhj3o" path="res://assets/sfx/player/mario/dive/dive_2.wav" id="sfxres3"]
@@ -2403,6 +2404,10 @@ metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 [node name="EntityDebugComponent" type="Node" parent="Components" unique_id=1079797540 node_paths=PackedStringArray("label", "entity")]
 script = ExtResource("ed_debug")
 label = NodePath("../../DebugContainer/DebugLabel")
+entity = NodePath("../..")
+
+[node name="RewindComponent" type="Node" parent="Components" unique_id=1079797541 node_paths=PackedStringArray("entity")]
+script = ExtResource("rw_rewind")
 entity = NodePath("../..")
 
 [node name="CanvasGroup" type="CanvasGroup" parent="." unique_id=477917490]
