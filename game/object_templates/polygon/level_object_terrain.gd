@@ -44,7 +44,7 @@ func _on_init() -> void:
 	if not polygon_data and not source_object_id.is_empty():
 		var game_object: GameObject = GameDB.get_object(source_object_id)
 		if game_object:
-			polygon_data = game_object.data as PolygonForm
+			polygon_data = game_object.form as PolygonForm
 	
 	super._on_init()
 	

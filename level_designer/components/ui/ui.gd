@@ -8,7 +8,7 @@ extends Node
 
 ## Chrome and windows are authored at 1:1 for touch and shrunk on desktop, where the
 ## game's 640x360 stretch would otherwise blow the editor up to fill the screen.
-const DESKTOP_SCALE: float = 0.6
+const DESKTOP_SCALE: float = 0.8
 const TOUCH_SCALE: float = 1.0
 
 @export var _chrome: Control

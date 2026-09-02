@@ -585,7 +585,14 @@ class TransitionBuilder:
 		return self
 	
 	
+	## Starts the transition. A request that arrives while one is still on screen is dropped: both
+	## would drive the same rect, material and shader parameters, and the second one's callbacks
+	## would run against a scene the first is already swapping out - which is what a double-pressed
+	## "Test Level" did, suspending the editor into a playtest twice.
 	func done() -> void:
+		if not is_instance_valid(_color_rect) or _color_rect.visible:
+			return
+		
 		var mat: ShaderMaterial = _color_rect.material as ShaderMaterial
 		var wave_aspect: float = 1.0
 		match _type:

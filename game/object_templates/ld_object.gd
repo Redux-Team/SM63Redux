@@ -147,7 +147,7 @@ func bind_to_active_layer() -> void:
 func init_properties(obj: GameObject) -> void:
 	source_object_id = obj.id
 	ld_flags = obj.ld_flags
-	_properties = obj.ld_properties
+	_properties = obj.get_properties()
 	for prop: LDProperty in _properties:
 		_property_values[prop.key] = prop.default_value
 		if prop.key == &"position":
