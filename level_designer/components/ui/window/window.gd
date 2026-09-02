@@ -132,6 +132,14 @@ func popin() -> void:
 		_backdrop_alpha = 0.0
 		_backdrop.visible = true
 
+	if not Settings.get_bool(&"display/ui_animations"):
+		_panel.scale = _target_scale()
+		_panel.modulate = Color.WHITE
+		if backdrop_enabled and _backdrop:
+			_backdrop_alpha = 1.0
+		_on_popin_finished()
+		return
+
 	var tween: Tween = create_tween().set_parallel()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUINT)
 	tween.tween_property(_panel, "scale", _target_scale(), ANIM_DURATION)
@@ -150,6 +158,12 @@ func popout() -> void:
 
 	if sfx_on_close:
 		SFX.play(SFX.LD_CLOSE)
+
+	if not Settings.get_bool(&"display/ui_animations"):
+		if backdrop_enabled and _backdrop:
+			_backdrop_alpha = 0.0
+		_on_popout_finished()
+		return
 
 	var tween: Tween = create_tween().set_parallel()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUINT)

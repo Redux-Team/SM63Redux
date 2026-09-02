@@ -85,6 +85,9 @@ static func _display() -> Array[SettingDef]:
 		
 		SettingDef.choice(&"display/particles", "Particles", particle_levels, PARTICLES_HIGH if Device.is_desktop() else PARTICLES_LOW).in_group("Graphics") \
 			.hint("Lower densities help on weaker hardware."),
+		
+		SettingDef.boolean(&"display/ui_animations", "UI Animations", true).in_group("Graphics") \
+			.hint("Windows popping open and toolbars growing as tools come and go. Off snaps them straight to place."),
 	]
 
 
