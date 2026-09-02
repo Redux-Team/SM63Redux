@@ -3,6 +3,12 @@ class_name GdssStorage
 extends RefCounted
 
 const FORMAT_VERSION: int = 6
+# Stamped in front of a compiled bundle so one written by another version of the plugin, or a file
+# that is not a bundle at all, is recognised before it is decoded. Handing such a file straight to
+# bytes_to_var reports the failure as an engine error no caller can catch, for a case the fallback
+# to the source already handles.
+const COMPILED_MAGIC: String = "GDSS"
+const COMPILED_HEADER_SIZE: int = 8
 
 
 static func is_current_format(raw: Variant) -> bool:
@@ -138,7 +144,11 @@ static func load_data(path: String = "") -> Dictionary:
 
 
 static func compiled_bytes(source: String, data: Dictionary, source_modified: int) -> PackedByteArray:
-	return var_to_bytes({"format": FORMAT_VERSION, "source": source, "data": data, "source_modified": source_modified})
+	var bytes: PackedByteArray = COMPILED_MAGIC.to_ascii_buffer()
+	bytes.resize(COMPILED_HEADER_SIZE)
+	bytes.encode_u32(COMPILED_MAGIC.length(), FORMAT_VERSION)
+	bytes.append_array(var_to_bytes({"format": FORMAT_VERSION, "source": source, "data": data, "source_modified": source_modified}))
+	return bytes
 
 
 static func load_compiled() -> Dictionary:
@@ -150,5 +160,15 @@ static func load_compiled() -> Dictionary:
 		return {}
 	var raw: PackedByteArray = file.get_buffer(file.get_length())
 	file.close()
-	var result: Variant = bytes_to_var(raw)
+	if not has_compiled_header(raw):
+		return {}
+	var result: Variant = bytes_to_var(raw.slice(COMPILED_HEADER_SIZE))
 	return result if is_current_format(result) else {}
+
+
+static func has_compiled_header(raw: PackedByteArray) -> bool:
+	if raw.size() < COMPILED_HEADER_SIZE:
+		return false
+	if raw.slice(0, COMPILED_MAGIC.length()).get_string_from_ascii() != COMPILED_MAGIC:
+		return false
+	return raw.decode_u32(COMPILED_MAGIC.length()) == FORMAT_VERSION
