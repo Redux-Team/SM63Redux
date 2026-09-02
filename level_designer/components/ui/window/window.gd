@@ -188,10 +188,10 @@ func _target_scale() -> Vector2:
 	return window_scale * LDUI.get_ui_scale()
 
 
-## The panel is centre-anchored and only ever grows, so shrink it back to nothing and let the
-## layout size it to whichever content is now visible.
+## Refits the panel to whichever content is now visible and re-centres it. Resizing alone leaves
+## the top-left corner where the previous, larger panel had it, so the window sits off-centre.
 func _refit() -> void:
-	_panel.reset_size()
+	_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_MINSIZE)
 
 
 func _setup_backdrop() -> void:
