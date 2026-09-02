@@ -28,6 +28,15 @@ signal file_state_changed
 var level_file_path: String
 var method: int = -1 # -1 X, 0 Bin, 1 JSON
 var _periodic_autosave_timer: Timer = null
+## Whether any input at all has arrived since the last periodic autosave. The level only ever
+## changes because of something the user did, so an interval with nothing at that end cannot have
+## changed it - and serializing a large level just to discover that costs more than a frame.
+var _input_since_autosave: bool = true
+## The in-flight autosave write, or -1. Encoding and writing are pure data work once the tree has
+## been read, so they run on a worker rather than on the frame.
+var _autosave_task: int = -1
+var _autosave_hash: int = 0
+var _has_autosaved: bool = false
 
 
 ## True when a real on-disk level file is currently loaded/saved (so "Save" can write
@@ -44,30 +53,51 @@ func is_dirty() -> bool:
 
 
 ## Records the current level as the saved baseline, so it reads as up-to-date until the next edit.
-func _mark_clean() -> void:
-	Singleton.set_meta(SAVED_HASH_META, content_hash(_serialize()))
+## Pass the dictionary that was just written where there is one: serializing a large level is not
+## cheap and a save would otherwise do it twice.
+func _mark_clean(data: Dictionary = {}) -> void:
+	Singleton.set_meta(SAVED_HASH_META, content_hash(data if not data.is_empty() else _serialize()))
 
 
 ## Hashes a level dict while ignoring volatile editor view state, so the unsaved-changes check only
 ## reacts to real content edits. Static so the runtime can compare a playtested level the same way.
+## Only the containers a key is stripped from are copied - the layer and object data underneath,
+## which is nearly all of a level, is shared, and [method @GlobalScope.hash] recurses into it
+## either way.
 static func content_hash(data: Dictionary) -> int:
-	var copy: Dictionary = data.duplicate(true)
+	var copy: Dictionary = data.duplicate()
+	
 	var editor: Variant = copy.get("editor")
 	if editor is Dictionary:
+		var editor_copy: Dictionary = (editor as Dictionary).duplicate()
 		for key: String in VOLATILE_EDITOR_KEYS:
-			(editor as Dictionary).erase(key)
+			editor_copy.erase(key)
+		copy["editor"] = editor_copy
+	
 	var areas: Variant = copy.get("areas")
 	if areas is Array:
-		for area_entry: Variant in areas:
+		var areas_copy: Array = []
+		for area_entry: Variant in areas as Array:
 			if area_entry is Dictionary:
+				var entry_copy: Dictionary = (area_entry as Dictionary).duplicate()
 				for key: String in VOLATILE_AREA_KEYS:
-					(area_entry as Dictionary).erase(key)
+					entry_copy.erase(key)
+				areas_copy.append(entry_copy)
+			else:
+				areas_copy.append(area_entry)
+		copy["areas"] = areas_copy
+	
 	var custom: Variant = copy.get("custom_music")
 	if custom is Dictionary:
-		for id: String in (custom as Dictionary):
-			var entry: Variant = (custom as Dictionary).get(id)
+		var custom_copy: Dictionary = (custom as Dictionary).duplicate()
+		for id: String in custom_copy.keys():
+			var entry: Variant = custom_copy.get(id)
 			if entry is Dictionary:
-				(entry as Dictionary).erase("data")
+				var entry_copy: Dictionary = (entry as Dictionary).duplicate()
+				entry_copy.erase("data")
+				custom_copy[id] = entry_copy
+		copy["custom_music"] = custom_copy
+	
 	return hash(copy)
 
 
@@ -118,6 +148,10 @@ func save_current() -> Error:
 	return save_binary(level_file_path)
 
 
+func _exit_tree() -> void:
+	_flush_autosave()
+
+
 func _enter_tree() -> void:
 	if not FileAccess.file_exists(LAST_SESSION_PATH):
 		return
@@ -157,24 +191,66 @@ func setup() -> void:
 			_mark_clean()
 
 
+## Any input marks the level as possibly edited. Deliberately every event rather than only the ones
+## that can edit: erring towards an extra autosave is free, erring the other way loses work.
+func _input(_event: InputEvent) -> void:
+	_input_since_autosave = true
+
+
+## Backs the workspace up even when it has never been saved to a custom path, so the method the
+## level would be written with does not matter here.
 func _on_periodic_autosave_timeout() -> void:
-	# Allow autosaving even if the file hasn't been saved to a custom path yet
-	# > we want periodic backups of the workspace regardless of method
+	if not _input_since_autosave:
+		return
+	if _autosave_task != -1:
+		if not WorkerThreadPool.is_task_completed(_autosave_task):
+			return
+		_flush_autosave()
+	
+	var data: Dictionary = _serialize()
+	if data.is_empty():
+		return
+	_input_since_autosave = false
+	
+	# Idling with the mouse over the viewport still counts as input, so the level is often
+	# unchanged even here; comparing costs a fraction of what writing a megabyte back does.
+	var content: int = content_hash(data)
+	if _has_autosaved and content == _autosave_hash:
+		return
+	_autosave_hash = content
+	_has_autosaved = true
+	
+	_autosave_task = WorkerThreadPool.add_task(_write_autosave.bind(data), false, "LD periodic autosave")
+
+
+## Runs on a worker thread. It only ever touches the dictionary it was handed, which the editor
+## drops on the way in and never writes to again, so it needs no locking.
+func _write_autosave(data: Dictionary) -> void:
 	var file: FileAccess = FileAccess.open(PERIODIC_AUTOSAVE_PATH, FileAccess.WRITE)
 	if file:
-		file.store_buffer(var_to_bytes(_serialize()))
+		file.store_buffer(var_to_bytes(data))
 		file.close()
 
 
+## Waits for an in-flight autosave to land, so the editor cannot be torn down mid-write and leave a
+## truncated backup behind.
+func _flush_autosave() -> void:
+	if _autosave_task == -1:
+		return
+	WorkerThreadPool.wait_for_task_completion(_autosave_task)
+	_autosave_task = -1
+
+
 func save_binary(path: String) -> Error:
+	var data: Dictionary = _serialize()
 	var binary_path: String = path.get_basename() + ".63rl"
-	var err: Error = write_binary(binary_path, _serialize())
+	var err: Error = write_binary(binary_path, data)
 	if err != OK:
 		return err
 	level_file_path = path
 	method = 0
 	save_session()
-	_mark_clean()
+	_mark_clean(data)
 	return OK
 
 
@@ -230,13 +306,14 @@ func reset_level() -> void:
 
 
 func save_json(path: String) -> Error:
-	var err: Error = write_json(path, _serialize())
+	var data: Dictionary = _serialize()
+	var err: Error = write_json(path, data)
 	if err != OK:
 		return err
 	level_file_path = path
 	method = 1
 	save_session()
-	_mark_clean()
+	_mark_clean(data)
 	return OK
 
 
@@ -346,7 +423,7 @@ func _serialize_area_layers(area: LDArea) -> Array:
 				continue
 			# Linked-stamp instances are rebuilt from their stamp's instances on load,
 			# so don't persist them here or they'd be duplicated.
-			if not str(obj.get_meta(&"linked_stamp", "")).is_empty():
+			if obj.has_meta(&"linked_stamp") and not str(obj.get_meta(&"linked_stamp")).is_empty():
 				continue
 			var obj_data: Dictionary = _serialize_object(obj)
 			if not obj_data.is_empty():
@@ -396,13 +473,20 @@ func _serialize_object(obj: LDObject) -> Dictionary:
 		if not poly_obj.get_topline_overrides().is_empty():
 			data["topline_forced"] = poly_obj.get_topline_overrides().duplicate()
 	
+	# Walked as parallel key/value arrays rather than keys with a lookup each: this runs for every
+	# property of every object in the level on every save, and the second hash per property was
+	# costing more than the pair of arrays does.
+	var props_out: Dictionary = data.get("properties")
 	var props: Dictionary = obj.get_property_values()
-	for key: StringName in props:
-		data["properties"][str(key)] = Packer.serialize_json_variant(props.get(key))
+	var keys: Array = props.keys()
+	var values: Array = props.values()
+	for i: int in keys.size():
+		props_out.set(str(keys.get(i)), Packer.serialize_json_variant(values.get(i)))
 	
-	var tags: Array[String] = LD.get_tag_handler().get_object_tags(obj)
-	if not tags.is_empty():
-		data["tags"] = tags
+	if obj.has_meta(&"tags"):
+		var tags: Array[String] = LD.get_tag_handler().get_object_tags(obj)
+		if not tags.is_empty():
+			data["tags"] = tags
 	
 	return data
 
@@ -423,8 +507,6 @@ func _deserialize(data: Dictionary) -> Error:
 	viewport.clear_selection()
 	level.clear_areas()
 	LDMusicDB.deserialize_custom(normalized.get("custom_music", {}))
-	
-	var db: GameDB = GameDB.get_db()
 	
 	# Backgrounds used to live globally under editor.background; fall back to it for areas that
 	# predate per-area backgrounds.
@@ -450,7 +532,7 @@ func _deserialize(data: Dictionary) -> Error:
 		area.camera_position = Packer.array_to_vec2(entry.get("camera_position", [0.0, 0.0]))
 		area.camera_zoom = Packer.array_to_vec2(entry.get("camera_zoom", [1.0, 1.0]))
 		area._active_index = int(entry.get("active_layer", 0))
-		_deserialize_area(entry, area, db)
+		_deserialize_area(entry, area)
 		_ensure_player_spawn(area)
 		_sanitize_player_layer(area)
 	
@@ -500,7 +582,7 @@ func _deserialize(data: Dictionary) -> Error:
 
 
 ## Loads one area entry's layers + objects into the given (already-created) area.
-func _deserialize_area(entry: Dictionary, area: LDArea, db: GameDB) -> void:
+func _deserialize_area(entry: Dictionary, area: LDArea) -> void:
 	for layer_data: Variant in entry.get("layers", []):
 		if not layer_data is Dictionary:
 			continue
@@ -526,7 +608,7 @@ func _deserialize_area(entry: Dictionary, area: LDArea, db: GameDB) -> void:
 		for obj_data: Variant in layer_data.get("objects", []):
 			if not obj_data is Dictionary:
 				continue
-			_deserialize_object(obj_data, layer_index, db, area)
+			_deserialize_object(obj_data, layer_index, area)
 
 
 func _normalize(data: Dictionary) -> Dictionary:
@@ -633,13 +715,3 @@ func apply_polygon_data(instance: LDObject, data: Dictionary) -> void:
 	var overrides: Variant = data.get("topline_forced")
 	if overrides is Dictionary:
 		poly_obj.set_topline_overrides(overrides)
-
-
-func find_game_object_for(obj: LDObject) -> GameObject:
-	if obj.source_object_id.is_empty():
-		return null
-	return find_game_object_by_id(obj.source_object_id, GameDB.get_db())
-
-
-func find_game_object_by_id(id: String, db: GameDB) -> GameObject:
-	return db.find_game_object(id)

@@ -207,6 +207,7 @@ func _apply_width(units: int) -> void:
 		if safety_shape and safety_shape.shape is RectangleShape2D:
 			(safety_shape.shape as RectangleShape2D).size.x = total
 	
+	invalidate_local_bounds()
 	_sync_shader_state()
 
 
@@ -226,6 +227,7 @@ func _apply_height(units: int) -> void:
 		if safety_shape and safety_shape.shape is RectangleShape2D:
 			(safety_shape.shape as RectangleShape2D).size.y = total
 	
+	invalidate_local_bounds()
 	_sync_shader_state()
 
 

@@ -49,6 +49,7 @@ func _on_disable() -> void:
 
 
 func try_begin_drag(mouse_pos: Vector2, objects: Array[LDObject]) -> bool:
+	begin_hit_pass()
 	for obj: LDObject in objects:
 		if _object_contains_point(obj, mouse_pos):
 			_begin_drag(mouse_pos, objects, true)
@@ -163,8 +164,9 @@ func _begin_drag(mouse_pos: Vector2, objects: Array[LDObject], return_to_select:
 
 
 func _get_object_at(mouse_pos: Vector2) -> LDObject:
+	begin_hit_pass()
 	for obj: LDObject in LD.get_area().get_all_objects_on_layer():
-		if obj.is_preview:
+		if obj.is_preview or obj.disabled:
 			continue
 		if _object_contains_point(obj, mouse_pos):
 			return obj
@@ -174,26 +176,14 @@ func _get_object_at(mouse_pos: Vector2) -> LDObject:
 func _object_contains_point(obj: LDObject, mouse_pos: Vector2) -> bool:
 	var poly_obj: LDObjectPolygon = obj as LDObjectPolygon
 	if poly_obj and poly_obj.editor_polygon:
-		var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * obj.get_global_transform()
-		var local_point: Vector2 = full_transform.affine_inverse() * mouse_pos
+		var local_point: Vector2 = object_screen_xform(obj).affine_inverse() * mouse_pos
 		return Geometry2D.is_point_in_polygon(local_point, poly_obj.editor_polygon.polygon)
 	
-	if not obj.editor_shape_area:
+	if obj.get_shape_points().is_empty():
 		var half: Vector2 = obj.get_stamp_size() * 0.5
-		var screen_rect: Rect2 = viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size())
-		return screen_rect.has_point(mouse_pos)
+		return viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size()).has_point(mouse_pos)
 	
-	for child: Node in obj.editor_shape_area.get_children():
-		var shape: CollisionShape2D = child as CollisionShape2D
-		if not shape or not shape.shape is RectangleShape2D:
-			continue
-		var rect: Rect2 = (shape.shape as RectangleShape2D).get_rect()
-		var world_top_left: Vector2 = shape.global_position + rect.position * obj.global_scale
-		var screen_rect: Rect2 = viewport.world_rect_to_screen(world_top_left, rect.size * obj.global_scale)
-		if screen_rect.has_point(mouse_pos):
-			return true
-	
-	return false
+	return object_shapes_have_point(obj, mouse_pos)
 
 
 func _get_mouse_pos() -> Vector2:

@@ -9,6 +9,10 @@ var _last_cell_y: Dictionary[int, float] = {}
 var _column_objects: Dictionary[int, Array] = {}
 var _is_painting: bool = false
 var _cached_stamp_size: Vector2 = Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE)
+## The placed player spawn, held for as long as it stays on the layer being painted. Placement
+## rules ask for it once per stamped object, and resolving it rebuilds and scans the layer's whole
+## object list, so a single drag across a large level was quadratic without this.
+var _cached_player: LDObject = null
 
 
 func get_tool_name() -> String:
@@ -195,7 +199,7 @@ func _add_stroke_preview(pos: Vector2) -> void:
 		GameObject.LDPlacementRules.FRONT_ALL:
 			preview.move_to_front()
 		_:
-			var player: LDObject = LD.get_area().find_object_by_id("player_mario")
+			var player: LDObject = _player_on(preview.get_parent())
 			if player:
 				var player_index: int = player.get_index()
 				match obj.ld_placement_rules:
@@ -208,6 +212,16 @@ func _add_stroke_preview(pos: Vector2) -> void:
 	if obj.has_property(&"position"):
 		preview.set_property(&"position", pos)
 	_stroke.append(preview)
+
+
+## The player spawn sitting under `parent`, cached between calls.
+func _player_on(parent: Node) -> LDObject:
+	if is_instance_valid(_cached_player) and _cached_player.get_parent() == parent:
+		return _cached_player
+	_cached_player = LD.get_area().find_object_by_id("player_mario")
+	if _cached_player and _cached_player.get_parent() != parent:
+		_cached_player = null
+	return _cached_player
 
 
 func _commit_stroke() -> void:

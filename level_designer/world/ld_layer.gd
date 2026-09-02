@@ -78,6 +78,21 @@ func _apply_distance() -> void:
 func _apply_modulate() -> void:
 	var base: Color = modulation if is_modulating else Color.WHITE
 	modulate = (base * _internal_modulation).lightened(0.3)
+	_sync_group_mode()
+
+
+## A [CanvasGroup] renders its whole subtree to an offscreen buffer so the group modulates as one
+## image. That only changes anything when the tint is see-through - an opaque tint multiplies the
+## same either way - and the buffer costs a fifth of the editor's frame on a busy layer, so the
+## grouping is switched off whenever the layer is fully opaque (which the active layer, and every
+## layer with ghosting off, always is).
+func _sync_group_mode() -> void:
+	RenderingServer.canvas_item_set_canvas_group_mode(
+		get_canvas_item(),
+		RenderingServer.CANVAS_GROUP_MODE_TRANSPARENT if modulate.a < 1.0 \
+			else RenderingServer.CANVAS_GROUP_MODE_DISABLED,
+		clear_margin, true, fit_margin, use_mipmaps
+	)
 
 
 ## Enables/disables applying this layer's modulation tint (driven by the Modulate view toggle).

@@ -311,7 +311,7 @@ func _mark_linked_object(obj: LDObject, address: String) -> void:
 
 ## True if obj is a read-only "ghost" copy of a placed stamp instance.
 func is_linked_readonly(obj: LDObject) -> bool:
-	return bool(obj.get_meta(&"linked_readonly", false))
+	return obj.has_meta(&"linked_readonly") and bool(obj.get_meta(&"linked_readonly"))
 
 
 ## All placed objects belonging to the same stamp instance as obj (used to

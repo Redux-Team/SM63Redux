@@ -266,5 +266,6 @@ func _sync_pulse() -> void:
 
 ## Tweens do not survive leaving the tree, so a held editor gets its pulse back on the way in.
 func _enter_tree() -> void:
+	super()
 	if _selection_state == LDObject.SelectionState.SELECTED:
 		_sync_pulse.call_deferred()

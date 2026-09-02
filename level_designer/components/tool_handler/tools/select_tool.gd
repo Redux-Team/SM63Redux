@@ -4,8 +4,9 @@ extends LDTool
 @export var shortcut_handler: LDSelectionShortcutHandler
 
 var _is_box_selecting: bool = false
-var _canvas_xform_cache: Transform2D = Transform2D.IDENTITY
-var _canvas_xform_valid: bool = false
+## Set while a box drag wants its hover states recomputed. Motion events can arrive several times
+## per frame and the pass touches every object, so it is run once a frame instead of once an event.
+var _hover_update_queued: bool = false
 var _is_shift_selecting: bool = false
 var _box_select_origin: Vector2
 var _box_select_rect: Rect2
@@ -69,7 +70,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and _is_box_selecting:
 		_box_select_rect = Rect2(_box_select_origin, viewport.get_screen_mouse() - _box_select_origin).abs()
 		_overlay.show_box(_box_select_rect)
-		_update_hover_states()
+		_queue_hover_update()
 
 
 func _on_enable() -> void:
@@ -80,6 +81,7 @@ func _on_enable() -> void:
 func _on_disable() -> void:
 	_overlay.hide_box()
 	_is_box_selecting = false
+	_hover_update_queued = false
 
 
 func _on_selected_object_changed(_obj: GameObject) -> void:
@@ -88,8 +90,24 @@ func _on_selected_object_changed(_obj: GameObject) -> void:
 	_is_box_selecting = false
 
 
+## Asks for a hover pass on the next frame. The box itself still follows the cursor immediately;
+## only the per-object state, which is what costs anything, waits for the frame.
+func _queue_hover_update() -> void:
+	_hover_update_queued = true
+	set_process(true)
+
+
+func _process(_delta: float) -> void:
+	set_process(false)
+	if not _hover_update_queued:
+		return
+	_hover_update_queued = false
+	if _is_box_selecting:
+		_update_hover_states()
+
+
 func _update_hover_states() -> void:
-	_canvas_xform_valid = false
+	begin_hit_pass()
 	# `obj in array` is a linear scan, so testing every object against the selection each frame was
 	# quadratic in the size of the selection.
 	var selected: Dictionary[LDObject, bool] = {}
@@ -99,7 +117,7 @@ func _update_hover_states() -> void:
 	for obj: LDObject in _get_selectable_objects():
 		if not obj.ld_flags & (1 << GameObject.LD_SELECTABLE):
 			continue
-		if obj.is_preview:
+		if obj.is_preview or obj.disabled:
 			continue
 		if selected.has(obj):
 			obj.set_selection_state(LDObject.SelectionState.SELECTED)
@@ -129,8 +147,9 @@ func _commit_box_select() -> void:
 		return
 	
 	var found: Array[LDObject] = []
+	begin_hit_pass()
 	for obj: LDObject in _get_selectable_objects():
-		if obj.is_preview:
+		if obj.is_preview or obj.disabled:
 			continue
 		if _object_intersects_box(obj):
 			found.append(obj)
@@ -165,21 +184,6 @@ func _delete_selected() -> void:
 	LD.get_object_handler().delete_placed_selection()
 
 
-func _get_shape_screen_points(shape: CollisionShape2D) -> PackedVector2Array:
-	var rect: Rect2 = (shape.shape as RectangleShape2D).get_rect()
-	var corners: Array[Vector2] = [
-		rect.position,
-		rect.position + Vector2(rect.size.x, 0.0),
-		rect.position + rect.size,
-		rect.position + Vector2(0.0, rect.size.y),
-	]
-	var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * shape.get_global_transform()
-	var points: PackedVector2Array = PackedVector2Array()
-	for corner: Vector2 in corners:
-		points.append(full_transform * corner)
-	return points
-
-
 func _point_near_polygon_edge(point: Vector2, screen_points: PackedVector2Array, threshold: float) -> bool:
 	var count: int = screen_points.size()
 	for i: int in count:
@@ -192,124 +196,83 @@ func _point_near_polygon_edge(point: Vector2, screen_points: PackedVector2Array,
 
 func _polygon_edge_intersects_box(screen_points: PackedVector2Array, box: Rect2) -> bool:
 	var count: int = screen_points.size()
-	var box_corners: Array[Vector2] = [
-		box.position,
-		box.position + Vector2(box.size.x, 0.0),
-		box.position + Vector2(0.0, box.size.y),
-		box.position + box.size,
-	]
-	var box_edges: Array[Array] = [
-		[box_corners[0], box_corners[1]],
-		[box_corners[1], box_corners[3]],
-		[box_corners[3], box_corners[2]],
-		[box_corners[2], box_corners[0]],
+	var box_end: Vector2 = box.end
+	var corners: PackedVector2Array = [
+		box.position, Vector2(box_end.x, box.position.y), box_end, Vector2(box.position.x, box_end.y),
 	]
 	for i: int in count:
 		var a: Vector2 = screen_points[i]
 		var b: Vector2 = screen_points[(i + 1) % count]
 		if box.has_point(a):
 			return true
-		for edge: Array in box_edges:
-			if Geometry2D.segment_intersects_segment(a, b, edge[0], edge[1]) != null:
+		for e: int in 4:
+			if Geometry2D.segment_intersects_segment(a, b, corners[e], corners[(e + 1) % 4]) != null:
 				return true
 	return false
 
 
-## The viewport's canvas transform, fetched once per pass. Reading it per object cost two node
-## lookups each, which adds up when a drag re-tests thousands of objects every frame.
-func _canvas_xform() -> Transform2D:
-	if not _canvas_xform_valid:
-		_canvas_xform_cache = viewport.get_viewport().get_canvas_transform()
-		_canvas_xform_valid = true
-	return _canvas_xform_cache
-
-
-## Screen-space bounds of an object, from its cached local bounds. Four transforms regardless of
-## how many points the object has, so it is cheap enough to run against every object every frame.
-func _object_screen_rect(obj: LDObject) -> Rect2:
-	var bounds: Rect2 = obj.get_local_bounds()
-	if bounds.size == Vector2.ZERO:
-		return Rect2()
-	var xform: Transform2D = _canvas_xform() * obj.get_global_transform()
-	var rect: Rect2 = Rect2(xform * bounds.position, Vector2.ZERO)
-	rect = rect.expand(xform * (bounds.position + Vector2(bounds.size.x, 0.0)))
-	rect = rect.expand(xform * (bounds.end))
-	rect = rect.expand(xform * (bounds.position + Vector2(0.0, bounds.size.y)))
-	return rect
+## Screen-space outline of a polygon object, written into `_hit_points` rather than returned so
+## a pass reuses one buffer instead of allocating per object.
+func _fill_polygon_hit_points(obj: LDObject, local: PackedVector2Array) -> void:
+	var xform: Transform2D = object_screen_xform(obj)
+	_hit_points.resize(local.size())
+	for i: int in local.size():
+		_hit_points[i] = xform * local[i]
 
 
 func _object_intersects_box(obj: LDObject) -> bool:
-	# Cheap reject first: the exact test below walks every point of every object, which is what
-	# made dragging a selection box over a large level stall.
-	var broad_rect: Rect2 = _object_screen_rect(obj)
-	if broad_rect.size != Vector2.ZERO and not _box_select_rect.intersects(broad_rect):
-		return false
-
-	var box_corners: Array[Vector2] = [
-		_box_select_rect.position,
-		_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0),
-		_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y),
-		_box_select_rect.position + _box_select_rect.size,
-	]
-	var box_edges: Array[Array] = [
-		[_box_select_rect.position, _box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0)],
-		[_box_select_rect.position + Vector2(_box_select_rect.size.x, 0.0), _box_select_rect.position + _box_select_rect.size],
-		[_box_select_rect.position + _box_select_rect.size, _box_select_rect.position + Vector2(0.0, _box_select_rect.size.y)],
-		[_box_select_rect.position + Vector2(0.0, _box_select_rect.size.y), _box_select_rect.position],
-	]
-	
+	# Polygons first: they carry their own outline and their editor area holds a CollisionPolygon2D
+	# rather than the rectangles the shape test below expects.
 	var poly_obj: LDObjectPolygon = obj as LDObjectPolygon
 	if poly_obj and poly_obj.editor_polygon:
-		var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * obj.get_global_transform()
-		var screen_points: PackedVector2Array = PackedVector2Array()
-		for point: Vector2 in poly_obj.editor_polygon.polygon:
-			screen_points.append(full_transform * point)
+		# The polygon tests walk every point it owns, so they keep a cheap reject in front.
+		var broad_rect: Rect2 = object_screen_rect(obj)
+		if broad_rect.size != Vector2.ZERO and not _box_select_rect.intersects(broad_rect):
+			return false
+		
+		_fill_polygon_hit_points(obj, poly_obj.editor_polygon.polygon)
 		
 		if poly_obj.polygon_data and poly_obj.polygon_data.edge_selection:
-			return _polygon_edge_intersects_box(screen_points, _box_select_rect)
+			return _polygon_edge_intersects_box(_hit_points, _box_select_rect)
 		
-		for p: Vector2 in screen_points:
+		for p: Vector2 in _hit_points:
 			if _box_select_rect.has_point(p):
 				return true
-		for corner: Vector2 in box_corners:
-			if Geometry2D.is_point_in_polygon(corner, screen_points):
+		var box_end: Vector2 = _box_select_rect.end
+		var corners: PackedVector2Array = [
+			_box_select_rect.position, Vector2(box_end.x, _box_select_rect.position.y),
+			box_end, Vector2(_box_select_rect.position.x, box_end.y),
+		]
+		for corner: Vector2 in corners:
+			if Geometry2D.is_point_in_polygon(corner, _hit_points):
 				return true
-		var count: int = screen_points.size()
-		for i: int in count:
-			var a1: Vector2 = screen_points[i]
-			var a2: Vector2 = screen_points[(i + 1) % count]
-			for edge: Array in box_edges:
-				if Geometry2D.segment_intersects_segment(a1, a2, edge.front(), edge.back()) != null:
+		return _polygon_edge_intersects_box(_hit_points, _box_select_rect)
+	
+	# Rectangular shapes go straight to the exact test: it opens with the same axis-aligned reject a
+	# separate broad phase would do, so running one first only transformed the object twice.
+	var local_points: PackedVector2Array = obj.get_shape_points()
+	if not local_points.is_empty():
+		var xform: Transform2D = object_screen_xform(obj)
+		# Placed objects are hardly ever rotated, and an unrotated rectangle stays axis aligned, so
+		# the whole test collapses to one rect overlap against two transformed corners.
+		if is_zero_approx(xform.x.y) and is_zero_approx(xform.y.x):
+			for offset: int in range(0, local_points.size(), 4):
+				var a: Vector2 = xform * local_points[offset]
+				var b: Vector2 = xform * local_points[offset + 2]
+				if _box_select_rect.intersects(Rect2(a, b - a).abs(), true):
 					return true
+			return false
+		_hit_points.resize(local_points.size())
+		for i: int in local_points.size():
+			_hit_points[i] = xform * local_points[i]
+		for offset: int in range(0, _hit_points.size(), 4):
+			if quad_intersects_rect(_hit_points, offset, _box_select_rect):
+				return true
 		return false
 	
-	var areas: Array[Area2D] = obj.get_all_editor_shape_areas()
-	if areas.is_empty():
-		var half: Vector2 = obj.get_stamp_size() * 0.5
-		var screen_rect: Rect2 = viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size())
-		return _box_select_rect.intersects(screen_rect)
-	
-	for area: Area2D in areas:
-		for child: Node in area.get_children():
-			var shape: CollisionShape2D = child as CollisionShape2D
-			if not shape or not shape.shape is RectangleShape2D:
-				continue
-			var points: PackedVector2Array = _get_shape_screen_points(shape)
-			for p: Vector2 in points:
-				if _box_select_rect.has_point(p):
-					return true
-			for corner: Vector2 in box_corners:
-				if Geometry2D.is_point_in_polygon(corner, points):
-					return true
-			var count: int = points.size()
-			for i: int in count:
-				var a1: Vector2 = points[i]
-				var a2: Vector2 = points[(i + 1) % count]
-				for edge: Array in box_edges:
-					if Geometry2D.segment_intersects_segment(a1, a2, edge.front(), edge.back()) != null:
-						return true
-	
-	return false
+	var half: Vector2 = obj.get_stamp_size() * 0.5
+	return _box_select_rect.intersects(
+		viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size()))
 
 
 func _get_selectable_objects() -> Array[LDObject]:
@@ -319,42 +282,33 @@ func _get_selectable_objects() -> Array[LDObject]:
 
 
 func _get_object_at(mouse_pos: Vector2) -> LDObject:
-	_canvas_xform_valid = false
+	begin_hit_pass()
 	var all: Array[LDObject] = _get_selectable_objects()
 	for i: int in range(all.size() - 1, -1, -1):
 		var obj: LDObject = all[i]
-		if obj.is_preview:
+		if obj.is_preview or obj.disabled:
 			continue
-		var broad_rect: Rect2 = _object_screen_rect(obj)
+		# A point query rejects on the cached bounds far more often than it hits, so unlike the box
+		# test it is worth paying for the broad phase before transforming anything.
+		var broad_rect: Rect2 = object_screen_rect(obj)
 		if broad_rect.size != Vector2.ZERO and not broad_rect.has_point(mouse_pos):
 			continue
 		var poly_obj: LDObjectPolygon = obj as LDObjectPolygon
 		if poly_obj:
-			var full_transform: Transform2D = viewport.get_viewport().get_canvas_transform() * obj.get_global_transform()
-			var screen_points: PackedVector2Array = PackedVector2Array()
-			for point: Vector2 in poly_obj.get_ring():
-				screen_points.append(full_transform * point)
+			_fill_polygon_hit_points(obj, poly_obj.get_ring())
 			if poly_obj.polygon_data and poly_obj.polygon_data.edge_selection:
-				if _point_near_polygon_edge(mouse_pos, screen_points, 6.0):
+				if _point_near_polygon_edge(mouse_pos, _hit_points, 6.0):
 					return obj
-			elif Geometry2D.is_point_in_polygon(mouse_pos, screen_points):
+			elif Geometry2D.is_point_in_polygon(mouse_pos, _hit_points):
 				return obj
 			continue
-		var areas: Array[Area2D] = obj.get_all_editor_shape_areas()
-		if areas.is_empty():
+		if obj.get_shape_points().is_empty():
 			var half: Vector2 = obj.get_stamp_size() * 0.5
-			var screen_rect: Rect2 = viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size())
-			if screen_rect.has_point(mouse_pos):
+			if viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size()).has_point(mouse_pos):
 				return obj
 			continue
-		for area: Area2D in areas:
-			for child: Node in area.get_children():
-				var shape: CollisionShape2D = child as CollisionShape2D
-				if not shape or not shape.shape is RectangleShape2D:
-					continue
-				var points: PackedVector2Array = _get_shape_screen_points(shape)
-				if Geometry2D.is_point_in_polygon(mouse_pos, points):
-					return obj
+		if object_shapes_have_point(obj, mouse_pos):
+			return obj
 	
 	return null
 
@@ -393,7 +347,7 @@ func _on_touch_swipe_moved(pos: Vector2) -> void:
 		return
 	_box_select_rect = Rect2(_box_select_origin, pos - _box_select_origin).abs()
 	_overlay.show_box(_box_select_rect)
-	_update_hover_states()
+	_queue_hover_update()
 
 
 func _on_touch_swipe_ended() -> void:

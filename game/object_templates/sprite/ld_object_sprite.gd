@@ -5,6 +5,11 @@ extends LDObject
 
 @export_group("Debug")
 @export var sprite_ref: Sprite2D
+
+## Whether [member sprite_ref] is already listed in [member LDObject.shader_objects] - the stock
+## template lists it there, so the base pass covers it. Resolved once on the way into the tree
+## rather than tested on every parameter write, which the selection tools do per object.
+var _sprite_covered: bool = false
 @export_tool_button("Create Sprite Props") var _create_sprite_props: Callable:
 	get: return func() -> void:
 		if not sprite_ref:
@@ -59,11 +64,18 @@ func _on_place() -> void:
 	reset_shader_modulate()
 
 
-## The sprite carries its own instance of the object shader, so it needs the parameter too.
+## The sprite carries its own instance of the object shader, so it needs the parameter too - unless
+## it is already listed in [member LDObject.shader_objects], which the stock template does, in which
+## case the base pass has just written it.
 func set_shader_parameter(parameter: StringName, value: Variant) -> void:
 	super(parameter, value)
-	if sprite_ref and sprite_ref.material is ShaderMaterial:
+	if not _sprite_covered and sprite_ref and sprite_ref.material is ShaderMaterial:
 		(sprite_ref.material as ShaderMaterial).set_shader_parameter(parameter, value)
+
+
+func _enter_tree() -> void:
+	super()
+	_sprite_covered = sprite_ref != null and sprite_ref in shader_objects
 
 
 func _setup_sprite_material(s: SmartSprite2D) -> void:

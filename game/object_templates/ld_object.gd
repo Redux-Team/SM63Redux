@@ -24,9 +24,6 @@ enum SelectionState {
 @export var disabled: bool = false:
 	set(v):
 		disabled = v
-		for area: Area2D in get_all_editor_shape_areas():
-			area.monitoring = not v
-			area.monitorable = not v
 		reset_shader_modulate()
 
 @export_group("Editor Props")
@@ -42,7 +39,9 @@ var _selection_state: SelectionState = SelectionState.HIDDEN
 ## every object on every frame of a drag.
 var ld_flags: int = 15
 var _local_bounds: Rect2 = Rect2()
-var _local_bounds_valid: bool = false
+var _editor_areas: Array[Area2D] = []
+var _shape_points: PackedVector2Array = PackedVector2Array()
+var _geometry_valid: bool = false
 var _properties: Array[LDProperty] = []
 var _property_values: Dictionary[StringName, Variant] = {}
 
@@ -193,8 +192,11 @@ func get_properties() -> Array[LDProperty]:
 	return _properties
 
 
+## The object's live property values. Read-only: the serializer walks this for every object in the
+## level on every save, so it hands back the dictionary rather than a copy of it. Duplicate it
+## yourself if you mean to keep or edit the result.
 func get_property_values() -> Dictionary[StringName, Variant]:
-	return _property_values.duplicate()
+	return _property_values
 
 
 func get_property_options(_key: StringName) -> PackedStringArray:
@@ -247,14 +249,38 @@ func get_origin_offset() -> Vector2:
 	return origin_marker.position
 
 
-func get_all_editor_shape_areas() -> Array[Area2D]:
-	var result: Array[Area2D] = []
+## The level designer never queries the physics server - every hit test it runs walks the shapes'
+## geometry in script instead. Left live, each area entering the tree is paired by the broadphase
+## against every other area already overlapping it, which makes loading a level quadratic in its
+## object count. Cleared here rather than in each template scene so procedurally built objects and
+## hand-authored override scenes are covered alike, and before the areas themselves enter the tree
+## (a parent is notified first), so they never reach the broadphase at all.
+func _enter_tree() -> void:
 	if editor_shape_area:
-		result.append(editor_shape_area)
+		editor_shape_area.monitoring = false
+		editor_shape_area.monitorable = false
 	for area: Area2D in editor_shape_areas:
 		if area:
-			result.append(area)
-	return result
+			area.monitoring = false
+			area.monitorable = false
+
+
+## The editor shape areas, deduplicated: a template that fills in both [member editor_shape_area]
+## and [member editor_shape_areas] would otherwise hand every hit test the same area twice.
+func get_all_editor_shape_areas() -> Array[Area2D]:
+	if not _geometry_valid:
+		_rebuild_geometry()
+	return _editor_areas
+
+
+## Corners of every rectangular editor shape this object owns, in the object's own space, four per
+## shape. The selection tools transform these directly, which keeps a hit test off the scene tree:
+## resolving the shapes through the areas cost a [method Node.get_children] allocation and a global
+## transform walk per shape, per object, per frame.
+func get_shape_points() -> PackedVector2Array:
+	if not _geometry_valid:
+		_rebuild_geometry()
+	return _shape_points
 
 
 ## Axis-aligned bounds of this object in its own space, unioned over every editor shape it owns
@@ -262,38 +288,55 @@ func get_all_editor_shape_areas() -> Array[Area2D]:
 ## exact hit tests, so it only has to be conservative. An empty rect means "no cheap bounds
 ## available" and callers should skip the reject rather than treat the object as a miss.
 func get_local_bounds() -> Rect2:
-	if not _local_bounds_valid:
-		_local_bounds = _compute_local_bounds()
-		_local_bounds_valid = true
+	if not _geometry_valid:
+		_rebuild_geometry()
 	return _local_bounds
 
 
-## Call when the editor shapes change size or count; the bounds are otherwise cached, because the
-## selection tools ask for them once per object per frame.
+## Call when the editor shapes change size or count; the geometry is otherwise cached, because the
+## selection tools ask for it once per object per frame.
 func invalidate_local_bounds() -> void:
-	_local_bounds_valid = false
+	_geometry_valid = false
 
 
-func _compute_local_bounds() -> Rect2:
-	var bounds: Rect2 = Rect2()
+## Resolves the areas, their shape corners and the union bounds in one pass, since every caller
+## that invalidates one invalidates all three.
+func _rebuild_geometry() -> void:
+	_geometry_valid = true
+	_editor_areas.clear()
+	_shape_points.clear()
+	_local_bounds = Rect2()
+	
+	if editor_shape_area:
+		_editor_areas.append(editor_shape_area)
+	for area: Area2D in editor_shape_areas:
+		if area and not _editor_areas.has(area):
+			_editor_areas.append(area)
+	
 	var found: bool = false
-
-	for area: Area2D in get_all_editor_shape_areas():
+	for area: Area2D in _editor_areas:
 		for child: Node in area.get_children():
 			var shape: CollisionShape2D = child as CollisionShape2D
 			if not shape or shape.shape is not RectangleShape2D:
 				continue
 			var local_transform: Transform2D = area.transform * shape.transform
 			var rect: Rect2 = (shape.shape as RectangleShape2D).get_rect()
-			for corner: Vector2 in [rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)]:
-				var point: Vector2 = local_transform * corner
+			var corners: PackedVector2Array = [
+				local_transform * rect.position,
+				local_transform * Vector2(rect.end.x, rect.position.y),
+				local_transform * rect.end,
+				local_transform * Vector2(rect.position.x, rect.end.y),
+			]
+			_shape_points.append_array(corners)
+			for point: Vector2 in corners:
 				if found:
-					bounds = bounds.expand(point)
+					_local_bounds = _local_bounds.expand(point)
 				else:
-					bounds = Rect2(point, Vector2.ZERO)
+					_local_bounds = Rect2(point, Vector2.ZERO)
 					found = true
-
-	return bounds.grow(2.0) if found else Rect2()
+	
+	if found:
+		_local_bounds = _local_bounds.grow(2.0)
 
 
 func get_stamp_size() -> Vector2:

@@ -22,13 +22,19 @@ enum {
 	set(p):
 		preview = p
 		_update_preview()
-@export var lock_flipping: bool = false
+@export var lock_flipping: bool = false:
+	set(l):
+		lock_flipping = l
+		_sync_processing()
 ## Draws the sprite unflipped while [member flip_h] keeps tracking the real facing direction.
 @export var hide_flipping: bool = false:
 	set(h):
 		hide_flipping = h
 		_apply_hidden_flip(flip_h)
-@export var flip_with_velocity: bool = true
+@export var flip_with_velocity: bool = true:
+	set(f):
+		flip_with_velocity = f
+		_sync_processing()
 @export var autoplay: bool = false
 
 ## the rotation but it respects whether the sprite is flipped or not
@@ -38,7 +44,10 @@ enum {
 	set(lr):
 		rotation_degrees = -lr if flip_h else lr
 
-@export var rotation_source: Node2D
+@export var rotation_source: Node2D:
+	set(r):
+		rotation_source = r
+		_sync_processing()
 
 @export var diffuse_texture: Texture2D:
 	set(t):
@@ -70,6 +79,7 @@ var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
 		follow_root = f
 		if f and follow_origin == Vector2.ZERO:
 			follow_origin = position
+		_sync_processing()
 @export_subgroup("Animation", "follow_")
 ## Played whenever the root's current animation has no entry in [member follow_overrides].
 @export var follow_default: StringName
@@ -192,6 +202,7 @@ var playing: bool = false:
 		notify_property_list_changed()
 		if playing:
 			_playback_time = 0.0
+		_sync_processing()
 @export_storage var looping: bool = true:
 	set(l):
 		looping = l
@@ -211,6 +222,17 @@ func _ready() -> void:
 	
 	_follow_applied = position
 	_follow_applied_rotation = rotation_degrees
+	_sync_processing()
+
+
+## A sprite with nothing to animate and no root to follow costs a script call per frame for both
+## callbacks and does nothing with either. That is invisible for a handful of sprites and the single
+## largest per-frame cost in the level designer, which holds one per placed object and animates
+## none of them, so the callbacks are switched off until something needs them. Everything that can
+## give them work to do sets one of the properties below, and each of those re-syncs.
+func _sync_processing() -> void:
+	set_process(follow_root or playing)
+	set_physics_process(flip_with_velocity and not lock_flipping and rotation_source is Entity)
 
 
 func get_pose(animation: StringName, frame_index: int) -> SubspritePose:

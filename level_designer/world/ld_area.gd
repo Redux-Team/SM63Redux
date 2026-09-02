@@ -38,6 +38,14 @@ var _active_index: int = 0
 var _preview_mode: bool = false
 var _hidden_layers: Dictionary[int, bool] = {}
 var _background_root: Node2D
+## Object lists, rebuilt only when a layer's children actually change. The selection tools ask for
+## them several times per frame while a drag is live, and walking every layer's children to build a
+## fresh typed array each time was the largest fixed cost of a hit test.
+var _all_objects_cache: Array[LDObject] = []
+var _all_objects_valid: bool = false
+var _layer_objects_cache: Array[LDObject] = []
+var _layer_objects_valid: bool = false
+var _layer_objects_index: int = -1
 
 
 func _init() -> void:
@@ -112,6 +120,7 @@ func _insert_layer(at_index: int) -> LDLayer:
 	for layer: LDLayer in layers:
 		if layer.index >= at_index:
 			layer.index += 1
+	invalidate_object_cache()
 	var layer: LDLayer = get_or_create_layer(at_index)
 	_reorder_children()
 	set_active_layer(at_index)
@@ -126,6 +135,7 @@ func remove_layer(layer: LDLayer) -> void:
 	var was_active: bool = layer.index == _active_index
 	layers.erase(layer)
 	layer.queue_free()
+	invalidate_object_cache()
 	if was_active:
 		_active_index = layers[0].index if not layers.is_empty() else 0
 		if not layers.is_empty():
@@ -152,6 +162,7 @@ func move_layer_order(layer: LDLayer, delta: int) -> void:
 	layer.index = other.index
 	other.index = swapped_index
 	_reorder_children()
+	invalidate_object_cache()
 
 	if active_layer:
 		_active_index = active_layer.index
@@ -213,6 +224,14 @@ func set_background(root: Node2D, node: Node) -> void:
 	root.add_child(node)
 
 
+## Whether a layer already exists at the given index, without creating one.
+func has_layer(index: int) -> bool:
+	for layer: LDLayer in layers:
+		if layer.index == index:
+			return true
+	return false
+
+
 ## Returns the layer at the given index, creating and inserting it in sorted order if it does not exist.
 func get_or_create_layer(index: int) -> LDLayer:
 	for layer: LDLayer in layers:
@@ -223,7 +242,9 @@ func get_or_create_layer(index: int) -> LDLayer:
 	new_layer.index = index
 	new_layer.is_parallaxing = LD.get_ui().get_viewport_handler().is_parallaxing_enabled()
 	new_layer.set_modulating(LD.get_ui().get_viewport_handler().is_modulation_enabled())
+	new_layer.get_objects_root().child_order_changed.connect(invalidate_object_cache)
 	add_child(new_layer)
+	invalidate_object_cache()
 	
 	var insert_pos: int = 0
 	for i: int in layers.size():
@@ -240,19 +261,29 @@ func get_or_create_layer(index: int) -> LDLayer:
 	return new_layer
 
 
-## Returns all objects across every layer in this area.
+## Returns all objects across every layer in this area. The array is cached and shared, so treat
+## it as read-only; [method Array.duplicate] it before holding on to one.
 func get_all_objects() -> Array[LDObject]:
+	if _all_objects_valid:
+		return _all_objects_cache
 	var result: Array[LDObject] = []
 	for layer: LDLayer in layers:
 		for child: Node in layer.get_objects_root().get_children():
 			var obj: LDObject = child as LDObject
 			if obj:
 				result.append(obj)
-	return result
+	# Replaced rather than refilled, so a caller iterating the previous list while it edits the
+	# level (removing a duplicate of a unique object, say) keeps walking a stable array.
+	_all_objects_cache = result
+	_all_objects_valid = true
+	return _all_objects_cache
 
 
-## Returns all objects on the layer at the given index.
+## Returns all objects on the layer at the given index. Cached for one index at a time, which is
+## all the hit tests need: they ask for the active layer over and over.
 func get_all_objects_on_layer(index: int = _active_index) -> Array[LDObject]:
+	if _layer_objects_valid and _layer_objects_index == index:
+		return _layer_objects_cache
 	var result: Array[LDObject] = []
 	for layer: LDLayer in layers:
 		if layer.index != index:
@@ -261,7 +292,17 @@ func get_all_objects_on_layer(index: int = _active_index) -> Array[LDObject]:
 			var obj: LDObject = child as LDObject
 			if obj:
 				result.append(obj)
-	return result
+	_layer_objects_cache = result
+	_layer_objects_valid = true
+	_layer_objects_index = index
+	return _layer_objects_cache
+
+
+## Drops the cached object lists. Wired to every layer's object root, so anything that adds,
+## removes, reparents or reorders an object invalidates them without having to remember to.
+func invalidate_object_cache() -> void:
+	_all_objects_valid = false
+	_layer_objects_valid = false
 
 
 ## Finds and returns the first object matching the given source ID on the specified layer.
@@ -285,10 +326,15 @@ func get_player_layer_index() -> int:
 
 ## Adds an object to the layer at the given index, defaulting to the active layer.
 func add_object(object: LDObject, pos: Vector2i = Vector2i.ZERO, index: int = _active_index) -> void:
+	# A layer's ghosting tint depends on which layer is active, never on what is placed on it, so
+	# it only has to be applied when the layer is first made. Re-applying it per object walked the
+	# UI to re-read the ghosting toggle once for every object in the level on load.
+	var existed: bool = has_layer(index)
 	var layer: LDLayer = get_or_create_layer(index)
 	layer.get_objects_root().add_child(object)
 	object.position = pos
-	_apply_layer_visual(layer)
+	if not existed:
+		_apply_layer_visual(layer)
 
 
 ## Moves an object to the layer at the given index.
@@ -300,8 +346,7 @@ func move_object_to_layer(object: LDObject, index: int) -> void:
 func move_objects_to_layer(objects: Array[LDObject], index: int) -> void:
 	var root: Node2D = get_or_create_layer(index).get_objects_root()
 	for obj: LDObject in objects:
-		var game_object: GameObject = GameDB.get_db().find_game_object(obj.source_object_id)
-		if game_object and game_object.ld_flags & (1 << GameObject.LD_LAYERABLE):
+		if obj.ld_flags & (1 << GameObject.LD_LAYERABLE):
 			obj.reparent(root)
 
 
