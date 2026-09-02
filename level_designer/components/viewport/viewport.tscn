@@ -2,29 +2,16 @@
 
 [ext_resource type="Script" uid="uid://b6vwygexlf4ht" path="res://level_designer/components/viewport/viewport.gd" id="1_urtws"]
 [ext_resource type="Script" uid="uid://bkvfc547p3vis" path="res://level_designer/components/viewport/root/viewport_root.gd" id="2_itnej"]
-[ext_resource type="Shader" uid="uid://d4m57jrrlul8l" path="res://core/shader/ld_viewport_bg.gdshader" id="2_vq6wp"]
 [ext_resource type="Texture2D" uid="uid://crqnqwpps0m8c" path="res://assets/textures/level_designer/viewport/bg_texture.png" id="3_nmc72"]
 [ext_resource type="Script" uid="uid://cftpqy38ystk8" path="res://level_designer/components/viewport/global_anchor.gd" id="5_ln2jb"]
 [ext_resource type="Script" uid="uid://bemjucm1rn4g1" path="res://level_designer/components/viewport/selection_overlay/selection_overlay.gd" id="5_pf3pc"]
 [ext_resource type="Script" uid="uid://ctu3ksd4yarv0" path="res://level_designer/components/viewport/touch_swipe_indicator.gd" id="6_uet0v"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nmc72"]
-shader = ExtResource("2_vq6wp")
-shader_parameter/grid_bg_texture = ExtResource("3_nmc72")
-shader_parameter/grid_origin_texture = ExtResource("3_nmc72")
-shader_parameter/grid_bg_modulate = Color(0, 0, 0, 0.2)
-shader_parameter/grid_origin_modulate = Color(0, 0, 0, 1)
-shader_parameter/camera_position = Vector2(0, 0)
-shader_parameter/camera_zoom = Vector2(1, 1)
-shader_parameter/screen_size = Vector2(1152, 648)
-shader_parameter/grid_offset = Vector2(0, 0)
-shader_parameter/grid_scale = Vector2(1, 1)
-shader_parameter/grid_fade_threshold = 1.0
+[ext_resource type="Script" uid="uid://b1pp3eq485150" path="res://level_designer/components/viewport/viewport_grid.gd" id="7_grid"]
 
 [node name="LDViewport" type="Node" unique_id=110890990 node_paths=PackedStringArray("camera", "_viewport_grid", "_root", "_selection_overlay", "_touch_indicator", "_background_root", "_global_anchor", "_viewport_input")]
 script = ExtResource("1_urtws")
 camera = NodePath("Root/LDCamera")
-_viewport_grid = NodePath("Root/BGCanvasLayer/ViewportGrid")
+_viewport_grid = NodePath("Root/Layers/ViewportGrid")
 _root = NodePath("Root")
 _selection_overlay = NodePath("CanvasLayer/SelectionOverlay")
 _touch_indicator = NodePath("CanvasLayer/TouchSwipeIndicator")
@@ -48,19 +35,18 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="ViewportGrid" type="ColorRect" parent="Root/BGCanvasLayer" unique_id=1665666835]
-material = SubResource("ShaderMaterial_nmc72")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(1, 1, 1, 0.2901961)
-
 [node name="LDCamera" type="Camera2D" parent="Root" unique_id=121042519]
 
 [node name="Layers" type="Node2D" parent="Root" unique_id=993688873]
+
+[node name="ViewportGrid" type="Control" parent="Root/Layers" unique_id=1665666835]
+texture_filter = 1
+texture_repeat = 2
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+script = ExtResource("7_grid")
+texture = ExtResource("3_nmc72")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1127959846]
 

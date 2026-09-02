@@ -7,8 +7,18 @@ const DISTANCE_MIN: float = LevelLayer.DISTANCE_MIN
 const DISTANCE_MAX: float = LevelLayer.DISTANCE_MAX
 
 
+## Gap left between consecutive layers' z-indices, so the editor's grid can be slotted in behind
+## whichever layer is active. One slot goes to the grid and the other fifteen are headroom for
+## objects carrying a relative z of their own, which a tighter stride would spill into the grid or
+## into the next layer's band. The engine clamps z to +/-4096, so this still spans ~+/-256 layers.
+const Z_STRIDE: int = 16
+
+
 @export_group("Layer")
-@export var index: int = 0
+@export var index: int = 0:
+	set(i):
+		index = i
+		z_index = i * Z_STRIDE
 ## Optional user-facing name; when empty the layer is shown as "Layer <index> (<n> objects)".
 @export var layer_name: String = ""
 @export var is_decoration: bool = false

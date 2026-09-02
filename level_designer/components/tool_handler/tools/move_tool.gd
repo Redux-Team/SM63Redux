@@ -61,15 +61,20 @@ func update_drag(mouse_pos: Vector2) -> void:
 	if not _is_dragging:
 		return
 	
-	var world_mouse: Vector2 = viewport.screen_to_world(mouse_pos)
+	var layer: Node = null
+	var layer_mouse: Vector2 = Vector2.ZERO
 	
 	for i: int in _objects.size():
-		var new_pos: Vector2 = world_mouse + _drag_offsets[i]
+		var obj: LDObject = _objects.get(i)
+		if i == 0 or obj.get_parent() != layer:
+			layer = obj.get_parent()
+			layer_mouse = viewport.screen_to_world(mouse_pos, obj)
+		var new_pos: Vector2 = layer_mouse + _drag_offsets.get(i)
 		if not Input.is_key_pressed(KEY_ALT):
 			new_pos = new_pos.snapped(Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE))
-		_objects[i].position = new_pos
-		if _objects[i]._properties.size() > 0:
-			_objects[i].set_property_no_apply(&"position", new_pos)
+		obj.position = new_pos
+		if obj._properties.size() > 0:
+			obj.set_property_no_apply(&"position", new_pos)
 
 
 func end_drag() -> void:
@@ -81,24 +86,24 @@ func end_drag() -> void:
 	var objects: Array[LDObject] = _objects.duplicate()
 	for obj: LDObject in objects:
 		new_positions.append(obj.position)
-
-	var delta: Vector2 = (new_positions[0] - old_positions[0]) if not objects.is_empty() else Vector2.ZERO
+	
+	var delta: Vector2 = (new_positions.front() - old_positions.front()) if not objects.is_empty() else Vector2.ZERO
 	var instance_starts: Dictionary[String, Vector2] = _linked_instance_starts.duplicate()
 	var gh: LDStampHandler = LD.get_stamp_handler()
-
+	
 	LD.get_history_handler().push("Move Objects",
 		func() -> void:
 			for i: int in objects.size():
-				if is_instance_valid(objects[i]):
-					objects[i].position = new_positions[i]
+				if is_instance_valid(objects.get(i)):
+					objects.get(i).position = new_positions.get(i)
 			for address: String in instance_starts:
-				gh.set_instance_position_by_address(address, instance_starts[address] + delta),
+				gh.set_instance_position_by_address(address, instance_starts.get(address) + delta),
 		func() -> void:
 			for i: int in objects.size():
-				if is_instance_valid(objects[i]):
-					objects[i].position = old_positions[i]
+				if is_instance_valid(objects.get(i)):
+					objects.get(i).position = old_positions.get(i)
 			for address: String in instance_starts:
-				gh.set_instance_position_by_address(address, instance_starts[address])
+				gh.set_instance_position_by_address(address, instance_starts.get(address))
 	)
 	
 	_is_dragging = false
@@ -129,7 +134,7 @@ func _try_begin_drag_at(mouse_pos: Vector2) -> bool:
 	var obj: LDObject = _get_object_at(mouse_pos)
 	if not obj:
 		return false
-
+	
 	# Clicking any object of a linked instance grabs the whole instance.
 	var drag_set: Array[LDObject] = [obj]
 	var instance: Array[LDObject] = LD.get_stamp_handler().get_linked_instance_objects(obj)
@@ -147,12 +152,10 @@ func _begin_drag(mouse_pos: Vector2, objects: Array[LDObject], return_to_select:
 	_drag_start_positions.clear()
 	_drag_offsets.clear()
 	
-	var world_mouse: Vector2 = viewport.screen_to_world(mouse_pos)
-	
 	for obj: LDObject in _objects:
 		_drag_start_positions.append(obj.position)
-		_drag_offsets.append(obj.position - world_mouse)
-
+		_drag_offsets.append(obj.position - viewport.screen_to_world(mouse_pos, obj))
+	
 	# Remember the start position of any linked instance in the drag set so the move
 	# can be written back to the instance (linked instances rehydrate from instances).
 	_linked_instance_starts.clear()
@@ -160,7 +163,7 @@ func _begin_drag(mouse_pos: Vector2, objects: Array[LDObject], return_to_select:
 	for obj: LDObject in _objects:
 		var address: String = gh.get_object_linked_stamp(obj)
 		if not address.is_empty() and not _linked_instance_starts.has(address):
-			_linked_instance_starts[address] = gh.get_instance_position_for_object(obj)
+			_linked_instance_starts.set(address, gh.get_instance_position_for_object(obj))
 
 
 func _get_object_at(mouse_pos: Vector2) -> LDObject:
@@ -180,15 +183,13 @@ func _object_contains_point(obj: LDObject, mouse_pos: Vector2) -> bool:
 		return Geometry2D.is_point_in_polygon(local_point, poly_obj.editor_polygon.polygon)
 	
 	if obj.get_shape_points().is_empty():
-		var half: Vector2 = obj.get_stamp_size() * 0.5
-		return viewport.world_rect_to_screen(obj.global_position - half, obj.get_stamp_size()).has_point(mouse_pos)
+		return object_stamp_screen_rect(obj).has_point(mouse_pos)
 	
 	return object_shapes_have_point(obj, mouse_pos)
 
 
 func _get_mouse_pos() -> Vector2:
 	return viewport.get_selection_overlay().get_local_mouse_position()
-
 
 
 func _on_touch_swipe_began(pos: Vector2) -> void:

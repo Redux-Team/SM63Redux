@@ -24,7 +24,7 @@ const CAMERA_ZOOM_MAX: Vector2 = Vector2(4.0, 4.0)
 
 @export var camera: Camera2D
 @export_group("Internal")
-@export var _viewport_grid: ColorRect
+@export var _viewport_grid: LDViewportGrid
 @export var _root: LDViewportRoot
 @export var _selection_overlay: LDSelectionOverlay
 @export var _touch_indicator: LDTouchSwipeIndicator
@@ -35,10 +35,6 @@ const CAMERA_ZOOM_MAX: Vector2 = Vector2(4.0, 4.0)
 
 var allow_panning: bool = true
 var allow_zooming: bool = true
-## Last layer transform pushed to the grid shader. Seeded past any real value so the first frame
-## always writes.
-var _grid_origin: Vector2 = Vector2.INF
-var _grid_scale: Vector2 = Vector2.INF
 var camera_position: Vector2 = Vector2.ZERO:
 	set(cp):
 		camera_position = cp
@@ -98,6 +94,7 @@ func _bind_area(area: LDArea) -> void:
 	if not area.active_layer_changed.is_connected(_on_active_layer_changed):
 		area.active_layer_changed.connect(_on_active_layer_changed)
 	area.refresh_layer_visuals()
+	_seat_grid(area._active_index)
 
 
 func _process(delta: float) -> void:
@@ -248,27 +245,30 @@ func get_background_root() -> Control:
 	return _background_root
 
 
-## Screen position of a point in world space, and back. Every tool goes through these rather
-## than composing canvas transforms itself.
-func world_to_screen(world_pos: Vector2) -> Vector2:
-	return _world_transform() * world_pos
+## Screen position of a point in the active layer's space, and back. Every tool goes through these
+## rather than composing canvas transforms itself. Tools editing an object pass it, so the object
+## is read and written in the layer it sits on rather than whichever one is active.
+func world_to_screen(world_pos: Vector2, obj: Node2D = null) -> Vector2:
+	return world_transform(obj) * world_pos
 
 
-func screen_to_world(screen_pos: Vector2) -> Vector2:
-	return _world_transform().affine_inverse() * screen_pos
+func screen_to_world(screen_pos: Vector2, obj: Node2D = null) -> Vector2:
+	return world_transform(obj).affine_inverse() * screen_pos
 
 
 func get_screen_mouse() -> Vector2:
 	return _viewport_input.get_global_mouse_position()
 
 
-func get_world_mouse() -> Vector2:
-	return _root.get_local_mouse_position()
+## Mouse in the space the editor works in: the layer `obj` sits on, or the active layer's own
+## coordinates when no object is given.
+func get_world_mouse(obj: Node2D = null) -> Vector2:
+	return _placement_root(obj).get_local_mouse_position()
 
 
 ## World mouse position rounded to the editor grid.
-func get_snapped_mouse() -> Vector2:
-	return get_world_mouse().snapped(Vector2(SNAPPING_SIZE, SNAPPING_SIZE))
+func get_snapped_mouse(obj: Node2D = null) -> Vector2:
+	return get_world_mouse(obj).snapped(Vector2(SNAPPING_SIZE, SNAPPING_SIZE))
 
 
 ## Cursor shown while the pointer is over the level. Tools set this on enable and reset it on
@@ -277,8 +277,51 @@ func set_cursor_shape(shape: Control.CursorShape) -> void:
 	_viewport_input.mouse_default_cursor_shape = shape
 
 
-func _world_transform() -> Transform2D:
-	return get_viewport().get_canvas_transform() * _root.get_global_transform()
+## The whole world-to-screen transform, for tools that transform runs of points at a time.
+func world_transform(obj: Node2D = null) -> Transform2D:
+	return get_viewport().get_canvas_transform() * _placement_root(obj).get_global_transform()
+
+
+## Screen transform for one object's own coordinates - the space the points it owns are written in.
+func object_transform(obj: Node2D) -> Transform2D:
+	return world_transform(obj) * obj.transform
+
+
+## The step from the layer `obj` sits on into the space the editor is working in, for points
+## authored at the cursor that have to land on an object somewhere else. Identity for anything on
+## the active layer, which is nearly everything.
+func layer_to_world(obj: Node2D) -> Transform2D:
+	var active: Transform2D = _placement_root().get_global_transform()
+	return active.affine_inverse() * _placement_root(obj).get_global_transform()
+
+
+## The node every object on the active layer is positioned against, or null before there is one.
+## Deliberately not [method LDArea.get_active_layer], which would create a layer as a side effect
+## of a query that only means to read one.
+func _active_layer_root() -> Node2D:
+	if not LD.is_ready():
+		return null
+	var area: LDArea = LDLevel.get_active_area()
+	if not area:
+		return null
+	for layer: LDLayer in area.layers:
+		if layer.index == area._active_index:
+			return layer.get_objects_root()
+	return null
+
+
+## The space the editor works in: the object root of the layer `obj` sits on, the active layer's
+## when no object is given (or it has not been placed yet), and the viewport root before a level
+## exists. Layers hang off a [Parallax2D] and carry their distance as a scale on this node, so it -
+## not the viewport root - is the one space where an object's own position, the points a level
+## saves and the editor grid all mean the same thing.
+func _placement_root(obj: Node2D = null) -> Node2D:
+	if obj:
+		var parent: Node2D = obj.get_parent() as Node2D
+		if parent:
+			return parent
+	var root: Node2D = _active_layer_root()
+	return root if root else _root
 
 
 ## Returns the selection overlay node.
@@ -348,14 +391,6 @@ func is_panning() -> bool:
 	return is_mouse_panning or _touch_mode == 1
 
 
-## Converts a world-space rect to screen-space coordinates.
-func world_rect_to_screen(world_top_left: Vector2, world_size: Vector2) -> Rect2:
-	var full_transform: Transform2D = get_viewport().get_canvas_transform() * _root.get_global_transform()
-	var screen_top_left: Vector2 = full_transform * world_top_left
-	var screen_bottom_right: Vector2 = full_transform * (world_top_left + world_size)
-	return Rect2(screen_top_left, screen_bottom_right - screen_top_left).abs()
-
-
 ## Refreshes the viewport by slightly moving the camera and emitting a move signal
 func refresh() -> void:
 	viewport_moved.emit(camera_position, camera_zoom)
@@ -393,52 +428,37 @@ func _on_layer_created(_layer: LDLayer) -> void:
 	LDLevel.get_active_area().refresh_layer_visuals()
 
 
-func _on_active_layer_changed(_index: int) -> void:
+func _on_active_layer_changed(index: int) -> void:
 	LDLevel.get_active_area().refresh_layer_visuals()
+	_seat_grid(index)
 
 
 func _on_viewport_moved(pos: Vector2 = camera_position, zoom: Vector2 = camera_zoom) -> void:
-	var mat: ShaderMaterial = _viewport_grid.material as ShaderMaterial
-	if not mat:
-		return
-	
-	mat.set_shader_parameter("camera_position", pos)
-	mat.set_shader_parameter("camera_zoom", zoom)
-	mat.set_shader_parameter("screen_size", get_viewport().get_visible_rect().size)
-	
+	if is_instance_valid(_viewport_grid):
+		_viewport_grid.set_camera(pos, zoom)
 	get_global_anchor().refresh()
+
+
+## Drops the grid into the layer stack directly behind the active layer, so everything under the
+## layer being edited reads as behind the grid and the layer itself as drawn on top of it.
+func _seat_grid(index: int) -> void:
+	_viewport_grid.z_index = index * LDLayer.Z_STRIDE - 1
 
 
 ## The grid is drawn in the active layer's own coordinates, so it has to track that layer's live
 ## transform: a parallaxing layer slides against the camera as it moves, and layer scaling resizes
 ## its cells. Read from the node rather than recomputed, which is what keeps it exact whatever
-## [Parallax2D] does internally, and change-guarded so a still camera costs one comparison.
+## [Parallax2D] does internally.
 func _sync_grid_layer() -> void:
-	var mat: ShaderMaterial = _viewport_grid.material as ShaderMaterial
-	if not mat or not LD.is_ready():
+	if not LD.is_ready():
 		return
 	
-	var area: LDArea = LDLevel.get_active_area()
-	if not area:
-		return
-	
-	# Deliberately not get_active_layer(), which would create a layer as a side effect of drawing.
-	var active: LDLayer = null
-	for layer: LDLayer in area.layers:
-		if layer.index == area.get_active_layer_index():
-			active = layer
-			break
+	var active: Node2D = _active_layer_root()
 	if not active:
 		return
 	
-	var xform: Transform2D = _root.get_global_transform().affine_inverse() * active.get_objects_root().get_global_transform()
-	if xform.get_origin() == _grid_origin and xform.get_scale() == _grid_scale:
-		return
-	
-	_grid_origin = xform.get_origin()
-	_grid_scale = xform.get_scale()
-	mat.set_shader_parameter("grid_offset", _grid_origin)
-	mat.set_shader_parameter("grid_scale", _grid_scale)
+	var xform: Transform2D = _root.get_global_transform().affine_inverse() * active.get_global_transform()
+	_viewport_grid.set_layer_transform(xform.get_origin(), xform.get_scale())
 
 
 func _zoom_at(pos: Vector2, zoom_delta: float) -> void:
