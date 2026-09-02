@@ -141,12 +141,16 @@ func rename_stamp(old_id: String, new_id: String) -> bool:
 	return true
 
 
-## Creates (or, when `id` names an existing stamp, replaces) a stamp from an immutable
-## snapshot of the given objects. The originals are left untouched; the stamp stores
-## serialized copies (relative to their centroid) that get spawned as instances wherever
-## the stamp is placed. Replacing an existing stamp re-renders its placed instances.
-## Returns null if nothing stampable was selected.
-func create_stamp_from_objects(objects: Array[LDObject], id: String = "") -> LDStamp:
+static func stamp_from_entries(entries: Array[Dictionary]) -> LDStamp:
+	if entries.is_empty():
+		return null
+	var stamp: LDStamp = LDStamp.new()
+	stamp.indexable = false
+	stamp.objects = entries.duplicate(true)
+	return stamp
+
+
+func build_entries(objects: Array[LDObject]) -> Array[Dictionary]:
 	var save_load: LDSaveLoadHandler = LD.get_save_load_handler()
 	
 	var stampable: Array[LDObject] = []
@@ -155,7 +159,7 @@ func create_stamp_from_objects(objects: Array[LDObject], id: String = "") -> LDS
 		if game_object and game_object.ld_stampable:
 			stampable.append(obj)
 	if stampable.is_empty():
-		return null
+		return []
 	
 	var instance_pos: Vector2 = Vector2.ZERO
 	for obj: LDObject in stampable:
@@ -164,7 +168,7 @@ func create_stamp_from_objects(objects: Array[LDObject], id: String = "") -> LDS
 	
 	# Layers are captured relative to the stamp's lowest layer, so placing the stamp on
 	# layer N puts its objects on N, N+1, ... preserving their layer spacing.
-	var base_layer: int = _get_object_layer_index(stampable[0])
+	var base_layer: int = _get_object_layer_index(stampable.front())
 	for obj: LDObject in stampable:
 		base_layer = mini(base_layer, _get_object_layer_index(obj))
 	
@@ -176,6 +180,44 @@ func create_stamp_from_objects(objects: Array[LDObject], id: String = "") -> LDS
 		data["local_offset"] = Packer.vec2_to_array(obj.position - instance_pos)
 		data["layer_offset"] = _get_object_layer_index(obj) - base_layer
 		entries.append(data)
+	return entries
+
+
+func build_loose_stamp(objects: Array[LDObject]) -> LDStamp:
+	return stamp_from_entries(build_entries(objects))
+
+
+func is_loose(stamp: LDStamp) -> bool:
+	return stamp != null and not has_stamp(stamp.id)
+
+
+func place_loose(stamp: LDStamp, position: Vector2, layer_index: int) -> void:
+	var area: LDArea = LDLevel.get_active_area()
+	var spawned: Array[LDObject] = _spawn_stamp_objects(stamp, position, layer_index, false, area)
+	if spawned.is_empty():
+		return
+	
+	LD.get_history_handler().push("Place Group",
+		func() -> void:
+			for obj: LDObject in spawned:
+				if is_instance_valid(obj) and not obj.get_parent():
+					area.add_object(obj, Vector2i(obj.position), obj.get_meta(&"spawn_layer", layer_index)),
+		func() -> void:
+			for obj: LDObject in spawned:
+				if is_instance_valid(obj) and obj.get_parent():
+					obj.get_parent().remove_child(obj)
+	)
+	
+	LD.get_editor_viewport().set_selected_objects(spawned)
+
+
+## Creates (or, when `id` names an existing stamp, replaces) a stamp from an immutable
+## snapshot of the given objects. The originals are left untouched; the stamp stores
+## serialized copies (relative to their centroid) that get spawned as instances wherever
+## the stamp is placed. Replacing an existing stamp re-renders its placed instances.
+## Returns null if nothing stampable was selected.
+func create_stamp_from_objects(objects: Array[LDObject], id: String = "") -> LDStamp:
+	var entries: Array[Dictionary] = build_entries(objects)
 	if entries.is_empty():
 		return null
 	
@@ -433,7 +475,8 @@ func generate_preview(stamp: LDStamp) -> void:
 	stamp.preview_texture = ImageTexture.create_from_image(img)
 	
 	viewport.queue_free()
-	stamp_changed.emit(stamp)
+	if not is_loose(stamp):
+		stamp_changed.emit(stamp)
 
 
 func _request_preview(stamp: LDStamp) -> void:

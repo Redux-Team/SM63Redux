@@ -258,16 +258,16 @@ events = [SubResource("InputEventKey_bt7vf"), SubResource("InputEventKey_bntcf")
 
 [sub_resource type="InputEventKey" id="InputEventKey_wp4la"]
 device = -1
-keycode = 49
-unicode = 49
+keycode = 88
+unicode = 120
 
 [sub_resource type="Shortcut" id="Shortcut_kp1nf"]
 events = [SubResource("InputEventKey_wp4la")]
 
 [sub_resource type="InputEventKey" id="InputEventKey_11twt"]
 device = -1
-keycode = 50
-unicode = 50
+keycode = 71
+unicode = 103
 
 [sub_resource type="Shortcut" id="Shortcut_awha3"]
 events = [SubResource("InputEventKey_11twt")]
@@ -645,7 +645,7 @@ metadata/gdss_classes = PackedStringArray("ViewportToggle")
 [node name="ParallaxingButton" type="Button" parent="ViewportUI/Chrome/LayerVisualsHBox" unique_id=904290079]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-tooltip_text = "Parallax (1)"
+tooltip_text = "Parallax (X)"
 focus_mode = 0
 toggle_mode = true
 shortcut = SubResource("Shortcut_kp1nf")
@@ -656,7 +656,7 @@ metadata/gdss_classes = PackedStringArray("ViewportToggle")
 [node name="GhostingButton" type="Button" parent="ViewportUI/Chrome/LayerVisualsHBox" unique_id=930484823]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-tooltip_text = "Ghosting (2)"
+tooltip_text = "Ghosting (G)"
 focus_mode = 0
 toggle_mode = true
 shortcut = SubResource("Shortcut_awha3")
@@ -703,7 +703,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -713,7 +712,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -723,7 +721,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -733,7 +730,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -743,7 +739,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -753,7 +748,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -763,7 +757,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -773,7 +766,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 

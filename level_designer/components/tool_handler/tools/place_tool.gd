@@ -5,6 +5,8 @@ extends LDTool
 ## Single-placement tool for stamps. Like the Brush, it shows a ghost that follows
 ## the cursor, but each left-click drops exactly one instance of the armed stamp
 ## (no drag-painting). Stays armed until another tool is selected or right-click cancels.
+## A loose stamp (a hotbar group, which is not in the stamp library) drops independent
+## objects instead of a linked instance.
 
 
 var _armed_stamp: LDStamp
@@ -40,10 +42,10 @@ func _on_armed_stamp_changed(stamp: LDStamp) -> void:
 func _on_viewport_input(event: InputEvent) -> void:
 	if not is_active() or get_viewport().is_input_handled():
 		return
-
+	
 	if event is InputEventMouseMotion:
 		LD.get_stamp_handler().position_preview(_ghost, viewport.get_snapped_mouse())
-
+	
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			get_tool_handler().select_tool("select")
@@ -55,10 +57,13 @@ func _place_at(pos: Vector2) -> void:
 	if not _armed_stamp:
 		get_tool_handler().select_tool("select")
 		return
-
+	
 	var gh: LDStampHandler = LD.get_stamp_handler()
-	var area_name: String = LDLevel.get_active_area().area_name
-	gh.place_linked(_armed_stamp.id, _armed_stamp.next_instance_id(area_name), pos, LDLevel.get_active_area()._active_index)
+	var area: LDArea = LDLevel.get_active_area()
+	if gh.is_loose(_armed_stamp):
+		gh.place_loose(_armed_stamp, pos, area._active_index)
+		return
+	gh.place_linked(_armed_stamp.id, _armed_stamp.next_instance_id(area.area_name), pos, area._active_index)
 
 
 func _spawn_ghost() -> void:
