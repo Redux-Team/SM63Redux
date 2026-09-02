@@ -67,7 +67,24 @@ func _handle_property(property_name: String, property_value: Variant) -> void:
 		prop.apply(self, property_value)
 		return
 	
-	set(property_name, property_value)
+	set(property_name, _as_node_type(property_name, property_value))
+
+
+## A level writes vectors and colors as arrays, and a field the object no longer declares has no
+## definition left to coerce one back with. Handing the node an [Array] where it holds a [Vector2]
+## resolves to zero rather than being ignored - which scales an object down to nothing instead of
+## leaving it alone - so the value the node already holds says what the type should be.
+func _as_node_type(property_name: String, value: Variant) -> Variant:
+	if value is not Array:
+		return value
+	
+	match typeof(get(property_name)):
+		TYPE_VECTOR2:
+			return Packer.array_to_vec2(value)
+		TYPE_COLOR:
+			return Packer.array_to_color(value)
+	
+	return value
 
 
 ## Overrides the full property logic of the object.
