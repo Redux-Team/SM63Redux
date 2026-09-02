@@ -11,9 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://2vcfa37p1h7t" path="res://assets/textures/objects/interactive/interactable/breakable_box_particles.png" id="5_3wji2"]
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="5_key8f"]
 [ext_resource type="Script" uid="uid://df82mcnubnp0h" path="res://core/custom_nodes/2d/animated_particles.gd" id="7_debris"]
-[ext_resource type="Script" path="res://game/entity_components/pound_cancel_component.gd" id="8_sustain"]
+[ext_resource type="Script" uid="uid://bua0v2wcixcy" path="res://game/entity_components/pound_cancel_component.gd" id="8_sustain"]
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_8nl6k"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ju08t"]
 diffuse_texture = ExtResource("2_qhjox")
 
 [sub_resource type="Resource" id="Resource_4xhut"]
@@ -27,18 +27,6 @@ size = Vector2(30, 30)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3wji2"]
 size = Vector2(32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_tmrtw"]
-atlas = ExtResource("5_3wji2")
-region = Rect2(0, 17, 11, 8)
-
-[sub_resource type="Curve" id="Curve_3wji2"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.052631572, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Gradient" id="Gradient_po2cq"]
-offsets = PackedFloat32Array(0, 0.91007197, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0.97482014, 0.97482014, 0.97482014, 1, 1, 1, 1, 0)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_2pebe"]
 atlas = ExtResource("5_3wji2")
 region = Rect2(0, 1, 11, 8)
@@ -46,6 +34,10 @@ region = Rect2(0, 1, 11, 8)
 [sub_resource type="AtlasTexture" id="AtlasTexture_rbqaj"]
 atlas = ExtResource("5_3wji2")
 region = Rect2(0, 9, 11, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tmrtw"]
+atlas = ExtResource("5_3wji2")
+region = Rect2(0, 17, 11, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ipbxf"]
 atlas = ExtResource("5_3wji2")
@@ -87,7 +79,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_tt2s6")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
@@ -105,9 +97,9 @@ coin = ExtResource("2_4xhut")
 metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=286401553]
-texture = SubResource("CanvasTexture_8nl6k")
+texture = SubResource("CanvasTexture_ju08t")
 script = ExtResource("3_prsgq")
-canvas_texture = SubResource("CanvasTexture_8nl6k")
+canvas_texture = SubResource("CanvasTexture_ju08t")
 diffuse_texture = ExtResource("2_qhjox")
 current_animation = ""
 current_frame = 0
@@ -145,6 +137,7 @@ sprite_frames = SubResource("SpriteFrames_m2ut4")
 amount = 10
 emission_radius = 9.0
 spread = 180.0
+angles = PackedFloat32Array()
 speed_min = 45.0
 speed_max = 130.0
 gravity = Vector2(0, 420)

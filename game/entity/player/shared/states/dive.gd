@@ -27,12 +27,14 @@ func _enter() -> void:
 
 
 func _exit() -> void:
+	player.cancel_stomp()
 	player.is_diving = false
 	player.lock_flipping = false
 	player.sprite.local_rotation = 0.0
 
 
 func _tick(delta: float) -> void:
+	player.tick_stomp(delta)
 	_detect_landing()
 	
 	if _resetting:

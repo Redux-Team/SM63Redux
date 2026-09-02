@@ -1,12 +1,11 @@
 [gd_scene format=3 uid="uid://bu0cpqsoc43la"]
 
 [ext_resource type="Script" uid="uid://gx548aea8dxr" path="res://game/entity/enemy/goomba/goomba.gd" id="1_hysx3"]
-[ext_resource type="Script" path="res://game/entity/state/state_machine.gd" id="2_e0p0p"]
+[ext_resource type="Script" uid="uid://ckt07dpulg2mq" path="res://game/entity/state/state_machine.gd" id="2_e0p0p"]
 [ext_resource type="PackedScene" uid="uid://tf6mq1quvwdw" path="res://game/object/coin/yellow_coin/yellow_coin_spawn.tscn" id="2_onrng"]
 [ext_resource type="PackedScene" uid="uid://dssc62dfv747q" path="res://game/entity/enemy/_shared/scenes/poof.tscn" id="3_7e3mf"]
 [ext_resource type="Texture2D" uid="uid://djgg3rgm58230" path="res://assets/textures/entity/enemy/goomba/goomba_walk.png" id="3_hysx3"]
-[ext_resource type="Script" path="res://game/entity/state/state_effects.gd" id="30_effects"]
-[ext_resource type="Script" path="res://game/entity/state/state.gd" id="3_tx7nd"]
+[ext_resource type="Script" uid="uid://4hwxabxucpuh" path="res://game/entity/state/state.gd" id="3_tx7nd"]
 [ext_resource type="Texture2D" uid="uid://dtakiqymwlidq" path="res://assets/textures/entity/enemy/goomba/goomba_alert.png" id="4_kyaey"]
 [ext_resource type="Script" uid="uid://dlx4gw1u1xim" path="res://core/custom_nodes/2d/smart_sprite_2d.gd" id="4_whnfo"]
 [ext_resource type="Script" uid="uid://ckuqr7ws7p6tk" path="res://game/entity/enemy/goomba/states/alert.gd" id="4_x5cu4"]
@@ -17,29 +16,63 @@
 [ext_resource type="Texture2D" uid="uid://bpp7wgte6dq0l" path="res://assets/textures/entity/enemy/goomba/goomba_squish.png" id="7_phpar"]
 [ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_components/gravity_component.gd" id="10_d6enh"]
 [ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_components/friction_component.gd" id="11_8wobc"]
-[ext_resource type="Script" path="res://game/entity/enemy/_shared/states/chase.gd" id="shared_chase"]
-[ext_resource type="Script" path="res://game/entity_components/player_detector_component.gd" id="detector"]
 [ext_resource type="Script" uid="uid://bu81quiseko6w" path="res://game/entity/enemy/goomba/states/squish.gd" id="12_6f57m"]
 [ext_resource type="Script" uid="uid://bxmdlmivclqhf" path="res://game/entity/enemy/goomba/states/strike.gd" id="14_xvu80"]
 [ext_resource type="Texture2D" uid="uid://djcybawlcos34" path="res://assets/textures/entity/enemy/goomba/goomba_hit.png" id="20_4grvk"]
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="26_15o45"]
 [ext_resource type="Script" uid="uid://dnsd2a8oriy3" path="res://util/entity/forcebox.gd" id="26_a7n3c"]
 [ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://core/custom_nodes/2d/water_check_area.gd" id="29_rakc8"]
-
+[ext_resource type="Script" uid="uid://dir75hkr2361s" path="res://game/entity/state/state_effects.gd" id="30_effects"]
+[ext_resource type="Script" uid="uid://dx3f5mhdkhnrw" path="res://game/entity_components/player_detector_component.gd" id="detector"]
 [ext_resource type="AudioStream" uid="uid://dgmayxvw7oy3w" path="res://assets/sfx/entity/goomba/goomba_step.wav" id="sfxres1"]
 [ext_resource type="AudioStream" uid="uid://y56kvftd2idy" path="res://assets/sfx/entity/goomba/goomba_jump.ogg" id="sfxres2"]
 [ext_resource type="AudioStream" uid="uid://cucdekyl58ypv" path="res://assets/sfx/entity/goomba/goomba_stomped.wav" id="sfxres3"]
 [ext_resource type="AudioStream" uid="uid://dq4csxy68lb4q" path="res://assets/sfx/entity/goomba/goomba_struck.wav" id="sfxres4"]
+[ext_resource type="Script" uid="uid://owie463aj20g" path="res://game/entity/enemy/_shared/states/chase.gd" id="shared_chase"]
+
 [sub_resource type="Curve" id="Curve_g7wuw"]
 _limits = [-1.0, 1.0, -1.0, 1.0]
 _data = [Vector2(-1, -1), 0.0, 0.0, 0, 0, Vector2(-0.35, -1), 0.0, 0.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 4
 
+[sub_resource type="Resource" id="Effects_Patrol"]
+script = ExtResource("30_effects")
+animation = &"walk"
+sfx_frame_enabled = true
+sfx_frame_sound = ExtResource("sfxres1")
+sfx_frame_indices = Array[int]([0, 3])
+
+[sub_resource type="Resource" id="Effects_Alert"]
+script = ExtResource("30_effects")
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres2")
+
+[sub_resource type="Resource" id="Effects_Chase"]
+script = ExtResource("30_effects")
+animation = &"walk"
+speed_scale = 1.5
+sfx_frame_enabled = true
+sfx_frame_sound = ExtResource("sfxres1")
+sfx_frame_indices = Array[int]([0, 3])
+
+[sub_resource type="Resource" id="Effects_Squish"]
+script = ExtResource("30_effects")
+animation = &"squish"
+speed_scale = 1.5
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres3")
+
+[sub_resource type="Resource" id="Effects_Strike"]
+script = ExtResource("30_effects")
+player_animation = &"strike_hit"
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres4")
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_n0olq"]
 atlas = ExtResource("3_hysx3")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_a7n3c"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_rakc8"]
 diffuse_texture = SubResource("AtlasTexture_n0olq")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kyaey"]
@@ -104,7 +137,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kyaey")
 }],
-"loop": false,
+"loop": 0,
 "name": &"alert_fall",
 "speed": 5.0
 }, {
@@ -115,7 +148,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_d6enh")
 }],
-"loop": false,
+"loop": 0,
 "name": &"alert_jump",
 "speed": 10.0
 }, {
@@ -123,7 +156,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8wobc")
 }],
-"loop": false,
+"loop": 0,
 "name": &"alert_landed",
 "speed": 5.0
 }, {
@@ -140,7 +173,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_dc2fh")
 }],
-"loop": false,
+"loop": 0,
 "name": &"squish",
 "speed": 10.0
 }, {
@@ -148,7 +181,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_15o45")
 }],
-"loop": true,
+"loop": 1,
 "name": &"strike",
 "speed": 5.0
 }, {
@@ -171,7 +204,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_phpar")
 }],
-"loop": true,
+"loop": 1,
 "name": &"walk",
 "speed": 8.0
 }]
@@ -237,7 +270,7 @@ damage_state_name = &"squish"
 metadata/_custom_type_script = "uid://drtqc6at2evph"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_whnfo"]
-size = Vector2(21.5, 14)
+size = Vector2(15.25, 10)
 
 [sub_resource type="Curve" id="Curve_a7n3c"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -248,39 +281,6 @@ size = Vector2(14, 15)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_42vey"]
 size = Vector2(16, 16)
-
-[sub_resource type="Resource" id="Effects_Patrol"]
-script = ExtResource("30_effects")
-sfx_frame_enabled = true
-animation = &"walk"
-sfx_frame_sound = ExtResource("sfxres1")
-sfx_frame_indices = Array[int]([0, 3])
-
-[sub_resource type="Resource" id="Effects_Alert"]
-script = ExtResource("30_effects")
-sfx_enter_enabled = true
-sfx_enter_sound = ExtResource("sfxres2")
-
-[sub_resource type="Resource" id="Effects_Chase"]
-script = ExtResource("30_effects")
-sfx_frame_enabled = true
-animation = &"walk"
-speed_scale = 1.5
-sfx_frame_sound = ExtResource("sfxres1")
-sfx_frame_indices = Array[int]([0, 3])
-
-[sub_resource type="Resource" id="Effects_Squish"]
-script = ExtResource("30_effects")
-sfx_enter_enabled = true
-animation = &"squish"
-speed_scale = 1.5
-sfx_enter_sound = ExtResource("sfxres3")
-
-[sub_resource type="Resource" id="Effects_Strike"]
-script = ExtResource("30_effects")
-sfx_enter_enabled = true
-player_animation = &"strike_hit"
-sfx_enter_sound = ExtResource("sfxres4")
 
 [node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("sprite", "components_root", "machine", "water_check")]
 collision_layer = 8
@@ -303,12 +303,13 @@ animation_player = NodePath("../AnimationPlayer")
 
 [node name="Wander" type="Node" parent="StateMachine" unique_id=288151632]
 script = ExtResource("3_tx7nd")
+
 [node name="Patrol" type="Node" parent="StateMachine/Wander" unique_id=392367863 node_paths=PackedStringArray("floor_check_l", "floor_check_r")]
 script = ExtResource("5_4grvk")
-effects = SubResource("Effects_Patrol")
 displacement = SubResource("Curve_g7wuw")
 floor_check_l = NodePath("../../../FloorCheckL")
 floor_check_r = NodePath("../../../FloorCheckR")
+effects = SubResource("Effects_Patrol")
 
 [node name="Alert" type="Node" parent="StateMachine/Wander" unique_id=1129696963]
 script = ExtResource("4_x5cu4")
@@ -316,26 +317,26 @@ effects = SubResource("Effects_Alert")
 
 [node name="Chase" type="Node" parent="StateMachine" unique_id=1835913114]
 script = ExtResource("shared_chase")
-effects = SubResource("Effects_Chase")
 snap_to_speed_on_enter = true
+effects = SubResource("Effects_Chase")
 
 [node name="Squish" type="Node" parent="StateMachine" unique_id=354975756 node_paths=PackedStringArray("hit_box")]
 script = ExtResource("12_6f57m")
-effects = SubResource("Effects_Squish")
 hit_box = NodePath("../../HitBox")
+effects = SubResource("Effects_Squish")
 
 [node name="Strike" type="Node" parent="StateMachine" unique_id=440686515 node_paths=PackedStringArray("hit_box")]
 script = ExtResource("14_xvu80")
-effects = SubResource("Effects_Strike")
 hit_box = NodePath("../../HitBox")
+effects = SubResource("Effects_Strike")
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]
 position = Vector2(0, -7)
-texture = SubResource("CanvasTexture_a7n3c")
+texture = SubResource("CanvasTexture_rakc8")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 script = ExtResource("4_whnfo")
-canvas_texture = SubResource("CanvasTexture_a7n3c")
+canvas_texture = SubResource("CanvasTexture_rakc8")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 animated = true
@@ -391,12 +392,12 @@ base_friction = 0.5
 entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cye3eo0tyv6vx"
 
-[node name="PlayerDetectorComponent" type="Node" parent="Components" unique_id=1423924392 node_paths=PackedStringArray("entity", "detection_area")]
+[node name="PlayerDetectorComponent" type="Node" parent="Components" unique_id=1423924392 node_paths=PackedStringArray("detection_area", "entity")]
 script = ExtResource("detector")
-entity = NodePath("../..")
 detection_area = NodePath("../../PlayerCheck")
 alert_state = &"Alert"
 ignored_states = Array[StringName]([&"Squish", &"Strike"])
+entity = NodePath("../..")
 
 [node name="PlayerCheck" type="Area2D" parent="." unique_id=1423924391]
 visible = false
@@ -429,7 +430,7 @@ components = Array[ExtResource("26_15o45")]([SubResource("Resource_onrng"), SubR
 metadata/_custom_type_script = "uid://3ara7t8dqmih"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=856276483]
-position = Vector2(-0.25, -3)
+position = Vector2(-0.375, -1)
 shape = SubResource("RectangleShape2D_whnfo")
 debug_color = Color(0.7, 0.66499996, 0, 0.41960785)
 

@@ -60,6 +60,7 @@ func _on_area_entered(area: Area2D) -> void:
 			_push_disable_timer(duration)
 		_hit_this_frame = true
 		damaged.emit(hitbox)
+		hitbox.landed.emit(self)
 		return
 
 

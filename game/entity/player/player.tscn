@@ -97,6 +97,7 @@
 [ext_resource type="Script" uid="uid://bo5t227gdf07k" path="res://game/entity/player/shared/states/idle.gd" id="ps_idle"]
 [ext_resource type="Script" uid="uid://cyj0786820s74" path="res://game/entity/player/shared/states/idle_jump.gd" id="ps_idle_jump"]
 [ext_resource type="Script" uid="uid://bnbyeuh75nmoj" path="res://game/entity/player/shared/states/jump.gd" id="ps_jump"]
+[ext_resource type="Script" uid="uid://ce0qlnp41jv8w" path="res://game/entity/player/shared/states/stomp.gd" id="ps_stomp"]
 [ext_resource type="Script" uid="uid://bg1m88hu1l2ur" path="res://game/entity/player/shared/states/strike.gd" id="ps_strike"]
 [ext_resource type="Script" uid="uid://c1484f8qy8ep0" path="res://game/entity/player/shared/states/swim_idle.gd" id="ps_swim_idle"]
 [ext_resource type="Script" uid="uid://bq04d84ls7hwp" path="res://game/entity/player/shared/states/swim_strike.gd" id="ps_swim_strike"]
@@ -130,6 +131,7 @@
 [ext_resource type="AudioStream" uid="uid://dly1p4x8t0r70" path="res://assets/sfx/player/ground_pound/ground_pound_generic.wav" id="sfxres32"]
 [ext_resource type="AudioStream" uid="uid://pga7av4xfjtv" path="res://assets/music/player_death.mp3" id="sfxres33"]
 [ext_resource type="Resource" uid="uid://dps3cdyw46lly" path="res://game/entity/player/res/footstep_sfx_bank.tres" id="sfxres34"]
+[ext_resource type="Texture2D" uid="uid://dv2fexr0a6o8t" path="res://assets/textures/entity/player/mario/stomp.png" id="tex_stomp"]
 
 [sub_resource type="Curve" id="Curve_aln35"]
 _limits = [-2.0, 0.0, 0.0, 2.0]
@@ -308,6 +310,11 @@ hide_flipping = true
 sfx_enter_enabled = true
 sfx_enter_sound = SubResource("sfxrand27")
 sfx_enter_stop_on_exit = true
+
+[sub_resource type="Resource" id="Effects_Stomp"]
+script = ExtResource("30_effects")
+animation = &"stomp"
+lock_flipping = true
 
 [sub_resource type="Resource" id="Effects_Floorslide"]
 script = ExtResource("30_effects")
@@ -570,7 +577,7 @@ anim_offset_max = 1.0
 atlas = ExtResource("65_ejgj1")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_f27fj"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_lou6s"]
 diffuse_texture = SubResource("AtlasTexture_26jgh")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hmgs0"]
@@ -792,6 +799,10 @@ region = Rect2(384, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_o0m62"]
 atlas = ExtResource("77_d3nks")
 region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stomp"]
+atlas = ExtResource("tex_stomp")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8vtha"]
 atlas = ExtResource("62_fx7qh")
@@ -1140,6 +1151,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_stomp")
+}],
+"loop": 0,
+"name": &"stomp",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_8vtha")
 }, {
 "duration": 1.0,
@@ -1217,7 +1236,7 @@ animations = [{
 atlas = ExtResource("100_sbpf8")
 region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_lou6s"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ckiah"]
 diffuse_texture = SubResource("AtlasTexture_opceb")
 
 [sub_resource type="Resource" id="Resource_v2l3k"]
@@ -1829,7 +1848,7 @@ animations = [{
 atlas = ExtResource("114_k6hol")
 region = Rect2(0, 0, 16, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_ckiah"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_ont6s"]
 diffuse_texture = SubResource("AtlasTexture_fbvjr")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_is4m5"]
@@ -1925,7 +1944,7 @@ size = Vector2(40, 11)
 size = Vector2(27, 15.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d635j"]
-size = Vector2(12, 3)
+size = Vector2(6, 3)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ae0hi"]
 size = Vector2(12, 8)
@@ -2193,6 +2212,9 @@ dive_rotation_curve = SubResource("Curve_aln35")
 dive_y_velocity_to_rotation_offset_curve = SubResource("Curve_ioda6")
 spin_fast_duration = 0.5
 spin_speed_scale_curve = SubResource("Curve_spinspeed")
+stomp_drag = 500.0
+stomp_duration = 0.15
+stomp_hitbox_frames = 100
 walk_speed_curve = SubResource("Curve_walkspeed")
 footstep_bank = ExtResource("sfxres34")
 footstep_particles = NodePath("FootstepParticles")
@@ -2286,6 +2308,11 @@ effects = SubResource("Effects_TripleJump")
 script = ExtResource("14_20bnd")
 spin_hitbox = NodePath("../../../../Hitboxes/Spin")
 effects = SubResource("Effects_Spin")
+
+[node name="Stomp" type="Node" parent="StateMachine/Dry" unique_id=1890132869 node_paths=PackedStringArray("feet_hitbox")]
+script = ExtResource("ps_stomp")
+feet_hitbox = NodePath("../../../Hitboxes/Feet")
+effects = SubResource("Effects_Stomp")
 
 [node name="Floorslide" type="Node" parent="StateMachine/Dry" unique_id=1890132868]
 script = ExtResource("6_y6elw")
@@ -2421,11 +2448,11 @@ process_material = SubResource("ParticleProcessMaterial_kyrvb")
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source", "subsprites")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_f27fj")
+texture = SubResource("CanvasTexture_lou6s")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_f27fj")
+canvas_texture = SubResource("CanvasTexture_lou6s")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 subsprites = [NodePath("Fludd")]
@@ -2439,11 +2466,11 @@ playing = false
 [node name="Fludd" type="Sprite2D" parent="Doll" unique_id=99316911 node_paths=PackedStringArray("subsprites")]
 show_behind_parent = true
 position = Vector2(-6, 0)
-texture = SubResource("CanvasTexture_lou6s")
+texture = SubResource("CanvasTexture_ckiah")
 region_enabled = true
 region_rect = Rect2(64, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_lou6s")
+canvas_texture = SubResource("CanvasTexture_ckiah")
 subsprites = [NodePath("Plume")]
 follow_root = true
 follow_default = &"hover:default"
@@ -2482,11 +2509,11 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 visible = false
 show_behind_parent = true
 position = Vector2(-6, 13)
-texture = SubResource("CanvasTexture_ckiah")
+texture = SubResource("CanvasTexture_ont6s")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 32)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_ckiah")
+canvas_texture = SubResource("CanvasTexture_ont6s")
 follow_origin = Vector2(-3, -1.9999998)
 animated = true
 diffuse_frames = SubResource("SpriteFrames_m2rg5")
@@ -2535,7 +2562,6 @@ volume_db = -6.0
 bus = &"Player"
 
 [node name="Hitboxes" type="Node2D" parent="." unique_id=1409973495]
-visible = false
 
 [node name="Spin" type="Area2D" parent="Hitboxes" unique_id=1300299390]
 position = Vector2(2, -10)
@@ -2573,7 +2599,6 @@ disabled = true
 debug_color = Color(0.7, 0, 0, 0.41960785)
 
 [node name="Feet" type="Area2D" parent="Hitboxes" unique_id=165454466]
-visible = false
 position = Vector2(2, -10)
 monitoring = false
 script = ExtResource("19_1wiqr")
@@ -2776,5 +2801,6 @@ speed_min = 20.0
 speed_max = 20.0
 metadata/_custom_type_script = "uid://df82mcnubnp0h"
 
+[connection signal="landed" from="Hitboxes/Feet" to="." method="_on_feet_landed"]
 [connection signal="water_entered" from="Regions/WaterCheck" to="." method="_on_water_check_water_entered"]
 [connection signal="water_exited" from="Regions/WaterCheck" to="." method="_on_water_check_water_exited"]

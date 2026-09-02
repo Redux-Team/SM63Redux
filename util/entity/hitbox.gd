@@ -3,6 +3,9 @@ class_name HitBox
 extends Area2D
 
 
+signal landed(hurt_box: HurtBox)
+
+
 enum DamageType {
 	GENERIC,
 	STRIKE,

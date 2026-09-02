@@ -122,6 +122,13 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 @export var rollout_fall_time: float = 0.3
 @export var rollout_fall_min_speed: float = 30.0
 @export var rollout_spin_min_speed: float = -40.0
+@export_subgroup("Stomp")
+@export var stomp_drag: float = 900.0
+@export var stomp_min_speed: float = 45.0
+@export var stomp_duration: float = 0.4
+## Physics frames the feet hitbox stays live for, so one landing can squish everything under it.
+@export var stomp_hitbox_frames: int = 2
+@export var stomp_bounce_speed: float = -280.0
 @export_subgroup("Ground Pound")
 @export var ground_pound_start_rise_speed: float = -38.0
 @export var ground_pound_start_duration: float = 0.3
@@ -249,6 +256,7 @@ var effective_midair_max_speed: float = 0.0
 var move_input: float = 0.0
 var jump_chain_index: int = 0
 var jump_chain_timer: float = 0.0
+var stomp_timer: float = 0.0
 var swim_hold_timer: float = 0.0
 var swim_input_timer: float = 0.0
 var action_hold_times: Dictionary[String, float]
@@ -420,6 +428,43 @@ func play_footstep() -> void:
 		footstep_bank.play_sfx_at(global_position, footstep_bank.bank_group, self, sprite)
 	if footstep_particles and abs(velocity.x) > 20:
 		footstep_particles.burst()
+
+
+func begin_stomp() -> void:
+	stomp_timer = stomp_duration
+	set_gravity_enabled(false)
+	if velocity.y > 0.0:
+		velocity.y = 0.0
+
+
+func tick_stomp(delta: float) -> void:
+	if stomp_timer <= 0.0:
+		return
+	
+	stomp_timer -= delta
+	if stomp_timer <= 0.0:
+		stomp_timer = 0.0
+		set_gravity_enabled(true)
+		velocity.y = stomp_bounce_speed
+
+
+func cancel_stomp() -> void:
+	if stomp_timer <= 0.0:
+		return
+	
+	stomp_timer = 0.0
+	set_gravity_enabled(true)
+
+
+func _on_feet_landed(_hurt_box: HurtBox) -> void:
+	if velocity.y < 0.0 or stomp_timer > 0.0 or machine.is_active(&"GroundPound"):
+		return
+	
+	if machine.is_active(&"Dive"):
+		begin_stomp()
+		return
+	
+	machine.change_state(&"Stomp")
 
 
 func _on_water_check_water_entered() -> void:
