@@ -64,6 +64,7 @@ metadata/_custom_type_script = "uid://2em0q35qtycp"
 [node name="Stem" type="Line2D" parent="." unique_id=837947717]
 texture_repeat = 2
 material = SubResource("ShaderMaterial_stem")
+width = 16.0
 texture_mode = 1
 
 [node name="Head" type="Sprite2D" parent="." unique_id=1478924218]
@@ -78,10 +79,14 @@ playing = false
 metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="EditorShapeArea" type="Area2D" parent="." unique_id=504418174]
+monitoring = false
+monitorable = false
 
 [node name="EditorShape" type="CollisionShape2D" parent="EditorShapeArea" unique_id=1525233621]
 shape = SubResource("RectangleShape2D_head")
 
 [node name="StemShapeArea" type="Area2D" parent="." unique_id=1240382157]
+monitoring = false
+monitorable = false
 
 [node name="Origin" type="Marker2D" parent="." unique_id=1677485957]
