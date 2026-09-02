@@ -111,10 +111,6 @@ func get_terrain() -> StringName:
 	return &""
 
 
-func get_debug_text() -> String:
-	return ""
-
-
 func is_in_water() -> bool:
 	if not water_check:
 		push_error("Tried checking if submerged without water check area!")

@@ -1,38 +1,13 @@
 @tool
 extends Node
 
-signal debug_mode_changed
-signal debug_rewind_requested
-
-enum DebugMode {
-	HIDDEN,
-	PROFILING,
-	VERBOSE,
-}
-
-const DEBUG_TOGGLE_KEY: Key = KEY_SLASH
-const TIME_SCALE_DOWN_KEY: Key = KEY_BRACKETLEFT
-const TIME_SCALE_UP_KEY: Key = KEY_BRACKETRIGHT
-const FRAME_STEP_KEY: Key = KEY_PERIOD
-const FRAME_REWIND_KEY: Key = KEY_COMMA
-const TIME_SCALES: Array[float] = [0.0, 0.1, 0.25, 0.5, 1.0, 1.25, 1.5, 2.0, 4.0, 8.0]
-const TIME_SCALE_DEFAULT_INDEX: int = 4
-
-var _debug_mode: DebugMode = DebugMode.PROFILING
-var _time_scale_index: int = TIME_SCALE_DEFAULT_INDEX
-var _base_physics_ticks: int = 60
-var _step_frames: int = 0
-var _step_done: bool = false
-
 var _input_handler: InputHandler = InputHandler.new()
 var _tree_hook: TreeHook = TreeHook.new()
 var _level_clock: LevelClock = LevelClock.new()
 var _multiplayer: MultiplayerHandler = MultiplayerHandler.new()
 var _editor_session: EditorSession = EditorSession.new()
-var _frame_stats: FrameStats = FrameStats.new()
 
 @export var _screen_transition_rect: ColorRect
-@export var _debug_label: Label
 
 
 ## Optional callback consulted before the app closes. It should return true if it handled the
@@ -46,12 +21,9 @@ func _init() -> void:
 	add_child(_tree_hook)
 	add_child(_level_clock)
 	add_child(_multiplayer)
-	add_child(_frame_stats)
 
 
 func _ready() -> void:
-	process_mode = PROCESS_MODE_ALWAYS
-	_base_physics_ticks = Engine.physics_ticks_per_second
 	if not Engine.is_editor_hint():
 		get_tree().set_auto_accept_quit(false)
 	every(1, func() -> void:
@@ -62,153 +34,6 @@ func _ready() -> void:
 			for n: CanvasItem in get_tree().get_nodes_in_group(&"gui_mp_client"):
 				n.show()
 	)
-	_apply_debug_mode()
-	_apply_time_scale()
-
-
-func _physics_process(_delta: float) -> void:
-	if _step_frames <= 0:
-		return
-	
-	_step_frames -= 1
-	_step_done = _step_frames <= 0
-
-
-func _process(_delta: float) -> void:
-	if not is_in_level() and _time_scale_index != TIME_SCALE_DEFAULT_INDEX:
-		reset_time_scale()
-	
-	if _step_done:
-		_step_done = false
-		get_tree().paused = true
-	
-	if not _debug_label.visible:
-		return
-	
-	var debug_text: String = ""
-	debug_text += "\"/\" to cycle (%s)\n" % get_debug_mode_name()
-	debug_text += "Version: %s\n" % get_version()
-	debug_text += "FPS: %s\n" % Engine.get_frames_per_second()
-	debug_text += "Average FPS: %.1f\n" % _frame_stats.get_average_fps()
-	debug_text += "Process: %.2f ms\n" % (Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0)
-	debug_text += "Physics: %.2f ms\n" % (Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0)
-	debug_text += "Draw Calls: %.0d\n" % Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)
-	debug_text += "Video Mem: %s\n" % String.humanize_size(int(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)))
-	debug_text += "Objects: %.0d\n" % Performance.get_monitor(Performance.OBJECT_COUNT)
-	debug_text += "Nodes: %.0d\n" % Performance.get_monitor(Performance.OBJECT_NODE_COUNT)
-	debug_text += "Resources: %.0d\n" % Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT)
-	debug_text += "Orphan Nodes: %.0d\n" % Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)
-	debug_text += "Bodies: %.0d\n" % Performance.get_monitor(Performance.PHYSICS_2D_ACTIVE_OBJECTS)
-	debug_text += "Collision Pairs: %.0d\n" % Performance.get_monitor(Performance.PHYSICS_2D_COLLISION_PAIRS)
-	debug_text += "Frame: %.2f ms (peak %.2f)\n" % [_frame_stats.average * 1000.0, _frame_stats.peak * 1000.0]
-	if is_in_level():
-		debug_text += "\n Time scale: %sx\n" % [get_time_scale()]
-		debug_text += "\"[\" and \"]\" to adjust"
-		if is_time_frozen():
-			debug_text += "\n\".\" to advance a frame"
-			debug_text += "\n\",\" to rewind a frame"
-	_debug_label.text = debug_text
-
-
-func _unhandled_key_input(event: InputEvent) -> void:
-	var key: InputEventKey = event as InputEventKey
-	if not key or not key.pressed or key.echo:
-		return
-	
-	match key.keycode:
-		DEBUG_TOGGLE_KEY:
-			set_debug_mode(((_debug_mode + 1) % DebugMode.size()) as DebugMode)
-		TIME_SCALE_DOWN_KEY:
-			shift_time_scale(-1)
-		TIME_SCALE_UP_KEY:
-			shift_time_scale(1)
-		FRAME_STEP_KEY:
-			step_frame()
-		FRAME_REWIND_KEY:
-			rewind_frame()
-
-
-func shift_time_scale(direction: int) -> void:
-	if _debug_mode == DebugMode.HIDDEN or not is_in_level():
-		return
-	
-	_time_scale_index = clampi(_time_scale_index + direction, 0, TIME_SCALES.size() - 1)
-	_apply_time_scale()
-
-
-func step_frame() -> void:
-	if _debug_mode == DebugMode.HIDDEN or not is_time_frozen() or not is_in_level():
-		return
-	
-	_step_frames = 1
-	get_tree().paused = false
-
-
-func rewind_frame() -> void:
-	if _debug_mode == DebugMode.HIDDEN or not is_time_frozen() or not is_in_level():
-		return
-	
-	debug_rewind_requested.emit()
-
-
-func get_time_scale() -> float:
-	return TIME_SCALES.get(_time_scale_index)
-
-
-func is_in_level() -> bool:
-	return is_instance_valid(Level.get_instance())
-
-
-func reset_time_scale() -> void:
-	_time_scale_index = TIME_SCALE_DEFAULT_INDEX
-	_apply_time_scale()
-
-
-func is_time_frozen() -> bool:
-	return get_time_scale() <= 0.0
-
-
-func _apply_time_scale() -> void:
-	var frozen: bool = is_time_frozen()
-	var scale: float = 1.0 if frozen else get_time_scale()
-	
-	_step_frames = 0
-	_step_done = false
-	Engine.time_scale = scale
-	Engine.physics_ticks_per_second = roundi(_base_physics_ticks * scale)
-	get_tree().paused = frozen
-	_set_physics_interpolation(scale < 1.0)
-
-
-func _set_physics_interpolation(active: bool) -> void:
-	if get_tree().physics_interpolation == active:
-		return
-	
-	get_tree().physics_interpolation = active
-	if is_instance_valid(get_tree().current_scene):
-		get_tree().current_scene.reset_physics_interpolation()
-
-
-func set_debug_mode(mode: DebugMode) -> void:
-	_debug_mode = mode
-	_apply_debug_mode()
-
-
-func get_debug_mode() -> DebugMode:
-	return _debug_mode
-
-
-func get_debug_mode_name() -> String:
-	return String(DebugMode.keys().get(_debug_mode)).capitalize()
-
-
-func is_verbose() -> bool:
-	return _debug_mode == DebugMode.VERBOSE
-
-
-func _apply_debug_mode() -> void:
-	_debug_label.visible = _debug_mode != DebugMode.HIDDEN
-	debug_mode_changed.emit()
 
 
 func _notification(what: int) -> void:
@@ -389,47 +214,6 @@ class LevelClock:
 	
 	func get_elapsed_time() -> float:
 		return _time
-
-
-class FrameStats:
-	extends Node
-	
-	const WINDOW: float = 1.0
-	
-	var average: float = 0.0
-	var peak: float = 0.0
-	
-	var _sum: float = 0.0
-	var _frames: int = 0
-	var _peak: float = 0.0
-	var _last_tick: int = 0
-	
-	
-	func _ready() -> void:
-		_last_tick = Time.get_ticks_usec()
-	
-	
-	func _process(_delta: float) -> void:
-		var now: int = Time.get_ticks_usec()
-		var elapsed: float = float(now - _last_tick) / 1000000.0
-		_last_tick = now
-		
-		_sum += elapsed
-		_frames += 1
-		_peak = maxf(_peak, elapsed)
-		
-		if _sum < WINDOW:
-			return
-		
-		average = _sum / _frames
-		peak = _peak
-		_sum = 0.0
-		_frames = 0
-		_peak = 0.0
-	
-	
-	func get_average_fps() -> float:
-		return 1.0 / average if average > 0.0 else 0.0
 
 
 class MultiplayerHandler:

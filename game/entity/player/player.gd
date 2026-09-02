@@ -83,12 +83,10 @@ var buffer_dictionary: Dictionary[String, float]
 @export var dive_ground_rotation_blend_fast: float = 0.3
 @export var dive_landing_rotation_smooth_duration: float = 0.3
 @export var dive_grounded_angle_deg: float = 90.0
-@export var dive_rotation_min_deg: float = 90.0
-@export var dive_rotation_max_deg: float = 180.0
+@export var dive_rotation_min_deg: float = -60.0
+@export var dive_rotation_max_deg: float = 85.0
 @export var dive_rotation_curve: Curve
 @export var dive_y_velocity_to_rotation_offset_curve: Curve
-@export var dive_y_velocity_curve_min: float = -300.0
-@export var dive_y_velocity_curve_max: float = 300.0
 @export_subgroup("Recovery")
 @export var dive_slide_stop_duration: float = 0.133
 @export var dive_rollout_jump_velocity: float = -214.0
@@ -462,13 +460,6 @@ func reset_jump_timer() -> void:
 	jump_buffer_timer = 0
 
 
-func request_pound_cancel() -> void:
-	if is_input_ground_pound or not machine.is_active(&"GroundPound"):
-		return
-	
-	machine.change_state(&"Fall")
-
-
 func get_terrain() -> StringName:
 	if not floor_slope_raycast.is_colliding():
 		return &""
@@ -482,15 +473,6 @@ func get_terrain() -> StringName:
 			return footstep_terrains.get(i)
 	
 	return StringName(collider.get_meta(&"terrain", ""))
-
-
-func get_debug_text() -> String:
-	var debug_text: String = ""
-	debug_text += "State: %s\n" % machine.get_state()
-	debug_text += "Animation: %s\n" % sprite.current_animation
-	debug_text += "Velocity: %s\n" % velocity
-	
-	return debug_text
 
 
 func get_spin_speed_scale(elapsed: float) -> float:

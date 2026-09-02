@@ -44,8 +44,6 @@ static var _inst: LevelCamera
 
 var _anchor: Node2D = null
 var _anchor_offset: Vector2 = Vector2.ZERO
-var _shake_offset: Vector2 = Vector2.ZERO
-var _shake_token: int = 0
 var _target_zoom: float = 1.0
 var _look_ahead_offset: Vector2 = Vector2.ZERO
 var _prev_anchor_position: Vector2 = Vector2.ZERO
@@ -97,24 +95,20 @@ func set_anchor_offset(anchor_offset: Vector2) -> void:
 
 
 func shake(strength: float, duration: float) -> void:
-	_shake_token += 1
-	var token: int = _shake_token
+	var base_offset: Vector2 = _anchor_offset
 	var elapsed: float = 0.0
-	
-	while elapsed < duration and token == _shake_token:
+	while elapsed < duration:
 		var delta: float = get_process_delta_time()
 		elapsed += delta
 		var t: float = elapsed / duration
 		var decay: float = 1.0 - t * t
 		var angle: float = elapsed * 60.0
-		_shake_offset = Vector2(
+		_anchor_offset = base_offset + Vector2(
 			cos(angle * 1.3) * strength * decay,
 			sin(angle) * strength * decay
 		)
 		await get_tree().process_frame
-	
-	if token == _shake_token:
-		_shake_offset = Vector2.ZERO
+	_anchor_offset = base_offset
 
 
 func freeze() -> void:
@@ -168,7 +162,7 @@ func _apply_anchor_position() -> void:
 	if not is_instance_valid(_anchor):
 		velocity = Vector2.ZERO
 		return
-	var target: Vector2 = _anchor.global_position + _anchor_offset + _look_ahead_offset + _shake_offset
+	var target: Vector2 = _anchor.global_position + _anchor_offset + _look_ahead_offset
 	velocity = (target - global_position) * position_smoothing_speed
 	move_and_slide()
 
