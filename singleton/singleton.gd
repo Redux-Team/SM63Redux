@@ -1,4 +1,3 @@
-@tool
 extends Node
 
 signal debug_mode_changed
@@ -18,7 +17,7 @@ const FRAME_REWIND_KEY: Key = KEY_COMMA
 const TIME_SCALES: Array[float] = [0.0, 0.1, 0.25, 0.5, 1.0, 1.25, 1.5, 2.0, 4.0, 8.0]
 const TIME_SCALE_DEFAULT_INDEX: int = 4
 
-var _debug_mode: DebugMode = DebugMode.PROFILING
+var _debug_mode: DebugMode = DebugMode.HIDDEN
 var _time_scale_index: int = TIME_SCALE_DEFAULT_INDEX
 var _base_physics_ticks: int = 60
 var _step_frames: int = 0
@@ -54,6 +53,7 @@ func _ready() -> void:
 	_base_physics_ticks = Engine.physics_ticks_per_second
 	if not Engine.is_editor_hint():
 		get_tree().set_auto_accept_quit(false)
+		Settings.initialize()
 	every(1, func() -> void:
 		if get_multiplayer_handler().is_server():
 			for n: CanvasItem in get_tree().get_nodes_in_group(&"gui_mp_host"):
@@ -216,6 +216,7 @@ func _notification(what: int) -> void:
 		return
 	if _quit_guard.is_valid() and _quit_guard.call():
 		return
+	Settings.flush()
 	get_tree().quit()
 
 

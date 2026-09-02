@@ -16,9 +16,10 @@ const WAVE_MASK: Texture2D = preload("uid://c0rwnbt8w3qel")
 @export var _save_button: Button
 
 
-## Set while a save-as is being routed through the file dialog on the way to quitting, so the app
-## closes once the file has actually been written (or stays put if the dialog is dismissed).
-var _quitting: bool = false
+## What to run once a save routed through the file dialog has actually written. Lets an action
+## that was waiting on "save first" - quitting, say - happen when the
+## file exists rather than before it. Cleared if the dialog is dismissed.
+var _after_save: Callable = Callable()
 var _save_buttons_update_queued: bool = false
 
 
@@ -56,38 +57,49 @@ func _exit_tree() -> void:
 func _on_quit_requested() -> bool:
 	if not LD.get_save_load_handler().is_dirty():
 		return false
+	_prompt_unsaved("You have unsaved changes. Save before quitting?", _quit, get_tree().quit)
+	return true
+
+
+## The shared "unsaved changes" prompt. [param on_save] runs when the player wants to save first,
+## [param on_discard] when they want to go ahead anyway; dismissing it does neither.
+func _prompt_unsaved(question: String, on_save: Callable, on_discard: Callable) -> void:
 	var dialog: ConfirmationDialog = ConfirmationDialog.new()
 	dialog.title = "Unsaved Changes"
-	dialog.dialog_text = "You have unsaved changes. Save before quitting?"
+	dialog.dialog_text = question
 	dialog.ok_button_text = "Save"
 	var dont_save: Button = dialog.add_button("Don't Save", true, "dont_save")
 	dont_save.pressed.connect(func() -> void:
 		dialog.queue_free()
-		get_tree().quit()
+		on_discard.call()
 	)
 	dialog.confirmed.connect(func() -> void:
 		dialog.queue_free()
-		_save_then_quit()
+		on_save.call()
 	)
 	dialog.canceled.connect(dialog.queue_free)
 	add_child(dialog)
 	dialog.popup_centered()
-	return true
 
 
-## Saves and then quits; with no file yet, routes through the save dialog (quitting once written).
-func _save_then_quit() -> void:
+## Saves, then runs [param next]. With no file yet this routes through the save dialog, and
+## [param next] waits until the file has been written.
+func _save_then(next: Callable) -> void:
 	var handler: LDSaveLoadHandler = LD.get_save_load_handler()
 	if handler.has_loaded_file():
 		handler.save_current()
-		get_tree().quit()
+		next.call()
 	else:
-		_quitting = true
+		_after_save = next
 		_save_file_dialog.popup_centered()
 
 
+func _quit() -> void:
+	_save_then(get_tree().quit)
+
+
 func _on_save_dialog_canceled() -> void:
-	_quitting = false
+	_after_save = Callable()
 
 
 #region Buttons
@@ -110,6 +122,10 @@ func _on_load_button_pressed() -> void:
 
 func _on_reset_button_pressed() -> void:
 	_reset_level_dialog.popup_centered()
+
+
+func _on_settings_button_pressed() -> void:
+	LD.get_ui().get_window_handler().toggle_settings()
 
 
 func _on_test_server_button_pressed() -> void:
@@ -146,11 +162,12 @@ func _on_save_file_selected(path: String) -> void:
 		err = handler.save_binary(path)
 	if err != OK:
 		push_error("Failed to save level: " + error_string(err))
-		_quitting = false
+		_after_save = Callable()
 		return
-	if _quitting:
-		_quitting = false
-		get_tree().quit()
+	if _after_save.is_valid():
+		var next: Callable = _after_save
+		_after_save = Callable()
+		next.call()
 
 
 func _on_load_file_selected(path: String) -> void:

@@ -96,9 +96,15 @@ func set_anchor_offset(anchor_offset: Vector2) -> void:
 	_anchor_offset = anchor_offset
 
 
+## Shakes the camera, unless the player has turned screen shake off. Bumping the token first
+## means a shake requested while it is off still cancels one already running.
 func shake(strength: float, duration: float) -> void:
 	_shake_token += 1
 	var token: int = _shake_token
+	if not Settings.get_bool(&"game/screen_shake"):
+		_shake_offset = Vector2.ZERO
+		return
+	
 	var elapsed: float = 0.0
 	
 	while elapsed < duration and token == _shake_token:

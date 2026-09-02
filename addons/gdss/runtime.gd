@@ -152,6 +152,12 @@ func _reload_parsed() -> void:
 	parsed_reloaded.emit()
 
 
+## Restyles every node GDSS is tracking. Used when something global changes underneath the
+## stylesheet - a rendering option, say - and the existing styles have to be rebuilt in place.
+func refresh_all() -> void:
+	_refresh_all_handlers()
+
+
 func _refresh_all_handlers() -> void:
 	for handler: GdssPropHandler in GdssNodeHandler.get_all_handlers():
 		var item: Node = handler.ref

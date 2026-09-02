@@ -686,6 +686,20 @@ static func enable_gdss_self(node: Node) -> void:
 	set_gdss_mode(node, GdssMode.ENABLE_SELF)
 
 
+## Turns GPU-rendered panels on or off at runtime and restyles everything already on screen, so
+## the change is visible without a restart. The value is mirrored into ProjectSettings, which is
+## where [method gpu_panels_enabled] reads it from on a cold start.
+static func set_gpu_panels(enabled: bool) -> void:
+	if _gpu_panels != -1 and gpu_panels_enabled() == enabled:
+		return
+
+	_gpu_panels = 1 if enabled else 0
+	ProjectSettings.set_setting("gdss/rendering/gpu_panels", enabled)
+
+	if is_instance_valid(_runtime) and _runtime.has_method(&"refresh_all"):
+		_runtime.call(&"refresh_all")
+
+
 static func gpu_panels_enabled() -> bool:
 	if _gpu_panels == -1:
 		if not ProjectSettings.has_setting("gdss/rendering/gpu_panels"):

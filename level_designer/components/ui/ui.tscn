@@ -21,6 +21,8 @@
 [ext_resource type="Script" uid="uid://cer032iulvsqx" path="res://level_designer/components/ui/handlers/chrome_handler.gd" id="19_chrome"]
 [ext_resource type="Theme" uid="uid://b6ld3d1tor8em" path="res://level_designer/ld_editor_theme.tres" id="20_theme"]
 [ext_resource type="PackedScene" uid="uid://dkm3i8yhjnauq" path="res://level_designer/components/ui/music_editor/music_editor.tscn" id="21_mused"]
+[ext_resource type="PackedScene" path="res://level_designer/components/ui/editor_settings/editor_settings.tscn" id="22_setpanel"]
+[ext_resource type="Texture2D" uid="uid://cdvkqplpbxa0q" path="res://assets/textures/level_designer/ui_icons/settings.svg" id="25_8nnne"]
 [ext_resource type="Texture2D" uid="uid://bg3fpaudox0nq" path="res://assets/textures/level_designer/ui_icons/areas.svg" id="ic_areas"]
 [ext_resource type="Texture2D" uid="uid://cosmmki8kuy3b" path="res://assets/textures/level_designer/ui_icons/back.svg" id="ic_back"]
 [ext_resource type="Texture2D" uid="uid://bt8u6qrpfh11r" path="res://assets/textures/level_designer/ui_icons/background.svg" id="ic_background"]
@@ -120,6 +122,13 @@ script = ExtResource("16_wdef")
 id = &"music_editor"
 scene = ExtResource("21_mused")
 title = "Music"
+
+[sub_resource type="Resource" id="WindowDef_settings"]
+script = ExtResource("16_wdef")
+id = &"settings"
+scene = ExtResource("22_setpanel")
+title = "Settings"
+close_on_back_input = true
 
 [sub_resource type="Resource" id="WindowDef_picker"]
 script = ExtResource("16_wdef")
@@ -339,7 +348,7 @@ _chrome_handler = NodePath("ChromeHandler")
 [node name="WindowHandler" type="Node" parent="." unique_id=1919577132 node_paths=PackedStringArray("_window")]
 script = ExtResource("11_winh")
 _window = NodePath("../WindowLayer/Window")
-_window_defs = Array[ExtResource("16_wdef")]([SubResource("WindowDef_browser"), SubResource("WindowDef_properties"), SubResource("WindowDef_layer"), SubResource("WindowDef_area"), SubResource("WindowDef_stamp"), SubResource("WindowDef_scenario"), SubResource("WindowDef_tag"), SubResource("WindowDef_background"), SubResource("WindowDef_music"), SubResource("WindowDef_picker")])
+_window_defs = Array[ExtResource("16_wdef")]([SubResource("WindowDef_browser"), SubResource("WindowDef_properties"), SubResource("WindowDef_layer"), SubResource("WindowDef_area"), SubResource("WindowDef_stamp"), SubResource("WindowDef_scenario"), SubResource("WindowDef_tag"), SubResource("WindowDef_background"), SubResource("WindowDef_music"), SubResource("WindowDef_settings"), SubResource("WindowDef_picker")])
 
 [node name="ViewportHandler" type="Node" parent="." unique_id=253371726 node_paths=PackedStringArray("_parallaxing_button", "_ghosting_button", "_modulation_button")]
 script = ExtResource("12_vph")
@@ -390,7 +399,8 @@ _panel_ids = Array[StringName]([&"object_browser", &"object_properties", &"layer
 layer = 2
 metadata/gdss_mode = 1
 
-[node name="Chrome" type="Control" parent="ViewportUI"]
+[node name="Chrome" type="Control" parent="ViewportUI" unique_id=394036031]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -400,6 +410,7 @@ mouse_filter = 2
 
 [node name="TopBarL" type="PanelContainer" parent="ViewportUI/Chrome" unique_id=931816477]
 texture_filter = 4
+layout_mode = 0
 offset_left = 12.0
 offset_top = 10.0
 offset_right = 12.0
@@ -456,6 +467,15 @@ icon = ExtResource("ic_reset_level")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("Danger")
 
+[node name="SettingsButton" type="Button" parent="ViewportUI/Chrome/TopBarL/Row/FileGroup" unique_id=1288942758]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Settings"
+focus_mode = 0
+icon = ExtResource("25_8nnne")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
 [node name="Sep" type="VSeparator" parent="ViewportUI/Chrome/TopBarL/Row/FileGroup" unique_id=408344831]
 layout_mode = 2
 metadata/gdss_classes = PackedStringArray()
@@ -496,7 +516,7 @@ metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="TopBarR" type="PanelContainer" parent="ViewportUI/Chrome" unique_id=622649123]
 texture_filter = 4
-anchors_preset = 1
+layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -276.0
@@ -601,7 +621,7 @@ metadata/gdss_classes = PackedStringArray("Danger")
 
 [node name="LayerVisualsHBox" type="HBoxContainer" parent="ViewportUI/Chrome" unique_id=1740288039]
 texture_filter = 4
-anchors_preset = 1
+layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -143.0
@@ -655,7 +675,7 @@ metadata/gdss_classes = PackedStringArray("ViewportToggle")
 
 [node name="BottomBar" type="PanelContainer" parent="ViewportUI/Chrome" unique_id=806800024]
 texture_filter = 4
-anchors_preset = 2
+layout_mode = 0
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 12.0
@@ -788,7 +808,7 @@ metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="ToolRail" type="PanelContainer" parent="ViewportUI/Chrome" unique_id=664428989]
 texture_filter = 4
-anchors_preset = 4
+layout_mode = 0
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 12.0
@@ -944,7 +964,7 @@ layout_mode = 2
 
 [node name="PanelRail" type="PanelContainer" parent="ViewportUI/Chrome" unique_id=1287214286]
 texture_filter = 4
-anchors_preset = 6
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
@@ -1029,7 +1049,7 @@ metadata/gdss_classes = PackedStringArray("IconButton")
 [node name="TestServerButton" type="Button" parent="ViewportUI/Chrome" unique_id=1723719953]
 texture_filter = 4
 custom_minimum_size = Vector2(28, 28)
-anchors_preset = 3
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -1084,6 +1104,7 @@ will be lost!"
 [connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/FileGroup/SaveNewButton" to="FileHandler" method="_on_save_new_button_pressed"]
 [connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/FileGroup/LoadButton" to="FileHandler" method="_on_load_button_pressed"]
 [connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/FileGroup/ResetButton" to="FileHandler" method="_on_reset_button_pressed"]
+[connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/FileGroup/SettingsButton" to="FileHandler" method="_on_settings_button_pressed"]
 [connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/FileGroup/UndoButton" to="ToolbarHandler" method="_on_undo_button_pressed"]
 [connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/FileGroup/RedoButton" to="ToolbarHandler" method="_on_redo_button_pressed"]
 [connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/TestGroup/TestClientButton" to="FileHandler" method="_on_test_client_button_pressed"]
