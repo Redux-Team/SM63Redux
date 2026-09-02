@@ -54,9 +54,16 @@ var _content_ref: Control
 var _backdrop_alpha: float = 0.0:
 	set(v):
 		_backdrop_alpha = v
-		if _backdrop and _backdrop.material:
-			var mat: ShaderMaterial = _backdrop.material as ShaderMaterial
-			mat.set_shader_parameter(&"tint", Color(backdrop_color.r, backdrop_color.g, backdrop_color.b, backdrop_color.a * v))
+		if not _backdrop:
+			return
+		
+		# The blur writes COLOR outright, so the flat tint is only what shows once [ScreenEffects]
+		# has taken the material away - but keeping both in step means the toggle can land at any
+		# point in the animation without a frame of the wrong colour.
+		_backdrop.color = Color(backdrop_color, backdrop_color.a * v)
+		var mat: ShaderMaterial = _backdrop.material as ShaderMaterial
+		if mat:
+			mat.set_shader_parameter(&"tint", _backdrop.color)
 			mat.set_shader_parameter(&"blur", backdrop_blur * v)
 var _tween: Tween
 
@@ -212,6 +219,7 @@ func _setup_backdrop() -> void:
 	if not backdrop_enabled or not _backdrop:
 		return
 
+	ScreenEffects.apply(_backdrop, _backdrop.material)
 	_backdrop.visible = false
 	_backdrop_alpha = 0.0
 

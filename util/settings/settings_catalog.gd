@@ -83,6 +83,10 @@ static func _display() -> Array[SettingDef]:
 			.hint("Low turns off GPU-rendered interface panels, which are the expensive part of the editor's look.") \
 			.on_apply(_apply_ui_quality),
 		
+		SettingDef.boolean(&"display/screen_effects", "Screen Effects", Device.is_desktop()).in_group("Graphics") \
+			.hint("Blur and refraction that read the screen back, like the dimmed backdrop behind a window. Each one copies the whole screen before it draws anything.") \
+			.on_apply(_apply_screen_effects),
+		
 		SettingDef.choice(&"display/particles", "Particles", particle_levels, PARTICLES_HIGH if Device.is_desktop() else PARTICLES_LOW).in_group("Graphics") \
 			.hint("Lower densities help on weaker hardware."),
 		
@@ -130,6 +134,13 @@ static func _audio() -> Array[SettingDef]:
 ## saving available on weak hardware, and it restyles live rather than needing a restart.
 static func _apply_ui_quality(level: String) -> void:
 	GDSS.set_gpu_panels(level == UI_QUALITY_HIGH)
+
+
+## The screen-reading shaders are the saving that matters after the GPU panels, for the same
+## reason: the framebuffer copy each one needs is what a weak GPU cannot absorb. Restyles live,
+## reading the new value back out of [Settings] rather than being handed it.
+static func _apply_screen_effects(_enabled: bool) -> void:
+	ScreenEffects.refresh_all()
 
 
 static func _apply_output_device(device: String) -> void:
