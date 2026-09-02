@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="ic_remove"]
 [ext_resource type="Texture2D" uid="uid://cyjlsmgjeixte" path="res://assets/textures/level_designer/ui_icons/up.svg" id="ic_up"]
 
-[node name="LayerProperties" type="MarginContainer" unique_id=899359989 node_paths=PackedStringArray("row_container", "add_button", "move_up_button", "move_down_button", "remove_button", "count_label", "detail", "detail_rows", "name_edit", "deco_layer", "distance_slider", "distance_label", "distance_rows", "manual_rows", "parallax_slider_x", "parallax_slider_y", "parallax_label_x", "parallax_label_y", "scale_slider_x", "scale_slider_y", "scale_label_x", "scale_label_y", "modulate_color_picker")]
+[node name="LayerProperties" type="MarginContainer" unique_id=899359989 node_paths=PackedStringArray("row_container", "add_button", "move_up_button", "move_down_button", "remove_button", "count_label", "detail", "detail_rows", "name_edit", "deco_layer", "distance_slider", "distance_label", "modulate_color_picker")]
 custom_minimum_size = Vector2(520, 0)
 script = ExtResource("1_e2re5")
 row_container = NodePath("Columns/ListColumn/ListInset/ListScroll/RowList")
@@ -22,16 +22,6 @@ name_edit = NodePath("Columns/Detail/DetailInset/Rows/NameRow/NameEdit")
 deco_layer = NodePath("Columns/Detail/DetailInset/Rows/DecoRow/DecoLayer")
 distance_slider = NodePath("Columns/Detail/DetailInset/Rows/DistRow/DistanceSlider")
 distance_label = NodePath("Columns/Detail/DetailInset/Rows/DistRow/DistanceLabel")
-distance_rows = [NodePath("Columns/Detail/DetailInset/Rows/DistanceHeader"), NodePath("Columns/Detail/DetailInset/Rows/DistRow")]
-manual_rows = [NodePath("Columns/Detail/DetailInset/Rows/ParallaxHeader"), NodePath("Columns/Detail/DetailInset/Rows/PXRow"), NodePath("Columns/Detail/DetailInset/Rows/PYRow"), NodePath("Columns/Detail/DetailInset/Rows/ScaleHeader"), NodePath("Columns/Detail/DetailInset/Rows/SXRow"), NodePath("Columns/Detail/DetailInset/Rows/SYRow")]
-parallax_slider_x = NodePath("Columns/Detail/DetailInset/Rows/PXRow/ParallaxSliderX")
-parallax_slider_y = NodePath("Columns/Detail/DetailInset/Rows/PYRow/ParallaxSliderY")
-parallax_label_x = NodePath("Columns/Detail/DetailInset/Rows/PXRow/ParallaxLabelX")
-parallax_label_y = NodePath("Columns/Detail/DetailInset/Rows/PYRow/ParallaxLabelY")
-scale_slider_x = NodePath("Columns/Detail/DetailInset/Rows/SXRow/ScaleSliderX")
-scale_slider_y = NodePath("Columns/Detail/DetailInset/Rows/SYRow/ScaleSliderY")
-scale_label_x = NodePath("Columns/Detail/DetailInset/Rows/SXRow/ScaleLabelX")
-scale_label_y = NodePath("Columns/Detail/DetailInset/Rows/SYRow/ScaleLabelY")
 modulate_color_picker = NodePath("Columns/Detail/DetailInset/Rows/ModRow/ModulateColorPicker")
 metadata/gdss_mode = 1
 
@@ -110,7 +100,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="DetailInset" type="PanelContainer" parent="Columns/Detail" unique_id=1344399171]
-custom_minimum_size = Vector2(0, 230)
 layout_mode = 2
 size_flags_vertical = 3
 metadata/gdss_classes = PackedStringArray("Card")
@@ -152,6 +141,36 @@ metadata/gdss_classes = PackedStringArray("Dim")
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 
+[node name="DistRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/DistRow"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "Distance"
+vertical_alignment = 1
+metadata/gdss_classes = PackedStringArray("Dim")
+
+[node name="DistanceSlider" type="HSlider" parent="Columns/Detail/DetailInset/Rows/DistRow"]
+texture_filter = 4
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = -0.8
+max_value = 9.0
+step = 0.1
+script = ExtResource("glass_slider")
+
+[node name="DistanceLabel" type="Label" parent="Columns/Detail/DetailInset/Rows/DistRow"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "0.0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [node name="ModRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows" unique_id=1919039853]
 layout_mode = 2
 
@@ -169,172 +188,3 @@ custom_minimum_size = Vector2(48, 24)
 layout_mode = 2
 size_flags_vertical = 4
 color = Color(1, 1, 1, 1)
-
-[node name="DistanceHeader" type="Label" parent="Columns/Detail/DetailInset/Rows"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Distance"
-metadata/gdss_classes = PackedStringArray("SectionHeader")
-
-[node name="DistRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/DistRow"]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "Depth"
-vertical_alignment = 1
-metadata/gdss_classes = PackedStringArray("Dim")
-
-[node name="DistanceSlider" type="HSlider" parent="Columns/Detail/DetailInset/Rows/DistRow"]
-texture_filter = 4
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-max_value = 9.0
-step = 0.05
-script = ExtResource("glass_slider")
-
-[node name="DistanceLabel" type="Label" parent="Columns/Detail/DetailInset/Rows/DistRow"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "1.0x"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="ParallaxHeader" type="Label" parent="Columns/Detail/DetailInset/Rows" unique_id=720359033]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Parallax"
-metadata/gdss_classes = PackedStringArray("SectionHeader")
-
-[node name="PXRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows" unique_id=1078721786]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/PXRow" unique_id=1851397938]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "X"
-vertical_alignment = 1
-metadata/gdss_classes = PackedStringArray("Dim")
-
-[node name="ParallaxSliderX" type="HSlider" parent="Columns/Detail/DetailInset/Rows/PXRow" unique_id=549529832]
-texture_filter = 4
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-max_value = 4.0
-step = 0.1
-value = 1.0
-script = ExtResource("glass_slider")
-
-[node name="ParallaxLabelX" type="Label" parent="Columns/Detail/DetailInset/Rows/PXRow" unique_id=1035066238]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "1.0x"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="PYRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows" unique_id=285843324]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/PYRow" unique_id=370250660]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "Y"
-vertical_alignment = 1
-metadata/gdss_classes = PackedStringArray("Dim")
-
-[node name="ParallaxSliderY" type="HSlider" parent="Columns/Detail/DetailInset/Rows/PYRow" unique_id=558127399]
-texture_filter = 4
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-max_value = 4.0
-step = 0.1
-value = 1.0
-script = ExtResource("glass_slider")
-
-[node name="ParallaxLabelY" type="Label" parent="Columns/Detail/DetailInset/Rows/PYRow" unique_id=825881335]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "1.0x"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="ScaleHeader" type="Label" parent="Columns/Detail/DetailInset/Rows"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Scale"
-metadata/gdss_classes = PackedStringArray("SectionHeader")
-
-[node name="SXRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/SXRow"]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "X"
-vertical_alignment = 1
-metadata/gdss_classes = PackedStringArray("Dim")
-
-[node name="ScaleSliderX" type="HSlider" parent="Columns/Detail/DetailInset/Rows/SXRow"]
-texture_filter = 4
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-min_value = 0.1
-max_value = 4.0
-step = 0.1
-value = 1.0
-script = ExtResource("glass_slider")
-
-[node name="ScaleLabelX" type="Label" parent="Columns/Detail/DetailInset/Rows/SXRow"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "1.0x"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="SYRow" type="HBoxContainer" parent="Columns/Detail/DetailInset/Rows"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Columns/Detail/DetailInset/Rows/SYRow"]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "Y"
-vertical_alignment = 1
-metadata/gdss_classes = PackedStringArray("Dim")
-
-[node name="ScaleSliderY" type="HSlider" parent="Columns/Detail/DetailInset/Rows/SYRow"]
-texture_filter = 4
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-min_value = 0.1
-max_value = 4.0
-step = 0.1
-value = 1.0
-script = ExtResource("glass_slider")
-
-[node name="ScaleLabelY" type="Label" parent="Columns/Detail/DetailInset/Rows/SYRow"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "1.0x"
-horizontal_alignment = 2
-vertical_alignment = 1

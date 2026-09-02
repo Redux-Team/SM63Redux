@@ -434,8 +434,6 @@ func _serialize_area_layers(area: LDArea) -> Array:
 		layers_data.append({
 			"layer_index": layer.index,
 			"layer_name": layer.layer_name,
-			"parallax_scale": Packer.vec2_to_array(layer.parallax_scale),
-			"layer_scale": Packer.vec2_to_array(layer.layer_scale),
 			"is_decoration": layer.is_decoration,
 			"distance": layer.distance,
 			"modulation": Packer.color_to_array(layer.modulation),
@@ -592,19 +590,11 @@ func _deserialize_area(entry: Dictionary, area: LDArea) -> void:
 		var layer_index: int = layer_data.get("layer_index", 0)
 		var layer: LDLayer = area.get_or_create_layer(layer_index)
 		layer.layer_name = layer_name
-		var raw_parallax: Variant = layer_data.get("parallax_scale", null)
-		if raw_parallax != null:
-			layer.parallax_scale = Packer.array_to_vec2(raw_parallax)
-		var raw_layer_scale: Variant = layer_data.get("layer_scale", null)
-		if raw_layer_scale != null:
-			layer.layer_scale = Packer.array_to_vec2(raw_layer_scale)
 		var raw_modulate: Variant = layer_data.get("modulation", null)
 		if raw_modulate != null:
 			layer.modulation = Packer.array_to_color(raw_modulate)
-		var derived: float = (1.0 / maxf(layer.parallax_scale.x, LDLayer.SCALE_MIN)) - 1.0
-		var distance: float = float(layer_data.get("distance", derived))
 		layer.is_decoration = layer_data.get("is_decoration", false)
-		layer.distance = distance
+		layer.distance = LevelLayer.distance_from_data(layer_data)
 		for obj_data: Variant in layer_data.get("objects", []):
 			if not obj_data is Dictionary:
 				continue
@@ -656,7 +646,7 @@ func _sanitize_player_layer(area: LDArea) -> void:
 		if layer.index == player_index:
 			layer.layer_name = ""
 			layer.is_decoration = false
-			layer.parallax_scale = Vector2.ONE
+			layer.distance = 0.0
 			return
 
 

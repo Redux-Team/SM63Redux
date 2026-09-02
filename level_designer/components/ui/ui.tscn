@@ -21,7 +21,7 @@
 [ext_resource type="Script" uid="uid://cer032iulvsqx" path="res://level_designer/components/ui/handlers/chrome_handler.gd" id="19_chrome"]
 [ext_resource type="Theme" uid="uid://b6ld3d1tor8em" path="res://level_designer/ld_editor_theme.tres" id="20_theme"]
 [ext_resource type="PackedScene" uid="uid://dkm3i8yhjnauq" path="res://level_designer/components/ui/music_editor/music_editor.tscn" id="21_mused"]
-[ext_resource type="PackedScene" path="res://level_designer/components/ui/editor_settings/editor_settings.tscn" id="22_setpanel"]
+[ext_resource type="PackedScene" uid="uid://d1y5onegdsekl" path="res://level_designer/components/ui/editor_settings/editor_settings.tscn" id="22_setpanel"]
 [ext_resource type="Texture2D" uid="uid://cdvkqplpbxa0q" path="res://assets/textures/level_designer/ui_icons/settings.svg" id="25_8nnne"]
 [ext_resource type="Texture2D" uid="uid://bg3fpaudox0nq" path="res://assets/textures/level_designer/ui_icons/areas.svg" id="ic_areas"]
 [ext_resource type="Texture2D" uid="uid://cosmmki8kuy3b" path="res://assets/textures/level_designer/ui_icons/back.svg" id="ic_back"]
