@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://b07xpkmbs8eu1"]
+
+[ext_resource type="Texture2D" uid="uid://cwglr7wkhgxo5" path="res://assets/textures/terrain/stone/terrain_stone_outline.png" id="1_wkwfx"]
+[ext_resource type="Script" uid="uid://du73sf56mrm15" path="res://game/polygon_styles/polygon_base_style.gd" id="2_mchpw"]
+[ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_go"]
+[ext_resource type="Texture2D" uid="uid://cn01hhj73t7aj" path="res://assets/textures/terrain/stone/terrain_stone_base.png" id="3_ou5g6"]
+[ext_resource type="Texture2D" uid="uid://bfiduy1708h5a" path="res://assets/textures/terrain/stone/terrain_stone_ld.png" id="4_hyxwh"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_forms/polygon_form.gd" id="4_pd"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="5_hyxwh"]
+[ext_resource type="Resource" uid="uid://cuyuor5c58jro" path="res://game/db/Polygon/Styles/Topline/grass.tres" id="6_top"]
+[ext_resource type="Script" uid="uid://dnf6ofgbhm3yc" path="res://game/object_traits/object_trait.gd" id="7_kt1b4"]
+
+[sub_resource type="Resource" id="Resource_d10v3"]
+script = ExtResource("2_mchpw")
+style_name = "Stone"
+texture = ExtResource("3_ou5g6")
+outline_texture = ExtResource("1_wkwfx")
+outline_width = 14.0
+metadata/_custom_type_script = "uid://du73sf56mrm15"
+
+[sub_resource type="Resource" id="PolygonForm_terrain_grass"]
+script = ExtResource("4_pd")
+line_mode = 1
+terrain_type = "stone"
+base = SubResource("Resource_d10v3")
+topline = ExtResource("6_top")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kt1b4"]
+atlas = ExtResource("4_hyxwh")
+region = Rect2(0, 0, 48, 48)
+
+[resource]
+script = ExtResource("3_go")
+id = "terrain_stone"
+form = SubResource("PolygonForm_terrain_grass")
+name_override = "Stone"
+ld_entry_texture = SubResource("AtlasTexture_kt1b4")
+ld_placement_rules = 2
+metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,16 +1,20 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bl2kt32lgc6gi"]
 
 [ext_resource type="Texture2D" uid="uid://tssemhgtaiw7" path="res://assets/textures/terrain/cave/terrain_cave_ld.png" id="1_ld"]
+[ext_resource type="Resource" uid="uid://by6d6ob8m4fvr" path="res://game/db/Polygon/Styles/Decoration/cave.tres" id="2_xd54m"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_go"]
 [ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_forms/polygon_form.gd" id="4_pd"]
 [ext_resource type="Resource" uid="uid://yyp6ypk7behj" path="res://game/db/Polygon/Styles/Base/cave.tres" id="5_base"]
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="6_ge4p0"]
 [ext_resource type="Resource" uid="uid://cdpik77xxogru" path="res://game/db/Polygon/Styles/Topline/cave.tres" id="6_top"]
+[ext_resource type="Script" uid="uid://dnf6ofgbhm3yc" path="res://game/object_traits/object_trait.gd" id="8_1kj2f"]
 
 [sub_resource type="Resource" id="PolygonForm_terrain_cave"]
 script = ExtResource("4_pd")
 terrain_type = "cave"
 base = ExtResource("5_base")
 topline = ExtResource("6_top")
+decoration = ExtResource("2_xd54m")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_entry"]
 atlas = ExtResource("1_ld")
