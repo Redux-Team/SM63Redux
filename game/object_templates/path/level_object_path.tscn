@@ -57,6 +57,7 @@ metadata/_custom_type_script = "uid://b2k22rvar0i2q"
 [node name="Stem" type="Line2D" parent="." unique_id=303399332]
 texture_repeat = 2
 material = SubResource("ShaderMaterial_stem")
+width = 16.0
 texture_mode = 1
 
 [node name="Head" type="Sprite2D" parent="." unique_id=1086530944]

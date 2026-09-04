@@ -4,12 +4,18 @@ extends Resource
 
 ## One editable field on a placed object. Everything about a property is data, so adding one means
 ## filling in a resource rather than writing a script: inline on the object that owns it, or as a
-## shared file under game/db/Properties/ when several objects want the same field.
+## file directly under [constant LDPropertyLibrary.ROOT] when several objects want the same field,
+## which they then pull in by file name.
+##
+## The same definition drives both halves of the game. [method apply] runs against the level
+## designer's stand-in node and against the real in-game one, so a property means one thing rather
+## than being re-interpreted on each side. Where the two genuinely differ, say so with
+## [constant Apply.METHOD] and let each side implement the method in its own terms.
 
 
 enum Type { BOOL, INT, FLOAT, STRING, VECTOR2, COLOR, ARRAY_VECTOR2, OPTION }
-## What editing the value should do to the editor object. Most properties do nothing here, because
-## the object reads them back through [method LDObject.get_property] when it needs them.
+## What editing the value should do to the object. Properties the object simply reads back through
+## get_property leave this at [constant Apply.NONE].
 enum Apply { NONE, PROPERTY, SHADER_PARAM, METHOD }
 
 
@@ -20,6 +26,9 @@ enum Apply { NONE, PROPERTY, SHADER_PARAM, METHOD }
 		type = t
 		notify_property_list_changed()
 @export var default_value: Variant
+## Section this property is filed under in the properties panel. Empty leaves it in the leading
+## unlabelled section.
+@export var group: StringName
 ## Hidden properties still save and load, they just get no widget in the properties panel.
 @export var visible_in_editor: bool = true
 @export var exclusive: bool = false
@@ -39,8 +48,8 @@ enum Apply { NONE, PROPERTY, SHADER_PARAM, METHOD }
 
 @export_group("Apply")
 @export var apply_mode: Apply = Apply.NONE
-## A property path (sub-properties like "block_size:x" work), a shader uniform, or a method name.
-@export var apply_target: NodePath
+## A property name (sub-properties like "block_size:x" work), a shader uniform, or a method name.
+@export var apply_target: StringName
 ## Rolls a starting value between the range bounds the first time the object is placed.
 @export var randomize_on_placement: bool = false
 ## Key of another property this one is measured from, so a widget can draw it as an offset
@@ -48,18 +57,24 @@ enum Apply { NONE, PROPERTY, SHADER_PARAM, METHOD }
 @export var relative_to: StringName
 
 
-func apply(obj: LDObject, value: Variant) -> void:
+## Pushes a value onto a node. Called with the level designer's object and with the game's, so
+## whatever a property means it means in both places.
+func apply(node: Node, value: Variant) -> void:
 	if apply_mode == Apply.NONE or apply_target.is_empty():
 		return
-
+	
 	var applied: Variant = coerce(value)
 	match apply_mode:
 		Apply.PROPERTY:
-			obj.set_indexed(apply_target, applied)
+			node.set_indexed(NodePath(apply_target), applied)
 		Apply.SHADER_PARAM:
-			obj.set_shader_parameter(StringName(String(apply_target)), applied)
+			# Both halves route uniforms through a setter of this name; a node that has no shader
+			# to speak of simply doesn't declare one.
+			if node.has_method(&"set_shader_parameter"):
+				node.call(&"set_shader_parameter", apply_target, applied)
 		Apply.METHOD:
-			obj.call(StringName(String(apply_target)), applied)
+			if node.has_method(apply_target):
+				node.call(apply_target, applied)
 
 
 func _on_first_placement(obj: LDObject, _value: Variant) -> void:
@@ -137,7 +152,7 @@ func is_unbound() -> bool:
 func _validate_property(property: Dictionary) -> void:
 	var numeric: bool = type == Type.INT or type == Type.FLOAT
 	var hidden: bool = false
-
+	
 	match property.name:
 		&"min_value", &"max_value":
 			hidden = not numeric and type != Type.VECTOR2
@@ -147,6 +162,6 @@ func _validate_property(property: Dictionary) -> void:
 			hidden = not numeric
 		&"options":
 			hidden = type != Type.OPTION
-
+	
 	if hidden:
 		property.usage = PROPERTY_USAGE_NO_EDITOR

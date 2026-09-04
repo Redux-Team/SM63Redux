@@ -290,13 +290,13 @@ sfx_enter_enabled = true
 animation = &"strike"
 sfx_enter_sound = ExtResource("sfxres1")
 
-[node name="CheepCheep" type="CharacterBody2D" unique_id=663921538 node_paths=PackedStringArray("entity_check_area_water", "entity_check_area_close", "entity_check_area_lost", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
+[node name="CheepCheep" type="CharacterBody2D" unique_id=663921538 node_paths=PackedStringArray("water_vision_area", "close_vision_area", "lost_vision_area", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_ya6ph")
-entity_check_area_water = NodePath("EntityCheckAreaWater")
-entity_check_area_close = NodePath("EntityCheckAreaClose")
-entity_check_area_lost = NodePath("EntityCheckAreaLost")
+water_vision_area = NodePath("EntityCheckAreaWater")
+close_vision_area = NodePath("EntityCheckAreaClose")
+lost_vision_area = NodePath("EntityCheckAreaLost")
 sprite = NodePath("Sprite")
 components_root = NodePath("Components")
 collision_shapes = [NodePath("CollisionShape2D"), NodePath("HitBox/CollisionShape2D"), NodePath("HurtBox/CollisionShape2D")]
@@ -339,10 +339,9 @@ wall_check_l = NodePath("../../../WallCheckL")
 wall_check_r = NodePath("../../../WallCheckR")
 effects = SubResource("Effects_Swim")
 
-[node name="Chase" type="Node" parent="StateMachine/Submerged" unique_id=832478878 node_paths=PackedStringArray("entity_check_area_lost")]
+[node name="Chase" type="Node" parent="StateMachine/Submerged" unique_id=832478878]
 script = ExtResource("12_b1y5l")
 effects = SubResource("Effects_Chase")
-entity_check_area_lost = NodePath("../../../EntityCheckAreaLost")
 
 [node name="Dry" type="Node" parent="StateMachine" unique_id=1978203948]
 script = ExtResource("13_xq1me")

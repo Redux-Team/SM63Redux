@@ -1,12 +1,10 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bvje86cos0jfb"]
 
 [ext_resource type="Texture2D" uid="uid://dbr74mgobfpsu" path="res://assets/textures/volume/water/water_ld.png" id="1_ld"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_go"]
-[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="4_pd"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_forms/polygon_form.gd" id="4_pd"]
 [ext_resource type="Texture2D" uid="uid://blvxwsmqowrbp" path="res://assets/textures/volume/water/water_top.png" id="8_top"]
-[ext_resource type="Script" uid="uid://du73sf56mrm15" path="res://game/object_data/polygon_base_style.gd" id="9_bstyle"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="10_pos"]
+[ext_resource type="Script" uid="uid://du73sf56mrm15" path="res://game/polygon_styles/polygon_base_style.gd" id="9_bstyle"]
 
 [sub_resource type="Resource" id="PolygonBaseStyle_style"]
 script = ExtResource("9_bstyle")
@@ -18,13 +16,15 @@ outline_ripple_amplitude = 1.3
 outline_ripple_frequency = 3.0
 outline_ripple_speed = 3.3
 
-[sub_resource type="Resource" id="PolygonData_data"]
+[sub_resource type="Resource" id="PolygonForm_data"]
 script = ExtResource("4_pd")
 line_mode = 1
 terrain_type = "water"
 base = SubResource("PolygonBaseStyle_style")
 collision_mode = 2
 game_scene_uid = "uid://bbikt30pixqht"
+designer_collision = false
+designer_styles = false
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_entry"]
 atlas = ExtResource("1_ld")
@@ -33,8 +33,7 @@ region = Rect2(0, 0, 48, 48)
 [resource]
 script = ExtResource("3_go")
 id = "water"
-data = SubResource("PolygonData_data")
-ld_properties = Array[ExtResource("2_prop")]([ExtResource("10_pos")])
+form = SubResource("PolygonForm_data")
 ld_entry_texture = SubResource("AtlasTexture_entry")
 ld_placement_rules = 2
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

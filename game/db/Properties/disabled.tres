@@ -9,4 +9,4 @@ label = "Disabled"
 type = 0
 default_value = false
 apply_mode = 1
-apply_target = NodePath("disabled")
+apply_target = &"disabled"

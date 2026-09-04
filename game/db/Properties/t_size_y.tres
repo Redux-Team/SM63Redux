@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_utnxd")
 key = &"t_size_y"
+group = &"Size"
 label = "Height"
 type = 1
 default_value = 1

@@ -1,10 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bkrycmuw2cib7"]
 
 [ext_resource type="Texture2D" uid="uid://kf0mtlfaxxlg" path="res://assets/textures/objects/decoration/nature/tall_cherry_flower_ld.png" id="1_ld"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
-[ext_resource type="Script" uid="uid://dbn5ed02uly7n" path="res://game/object_data/path_data.gd" id="3_533ha"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
-[ext_resource type="Resource" uid="uid://byf56jqxund1r" path="res://game/db/Properties/path/path_points.tres" id="4_path"]
+[ext_resource type="Script" uid="uid://dbn5ed02uly7n" path="res://game/object_forms/path_form.gd" id="3_533ha"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="5_go"]
 [ext_resource type="Texture2D" uid="uid://s6jpdmne5883" path="res://assets/textures/objects/decoration/nature/tall_cherry_flower_stem.png" id="6_stem"]
 [ext_resource type="Texture2D" uid="uid://ducuaqcxe3pdi" path="res://assets/textures/objects/decoration/nature/tall_cherry_flower_head.png" id="7_head"]
@@ -23,8 +20,8 @@ region = Rect2(0, 0, 48, 48)
 [resource]
 script = ExtResource("5_go")
 id = "tall_cherry_flower"
-data = SubResource("Resource_fs2at")
-ld_properties = Array[ExtResource("2_prop")]([ExtResource("3_pos"), ExtResource("4_path")])
+form = SubResource("Resource_fs2at")
 ld_entry_texture = SubResource("AtlasTexture_lhthd")
 ld_index_id = "cherry_flower_04"
+ld_group_override = "Cherry"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

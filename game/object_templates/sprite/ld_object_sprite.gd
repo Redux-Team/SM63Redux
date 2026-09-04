@@ -5,6 +5,11 @@ extends LDObject
 
 @export_group("Debug")
 @export var sprite_ref: Sprite2D
+
+## Whether [member sprite_ref] is already listed in [member LDObject.shader_objects] - the stock
+## template lists it there, so the base pass covers it. Resolved once on the way into the tree
+## rather than tested on every parameter write, which the selection tools do per object.
+var _sprite_covered: bool = false
 @export_tool_button("Create Sprite Props") var _create_sprite_props: Callable:
 	get: return func() -> void:
 		if not sprite_ref:
@@ -36,17 +41,17 @@ extends LDObject
 			origin_marker.owner = self
 
 
-static func from_data(data: GameObjectData) -> LDObject:
-	var sprite_data: SpriteData = data as SpriteData
-	if not sprite_data:
+static func from_data(form: ObjectForm) -> LDObject:
+	var sprite_form: SpriteForm = form as SpriteForm
+	if not sprite_form:
 		return null
 
 	var instance: LDObjectSprite = load("uid://qn5edo21q3sg").instantiate()
-	instance.sprite_ref.diffuse_texture = sprite_data.texture
+	instance.sprite_ref.diffuse_texture = sprite_form.texture
 
 	var editor_shape: CollisionShape2D = instance.editor_placement_rect
-	editor_shape.shape = sprite_data.editor_shape_override if sprite_data.editor_shape_override else Packer.get_texture_as_shape(sprite_data.texture)
-	editor_shape.position = sprite_data.editor_shape_offset
+	editor_shape.shape = sprite_form.editor_shape_override if sprite_form.editor_shape_override else Packer.get_texture_as_shape(sprite_form.texture)
+	editor_shape.position = sprite_form.editor_shape_offset
 
 	return instance
 
@@ -59,11 +64,18 @@ func _on_place() -> void:
 	reset_shader_modulate()
 
 
-## The sprite carries its own instance of the object shader, so it needs the parameter too.
+## The sprite carries its own instance of the object shader, so it needs the parameter too - unless
+## it is already listed in [member LDObject.shader_objects], which the stock template does, in which
+## case the base pass has just written it.
 func set_shader_parameter(parameter: StringName, value: Variant) -> void:
 	super(parameter, value)
-	if sprite_ref and sprite_ref.material is ShaderMaterial:
+	if not _sprite_covered and sprite_ref and sprite_ref.material is ShaderMaterial:
 		(sprite_ref.material as ShaderMaterial).set_shader_parameter(parameter, value)
+
+
+func _enter_tree() -> void:
+	super()
+	_sprite_covered = sprite_ref != null and sprite_ref in shader_objects
 
 
 func _setup_sprite_material(s: SmartSprite2D) -> void:

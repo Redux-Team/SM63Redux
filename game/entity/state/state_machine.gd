@@ -94,6 +94,20 @@ func get_history() -> Array[StringName]:
 	return _history.duplicate()
 
 
+func get_active_states() -> Array[State]:
+	return _stack.duplicate()
+
+
+func restore_state(state_name: StringName) -> void:
+	var target: State = _states.get(state_name)
+	if not target or target == _current:
+		return
+	
+	_previous = _current
+	_current = target
+	_stack = _build_stack(target)
+
+
 func stop() -> void:
 	if not _running:
 		return

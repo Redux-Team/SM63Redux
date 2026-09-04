@@ -1,10 +1,8 @@
-@abstract class_name LDWidgetTool
-extends LDTool
-
-
 ## Shared base for tools that drive an LDToolWidget over the current selection
 ## (Rotate, Scale, TelescopingEdit). Subclasses only declare their name and which
 ## of the selected objects they apply to via _get_target_objects().
+@abstract class_name LDWidgetTool
+extends LDTool
 
 
 @export var _widget: LDToolWidget

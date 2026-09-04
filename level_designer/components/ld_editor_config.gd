@@ -1,78 +1,72 @@
 class_name LDEditorConfig
 
-## Global, level-independent editor preferences for the level designer, persisted to a user://
-## config file so they carry across levels and sessions. Accessed statically, e.g.
-## LDEditorConfig.get_pan_speed(). Lazily loaded on first access.
+## Level designer preferences. A typed front for the [code]editor/[/code] entries in [Settings],
+## kept so editor code reads as LDEditorConfig.get_pan_speed() rather than reaching for raw
+## setting keys. The values themselves live in the shared settings file; the level designer's
+## old standalone config is imported once, on first access.
 
 
-const CONFIG_PATH: String = "user://ld_editor.cfg"
-const VIEWPORT_SECTION: String = "viewport"
-const MUSIC_SECTION: String = "music"
+const LEGACY_PATH: String = "user://ld_editor.cfg"
 
-const PAN_SPEED_DEFAULT: float = 4.0
-const PAN_SPEED_MIN: float = 1.0
-const PAN_SPEED_MAX: float = 16.0
-
-
-static var _config: ConfigFile
-static var _pan_speed: float = PAN_SPEED_DEFAULT
-static var _ld_playlist: Array[String] = []
-static var _ld_loop: bool = false
+const PAN_SPEED: StringName = &"editor/pan_speed"
+const MUSIC_LOOP: StringName = &"editor/music_loop"
+const PLAYLIST: StringName = &"editor/playlist"
+const INITIALIZED: StringName = &"editor/initialized"
 
 
-static func _ensure_loaded() -> void:
-	if _config:
+## Runs once ever: imports the old config file if there is one, and otherwise starts the
+## playlist off with every level designer track. Distinguishing this from a plain default
+## matters because an empty playlist is also a valid choice - it means "no music".
+static func _ensure_initialized() -> void:
+	if Settings.get_bool(INITIALIZED):
 		return
-	_config = ConfigFile.new()
-	if _config.load(CONFIG_PATH) == OK:
-		_pan_speed = clampf(float(_config.get_value(VIEWPORT_SECTION, "pan_speed", PAN_SPEED_DEFAULT)), PAN_SPEED_MIN, PAN_SPEED_MAX)
-	if _config.has_section_key(MUSIC_SECTION, "ld_playlist"):
-		_ld_playlist.assign(_config.get_value(MUSIC_SECTION, "ld_playlist", PackedStringArray()))
-	else:
-		_ld_playlist.assign(LDMusicDB.get_track_ids_in(LDMusicDB.CATEGORY_LD))
-	_ld_loop = bool(_config.get_value(MUSIC_SECTION, "ld_loop", false))
+	Settings.set_value(INITIALIZED, true)
+	
+	var legacy: ConfigFile = ConfigFile.new()
+	if legacy.load(LEGACY_PATH) == OK:
+		Settings.set_value(PAN_SPEED, legacy.get_value("viewport", "pan_speed", Settings.get_float(PAN_SPEED)))
+		Settings.set_value(MUSIC_LOOP, legacy.get_value("music", "ld_loop", false))
+		if legacy.has_section_key("music", "ld_playlist"):
+			Settings.set_value(PLAYLIST, legacy.get_value("music", "ld_playlist"))
+			return
+	
+	Settings.set_value(PLAYLIST, PackedStringArray(LDMusicDB.get_track_ids_in(LDMusicDB.CATEGORY_LD)))
 
 
 ## Camera pan speed used by WASD navigation in the editor viewport.
 static func get_pan_speed() -> float:
-	_ensure_loaded()
-	return _pan_speed
+	_ensure_initialized()
+	return Settings.get_float(PAN_SPEED)
 
 
 static func set_pan_speed(value: float) -> void:
-	_ensure_loaded()
-	_pan_speed = clampf(value, PAN_SPEED_MIN, PAN_SPEED_MAX)
-	_config.set_value(VIEWPORT_SECTION, "pan_speed", _pan_speed)
-	_config.save(CONFIG_PATH)
+	Settings.set_value(PAN_SPEED, value)
 
 
 static func get_ld_playlist() -> Array[String]:
-	_ensure_loaded()
-	return _ld_playlist.duplicate()
+	_ensure_initialized()
+	var playlist: Array[String] = []
+	playlist.assign(Settings.get_value(PLAYLIST) as PackedStringArray)
+	return playlist
 
 
 static func is_ld_track_enabled(id: String) -> bool:
-	_ensure_loaded()
-	return _ld_playlist.has(id)
+	return get_ld_playlist().has(id)
 
 
 static func set_ld_track_enabled(id: String, enabled: bool) -> void:
-	_ensure_loaded()
-	if enabled and not _ld_playlist.has(id):
-		_ld_playlist.append(id)
+	var playlist: Array[String] = get_ld_playlist()
+	if enabled and not playlist.has(id):
+		playlist.append(id)
 	elif not enabled:
-		_ld_playlist.erase(id)
-	_config.set_value(MUSIC_SECTION, "ld_playlist", PackedStringArray(_ld_playlist))
-	_config.save(CONFIG_PATH)
+		playlist.erase(id)
+	Settings.set_value(PLAYLIST, PackedStringArray(playlist))
 
 
 static func get_ld_loop() -> bool:
-	_ensure_loaded()
-	return _ld_loop
+	_ensure_initialized()
+	return Settings.get_bool(MUSIC_LOOP)
 
 
 static func set_ld_loop(value: bool) -> void:
-	_ensure_loaded()
-	_ld_loop = value
-	_config.set_value(MUSIC_SECTION, "ld_loop", value)
-	_config.save(CONFIG_PATH)
+	Settings.set_value(MUSIC_LOOP, value)

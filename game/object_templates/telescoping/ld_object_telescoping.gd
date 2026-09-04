@@ -53,8 +53,8 @@ var _initial_nine_patch_size: Vector2
 			origin_marker.owner = self
 
 
-static func from_data(data: GameObjectData) -> LDObject:
-	var telescoping_data: TelescopingData = data as TelescopingData
+static func from_data(data: ObjectForm) -> LDObject:
+	var telescoping_data: TelescopingForm = data as TelescopingForm
 	if not telescoping_data:
 		return null
 	
@@ -207,6 +207,7 @@ func _apply_width(units: int) -> void:
 		if safety_shape and safety_shape.shape is RectangleShape2D:
 			(safety_shape.shape as RectangleShape2D).size.x = total
 	
+	invalidate_local_bounds()
 	_sync_shader_state()
 
 
@@ -226,6 +227,7 @@ func _apply_height(units: int) -> void:
 		if safety_shape and safety_shape.shape is RectangleShape2D:
 			(safety_shape.shape as RectangleShape2D).size.y = total
 	
+	invalidate_local_bounds()
 	_sync_shader_state()
 
 

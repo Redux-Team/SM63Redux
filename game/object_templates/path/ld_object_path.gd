@@ -18,8 +18,8 @@ var _preview_valid: bool = true
 var _stem_shapes: Array[CollisionShape2D] = []
 
 
-static func from_data(data: GameObjectData) -> LDObject:
-	var path_data: PathData = data as PathData
+static func from_data(data: ObjectForm) -> LDObject:
+	var path_data: PathForm = data as PathForm
 	if not path_data:
 		return null
 	
@@ -93,6 +93,7 @@ func _on_points_changed(points: PackedVector2Array) -> void:
 		stem.points = get_path_points(stem.texture) if points.size() >= 2 else PackedVector2Array()
 	
 	_sync_stem_shapes(points)
+	invalidate_local_bounds()
 
 
 func _sync_head_shape(pos: Vector2, rot: float) -> void:
@@ -144,5 +145,7 @@ func _sync_stem_shapes(points: PackedVector2Array) -> void:
 func _clear_stem_shapes() -> void:
 	for s: CollisionShape2D in _stem_shapes:
 		if is_instance_valid(s):
+			if s.get_parent():
+				s.get_parent().remove_child(s)
 			s.queue_free()
 	_stem_shapes.clear()

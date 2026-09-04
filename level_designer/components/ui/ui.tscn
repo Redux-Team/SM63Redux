@@ -21,6 +21,8 @@
 [ext_resource type="Script" uid="uid://cer032iulvsqx" path="res://level_designer/components/ui/handlers/chrome_handler.gd" id="19_chrome"]
 [ext_resource type="Theme" uid="uid://b6ld3d1tor8em" path="res://level_designer/ld_editor_theme.tres" id="20_theme"]
 [ext_resource type="PackedScene" uid="uid://dkm3i8yhjnauq" path="res://level_designer/components/ui/music_editor/music_editor.tscn" id="21_mused"]
+[ext_resource type="PackedScene" uid="uid://d1y5onegdsekl" path="res://level_designer/components/ui/editor_settings/editor_settings.tscn" id="22_setpanel"]
+[ext_resource type="Texture2D" uid="uid://cdvkqplpbxa0q" path="res://assets/textures/level_designer/ui_icons/settings.svg" id="25_8nnne"]
 [ext_resource type="Texture2D" uid="uid://bg3fpaudox0nq" path="res://assets/textures/level_designer/ui_icons/areas.svg" id="ic_areas"]
 [ext_resource type="Texture2D" uid="uid://cosmmki8kuy3b" path="res://assets/textures/level_designer/ui_icons/back.svg" id="ic_back"]
 [ext_resource type="Texture2D" uid="uid://bt8u6qrpfh11r" path="res://assets/textures/level_designer/ui_icons/background.svg" id="ic_background"]
@@ -120,6 +122,13 @@ script = ExtResource("16_wdef")
 id = &"music_editor"
 scene = ExtResource("21_mused")
 title = "Music"
+
+[sub_resource type="Resource" id="WindowDef_settings"]
+script = ExtResource("16_wdef")
+id = &"settings"
+scene = ExtResource("22_setpanel")
+title = "Settings"
+close_on_back_input = true
 
 [sub_resource type="Resource" id="WindowDef_picker"]
 script = ExtResource("16_wdef")
@@ -249,16 +258,16 @@ events = [SubResource("InputEventKey_bt7vf"), SubResource("InputEventKey_bntcf")
 
 [sub_resource type="InputEventKey" id="InputEventKey_wp4la"]
 device = -1
-keycode = 49
-unicode = 49
+keycode = 88
+unicode = 120
 
 [sub_resource type="Shortcut" id="Shortcut_kp1nf"]
 events = [SubResource("InputEventKey_wp4la")]
 
 [sub_resource type="InputEventKey" id="InputEventKey_11twt"]
 device = -1
-keycode = 50
-unicode = 50
+keycode = 71
+unicode = 103
 
 [sub_resource type="Shortcut" id="Shortcut_awha3"]
 events = [SubResource("InputEventKey_11twt")]
@@ -326,9 +335,11 @@ physical_keycode = 4194309
 [sub_resource type="Shortcut" id="Shortcut_nm1lm"]
 events = [SubResource("InputEventKey_8wigk")]
 
-[node name="UI" type="Node" unique_id=2080364698 node_paths=PackedStringArray("_chrome", "_window_handler", "_viewport_handler", "_toolbar_handler", "_file_handler", "_hotbar_handler", "_chrome_handler")]
+[node name="UI" type="Node" unique_id=2080364698 node_paths=PackedStringArray("_chrome", "_top_bar_left", "_top_bar_right", "_window_handler", "_viewport_handler", "_toolbar_handler", "_file_handler", "_hotbar_handler", "_chrome_handler")]
 script = ExtResource("1_8w51u")
 _chrome = NodePath("ViewportUI/Chrome")
+_top_bar_left = NodePath("ViewportUI/Chrome/TopBarL")
+_top_bar_right = NodePath("ViewportUI/Chrome/TopBarR")
 _window_handler = NodePath("WindowHandler")
 _viewport_handler = NodePath("ViewportHandler")
 _toolbar_handler = NodePath("ToolbarHandler")
@@ -339,7 +350,7 @@ _chrome_handler = NodePath("ChromeHandler")
 [node name="WindowHandler" type="Node" parent="." unique_id=1919577132 node_paths=PackedStringArray("_window")]
 script = ExtResource("11_winh")
 _window = NodePath("../WindowLayer/Window")
-_window_defs = Array[ExtResource("16_wdef")]([SubResource("WindowDef_browser"), SubResource("WindowDef_properties"), SubResource("WindowDef_layer"), SubResource("WindowDef_area"), SubResource("WindowDef_stamp"), SubResource("WindowDef_scenario"), SubResource("WindowDef_tag"), SubResource("WindowDef_background"), SubResource("WindowDef_music"), SubResource("WindowDef_picker")])
+_window_defs = Array[ExtResource("16_wdef")]([SubResource("WindowDef_browser"), SubResource("WindowDef_properties"), SubResource("WindowDef_layer"), SubResource("WindowDef_area"), SubResource("WindowDef_stamp"), SubResource("WindowDef_scenario"), SubResource("WindowDef_tag"), SubResource("WindowDef_background"), SubResource("WindowDef_music"), SubResource("WindowDef_settings"), SubResource("WindowDef_picker")])
 
 [node name="ViewportHandler" type="Node" parent="." unique_id=253371726 node_paths=PackedStringArray("_parallaxing_button", "_ghosting_button", "_modulation_button")]
 script = ExtResource("12_vph")
@@ -365,32 +376,35 @@ _save_button = NodePath("../ViewportUI/Chrome/TopBarL/Row/FileGroup/SaveButton")
 script = ExtResource("15_hbh")
 _hotbar_buttons = [NodePath("../ViewportUI/Chrome/BottomBar/Row/Hotbar/HotbarButton"), NodePath("../ViewportUI/Chrome/BottomBar/Row/Hotbar/HotbarButton2"), NodePath("../ViewportUI/Chrome/BottomBar/Row/Hotbar/HotbarButton3"), NodePath("../ViewportUI/Chrome/BottomBar/Row/Hotbar/HotbarButton4"), NodePath("../ViewportUI/Chrome/BottomBar/Row/Hotbar/HotbarButton5"), NodePath("../ViewportUI/Chrome/BottomBar/Row/Hotbar/HotbarButton6"), NodePath("../ViewportUI/Chrome/BottomBar/Row/Hotbar/HotbarButton7"), NodePath("../ViewportUI/Chrome/BottomBar/Row/Hotbar/HotbarButton8")]
 
-[node name="ChromeHandler" type="Node" parent="." unique_id=1489396500 node_paths=PackedStringArray("_select_button", "_brush_button", "_move_button", "_rotate_button", "_scale_button", "_place_button", "_tile_button", "_poly_edit_button", "_poly_add_button", "_poly_cut_button", "_topline_button", "_selection_op_buttons", "_undo_button", "_redo_button", "_paste_button", "_properties_button", "_panel_buttons")]
+[node name="ChromeHandler" type="Node" parent="." unique_id=1489396500 node_paths=PackedStringArray("_tool_bar", "_tool_bar_clip", "_select_button", "_brush_button", "_move_button", "_rotate_button", "_scale_button", "_place_button", "_tile_button", "_poly_edit_button", "_poly_add_button", "_poly_cut_button", "_topline_button", "_selection_op_buttons", "_undo_button", "_redo_button", "_paste_button", "_properties_button", "_panel_buttons")]
 script = ExtResource("19_chrome")
-_select_button = NodePath("../ViewportUI/Chrome/ToolRail/Tools/SelectButton")
-_brush_button = NodePath("../ViewportUI/Chrome/ToolRail/Tools/BrushButton")
-_move_button = NodePath("../ViewportUI/Chrome/ToolRail/Tools/MoveButton")
-_rotate_button = NodePath("../ViewportUI/Chrome/ToolRail/Tools/RotateButton")
-_scale_button = NodePath("../ViewportUI/Chrome/ToolRail/Tools/ScaleButton")
-_place_button = NodePath("../ViewportUI/Chrome/ToolRail/Tools/PlaceButton")
-_tile_button = NodePath("../ViewportUI/Chrome/ToolRail/Tools/TileButton")
-_poly_edit_button = NodePath("../ViewportUI/Chrome/ToolRail/Tools/PolyEditButton")
-_poly_add_button = NodePath("../ViewportUI/Chrome/ToolRail/Tools/PolyAddButton")
-_poly_cut_button = NodePath("../ViewportUI/Chrome/ToolRail/Tools/PolyCutButton")
-_topline_button = NodePath("../ViewportUI/Chrome/ToolRail/Tools/ToplineButton")
+_tool_bar = NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools")
+_tool_bar_clip = NodePath("../ViewportUI/Chrome/ToolRail/Clip")
+_select_button = NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/SelectButton")
+_brush_button = NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/BrushButton")
+_move_button = NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/MoveButton")
+_rotate_button = NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/RotateButton")
+_scale_button = NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/ScaleButton")
+_place_button = NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/PlaceButton")
+_tile_button = NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/TileButton")
+_poly_edit_button = NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/PolyEditButton")
+_poly_add_button = NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/PolyAddButton")
+_poly_cut_button = NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/PolyCutButton")
+_topline_button = NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/ToplineButton")
 _selection_op_buttons = [NodePath("../ViewportUI/Chrome/TopBarR/EditGroup/CutButton"), NodePath("../ViewportUI/Chrome/TopBarR/EditGroup/CopyButton"), NodePath("../ViewportUI/Chrome/TopBarR/EditGroup/DuplicateButton"), NodePath("../ViewportUI/Chrome/TopBarR/EditGroup/DeselectButton"), NodePath("../ViewportUI/Chrome/TopBarR/EditGroup/MoveToFrontButton"), NodePath("../ViewportUI/Chrome/TopBarR/EditGroup/MoveToBackButton"), NodePath("../ViewportUI/Chrome/TopBarR/EditGroup/DeleteButton")]
 _undo_button = NodePath("../ViewportUI/Chrome/TopBarL/Row/FileGroup/UndoButton")
 _redo_button = NodePath("../ViewportUI/Chrome/TopBarL/Row/FileGroup/RedoButton")
 _paste_button = NodePath("../ViewportUI/Chrome/TopBarR/EditGroup/PasteButton")
-_properties_button = NodePath("../ViewportUI/Chrome/ToolRail/Tools/PropertiesButton")
-_panel_buttons = [NodePath("../ViewportUI/Chrome/ToolRail/Tools/ObjectBrowserButton"), NodePath("../ViewportUI/Chrome/ToolRail/Tools/PropertiesButton"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/LayerProperties"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/AreasButton"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/TagsButton"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/StampsButton"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/ScenariosButton"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/BackgroundButton"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/MusicButton")]
+_properties_button = NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/PropertiesButton")
+_panel_buttons = [NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/ObjectBrowserButton"), NodePath("../ViewportUI/Chrome/ToolRail/Clip/Tools/PropertiesButton"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/LayerProperties"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/AreasButton"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/TagsButton"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/StampsButton"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/ScenariosButton"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/BackgroundButton"), NodePath("../ViewportUI/Chrome/PanelRail/Panels/MusicButton")]
 _panel_ids = Array[StringName]([&"object_browser", &"object_properties", &"layer_properties", &"area_editor", &"tag_editor", &"stamp_editor", &"scenario_editor", &"background_editor", &"music_editor"])
 
 [node name="ViewportUI" type="CanvasLayer" parent="." unique_id=1959582476]
 layer = 2
 metadata/gdss_mode = 1
 
-[node name="Chrome" type="Control" parent="ViewportUI"]
+[node name="Chrome" type="Control" parent="ViewportUI" unique_id=394036031]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -400,6 +414,7 @@ mouse_filter = 2
 
 [node name="TopBarL" type="PanelContainer" parent="ViewportUI/Chrome" unique_id=931816477]
 texture_filter = 4
+layout_mode = 0
 offset_left = 12.0
 offset_top = 10.0
 offset_right = 12.0
@@ -456,6 +471,15 @@ icon = ExtResource("ic_reset_level")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("Danger")
 
+[node name="SettingsButton" type="Button" parent="ViewportUI/Chrome/TopBarL/Row/FileGroup" unique_id=1288942758]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Settings"
+focus_mode = 0
+icon = ExtResource("25_8nnne")
+expand_icon = true
+metadata/gdss_classes = PackedStringArray("IconButton")
+
 [node name="Sep" type="VSeparator" parent="ViewportUI/Chrome/TopBarL/Row/FileGroup" unique_id=408344831]
 layout_mode = 2
 metadata/gdss_classes = PackedStringArray()
@@ -496,7 +520,7 @@ metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="TopBarR" type="PanelContainer" parent="ViewportUI/Chrome" unique_id=622649123]
 texture_filter = 4
-anchors_preset = 1
+layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -276.0
@@ -601,7 +625,7 @@ metadata/gdss_classes = PackedStringArray("Danger")
 
 [node name="LayerVisualsHBox" type="HBoxContainer" parent="ViewportUI/Chrome" unique_id=1740288039]
 texture_filter = 4
-anchors_preset = 1
+layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -143.0
@@ -623,7 +647,7 @@ metadata/gdss_classes = PackedStringArray("ViewportToggle")
 [node name="ParallaxingButton" type="Button" parent="ViewportUI/Chrome/LayerVisualsHBox" unique_id=904290079]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-tooltip_text = "Parallax (1)"
+tooltip_text = "Parallax (X)"
 focus_mode = 0
 toggle_mode = true
 shortcut = SubResource("Shortcut_kp1nf")
@@ -634,7 +658,7 @@ metadata/gdss_classes = PackedStringArray("ViewportToggle")
 [node name="GhostingButton" type="Button" parent="ViewportUI/Chrome/LayerVisualsHBox" unique_id=930484823]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-tooltip_text = "Ghosting (2)"
+tooltip_text = "Ghosting (G)"
 focus_mode = 0
 toggle_mode = true
 shortcut = SubResource("Shortcut_awha3")
@@ -655,7 +679,7 @@ metadata/gdss_classes = PackedStringArray("ViewportToggle")
 
 [node name="BottomBar" type="PanelContainer" parent="ViewportUI/Chrome" unique_id=806800024]
 texture_filter = 4
-anchors_preset = 2
+layout_mode = 0
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 12.0
@@ -681,7 +705,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -691,7 +714,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -701,7 +723,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -711,7 +732,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -721,7 +741,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -731,7 +750,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -741,7 +759,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -751,7 +768,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-expand_icon = true
 script = ExtResource("2_sdhrq")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
@@ -788,7 +804,7 @@ metadata/gdss_classes = PackedStringArray("IconButton")
 
 [node name="ToolRail" type="PanelContainer" parent="ViewportUI/Chrome" unique_id=664428989]
 texture_filter = 4
-anchors_preset = 4
+layout_mode = 0
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 12.0
@@ -801,13 +817,18 @@ mouse_filter = 1
 theme = ExtResource("20_theme")
 metadata/gdss_classes = PackedStringArray("Bar")
 
-[node name="Tools" type="BoxContainer" parent="ViewportUI/Chrome/ToolRail" unique_id=479776930]
+[node name="Clip" type="Control" parent="ViewportUI/Chrome/ToolRail"]
+clip_contents = true
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Tools" type="BoxContainer" parent="ViewportUI/Chrome/ToolRail/Clip" unique_id=479776930]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 28.0
 vertical = true
 
-[node name="ObjectBrowserButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=597165367]
+[node name="ObjectBrowserButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=597165367]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Object Browser (Space)"
@@ -817,7 +838,7 @@ icon = ExtResource("ic_obj_browser")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="PropertiesButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=56257471]
+[node name="PropertiesButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=56257471]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Properties (P)"
@@ -827,7 +848,7 @@ icon = ExtResource("ic_properties")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="SelectButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=1017939358]
+[node name="SelectButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=1017939358]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Select (Q)"
@@ -837,7 +858,7 @@ icon = ExtResource("ic_select")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
-[node name="BrushButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=510352985]
+[node name="BrushButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=510352985]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Brush (B)"
@@ -847,7 +868,7 @@ icon = ExtResource("ic_brush")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
-[node name="TileButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=136465066]
+[node name="TileButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=136465066]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -858,7 +879,7 @@ icon = ExtResource("ic_tile")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
-[node name="MoveButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=1363880092]
+[node name="MoveButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=1363880092]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Move (M)"
@@ -868,7 +889,7 @@ icon = ExtResource("ic_move")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
-[node name="RotateButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=316894685]
+[node name="RotateButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=316894685]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -879,7 +900,7 @@ icon = ExtResource("ic_rotate")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
-[node name="ScaleButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=1106547301]
+[node name="ScaleButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=1106547301]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -889,7 +910,7 @@ icon = ExtResource("ic_scale")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
-[node name="PlaceButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=1206655787]
+[node name="PlaceButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=1206655787]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -899,7 +920,7 @@ icon = ExtResource("ic_place")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
-[node name="PolyEditButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=1443655826]
+[node name="PolyEditButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=1443655826]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -909,7 +930,7 @@ icon = ExtResource("ic_poly_edit")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
-[node name="PolyAddButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=818526651]
+[node name="PolyAddButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=818526651]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -919,7 +940,7 @@ icon = ExtResource("ic_poly_add")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
-[node name="PolyCutButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=593973020]
+[node name="PolyCutButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=593973020]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -929,7 +950,7 @@ icon = ExtResource("ic_poly_cut")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
-[node name="ToplineButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=772524995]
+[node name="ToplineButton" type="Button" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=772524995]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -939,12 +960,12 @@ icon = ExtResource("ic_topline")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
-[node name="Control" type="Control" parent="ViewportUI/Chrome/ToolRail/Tools" unique_id=1312792724]
+[node name="Control" type="Control" parent="ViewportUI/Chrome/ToolRail/Clip/Tools" unique_id=1312792724]
 layout_mode = 2
 
 [node name="PanelRail" type="PanelContainer" parent="ViewportUI/Chrome" unique_id=1287214286]
 texture_filter = 4
-anchors_preset = 6
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
@@ -1029,7 +1050,7 @@ metadata/gdss_classes = PackedStringArray("IconButton")
 [node name="TestServerButton" type="Button" parent="ViewportUI/Chrome" unique_id=1723719953]
 texture_filter = 4
 custom_minimum_size = Vector2(28, 28)
-anchors_preset = 3
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -1084,6 +1105,7 @@ will be lost!"
 [connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/FileGroup/SaveNewButton" to="FileHandler" method="_on_save_new_button_pressed"]
 [connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/FileGroup/LoadButton" to="FileHandler" method="_on_load_button_pressed"]
 [connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/FileGroup/ResetButton" to="FileHandler" method="_on_reset_button_pressed"]
+[connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/FileGroup/SettingsButton" to="FileHandler" method="_on_settings_button_pressed"]
 [connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/FileGroup/UndoButton" to="ToolbarHandler" method="_on_undo_button_pressed"]
 [connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/FileGroup/RedoButton" to="ToolbarHandler" method="_on_redo_button_pressed"]
 [connection signal="pressed" from="ViewportUI/Chrome/TopBarL/Row/TestGroup/TestClientButton" to="FileHandler" method="_on_test_client_button_pressed"]
@@ -1101,19 +1123,19 @@ will be lost!"
 [connection signal="toggled" from="ViewportUI/Chrome/LayerVisualsHBox/ModulationButton" to="ViewportHandler" method="set_modulation_enabled"]
 [connection signal="pressed" from="ViewportUI/Chrome/BottomBar/Row/NavGroup/LayerNav/PrevLayer" to="ToolbarHandler" method="_on_prev_layer_pressed"]
 [connection signal="pressed" from="ViewportUI/Chrome/BottomBar/Row/NavGroup/LayerNav/NextLayer" to="ToolbarHandler" method="_on_next_layer_pressed"]
-[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Tools/ObjectBrowserButton" to="WindowHandler" method="toggle_object_browser"]
-[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Tools/PropertiesButton" to="WindowHandler" method="toggle_object_properties"]
-[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Tools/SelectButton" to="ToolbarHandler" method="_on_select_button_pressed"]
-[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Tools/BrushButton" to="ToolbarHandler" method="_on_brush_button_pressed"]
-[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Tools/TileButton" to="ToolbarHandler" method="_on_tile_button_pressed"]
-[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Tools/MoveButton" to="ToolbarHandler" method="_on_move_button_pressed"]
-[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Tools/RotateButton" to="ToolbarHandler" method="_on_rotate_button_pressed"]
-[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Tools/ScaleButton" to="ToolbarHandler" method="_on_scale_button_pressed"]
-[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Tools/PlaceButton" to="ToolbarHandler" method="_on_place_button_pressed"]
-[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Tools/PolyEditButton" to="ToolbarHandler" method="_on_poly_edit_pressed"]
-[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Tools/PolyAddButton" to="ToolbarHandler" method="_on_poly_add_pressed"]
-[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Tools/PolyCutButton" to="ToolbarHandler" method="_on_poly_cut_pressed"]
-[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Tools/ToplineButton" to="ToolbarHandler" method="_on_topline_pressed"]
+[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Clip/Tools/ObjectBrowserButton" to="WindowHandler" method="toggle_object_browser"]
+[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Clip/Tools/PropertiesButton" to="WindowHandler" method="toggle_object_properties"]
+[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Clip/Tools/SelectButton" to="ToolbarHandler" method="_on_select_button_pressed"]
+[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Clip/Tools/BrushButton" to="ToolbarHandler" method="_on_brush_button_pressed"]
+[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Clip/Tools/TileButton" to="ToolbarHandler" method="_on_tile_button_pressed"]
+[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Clip/Tools/MoveButton" to="ToolbarHandler" method="_on_move_button_pressed"]
+[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Clip/Tools/RotateButton" to="ToolbarHandler" method="_on_rotate_button_pressed"]
+[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Clip/Tools/ScaleButton" to="ToolbarHandler" method="_on_scale_button_pressed"]
+[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Clip/Tools/PlaceButton" to="ToolbarHandler" method="_on_place_button_pressed"]
+[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Clip/Tools/PolyEditButton" to="ToolbarHandler" method="_on_poly_edit_pressed"]
+[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Clip/Tools/PolyAddButton" to="ToolbarHandler" method="_on_poly_add_pressed"]
+[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Clip/Tools/PolyCutButton" to="ToolbarHandler" method="_on_poly_cut_pressed"]
+[connection signal="pressed" from="ViewportUI/Chrome/ToolRail/Clip/Tools/ToplineButton" to="ToolbarHandler" method="_on_topline_pressed"]
 [connection signal="pressed" from="ViewportUI/Chrome/PanelRail/Panels/LayerProperties" to="WindowHandler" method="toggle_layer_properties"]
 [connection signal="pressed" from="ViewportUI/Chrome/PanelRail/Panels/AreasButton" to="WindowHandler" method="toggle_area_editor"]
 [connection signal="pressed" from="ViewportUI/Chrome/PanelRail/Panels/TagsButton" to="WindowHandler" method="toggle_tag_editor"]

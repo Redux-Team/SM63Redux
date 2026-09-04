@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LDProperty" format=3]
+
+[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="1_658wu"]
+
+[resource]
+script = ExtResource("1_658wu")
+key = &"base_style"
+group = &"Appearance"
+label = "Base Style"
+type = 7
+default_value = ""

@@ -41,6 +41,7 @@ const BG_TRANSITION_TIME: float = 0.2
 @export var name_label: Label
 @export var carousel: Node2D
 @export var music: AudioStreamPlayer
+@export var blur: ColorRect
 ## Spin speed (AnimatedSprite2D.speed_scale) over the selection animation, sampled 0..1.
 @export var selection_spin_speed_curve: Curve
 ## Vertical velocity (px/sec, negative = up) over the selection animation, sampled 0..1.
@@ -72,6 +73,7 @@ var _name_rest_captured: bool = false
 
 ## Builds the screen from the saved level dict and the list of shine scenarios to offer.
 func setup(level_data: Dictionary, scenarios: Array[Dictionary]) -> void:
+	ScreenEffects.apply(blur, blur.material)
 	_scenarios = scenarios
 	_level_data = level_data
 	_selected = 0

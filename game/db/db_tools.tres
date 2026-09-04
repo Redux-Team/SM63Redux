@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="GameDBTools" format=3]
+
+[ext_resource type="Script" path="res://game/db/db_tools.gd" id="1_dbtls"]
+
+[resource]
+script = ExtResource("1_dbtls")
+metadata/_custom_type_script = "res://game/db/db_tools.gd"

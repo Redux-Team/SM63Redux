@@ -11,21 +11,21 @@ const EDGE_BOOST: float = 6.0
 @export var wall_check_l: RayCast2D
 @export var wall_check_r: RayCast2D
 
-var _t: float = 0.0
+var _phase: float = 0.0
 var _boost: float = 1.0
 
 
 func _tick(delta: float) -> void:
-	var p: float = pingpong(_t, 1.0) * 2.0 - 1.0
+	var sweep: float = pingpong(_phase, 1.0) * 2.0 - 1.0
 	
-	if (p > 0.0 and (wall_check_r.is_colliding() or not water_check_r.is_in_water())) \
-	or (p < 0.0 and (wall_check_l.is_colliding() or not water_check_l.is_in_water())):
+	if (sweep > 0.0 and (wall_check_r.is_colliding() or not water_check_r.is_in_water())) \
+	or (sweep < 0.0 and (wall_check_l.is_colliding() or not water_check_l.is_in_water())):
 		_boost = EDGE_BOOST
 	
-	_t += _boost * delta / PERIOD
+	_phase += _boost * delta / PERIOD
 	_boost = lerpf(_boost, 1.0, delta * 4.0)
 	
-	cheep_cheep.velocity.x = AMPLITUDE * displacement.sample(p)
+	cheep_cheep.velocity.x = AMPLITUDE * displacement.sample(sweep)
 	sprite.flip_h = cheep_cheep.velocity.x < 0.0
 
 

@@ -61,10 +61,10 @@ animations = [{
 "speed": 12.0
 }]
 
-[node name="RedCoin" unique_id=187434736 node_paths=PackedStringArray("all_collected", "collect_label") instance=ExtResource("1_qed2w")]
+[node name="RedCoin" unique_id=187434736 node_paths=PackedStringArray("all_collected_sfx", "collect_label") instance=ExtResource("1_qed2w")]
 script = ExtResource("2_c4m15")
 group = "default"
-all_collected = NodePath("AllCollected")
+all_collected_sfx = NodePath("AllCollected")
 collect_label = NodePath("CollectLabel")
 
 [node name="Sprite" parent="." index="1" unique_id=1781944590]

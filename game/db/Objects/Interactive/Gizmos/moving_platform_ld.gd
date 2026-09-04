@@ -16,24 +16,41 @@ enum Mode {
 @export var radius: float = 64
 @export var start_angle: float = 0
 
+## Shape the ghosts were last built for. The rebuild reconnects a draw callable and re-resolves a
+## [RemoteTransform2D] path per ghost, so it only runs when the orbit actually changes.
+var _ghost_signature: Vector3 = Vector3.INF
+
 
 func _apply_property(key: StringName, value: Variant) -> void:
 	if key == "rotation":
 		start_angle = deg_to_rad(value)
 	else:
 		super(key, value)
+	queue_redraw()
 
 
+func _on_place() -> void:
+	super()
+	queue_redraw()
+
+
+func _on_preview() -> void:
+	super()
+	queue_redraw()
+
+
+## Only the orbit rotation moves between frames, and it rides [member ghost_container]'s own
+## transform. The drawn platforms sit at their rest angles and change only with the object's
+## properties, so the redraw is left to those rather than run every frame.
 func _process(_delta: float) -> void:
 	if is_preview:
-		if ghost_root:
+		if ghost_root and ghost_root.visible:
 			ghost_root.visible = false
 		return
-	queue_redraw()
 	if ghost_container:
 		var platform_period: float = get_property(&"platform_period") if has_property(&"platform_period") else speed
 		ghost_container.rotation += platform_period * get_process_delta_time()
-	if ghost_root:
+	if ghost_root and not ghost_root.visible:
 		ghost_root.visible = true
 
 
@@ -61,6 +78,10 @@ func _draw_platform_sliced_on(target: CanvasItem, pos: Vector2, units: int, modu
 
 
 func _sync_ghost_platforms(platform_amount: int, platform_width: int, platform_radius: float) -> void:
+	var signature: Vector3 = Vector3(platform_amount, platform_width, platform_radius)
+	if signature == _ghost_signature:
+		return
+	_ghost_signature = signature
 	var anchor_count: int = ghost_container.get_child_count()
 	var ghost_count: int = ghost_root.get_child_count()
 	for i: int in platform_amount:

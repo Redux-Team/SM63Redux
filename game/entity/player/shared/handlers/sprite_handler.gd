@@ -40,8 +40,8 @@ func _physics_process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 	
-	if _player.move_dir != 0 and not _player.lock_flipping:
-		_doll.flip_h = _player.move_dir < 0
+	if _player.move_input != 0 and not _player.lock_flipping:
+		_doll.flip_h = _player.move_input < 0
 	
 	_update_plume()
 

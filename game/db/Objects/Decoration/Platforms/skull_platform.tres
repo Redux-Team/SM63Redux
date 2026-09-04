@@ -1,12 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://bsf2g2tiudu10"]
 
 [ext_resource type="Texture2D" uid="uid://dm4qq005dencn" path="res://assets/textures/objects/decoration/platform/skull_platform_ld.png" id="1_56wmm"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_g8y1q"]
-[ext_resource type="Script" uid="uid://cb1ouljyhrjdx" path="res://game/object_data/telescoping_data.gd" id="2_nxitw"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_nxitw"]
-[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_ukn1g"]
-[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_x4djw"]
-[ext_resource type="Resource" uid="uid://d3j4ktfhy214l" path="res://game/db/Properties/t_size_x.tres" id="6_2hqpg"]
+[ext_resource type="Script" uid="uid://cb1ouljyhrjdx" path="res://game/object_forms/telescoping_form.gd" id="2_nxitw"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="7_icssj"]
 [ext_resource type="Texture2D" uid="uid://dnl0evp3cfcpf" path="res://assets/textures/objects/decoration/platform/skull_platform.png" id="8_etgqw"]
 
@@ -25,8 +20,7 @@ region = Rect2(-7, -15, 48, 48)
 [resource]
 script = ExtResource("7_icssj")
 id = "skull_platform"
-data = SubResource("Resource_ukn1g")
-ld_properties = Array[ExtResource("2_g8y1q")]([ExtResource("3_nxitw"), ExtResource("4_ukn1g"), ExtResource("5_x4djw"), ExtResource("6_2hqpg")])
+form = SubResource("Resource_ukn1g")
 ld_entry_texture = SubResource("AtlasTexture_u8h2p")
 ld_index_id = "platform"
 ld_placement_tool_override = "telescoping"

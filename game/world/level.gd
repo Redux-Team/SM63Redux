@@ -200,16 +200,11 @@ func load_from_dict(data: Dictionary, scenario_index: int = 0) -> Error:
 			if disabled_layers.has(layer_index):
 				continue
 			var layer: LevelLayer = current_area.get_or_create_layer(layer_index)
-			var raw_parallax: Variant = layer_data.get("parallax_scale", null)
-			if raw_parallax != null:
-				layer.parallax_scale = Packer.array_to_vec2(raw_parallax)
-			var raw_layer_scale: Variant = layer_data.get("layer_scale", null)
-			if raw_layer_scale != null:
-				layer.layer_scale = Packer.array_to_vec2(raw_layer_scale)
 			var raw_modulate: Variant = layer_data.get("modulation", null)
 			if raw_modulate != null:
 				layer.modulation = Packer.array_to_color(raw_modulate)
 			layer.is_decoration = layer_data.get("is_decoration", false)
+			layer.distance = LevelLayer.distance_from_data(layer_data)
 			for obj_data: Variant in layer_data.get("objects", []):
 				if not obj_data is Dictionary:
 					continue
@@ -539,7 +534,7 @@ func _instantiate_object(data: Dictionary, layer: LevelLayer, _area: LevelArea) 
 	if object_id.is_empty():
 		return
 	
-	var game_object: GameObject = GameDB.get_db().find_game_object(object_id)
+	var game_object: GameObject = GameDB.get_object(object_id)
 	if not game_object:
 		return
 	

@@ -54,9 +54,16 @@ var _content_ref: Control
 var _backdrop_alpha: float = 0.0:
 	set(v):
 		_backdrop_alpha = v
-		if _backdrop and _backdrop.material:
-			var mat: ShaderMaterial = _backdrop.material as ShaderMaterial
-			mat.set_shader_parameter(&"tint", Color(backdrop_color.r, backdrop_color.g, backdrop_color.b, backdrop_color.a * v))
+		if not _backdrop:
+			return
+		
+		# The blur writes COLOR outright, so the flat tint is only what shows once [ScreenEffects]
+		# has taken the material away - but keeping both in step means the toggle can land at any
+		# point in the animation without a frame of the wrong colour.
+		_backdrop.color = Color(backdrop_color, backdrop_color.a * v)
+		var mat: ShaderMaterial = _backdrop.material as ShaderMaterial
+		if mat:
+			mat.set_shader_parameter(&"tint", _backdrop.color)
 			mat.set_shader_parameter(&"blur", backdrop_blur * v)
 var _tween: Tween
 
@@ -132,6 +139,14 @@ func popin() -> void:
 		_backdrop_alpha = 0.0
 		_backdrop.visible = true
 
+	if not Settings.get_bool(&"display/ui_animations"):
+		_panel.scale = _target_scale()
+		_panel.modulate = Color.WHITE
+		if backdrop_enabled and _backdrop:
+			_backdrop_alpha = 1.0
+		_on_popin_finished()
+		return
+
 	var tween: Tween = create_tween().set_parallel()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUINT)
 	tween.tween_property(_panel, "scale", _target_scale(), ANIM_DURATION)
@@ -150,6 +165,12 @@ func popout() -> void:
 
 	if sfx_on_close:
 		SFX.play(SFX.LD_CLOSE)
+
+	if not Settings.get_bool(&"display/ui_animations"):
+		if backdrop_enabled and _backdrop:
+			_backdrop_alpha = 0.0
+		_on_popout_finished()
+		return
 
 	var tween: Tween = create_tween().set_parallel()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUINT)
@@ -188,16 +209,17 @@ func _target_scale() -> Vector2:
 	return window_scale * LDUI.get_ui_scale()
 
 
-## The panel is centre-anchored and only ever grows, so shrink it back to nothing and let the
-## layout size it to whichever content is now visible.
+## Refits the panel to whichever content is now visible and re-centres it. Resizing alone leaves
+## the top-left corner where the previous, larger panel had it, so the window sits off-centre.
 func _refit() -> void:
-	_panel.reset_size()
+	_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_MINSIZE)
 
 
 func _setup_backdrop() -> void:
 	if not backdrop_enabled or not _backdrop:
 		return
 
+	ScreenEffects.apply(_backdrop, _backdrop.material)
 	_backdrop.visible = false
 	_backdrop_alpha = 0.0
 

@@ -1,21 +1,13 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://c1yk0p8ujnu4p"]
 
 [ext_resource type="Texture2D" uid="uid://cynlobcpewq76" path="res://assets/textures/terrain/cherry/terrain_cherry_ld.png" id="1_ld"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_go"]
-[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="4_pd"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_forms/polygon_form.gd" id="4_pd"]
 [ext_resource type="Resource" path="res://game/db/Polygon/Styles/Base/cherry.tres" id="5_base"]
 [ext_resource type="Resource" path="res://game/db/Polygon/Styles/Topline/cherry.tres" id="6_top"]
 [ext_resource type="Resource" path="res://game/db/Polygon/Styles/Decoration/cherry.tres" id="7_deco"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="10_pos"]
-[ext_resource type="Resource" uid="uid://b12ma52j5x2hd" path="res://game/db/Properties/rng_seed.tres" id="11_seed"]
-[ext_resource type="Resource" path="res://game/db/Properties/polygon/base_style.tres" id="12_bs"]
-[ext_resource type="Resource" path="res://game/db/Properties/polygon/topline_style.tres" id="13_ts"]
-[ext_resource type="Resource" path="res://game/db/Properties/polygon/collision_mode.tres" id="14_cm"]
-[ext_resource type="Resource" path="res://game/db/Properties/polygon/decorations_enabled.tres" id="15_de"]
-[ext_resource type="Resource" path="res://game/db/Properties/polygon/decoration_set.tres" id="16_ds"]
 
-[sub_resource type="Resource" id="PolygonData_terrain_cherry"]
+[sub_resource type="Resource" id="PolygonForm_terrain_cherry"]
 script = ExtResource("4_pd")
 terrain_type = "grass"
 base = ExtResource("5_base")
@@ -29,8 +21,7 @@ region = Rect2(0, 0, 48, 48)
 [resource]
 script = ExtResource("3_go")
 id = "terrain_cherry"
-data = SubResource("PolygonData_terrain_cherry")
-ld_properties = Array[ExtResource("2_prop")]([ExtResource("10_pos"), ExtResource("11_seed"), ExtResource("12_bs"), ExtResource("13_ts"), ExtResource("14_cm"), ExtResource("15_de"), ExtResource("16_ds")])
+form = SubResource("PolygonForm_terrain_cherry")
 name_override = "Cherry Grass"
 ld_entry_texture = SubResource("AtlasTexture_entry")
 ld_placement_rules = 2

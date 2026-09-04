@@ -75,7 +75,7 @@ func _draw_preview(points: PackedVector2Array) -> void:
 ## Marks the edges that one-way collision will be built from, so a semisolid polygon still reads as
 ## one when its topline art is hidden.
 func _draw_semisolid_hint() -> void:
-	if target.surface.get_collision_mode() != PolygonData.CollisionMode.SEMISOLID:
+	if target.surface.get_collision_mode() != PolygonForm.CollisionMode.SEMISOLID:
 		return
 	for segment: PackedVector2Array in target.surface.get_topline_segments():
 		if segment.size() >= 2:

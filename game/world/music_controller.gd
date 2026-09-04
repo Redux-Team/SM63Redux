@@ -198,5 +198,3 @@ func _remove_muffle_bus() -> void:
 	var idx: int = AudioServer.get_bus_index(_muffle_bus_name())
 	if idx != -1:
 		AudioServer.remove_bus(idx)
-
-

@@ -26,7 +26,22 @@ func _ready() -> void:
 			queue_free()
 		)
 	if high_particle_amount > 0:
-		amount = high_particle_amount
+		amount = _amount_for_density()
+
+
+## Particle count for the player's chosen density. Scene-authored amounts stay untouched in the
+## editor, where reading player settings would mean writing a config file from a tool script.
+func _amount_for_density() -> int:
+	if Engine.is_editor_hint():
+		return high_particle_amount
+	
+	match Settings.get_string(&"display/particles"):
+		SettingsCatalog.PARTICLES_LOW:
+			return low_particle_amount
+		SettingsCatalog.PARTICLES_MEDIUM:
+			return medium_particle_amount
+	
+	return high_particle_amount
 
 
 func _process(delta: float) -> void:

@@ -27,12 +27,13 @@ shader_parameter/inner = 0.30000001425
 shader_parameter/outer = 1.0
 shader_parameter/strength = 0.50000002375
 
-[node name="ShineSelect" type="CanvasLayer" unique_id=177695623 node_paths=PackedStringArray("bg_layer", "name_label", "carousel", "music")]
+[node name="ShineSelect" type="CanvasLayer" unique_id=177695623 node_paths=PackedStringArray("bg_layer", "name_label", "carousel", "music", "blur")]
 script = ExtResource("1_ss")
 bg_layer = NodePath("BgRoot")
 name_label = NodePath("NameLabel")
 carousel = NodePath("Center/Carousel")
 music = NodePath("Music")
+blur = NodePath("BlurRect")
 selection_spin_speed_curve = SubResource("Curve_spin")
 selection_y_velocity_curve = SubResource("Curve_yvel")
 

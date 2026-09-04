@@ -40,11 +40,11 @@ func _process(delta: float) -> void:
 
 
 func _rebuild_platforms() -> void:
-	for p: AnimatableBody2D in _platforms:
-		p.queue_free()
+	for platform: AnimatableBody2D in _platforms:
+		platform.queue_free()
 	_platforms.clear()
-	for c: Node in _pivots.get_children():
-		c.queue_free()
+	for pivot: Node in _pivots.get_children():
+		pivot.queue_free()
 	var amount: int = int(get_property(&"platform_amount")) if get_property(&"platform_amount") != null else 3
 	var units: int = int(get_property(&"t_size_x")) if get_property(&"t_size_x") != null else 1
 	var radius: float = get_property(&"platform_radius") if get_property(&"platform_radius") != null else 64.0
@@ -68,27 +68,27 @@ func _build_platform(units: int) -> AnimatableBody2D:
 	platform_body.collision_layer = 514
 	platform_body.sync_to_physics = true
 	if platform_nine_patch and platform_nine_patch.texture:
-		var ml: int = platform_nine_patch.patch_margin_left
-		var mr: int = platform_nine_patch.patch_margin_right
-		var seg_w: int = platform_nine_patch.texture.get_width() - ml - mr
-		var total_w: float = float(ml + seg_w * units + mr)
-		var h: float = float(platform_nine_patch.texture.get_height())
+		var margin_left: int = platform_nine_patch.patch_margin_left
+		var margin_right: int = platform_nine_patch.patch_margin_right
+		var segment_width: int = platform_nine_patch.texture.get_width() - margin_left - margin_right
+		var total_width: float = float(margin_left + segment_width * units + margin_right)
+		var height: float = float(platform_nine_patch.texture.get_height())
 		var sprite: NinePatchRect = NinePatchRect.new()
 		sprite.texture = platform_nine_patch.texture
-		sprite.patch_margin_left = ml
-		sprite.patch_margin_right = mr
+		sprite.patch_margin_left = margin_left
+		sprite.patch_margin_right = margin_right
 		sprite.patch_margin_top = platform_nine_patch.patch_margin_top
 		sprite.patch_margin_bottom = platform_nine_patch.patch_margin_bottom
 		sprite.axis_stretch_horizontal = NinePatchRect.AXIS_STRETCH_MODE_TILE
-		sprite.size = Vector2(total_w, h)
-		sprite.position = Vector2(-total_w / 2.0, -h / 2.0)
+		sprite.size = Vector2(total_width, height)
+		sprite.position = Vector2(-total_width / 2.0, -height / 2.0)
 		platform_body.add_child(sprite)
 		if platform_collision_shape:
-			var src: RectangleShape2D = platform_collision_shape.shape as RectangleShape2D
-			var rect: RectangleShape2D = RectangleShape2D.new()
-			if src:
-				rect.size = Vector2(total_w, src.size.y)
-			var duped: CollisionShape2D = platform_collision_shape.duplicate() as CollisionShape2D
-			duped.shape = rect
-			platform_body.add_child(duped)
+			var source_shape: RectangleShape2D = platform_collision_shape.shape as RectangleShape2D
+			var shape: RectangleShape2D = RectangleShape2D.new()
+			if source_shape:
+				shape.size = Vector2(total_width, source_shape.size.y)
+			var collision_shape: CollisionShape2D = platform_collision_shape.duplicate() as CollisionShape2D
+			collision_shape.shape = shape
+			platform_body.add_child(collision_shape)
 	return platform_body

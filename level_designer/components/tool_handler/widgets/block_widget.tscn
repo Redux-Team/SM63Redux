@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://level_designer/components/tool_handler/widgets/block_widget.gd" id="1_block"]
+[ext_resource type="Script" path="res://level_designer/components/tool_handler/widgets/handles/tool_handle_set.gd" id="2_set"]
+[ext_resource type="PackedScene" path="res://level_designer/components/tool_handler/widgets/handles/tool_handle.tscn" id="3_handle"]
+[ext_resource type="Resource" path="res://assets/textures/level_designer/tool_widgets/block_corner.tres" id="4_corner"]
+
+[node name="BlockWidget" type="Control" unique_id=1400200001 node_paths=PackedStringArray("corners")]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_block")
+corners = NodePath("Corners")
+
+[node name="Corners" type="Control" parent="." unique_id=1400200002]
+layout_mode = 1
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("2_set")
+handle_scene = ExtResource("3_handle")
+style = ExtResource("4_corner")

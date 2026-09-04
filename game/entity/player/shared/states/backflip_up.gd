@@ -3,7 +3,7 @@ extends PlayerState
 
 func _enter() -> void:
 	player.lock_flipping = true
-	player.velocity.x += player.backflip_up_x_boost * (int(player.sprite.flip_h) * 2 - 1)
+	player.velocity.x -= player.backflip_up_x_boost * player.get_facing()
 	player.velocity.y = player.backflip_up_y_velocity
 
 

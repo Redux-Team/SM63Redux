@@ -1,28 +1,32 @@
 extends LevelObject
 
+const SHAKE_DURATION: float = 1.0
+const SHAKE_OFFSET: int = 2
+const CLEANUP_DELAY: float = 3.0
+
 @export var falling_speed: float = 200.0
 @export var sprite: SmartSprite2D
 
-var shake: bool = false
-var started: bool = false
-var falling: bool = false
+var _shaking: bool = false
+var _falling: bool = false
+var _triggered: bool = false
 
 
 func _physics_process(delta: float) -> void:
-	if shake:
-		sprite.offset = Vector2(randi_range(0, 2), 0)
-	if falling:
+	if _shaking:
+		sprite.offset = Vector2(randi_range(0, SHAKE_OFFSET), 0)
+	if _falling:
 		position.y += falling_speed * delta
 
 
 func _on_ride_area_new_player_rider(_player: Player) -> void:
-	if started:
+	if _triggered:
 		return
 	
-	started = true
-	shake = true
-	await get_tree().create_timer(1).timeout
-	shake = false
-	falling = true
-	await get_tree().create_timer(3).timeout
+	_triggered = true
+	_shaking = true
+	await get_tree().create_timer(SHAKE_DURATION).timeout
+	_shaking = false
+	_falling = true
+	await get_tree().create_timer(CLEANUP_DELAY).timeout
 	queue_free()

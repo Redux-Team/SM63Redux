@@ -25,27 +25,21 @@ signal fludd_fuel_changed(fuel_amount: float)
 signal fludd_power_changed(power_amount: float)
 signal fludd_nozzle_changed(nozzle: FluddNozzle)
 
-
-
-
-
-
-@export_group("")
 @export var nozzle_switch_sfx: AudioStream
 @export var _spray_particles: GPUParticles2D
 @export var player: Player
 @export var fludd_fuel: float = 100.0:
-	set(ff):
-		fludd_fuel = clamp(ff, 0.0, FLUDD_FUEL_MAX)
+	set(fuel):
+		fludd_fuel = clamp(fuel, 0.0, FLUDD_FUEL_MAX)
 		fludd_fuel_changed.emit(fludd_fuel)
 @export var fludd_power: float = 100.0:
-	set(fp):
-		fludd_power = clamp(fp, 0.0, FLUDD_POWER_MAX)
+	set(power):
+		fludd_power = clamp(power, 0.0, FLUDD_POWER_MAX)
 		fludd_power_changed.emit(fludd_power)
 @export var equipped_nozzle: FluddNozzle:
-	set(en):
-		equipped_nozzle = en
-		fludd_nozzle_changed.emit(en)
+	set(nozzle):
+		equipped_nozzle = nozzle
+		fludd_nozzle_changed.emit(nozzle)
 @export var held_nozzles: Dictionary[FluddNozzle, bool] = {
 	FluddNozzle.NONE: true,
 	FluddNozzle.HOVER: false,
@@ -58,9 +52,9 @@ signal fludd_nozzle_changed(nozzle: FluddNozzle)
 @export var _spray_loop_sfx: AudioStreamPlayer2D
 
 var _hover_active: bool = false:
-	set(ha):
-		_hover_active = ha
-		_hover_fludd_particles.emitting = ha
+	set(active):
+		_hover_active = active
+		_hover_fludd_particles.emitting = active
 
 var _dive_rotation: float = 0.0
 var _fludd_context: FluddContext = FluddContext.NONE
@@ -152,7 +146,6 @@ func _can_use_fludd() -> bool:
 
 func _deactivate_fludd() -> void:
 	player.effective_midair_max_speed = player.midair_max_speed
-	player.is_using_hover_fludd = false
 	_fludd_context = FluddContext.NONE
 	_hover_active = false
 	_hover_sfx.stop()
@@ -160,7 +153,6 @@ func _deactivate_fludd() -> void:
 
 
 func _hover_fludd_logic() -> void:
-	player.is_using_hover_fludd = true
 	if not _hover_active:
 		_hover_active = true
 		_hover_sfx.play()
@@ -169,40 +161,37 @@ func _hover_fludd_logic() -> void:
 		player.velocity.y *= player.fludd_impulse
 		player.velocity.y = max(player.velocity.y, player.fludd_impulse_speed_cap)
 	elif player.velocity.y < player.fludd_hover_min_rise_speed:
-		var fludd_velocity_factor: float = lerpf(player.fludd_lift_factor_min, player.fludd_lift_factor_max, fludd_power / FLUDD_POWER_MAX)
-		player.velocity.y = min(lerpf(player.velocity.y, -player.fludd_force * fludd_velocity_factor, player.fludd_lift_weight), player.velocity.y)
+		var lift_factor: float = lerpf(player.fludd_lift_factor_min, player.fludd_lift_factor_max, fludd_power / FLUDD_POWER_MAX)
+		player.velocity.y = min(lerpf(player.velocity.y, -player.fludd_force * lift_factor, player.fludd_lift_weight), player.velocity.y)
 	else:
 		player.velocity.y = lerpf(player.velocity.y, player.fludd_fall_target_speed, player.fludd_fall_weight)
 
 
 func _hover_dive_fludd_logic(delta: float) -> void:
-	player.is_using_hover_fludd = true
 	_hover_active = true
 	
-	var fps: float = delta * 60.0
-	player.velocity.y *= 1.0 - player.dive_fludd_dampen_y * fps
-	player.velocity.x *= 1.0 - player.dive_fludd_dampen_x * fps
-	player.velocity.y += (sin(_dive_rotation) * player.dive_fludd_force * player.dive_fludd_y_factor - player.dive_fludd_upward_bias) * pow(fps, 2.0)
-	player.velocity.x += cos(_dive_rotation) * player.dive_fludd_force * player.dive_fludd_x_factor * pow(fps, 2.0) * float(player.get_facing())
+	var frame_scale: float = delta * 60.0
+	player.velocity.y *= 1.0 - player.dive_fludd_dampen_y * frame_scale
+	player.velocity.x *= 1.0 - player.dive_fludd_dampen_x * frame_scale
+	player.velocity.y += (sin(_dive_rotation) * player.dive_fludd_force * player.dive_fludd_y_factor - player.dive_fludd_upward_bias) * pow(frame_scale, 2.0)
+	player.velocity.x += cos(_dive_rotation) * player.dive_fludd_force * player.dive_fludd_x_factor * pow(frame_scale, 2.0) * float(player.get_facing())
 
 
 func _hover_floor_slide_fludd_logic(delta: float) -> void:
-	player.is_using_hover_fludd = true
 	_hover_active = true
 	
-	var fps: float = delta * 60.0
-	player.velocity.x *= 1.0 - player.slide_fludd_dampen_x * fps
-	player.velocity.y -= player.slide_fludd_upward_bias * pow(fps, 2.0)
-	player.velocity.x += cos(_dive_rotation) * player.slide_fludd_force * player.slide_fludd_x_factor * pow(fps, 2.0) * float(player.get_facing())
-	player.velocity.y += sin(_dive_rotation) * player.slide_fludd_force * player.slide_fludd_y_factor * pow(fps, 2.0)
+	var frame_scale: float = delta * 60.0
+	player.velocity.x *= 1.0 - player.slide_fludd_dampen_x * frame_scale
+	player.velocity.y -= player.slide_fludd_upward_bias * pow(frame_scale, 2.0)
+	player.velocity.x += cos(_dive_rotation) * player.slide_fludd_force * player.slide_fludd_x_factor * pow(frame_scale, 2.0) * float(player.get_facing())
+	player.velocity.y += sin(_dive_rotation) * player.slide_fludd_force * player.slide_fludd_y_factor * pow(frame_scale, 2.0)
 
 
 func _hover_submerged_fludd_logic(delta: float) -> void:
-	player.is_using_hover_fludd = true
 	_hover_active = true
 	
-	var t: float = 1.0 - pow(0.5, delta / player.submerged_fludd_ease_halflife)
-	player.velocity.y = lerpf(player.velocity.y, player.submerged_fludd_target_velocity, t)
+	var weight: float = 1.0 - pow(0.5, delta / player.submerged_fludd_ease_halflife)
+	player.velocity.y = lerpf(player.velocity.y, player.submerged_fludd_target_velocity, weight)
 
 
 func _rocket_fludd_logic(_delta: float) -> void:
@@ -222,10 +211,10 @@ func _handle_grounded_launch() -> void:
 func _apply_x_speed_clamp(delta: float) -> void:
 	player.effective_midair_max_speed = player.fludd_x_speed_cap
 	if absf(player.velocity.x) > player.fludd_x_speed_cap:
-		var sign_x: float = signf(player.velocity.x)
-		player.velocity.x = lerpf(player.velocity.x, sign_x * player.fludd_x_speed_cap, player.fludd_x_clamp_weight * delta * player.fludd_x_clamp_rate)
+		var direction: float = signf(player.velocity.x)
+		player.velocity.x = lerpf(player.velocity.x, direction * player.fludd_x_speed_cap, player.fludd_x_clamp_weight * delta * player.fludd_x_clamp_rate)
 	
-	if player.move_dir == 0.0:
+	if player.move_input == 0.0:
 		player.velocity.x = lerpf(player.velocity.x, 0.0, player.fludd_x_clamp_weight * delta * player.fludd_x_clamp_rate)
 
 
@@ -250,10 +239,6 @@ func set_dive_rotation(rotation: float, context: FluddContext) -> void:
 
 func set_spray_angle(angle: float) -> void:
 	_spray_particles.rotation = angle
-
-
-func is_hover_active() -> bool:
-	return _hover_active
 
 
 ## Whether the equipped nozzle is currently spraying. Nozzle logic sets [member _hover_active], so
@@ -281,16 +266,16 @@ func _input(event: InputEvent) -> void:
 
 func switch_nozzle() -> bool:
 	var nozzle_switched: bool = false
-	var t_equipped: FluddNozzle = equipped_nozzle
-	var try_nozzle: int = equipped_nozzle
+	var previous_nozzle: FluddNozzle = equipped_nozzle
+	var candidate_nozzle: int = equipped_nozzle
 	
 	while not nozzle_switched:
-		try_nozzle = wrapi(try_nozzle + 1, FluddNozzle.NONE, FluddNozzle.MAX)
-		if held_nozzles.get(try_nozzle):
-			equipped_nozzle = try_nozzle as FluddNozzle
+		candidate_nozzle = wrapi(candidate_nozzle + 1, FluddNozzle.NONE, FluddNozzle.MAX)
+		if held_nozzles.get(candidate_nozzle):
+			equipped_nozzle = candidate_nozzle as FluddNozzle
 			nozzle_switched = true
 	
-	if equipped_nozzle != t_equipped:
+	if equipped_nozzle != previous_nozzle:
 		fludd_nozzle_changed.emit(equipped_nozzle)
 		return true
 	

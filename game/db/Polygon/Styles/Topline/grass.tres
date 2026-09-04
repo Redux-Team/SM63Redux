@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PolygonToplineStyle" format=3 uid="uid://cuyuor5c58jro"]
 
-[ext_resource type="Script" uid="uid://ch2gd44i1b23u" path="res://game/object_data/polygon_topline_style.gd" id="1"]
+[ext_resource type="Script" uid="uid://ch2gd44i1b23u" path="res://game/polygon_styles/polygon_topline_style.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://rskimd81gk3w" path="res://assets/textures/terrain/grass/terrain_grass_top.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://dt5o1wfangng7" path="res://assets/textures/terrain/grass/terrain_grass_shadow.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://hsblflmkc6wq" path="res://assets/textures/terrain/grass/terrain_grass_top_left.png" id="4"]

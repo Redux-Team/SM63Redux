@@ -13,4 +13,4 @@ max_value = 360.0
 arrow_step = 15.0
 wrap_value = true
 apply_mode = 1
-apply_target = NodePath("rotation_degrees")
+apply_target = &"rotation_degrees"

@@ -25,25 +25,25 @@ func _render_tick(_delta: float) -> void:
 
 
 func _apply_gait() -> void:
-	var input: float = absf(player.move_dir)
-	var wanted: StringName = sprite.current_animation
-	if input >= player.move_input_threshold:
-		wanted = &"run_loop" if input >= player.run_animation_input else &"walk_loop"
+	var input_strength: float = absf(player.move_input)
+	var wanted_animation: StringName = sprite.current_animation
+	if input_strength >= player.move_input_threshold:
+		wanted_animation = &"run_loop" if input_strength >= player.run_animation_input_threshold else &"walk_loop"
 	elif absf(player.velocity.x) <= player.walk_animation_stop_speed:
-		wanted = &"walk_loop"
+		wanted_animation = &"walk_loop"
 	
-	if sprite.current_animation != wanted:
-		sprite.play(wanted)
+	if sprite.current_animation != wanted_animation:
+		sprite.play(wanted_animation)
 	
 	if player.walk_speed_curve:
-		var ratio: float = clampf(absf(player.velocity.x) / maxf(player.run_max_speed, 1.0), 0.0, 1.0)
-		sprite.speed_scale = player.walk_speed_curve.sample(ratio)
+		var speed_ratio: float = clampf(absf(player.velocity.x) / maxf(player.run_max_speed, 1.0), 0.0, 1.0)
+		sprite.speed_scale = player.walk_speed_curve.sample(speed_ratio)
 
 
 func _next() -> StringName:
 	if not player.is_on_floor() and player.velocity.y >= 0.0:
 		return &"Fall"
-	if absf(player.move_dir) < player.move_input_threshold and absf(player.velocity.x) < player.walk_stop_speed:
+	if absf(player.move_input) < player.move_input_threshold and absf(player.velocity.x) < player.walk_stop_speed:
 		return &"Idle"
 	if player.is_action_just_pressed("crouch") and player.is_on_floor():
 		if absf(player.velocity.x) <= player.crouch_max_speed:

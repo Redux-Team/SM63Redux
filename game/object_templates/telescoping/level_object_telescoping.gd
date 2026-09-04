@@ -7,7 +7,7 @@ extends LevelObject
 var _initial_nine_patch_size: Vector2
 var _collision_expand: Vector2 = Vector2.ZERO
 var _collision_offset: Vector2 = Vector2.ZERO
-var _collision_anchor: TelescopingData.CollisionAnchor = TelescopingData.CollisionAnchor.TOP
+var _collision_anchor: TelescopingForm.CollisionAnchor = TelescopingForm.CollisionAnchor.TOP
 var _collision_collapsed: bool = false
 var t_size_x: int = 0
 var t_size_y: int = 0
@@ -36,14 +36,14 @@ func _is_y_telescoping() -> bool:
 
 func _get_anchor_offset(col_size: Vector2, visual_size: Vector2) -> Vector2:
 	match _collision_anchor:
-		TelescopingData.CollisionAnchor.TOP:
+		TelescopingForm.CollisionAnchor.TOP:
 			# adding 2 to the y here since normally theres a padding of a transparent + outline pixel
 			return Vector2(0.0, 2.0 + (-(visual_size.y - col_size.y) / 2.0))
-		TelescopingData.CollisionAnchor.BOTTOM:
+		TelescopingForm.CollisionAnchor.BOTTOM:
 			return Vector2(0.0, (visual_size.y - col_size.y) / 2.0)
-		TelescopingData.CollisionAnchor.LEFT:
+		TelescopingForm.CollisionAnchor.LEFT:
 			return Vector2(-(visual_size.x - col_size.x) / 2.0, 0.0)
-		TelescopingData.CollisionAnchor.RIGHT:
+		TelescopingForm.CollisionAnchor.RIGHT:
 			return Vector2((visual_size.x - col_size.x) / 2.0, 0.0)
 	return Vector2.ZERO
 
@@ -108,8 +108,8 @@ func _get_end_caps_size_y(expand: float = 0.0) -> float:
 	return (full_height if margins == 0.0 else margins) + expand
 
 
-static func from_data(object_data: GameObjectData) -> LevelObjectTelescoping:
-	var telescoping_data: TelescopingData = object_data as TelescopingData
+static func from_data(object_data: ObjectForm) -> LevelObjectTelescoping:
+	var telescoping_data: TelescopingForm = object_data as TelescopingForm
 	if not telescoping_data:
 		return null
 	

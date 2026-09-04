@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_yt1h6")
 key = &"t_size_x"
+group = &"Size"
 label = "Width"
 type = 1
 default_value = 0

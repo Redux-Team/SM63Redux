@@ -1,11 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cavq2y3n10073"]
 
-[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="1_gsxn3"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_forms/sprite_form.gd" id="1_gsxn3"]
 [ext_resource type="Texture2D" uid="uid://c4dl8uyuqjte" path="res://assets/textures/objects/decoration/nature/medium_cave_stem.png" id="1_tex"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_pos"]
-[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_rot"]
-[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_scl"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_obj"]
 
 [sub_resource type="Resource" id="Resource_i5kka"]
@@ -19,8 +15,8 @@ region = Rect2(-10, 8, 48, 48)
 [resource]
 script = ExtResource("6_obj")
 id = "medium_cave_stem"
-data = SubResource("Resource_i5kka")
-ld_properties = Array[ExtResource("2_prop")]([ExtResource("3_pos"), ExtResource("4_rot"), ExtResource("5_scl")])
+form = SubResource("Resource_i5kka")
 ld_entry_texture = SubResource("AtlasTexture_stem")
 ld_index_id = "cave_stem_03"
+ld_group_override = "Cave"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://level_designer/components/tool_handler/widgets/polygon_widget.gd" id="1_widget"]
+[ext_resource type="Script" path="res://level_designer/components/tool_handler/widgets/handles/tool_handle_set.gd" id="2_set"]
+[ext_resource type="PackedScene" path="res://level_designer/components/tool_handler/widgets/handles/tool_handle.tscn" id="3_handle"]
+[ext_resource type="Resource" path="res://assets/textures/level_designer/tool_widgets/polygon_vertex.tres" id="4_vertex"]
+[ext_resource type="Resource" path="res://assets/textures/level_designer/tool_widgets/polygon_vertex_hole.tres" id="5_hole"]
+[ext_resource type="Resource" path="res://assets/textures/level_designer/tool_widgets/polygon_vertex_preview.tres" id="6_preview"]
+
+[node name="PolygonWidget" type="Control" unique_id=1512300001 node_paths=PackedStringArray("vertices", "hole_vertices", "edge_preview")]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_widget")
+render_space = 0
+vertices = NodePath("Vertices")
+hole_vertices = NodePath("HoleVertices")
+edge_preview = NodePath("EdgePreview")
+
+[node name="Vertices" type="Control" parent="." unique_id=1512300002]
+layout_mode = 1
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("2_set")
+handle_scene = ExtResource("3_handle")
+style = ExtResource("4_vertex")
+render_space = 0
+
+[node name="HoleVertices" type="Control" parent="." unique_id=1512300003]
+layout_mode = 1
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("2_set")
+handle_scene = ExtResource("3_handle")
+style = ExtResource("5_hole")
+render_space = 0
+
+[node name="EdgePreview" type="Control" parent="." unique_id=1512300004]
+layout_mode = 1
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("2_set")
+handle_scene = ExtResource("3_handle")
+style = ExtResource("6_preview")
+render_space = 0

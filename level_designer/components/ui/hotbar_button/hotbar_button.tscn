@@ -4,6 +4,7 @@
 
 [node name="HotbarButton" type="Button" unique_id=1358091743]
 custom_minimum_size = Vector2(30, 30)
+focus_mode = 0
 icon_alignment = 1
 expand_icon = true
 script = ExtResource("1_qlvxj")

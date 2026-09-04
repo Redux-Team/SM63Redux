@@ -1,25 +1,22 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://p1rx0878ftm2"]
 
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_prop"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="3_go"]
-[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_data/polygon_data.gd" id="4_pd"]
-[ext_resource type="Script" uid="uid://du73sf56mrm15" path="res://game/object_data/polygon_base_style.gd" id="9_bstyle"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="10_pos"]
-[ext_resource type="Resource" path="res://game/db/Properties/polygon/collision_mode.tres" id="14_cm"]
+[ext_resource type="Script" uid="uid://drs86mw0b40vi" path="res://game/object_forms/polygon_form.gd" id="4_pd"]
+[ext_resource type="Script" uid="uid://du73sf56mrm15" path="res://game/polygon_styles/polygon_base_style.gd" id="9_bstyle"]
 
 [sub_resource type="Resource" id="PolygonBaseStyle_style"]
 script = ExtResource("9_bstyle")
 outline_width = 0.0
 
-[sub_resource type="Resource" id="PolygonData_data"]
+[sub_resource type="Resource" id="PolygonForm_data"]
 script = ExtResource("4_pd")
 line_mode = 1
 base = SubResource("PolygonBaseStyle_style")
+designer_styles = false
 
 [resource]
 script = ExtResource("3_go")
 id = "terrain_color_solid"
-data = SubResource("PolygonData_data")
-ld_properties = Array[ExtResource("2_prop")]([ExtResource("10_pos"), ExtResource("14_cm")])
+form = SubResource("PolygonForm_data")
 name_override = "Solid Color"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

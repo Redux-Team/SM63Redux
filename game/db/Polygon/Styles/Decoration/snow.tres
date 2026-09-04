@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PolygonDecorationStyle" format=3]
 
-[ext_resource type="Script" uid="uid://6bps37udg7ro" path="res://game/object_data/polygon_decoration_style.gd" id="1"]
+[ext_resource type="Script" uid="uid://6bps37udg7ro" path="res://game/polygon_styles/polygon_decoration_style.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://dx0qwnwhg1rre" path="res://assets/textures/terrain/snow/terrain_snow_decoration_1.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://bcfckryx00bpb" path="res://assets/textures/terrain/snow/terrain_snow_decoration_2.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://c7j6adxm3xwiq" path="res://assets/textures/terrain/snow/terrain_snow_decoration_3.png" id="4"]

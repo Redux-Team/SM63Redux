@@ -17,7 +17,10 @@ func handle_input(event: InputEvent) -> void:
 	var alt: bool = event.alt_pressed
 	
 	if ctrl and shift and event.keycode == KEY_H:
-		align_horizontal()
+		if alt:
+			align_horizontal_spaced()
+		else:
+			align_horizontal()
 	
 	if ctrl and alt and event.keycode == KEY_V:
 		if shift:
@@ -74,7 +77,7 @@ func align_horizontal() -> void:
 
 
 func align_horizontal_spaced() -> void:
-	var objects: Array[LDObject] = _viewport.get_selected_objects()
+	var objects: Array[LDObject] = _viewport.get_selected_objects().duplicate()
 	if objects.is_empty():
 		return
 	
@@ -135,7 +138,7 @@ func align_vertical() -> void:
 
 
 func align_vertical_spaced() -> void:
-	var objects: Array[LDObject] = _viewport.get_selected_objects()
+	var objects: Array[LDObject] = _viewport.get_selected_objects().duplicate()
 	if objects.is_empty():
 		return
 	
@@ -176,49 +179,35 @@ func duplicate_selection() -> void:
 	
 	var area: LDArea = LDLevel.get_active_area()
 	var duplicates: Array[LDObject] = []
+	var parents: Array[Node] = []
 	for obj: LDObject in objects:
 		var dupe: LDObject = obj.duplicate() as LDObject
 		area.add_object(dupe, Vector2i(obj.position + Vector2(LDViewport.SNAPPING_SIZE, LDViewport.SNAPPING_SIZE)))
 		dupe.place()
 		duplicates.append(dupe)
+		parents.append(dupe.get_parent())
 	
-	LD.get_history_handler().push("Duplicate Objects",
+	var history: LDHistoryHandler = LD.get_history_handler()
+	history.push("Duplicate Objects",
+		func() -> void:
+			for i: int in duplicates.size():
+				var dupe: LDObject = duplicates.get(i)
+				if is_instance_valid(dupe) and not dupe.get_parent() and is_instance_valid(parents.get(i)):
+					parents.get(i).add_child(dupe),
 		func() -> void:
 			for dupe: LDObject in duplicates:
-				if is_instance_valid(dupe):
-					dupe.show(),
-		func() -> void:
-			for dupe: LDObject in duplicates:
-				if is_instance_valid(dupe):
-					dupe.hide()
+				if is_instance_valid(dupe) and dupe.get_parent():
+					dupe.get_parent().remove_child(dupe)
 	)
+	history.track_detached(duplicates)
 	
 	_viewport.set_selected_objects(duplicates)
 
 
+## Deletion goes through the object handler so the LD_DELETABLE flag and linked-stamp
+## instances are honoured, exactly as the toolbar's delete button does.
 func delete_selection() -> void:
-	var objects: Array[LDObject] = _viewport.get_selected_objects()
-	if objects.is_empty():
-		return
-	
-	var parents: Array[Node] = []
-	for obj: LDObject in objects:
-		parents.append(obj.get_parent())
-	
-	_viewport.clear_selection()
-	
-	var history: LDHistoryHandler = LD.get_history_handler()
-	history.push("Delete Objects",
-		func() -> void:
-			for obj: LDObject in objects:
-				if is_instance_valid(obj) and obj.get_parent():
-					obj.get_parent().remove_child(obj),
-		func() -> void:
-			for i: int in objects.size():
-				if is_instance_valid(objects.get(i)) and is_instance_valid(parents.get(i)):
-					parents.get(i).add_child(objects.get(i))
-	)
-	history.track_detached(objects)
+	LD.get_object_handler().delete_placed_selection()
 
 
 func snap_to_grid() -> void:
@@ -274,7 +263,7 @@ func center_on_centroid() -> void:
 
 
 func distribute_centered() -> void:
-	var objects: Array[LDObject] = _viewport.get_selected_objects()
+	var objects: Array[LDObject] = _viewport.get_selected_objects().duplicate()
 	if objects.size() < 2:
 		return
 	

@@ -1,11 +1,7 @@
 [gd_resource type="Resource" script_class="GameObject" format=3 uid="uid://cr1p0egoys1tf"]
 
-[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_data/sprite_data.gd" id="1_ldn2n"]
+[ext_resource type="Script" uid="uid://d0gw6sbjk3v2" path="res://game/object_forms/sprite_form.gd" id="1_ldn2n"]
 [ext_resource type="Texture2D" uid="uid://dcoump5mt4pp3" path="res://assets/textures/objects/interactive/interactable/sign.png" id="1_wg875"]
-[ext_resource type="Script" uid="uid://cp5rwldg5q280" path="res://game/db/Properties/_ld_property.gd" id="2_ldn2n"]
-[ext_resource type="Resource" uid="uid://eub4j18f30lj" path="res://game/db/Properties/position.tres" id="3_ypbep"]
-[ext_resource type="Resource" uid="uid://biih4ua68gqhe" path="res://game/db/Properties/rotation.tres" id="4_mtb7d"]
-[ext_resource type="Resource" uid="uid://b2lplu0614unh" path="res://game/db/Properties/scale.tres" id="5_icwby"]
 [ext_resource type="Script" uid="uid://dkabi60x2g40f" path="res://game/db/Objects/game_object.gd" id="6_0tc0a"]
 
 [sub_resource type="Resource" id="Resource_ypbep"]
@@ -19,8 +15,7 @@ region = Rect2(-7, -8, 48, 48)
 [resource]
 script = ExtResource("6_0tc0a")
 id = "sign"
-data = SubResource("Resource_ypbep")
-ld_properties = Array[ExtResource("2_ldn2n")]([ExtResource("3_ypbep"), ExtResource("4_mtb7d"), ExtResource("5_icwby")])
+form = SubResource("Resource_ypbep")
 ld_entry_texture = SubResource("AtlasTexture_lv4ed")
 ld_index_id = "sign"
 metadata/_custom_type_script = "uid://dkabi60x2g40f"

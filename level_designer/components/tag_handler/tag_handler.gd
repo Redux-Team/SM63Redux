@@ -73,7 +73,9 @@ func rename_tag(old_tag: String, new_tag: String) -> bool:
 
 
 func get_object_tags(obj: LDObject) -> Array[String]:
-	var raw: Variant = obj.get_meta(&"tags", [])
+	if not obj.has_meta(&"tags"):
+		return []
+	var raw: Variant = obj.get_meta(&"tags")
 	var result: Array[String] = []
 	for entry: Variant in raw:
 		result.append(str(entry))

@@ -11,6 +11,8 @@ const INHERIT_BUS: StringName = &"Inherit"
 @export var speed_scale: float = 1.0
 @export var stop_on_exit: bool = false
 @export var lock_flipping: bool = false
+## Keeps the sprite drawn unflipped for the whole state, without touching the facing direction.
+@export var hide_flipping: bool = false
 @export_subgroup("Variants", "variant_")
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "variant_") var variant_enabled: bool = false
 @export var variant_animations: Array[StringName] = []
@@ -57,6 +59,8 @@ func enter(state: State) -> void:
 		state.entity.collision_mask = collision_mask_override
 	if lock_flipping and state.entity is Player:
 		(state.entity as Player).lock_flipping = true
+	if hide_flipping and state.sprite:
+		state.sprite.hide_flipping = true
 	_play_animation(state)
 	_play_player_animation(state)
 	if sfx_enter_enabled and sfx_enter_sound:
@@ -71,6 +75,8 @@ func exit(state: State) -> void:
 		state.mask_backup = -1
 	if lock_flipping and state.entity is Player:
 		(state.entity as Player).lock_flipping = false
+	if hide_flipping and state.sprite:
+		state.sprite.hide_flipping = false
 	
 	if is_instance_valid(state.sfx_tracked):
 		state.sfx_tracked.stop()

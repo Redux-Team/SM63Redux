@@ -179,10 +179,11 @@ fill_to = Vector2(0.82478637, 0.13675214)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rtor7"]
 
-[node name="ShineSprite" type="Node2D" unique_id=1870793460 node_paths=PackedStringArray("sprite", "audio_stream_player_2d")]
+[node name="ShineSprite" type="Node2D" unique_id=1870793460 node_paths=PackedStringArray("sprite", "sfx_player", "particle_emitter")]
 script = ExtResource("1_22unf")
 sprite = NodePath("Sprite")
-audio_stream_player_2d = NodePath("AudioStreamPlayer2D")
+sfx_player = NodePath("AudioStreamPlayer2D")
+particle_emitter = NodePath("ParticleEmitter")
 metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
 
 [node name="ParticleEmitter" type="CPUParticles2D" parent="." unique_id=1636801736]

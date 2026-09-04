@@ -1,42 +1,28 @@
 [gd_scene format=3 uid="uid://7dd3ek12qxdr"]
 
 [ext_resource type="Script" uid="uid://b3ehi1h054nr4" path="res://level_designer/components/tool_handler/widgets/telescoping_widget.gd" id="1_rwo7j"]
+[ext_resource type="Script" path="res://level_designer/components/tool_handler/widgets/handles/tool_handle_set.gd" id="2_set"]
+[ext_resource type="PackedScene" path="res://level_designer/components/tool_handler/widgets/handles/tool_handle.tscn" id="3_handle"]
+[ext_resource type="Resource" path="res://assets/textures/level_designer/tool_widgets/telescoping_x.tres" id="4_cap"]
+[ext_resource type="Resource" path="res://assets/textures/level_designer/tool_widgets/telescoping_head.tres" id="5_head"]
+[ext_resource type="Resource" path="res://assets/textures/level_designer/tool_widgets/telescoping_y.tres" id="6_capy"]
 
-[node name="TelescopingWidget" type="Control" unique_id=1832040969 node_paths=PackedStringArray("point_a", "point_b")]
+[node name="TelescopingWidget" type="Control" unique_id=1832040969 node_paths=PackedStringArray("caps")]
 layout_mode = 3
 anchors_preset = 0
+mouse_filter = 2
 script = ExtResource("1_rwo7j")
-point_a = NodePath("PointA")
-point_b = NodePath("PointB")
+render_space = 0
+caps = NodePath("Caps")
+head_style = ExtResource("5_head")
+style_x = ExtResource("4_cap")
+style_y = ExtResource("6_capy")
 
-[node name="PointA" type="Button" parent="." unique_id=1245101449]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -4.0
-offset_top = -4.0
-offset_right = 4.0
-offset_bottom = 4.0
-grow_horizontal = 2
-grow_vertical = 2
-metadata/gdss_mode = 1
-metadata/gdss_classes = PackedStringArray("VertexHead")
-
-[node name="PointB" type="Button" parent="." unique_id=901104698]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -4.0
-offset_top = -4.0
-offset_right = 4.0
-offset_bottom = 4.0
-grow_horizontal = 2
-grow_vertical = 2
-metadata/gdss_mode = 1
-metadata/gdss_classes = PackedStringArray("Vertex")
+[node name="Caps" type="Control" parent="." unique_id=1719003402]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("2_set")
+handle_scene = ExtResource("3_handle")
+style = ExtResource("4_cap")
+render_space = 0

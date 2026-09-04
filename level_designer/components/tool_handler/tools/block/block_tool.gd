@@ -53,9 +53,7 @@ func _on_viewport_input(event: InputEvent) -> void:
 		var pos: Vector2 = viewport.get_snapped_mouse()
 		if not _is_dragging:
 			if _active_object:
-				var default_x: float = float(_active_object.get_property(&"b_size_x") if _active_object.has_property(&"b_size_x") else LDViewport.SNAPPING_SIZE)
-				var default_y: float = float(_active_object.get_property(&"b_size_y") if _active_object.has_property(&"b_size_y") else LDViewport.SNAPPING_SIZE)
-				_active_object.position = pos + Vector2(default_x, default_y) * 0.5
+				_active_object.position = pos + _get_default_size() * 0.5
 		else:
 			_update_block(pos)
 	
@@ -66,8 +64,6 @@ func _on_viewport_input(event: InputEvent) -> void:
 			if not _is_dragging:
 				_origin = viewport.get_snapped_mouse()
 				_is_dragging = true
-				if _active_object:
-					_active_object.position = _origin
 				_update_block(_origin)
 		else:
 			if _is_dragging:
@@ -91,7 +87,40 @@ func _spawn_block_preview(obj: GameObject) -> void:
 	_active_object = spawn_preview(obj)
 	_is_dragging = false
 	if _active_object:
-		_active_object.position = viewport.get_snapped_mouse()
+		_active_object.position = viewport.get_snapped_mouse() + _get_default_size() * 0.5
+
+
+func _get_default_size() -> Vector2:
+	var snapping: float = LDViewport.SNAPPING_SIZE
+	if not _active_object:
+		return Vector2(snapping, snapping)
+	var size_x: float = float(_active_object.get_property(&"b_size_x")) if _active_object.has_property(&"b_size_x") else snapping
+	var size_y: float = float(_active_object.get_property(&"b_size_y")) if _active_object.has_property(&"b_size_y") else snapping
+	return Vector2(size_x, size_y)
+
+
+func _get_minimum_size() -> Vector2:
+	var snapping: float = LDViewport.SNAPPING_SIZE
+	return Vector2(_get_axis_minimum(&"b_size_x", snapping), _get_axis_minimum(&"b_size_y", snapping))
+
+
+func _get_axis_minimum(key: StringName, snapping: float) -> float:
+	var prop: LDProperty = _active_object.get_ld_property(key) if _active_object else null
+	if not prop or not is_finite(prop.min_value):
+		return snapping
+	return maxf(snapping, ceilf(prop.min_value / snapping) * snapping)
+
+
+func _get_maximum_size() -> Vector2:
+	var snapping: float = LDViewport.SNAPPING_SIZE
+	return Vector2(_get_axis_maximum(&"b_size_x", snapping), _get_axis_maximum(&"b_size_y", snapping))
+
+
+func _get_axis_maximum(key: StringName, snapping: float) -> float:
+	var prop: LDProperty = _active_object.get_ld_property(key) if _active_object else null
+	if not prop or not is_finite(prop.max_value):
+		return INF
+	return floorf(prop.max_value / snapping) * snapping
 
 
 func _update_block(pos: Vector2) -> void:
@@ -100,13 +129,15 @@ func _update_block(pos: Vector2) -> void:
 	
 	var delta: Vector2 = pos - _origin
 	var snapping: float = LDViewport.SNAPPING_SIZE
+	var minimum: Vector2 = _get_minimum_size()
+	var maximum: Vector2 = _get_maximum_size()
 	
-	var size_x: float = maxf(snapping, snappedf(absf(delta.x), snapping))
-	var size_y: float = maxf(snapping, snappedf(absf(delta.y), snapping))
+	var size_x: float = clampf(snappedf(absf(delta.x), snapping), minimum.x, maximum.x)
+	var size_y: float = clampf(snappedf(absf(delta.y), snapping), minimum.y, maximum.y)
 	
 	var anchor: Vector2 = Vector2(
-		_origin.x if delta.x >= 0.0 else _origin.x - size_x + snapping,
-		_origin.y if delta.y >= 0.0 else _origin.y - size_y + snapping
+		_origin.x if delta.x >= 0.0 else _origin.x - size_x,
+		_origin.y if delta.y >= 0.0 else _origin.y - size_y
 	)
 	
 	var center: Vector2 = anchor + Vector2(size_x, size_y) * 0.5
@@ -126,7 +157,7 @@ func _commit() -> void:
 	var parent: Node = placed.get_parent()
 	
 	if placed.has_property(&"position"):
-		placed.set_property(&"position", placed.global_position)
+		placed.set_property(&"position", placed.position)
 	
 	LD.get_history_handler().push("Place Block",
 		func() -> void:
