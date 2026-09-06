@@ -30,7 +30,10 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 @export var air_turn_boost: float = 2.8
 @export var air_turn_boost_spin: float = 1.4
 @export var air_turn_speed_threshold: float = 10.0
-@export var air_over_speed_decel: float = 0.1
+@export var air_momentum_gain: float = 0.5
+@export var air_momentum_max_speed: float = 400.0
+@export var air_drag: float = 2.0
+@export var air_drag_over_speed: float = 5.0
 @export_subgroup("Underwater")
 @export var water_resistance: float = 0.6
 @export_subgroup("Limits")
@@ -48,6 +51,8 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 @export_subgroup("Feel")
 @export var jump_chain_time: float = 0.15
 @export_range(0.0, 1.0) var jump_cut_multiplier: float = 0.75
+@export_range(0.0, 1.0) var double_jump_cut_multiplier: float = 0.85
+@export var jump_cut_max_chain: int = 2
 @export var jump_buffer_window: float = 0.2
 @export_subgroup("Exits")
 @export var jump_spin_min_speed: float = -55.0
@@ -253,6 +258,7 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 
 
 var effective_midair_max_speed: float = 0.0
+var effective_run_max_speed: float = 0.0
 var move_input: float = 0.0
 var jump_chain_index: int = 0
 var jump_chain_timer: float = 0.0
@@ -280,6 +286,7 @@ var can_ground_pound: bool = true
 
 func _ready() -> void:
 	effective_midair_max_speed = midair_max_speed
+	effective_run_max_speed = run_max_speed
 	var ingame_hud: IngameHUD = preload("uid://deyfsp6xn4e27").instantiate()
 	ingame_hud.bind(self)
 	add_child(ingame_hud)

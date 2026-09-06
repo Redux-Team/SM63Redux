@@ -2,10 +2,13 @@ extends PlayerState
 
 
 func _tick(_delta: float) -> void:
-	if absf(player.move_input) > 0.0 and not player.is_diving:
-		_air_move(player.move_input)
+	if player.is_diving:
+		return
 	
-	player.velocity.y = min(player.velocity.y, player.terminal_velocity_y)
+	if absf(player.move_input) > 0.0:
+		_air_move(player.move_input)
+	else:
+		_air_drag()
 
 
 func _air_move(move_input: float) -> void:
@@ -19,9 +22,15 @@ func _air_move(move_input: float) -> void:
 	
 	var speed_x: float = player.velocity.x
 	
-	if abs(speed_x) < max_speed or sign(speed_x) != sign(move_input):
+	if absf(speed_x) < max_speed or signf(speed_x) != signf(move_input):
 		speed_x = move_toward(speed_x, max_speed * move_input, acceleration * acceleration_multiplier)
-	elif abs(speed_x) > max_speed and not player.get_fludd_handler().is_spraying():
-		speed_x = move_toward(speed_x, max_speed * sign(speed_x), acceleration * acceleration_multiplier * player.air_over_speed_decel)
+	elif not player.get_fludd_handler().is_spraying():
+		speed_x = move_toward(speed_x, player.air_momentum_max_speed * signf(speed_x), player.air_momentum_gain)
 	
 	player.velocity.x = speed_x
+
+
+func _air_drag() -> void:
+	var over_speed: bool = absf(player.velocity.x) > player.effective_midair_max_speed
+	var drag: float = player.air_drag_over_speed if over_speed else player.air_drag
+	player.velocity.x = move_toward(player.velocity.x, 0.0, drag)

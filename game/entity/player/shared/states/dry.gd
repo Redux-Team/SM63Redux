@@ -6,6 +6,8 @@ func _tick(delta: float) -> void:
 		var friction_component: FrictionComponent = player.get_component(FrictionComponent)
 		friction_component.apply(player.dry_friction)
 	
+	player.velocity.y = min(player.velocity.y, player.terminal_velocity_y)
+	
 	_update_jump_chain(delta)
 	_handle_ground_pound()
 
