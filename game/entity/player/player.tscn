@@ -2443,7 +2443,7 @@ amount = 50
 texture = ExtResource("56_kyrvb")
 lifetime = 0.5
 fixed_fps = 0
-visibility_rect = Rect2(-14, 0, 26, 211)
+visibility_rect = Rect2(-256, -256, 512, 512)
 process_material = SubResource("ParticleProcessMaterial_kyrvb")
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source", "subsprites")]
