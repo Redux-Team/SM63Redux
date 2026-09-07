@@ -68,7 +68,7 @@ shader_parameter/divider_color = Color(0.6392157, 0.6392157, 0.6392157, 1)
 atlas = ExtResource("2_fsh6l")
 region = Rect2(0, 0, 64, 16)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_1hbjs"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_tg085"]
 diffuse_texture = SubResource("AtlasTexture_1hbjs")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nayuj"]
@@ -138,7 +138,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_1hbjs")
 }],
-"loop": false,
+"loop": 0,
 "name": &"default",
 "speed": 13.0
 }, {
@@ -152,7 +152,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_rmsoo")
 }],
-"loop": false,
+"loop": 0,
 "name": &"heal",
 "speed": 13.0
 }]
@@ -161,7 +161,7 @@ animations = [{
 atlas = ExtResource("13_erhw5")
 region = Rect2(0, 0, 14, 14)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_rmsoo"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_aqq40"]
 diffuse_texture = SubResource("AtlasTexture_tg085")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aqq40"]
@@ -238,7 +238,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_871rv")
 }],
-"loop": false,
+"loop": 0,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -252,7 +252,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_0vmaj")
 }],
-"loop": false,
+"loop": 0,
 "name": &"heal",
 "speed": 13.0
 }]
@@ -273,7 +273,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("21_lfl17")
 }],
-"loop": false,
+"loop": 0,
 "name": &"default",
 "speed": 5.0
 }]
@@ -305,6 +305,7 @@ fludd_nozzle_icon = NodePath("../FLUDDContainer/Tank/Control/FluddNozzleIcon")
 power_meter = NodePath("../FLUDDContainer/Tank/PowerMeter")
 power_scrolling_texture = SubResource("Texture2D_1f64a")
 power_clipping_texture = SubResource("Texture2D_ycetg")
+bob_speed_spraying = 18.0
 
 [node name="CollectibleContainer" type="Control" parent="." unique_id=1142767291]
 layout_mode = 3
@@ -470,11 +471,11 @@ grow_vertical = 2
 [node name="POWER" type="Sprite2D" parent="HealthContainer/Base" unique_id=457957822]
 position = Vector2(31.499989, 9)
 scale = Vector2(1.0781246, 1)
-texture = SubResource("CanvasTexture_1hbjs")
+texture = SubResource("CanvasTexture_tg085")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 16)
 script = ExtResource("11_fsh6l")
-canvas_texture = SubResource("CanvasTexture_1hbjs")
+canvas_texture = SubResource("CanvasTexture_tg085")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_rmsoo")
 current_animation = "default"
@@ -485,11 +486,11 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 
 [node name="CoinMeter" type="Sprite2D" parent="HealthContainer/Base" unique_id=281389693]
 position = Vector2(32, 32)
-texture = SubResource("CanvasTexture_rmsoo")
+texture = SubResource("CanvasTexture_aqq40")
 region_enabled = true
 region_rect = Rect2(0, 0, 14, 14)
 script = ExtResource("11_fsh6l")
-canvas_texture = SubResource("CanvasTexture_rmsoo")
+canvas_texture = SubResource("CanvasTexture_aqq40")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_871rv")
 current_animation = "default"

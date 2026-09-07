@@ -265,7 +265,7 @@ func _follow_root_sprite() -> void:
 	if diffuse_frames and diffuse_frames.has_animation(wanted) and current_animation != wanted:
 		current_animation = wanted
 	
-	if diffuse_frames and diffuse_frames.has_animation(current_animation):
+	if not playing and diffuse_frames and diffuse_frames.has_animation(current_animation):
 		var count: int = diffuse_frames.get_frame_count(current_animation)
 		if count > 0:
 			var wanted_frame: int = pose.frame if pose and pose.frame >= 0 else root.current_frame

@@ -64,7 +64,7 @@ func _next() -> StringName:
 		return &"Backflip"
 	if player.is_action_pressed("jump") and player.is_on_floor() and player.get_facing_velocity() > player.slide_rollout_min_speed:
 		return &"RolloutF"
-	if player.is_on_floor() and absf(player.velocity.x) <= _exit_speed():
+	if player.is_on_floor() and absf(player.velocity.x) <= _exit_speed() and not player.get_fludd_handler().is_committing():
 		return &"Idle"
 	return &""
 

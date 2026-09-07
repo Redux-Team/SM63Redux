@@ -17,6 +17,9 @@ func _tick(delta: float) -> void:
 
 
 func _apply_vertical_drift() -> void:
+	if player.get_fludd_handler().is_aiming():
+		return
+	
 	var can_steer: bool = player.swim_hold_timer <= 0.0 and not player.get_fludd_handler().is_spraying()
 	
 	if can_steer and not is_zero_approx(player.swim_input):
