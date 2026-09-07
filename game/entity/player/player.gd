@@ -165,6 +165,8 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 @export var swim_neutral_sink_smoothing: float = 0.1
 @export var swim_down_speed: float = 140.0
 @export var swim_down_lerp: float = 0.2
+@export var swim_up_speed: float = 140.0
+@export var swim_up_lerp: float = 0.2
 @export var swim_hold_lerp: float = 0.08
 @export var swim_drift_speed: float = 20.0
 @export var swim_drift_lerp: float = 0.1
@@ -260,6 +262,7 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 var effective_midair_max_speed: float = 0.0
 var effective_run_max_speed: float = 0.0
 var move_input: float = 0.0
+var swim_input: float = 0.0
 var jump_chain_index: int = 0
 var jump_chain_timer: float = 0.0
 var stomp_timer: float = 0.0
@@ -296,6 +299,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	move_input = Input.get_axis("move_left", "move_right")
+	swim_input = Input.get_axis("swim_up", "swim_down")
 	is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
 	is_input_dive = Input.is_action_pressed("dive") and not is_on_floor()
 	is_input_ground_pound = Input.is_action_pressed("ground_pound")

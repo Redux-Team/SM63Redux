@@ -12,14 +12,21 @@ func _tick(delta: float) -> void:
 	if abs(player.move_input) > 0 and not player.is_crouching and player.can_walk:
 		_speed_up(player.move_input)
 	
-	if player.is_action_pressed("swim_down") and player.swim_hold_timer <= 0.0 and not player.get_fludd_handler().is_spraying():
-		player.velocity.y = lerpf(player.velocity.y, player.swim_down_speed, player.swim_down_lerp)
+	_apply_vertical_drift()
+	_handle_ground_pound()
+
+
+func _apply_vertical_drift() -> void:
+	var can_steer: bool = player.swim_hold_timer <= 0.0 and not player.get_fludd_handler().is_spraying()
+	
+	if can_steer and not is_zero_approx(player.swim_input):
+		var rising: bool = player.swim_input < 0.0
+		var target: float = -player.swim_up_speed if rising else player.swim_down_speed
+		player.velocity.y = lerpf(player.velocity.y, target, player.swim_up_lerp if rising else player.swim_down_lerp)
 	elif player.swim_hold_timer > 0.0:
 		player.velocity.y = lerpf(player.velocity.y, 0.0, player.swim_hold_lerp)
 	else:
 		player.velocity.y = lerpf(player.velocity.y, player.swim_drift_speed, player.swim_drift_lerp)
-	
-	_handle_ground_pound()
 
 
 func _next() -> StringName:
@@ -31,7 +38,7 @@ func _next() -> StringName:
 func _speed_up(move_input: float) -> void:
 	var resistance: float = clamp(player.water_resistance, 0.0, 1.0)
 	
-	var target_speed: float = player.run_max_speed * move_input * resistance
+	var target_speed: float = player.effective_run_max_speed * move_input * resistance
 	var acceleration: float = player.walk_acceleration * resistance
 	var friction: float = player.get_effective_friction() * resistance
 	
