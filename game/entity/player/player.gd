@@ -98,10 +98,13 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 @export var slide_airborne_nosedive_speed: float = 0.15
 @export var slide_ledge_buffer_time: float = 0.15
 @export var slide_friction_scale: float = 1.6
+@export var slide_slope_acceleration: float = 12.0
 @export var slide_air_gravity_add: float = 1.0
 @export var slide_terminal_x_divisor: float = 2.0
 @export var slide_terminal_y_divisor: float = 1.5
+@export var slide_terminal_decel: float = 8.0
 @export var slide_exit_speed: float = 5.0
+@export var slide_release_exit_speed: float = 150.0
 @export var slide_rollout_min_speed: float = 50.0
 @export_subgroup("Spin")
 @export var spin_gravity_scale: float = 0.67
