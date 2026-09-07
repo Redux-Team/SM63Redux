@@ -20,9 +20,17 @@ shader_parameter/vignette_softness = 0.5
 shader_parameter/fisheye_strength = 0.0
 shader_parameter/zoom_velocity = 0.0
 
-[node name="Level" type="Node2D" unique_id=1909384183 node_paths=PackedStringArray("_level_camera", "music_player", "music_controller")]
+[sub_resource type="InputEventKey" id="InputEventKey_fuut0"]
+device = -1
+keycode = 4194308
+
+[sub_resource type="Shortcut" id="Shortcut_fuut0"]
+events = [SubResource("InputEventKey_fuut0")]
+
+[node name="Level" type="Node2D" unique_id=1909384183 node_paths=PackedStringArray("_level_camera", "back_button", "music_player", "music_controller")]
 script = ExtResource("1_0euo3")
 _level_camera = NodePath("LevelCamera")
+back_button = NodePath("CanvasLayer2/Button")
 music_player = NodePath("MusicPlayer")
 music_controller = NodePath("MusicController")
 
@@ -62,12 +70,27 @@ remote_path = NodePath("../../Camera2D")
 rotation_smoothing_speed = 3.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1277764924]
-visible = false
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1295168910]
+visible = false
 material = SubResource("ShaderMaterial_81ib3")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=971484100]
+layer = 2
+
+[node name="Button" type="Button" parent="CanvasLayer2" unique_id=190854462]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -31.0
+offset_right = 88.0
+offset_bottom = -6.0
+grow_vertical = 0
+shortcut = SubResource("Shortcut_fuut0")
+text = "Back to LD"
