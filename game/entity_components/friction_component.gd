@@ -3,11 +3,12 @@ extends EntityComponent
 
 
 @export var base_friction: float = 1.0
-@export var multiplier: float = 1.0
-@export var scale_factor: float = 1.0
+
+var modifiers: ModifierStack = ModifierStack.new()
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	modifiers.tick(delta)
 	if entity and enabled and entity.is_on_floor():
 		apply()
 
@@ -22,4 +23,4 @@ func apply(factor: float = 1.0, enforce: bool = false) -> void:
 
 
 func get_effective() -> float:
-	return base_friction * multiplier * scale_factor
+	return base_friction * modifiers.product()

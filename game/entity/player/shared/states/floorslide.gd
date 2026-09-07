@@ -8,7 +8,7 @@ var _last_slope_angle: float = 0.0
 
 func _enter() -> void:
 	player.lock_flipping = true
-	player.set_friction_scale_factor(player.slide_friction_scale)
+	player.set_friction_modifier(&"floorslide", player.slide_friction_scale)
 	_time_since_grounded = 0.0
 	
 	var last_state: State = machine.get_last_state()
@@ -24,7 +24,7 @@ func _enter() -> void:
 
 func _exit() -> void:
 	player.lock_flipping = false
-	player.set_friction_scale_factor(1.0)
+	player.clear_friction_modifier(&"floorslide")
 	_body_rotation = 0.0
 	player.sprite.rotation_degrees = 0.0
 	player.get_fludd_handler().set_dive_rotation(_body_rotation, PlayerFluddHandler.FluddContext.NONE)

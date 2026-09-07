@@ -8,8 +8,9 @@ extends EntityComponent
 @export var rotate_root: bool = true
 @export var water_multiplier: float = 0.1
 
+var modifiers: ModifierStack = ModifierStack.new()
+
 var _locks: int = 0
-var _modifiers: Dictionary[StringName, float] = {}
 
 
 func _init() -> void:
@@ -38,16 +39,16 @@ func get_angle() -> float:
 	return Vector2(0, 1).angle_to(direction)
 
 
-func set_modifier(key: StringName, scale: float) -> void:
-	_modifiers[key] = scale
+func set_modifier(key: StringName, scale: float, duration: float = 0.0) -> void:
+	modifiers.set_modifier(key, scale, duration)
 
 
 func clear_modifier(key: StringName) -> void:
-	_modifiers.erase(key)
+	modifiers.clear_modifier(key)
 
 
 func get_effective_strength() -> float:
-	return strength * scale_factor
+	return strength * scale_factor * modifiers.product()
 
 
 func _process(_delta: float) -> void:
@@ -56,6 +57,7 @@ func _process(_delta: float) -> void:
 		entity.up_direction = direction.rotated(PI)
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	modifiers.tick(delta)
 	if enabled and entity:
-		entity.velocity.y += (strength * scale_factor * (water_multiplier if entity.water_check and entity.is_in_water() else 1.0))
+		entity.velocity.y += get_effective_strength() * (water_multiplier if entity.water_check and entity.is_in_water() else 1.0)

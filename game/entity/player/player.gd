@@ -370,16 +370,28 @@ func set_gravity_enabled(enabled: bool) -> void:
 		gravity_component.enabled = enabled
 
 
-func set_gravity_scale_factor(scale_factor: float) -> void:
+func set_gravity_modifier(key: StringName, value: float, duration: float = 0.0) -> void:
 	var gravity_component: GravityComponent = get_component(GravityComponent)
 	if gravity_component:
-		gravity_component.scale_factor = scale_factor
+		gravity_component.set_modifier(key, value, duration)
 
 
-func set_friction_scale_factor(scale_factor: float) -> void:
+func clear_gravity_modifier(key: StringName) -> void:
+	var gravity_component: GravityComponent = get_component(GravityComponent)
+	if gravity_component:
+		gravity_component.clear_modifier(key)
+
+
+func set_friction_modifier(key: StringName, value: float, duration: float = 0.0) -> void:
 	var friction_component: FrictionComponent = get_component(FrictionComponent)
 	if friction_component:
-		friction_component.scale_factor = scale_factor
+		friction_component.modifiers.set_modifier(key, value, duration)
+
+
+func clear_friction_modifier(key: StringName) -> void:
+	var friction_component: FrictionComponent = get_component(FrictionComponent)
+	if friction_component:
+		friction_component.modifiers.clear_modifier(key)
 
 
 func add_power(amount: int) -> void:
