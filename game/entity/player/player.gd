@@ -30,7 +30,10 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 @export var air_turn_boost: float = 2.8
 @export var air_turn_boost_spin: float = 1.4
 @export var air_turn_speed_threshold: float = 10.0
-@export var air_over_speed_decel: float = 0.1
+@export var air_momentum_gain: float = 0.5
+@export var air_momentum_max_speed: float = 400.0
+@export var air_drag: float = 2.0
+@export var air_drag_over_speed: float = 5.0
 @export_subgroup("Underwater")
 @export var water_resistance: float = 0.6
 @export_subgroup("Limits")
@@ -48,6 +51,8 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 @export_subgroup("Feel")
 @export var jump_chain_time: float = 0.15
 @export_range(0.0, 1.0) var jump_cut_multiplier: float = 0.75
+@export_range(0.0, 1.0) var double_jump_cut_multiplier: float = 0.85
+@export var jump_cut_max_chain: int = 2
 @export var jump_buffer_window: float = 0.2
 @export_subgroup("Exits")
 @export var jump_spin_min_speed: float = -55.0
@@ -93,10 +98,13 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 @export var slide_airborne_nosedive_speed: float = 0.15
 @export var slide_ledge_buffer_time: float = 0.15
 @export var slide_friction_scale: float = 1.6
+@export var slide_slope_acceleration: float = 12.0
 @export var slide_air_gravity_add: float = 1.0
 @export var slide_terminal_x_divisor: float = 2.0
 @export var slide_terminal_y_divisor: float = 1.5
+@export var slide_terminal_decel: float = 8.0
 @export var slide_exit_speed: float = 5.0
+@export var slide_release_exit_speed: float = 150.0
 @export var slide_rollout_min_speed: float = 50.0
 @export_subgroup("Spin")
 @export var spin_gravity_scale: float = 0.67
@@ -160,6 +168,8 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 @export var swim_neutral_sink_smoothing: float = 0.1
 @export var swim_down_speed: float = 140.0
 @export var swim_down_lerp: float = 0.2
+@export var swim_up_speed: float = 140.0
+@export var swim_up_lerp: float = 0.2
 @export var swim_hold_lerp: float = 0.08
 @export var swim_drift_speed: float = 20.0
 @export var swim_drift_lerp: float = 0.1
@@ -196,44 +206,6 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 @export var death_transition_delay: float = 2.0
 @export var death_screen_hold: float = 0.5
 
-@export_group("FLUDD")
-@export_subgroup("Hover")
-@export var fludd_force: float = 200.0
-@export var fludd_impulse: float = 1.3
-@export var fludd_impulse_speed_cap: float = -500.0
-@export var fludd_hover_min_rise_speed: float = -50.0
-@export var fludd_lift_factor_min: float = 0.3
-@export var fludd_lift_factor_max: float = 0.8
-@export var fludd_lift_weight: float = 0.57
-@export var fludd_fall_target_speed: float = -200.0
-@export var fludd_fall_weight: float = 0.1
-@export var fludd_launch_speed: float = -50.0
-@export_subgroup("Speed Clamp")
-@export var fludd_x_speed_cap: float = 120.0
-@export var fludd_x_clamp_weight: float = 0.1
-@export var fludd_x_clamp_rate: float = 20.0
-@export_subgroup("Consumption")
-@export var fludd_consume_rate: float = 1.0
-@export var fludd_power_drain_rate: float = 45.0
-@export var fludd_fuel_drain_ratio: float = 0.05
-@export var fludd_switch_sfx_db: float = -10.0
-@export_subgroup("Hover Dive")
-@export var dive_fludd_force: float = 10.0
-@export var dive_fludd_x_factor: float = 1.0
-@export var dive_fludd_y_factor: float = 0.0
-@export var dive_fludd_upward_bias: float = 0.0
-@export var dive_fludd_dampen_y: float = 0.02
-@export var dive_fludd_dampen_x: float = 0.03
-@export_subgroup("Hover Floor Slide")
-@export var slide_fludd_force: float = 50.0
-@export var slide_fludd_x_factor: float = 1.0
-@export var slide_fludd_y_factor: float = 0.0
-@export var slide_fludd_upward_bias: float = 0.0
-@export var slide_fludd_dampen_x: float = 0.03
-@export_subgroup("Submerged")
-@export var submerged_fludd_target_velocity: float = -1000.0
-@export var submerged_fludd_ease_halflife: float = 0.3
-
 @export_group("Footsteps", "footstep_")
 @export var footstep_bank: SFXBank
 @export var footstep_particles: AnimatedParticles
@@ -253,7 +225,9 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 
 
 var effective_midair_max_speed: float = 0.0
+var effective_run_max_speed: float = 0.0
 var move_input: float = 0.0
+var swim_input: float = 0.0
 var jump_chain_index: int = 0
 var jump_chain_timer: float = 0.0
 var stomp_timer: float = 0.0
@@ -280,6 +254,7 @@ var can_ground_pound: bool = true
 
 func _ready() -> void:
 	effective_midair_max_speed = midair_max_speed
+	effective_run_max_speed = run_max_speed
 	var ingame_hud: IngameHUD = preload("uid://deyfsp6xn4e27").instantiate()
 	ingame_hud.bind(self)
 	add_child(ingame_hud)
@@ -289,12 +264,15 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	move_input = Input.get_axis("move_left", "move_right")
+	if _fludd_handler.is_turbo_active() and is_zero_approx(move_input):
+		move_input = float(get_facing())
+	swim_input = Input.get_axis("swim_up", "swim_down")
 	is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
 	is_input_dive = Input.is_action_pressed("dive") and not is_on_floor()
 	is_input_ground_pound = Input.is_action_pressed("ground_pound")
 	is_input_spin = Input.is_action_pressed("spin")
 	
-	if Input.is_action_just_pressed("jump"):
+	if Input.is_action_just_pressed("jump") and not _fludd_handler.is_aiming():
 		swim_input_timer = SWIM_INPUT_BUFFER_TIME
 	swim_input_timer = max(swim_input_timer - delta, 0.0)
 	
@@ -356,16 +334,28 @@ func set_gravity_enabled(enabled: bool) -> void:
 		gravity_component.enabled = enabled
 
 
-func set_gravity_scale_factor(scale_factor: float) -> void:
+func set_gravity_modifier(key: StringName, value: float, duration: float = 0.0) -> void:
 	var gravity_component: GravityComponent = get_component(GravityComponent)
 	if gravity_component:
-		gravity_component.scale_factor = scale_factor
+		gravity_component.set_modifier(key, value, duration)
 
 
-func set_friction_scale_factor(scale_factor: float) -> void:
+func clear_gravity_modifier(key: StringName) -> void:
+	var gravity_component: GravityComponent = get_component(GravityComponent)
+	if gravity_component:
+		gravity_component.clear_modifier(key)
+
+
+func set_friction_modifier(key: StringName, value: float, duration: float = 0.0) -> void:
 	var friction_component: FrictionComponent = get_component(FrictionComponent)
 	if friction_component:
-		friction_component.scale_factor = scale_factor
+		friction_component.modifiers.set_modifier(key, value, duration)
+
+
+func clear_friction_modifier(key: StringName) -> void:
+	var friction_component: FrictionComponent = get_component(FrictionComponent)
+	if friction_component:
+		friction_component.modifiers.clear_modifier(key)
 
 
 func add_power(amount: int) -> void:

@@ -69,6 +69,7 @@ func _start_level(scenario_index: int) -> void:
 	_level.name = "Level"
 	level_root.add_child(_level)
 	_level.kickout_requested.connect(_on_kickout_requested)
+	_level.exit_requested.connect(_on_back_button_pressed)
 	_level.load_from_dict(_data, scenario_index)
 	Singleton.get_level_clock().start()
 

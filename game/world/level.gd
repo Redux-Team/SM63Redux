@@ -16,6 +16,8 @@ signal shine_collected(scenario_id: int)
 ## The player should be removed from the level (e.g. after collecting a kickout shine). The runtime
 ## decides how (transition out, results screen, ...).
 signal kickout_requested
+## The player asked to leave the level. The runtime decides where that goes.
+signal exit_requested
 
 
 static var _inst: Level
@@ -36,12 +38,18 @@ var _culler: LevelCuller
 var _progress: LevelProgress = LevelProgress.new()
 
 @export var _level_camera: LevelCamera
+@export var back_button: Button
 @export var music_player: AudioStreamPlayer
 @export var music_controller: MusicController
 
 
 func _init() -> void:
 	_inst = self
+
+
+func _ready() -> void:
+	if back_button:
+		back_button.pressed.connect(exit_requested.emit)
 
 
 func _exit_tree() -> void:

@@ -11,13 +11,15 @@ func _tick(_delta: float) -> void:
 
 
 func _speed_up(move_input: float) -> void:
-	var target_speed: float = player.run_max_speed * move_input
+	var max_speed: float = player.effective_run_max_speed
+	var speed_x: float = player.velocity.x
 	var acceleration: float = player.walk_acceleration
 	
-	if sign(player.velocity.x) != sign(move_input) and abs(player.velocity.x) > 0.0:
+	if sign(speed_x) != sign(move_input) and abs(speed_x) > 0.0:
 		acceleration *= player.turn_acceleration_multiplier
 	
-	player.velocity.x = move_toward(player.velocity.x, target_speed, acceleration)
+	if absf(speed_x) < max_speed or signf(speed_x) != signf(move_input):
+		player.velocity.x = move_toward(speed_x, max_speed * move_input, acceleration)
 	
 	if player.get_local_floor_normal().y < player.slope_normal_threshold and player.velocity.y >= 0.0:
 		player.velocity.y = player.slope_stick_speed

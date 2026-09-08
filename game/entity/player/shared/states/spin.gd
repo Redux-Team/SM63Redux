@@ -8,7 +8,7 @@ var _slow_spin_started: bool = false
 
 
 func _enter() -> void:
-	player.set_gravity_scale_factor(player.spin_gravity_scale)
+	player.set_gravity_modifier(&"spin", player.spin_gravity_scale)
 	player.is_spinning = true
 	spin_hitbox.enable(player.spin_fast_duration)
 	_gravity_suspended = false
@@ -46,7 +46,7 @@ func _tick(_delta: float) -> void:
 
 func _exit() -> void:
 	player.set_gravity_enabled(true)
-	player.set_gravity_scale_factor(1.0)
+	player.clear_gravity_modifier(&"spin")
 	spin_hitbox.disable()
 
 

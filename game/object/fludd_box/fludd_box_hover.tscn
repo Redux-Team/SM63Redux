@@ -132,11 +132,12 @@ metadata/_custom_type_script = "uid://drtqc6at2evph"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_748og"]
 size = Vector2(30, 7)
 
-[node name="FluddBoxHover" type="Node2D" unique_id=2137935164 node_paths=PackedStringArray("sprite", "open_sfx")]
+[node name="FluddBoxHover" type="Node2D" unique_id=2137935164 node_paths=PackedStringArray("sprite", "open_sfx", "hurt_box")]
 script = ExtResource("1_scmcn")
 spawn = ExtResource("2_6q8s3")
 sprite = NodePath("Sprite")
 open_sfx = NodePath("OpenSFX")
+hurt_box = NodePath("HurtBox")
 metadata/_custom_type_script = "uid://bsswcbgcrlwv2"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=499824916]

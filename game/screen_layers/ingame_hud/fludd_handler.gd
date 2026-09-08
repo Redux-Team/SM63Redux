@@ -13,7 +13,19 @@ extends Node
 @export var power_scrolling_texture: ScrollingTexture2D
 @export var power_clipping_texture: ClippingTexture2D
 
+@export_group("Bob", "bob_")
+@export var bob_amplitude: float = 3.0
+@export var bob_speed: float = 2.0
+@export var bob_speed_spraying: float = 6.0
 
+
+const BOB_SPRAY_NOZZLES: Array[int] = [
+	PlayerFluddHandler.FluddNozzle.HOVER,
+	PlayerFluddHandler.FluddNozzle.TURBO,
+]
+
+var _fludd_handler: PlayerFluddHandler
+var _bob_phase: float = 0.0
 var _fuel: float = 0.0
 var _power: float = 0.0
 
@@ -27,6 +39,7 @@ var power_flash_tween: Tween
 func _ready() -> void:
 	Level.get_instance().on_load(func() -> void:
 		var fludd_handler: PlayerFluddHandler = Level.get_player().get_fludd_handler()
+		_fludd_handler = fludd_handler
 		
 		set_nozzle(fludd_handler.equipped_nozzle)
 		fludd_handler.fludd_nozzle_changed.connect(set_nozzle)
@@ -42,7 +55,15 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	const POWER_ANIMATION_RATE: float = -0.8
 	power_scrolling_texture.scroll.y += POWER_ANIMATION_RATE * delta
-	fludd_nozzle_icon.position = Vector2(0, 3 * sin(Time.get_ticks_msec() / 500.0))
+	_bob_phase = fmod(_bob_phase + _get_bob_speed() * delta, TAU)
+	fludd_nozzle_icon.position = Vector2(0, bob_amplitude * sin(_bob_phase))
+
+
+func _get_bob_speed() -> float:
+	if not _fludd_handler or not _fludd_handler.is_spraying():
+		return bob_speed
+	
+	return bob_speed_spraying if _fludd_handler.equipped_nozzle in BOB_SPRAY_NOZZLES else bob_speed
 
 
 func _on_fuel_changed(percentage: float) -> void:
