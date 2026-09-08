@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PolygonDecorationStyle" format=3 uid="uid://by6d6ob8m4fvr"]
+
+[ext_resource type="Script" uid="uid://6bps37udg7ro" path="res://game/polygon_styles/polygon_decoration_style.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cvrmkhj1ij645" path="res://assets/textures/terrain/cave/terrain_cave_decoration_1.png" id="2_e34gd"]
+[ext_resource type="Texture2D" uid="uid://fcdv7e37jxl2" path="res://assets/textures/terrain/cave/terrain_cave_decoration_2.png" id="3_cqeeq"]
+[ext_resource type="Texture2D" uid="uid://c2lwnk0qc4dqk" path="res://assets/textures/terrain/cave/terrain_cave_decoration_3.png" id="4_juwfs"]
+[ext_resource type="Texture2D" uid="uid://boqfgiuspgdog" path="res://assets/textures/terrain/cave/terrain_cave_decoration_4.png" id="5_nsu78"]
+
+[resource]
+script = ExtResource("1")
+style_name = "Cave"
+weightmap = Dictionary[Texture2D, float]({
+ExtResource("2_e34gd"): 3.0,
+ExtResource("3_cqeeq"): 1.0,
+ExtResource("4_juwfs"): 1.0,
+ExtResource("5_nsu78"): 0.5
+})
