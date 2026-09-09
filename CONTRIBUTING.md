@@ -1,4 +1,6 @@
 # Guidelines
+## AI Usage
+The Redux team is committed to human-only development. No generative AI was, or will be used in the development of Super Mario 63 Redux at any point. This applies to all facets of development, including code, assets and dialogue.
 ## Reporting bugs
 ### One issue for one bug
 Generally, try to make sure that every bug has only one issue, and every issue has only one bug. To do this:
