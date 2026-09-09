@@ -1,9 +1,9 @@
 @tool
 extends LDObjectSprite
-enum Mode {
+enum PlatformMode {
 	ORBIT
 }
-@export var mode: Mode = Mode.ORBIT
+@export var mode: PlatformMode = PlatformMode.ORBIT
 @export var center_texture: Texture2D
 @export var platform_nine_patch: NinePatchRect
 @export var path_drawer: Node2D
@@ -119,7 +119,7 @@ func _sync_ghost_platforms(platform_amount: int, platform_width: int, platform_r
 
 
 func _draw() -> void:
-	if mode == Mode.ORBIT:
+	if mode == PlatformMode.ORBIT:
 		var platform_radius: float = get_property(&"platform_radius") if has_property(&"platform_radius") else radius
 		var platform_amount: int = int(get_property(&"platform_amount")) if has_property(&"platform_amount") else amount
 		var platform_width: float = get_property(&"t_size_x") if has_property(&"t_size_x") else width

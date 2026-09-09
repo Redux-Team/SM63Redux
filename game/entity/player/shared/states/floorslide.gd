@@ -8,7 +8,7 @@ var _last_slope_angle: float = 0.0
 
 func _enter() -> void:
 	player.lock_flipping = true
-	player.set_friction_scale_factor(player.slide_friction_scale)
+	player.set_friction_modifier(&"floorslide", player.slide_friction_scale)
 	_time_since_grounded = 0.0
 	
 	var last_state: State = machine.get_last_state()
@@ -24,7 +24,7 @@ func _enter() -> void:
 
 func _exit() -> void:
 	player.lock_flipping = false
-	player.set_friction_scale_factor(1.0)
+	player.clear_friction_modifier(&"floorslide")
 	_body_rotation = 0.0
 	player.sprite.rotation_degrees = 0.0
 	player.get_fludd_handler().set_dive_rotation(_body_rotation, PlayerFluddHandler.FluddContext.NONE)
@@ -35,16 +35,24 @@ func _tick(delta: float) -> void:
 	
 	if player.is_on_floor():
 		_time_since_grounded = 0.0
+		_apply_slope_acceleration()
 		return
 	
 	player.velocity.y += player.slide_air_gravity_add
 	_time_since_grounded += delta
+	_apply_air_terminal()
+
+
+func _apply_slope_acceleration() -> void:
+	player.velocity.x += player.get_local_floor_normal().x * player.slide_slope_acceleration
+
+
+func _apply_air_terminal() -> void:
+	var terminal_x: float = player.terminal_velocity_x / player.slide_terminal_x_divisor
+	var terminal_y: float = player.terminal_velocity_y / player.slide_terminal_y_divisor
 	
-	var direction: Vector2 = sign(player.velocity)
-	var abs_velocity: Vector2 = abs(player.velocity)
-	player.velocity.x = min(abs_velocity.x, player.terminal_velocity_x / player.slide_terminal_x_divisor)
-	player.velocity.y = min(abs_velocity.y, player.terminal_velocity_y / player.slide_terminal_y_divisor)
-	player.velocity *= direction
+	player.velocity.x = move_toward(player.velocity.x, clampf(player.velocity.x, -terminal_x, terminal_x), player.slide_terminal_decel)
+	player.velocity.y = clampf(player.velocity.y, -terminal_y, terminal_y)
 
 
 func _render_tick(_delta: float) -> void:
@@ -56,9 +64,13 @@ func _next() -> StringName:
 		return &"Backflip"
 	if player.is_action_pressed("jump") and player.is_on_floor() and player.get_facing_velocity() > player.slide_rollout_min_speed:
 		return &"RolloutF"
-	if not player.is_crouching and absf(player.velocity.x) <= player.slide_exit_speed:
+	if player.is_on_floor() and absf(player.velocity.x) <= _exit_speed() and not player.get_fludd_handler().is_committing():
 		return &"Idle"
 	return &""
+
+
+func _exit_speed() -> float:
+	return player.slide_exit_speed if player.is_crouching else player.slide_release_exit_speed
 
 
 func _update_rotation() -> void:

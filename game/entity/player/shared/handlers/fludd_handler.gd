@@ -39,6 +39,8 @@ signal fludd_nozzle_changed(nozzle: FluddNozzle)
 @export var equipped_nozzle: FluddNozzle:
 	set(nozzle):
 		equipped_nozzle = nozzle
+		if modes:
+			modes.select(_mode_names.get(nozzle, &""))
 		fludd_nozzle_changed.emit(nozzle)
 @export var held_nozzles: Dictionary[FluddNozzle, bool] = {
 	FluddNozzle.NONE: true,
@@ -47,204 +49,211 @@ signal fludd_nozzle_changed(nozzle: FluddNozzle)
 	FluddNozzle.TURBO: false,
 }
 
-@export var _hover_fludd_particles: GPUParticles2D
-@export var _hover_sfx: AudioStreamPlayer2D
-@export var _spray_loop_sfx: AudioStreamPlayer2D
+@export var modes: ModeMachine
+@export var hover_sfx: AudioStreamPlayer2D
+@export var spray_loop_sfx: AudioStreamPlayer2D
+@export var rocket_sfx: AudioStreamPlayer2D
 
-var _hover_active: bool = false:
-	set(active):
-		_hover_active = active
-		_hover_fludd_particles.emitting = active
+@export_group("Ground Launch")
+@export var fludd_launch_speed: float = -50.0
+@export_group("Consumption")
+@export var fludd_power_drain_rate: float = 45.0
+@export var fludd_fuel_drain_ratio: float = 0.05
+@export var fludd_switch_sfx_db: float = -10.0
 
-var _dive_rotation: float = 0.0
-var _fludd_context: FluddContext = FluddContext.NONE
+var body_rotation: float = 0.0
+
+var _spraying: bool = false
+var _context: FluddContext = FluddContext.NONE
 var _pending_sfx_stop: bool = false
+var _burst_timer: float = 0.0
+var _mode_names: Dictionary[int, StringName] = {}
+var _holding: bool = false
+
+
+func _ready() -> void:
+	for mode: Mode in modes.get_modes():
+		var fludd_mode: FluddMode = mode as FluddMode
+		if fludd_mode:
+			_mode_names.set(fludd_mode.nozzle, mode.name)
+	
+	modes.select(_mode_names.get(equipped_nozzle, &""))
 
 
 func _physics_process(delta: float) -> void:
+	_holding = Input.is_action_pressed(&"use_fludd")
+	
 	_tick_sfx()
-	_tick_refill()
+	_tick_refill(delta)
+	_tick_burst(delta)
 	_update_spray_angle()
 	
-	if Input.is_action_pressed(&"use_fludd") and _can_use_fludd():
-		_update_submerged_context()
-		_tick_nozzle(delta)
-		_consume_fludd(delta)
-	else:
-		_deactivate_fludd()
+	modes.tick(delta, _holding and _can_use_fludd())
+	
+	var running: FluddMode = get_running_mode()
+	if running:
+		_consume_fludd(delta, running)
+	
+	_update_spray_particles()
+	_context = FluddContext.NONE
 
 
 func _tick_sfx() -> void:
 	if equipped_nozzle == FluddNozzle.NONE:
-		_spray_loop_sfx.stop()
+		spray_loop_sfx.stop()
 		_pending_sfx_stop = false
-		_hover_active = false
+		_spraying = false
 		return
 	
-	if _pending_sfx_stop and not _hover_active:
-		_spray_loop_sfx.stop()
+	if _pending_sfx_stop and not _spraying:
+		spray_loop_sfx.stop()
 		_pending_sfx_stop = false
 
 
-func _tick_refill() -> void:
-	if (player.is_on_floor() or player.is_in_water()) and not is_equal_approx(fludd_power, FLUDD_POWER_MAX):
-		fludd_power = FLUDD_POWER_MAX
+func _tick_refill(delta: float) -> void:
 	if player.is_in_water() and not is_equal_approx(fludd_fuel, FLUDD_FUEL_MAX):
 		fludd_fuel = FLUDD_FUEL_MAX
+	if is_equal_approx(fludd_power, FLUDD_POWER_MAX):
+		return
+	
+	if player.is_on_floor() or player.is_in_water():
+		fludd_power = FLUDD_POWER_MAX
+		return
+	
+	var mode: FluddMode = get_selected_mode()
+	if mode and mode.recharge_time > 0.0 and not _holding:
+		fludd_power += FLUDD_POWER_MAX * delta / mode.recharge_time
+
+
+func _tick_burst(delta: float) -> void:
+	if _burst_timer <= 0.0:
+		return
+	
+	_burst_timer = maxf(_burst_timer - delta, 0.0)
+	if _burst_timer > 0.0:
+		return
+	
+	_spray_particles.scale = Vector2.ONE
+	_spray_particles.emitting = false
+
+
+func _update_spray_particles() -> void:
+	if _burst_timer > 0.0:
+		return
+	
+	var mode: FluddMode = get_selected_mode()
+	_spray_particles.emitting = _spraying and mode != null and mode.continuous_particles
 
 
 func _update_spray_angle() -> void:
-	if _fludd_context in [FluddContext.DIVE, FluddContext.FLOOR_SLIDE]:
-		const RIGHT: float = PI / 2.0
-		if player.sprite.flip_h:
-			set_spray_angle((3.0 * RIGHT) - deg_to_rad(player.sprite.local_rotation))
-		else:
-			set_spray_angle(RIGHT + deg_to_rad(player.sprite.local_rotation))
-	else:
-		set_spray_angle(player.sprite.rotation)
-
-
-func _update_submerged_context() -> void:
-	if player.is_in_water() and equipped_nozzle == FluddNozzle.HOVER:
-		if _fludd_context != FluddContext.SUBMERGED:
-			_fludd_context = FluddContext.SUBMERGED
-			_hover_active = true
-			if not _spray_loop_sfx.playing:
-				_hover_sfx.stop()
-				_spray_loop_sfx.play()
-	elif _fludd_context == FluddContext.SUBMERGED:
-		_fludd_context = FluddContext.NONE
-
-
-func _tick_nozzle(delta: float) -> void:
-	match equipped_nozzle:
-		FluddNozzle.HOVER:
-			_handle_grounded_launch()
-			match _fludd_context:
-				FluddContext.DIVE:
-					_hover_dive_fludd_logic(delta)
-				FluddContext.FLOOR_SLIDE:
-					_hover_floor_slide_fludd_logic(delta)
-				FluddContext.SUBMERGED:
-					_hover_submerged_fludd_logic(delta)
-				_:
-					_hover_fludd_logic()
-					_apply_x_speed_clamp(delta)
-		FluddNozzle.ROCKET:
-			_rocket_fludd_logic(delta)
-		FluddNozzle.TURBO:
-			_turbo_fludd_logic(delta)
+	var mode: FluddMode = get_selected_mode()
+	set_spray_angle(mode.get_spray_angle() if mode else player.sprite.rotation)
 
 
 func _can_use_fludd() -> bool:
-	return fludd_power > 0 and \
+	var mode: FluddMode = get_selected_mode()
+	return mode != null and \
+		mode.has_charge() and \
 		fludd_fuel > 0 and \
 		player.machine.get_state_name() not in [
-			&"Spin", &"Strike", &"Crouch", &"RolloutF", &"GroundPoundFall", &"GroundPoundStart", &"GroundPoundSlam"
+			&"Spin", &"SwimSpin", &"Strike", &"Crouch", &"RolloutF", &"GroundPoundFall", &"GroundPoundStart", &"GroundPoundSlam"
 		]
 
 
-func _deactivate_fludd() -> void:
-	player.effective_midair_max_speed = player.midair_max_speed
-	_fludd_context = FluddContext.NONE
-	_hover_active = false
-	_hover_sfx.stop()
+func _consume_fludd(delta: float, mode: FluddMode) -> void:
+	var power_drain: float = fludd_power_drain_rate * delta
+	
+	if mode.drains_power and not player.is_on_floor():
+		fludd_power -= power_drain
+	
+	if mode.drains_fuel and not player.is_in_water():
+		fludd_fuel -= fludd_fuel_drain_ratio * power_drain
+
+
+func begin_spray(sfx: AudioStreamPlayer2D = null) -> void:
+	if _spraying:
+		return
+	
+	_spraying = true
+	if sfx:
+		sfx.play()
+
+
+func begin_spray_loop() -> void:
+	_spraying = true
+	if spray_loop_sfx.playing:
+		return
+	
+	hover_sfx.stop()
+	spray_loop_sfx.play()
+
+
+func end_spray() -> void:
+	_spraying = false
+	hover_sfx.stop()
 	_pending_sfx_stop = true
 
 
-func _hover_fludd_logic() -> void:
-	if not _hover_active:
-		_hover_active = true
-		_hover_sfx.play()
-	
-	if player.velocity.y < 0.0 and fludd_power == FLUDD_POWER_MAX and not player.is_on_floor():
-		player.velocity.y *= player.fludd_impulse
-		player.velocity.y = max(player.velocity.y, player.fludd_impulse_speed_cap)
-	elif player.velocity.y < player.fludd_hover_min_rise_speed:
-		var lift_factor: float = lerpf(player.fludd_lift_factor_min, player.fludd_lift_factor_max, fludd_power / FLUDD_POWER_MAX)
-		player.velocity.y = min(lerpf(player.velocity.y, -player.fludd_force * lift_factor, player.fludd_lift_weight), player.velocity.y)
-	else:
-		player.velocity.y = lerpf(player.velocity.y, player.fludd_fall_target_speed, player.fludd_fall_weight)
+func burst_particles(duration: float, scale: float) -> void:
+	_burst_timer = duration
+	_spray_particles.scale = Vector2.ONE * scale
+	_spray_particles.restart()
 
 
-func _hover_dive_fludd_logic(delta: float) -> void:
-	_hover_active = true
-	
-	var frame_scale: float = delta * 60.0
-	player.velocity.y *= 1.0 - player.dive_fludd_dampen_y * frame_scale
-	player.velocity.x *= 1.0 - player.dive_fludd_dampen_x * frame_scale
-	player.velocity.y += (sin(_dive_rotation) * player.dive_fludd_force * player.dive_fludd_y_factor - player.dive_fludd_upward_bias) * pow(frame_scale, 2.0)
-	player.velocity.x += cos(_dive_rotation) * player.dive_fludd_force * player.dive_fludd_x_factor * pow(frame_scale, 2.0) * float(player.get_facing())
-
-
-func _hover_floor_slide_fludd_logic(delta: float) -> void:
-	_hover_active = true
-	
-	var frame_scale: float = delta * 60.0
-	player.velocity.x *= 1.0 - player.slide_fludd_dampen_x * frame_scale
-	player.velocity.y -= player.slide_fludd_upward_bias * pow(frame_scale, 2.0)
-	player.velocity.x += cos(_dive_rotation) * player.slide_fludd_force * player.slide_fludd_x_factor * pow(frame_scale, 2.0) * float(player.get_facing())
-	player.velocity.y += sin(_dive_rotation) * player.slide_fludd_force * player.slide_fludd_y_factor * pow(frame_scale, 2.0)
-
-
-func _hover_submerged_fludd_logic(delta: float) -> void:
-	_hover_active = true
-	
-	var weight: float = 1.0 - pow(0.5, delta / player.submerged_fludd_ease_halflife)
-	player.velocity.y = lerpf(player.velocity.y, player.submerged_fludd_target_velocity, weight)
-
-
-func _rocket_fludd_logic(_delta: float) -> void:
-	pass
-
-
-func _turbo_fludd_logic(_delta: float) -> void:
-	pass
-
-
-func _handle_grounded_launch() -> void:
+func launch_off_ground() -> void:
 	if player.machine.is_active(&"Grounded"):
 		player.machine.change_state(&"IdleJump")
-		player.velocity.y = player.fludd_launch_speed
+		player.velocity.y = fludd_launch_speed
 
 
-func _apply_x_speed_clamp(delta: float) -> void:
-	player.effective_midair_max_speed = player.fludd_x_speed_cap
-	if absf(player.velocity.x) > player.fludd_x_speed_cap:
-		var direction: float = signf(player.velocity.x)
-		player.velocity.x = lerpf(player.velocity.x, direction * player.fludd_x_speed_cap, player.fludd_x_clamp_weight * delta * player.fludd_x_clamp_rate)
+func get_context() -> FluddContext:
+	if player.is_in_water() and equipped_nozzle == FluddNozzle.HOVER:
+		return FluddContext.SUBMERGED
 	
-	if player.move_input == 0.0:
-		player.velocity.x = lerpf(player.velocity.x, 0.0, player.fludd_x_clamp_weight * delta * player.fludd_x_clamp_rate)
-
-
-func _consume_fludd(delta: float) -> void:
-	var power_drain: float = (player.fludd_power_drain_rate * player.fludd_consume_rate) * delta
-	
-	if not player.is_on_floor():
-		fludd_power -= power_drain
-	
-	if not player.is_in_water():
-		fludd_fuel -= player.fludd_fuel_drain_ratio * power_drain
+	return _context
 
 
 func set_dive_rotation(rotation: float, context: FluddContext) -> void:
-	if context != FluddContext.NONE and not _spray_loop_sfx.playing and _hover_active:
-		_hover_sfx.stop()
-		_spray_loop_sfx.play()
+	if context != FluddContext.NONE and not spray_loop_sfx.playing and _spraying:
+		hover_sfx.stop()
+		spray_loop_sfx.play()
 	
-	_dive_rotation = rotation
-	_fludd_context = context
+	body_rotation = rotation
+	_context = context
 
 
 func set_spray_angle(angle: float) -> void:
 	_spray_particles.rotation = angle
 
 
-## Whether the equipped nozzle is currently spraying. Nozzle logic sets [member _hover_active], so
-## rocket and turbo start driving the plume as soon as their logic does the same.
 func is_spraying() -> bool:
-	return _hover_active
+	return _spraying
+
+
+func is_holding() -> bool:
+	return _holding
+
+
+func get_selected_mode() -> FluddMode:
+	return modes.get_selected() as FluddMode
+
+
+func get_running_mode() -> FluddMode:
+	return modes.get_running() as FluddMode
+
+
+func is_committing() -> bool:
+	var mode: FluddMode = get_running_mode()
+	return mode != null and mode.is_committing()
+
+
+func is_aiming() -> bool:
+	var mode: FluddMode = get_running_mode()
+	return mode != null and mode.is_aiming()
+
+
+func is_turbo_active() -> bool:
+	return modes.is_running(&"Turbo")
 
 
 func _input(event: InputEvent) -> void:
@@ -256,7 +265,7 @@ func _input(event: InputEvent) -> void:
 		if successful_switch:
 			SFX.build()\
 				.set_stream(nozzle_switch_sfx)\
-				.set_db(player.fludd_switch_sfx_db)\
+				.set_db(fludd_switch_sfx_db)\
 				.set_bus(&"Player")\
 				.play()
 	if event is InputEventKey:
