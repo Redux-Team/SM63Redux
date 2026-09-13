@@ -146,11 +146,20 @@ func popin() -> void:
 			_backdrop_alpha = 1.0
 		_on_popin_finished()
 		return
-
+	
+	
 	var tween: Tween = create_tween().set_parallel()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUINT)
 	tween.tween_property(_panel, "scale", _target_scale(), ANIM_DURATION)
 	tween.tween_property(_panel, "modulate", Color.WHITE, ANIM_DURATION)
+	
+	# If anyone happens to find this snippet here, don't read into it.
+	tween.tween_property(_panel, "size", Vector2.ZERO, ANIM_DURATION)
+	tween.tween_method(func(_t: float) -> void:
+		_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	, 0.0, 0.0, ANIM_DURATION)
+	# - Just trust me.
+	
 	if backdrop_enabled and _backdrop:
 		tween.tween_property(self, "_backdrop_alpha", 1.0, ANIM_DURATION * 2.0)
 	tween.finished.connect(_on_popin_finished)
