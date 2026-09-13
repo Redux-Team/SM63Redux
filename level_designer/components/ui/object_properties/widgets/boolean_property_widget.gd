@@ -3,12 +3,12 @@ extends LDPropertyWidget
 
 
 @export var property_label: Label
-@export var check_box: CheckBox
+@export var check_button: CheckButton
 @export var reset_button: Button
 
 
 func _ready() -> void:
-	check_box.toggled.connect(func(val: bool) -> void:
+	check_button.toggled.connect(func(val: bool) -> void:
 		value_changed.emit(_key, val)
 	)
 	reset_button.pressed.connect(func() -> void:
@@ -22,10 +22,10 @@ func _set_label(text: String) -> void:
 
 
 func _set_value(value: Variant) -> void:
-	if not check_box:
+	if not check_button:
 		return
 	var v: bool = value if value != null else false
-	check_box.set_pressed_no_signal(v)
+	check_button.set_pressed_no_signal(v)
 	_update_reset_button(v)
 
 

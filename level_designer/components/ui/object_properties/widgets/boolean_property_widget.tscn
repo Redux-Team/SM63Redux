@@ -1,16 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://bt4orb5cttk0u"]
+[gd_scene format=3 uid="uid://bt4orb5cttk0u"]
 
 [ext_resource type="Script" uid="uid://c76hf347fv67x" path="res://level_designer/components/ui/object_properties/widgets/boolean_property_widget.gd" id="1_tsk2e"]
 [ext_resource type="Texture2D" uid="uid://0o252anyb2n6" path="res://assets/textures/level_designer/ui_icons/reset_level.svg" id="ic_reset_level"]
 
-[node name="BooleanPropertyWidget" type="PanelContainer" unique_id=581750635 node_paths=PackedStringArray("property_label", "check_box", "reset_button")]
+[node name="BooleanPropertyWidget" type="PanelContainer" unique_id=581750635 node_paths=PackedStringArray("property_label", "check_button", "reset_button")]
 offset_right = 188.0
 offset_bottom = 24.0
 script = ExtResource("1_tsk2e")
-metadata/gdss_classes = PackedStringArray("Inset")
 property_label = NodePath("MarginContainer/HBoxContainer/PropertyLabel")
-check_box = NodePath("MarginContainer/HBoxContainer/CheckBox")
+check_button = NodePath("MarginContainer/HBoxContainer/CheckButton")
 reset_button = NodePath("MarginContainer/HBoxContainer/ResetBase/ResetButton")
+metadata/gdss_classes = PackedStringArray("Inset")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=567774651]
 layout_mode = 2
@@ -46,13 +46,12 @@ offset_bottom = 12.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 4
-text = ""
 tooltip_text = "Reset to default"
 icon = ExtResource("ic_reset_level")
 expand_icon = true
 metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer" unique_id=1030023524]
+[node name="CheckButton" type="CheckButton" parent="MarginContainer/HBoxContainer" unique_id=988903069]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 
