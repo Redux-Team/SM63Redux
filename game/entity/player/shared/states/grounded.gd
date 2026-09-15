@@ -24,7 +24,5 @@ func _speed_up(move_input: float) -> void:
 
 
 func _apply_friction() -> void:
-	var speed: float = abs(player.velocity.x)
-	speed = max(0.0, speed - player.ground_friction_flat)
-	speed /= player.ground_friction_divisor
-	player.velocity.x = speed * sign(player.velocity.x)
+	player.velocity.x = move_toward(player.velocity.x, 0.0, player.ground_friction_flat)
+	player.velocity.x /= player.ground_friction_divisor
