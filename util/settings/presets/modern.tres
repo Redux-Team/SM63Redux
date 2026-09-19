@@ -1,0 +1,140 @@
+[gd_resource type="Resource" script_class="SettingsPreset" format=3 uid="uid://b2v8i8nuklxr3"]
+
+[ext_resource type="Script" uid="uid://bcelgoaeywyic" path="res://util/settings/settings_preset.gd" id="1"]
+[ext_resource type="Script" uid="uid://bix5i78rcy5wd" path="res://util/settings/settings_binding.gd" id="2"]
+
+[sub_resource type="InputEventKey" id="Key_A"]
+device = -1
+physical_keycode = 65
+unicode = 97
+
+[sub_resource type="InputEventJoypadButton" id="Joy_DpadLeft"]
+button_index = 13
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="Joy_AxisLeft"]
+axis_value = -1.0
+
+[sub_resource type="Resource" id="Binding_MoveLeft"]
+script = ExtResource("2")
+setting_key = "move_left"
+events = Array[InputEvent]([SubResource("Key_A"), SubResource("Joy_DpadLeft"), SubResource("Joy_AxisLeft")])
+
+[sub_resource type="InputEventKey" id="Key_D"]
+device = -1
+physical_keycode = 68
+unicode = 100
+
+[sub_resource type="InputEventJoypadButton" id="Joy_DpadRight"]
+button_index = 14
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="Joy_AxisRight"]
+axis_value = 1.0
+
+[sub_resource type="Resource" id="Binding_MoveRight"]
+script = ExtResource("2")
+setting_key = "move_right"
+events = Array[InputEvent]([SubResource("Key_D"), SubResource("Joy_DpadRight"), SubResource("Joy_AxisRight")])
+
+[sub_resource type="InputEventKey" id="Key_Space"]
+device = -1
+physical_keycode = 32
+unicode = 32
+
+[sub_resource type="InputEventJoypadButton" id="Joy_A"]
+pressed = true
+
+[sub_resource type="Resource" id="Binding_Jump"]
+script = ExtResource("2")
+setting_key = "jump"
+events = Array[InputEvent]([SubResource("Key_Space"), SubResource("Joy_A")])
+
+[sub_resource type="InputEventKey" id="Key_S"]
+device = -1
+physical_keycode = 83
+unicode = 115
+
+[sub_resource type="InputEventJoypadButton" id="Joy_B"]
+button_index = 1
+pressed = true
+
+[sub_resource type="Resource" id="Binding_Crouch"]
+script = ExtResource("2")
+setting_key = "crouch"
+events = Array[InputEvent]([SubResource("Key_S"), SubResource("Joy_B")])
+
+[sub_resource type="Resource" id="Binding_Dive"]
+script = ExtResource("2")
+setting_key = "dive"
+events = Array[InputEvent]([SubResource("Key_S"), SubResource("Joy_B")])
+
+[sub_resource type="InputEventKey" id="Key_Z"]
+device = -1
+physical_keycode = 90
+unicode = 122
+
+[sub_resource type="InputEventJoypadButton" id="Joy_Y"]
+button_index = 3
+pressed = true
+
+[sub_resource type="Resource" id="Binding_GroundPound"]
+script = ExtResource("2")
+setting_key = "ground_pound"
+events = Array[InputEvent]([SubResource("Key_Z"), SubResource("Joy_Y")])
+
+[sub_resource type="Resource" id="Binding_Interact"]
+script = ExtResource("2")
+setting_key = "interact"
+events = Array[InputEvent]([SubResource("Key_Z"), SubResource("Joy_Y")])
+
+[sub_resource type="InputEventKey" id="Key_X"]
+device = -1
+physical_keycode = 88
+unicode = 120
+
+[sub_resource type="InputEventJoypadButton" id="Joy_X"]
+button_index = 2
+pressed = true
+
+[sub_resource type="Resource" id="Binding_Spin"]
+script = ExtResource("2")
+setting_key = "spin"
+events = Array[InputEvent]([SubResource("Key_X"), SubResource("Joy_X")])
+
+[sub_resource type="Resource" id="Binding_SkipDialogue"]
+script = ExtResource("2")
+setting_key = "skip_dialogue"
+events = Array[InputEvent]([SubResource("Key_X"), SubResource("Joy_X")])
+
+[sub_resource type="InputEventKey" id="Key_C"]
+device = -1
+physical_keycode = 67
+unicode = 99
+
+[sub_resource type="InputEventJoypadButton" id="Joy_LB"]
+button_index = 9
+pressed = true
+
+[sub_resource type="Resource" id="Binding_UseFludd"]
+script = ExtResource("2")
+setting_key = "use_fludd"
+events = Array[InputEvent]([SubResource("Key_C"), SubResource("Joy_LB")])
+
+[sub_resource type="InputEventKey" id="Key_Shift"]
+device = -1
+physical_keycode = 4194325
+
+[sub_resource type="InputEventJoypadButton" id="Joy_RB"]
+button_index = 10
+pressed = true
+
+[sub_resource type="Resource" id="Binding_SwitchNozzle"]
+script = ExtResource("2")
+setting_key = "switch_nozzle"
+events = Array[InputEvent]([SubResource("Key_Shift"), SubResource("Joy_RB")])
+
+[resource]
+script = ExtResource("1")
+preset_name = "Modern"
+bindings = Array[ExtResource("2")]([SubResource("Binding_MoveLeft"), SubResource("Binding_MoveRight"), SubResource("Binding_Jump"), SubResource("Binding_Crouch"), SubResource("Binding_Dive"), SubResource("Binding_GroundPound"), SubResource("Binding_Interact"), SubResource("Binding_Spin"), SubResource("Binding_SkipDialogue"), SubResource("Binding_UseFludd"), SubResource("Binding_SwitchNozzle")])

@@ -1,0 +1,316 @@
+[gd_scene format=3 uid="uid://cvkmj15pmf6qf"]
+
+[ext_resource type="Script" uid="uid://hqh0dec6rwjs" path="res://util/settings/settings.gd" id="1_ox0kw"]
+[ext_resource type="Script" uid="uid://bcelgoaeywyic" path="res://util/settings/settings_preset.gd" id="2_45tku"]
+[ext_resource type="Script" uid="uid://c847m85ywca8y" path="res://util/settings/settings_category.gd" id="2_nqbln"]
+[ext_resource type="Script" uid="uid://cufbssy07f2q3" path="res://util/settings/entries/display/window_mode.gd" id="3_y2is3"]
+[ext_resource type="Script" uid="uid://ca5o0gd0hfwyc" path="res://util/settings/entries/display/fps_cap.gd" id="4_mlflh"]
+[ext_resource type="Script" uid="uid://b03tdjoqnu2x0" path="res://util/settings/entries/display/v_sync.gd" id="5_bydeg"]
+[ext_resource type="Script" uid="uid://l4bwdno0koqn" path="res://util/settings/entries/graphics/particle_amount.gd" id="6_1lsit"]
+[ext_resource type="Script" uid="uid://bsubgie4esm85" path="res://util/settings/entries/ui/ui_scale.gd" id="7_fbfgd"]
+[ext_resource type="Script" uid="uid://ctbwyba2o577s" path="res://util/settings/entries/ui/ui_blur_strength.gd" id="8_fbfgd"]
+[ext_resource type="Script" uid="uid://dyp27b2ox8ccd" path="res://util/settings/entries/ui/ui_animations.gd" id="9_8sl86"]
+[ext_resource type="Script" uid="uid://bjib53snokv2m" path="res://util/settings/types/input.gd" id="10_blywr"]
+[ext_resource type="Resource" uid="uid://cl8s3fijrsyxv" path="res://util/settings/presets/classic.tres" id="11_classic"]
+[ext_resource type="Resource" uid="uid://b2v8i8nuklxr3" path="res://util/settings/presets/modern.tres" id="12_modern"]
+[ext_resource type="Script" uid="uid://2xkdb7ge8v0l" path="res://util/settings/types/list.gd" id="14_lii33"]
+[ext_resource type="Script" uid="uid://dqx6u66fpb5ys" path="res://util/settings/types/float.gd" id="14_pygfv"]
+[ext_resource type="Script" uid="uid://wbytn3c5m6h8" path="res://util/settings/types/boolean.gd" id="16_d6wi1"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_blywr"]
+device = -1
+physical_keycode = 4194319
+
+[sub_resource type="InputEventKey" id="InputEventKey_6vgvj"]
+device = -1
+physical_keycode = 65
+unicode = 97
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_blywr"]
+button_index = 13
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_6vgvj"]
+axis_value = -1.0
+
+[sub_resource type="InputEventKey" id="InputEventKey_ke4p5"]
+device = -1
+physical_keycode = 4194321
+
+[sub_resource type="InputEventKey" id="InputEventKey_45tku"]
+device = -1
+physical_keycode = 68
+unicode = 100
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_6vgvj"]
+button_index = 14
+pressed = true
+
+[sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_ke4p5"]
+axis_value = 1.0
+
+[sub_resource type="InputEventKey" id="Key_Up"]
+device = -1
+physical_keycode = 4194320
+
+[sub_resource type="InputEventKey" id="InputEventKey_jump"]
+device = -1
+physical_keycode = 32
+unicode = 32
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_jump"]
+pressed = true
+
+[sub_resource type="InputEventKey" id="Key_Down"]
+device = -1
+physical_keycode = 4194322
+
+[sub_resource type="InputEventKey" id="Key_S"]
+device = -1
+physical_keycode = 83
+unicode = 115
+
+[sub_resource type="InputEventJoypadButton" id="JoyButton_B"]
+button_index = 1
+pressed = true
+
+[sub_resource type="InputEventKey" id="Key_Z"]
+device = -1
+physical_keycode = 90
+unicode = 122
+
+[sub_resource type="InputEventJoypadButton" id="JoyButton_Y"]
+button_index = 3
+pressed = true
+
+[sub_resource type="InputEventKey" id="Key_X"]
+device = -1
+physical_keycode = 88
+unicode = 120
+
+[sub_resource type="InputEventJoypadButton" id="JoyButton_X"]
+button_index = 2
+pressed = true
+
+[sub_resource type="InputEventKey" id="Key_C"]
+device = -1
+physical_keycode = 67
+unicode = 99
+
+[sub_resource type="InputEventJoypadButton" id="JoyButton_LB"]
+button_index = 9
+pressed = true
+
+[sub_resource type="InputEventKey" id="Key_Shift"]
+device = -1
+physical_keycode = 4194325
+
+[sub_resource type="InputEventJoypadButton" id="JoyButton_RB"]
+button_index = 10
+pressed = true
+
+[node name="Settings" type="Node" unique_id=1964874867]
+script = ExtResource("1_ox0kw")
+presets = Array[ExtResource("2_45tku")]([ExtResource("11_classic"), ExtResource("12_modern")])
+
+[node name="Display" type="Node" parent="." unique_id=1309538916]
+script = ExtResource("2_nqbln")
+metadata/_custom_type_script = "uid://c847m85ywca8y"
+
+[node name="Window Mode" type="Node" parent="Display" unique_id=695864478]
+script = ExtResource("3_y2is3")
+options = PackedStringArray("Windowed", "Fullscreen", "Borderless Fullscreen")
+setting_key = "window_mode"
+metadata/_custom_type_script = "uid://2xkdb7ge8v0l"
+
+[node name="FPS Cap" type="Node" parent="Display" unique_id=1384621567]
+script = ExtResource("4_mlflh")
+options = PackedStringArray("30", "60", "120", "240", "Unlimited")
+default_value = 1
+hint = 1
+setting_key = "fps_cap"
+metadata/_custom_type_script = "uid://2xkdb7ge8v0l"
+
+[node name="V-Sync" type="Node" parent="Display" unique_id=1890118761]
+script = ExtResource("5_bydeg")
+setting_key = "v_sync"
+metadata/_custom_type_script = "uid://wbytn3c5m6h8"
+
+[node name="Graphics" type="Node" parent="." unique_id=444964055]
+script = ExtResource("2_nqbln")
+metadata/_custom_type_script = "uid://c847m85ywca8y"
+
+[node name="Particle Amount" type="Node" parent="Graphics" unique_id=452400835]
+script = ExtResource("6_1lsit")
+options = PackedStringArray("None", "Performance", "Low", "Standard")
+default_value = 3
+hint = 1
+setting_key = "particle_amount"
+metadata/_custom_type_script = "uid://2xkdb7ge8v0l"
+
+[node name="UI" type="Node" parent="." unique_id=2070063653]
+script = ExtResource("2_nqbln")
+metadata/_custom_type_script = "uid://c847m85ywca8y"
+
+[node name="Scale" type="Node" parent="UI" unique_id=949698302]
+script = ExtResource("7_fbfgd")
+default_value = 1.0
+minimum = 0.25
+maximum = 3.0
+step = 0.25
+slider_text = "%.2fx"
+setting_key = "scale"
+metadata/_custom_type_script = "uid://dqx6u66fpb5ys"
+
+[node name="Blur Strength" type="Node" parent="UI" unique_id=1987189430]
+script = ExtResource("8_fbfgd")
+default_value = 100.0
+maximum = 100.0
+step = 1.0
+slider_text = "%d%%"
+setting_key = "blur_strength"
+metadata/_custom_type_script = "uid://dqx6u66fpb5ys"
+
+[node name="Animations" type="Node" parent="UI" unique_id=1870479657]
+script = ExtResource("9_8sl86")
+setting_key = "animations"
+metadata/_custom_type_script = "uid://wbytn3c5m6h8"
+
+[node name="Input" type="Node" parent="." unique_id=1479907878]
+script = ExtResource("2_nqbln")
+metadata/_custom_type_script = "uid://c847m85ywca8y"
+
+[node name="Move Left" type="Node" parent="Input" unique_id=61699404]
+script = ExtResource("10_blywr")
+default_value = Array[InputEvent]([SubResource("InputEventKey_blywr"), SubResource("InputEventKey_6vgvj"), SubResource("InputEventJoypadButton_blywr"), SubResource("InputEventJoypadMotion_6vgvj")])
+setting_key = "move_left"
+metadata/_custom_type_script = "uid://bjib53snokv2m"
+
+[node name="Move Right" type="Node" parent="Input" unique_id=623624706]
+script = ExtResource("10_blywr")
+default_value = Array[InputEvent]([SubResource("InputEventKey_ke4p5"), SubResource("InputEventKey_45tku"), SubResource("InputEventJoypadButton_6vgvj"), SubResource("InputEventJoypadMotion_ke4p5")])
+setting_key = "move_right"
+metadata/_custom_type_script = "uid://bjib53snokv2m"
+
+[node name="Jump" type="Node" parent="Input" unique_id=485737962]
+script = ExtResource("10_blywr")
+default_value = Array[InputEvent]([SubResource("Key_Up"), SubResource("InputEventKey_jump"), SubResource("InputEventJoypadButton_jump")])
+setting_key = "jump"
+metadata/_custom_type_script = "uid://bjib53snokv2m"
+
+[node name="Crouch" type="Node" parent="Input" unique_id=1944391953]
+script = ExtResource("10_blywr")
+default_value = Array[InputEvent]([SubResource("Key_Down"), SubResource("Key_S"), SubResource("JoyButton_B")])
+setting_key = "crouch"
+metadata/_custom_type_script = "uid://bjib53snokv2m"
+
+[node name="Dive" type="Node" parent="Input" unique_id=1596969360]
+script = ExtResource("10_blywr")
+default_value = Array[InputEvent]([SubResource("Key_Down"), SubResource("Key_S"), SubResource("JoyButton_B")])
+setting_key = "dive"
+metadata/_custom_type_script = "uid://bjib53snokv2m"
+
+[node name="Ground Pound" type="Node" parent="Input" unique_id=1366211424]
+script = ExtResource("10_blywr")
+default_value = Array[InputEvent]([SubResource("Key_Z"), SubResource("JoyButton_Y")])
+setting_key = "ground_pound"
+metadata/_custom_type_script = "uid://bjib53snokv2m"
+
+[node name="Spin" type="Node" parent="Input" unique_id=1188171719]
+script = ExtResource("10_blywr")
+default_value = Array[InputEvent]([SubResource("Key_X"), SubResource("JoyButton_X")])
+setting_key = "spin"
+metadata/_custom_type_script = "uid://bjib53snokv2m"
+
+[node name="Use FLUDD" type="Node" parent="Input" unique_id=307460454]
+script = ExtResource("10_blywr")
+default_value = Array[InputEvent]([SubResource("Key_C"), SubResource("InputEventKey_jump"), SubResource("JoyButton_LB")])
+setting_key = "use_fludd"
+metadata/_custom_type_script = "uid://bjib53snokv2m"
+
+[node name="Switch Nozzle" type="Node" parent="Input" unique_id=730936225]
+script = ExtResource("10_blywr")
+default_value = Array[InputEvent]([SubResource("Key_Shift"), SubResource("JoyButton_RB")])
+setting_key = "switch_nozzle"
+metadata/_custom_type_script = "uid://bjib53snokv2m"
+
+[node name="Interact" type="Node" parent="Input" unique_id=1586391110]
+script = ExtResource("10_blywr")
+default_value = Array[InputEvent]([SubResource("Key_Z"), SubResource("JoyButton_Y")])
+setting_key = "interact"
+metadata/_custom_type_script = "uid://bjib53snokv2m"
+
+[node name="Skip Dialogue" type="Node" parent="Input" unique_id=1560048672]
+script = ExtResource("10_blywr")
+default_value = Array[InputEvent]([SubResource("Key_X"), SubResource("JoyButton_X")])
+setting_key = "skip_dialogue"
+metadata/_custom_type_script = "uid://bjib53snokv2m"
+
+[node name="Audio" type="Node" parent="." unique_id=335171066]
+script = ExtResource("2_nqbln")
+metadata/_custom_type_script = "uid://c847m85ywca8y"
+
+[node name="Output Device" type="Node" parent="Audio" unique_id=971169493]
+script = ExtResource("14_lii33")
+options = PackedStringArray("Default")
+setting_key = "output_device"
+metadata/_custom_type_script = "uid://2xkdb7ge8v0l"
+
+[node name="Master Volume" type="Node" parent="Audio" unique_id=221709131]
+script = ExtResource("14_pygfv")
+maximum = 100.0
+step = 1.0
+slider_text = "%d%%"
+setting_key = "master_volume"
+metadata/_custom_type_script = "uid://dqx6u66fpb5ys"
+
+[node name="Music Volume" type="Node" parent="Audio" unique_id=2093222947]
+script = ExtResource("14_pygfv")
+maximum = 100.0
+step = 1.0
+slider_text = "%d%%"
+setting_key = "music_volume"
+metadata/_custom_type_script = "uid://dqx6u66fpb5ys"
+
+[node name="SFX Volume" type="Node" parent="Audio" unique_id=1846137666]
+script = ExtResource("14_pygfv")
+maximum = 100.0
+step = 1.0
+slider_text = "%d%%"
+setting_key = "sfx_volume"
+metadata/_custom_type_script = "uid://dqx6u66fpb5ys"
+
+[node name="Player Volume" type="Node" parent="Audio" unique_id=550015522]
+script = ExtResource("14_pygfv")
+maximum = 100.0
+step = 1.0
+slider_text = "%d%%"
+setting_key = "player_volume"
+metadata/_custom_type_script = "uid://dqx6u66fpb5ys"
+
+[node name="Gameplay" type="Node" parent="." unique_id=1508292649]
+script = ExtResource("2_nqbln")
+metadata/_custom_type_script = "uid://c847m85ywca8y"
+
+[node name="Screen Shake" type="Node" parent="Gameplay" unique_id=63225717]
+script = ExtResource("16_d6wi1")
+setting_key = "screen_shake"
+metadata/_custom_type_script = "uid://wbytn3c5m6h8"
+
+[node name="Faster Death Animation" type="Node" parent="Gameplay" unique_id=291617324]
+script = ExtResource("16_d6wi1")
+setting_key = "faster_death"
+metadata/_custom_type_script = "uid://wbytn3c5m6h8"
+
+[node name="Misc" type="Node" parent="." unique_id=1016970897]
+script = ExtResource("2_nqbln")
+metadata/_custom_type_script = "uid://c847m85ywca8y"
+
+[node name="Language" type="Node" parent="Misc" unique_id=1763125853]
+script = ExtResource("14_lii33")
+metadata/_custom_type_script = "uid://2xkdb7ge8v0l"
+
+[node name="Force Touch Controls" type="Node" parent="Misc" unique_id=1984470812]
+script = ExtResource("16_d6wi1")
+setting_key = "force_touch_controls"
+metadata/_custom_type_script = "uid://wbytn3c5m6h8"
