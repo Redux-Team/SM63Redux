@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="UnitTester" format=3 uid="uid://dlr5ex5o8352b"]
+
+[ext_resource type="Script" uid="uid://c5cyqyu7rbw84" path="res://dev/unit_tests/_unit_tester.gd" id="1_186r1"]
+
+[resource]
+script = ExtResource("1_186r1")
+metadata/_custom_type_script = "uid://c5cyqyu7rbw84"
