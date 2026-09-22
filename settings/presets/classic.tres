@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="SettingsPreset" format=3 uid="uid://cl8s3fijrsyxv"]
 
-[ext_resource type="Script" uid="uid://bcelgoaeywyic" path="res://util/settings/settings_preset.gd" id="1"]
-[ext_resource type="Script" uid="uid://bix5i78rcy5wd" path="res://util/settings/settings_binding.gd" id="2"]
+[ext_resource type="Script" uid="uid://bcelgoaeywyic" path="res://settings/settings_preset.gd" id="1"]
+[ext_resource type="Script" uid="uid://bix5i78rcy5wd" path="res://settings/settings_binding.gd" id="2"]
 
 [sub_resource type="InputEventKey" id="Key_Left"]
 device = -1

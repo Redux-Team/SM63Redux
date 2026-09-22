@@ -38,6 +38,14 @@ func _restore_default() -> void:
 	current_value = default_value.duplicate()
 
 
+func _get_value() -> Variant:
+	return current_value
+
+
+func _set_value(val: Variant) -> void:
+	current_value = val
+
+
 func apply() -> void:
 	if not InputMap.has_action(setting_key):
 		InputMap.add_action(setting_key)

@@ -21,3 +21,11 @@ func _get_default_value() -> Variant:
 
 func _restore_default() -> void:
 	current_value = default_value
+
+
+func _get_value() -> Variant:
+	return current_value
+
+
+func _set_value(val: Variant) -> void:
+	current_value = val

@@ -48,6 +48,7 @@ folder_colors={
 "res://global/": "orange",
 "res://meta/": "yellow",
 "res://scenes/": "teal",
+"res://settings/": "pink",
 "res://util/": "purple"
 }
 

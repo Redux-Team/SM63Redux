@@ -29,6 +29,7 @@ func save() -> void:
 		var setting: SettingsType = _settings_map.get(setting_key)
 		config.set_value(setting.get_parent().name, setting_key, setting._serialize())
 	config.set_value("Input", "active_preset", active_input_preset)
+	config.set_value("metadata", "version", Singleton.get_version().as_string())
 	config.save(SAVE_PATH)
 
 
@@ -84,3 +85,28 @@ func rebind_action(setting_key: String, events: Array[InputEvent]) -> void:
 	input_setting.apply()
 	active_input_preset = ""
 	save()
+
+
+func get_setting(key: String) -> SettingsType:
+	return _resolve_setting(key)
+
+
+func set_setting(key: String, value: Variant, persist: bool = true) -> void:
+	var setting: SettingsType = _resolve_setting(key)
+	if setting == null:
+		return
+	setting.set_value(value)
+	if persist:
+		save()
+
+
+func _resolve_setting(key: String) -> SettingsType:
+	var parts: PackedStringArray = key.split("/", true, 1)
+	var category: String = parts.get(0) if parts.size() == 2 else ""
+	var setting_key: String = parts.get(1) if parts.size() == 2 else parts.get(0)
+	var setting: SettingsType = _settings_map.get(setting_key)
+	if setting == null:
+		return null
+	if not category.is_empty() and setting.get_parent().name != category:
+		return null
+	return setting

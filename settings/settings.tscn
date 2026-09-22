@@ -1,21 +1,26 @@
 [gd_scene format=3 uid="uid://cvkmj15pmf6qf"]
 
-[ext_resource type="Script" uid="uid://hqh0dec6rwjs" path="res://util/settings/settings.gd" id="1_ox0kw"]
-[ext_resource type="Script" uid="uid://bcelgoaeywyic" path="res://util/settings/settings_preset.gd" id="2_45tku"]
-[ext_resource type="Script" uid="uid://c847m85ywca8y" path="res://util/settings/settings_category.gd" id="2_nqbln"]
-[ext_resource type="Script" uid="uid://cufbssy07f2q3" path="res://util/settings/entries/display/window_mode.gd" id="3_y2is3"]
-[ext_resource type="Script" uid="uid://ca5o0gd0hfwyc" path="res://util/settings/entries/display/fps_cap.gd" id="4_mlflh"]
-[ext_resource type="Script" uid="uid://b03tdjoqnu2x0" path="res://util/settings/entries/display/v_sync.gd" id="5_bydeg"]
-[ext_resource type="Script" uid="uid://l4bwdno0koqn" path="res://util/settings/entries/graphics/particle_amount.gd" id="6_1lsit"]
-[ext_resource type="Script" uid="uid://bsubgie4esm85" path="res://util/settings/entries/ui/ui_scale.gd" id="7_fbfgd"]
-[ext_resource type="Script" uid="uid://ctbwyba2o577s" path="res://util/settings/entries/ui/ui_blur_strength.gd" id="8_fbfgd"]
-[ext_resource type="Script" uid="uid://dyp27b2ox8ccd" path="res://util/settings/entries/ui/ui_animations.gd" id="9_8sl86"]
-[ext_resource type="Script" uid="uid://bjib53snokv2m" path="res://util/settings/types/input.gd" id="10_blywr"]
-[ext_resource type="Resource" uid="uid://cl8s3fijrsyxv" path="res://util/settings/presets/classic.tres" id="11_classic"]
-[ext_resource type="Resource" uid="uid://b2v8i8nuklxr3" path="res://util/settings/presets/modern.tres" id="12_modern"]
-[ext_resource type="Script" uid="uid://2xkdb7ge8v0l" path="res://util/settings/types/list.gd" id="14_lii33"]
-[ext_resource type="Script" uid="uid://dqx6u66fpb5ys" path="res://util/settings/types/float.gd" id="14_pygfv"]
-[ext_resource type="Script" uid="uid://wbytn3c5m6h8" path="res://util/settings/types/boolean.gd" id="16_d6wi1"]
+[ext_resource type="Script" uid="uid://hqh0dec6rwjs" path="res://settings/settings.gd" id="1_ox0kw"]
+[ext_resource type="Script" uid="uid://bcelgoaeywyic" path="res://settings/settings_preset.gd" id="2_45tku"]
+[ext_resource type="Script" uid="uid://c847m85ywca8y" path="res://settings/settings_category.gd" id="2_nqbln"]
+[ext_resource type="Script" uid="uid://cufbssy07f2q3" path="res://settings/entries/display/window_mode.gd" id="3_y2is3"]
+[ext_resource type="Script" uid="uid://ca5o0gd0hfwyc" path="res://settings/entries/display/fps_cap.gd" id="4_mlflh"]
+[ext_resource type="Script" uid="uid://b03tdjoqnu2x0" path="res://settings/entries/display/v_sync.gd" id="5_bydeg"]
+[ext_resource type="Script" uid="uid://l4bwdno0koqn" path="res://settings/entries/graphics/particle_amount.gd" id="6_1lsit"]
+[ext_resource type="Script" uid="uid://bsubgie4esm85" path="res://settings/entries/ui/ui_scale.gd" id="7_fbfgd"]
+[ext_resource type="Script" uid="uid://ctbwyba2o577s" path="res://settings/entries/ui/ui_blur_strength.gd" id="8_fbfgd"]
+[ext_resource type="Script" uid="uid://dyp27b2ox8ccd" path="res://settings/entries/ui/ui_animations.gd" id="9_8sl86"]
+[ext_resource type="Script" uid="uid://bjib53snokv2m" path="res://settings/types/input.gd" id="10_blywr"]
+[ext_resource type="Resource" uid="uid://cl8s3fijrsyxv" path="res://settings/presets/classic.tres" id="11_classic"]
+[ext_resource type="Resource" uid="uid://b2v8i8nuklxr3" path="res://settings/presets/modern.tres" id="12_modern"]
+[ext_resource type="Script" uid="uid://cfqnecqujyb8f" path="res://settings/entries/audio/output_device.gd" id="14_gd22x"]
+[ext_resource type="Script" uid="uid://b8rev4w18nyra" path="res://settings/entries/audio/master_volume.gd" id="15_tw7ya"]
+[ext_resource type="Script" uid="uid://wbytn3c5m6h8" path="res://settings/types/boolean.gd" id="16_d6wi1"]
+[ext_resource type="Script" uid="uid://bc107nnlp0sgv" path="res://settings/entries/audio/music_volume.gd" id="16_e3a6j"]
+[ext_resource type="Script" uid="uid://pl7g4x12lj1n" path="res://settings/entries/audio/sfx_volume.gd" id="17_qqxj8"]
+[ext_resource type="Script" uid="uid://byta2ftghpa5j" path="res://settings/entries/audio/player_volume.gd" id="18_qqxj8"]
+[ext_resource type="Script" uid="uid://07sac1dcp84h" path="res://settings/entries/misc/language.gd" id="20_qqxj8"]
+[ext_resource type="Script" uid="uid://cvnlf3geweg4v" path="res://settings/entries/misc/force_touch_controls.gd" id="21_g2v80"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_blywr"]
 device = -1
@@ -251,38 +256,42 @@ script = ExtResource("2_nqbln")
 metadata/_custom_type_script = "uid://c847m85ywca8y"
 
 [node name="Output Device" type="Node" parent="Audio" unique_id=971169493]
-script = ExtResource("14_lii33")
+script = ExtResource("14_gd22x")
 options = PackedStringArray("Default")
 setting_key = "output_device"
 metadata/_custom_type_script = "uid://2xkdb7ge8v0l"
 
 [node name="Master Volume" type="Node" parent="Audio" unique_id=221709131]
-script = ExtResource("14_pygfv")
-maximum = 100.0
+script = ExtResource("15_tw7ya")
+default_value = 75.0
+maximum = 125.0
 step = 1.0
 slider_text = "%d%%"
 setting_key = "master_volume"
 metadata/_custom_type_script = "uid://dqx6u66fpb5ys"
 
 [node name="Music Volume" type="Node" parent="Audio" unique_id=2093222947]
-script = ExtResource("14_pygfv")
-maximum = 100.0
+script = ExtResource("16_e3a6j")
+default_value = 100.0
+maximum = 125.0
 step = 1.0
 slider_text = "%d%%"
 setting_key = "music_volume"
 metadata/_custom_type_script = "uid://dqx6u66fpb5ys"
 
 [node name="SFX Volume" type="Node" parent="Audio" unique_id=1846137666]
-script = ExtResource("14_pygfv")
-maximum = 100.0
+script = ExtResource("17_qqxj8")
+default_value = 100.0
+maximum = 125.0
 step = 1.0
 slider_text = "%d%%"
 setting_key = "sfx_volume"
 metadata/_custom_type_script = "uid://dqx6u66fpb5ys"
 
 [node name="Player Volume" type="Node" parent="Audio" unique_id=550015522]
-script = ExtResource("14_pygfv")
-maximum = 100.0
+script = ExtResource("18_qqxj8")
+default_value = 100.0
+maximum = 125.0
 step = 1.0
 slider_text = "%d%%"
 setting_key = "player_volume"
@@ -295,11 +304,13 @@ metadata/_custom_type_script = "uid://c847m85ywca8y"
 [node name="Screen Shake" type="Node" parent="Gameplay" unique_id=63225717]
 script = ExtResource("16_d6wi1")
 setting_key = "screen_shake"
+requires_apply = false
 metadata/_custom_type_script = "uid://wbytn3c5m6h8"
 
 [node name="Faster Death Animation" type="Node" parent="Gameplay" unique_id=291617324]
 script = ExtResource("16_d6wi1")
 setting_key = "faster_death"
+requires_apply = false
 metadata/_custom_type_script = "uid://wbytn3c5m6h8"
 
 [node name="Misc" type="Node" parent="." unique_id=1016970897]
@@ -307,10 +318,11 @@ script = ExtResource("2_nqbln")
 metadata/_custom_type_script = "uid://c847m85ywca8y"
 
 [node name="Language" type="Node" parent="Misc" unique_id=1763125853]
-script = ExtResource("14_lii33")
+script = ExtResource("20_qqxj8")
+setting_key = "language"
 metadata/_custom_type_script = "uid://2xkdb7ge8v0l"
 
 [node name="Force Touch Controls" type="Node" parent="Misc" unique_id=1984470812]
-script = ExtResource("16_d6wi1")
+script = ExtResource("21_g2v80")
 setting_key = "force_touch_controls"
 metadata/_custom_type_script = "uid://wbytn3c5m6h8"
