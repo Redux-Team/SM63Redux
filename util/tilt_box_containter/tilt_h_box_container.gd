@@ -1,4 +1,6 @@
 @tool
+## A container that arranges its child controls horizontally,
+## in a slanted manner, determined by [member slope].
 class_name TiltHBoxContainer extends HBoxContainer
 
 ## Slope (y / x). 0 is perfectly horizontal.

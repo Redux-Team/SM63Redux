@@ -1,4 +1,6 @@
 @tool
+## A container that arranges its child controls vertically,
+## in a slanted manner, determined by [member slope].
 class_name TiltVBoxContainer extends VBoxContainer
 
 ## Slope (x / y). 0 is perfectly vertical.
