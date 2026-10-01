@@ -3,7 +3,14 @@ extends Node
 
 const SAVE_PATH: String = "user://settings.cfg"
 
-@export var presets: Array[SettingsPreset] = []
+@export var display: SettingsCategoryDisplay
+@export var graphics: SettingsCategoryGraphics
+@export var ui: SettingsCategoryUI
+@export var input: SettingsCategoryInput
+@export var audio: SettingsCategoryAudio
+@export var gameplay: SettingsCategoryGameplay
+@export var misc: SettingsCategoryMisc
+@export var input_presets: Array[SettingsPreset] = []
 
 var active_input_preset: String = ""
 var _settings_map: Dictionary[String, SettingsType] = {}
@@ -59,7 +66,7 @@ func restore_defaults() -> void:
 
 func apply_preset(preset_name: String) -> void:
 	var preset: SettingsPreset = null
-	for candidate: SettingsPreset in presets:
+	for candidate: SettingsPreset in input_presets:
 		if candidate.preset_name == preset_name:
 			preset = candidate
 			break
@@ -71,42 +78,20 @@ func apply_preset(preset_name: String) -> void:
 			continue
 		var input_setting: SettingsTypeInput = setting as SettingsTypeInput
 		input_setting.current_value = binding.events
-		input_setting.apply()
 	active_input_preset = preset_name
 	save()
 
 
-func rebind_action(setting_key: String, events: Array[InputEvent]) -> void:
-	var setting: SettingsType = _settings_map.get(setting_key)
-	if not setting is SettingsTypeInput:
-		return
-	var input_setting: SettingsTypeInput = setting as SettingsTypeInput
-	input_setting.current_value = events
-	input_setting.apply()
+func rebind_action(action: SettingsTypeInput, events: Array[InputEvent]) -> void:
+	action.current_value = events
 	active_input_preset = ""
 	save()
 
 
-func get_setting(key: String) -> SettingsType:
-	return _resolve_setting(key)
-
-
-func set_setting(key: String, value: Variant, persist: bool = true) -> void:
-	var setting: SettingsType = _resolve_setting(key)
-	if setting == null:
-		return
-	setting.set_value(value)
-	if persist:
-		save()
-
-
-func _resolve_setting(key: String) -> SettingsType:
-	var parts: PackedStringArray = key.split("/", true, 1)
-	var category: String = parts.get(0) if parts.size() == 2 else ""
-	var setting_key: String = parts.get(1) if parts.size() == 2 else parts.get(0)
-	var setting: SettingsType = _settings_map.get(setting_key)
-	if setting == null:
-		return null
-	if not category.is_empty() and setting.get_parent().name != category:
-		return null
-	return setting
+func get_settings_str(format: String = "\"%s\" = %s;") -> String:
+	var settings_str: String = ""
+	
+	for setting: SettingsType in _settings_map.values():
+		settings_str += format % [setting.setting_key, setting.value()]
+	
+	return settings_str

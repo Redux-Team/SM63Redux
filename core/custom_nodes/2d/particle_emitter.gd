@@ -32,7 +32,7 @@ func _ready() -> void:
 func _amount_for_density() -> int:
 	if Engine.is_editor_hint():
 		return high_particle_amount
-	match Settings.get_setting("particle_amount").value():
+	match Settings.graphics.particle_amount.option():
 		"None":
 			return 0
 		"Performance":

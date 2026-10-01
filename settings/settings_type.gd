@@ -17,21 +17,20 @@ extends Node
 @abstract func _get_default_value() -> Variant
 @abstract func _restore_default() -> void
 @abstract func _get_value() -> Variant
-@abstract func _set_value(val: Variant) -> void
 
-# We can't compile-enforce these to be overridden since there's a type
-# abstraction in between but this should do the trick
+
 func apply() -> void:
-	assert(not requires_apply, "The apply method must be overridden! (%s)" % self)
+	if not requires_apply:
+		return
+	var category: SettingsCategory = get_parent() as SettingsCategory
+	if category == null:
+		push_error("Settings: '%s' is not parented to a category." % setting_key)
+		return
+	category._apply_setting(self)
 
 
 func value() -> Variant:
 	return _get_value()
-
-
-func set_value(new_value: Variant) -> void:
-	_set_value(new_value)
-	apply()
 
 
 func display_name() -> String:

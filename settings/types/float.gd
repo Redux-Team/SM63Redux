@@ -8,7 +8,10 @@ extends SettingsType
 @export var maximum: float = 1.0
 @export var step: float = 0.1
 @export var slider_text: String = "%.2f"
-var current_value: float
+var current_value: float = 0.0:
+	set(value):
+		current_value = clampf(value, minimum, maximum)
+		apply()
 
 
 func _serialize() -> String:
@@ -29,7 +32,3 @@ func _restore_default() -> void:
 
 func _get_value() -> Variant:
 	return current_value
-
-
-func _set_value(val: Variant) -> void:
-	current_value = val

@@ -4,7 +4,10 @@ extends SettingsType
 
 
 @export var default_value: bool = true
-var current_value: bool
+var current_value: bool = false:
+	set(value):
+		current_value = value
+		apply()
 
 
 func _serialize() -> String:
@@ -25,7 +28,3 @@ func _restore_default() -> void:
 
 func _get_value() -> Variant:
 	return current_value
-
-
-func _set_value(val: Variant) -> void:
-	current_value = val

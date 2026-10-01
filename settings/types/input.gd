@@ -4,7 +4,10 @@ extends SettingsType
 
 
 @export var default_value: Array[InputEvent]
-var current_value: Array[InputEvent]
+var current_value: Array[InputEvent] = []:
+	set(value):
+		current_value = value
+		apply()
 
 
 func _serialize() -> String:
@@ -20,14 +23,14 @@ func _serialize() -> String:
 
 func _deserialize(string: String) -> void:
 	var actions: PackedStringArray = string.split(";")
-	
-	current_value.clear()
-	current_value.resize(actions.size())
+	var events: Array[InputEvent] = []
+	events.resize(actions.size())
 	
 	for i: int in actions.size():
 		var action_string: String = actions.get(i)
-		var event: InputEvent = InputUtil.string_to_event(action_string)
-		current_value.set(i, event)
+		events.set(i, InputUtil.string_to_event(action_string))
+	
+	current_value = events
 
 
 func _get_default_value() -> Variant:
@@ -42,13 +45,25 @@ func _get_value() -> Variant:
 	return current_value
 
 
-func _set_value(val: Variant) -> void:
-	current_value = val
-
-
 func apply() -> void:
 	if not InputMap.has_action(setting_key):
 		InputMap.add_action(setting_key)
 	InputMap.action_erase_events(setting_key)
 	for event: InputEvent in current_value:
 		InputMap.action_add_event(setting_key, event)
+
+
+func pressed() -> bool:
+	return Input.is_action_pressed(setting_key)
+
+
+func just_pressed() -> bool:
+	return Input.is_action_just_pressed(setting_key)
+
+
+func just_released() -> bool:
+	return Input.is_action_just_released(setting_key)
+
+
+func strength() -> float:
+	return Input.get_action_strength(setting_key)
