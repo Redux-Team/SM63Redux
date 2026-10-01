@@ -12,6 +12,7 @@ class_name SlopeBoxContainer extends BoxContainer
 		queue_sort()
 
 
+
 func _notification(what: int) -> void:
 	# This is always run after BoxContainer sort.
 	if (what == NOTIFICATION_SORT_CHILDREN):
@@ -27,6 +28,7 @@ func _notification(what: int) -> void:
 			else:
 				control_children.reverse()
 				_offset_children(control_children, -slope)
+
 
 
 func _offset_children(controls: Array[Control], offset_slope: float) -> void:
