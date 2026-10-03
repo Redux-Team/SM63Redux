@@ -2452,7 +2452,7 @@ plume_offset = Vector2(4, -1)
 
 [node name="Turbo" type="Node" parent="Handlers/FLUDDHandler/Modes" unique_id=468241508]
 script = ExtResource("87_fmtrb")
-turbo_speed = 500.0
+turbo_speed = 600.0
 nozzle = 3
 blocked_states = Array[StringName]([&"Floorslide", &"Dive"])
 drains_power = false
