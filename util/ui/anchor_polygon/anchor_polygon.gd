@@ -7,6 +7,8 @@ class_name AnchorPolygon extends Control
 	set(new_color):
 		color = new_color
 		queue_redraw()
+@export var ignored_anchors: Array[VertexAnchor]
+
 
 # Should redraw on: 
 #	this node resized (done automatically by Godot)
@@ -14,8 +16,8 @@ class_name AnchorPolygon extends Control
 #	child node order changed (done automatically by Godot)
 #	recoloured (done with setter)
 func _draw() -> void:
-	var position_array: Array[Vector2] = []
+	var position_array: PackedVector2Array = PackedVector2Array()
 	for node: Node in get_children():
-		if node is VertexAnchor:
+		if node is VertexAnchor and node not in ignored_anchors:
 			position_array.append(node.position)
 	draw_colored_polygon(position_array, color)
