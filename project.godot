@@ -25,6 +25,7 @@ config/windows_native_icon="res://meta/icon.ico"
 
 Singleton="*uid://gi77agsivaq5"
 Settings="*uid://cvkmj15pmf6qf"
+GdssRuntime="*uid://yu6lhnx763yp"
 
 [debug]
 
@@ -38,6 +39,11 @@ window/size/viewport_width=640
 window/size/viewport_height=360
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+display_server/driver.linuxbsd="wayland"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdss/plugin.cfg")
 
 [file_customization]
 
@@ -51,6 +57,14 @@ folder_colors={
 "res://settings/": "pink",
 "res://util/": "purple"
 }
+
+[gdss]
+
+internal/initialized=true
+editor/use_minimap=true
+editor/show_outline=true
+editor/show_resources=false
+storage/save_uid="uid://w0mcqa8e8dud"
 
 [physics]
 
