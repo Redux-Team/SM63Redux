@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3bawiafh4l8h"
-path="res://.godot/imported/selector.png-5d02d637af84e31479a99a3e15349c2b.ctex"
+uid="uid://cfdhtcrv76oix"
+path="res://.godot/imported/level_designer.png-bb0955d869d8ac018518e7caaea30fb0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/gui/title_screen/select_mode_button/selector.png"
-dest_files=["res://.godot/imported/selector.png-5d02d637af84e31479a99a3e15349c2b.ctex"]
+source_file="res://assets/textures/gui/title_screen/select_mode_button/level_designer.png"
+dest_files=["res://.godot/imported/level_designer.png-bb0955d869d8ac018518e7caaea30fb0.ctex"]
 
 [params]
 

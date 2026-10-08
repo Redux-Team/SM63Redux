@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brkasolihf1k7"
-path="res://.godot/imported/menu_titles.png-18cbcfa70fc8ce04cd23aa9f34bae4fa.ctex"
+uid="uid://uxsyer7box1s"
+path="res://.godot/imported/mystery.png-af44493b6bf225f31a132442880b63b6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/gui/title_screen/select_mode_button/menu_titles.png"
-dest_files=["res://.godot/imported/menu_titles.png-18cbcfa70fc8ce04cd23aa9f34bae4fa.ctex"]
+source_file="res://assets/textures/gui/title_screen/select_mode_button/mystery.png"
+dest_files=["res://.godot/imported/mystery.png-af44493b6bf225f31a132442880b63b6.ctex"]
 
 [params]
 
