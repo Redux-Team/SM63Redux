@@ -1,0 +1,152 @@
+# @chunk meta
+@resources {
+	BUTTON_FONT: font("uid://cf4ehcuf6rt7p")
+	CAMPAIGN_TEXTURE: texture("uid://d2ms7egugej4j", NEAREST, true, true)
+	LD_TEXTURE: texture("uid://cfdhtcrv76oix", NEAREST, true, true)
+	EXTRA_TEXTURE: texture("uid://b213yk0c3jyc0", NEAREST, true, true)
+	SETTINGS_TEXTURE: texture("uid://cn5mc2u0baujv", NEAREST, true, true)
+	MYSTERY_TEXTURE: texture("uid://uxsyer7box1s", NEAREST, true, true)
+	MAIN_FONT: font("uid://cnmgtcgow66hp")
+	HOLLOW_FONT: font("uid://k76pvtok3f2u")
+}
+
+
+# @chunk Title Screen
+var base_shadow_col: "#1B2A41"
+var shadow_drop: 0.65
+
+
+Panel {
+	BlurPanel {
+		clip_path: polygon(0,0.25, 1,0.15, 1,0.75, 0,0.85)
+		bg_color: blur(5, BLACK, 0.45)
+	}
+}
+
+Label {
+	font: $MAIN_FONT
+	 
+	InfoLabel {
+		font_size: 20
+		shadow_color: BLACK
+		font_color: alpha(WHITE, 0.6)
+	}
+}
+
+RichTextLabel {
+	normal_font: $MAIN_FONT 
+	default_color: alpha(WHITE, 0.6)
+}
+
+
+Button {
+	bg_color: WHITE
+	font: $MAIN_FONT 
+	font_size: 32
+	font_color: $base_shadow_col
+	border: 2
+	border_color: $base_shadow_col
+	shadow_color: $base_shadow_col
+	padding: 30 30 14 14
+	corner_radius: 12 12 12 12
+	bg_scroll: 6 4
+	transform_enabled: true
+	
+	transition_time: 0.3
+	transition_func: QUINT
+	transition_type: EASE_OUT
+	
+	> Label {
+		font: $HOLLOW_FONT 
+		font_size: 32
+	}
+	
+	:hover, :focus {
+		transform_scale: 1.1
+		font_color: WHITE
+		border_color: radial_gradient("#ffb600", YELLOW)
+	}
+	
+	TitleButton {
+		var accent: WHITE
+		
+		cursor: POINTING
+		
+		font_color: lighten($accent, 0.2)
+		border_color: darken($accent, $shadow_drop)
+		shadow_color: darken($accent, $shadow_drop)
+		
+		padding: 32 32 22 22
+		corner_radius_bottom_left: 4
+		corner_radius_top_right: 4
+		shadow_bottom: 1
+		shadow_right: 1
+		shadow_offset: 2
+		shadow_blur: 0
+		transform_rotation: -0.05rad
+		transition_time: 0 "bg_texture"
+		bg_tint: lighten($accent, 0.3)
+		
+		> Label {
+			font_color: darken($accent, $shadow_drop)
+		}
+		
+		:hover, :focus {
+			font_color: WHITE
+			transform_rotation: 0
+			bg_color: $accent
+			bg_texture: $art
+			transition_time: 0.1 "bg_texture"
+			
+			> Label {
+				font_color: darken($accent, $shadow_drop)
+			}
+		}
+		
+		:disabled {
+			bg_color: alpha($accent, 0.5)
+			cursor: DISABLED
+			font_color: TRANSPARENT
+		}
+		
+		:pressed {
+			transform_rotation: 0
+			font_color: darken($accent, 0.4)
+			bg_color: darken($accent, 0.2)
+		}
+		
+		CampaignButton {
+			var accent: "#FF5D5D"
+			var art: $CAMPAIGN_TEXTURE
+		}
+		
+		LDButton {
+			var accent: "#2FBF71"
+			var art: $LD_TEXTURE
+		}
+		
+		TitleButtonSecondary {
+			padding: 20 20 10 10
+			font_size: 22
+			
+			> Label {
+				font_size: 22
+			}
+			
+			SettingsButton {
+				var accent: "#8B93A1"
+				var art: $SETTINGS_TEXTURE
+			}
+			
+			ExtraButton {
+				var accent: "#4EA1F0"
+				var art: $EXTRA_TEXTURE
+			}
+			
+			MysteryButton {
+				var accent: "#B07AE0"
+				var art: $MYSTERY_TEXTURE
+			}
+		}
+	}
+}
