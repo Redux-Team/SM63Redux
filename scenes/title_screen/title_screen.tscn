@@ -13,10 +13,10 @@
 [ext_resource type="Shader" uid="uid://wxepa6euigw5" path="res://util/shader/blur.gdshader" id="11_seoxh"]
 [ext_resource type="Script" uid="uid://r7egndbc4l4i" path="res://util/ui/anchor_polygon/vertex_anchor.gd" id="12_c7dqk"]
 [ext_resource type="Script" uid="uid://bmkoc7l020aqo" path="res://util/ui/slope_box_container/slope_box_container.gd" id="13_fdkeb"]
-[ext_resource type="Script" uid="uid://by1fh633aj2jd" path="res://util/ui/ui_button/ui_button.gd" id="14_aihkd"]
 [ext_resource type="Texture2D" uid="uid://dmq4jeitac3w1" path="res://meta/logo.png" id="15_wmj2m"]
 [ext_resource type="Script" uid="uid://djwxqlemhil25" path="res://util/ui/ui_blur_rect/ui_blur_rect.gd" id="16_aihkd"]
 [ext_resource type="FontFile" uid="uid://cnmgtcgow66hp" path="res://assets/font/pixel_redux_border.fnt" id="16_otspg"]
+[ext_resource type="PackedScene" uid="uid://5ihpqfwwsxbo" path="res://scenes/settings_screen/settings_screen.tscn" id="18_7paur"]
 
 [sub_resource type="Gradient" id="Gradient_dg61c"]
 colors = PackedColorArray(0, 0.7647059, 1, 1, 0, 0.60784316, 1, 1)
@@ -192,6 +192,90 @@ tracks/7/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("PanelBase/Buttons:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("PanelBase/Buttons:ratio_offset")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("PanelBase/Buttons:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("PanelBase:scale")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 0)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SettingsScreen:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SettingsScreen:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("LogoAnchor:ratio_offset")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 0,
+"values": []
+}
 
 [sub_resource type="Animation" id="Animation_ao3wo"]
 resource_name = "intro"
@@ -332,15 +416,139 @@ tracks/5/keys = {
 "update": 1,
 "values": [false, true]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("BlurRect:tint")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.06666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.3019608)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("PanelBase/Buttons:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_seoxh"]
+resource_name = "show_settings"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PanelBase/Buttons:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PanelBase/Buttons:ratio_offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.13333334),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -50)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LogoAnchor:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LogoAnchor:ratio_offset")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.13333334),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -50)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PanelBase/Buttons:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.13333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("LogoAnchor:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.13333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SettingsScreen:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.13333334, 0.26666668),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SettingsScreen:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.033333335, 0.06666668),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_n6fv5"]
 _data = {
 &"RESET": SubResource("Animation_n6fv5"),
 &"intro": SubResource("Animation_ao3wo"),
-&"open": SubResource("Animation_p56b5")
+&"open": SubResource("Animation_p56b5"),
+&"show_settings": SubResource("Animation_seoxh")
 }
 
-[node name="TitleScreen" type="Control" unique_id=887533943 node_paths=PackedStringArray("animation_player", "audio_stream_player")]
+[node name="TitleScreen" type="Control" unique_id=887533943 node_paths=PackedStringArray("animation_player", "audio_stream_player", "blur_panel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -350,6 +558,7 @@ grow_vertical = 2
 script = ExtResource("1_aihkd")
 animation_player = NodePath("AnimationPlayer")
 audio_stream_player = NodePath("AudioStreamPlayer")
+blur_panel = NodePath("PanelBase/BlurPanel")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=502231712]
 bus = &"Music"
@@ -374,7 +583,6 @@ script = ExtResource("16_aihkd")
 metadata/_custom_type_script = "uid://djwxqlemhil25"
 
 [node name="PanelBase" type="Control" parent="." unique_id=1856306473]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -395,7 +603,8 @@ metadata/gdss_classes = PackedStringArray("BlurPanel")
 metadata/gdss_mode = 1
 
 [node name="Buttons" type="Control" parent="PanelBase" unique_id=439505457]
-anchors_preset = 0
+visible = false
+layout_mode = 1
 anchor_left = 0.5
 anchor_top = 0.54
 anchor_right = 0.5
@@ -404,30 +613,33 @@ script = ExtResource("12_c7dqk")
 ratio = Vector2(0.5, 0.54)
 metadata/_custom_type_script = "uid://r7egndbc4l4i"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelBase/Buttons" unique_id=208421032]
-layout_mode = 1
+[node name="CanvasGroup" type="CanvasGroup" parent="PanelBase/Buttons" unique_id=276955557]
+position = Vector2(-320, -194.40001)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelBase/Buttons/CanvasGroup" unique_id=208421032]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -105.5
-offset_top = -20.0
-offset_right = 105.5
-offset_bottom = 20.0
+offset_left = 87.5
+offset_top = 125.40001
+offset_right = 552.5
+offset_bottom = 263.40002
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 
-[node name="SlopeBoxContainer" type="BoxContainer" parent="PanelBase/Buttons/VBoxContainer" unique_id=1343930878]
+[node name="SlopeBoxContainer" type="BoxContainer" parent="PanelBase/Buttons/CanvasGroup/VBoxContainer" unique_id=1343930878]
 layout_mode = 2
 theme_override_constants/separation = 24
 alignment = 1
 script = ExtResource("13_fdkeb")
 slope = -0.05
 metadata/_custom_type_script = "uid://bmkoc7l020aqo"
+metadata/gdss_mode = 1
 
-[node name="CampaignButton" type="Button" parent="PanelBase/Buttons/VBoxContainer/SlopeBoxContainer" unique_id=389124938]
+[node name="CampaignButton" type="Button" parent="PanelBase/Buttons/CanvasGroup/VBoxContainer/SlopeBoxContainer" unique_id=913298556]
 layout_mode = 2
 focus_neighbor_left = NodePath("../../SlopeBoxContainer2/MysteryButton")
 focus_neighbor_top = NodePath(".")
@@ -436,23 +648,17 @@ focus_neighbor_bottom = NodePath("../../SlopeBoxContainer2/ExtraButton")
 focus_mode = 0
 disabled = true
 text = "Story Mode"
-script = ExtResource("14_aihkd")
-metadata/gdss_mode = 1
-metadata/_custom_type_script = "uid://by1fh633aj2jd"
 metadata/gdss_classes = PackedStringArray("CampaignButton")
 
-[node name="LDButton" type="Button" parent="PanelBase/Buttons/VBoxContainer/SlopeBoxContainer" unique_id=1789456932]
+[node name="LDButton" type="Button" parent="PanelBase/Buttons/CanvasGroup/VBoxContainer/SlopeBoxContainer" unique_id=1532804116]
 layout_mode = 2
 focus_neighbor_left = NodePath("../CampaignButton")
 focus_neighbor_right = NodePath("../../SlopeBoxContainer2/ExtraButton")
 focus_neighbor_bottom = NodePath("../../SlopeBoxContainer2/SettingsButton")
 text = "level designer"
-script = ExtResource("14_aihkd")
-metadata/gdss_mode = 1
-metadata/_custom_type_script = "uid://by1fh633aj2jd"
 metadata/gdss_classes = PackedStringArray("LDButton")
 
-[node name="SlopeBoxContainer2" type="BoxContainer" parent="PanelBase/Buttons/VBoxContainer" unique_id=2120952287]
+[node name="SlopeBoxContainer2" type="BoxContainer" parent="PanelBase/Buttons/CanvasGroup/VBoxContainer" unique_id=2120952287]
 layout_mode = 2
 theme_override_constants/separation = 24
 alignment = 1
@@ -461,29 +667,23 @@ slope = -0.05
 metadata/_custom_type_script = "uid://bmkoc7l020aqo"
 metadata/gdss_mode = 1
 
-[node name="ExtraButton" type="Button" parent="PanelBase/Buttons/VBoxContainer/SlopeBoxContainer2" unique_id=1745543609]
+[node name="ExtraButton" type="Button" parent="PanelBase/Buttons/CanvasGroup/VBoxContainer/SlopeBoxContainer2" unique_id=1132310803]
 layout_mode = 2
 focus_neighbor_left = NodePath("../../SlopeBoxContainer/LDButton")
 focus_neighbor_right = NodePath("../SettingsButton")
 focus_mode = 0
 disabled = true
 text = "extra"
-script = ExtResource("14_aihkd")
-metadata/gdss_mode = 1
-metadata/_custom_type_script = "uid://by1fh633aj2jd"
 metadata/gdss_classes = PackedStringArray("ExtraButton")
 
-[node name="SettingsButton" type="Button" parent="PanelBase/Buttons/VBoxContainer/SlopeBoxContainer2" unique_id=1380807313]
+[node name="SettingsButton" type="Button" parent="PanelBase/Buttons/CanvasGroup/VBoxContainer/SlopeBoxContainer2" unique_id=1142622998]
 layout_mode = 2
 focus_neighbor_left = NodePath("../ExtraButton")
 focus_neighbor_top = NodePath("../../SlopeBoxContainer/LDButton")
 text = "settings"
-script = ExtResource("14_aihkd")
-metadata/gdss_mode = 1
-metadata/_custom_type_script = "uid://by1fh633aj2jd"
 metadata/gdss_classes = PackedStringArray("SettingsButton")
 
-[node name="MysteryButton" type="Button" parent="PanelBase/Buttons/VBoxContainer/SlopeBoxContainer2" unique_id=1823278421]
+[node name="MysteryButton" type="Button" parent="PanelBase/Buttons/CanvasGroup/VBoxContainer/SlopeBoxContainer2" unique_id=109220960]
 layout_mode = 2
 focus_neighbor_left = NodePath("../SettingsButton")
 focus_neighbor_top = NodePath("../../SlopeBoxContainer/LDButton")
@@ -491,9 +691,6 @@ focus_neighbor_right = NodePath("../../SlopeBoxContainer/CampaignButton")
 focus_mode = 0
 disabled = true
 text = "???"
-script = ExtResource("14_aihkd")
-metadata/gdss_mode = 1
-metadata/_custom_type_script = "uid://by1fh633aj2jd"
 metadata/gdss_classes = PackedStringArray("MysteryButton")
 
 [node name="LogoAnchor" type="Control" parent="." unique_id=391751389]
@@ -530,6 +727,10 @@ theme_override_fonts/font = ExtResource("16_otspg")
 theme_override_font_sizes/font_size = 28
 text = "PRESS-START-MESSAGE"
 horizontal_alignment = 1
+
+[node name="SettingsScreen" parent="." unique_id=1237328752 instance=ExtResource("18_7paur")]
+visible = false
+layout_mode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=645965856]
 libraries/ = SubResource("AnimationLibrary_n6fv5")
@@ -578,3 +779,5 @@ horizontal_alignment = 2
 vertical_alignment = 2
 metadata/gdss_mode = 1
 metadata/gdss_classes = PackedStringArray("InfoLabel")
+
+[connection signal="pressed" from="PanelBase/Buttons/CanvasGroup/VBoxContainer/SlopeBoxContainer2/SettingsButton" to="." method="_on_settings_button_pressed"]

@@ -13,8 +13,14 @@ class_name VertexAnchor extends Control
 		set_anchor_and_offset(SIDE_BOTTOM, r.y, 0, true)
 		set_anchor_and_offset(SIDE_TOP, r.y, 0, true)
 		queue_redraw()
+		position += ratio_offset
 	get:
 		return Vector2(get_anchor(SIDE_LEFT), get_anchor(SIDE_TOP))
+@export var ratio_offset: Vector2:
+	set(ro):
+		ratio_offset = ro
+		ratio = ratio
+
 
 
 func _ready() -> void:

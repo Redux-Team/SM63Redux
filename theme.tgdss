@@ -11,6 +11,58 @@
 }
 
 
+# @chunk Primary
+@global var global_accent: "#6496ed"
+
+Label {
+	font: $MAIN_FONT 
+	
+	Header {
+		font_size: 38
+	}
+	Subheader {
+		font_size: 28
+	}
+}
+
+Button {
+	cursor: POINTING
+	
+	GenericButton {
+		font: $BUTTON_FONT 
+		font_size: 8
+		padding: 8 8 12 12
+		bg_color: TRANSPARENT_WHITE
+		border: 0
+		corner_radius: 6
+		font_color: WHITE
+		
+		:hover {
+			transform_scale: 1
+			bg_color: alpha(WHITE, 0.3)
+		}
+		
+		:focus {
+			transform_scale: 1.05
+			bg_color: alpha(WHITE, 0.3)
+		}
+		
+		:pressed, :hover_pressed {
+			bg_color: $global_accent 
+		}
+	}
+}
+
+OptionButton {
+	font: $BUTTON_FONT 
+	font_size: 8
+	bg_color: WHITE
+	border: 2
+	padding: 12 12 8 8
+	corner_radius: 8
+	border_color: $base_shadow_col 
+	font_color: $base_shadow_col 
+}
 # @chunk Title Screen
 var base_shadow_col: "#1B2A41"
 var shadow_drop: 0.65
@@ -20,6 +72,12 @@ Panel {
 	BlurPanel {
 		clip_path: polygon(0,0.25, 1,0.15, 1,0.75, 0,0.85)
 		bg_color: blur(5, BLACK, 0.45)
+		transition_time: 0.2
+		transition_func: CUBIC
+		
+		::open {
+			clip_path: polygon(0,0, 1,0, 1,1, 0,1)
+		}
 	}
 }
 
@@ -106,7 +164,7 @@ Button {
 		:disabled {
 			bg_color: alpha($accent, 0.5)
 			cursor: DISABLED
-			font_color: TRANSPARENT
+			font_color: alpha($accent, 0.4)
 		}
 		
 		:pressed {

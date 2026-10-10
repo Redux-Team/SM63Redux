@@ -1,0 +1,127 @@
+[gd_scene format=3 uid="uid://5ihpqfwwsxbo"]
+
+[ext_resource type="Shader" uid="uid://cutgicj2s5not" path="res://util/shader/ui_canvas_group.gdshader" id="1_xq7de"]
+[ext_resource type="Script" uid="uid://dhgqv1os58v6y" path="res://util/ui/ui_canvas_group/ui_canvas_group.gd" id="2_ht7oo"]
+[ext_resource type="PackedScene" uid="uid://baakk5qyhrm3q" path="res://game/widgets/widget_list/widget_list.tscn" id="3_ht7oo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nfbke"]
+shader = ExtResource("1_xq7de")
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_ht7oo"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_ht7oo"]
+color = Color(1, 1, 1, 0.21176471)
+vertical = true
+
+[node name="SettingsScreen" type="Control" unique_id=510955522]
+material = SubResource("ShaderMaterial_nfbke")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_ht7oo")
+metadata/_custom_type_script = "uid://dhgqv1os58v6y"
+metadata/gdss_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1703419586]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+metadata/gdss_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1437596719]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer" unique_id=867250480]
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=2030885016]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1178887062]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 12
+metadata/gdss_mode = 3
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer" unique_id=1126379111]
+layout_mode = 2
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/gdss_classes = PackedStringArray("Header")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=360857758]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer" unique_id=1348982917]
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_ht7oo")
+text = "display"
+alignment = 0
+metadata/gdss_classes = PackedStringArray("GenericButton")
+
+[node name="Button2" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer" unique_id=1573011854]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_ht7oo")
+text = "graphics"
+alignment = 0
+metadata/gdss_classes = PackedStringArray("GenericButton")
+
+[node name="Button3" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer" unique_id=345505460]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_ht7oo")
+text = "ui"
+alignment = 0
+metadata/gdss_classes = PackedStringArray("GenericButton")
+
+[node name="Control2" type="Control" parent="MarginContainer/HBoxContainer" unique_id=174316975]
+custom_minimum_size = Vector2(6, 0)
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/HBoxContainer" unique_id=704412965]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_ht7oo")
+metadata/gdss_mode = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer" unique_id=1895616182]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+metadata/gdss_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer" unique_id=591983540]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/MarginContainer/VBoxContainer" unique_id=1718115238]
+layout_mode = 2
+text = "Display"
+metadata/gdss_classes = PackedStringArray("Subheader")
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/MarginContainer/VBoxContainer" unique_id=953124639]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/VBoxContainer" unique_id=1125880895]
+layout_mode = 2
+
+[node name="WidgetList" parent="MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer" unique_id=507014339 instance=ExtResource("3_ht7oo")]
+layout_mode = 2
