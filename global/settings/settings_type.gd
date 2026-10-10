@@ -35,3 +35,11 @@ func value() -> Variant:
 
 func display_name() -> String:
 	return name_override if not name_override.is_empty() else String(name)
+
+
+func binding() -> PropertyBinding:
+	return PropertyBinding.from_property(self, &"current_value", display_name(), _property_info())
+
+
+func _property_info() -> Dictionary:
+	return {}

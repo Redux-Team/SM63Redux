@@ -53,6 +53,14 @@ func apply() -> void:
 		InputMap.action_add_event(setting_key, event)
 
 
+func binding() -> PropertyBinding:
+	var getter: Callable = func() -> Variant:
+		return current_value
+	var setter: Callable = func(value: Variant) -> void:
+		Settings.rebind_action(self, value)
+	return PropertyBinding.new(getter, setter, display_name(), {"type": TYPE_ARRAY, "hint": PROPERTY_HINT_ARRAY_TYPE, "hint_string": "InputEvent"})
+
+
 func pressed() -> bool:
 	return Input.is_action_pressed(setting_key)
 

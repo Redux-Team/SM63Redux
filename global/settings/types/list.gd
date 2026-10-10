@@ -41,6 +41,13 @@ func _get_value() -> Variant:
 	return option()
 
 
+func _property_info() -> Dictionary:
+	var info: Dictionary = {"hint": PROPERTY_HINT_ENUM, "hint_string": ",".join(options)}
+	if hint == Hint.SLIDER:
+		info.set("widget", &"enum_slider")
+	return info
+
+
 func _validate_property(property: Dictionary) -> void:
 	if property.name == "default_value":
 		property.set("hint", PROPERTY_HINT_ENUM)

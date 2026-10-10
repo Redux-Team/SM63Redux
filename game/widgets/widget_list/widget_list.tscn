@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://baakk5qyhrm3q"]
+
+[ext_resource type="Script" uid="uid://cn5dqe5xum5by" path="res://game/widgets/widget_list/widget_list.gd" id="1_yga5j"]
+[ext_resource type="FontFile" uid="uid://cnmgtcgow66hp" path="res://assets/font/pixel_redux_border.fnt" id="2_3ma7y"]
+
+[node name="WidgetList" type="HBoxContainer" unique_id=507014339 node_paths=PackedStringArray("label", "option_button")]
+offset_right = 144.0
+offset_bottom = 29.0
+size_flags_horizontal = 3
+script = ExtResource("1_yga5j")
+label = NodePath("Label")
+option_button = NodePath("OptionButton")
+metadata/gdss_mode = 1
+
+[node name="Label" type="Label" parent="." unique_id=751779379]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_3ma7y")
+theme_override_font_sizes/font_size = 24
+text = "name"
+metadata/gdss_overrides = "font_size: 24"
+
+[node name="Control" type="Control" parent="." unique_id=1764571795]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="OptionButton" type="OptionButton" parent="." unique_id=386225943]
+layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "value"
+popup/item_0/id = 0
