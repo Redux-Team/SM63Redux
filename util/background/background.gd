@@ -99,13 +99,13 @@ func _build_backdrop() -> Parallax2D:
 
 func _update_background() -> void:
 	var visible_rect: Rect2 = Rect2(Vector2.ZERO, _visible_size)
-	var offset: int = 0
+	var bg_offset: int = 0
 	if _backdrop:
 		var sprite: Sprite2D = _backdrop.get_child(0)
 		sprite.scale = _visible_size / background_texture.get_size()
-		offset = 1
+		bg_offset = 1
 	for i: int in _active.size():
-		_active.get(i)._update(get_child(i + offset, true), visible_rect)
+		_active.get(i)._update(get_child(i + bg_offset, true), visible_rect)
 
 
 func _get_visible_size() -> Vector2:

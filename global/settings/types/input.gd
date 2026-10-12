@@ -56,8 +56,8 @@ func apply() -> void:
 func binding() -> PropertyBinding:
 	var getter: Callable = func() -> Variant:
 		return current_value
-	var setter: Callable = func(value: Variant) -> void:
-		Settings.rebind_action(self, value)
+	var setter: Callable = func(val: Variant) -> void:
+		Settings.rebind_action(self, val)
 	return PropertyBinding.new(getter, setter, display_name(), {"type": TYPE_ARRAY, "hint": PROPERTY_HINT_ARRAY_TYPE, "hint_string": "InputEvent"})
 
 

@@ -17,15 +17,15 @@ func _init(getter: Callable, setter: Callable, binding_label: String = "", bindi
 
 
 static func from_property(target: Object, property: StringName, binding_label: String = "", info_overrides: Dictionary = {}) -> PropertyBinding:
-	var info: Dictionary = {}
+	var prop_info: Dictionary = {}
 	for candidate: Dictionary in target.get_property_list():
 		if candidate.get("name") == property:
-			info = candidate
+			prop_info = candidate
 			break
 	var setter: Callable = func(value: Variant) -> void:
 		target.set(property, value)
 	var resolved_label: String = binding_label if not binding_label.is_empty() else String(property).capitalize()
-	return PropertyBinding.new(target.get.bind(property), setter, resolved_label, info.merged(info_overrides, true))
+	return PropertyBinding.new(target.get.bind(property), setter, resolved_label, prop_info.merged(info_overrides, true))
 
 
 func get_value() -> Variant:

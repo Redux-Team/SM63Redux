@@ -221,6 +221,7 @@ func _get_origin(visible_size: Vector2, draw_size: Vector2, period: Vector2, rep
 	var origin: Vector2 = (visible_size - draw_size) * ratio + anchor_offset
 	if repeat_mode == RepeatMode.CUSTOM:
 		return origin
+	@warning_ignore("integer_division")
 	var lead: int = repeat_times / 2
 	if repeat_size.x > 0.0:
 		origin.x = lead * period.x + fposmod(anchor_offset.x, period.x) - period.x
