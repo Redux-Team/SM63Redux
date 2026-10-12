@@ -1,0 +1,113 @@
+[gd_scene format=3 uid="uid://kbh00qr7ptb0"]
+
+[ext_resource type="Script" uid="uid://cspo44xkemqn8" path="res://dev/debug_overlay/debug_overlay.gd" id="1_5k3mp"]
+[ext_resource type="FontFile" uid="uid://cf4ehcuf6rt7p" path="res://assets/font/pixel_redux.fnt" id="1_eii55"]
+[ext_resource type="FontFile" uid="uid://cnmgtcgow66hp" path="res://assets/font/pixel_redux_border.fnt" id="1_skb2b"]
+[ext_resource type="Script" uid="uid://bjig2y52v1jnp" path="res://dev/debug_overlay/hardware.gd" id="3_tl1ce"]
+[ext_resource type="Script" uid="uid://cunqbbo1l5dfc" path="res://dev/debug_overlay/profile.gd" id="4_a3h30"]
+[ext_resource type="Script" uid="uid://5kwl53ml1k3b" path="res://dev/debug_overlay/input.gd" id="6_2p8dq"]
+
+[node name="DebugOverlay" type="CanvasLayer" unique_id=1072152519 node_paths=PackedStringArray("debug_root")]
+layer = 99
+visible = false
+script = ExtResource("1_5k3mp")
+debug_root = NodePath("DebugRoot")
+
+[node name="DebugRoot" type="Control" parent="." unique_id=2050599083]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/gdss_mode = 1
+
+[node name="Hardware" type="VBoxContainer" parent="DebugRoot" unique_id=936088480]
+layout_mode = 1
+offset_left = 3.0
+offset_top = 4.0
+offset_right = 130.0
+offset_bottom = 126.0
+mouse_filter = 2
+theme_override_constants/separation = 8
+metadata/gdss_mode = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="DebugRoot/Hardware" unique_id=734050812]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_skb2b")
+text = "debug menu: f3"
+fit_content = true
+
+[node name="Hardware" type="RichTextLabel" parent="DebugRoot/Hardware" unique_id=1741268651]
+layout_mode = 2
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("1_eii55")
+theme_override_fonts/bold_font = ExtResource("1_skb2b")
+theme_override_font_sizes/normal_font_size = 6
+bbcode_enabled = true
+text = "[b]hardware[/b]
+"
+fit_content = true
+autowrap_mode = 0
+script = ExtResource("3_tl1ce")
+metadata/gdss_classes = PackedStringArray("DebugLabel")
+
+[node name="Panel" type="Panel" parent="DebugRoot/Hardware/Hardware" unique_id=398881789]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/gdss_mode = 3
+
+[node name="Profile" type="RichTextLabel" parent="DebugRoot/Hardware" unique_id=1688609327]
+layout_mode = 2
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("1_eii55")
+theme_override_fonts/bold_font = ExtResource("1_skb2b")
+theme_override_font_sizes/normal_font_size = 6
+bbcode_enabled = true
+text = "[b]profile[/b]"
+fit_content = true
+autowrap_mode = 0
+script = ExtResource("4_a3h30")
+metadata/gdss_classes = PackedStringArray("DebugLabel")
+
+[node name="Panel" type="Panel" parent="DebugRoot/Hardware/Profile" unique_id=1569783090]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/gdss_mode = 3
+
+[node name="Input" type="RichTextLabel" parent="DebugRoot/Hardware" unique_id=923688664]
+layout_mode = 2
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("1_eii55")
+theme_override_fonts/bold_font = ExtResource("1_skb2b")
+theme_override_font_sizes/normal_font_size = 6
+bbcode_enabled = true
+text = "[b]input[/b]"
+fit_content = true
+autowrap_mode = 2
+script = ExtResource("6_2p8dq")
+metadata/gdss_classes = PackedStringArray("DebugLabel")
+
+[node name="Panel" type="Panel" parent="DebugRoot/Hardware/Input" unique_id=412421525]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/gdss_mode = 3

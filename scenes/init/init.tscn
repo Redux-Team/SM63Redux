@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dt1u2vrcmm5s2" path="res://scenes/init/init.gd" id="1_mbfq6"]
 [ext_resource type="Resource" uid="uid://dlr5ex5o8352b" path="res://dev/unit_tests/_unit_tester.tres" id="2_b5ra7"]
+[ext_resource type="PackedScene" uid="uid://kbh00qr7ptb0" path="res://dev/debug_overlay/debug_overlay.tscn" id="3_eba8g"]
 
 [node name="Init" type="Control" unique_id=98938417]
 layout_mode = 3
@@ -12,6 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mbfq6")
 unit_tests = ExtResource("2_b5ra7")
+debug_overlay = ExtResource("3_eba8g")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=559890405]
 layout_mode = 1

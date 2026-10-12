@@ -1,6 +1,7 @@
 extends Control
 
 @export var unit_tests: UnitTester
+@export var debug_overlay: PackedScene
 
 
 func _ready() -> void:
@@ -10,6 +11,9 @@ func _ready() -> void:
 		if unit_tests:
 			print("Running unit tests...")
 			unit_tests._run_tests(false)
+		
+		if debug_overlay:
+			Singleton.add_child(debug_overlay.instantiate())
 	
 	print_rich("\nProfiling... ([color=red]-1.0[/color] to [color=green]1.0[/color])")
 	await Profile.run()

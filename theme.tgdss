@@ -254,6 +254,12 @@ Label {
 RichTextLabel {
 	normal_font: $MAIN_FONT
 	default_color: alpha(WHITE, 0.6)
+	
+	DebugLabel {
+		bold_font: $MAIN_FONT 
+		normal_font: $BUTTON_FONT 
+		normal_font_size: 6
+	}
 }
 
 Button {
