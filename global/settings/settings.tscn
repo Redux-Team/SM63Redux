@@ -334,10 +334,11 @@ setting_key = "faster_death"
 requires_apply = false
 metadata/_custom_type_script = "uid://wbytn3c5m6h8"
 
-[node name="Misc" type="Node" parent="." unique_id=1016970897 node_paths=PackedStringArray("language", "force_touch_controls")]
+[node name="Misc" type="Node" parent="." unique_id=1016970897 node_paths=PackedStringArray("language", "force_touch_controls", "discord_rpc")]
 script = ExtResource("9_misc")
 language = NodePath("Language")
 force_touch_controls = NodePath("Force Touch Controls")
+discord_rpc = NodePath("Discord RPC")
 
 [node name="Language" type="Node" parent="Misc" unique_id=1763125853]
 script = ExtResource("10_list")
@@ -348,3 +349,10 @@ metadata/_custom_type_script = "uid://2xkdb7ge8v0l"
 script = ExtResource("12_boolean")
 setting_key = "force_touch_controls"
 metadata/_custom_type_script = "uid://wbytn3c5m6h8"
+
+[node name="Discord RPC" type="Node" parent="Misc" unique_id=1816549171]
+script = ExtResource("10_list")
+options = PackedStringArray("Off", "Minimal", "Detailed")
+default_value = 2
+setting_key = "discord_rpc"
+metadata/_custom_type_script = "uid://2xkdb7ge8v0l"

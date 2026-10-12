@@ -22,10 +22,12 @@ var minor_version: int = -1
 var patch_number: int = -1
 var branch: VersionBranch = VersionBranch.UNSET
 var branch_version: int = -1
+var _hash: String = ""
 
 
-static func from_string(version_string: String) -> Version:
+static func from_string(version_string: String, version_hash: String = "") -> Version:
 	var version: Version = Version.new()
+	version._hash = version_hash
 	var split_regex: RegEx = RegEx.create_from_string("[.-]")
 	
 	var new_version_string: String = _branch_str_to_int(version_string)
@@ -91,6 +93,12 @@ func is_equal_to(version: Version) -> bool:
 
 func is_newer_than(version: Version) -> bool:
 	return Version.compare(self, version) == 1
+
+
+func hash() -> String:
+	if _hash.is_empty():
+		push_error("Version '%s' has no hash." % self)
+	return _hash
 
 
 func as_string() -> String:

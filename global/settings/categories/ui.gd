@@ -15,7 +15,6 @@ func _apply_setting(setting: SettingsType) -> void:
 		blur_strength:
 			print_debug("TODO!")
 		animations:
-			print(animations.current_value)
 			GDSS.animations_enabled = animations.current_value
 		_:
 			super(setting)
