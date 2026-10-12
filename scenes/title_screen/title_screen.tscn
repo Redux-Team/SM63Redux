@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://dp3i27o4vk7jm" path="res://assets/textures/world/background/hills_0/bg_hills_0.png" id="8_f5c17"]
 [ext_resource type="Texture2D" uid="uid://nryk3t4ejhvh" path="res://assets/textures/world/background/hills_0/bg_hills_2.png" id="9_hhw6k"]
 [ext_resource type="Texture2D" uid="uid://dumcbic4y5b4i" path="res://assets/textures/world/background/hills_0/bg_hills_1.png" id="10_ue80m"]
-[ext_resource type="Shader" uid="uid://wxepa6euigw5" path="res://util/shader/blur.gdshader" id="11_seoxh"]
+[ext_resource type="Shader" uid="uid://wxepa6euigw5" path="res://shader/blur.gdshader" id="11_seoxh"]
 [ext_resource type="Script" uid="uid://r7egndbc4l4i" path="res://util/ui/anchor_polygon/vertex_anchor.gd" id="12_c7dqk"]
 [ext_resource type="Script" uid="uid://bmkoc7l020aqo" path="res://util/ui/slope_box_container/slope_box_container.gd" id="13_fdkeb"]
 [ext_resource type="Texture2D" uid="uid://dmq4jeitac3w1" path="res://meta/logo.png" id="15_wmj2m"]
@@ -308,6 +308,94 @@ tracks/14/keys = {
 "update": 0,
 "values": []
 }
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("PanelBase:visible")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_5q4na"]
+resource_name = "close"
+length = 0.33333334
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LogoAnchor:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.13333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PanelBase:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.33333334),
+"transitions": PackedFloat32Array(0.3, 0.3),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PanelBase:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.33333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BlurRect:tint")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.33333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.3019608)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PanelBase/Buttons:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.33333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("PanelBase/Buttons:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.13333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_7paur"]
 resource_name = "hide_settings"
@@ -471,6 +559,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("PanelBase:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_p56b5"]
@@ -676,6 +776,7 @@ tracks/7/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_n6fv5"]
 _data = {
 &"RESET": SubResource("Animation_n6fv5"),
+&"close": SubResource("Animation_5q4na"),
 &"hide_settings": SubResource("Animation_7paur"),
 &"intro": SubResource("Animation_ao3wo"),
 &"open": SubResource("Animation_p56b5"),
@@ -719,6 +820,7 @@ script = ExtResource("16_aihkd")
 metadata/_custom_type_script = "uid://djwxqlemhil25"
 
 [node name="PanelBase" type="Control" parent="." unique_id=1856306473]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -920,5 +1022,6 @@ vertical_alignment = 2
 metadata/gdss_mode = 1
 metadata/gdss_classes = PackedStringArray("InfoLabel")
 
+[connection signal="pressed" from="PanelBase/Buttons/CanvasGroup/VBoxContainer/SlopeBoxContainer/LDButton" to="." method="_on_ld_button_pressed"]
 [connection signal="pressed" from="PanelBase/Buttons/CanvasGroup/VBoxContainer/SlopeBoxContainer2/SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="closed" from="SettingsScreen" to="." method="_on_settings_screen_closed"]

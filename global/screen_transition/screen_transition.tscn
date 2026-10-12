@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://dc1a8llb7l88l"]
+
+[ext_resource type="Script" uid="uid://dxxsc8udet7d3" path="res://global/screen_transition/screen_transition.gd" id="1_script"]
+[ext_resource type="Shader" uid="uid://dcewkclyl2vjk" path="res://shader/screen_transition_center.gdshader" id="2_center"]
+[ext_resource type="PackedScene" uid="uid://j2gs73yc1ljb" path="res://global/screen_transition/loading_screen.tscn" id="3_loading"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mask"]
+shader = ExtResource("2_center")
+shader_parameter/mask_scale = 1.0
+
+[node name="ScreenTransition" type="CanvasLayer" node_paths=PackedStringArray("mask_rect", "loading_screen")]
+process_mode = 3
+layer = 98
+script = ExtResource("1_script")
+mask_rect = NodePath("AspectRatioContainer/MaskRect")
+loading_screen = NodePath("LoadingScreen")
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="MaskRect" type="ColorRect" parent="AspectRatioContainer"]
+visible = false
+material = SubResource("ShaderMaterial_mask")
+layout_mode = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="LoadingScreen" parent="." instance=ExtResource("3_loading")]

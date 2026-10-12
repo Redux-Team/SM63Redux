@@ -8,6 +8,7 @@ enum DiscordMode {
 }
 
 const DISCORD_APP_ID: String = "1496255367607488562"
+const SCREEN_TRANSITION: PackedScene = preload("uid://dc1a8llb7l88l")
 
 var _discord: DiscordRichPresence
 var _discord_mode: DiscordMode = DiscordMode.OFF
@@ -17,6 +18,28 @@ var _discord_large_image: String = ""
 var _commit_hash: String = ""
 var _git_branch: String = ""
 var _git_fetched: bool = false
+var _screen_transition: ScreenTransition
+
+
+func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+	
+	_screen_transition = SCREEN_TRANSITION.instantiate()
+	add_child(_screen_transition)
+
+
+func build_screen_transition() -> ScreenTransition.Builder:
+	return ScreenTransition.Builder.new(_screen_transition)
+
+
+func is_transitioning() -> bool:
+	return _screen_transition.is_transitioning()
+
+
+func set_screen_transition_visible(visible: bool) -> void:
+	_screen_transition.visible = visible
+
 
 ## Returns the current version of the game as a [Version].
 func get_version() -> Version:

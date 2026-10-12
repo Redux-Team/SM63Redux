@@ -1,6 +1,6 @@
 class_name ProfileInstantiation
 
-const _WARMUP_USEC: int = 100_000
+const _WARMUP_SLICES: int = 5
 const _SLICE_USEC: int = 20_000
 const _REPS: int = 5
 const _PARTICLE_AMOUNT: int = 32
@@ -8,25 +8,35 @@ const _REFERENCE: int = 249
 
 
 static func run() -> float:
-	var scene: PackedScene = _build_scene()
-	var warmup_start: int = Time.get_ticks_usec()
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	
-	while Time.get_ticks_usec() - warmup_start < _WARMUP_USEC:
-		scene.instantiate().free()
+	if tree == null:
+		return 0.0
+	
+	var scene: PackedScene = _build_scene()
+	
+	for i: int in _WARMUP_SLICES:
+		_slice(scene)
+		await tree.process_frame
 	
 	var best: int = 0
 	
 	for rep: int in _REPS:
-		var units: int = 0
-		var start: int = Time.get_ticks_usec()
-		
-		while Time.get_ticks_usec() - start < _SLICE_USEC:
-			scene.instantiate().free()
-			units += 1
-		
-		best = maxi(best, units)
+		best = maxi(best, _slice(scene))
+		await tree.process_frame
 	
 	return 1.0 - (float(_REFERENCE) / float(maxi(best, 1)))
+
+
+static func _slice(scene: PackedScene) -> int:
+	var units: int = 0
+	var start: int = Time.get_ticks_usec()
+	
+	while Time.get_ticks_usec() - start < _SLICE_USEC:
+		scene.instantiate().free()
+		units += 1
+	
+	return units
 
 
 static func _build_scene() -> PackedScene:
