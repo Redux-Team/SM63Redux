@@ -1,5 +1,5 @@
 class_name Version
-extends Object
+extends RefCounted
 ## Helper class for versioning, uses the SemVer standard (https://semver.org/).
 
 enum VersionBranch {
@@ -95,9 +95,11 @@ func is_newer_than(version: Version) -> bool:
 	return Version.compare(self, version) == 1
 
 
+func has_hash() -> bool:
+	return not _hash.is_empty()
+
+
 func hash() -> String:
-	if _hash.is_empty():
-		push_error("Version '%s' has no hash." % self)
 	return _hash
 
 

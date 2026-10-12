@@ -57,7 +57,7 @@ func _push_discord_activity() -> void:
 	if _discord_mode == DiscordMode.DETAILED and not _discord_large_image.is_empty():
 		large_image = _discord_large_image
 	var large_text: String = "v%s" % version
-	if OS.has_feature("editor"):
+	if OS.has_feature("editor") and version.has_hash():
 		large_text += " (%s:%s)" % [_git_branch, version.hash()]
 	var activity: Dictionary = {
 		"timestamps": _discord_timestamps,

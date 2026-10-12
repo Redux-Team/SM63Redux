@@ -110,7 +110,6 @@ pressed = true
 
 [node name="Settings" type="Node" unique_id=1964874867 node_paths=PackedStringArray("display", "graphics", "ui", "input", "audio", "gameplay", "misc")]
 script = ExtResource("1_settings")
-input_presets = Array[ExtResource("2_preset")]([ExtResource("14_classic"), ExtResource("15_modern")])
 display = NodePath("Display")
 graphics = NodePath("Graphics")
 ui = NodePath("UI")
@@ -118,6 +117,7 @@ input = NodePath("Input")
 audio = NodePath("Audio")
 gameplay = NodePath("Gameplay")
 misc = NodePath("Misc")
+input_presets = Array[ExtResource("2_preset")]([ExtResource("14_classic"), ExtResource("15_modern")])
 
 [node name="Display" type="Node" parent="." unique_id=1309538916 node_paths=PackedStringArray("window_mode", "fps_cap", "v_sync")]
 script = ExtResource("3_display")
@@ -355,4 +355,5 @@ script = ExtResource("10_list")
 options = PackedStringArray("Off", "Minimal", "Detailed")
 default_value = 2
 setting_key = "discord_rpc"
+name_override = "Discord Status"
 metadata/_custom_type_script = "uid://2xkdb7ge8v0l"
