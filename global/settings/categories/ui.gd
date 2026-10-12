@@ -13,7 +13,7 @@ func _apply_setting(setting: SettingsType) -> void:
 			# This is to make scaling consistent with hiDPI displays
 			get_window().content_scale_factor = scale.current_value
 		blur_strength:
-			print_debug("TODO!")
+			GDSS.set_global_var("blur_amount", 5 * (blur_strength.current_value / 100.0))
 		animations:
 			GDSS.animations_enabled = animations.current_value
 		_:

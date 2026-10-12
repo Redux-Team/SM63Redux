@@ -228,13 +228,14 @@ PopupMenu {
 
 
 # @chunk Title Screen
+@global var blur_amount: 5.0
 var shadow_drop: 0.65
 
 Panel {
 	BlurPanel {
 		transition_time: 0.2
 		transition_func: CUBIC
-		bg_color: blur(5, BLACK, 0.45)
+		bg_color: blur($blur_amount, BLACK, 0.45)
 		clip_path: polygon(0,0.25, 1,0.15, 1,0.75, 0,0.85)
 		
 		::open {
