@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://dp3ocrpop234v"]
 
 [ext_resource type="Script" uid="uid://bucyvd3xpug0m" path="res://scenes/title_screen/title_screen.gd" id="1_aihkd"]
+[ext_resource type="AudioStream" uid="uid://bvua6a3rmk7hf" path="res://assets/music/title_welcome.mp3" id="2_7paur"]
 [ext_resource type="Script" uid="uid://t463o2ocnavq" path="res://util/background/background.gd" id="2_seoxh"]
+[ext_resource type="AudioStream" uid="uid://dmjltgy8g1jqg" path="res://assets/music/title_menu.mp3" id="3_5q4na"]
 [ext_resource type="Script" uid="uid://bch8jy3lorqya" path="res://util/background/background_layer.gd" id="3_7paur"]
 [ext_resource type="Script" uid="uid://dirasfi12sai2" path="res://util/background/background_layer_2d.gd" id="4_5q4na"]
 [ext_resource type="Texture2D" uid="uid://cg0354brx4x1h" path="res://assets/textures/world/background/clouds_0/bg_clouds_02.png" id="5_cqe78"]
@@ -17,6 +19,36 @@
 [ext_resource type="Script" uid="uid://djwxqlemhil25" path="res://util/ui/ui_blur_rect/ui_blur_rect.gd" id="16_aihkd"]
 [ext_resource type="FontFile" uid="uid://cnmgtcgow66hp" path="res://assets/font/pixel_redux_border.fnt" id="16_otspg"]
 [ext_resource type="PackedScene" uid="uid://5ihpqfwwsxbo" path="res://scenes/settings_screen/settings_screen.tscn" id="18_7paur"]
+
+[sub_resource type="AudioStreamInteractive" id="AudioStreamInteractive_jv03u"]
+clip_count = 2
+clip_0/name = &"welcome"
+clip_0/stream = ExtResource("2_7paur")
+clip_0/auto_advance = 0
+clip_1/name = &"menu"
+clip_1/stream = ExtResource("3_5q4na")
+clip_1/auto_advance = 0
+_transitions = {
+Vector2i(0, 1): {
+"fade_beats": 1.0,
+"fade_mode": 0,
+"from_time": 0,
+"hold_previous": true,
+"to_time": 1
+},
+Vector2i(1, 0): {
+"fade_beats": 1.0,
+"fade_mode": 0,
+"from_time": 0,
+"to_time": 2
+},
+Vector2i(1, 1): {
+"fade_beats": 1.0,
+"fade_mode": 0,
+"from_time": 0,
+"to_time": 0
+}
+}
 
 [sub_resource type="Gradient" id="Gradient_dg61c"]
 colors = PackedColorArray(0, 0.7647059, 1, 1, 0, 0.60784316, 1, 1)
@@ -664,6 +696,7 @@ blur_panel = NodePath("PanelBase/BlurPanel")
 settings_screen = NodePath("SettingsScreen")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=502231712]
+stream = SubResource("AudioStreamInteractive_jv03u")
 bus = &"Music"
 
 [node name="Background" type="CanvasLayer" parent="." unique_id=1785428884]
