@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://bpte0j20nd05a"]
+
+[ext_resource type="Script" uid="uid://bepa5bvjapo1" path="res://game/widgets/widget_range/widget_range.gd" id="1_rng"]
+[ext_resource type="PackedScene" uid="uid://bqi8fj4vx0u0a" path="res://util/ui/ui_slider/ui_slider.tscn" id="2_sld"]
+
+[node name="WidgetRange" type="HBoxContainer" unique_id=657352137 node_paths=PackedStringArray("label", "slider", "value_label")]
+offset_right = 144.0
+offset_bottom = 29.0
+size_flags_horizontal = 3
+script = ExtResource("1_rng")
+label = NodePath("Label")
+slider = NodePath("UISlider")
+value_label = NodePath("ValueLabel")
+metadata/gdss_mode = 1
+
+[node name="Label" type="Label" parent="." unique_id=1961268300]
+layout_mode = 2
+text = "range"
+metadata/gdss_overrides = "font_size: 24"
+
+[node name="Control" type="Control" parent="." unique_id=1847285030]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ValueLabel" type="Label" parent="." unique_id=925517850]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "value"
+horizontal_alignment = 2
+metadata/gdss_overrides = "font_size: 24"
+
+[node name="UISlider" parent="." unique_id=540616599 instance=ExtResource("2_sld")]
+layout_mode = 2
+ticks_on_borders = true
+
+[connection signal="value_changed" from="UISlider" to="." method="_on_slider_value_changed"]
+[connection signal="drag_ended" from="UISlider" to="." method="_on_slider_drag_ended"]

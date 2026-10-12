@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://bqi8fj4vx0u0a"]
+
+[ext_resource type="Script" uid="uid://iq4yt4rrphvs" path="res://util/ui/ui_slider/ui_slider.gd" id="1_sld"]
+
+[node name="UISlider" type="HSlider" unique_id=1671745489 node_paths=PackedStringArray("fill", "grabber")]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(140, 17)
+offset_right = 96.0
+offset_bottom = 17.0
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+max_value = 1.0
+step = 0.25
+ticks_on_borders = true
+script = ExtResource("1_sld")
+fill = NodePath("Fill")
+grabber = NodePath("Grabber")
+inset = 0.0
+tick_size = Vector2(2, 3)
+metadata/gdss_mode = 1
+metadata/_edit_group_ = true
+
+[node name="Track" type="Panel" parent="." unique_id=1663251916]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -4.5
+offset_bottom = 4.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/gdss_classes = PackedStringArray("SliderTrack")
+
+[node name="Fill" type="Panel" parent="." unique_id=369921966]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 2.0
+offset_top = -2.5
+offset_right = 16.999996
+offset_bottom = 2.5
+grow_vertical = 2
+mouse_filter = 2
+metadata/gdss_classes = PackedStringArray("SliderFill")
+
+[node name="Grabber" type="Panel" parent="." unique_id=396619364]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -8.5
+offset_right = 16.999996
+offset_bottom = 8.5
+grow_vertical = 2
+mouse_filter = 2
+metadata/gdss_classes = PackedStringArray("SliderGrabber")

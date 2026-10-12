@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://b7ub6g70ijha2"]
+
+[ext_resource type="Script" uid="uid://cmaqags06y5qt" path="res://game/widgets/widget_enum_slider/widget_enum_slider.gd" id="1_ens"]
+[ext_resource type="PackedScene" uid="uid://bqi8fj4vx0u0a" path="res://util/ui/ui_slider/ui_slider.tscn" id="2_sld"]
+
+[node name="WidgetEnumSlider" type="HBoxContainer" unique_id=1160558237 node_paths=PackedStringArray("label", "slider", "value_label")]
+offset_right = 144.0
+offset_bottom = 29.0
+size_flags_horizontal = 3
+script = ExtResource("1_ens")
+label = NodePath("Label")
+slider = NodePath("UISlider")
+value_label = NodePath("ValueLabel")
+metadata/gdss_mode = 1
+
+[node name="Label" type="Label" parent="." unique_id=1666159669]
+layout_mode = 2
+text = "enum slider"
+metadata/gdss_overrides = "font_size: 24"
+
+[node name="Control" type="Control" parent="." unique_id=285625657]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ValueLabel" type="Label" parent="." unique_id=254000780]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "value"
+horizontal_alignment = 2
+metadata/gdss_overrides = "font_size: 24"
+
+[node name="UISlider" parent="." unique_id=855751019 instance=ExtResource("2_sld")]
+layout_mode = 2
+step = 1.0
+rounded = true
+
+[node name="Control2" type="Control" parent="." unique_id=2047385189]
+layout_mode = 2
+
+[connection signal="value_changed" from="UISlider" to="." method="_on_slider_value_changed"]

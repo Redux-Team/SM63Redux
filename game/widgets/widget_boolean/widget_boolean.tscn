@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://buhxjd0lc4clj"]
+
+[ext_resource type="Script" uid="uid://n6knwgeedrtr" path="res://game/widgets/widget_boolean/widget_boolean.gd" id="1_p3d74"]
+
+[node name="WidgetBoolean" type="HBoxContainer" unique_id=507014339 node_paths=PackedStringArray("label", "toggle", "toggle_dot")]
+offset_right = 144.0
+offset_bottom = 29.0
+size_flags_horizontal = 3
+script = ExtResource("1_p3d74")
+label = NodePath("Label")
+toggle = NodePath("CheckButtonBG")
+toggle_dot = NodePath("CheckButtonBG/CheckButtonDot")
+metadata/gdss_mode = 1
+
+[node name="Label" type="Label" parent="." unique_id=751779379]
+layout_mode = 2
+text = "boolean"
+metadata/gdss_overrides = "font_size: 24"
+
+[node name="Control" type="Control" parent="." unique_id=1764571795]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CheckButtonBG" type="Button" parent="." unique_id=1550892988]
+custom_minimum_size = Vector2(32, 17)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+toggle_mode = true
+metadata/gdss_classes = PackedStringArray("CheckButtonBG")
+
+[node name="CheckButtonDot" type="Panel" parent="CheckButtonBG" unique_id=1112990243]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 4.0
+offset_top = -4.5
+offset_right = 13.0
+offset_bottom = 4.5
+grow_vertical = 2
+mouse_filter = 2
+metadata/gdss_classes = PackedStringArray("CheckButtonDot")
+
+[connection signal="toggled" from="CheckButtonBG" to="." method="_on_toggle_toggled"]

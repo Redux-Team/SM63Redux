@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bnlgql4fauuga"]
+
+[ext_resource type="Script" uid="uid://d0i8dks1uqwbg" path="res://game/widgets/widget_input/widget_input.gd" id="1_inp"]
+
+[node name="WidgetInput" type="HBoxContainer" unique_id=1784460085 node_paths=PackedStringArray("label", "bindings")]
+offset_right = 144.0
+offset_bottom = 29.0
+size_flags_horizontal = 3
+script = ExtResource("1_inp")
+label = NodePath("Label")
+bindings = NodePath("Bindings")
+metadata/gdss_mode = 1
+
+[node name="Label" type="Label" parent="." unique_id=1010692424]
+layout_mode = 2
+text = "input"
+metadata/gdss_overrides = "font_size: 24"
+
+[node name="Control" type="Control" parent="." unique_id=1530511863]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Bindings" type="HBoxContainer" parent="." unique_id=1872828951]
+layout_mode = 2
+theme_override_constants/separation = 4

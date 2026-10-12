@@ -3,6 +3,10 @@ extends Control
 
 const SCENES: Dictionary[StringName, String] = {
 	&"enum": "uid://baakk5qyhrm3q",
+	&"bool": "uid://buhxjd0lc4clj",
+	&"range": "uid://bpte0j20nd05a",
+	&"enum_slider": "uid://b7ub6g70ijha2",
+	&"Array[InputEvent]": "uid://bnlgql4fauuga",
 }
 
 static var _registered: Dictionary[StringName, PackedScene] = {}

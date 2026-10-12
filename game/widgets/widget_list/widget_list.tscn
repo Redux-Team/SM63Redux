@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://baakk5qyhrm3q"]
 
 [ext_resource type="Script" uid="uid://cn5dqe5xum5by" path="res://game/widgets/widget_list/widget_list.gd" id="1_yga5j"]
-[ext_resource type="FontFile" uid="uid://cnmgtcgow66hp" path="res://assets/font/pixel_redux_border.fnt" id="2_3ma7y"]
 
 [node name="WidgetList" type="HBoxContainer" unique_id=507014339 node_paths=PackedStringArray("label", "option_button")]
 offset_right = 144.0
@@ -14,9 +13,7 @@ metadata/gdss_mode = 1
 
 [node name="Label" type="Label" parent="." unique_id=751779379]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_3ma7y")
-theme_override_font_sizes/font_size = 24
-text = "name"
+text = "list"
 metadata/gdss_overrides = "font_size: 24"
 
 [node name="Control" type="Control" parent="." unique_id=1764571795]
