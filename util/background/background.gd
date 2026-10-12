@@ -24,6 +24,7 @@ extends CanvasLayer
 var _active: Array[BackgroundLayer] = []
 var _backdrop: Parallax2D
 var _visible_size: Vector2
+var _content_scale: float = 1.0
 var _dirty: bool = false
 
 
@@ -35,10 +36,12 @@ func _process(_delta: float) -> void:
 	if _dirty:
 		_dirty = false
 		_refresh_background()
-	var size: Vector2 = _get_visible_size()
-	if size == _visible_size:
+	var content_scale: float = _get_content_scale()
+	var size: Vector2 = _get_visible_size(content_scale)
+	if size == _visible_size and content_scale == _content_scale:
 		return
 	_visible_size = size
+	_content_scale = content_scale
 	_update_background()
 
 
@@ -83,7 +86,8 @@ func _refresh_background() -> void:
 			parallax.autoscroll += autoscroll
 		add_child(node, false, INTERNAL_MODE_FRONT)
 		_active.append(bg_layer)
-	_visible_size = _get_visible_size()
+	_content_scale = _get_content_scale()
+	_visible_size = _get_visible_size(_content_scale)
 	_update_background()
 
 
@@ -98,6 +102,7 @@ func _build_backdrop() -> Parallax2D:
 
 
 func _update_background() -> void:
+	scale = Vector2.ONE / _content_scale
 	var visible_rect: Rect2 = Rect2(Vector2.ZERO, _visible_size)
 	var bg_offset: int = 0
 	if _backdrop:
@@ -108,12 +113,20 @@ func _update_background() -> void:
 		_active.get(i)._update(get_child(i + bg_offset, true), visible_rect)
 
 
-func _get_visible_size() -> Vector2:
+func _get_visible_size(content_scale: float) -> Vector2:
 	var viewport: Viewport = get_viewport()
 	if Engine.is_editor_hint() or not viewport:
 		return _get_design_size()
 	var camera: Camera2D = viewport.get_camera_2d()
-	return viewport.get_visible_rect().size / (camera.zoom if camera else Vector2.ONE)
+	var size: Vector2 = viewport.get_visible_rect().size * content_scale
+	return size / (camera.zoom if camera else Vector2.ONE)
+
+
+func _get_content_scale() -> float:
+	var window: Window = get_viewport() as Window
+	if Engine.is_editor_hint() or not window:
+		return 1.0
+	return window.content_scale_factor
 
 
 func _get_design_size() -> Vector2:
