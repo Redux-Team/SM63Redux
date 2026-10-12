@@ -24,6 +24,7 @@ static func run() -> float:
 	tree.root.add_child(viewport)
 	await tree.process_frame
 	
+	Singleton.set_screen_transition_visible(false)
 	for i: int in _WARMUP_FRAMES:
 		RenderingServer.force_draw(false)
 	
@@ -34,6 +35,7 @@ static func run() -> float:
 	for rep: int in _REPS:
 		best = minf(best, _batch(viewport))
 	
+	Singleton.set_screen_transition_visible(true)
 	viewport.queue_free()
 	
 	return 1.0 - (best / _REFERENCE_MSEC)
