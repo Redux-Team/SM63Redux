@@ -504,6 +504,8 @@ func _apply_overrides_unwrapped(node_type: GdssNodeType, control: Variant, clear
 	var entry: Dictionary = _resolve_entry()
 	var state: String = _get_state()
 	var styled: Dictionary = _entry_styled_props(entry)
+	var slot_states: PackedStringArray = node_type.states if node_type.is_static and not _slot_state.is_empty() else PackedStringArray()
+	var is_secondary_slot: bool = not slot_states.is_empty() and _slot_state != slot_states.get(0)
 	for prop: GdssProp in node_type.get_enabled_props():
 		if prop.category == GdssProp.Category.STYLE:
 			if prop.name == "padding":
@@ -513,12 +515,18 @@ func _apply_overrides_unwrapped(node_type: GdssNodeType, control: Variant, clear
 					_get_val_cached(prop.name, entry, state, prop.get_default_value()))
 				_apply_padding(Vector4(pad_raw if pad_raw != null else prop.get_default_value()))
 			continue
-		if not styled.has(prop.name):
+		if is_secondary_slot or not styled.has(prop.name):
 			continue
 		var val: Variant = _get_val_cached(prop.name, entry, state, prop.get_default_value())
 		if val == null:
 			val = prop.get_default_value()
 		_apply_theme_prop(prop, control, node_type, val)
+		if prop.category == GdssProp.Category.COLOR:
+			for slot: String in slot_states.slice(1):
+				var slot_color: String = prop.name.trim_suffix("color") + slot + "_color"
+				var slot_val: Variant = _get_val_cached(prop.name, entry, slot, val)
+				if node_type.colors.has(slot_color) and slot_val is Color:
+					_override_color_if_custom(control, node_type, slot_color, slot_val)
 	_refresh_font_transform(control, node_type)
 	_applying = false
 
@@ -918,8 +926,12 @@ func _start_transition(from_state: String, to_state: String, timing_state: Strin
 			
 			GDSS.Type.INT:
 				var fallback: int = int(prop.get_default_value())
-				var from: int = int(_tweened_values.get(prop_name, _get_parsed_val(prop_name, resolved_from, fallback)))
-				var to: int = int(_get_parsed_val(prop_name, to_state, fallback))
+				var int_from: Variant = _tweened_values.get(prop_name, _get_parsed_val(prop_name, resolved_from, fallback))
+				var int_to: Variant = _get_parsed_val(prop_name, to_state, fallback)
+				if not (int_from is int or int_from is float) or not (int_to is int or int_to is float):
+					continue
+				var from: int = int(int_from)
+				var to: int = int(int_to)
 				if from == to:
 					continue
 				var captured: String = prop_name

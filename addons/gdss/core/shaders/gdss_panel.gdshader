@@ -226,9 +226,9 @@ void fragment() {
 	// with whatever is underneath it.
 	float fill_a = fill_col.a * fill_mask;
 	float border_a = border_col.a * border_mask;
-	float panel_a = border_a + fill_a * (1.0 - border_a);
+	float panel_a = min(border_a + fill_a, 1.0);
 	vec3 panel_rgb = panel_a > EPS
-		? (border_col.rgb * border_a + fill_col.rgb * fill_a * (1.0 - border_a)) / panel_a
+		? (border_col.rgb * border_a + fill_col.rgb * fill_a) / (border_a + fill_a)
 		: fill_col.rgb;
 	vec4 col = vec4(panel_rgb, panel_a);
 	
