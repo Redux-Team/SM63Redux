@@ -13,15 +13,28 @@
 
 # @chunk Primary
 @global var global_accent: "#6496ed"
+var base_shadow_col: "#1B2A41"
 
 Label {
-	font: $MAIN_FONT 
+	font: $MAIN_FONT
 	
 	Header {
 		font_size: 38
 	}
+	
 	Subheader {
 		font_size: 28
+	}
+	
+	InputBinding {
+		font: $BUTTON_FONT
+		font_size: 8
+		font_color: $base_shadow_col
+		bg_color: WHITE
+		border: 2
+		border_color: $base_shadow_col
+		corner_radius: 6
+		padding: 8 8 4 4
 	}
 }
 
@@ -31,49 +44,198 @@ Button {
 	GenericButton {
 		font: $BUTTON_FONT 
 		font_size: 8
-		padding: 8 8 12 12
-		bg_color: TRANSPARENT_WHITE
-		border: 0
-		corner_radius: 6
-		font_color: WHITE
+		font_color: $base_shadow_col 
+		corner_radius: 8
+		padding: 12 12 8 8
+		transition_time: 0.1
 		
-		:hover {
-			transform_scale: 1
-			bg_color: alpha(WHITE, 0.3)
-		}
-		
-		:focus {
+		:hover, :focus {
+			border_color: $base_shadow_col 
+			bg_color: $global_accent 
 			transform_scale: 1.05
-			bg_color: alpha(WHITE, 0.3)
 		}
 		
 		:pressed, :hover_pressed {
+			bg_color: $base_shadow_col 
+			font_color: WHITE
+		}
+	}
+	
+	SidebarButton {
+		font: $BUTTON_FONT
+		font_size: 8
+		font_color: WHITE
+		bg_color: TRANSPARENT_WHITE
+		border: 0
+		corner_radius: 6
+		padding: 8 8 12 12
+		
+		:hover, :focus {
+			bg_color: alpha(WHITE, 0.3)
+			transform_scale: 1.05
+		}
+		
+		:pressed {
+			bg_color: $global_accent
+		}
+		
+		:hover_pressed, :focus_pressed {
+			bg_color: $global_accent
+			transform_scale: 1.05
+		}
+	}
+	
+	CheckButtonBG {
+		transition_type: EASE_OUT
+		bg_color: WHITE
+		border: 2
+		border_color: $base_shadow_col
+		corner_radius: 99
+		padding: 0
+		
+		:hover {
+			border_color: $base_shadow_col
+			transform_scale: 1
+		}
+		
+		:focus {
+			bg_color: $global_accent
+			border_color: $base_shadow_col
+			transform_scale: 1
+		}
+		
+		:pressed, :hover_pressed {
+			bg_color: $global_accent
+			border_color: $global_accent
+		}
+		
+		:focus_pressed {
+			bg_color: $global_accent
+			border_color: $base_shadow_col
+			transform_scale: 1
+		}
+	}
+}
+
+Panel {
+	CheckButtonDot {
+		transition_time: 0.15
+		transition_func: QUAD
+		transition_type: EASE_IN_OUT
+		transform_enabled: true
+		bg_color: $base_shadow_col
+		corner_radius: 99
+		
+		::on {
+			bg_color: WHITE
+			transform_position: 15 0
+		}
+	}
+	
+	SliderTrack {
+		bg_color: WHITE
+		border: 2
+		border_color: $base_shadow_col
+		corner_radius: 99
+	}
+	
+	SliderFill {
+		bg_color: $global_accent 
+		corner_radius: 99
+	}
+	
+	SliderGrabber {
+		transition_time: 0.1
+		transition_func: QUAD
+		transition_type: EASE_OUT
+		transform_enabled: true
+		bg_color: WHITE
+		corner_radius: 99
+		border: 2
+		border_color: $base_shadow_col
+		
+		::active {
 			bg_color: $global_accent 
+			transform_scale: 1.1
+		}
+		
+		::pressed {
+			bg_color: $base_shadow_col 
+		}
+	}
+	
+	TickMark {
+		bg_color: alpha($base_shadow_col, 0.4)
+		corner_radius: 99
+		
+		::filled {
+			bg_color: alpha(WHITE, 0.4)
 		}
 	}
 }
 
 OptionButton {
-	font: $BUTTON_FONT 
+	cursor: POINTING
+	transition_time: 0.1
+	font: $BUTTON_FONT
 	font_size: 8
+	font_color: $base_shadow_col
 	bg_color: WHITE
 	border: 2
-	padding: 12 12 8 8
+	border_color: $base_shadow_col
 	corner_radius: 8
-	border_color: $base_shadow_col 
-	font_color: $base_shadow_col 
+	padding: 12 12 8 8
+	arrow_margin: 10
+	modulate_arrow: 1
+	
+	:hover, :focus {
+		bg_color: $global_accent
+		font_color: WHITE
+	}
 }
-# @chunk Title Screen
-var base_shadow_col: "#1B2A41"
-var shadow_drop: 0.65
 
+#HSlider, VSlider {
+	#corner_radius: 8
+	#border: 2
+	#border_color: $base_shadow_col 
+	#padding: 6
+	
+	#:slider {
+		#bg_color: WHITE
+	#}
+	
+	#:grabber_area, :grabber_area_highlight {
+		#corner_radius_top_right: 0
+		#corner_radius_bottom_right: 0
+		#border_right: 0
+		#bg_color: $global_accent 
+	#}
+#}
+
+PopupMenu {
+	font: $BUTTON_FONT
+	font_size: 8
+	font_color: $base_shadow_col
+	bg_color: WHITE
+	border: 2
+	border_color: $base_shadow_col
+	corner_radius: 8
+	
+	:hover {
+		bg_color: $global_accent
+	}
+}
+
+
+# @chunk Title Screen
+var shadow_drop: 0.65
 
 Panel {
 	BlurPanel {
-		clip_path: polygon(0,0.25, 1,0.15, 1,0.75, 0,0.85)
-		bg_color: blur(5, BLACK, 0.45)
 		transition_time: 0.2
 		transition_func: CUBIC
+		bg_color: blur(5, BLACK, 0.45)
+		clip_path: polygon(0,0.25, 1,0.15, 1,0.75, 0,0.85)
 		
 		::open {
 			clip_path: polygon(0,0, 1,0, 1,1, 0,1)
@@ -82,79 +244,73 @@ Panel {
 }
 
 Label {
-	font: $MAIN_FONT
-	 
 	InfoLabel {
 		font_size: 20
-		shadow_color: BLACK
 		font_color: alpha(WHITE, 0.6)
+		shadow_color: BLACK
 	}
 }
 
 RichTextLabel {
-	normal_font: $MAIN_FONT 
+	normal_font: $MAIN_FONT
 	default_color: alpha(WHITE, 0.6)
 }
 
-
 Button {
-	bg_color: WHITE
-	font: $MAIN_FONT 
-	font_size: 32
-	font_color: $base_shadow_col
-	border: 2
-	border_color: $base_shadow_col
-	shadow_color: $base_shadow_col
-	padding: 30 30 14 14
-	corner_radius: 12 12 12 12
-	bg_scroll: 6 4
-	transform_enabled: true
-	
 	transition_time: 0.3
 	transition_func: QUINT
 	transition_type: EASE_OUT
+	transform_enabled: true
+	font: $MAIN_FONT
+	font_size: 32
+	font_color: $base_shadow_col
+	bg_color: WHITE
+	bg_scroll: 6 4
+	border: 2
+	border_color: $base_shadow_col
+	shadow_color: $base_shadow_col
+	corner_radius: 12
+	padding: 30 30 14 14
 	
 	> Label {
-		font: $HOLLOW_FONT 
+		font: $HOLLOW_FONT
 		font_size: 32
 	}
 	
 	:hover, :focus {
-		transform_scale: 1.1
 		font_color: WHITE
 		border_color: radial_gradient("#ffb600", YELLOW)
+		transform_scale: 1.1
 	}
 	
 	TitleButton {
 		var accent: WHITE
 		
 		cursor: POINTING
-		
+		transition_time: 0 "bg_texture"
+		transform_rotation: -0.05rad
 		font_color: lighten($accent, 0.2)
+		bg_tint: lighten($accent, 0.3)
 		border_color: darken($accent, $shadow_drop)
 		shadow_color: darken($accent, $shadow_drop)
-		
-		padding: 32 32 22 22
-		corner_radius_bottom_left: 4
-		corner_radius_top_right: 4
 		shadow_bottom: 1
 		shadow_right: 1
 		shadow_offset: 2
 		shadow_blur: 0
-		transform_rotation: -0.05rad
-		transition_time: 0 "bg_texture"
-		bg_tint: lighten($accent, 0.3)
+		corner_radius_bottom_left: 4
+		corner_radius_top_right: 4
+		padding: 32 32 22 22
 		
 		> Label {
 			font_color: darken($accent, $shadow_drop)
 		}
 		
 		:hover, :focus {
-			font_color: WHITE
+			transition_time: 0.1 "bg_texture"
 			transform_rotation: 0
+			font_color: WHITE
 			bg_color: $accent
 			bg_texture: $art
-			transition_time: 0.1 "bg_texture"
 			
 			> Label {
 				font_color: darken($accent, $shadow_drop)
@@ -162,9 +318,9 @@ Button {
 		}
 		
 		:disabled {
-			bg_color: alpha($accent, 0.5)
 			cursor: DISABLED
 			font_color: alpha($accent, 0.4)
+			bg_color: alpha($accent, 0.5)
 		}
 		
 		:pressed {
