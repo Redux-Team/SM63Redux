@@ -30,3 +30,10 @@ func _apply_setting(setting: SettingsType) -> void:
 			)
 		_:
 			super(setting)
+
+
+func _get_ignored_settings() -> Array[SettingsType]:
+	var ignored: Array[SettingsType] = []
+	if OS.has_feature("mobile"):
+		ignored.append(window_mode)
+	return []

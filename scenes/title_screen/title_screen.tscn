@@ -277,6 +277,106 @@ tracks/14/keys = {
 "values": []
 }
 
+[sub_resource type="Animation" id="Animation_7paur"]
+resource_name = "hide_settings"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PanelBase/Buttons:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PanelBase/Buttons:ratio_offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(0.3, 0.3),
+"update": 0,
+"values": [Vector2(0, -50), Vector2(0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LogoAnchor:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LogoAnchor:ratio_offset")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(0.3, 0.3),
+"update": 0,
+"values": [Vector2(0, -50), Vector2(0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PanelBase/Buttons:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("LogoAnchor:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SettingsScreen:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SettingsScreen:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
 [sub_resource type="Animation" id="Animation_ao3wo"]
 resource_name = "intro"
 length = 12.0
@@ -443,6 +543,7 @@ tracks/7/keys = {
 
 [sub_resource type="Animation" id="Animation_seoxh"]
 resource_name = "show_settings"
+length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -543,12 +644,13 @@ tracks/7/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_n6fv5"]
 _data = {
 &"RESET": SubResource("Animation_n6fv5"),
+&"hide_settings": SubResource("Animation_7paur"),
 &"intro": SubResource("Animation_ao3wo"),
 &"open": SubResource("Animation_p56b5"),
 &"show_settings": SubResource("Animation_seoxh")
 }
 
-[node name="TitleScreen" type="Control" unique_id=887533943 node_paths=PackedStringArray("animation_player", "audio_stream_player", "blur_panel")]
+[node name="TitleScreen" type="Control" unique_id=887533943 node_paths=PackedStringArray("animation_player", "audio_stream_player", "blur_panel", "settings_screen")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -559,6 +661,7 @@ script = ExtResource("1_aihkd")
 animation_player = NodePath("AnimationPlayer")
 audio_stream_player = NodePath("AudioStreamPlayer")
 blur_panel = NodePath("PanelBase/BlurPanel")
+settings_screen = NodePath("SettingsScreen")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=502231712]
 bus = &"Music"
@@ -748,14 +851,17 @@ anchor_bottom = 1.0
 offset_top = -20.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_right = 4
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VersionContainer" unique_id=851251999]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="VersionLabel" type="RichTextLabel" parent="VersionContainer/HBoxContainer" unique_id=37723643]
 layout_mode = 2
+theme_override_colors/default_color = Color(1, 1, 1, 0.6)
 theme_override_fonts/normal_font = ExtResource("16_otspg")
 bbcode_enabled = true
 text = "[font_size=14]v[/font_size]0.2.0"
@@ -768,6 +874,7 @@ metadata/gdss_mode = 1
 [node name="Control" type="Control" parent="VersionContainer/HBoxContainer" unique_id=1120775374]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="VersionLabel2" type="Label" parent="VersionContainer/HBoxContainer" unique_id=1990214281]
 layout_mode = 2
@@ -781,3 +888,4 @@ metadata/gdss_mode = 1
 metadata/gdss_classes = PackedStringArray("InfoLabel")
 
 [connection signal="pressed" from="PanelBase/Buttons/CanvasGroup/VBoxContainer/SlopeBoxContainer2/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="closed" from="SettingsScreen" to="." method="_on_settings_screen_closed"]
