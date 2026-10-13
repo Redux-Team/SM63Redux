@@ -8,6 +8,8 @@ func _tick(delta: float) -> void:
 	super(delta)
 	if controls.swim <= 0.0:
 		player.velocity.y = minf(player.velocity.y, 0.0)
+	elif controls.swim > 0.0:
+		player.velocity.y = maxf(player.velocity.y, 0.0)
 
 
 func _next() -> StringName:

@@ -3,7 +3,8 @@
 [ext_resource type="Script" uid="uid://diouyfah3pe7y" path="res://dev/player_movement/playtest.gd" id="1_jkuof"]
 [ext_resource type="PackedScene" uid="uid://c0hjv83unhj0w" path="res://game/entity/player/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" uid="uid://vgcwqugyqu40" path="res://game/hud/player_hud.tscn" id="4_hud"]
-[ext_resource type="Script" uid="uid://bfm66pksrtvtp" path="res://util/2d/silhouette_2d.gd" id="5_silhouette"]
+[ext_resource type="Script" uid="uid://bfm66pksrtvtp" path="res://util/2d/silhouette_source.gd" id="5_silhouette"]
+[ext_resource type="Script" path="res://util/2d/silhouette_view.gd" id="7_silhouette_view"]
 [ext_resource type="Shader" uid="uid://dbj7imkpljnnh" path="res://shader/silhouette_outline.gdshader" id="6_silhouette"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_silhouette"]
@@ -35,16 +36,21 @@ collision_layer = 65535
 collision_mask = 0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1003145735]
-position = Vector2(-724, 267)
-polygon = PackedVector2Array(390, 75, 851, 94, 1447, 116, 1485, 48, 2042, 56, 2961, 3, 3544, 100, 3667, 747, 2426, 947, 1130, 906, -155, 1042, -605, 513, -677, -384, -400, -715, -224, -439, -29, -440, 111, -175, 389, -180)
+position = Vector2(-722, 275)
+polygon = PackedVector2Array(390, 75, 851, 94, 1392, 106, 1433, 83, 1461, 55, 1485, 48, 1512, 47, 1534, 65, 1575, 78, 1602, 77, 1636, 65, 1687, 63, 2042, 56, 2961, 3, 3544, 100, 3667, 747, 2426, 947, 1130, 906, -155, 1042, -605, 513, -677, -384, -400, -715, -224, -439, -29, -440, 111, -175, 389, -180)
 
 [node name="Polygon2D" type="Polygon2D" parent="." unique_id=1207091793]
 clip_children = 2
+position = Vector2(-16, -59)
 color = Color(0.073800005, 0.18, 0.18, 1)
-polygon = PackedVector2Array(109, 9, 390, 9, 328, 388, 188, 380)
+polygon = PackedVector2Array(109, 9, 516, 3, 469, 384, 328, 388, 188, 380)
 
-[node name="Silhouette" type="Node2D" parent="Polygon2D" unique_id=1873402915 node_paths=PackedStringArray("anchor", "targets")]
+[node name="Silhouette" type="Node2D" parent="Polygon2D" unique_id=1873402915 node_paths=PackedStringArray("source")]
 material = SubResource("ShaderMaterial_silhouette")
+script = ExtResource("7_silhouette_view")
+source = NodePath("../../SilhouetteSource")
+
+[node name="SilhouetteSource" type="Node" parent="." unique_id=1873402916 node_paths=PackedStringArray("anchor", "targets")]
 script = ExtResource("5_silhouette")
-anchor = NodePath("../../Player")
-targets = [NodePath("../../Player/Doll"), NodePath("../../Player/Doll/Fludd")]
+anchor = NodePath("../Player")
+targets = [NodePath("../Player/Doll"), NodePath("../Player/Doll/Fludd")]

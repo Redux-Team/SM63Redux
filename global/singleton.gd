@@ -9,6 +9,7 @@ enum DiscordMode {
 
 const DISCORD_APP_ID: String = "1496255367607488562"
 const SCREEN_TRANSITION: PackedScene = preload("uid://dc1a8llb7l88l")
+const TOOLTIP: PackedScene = preload("res://util/ui/tooltip/tooltip.tscn")
 
 var _discord: DiscordRichPresence
 var _discord_mode: DiscordMode = DiscordMode.OFF
@@ -19,6 +20,7 @@ var _commit_hash: String = ""
 var _git_branch: String = ""
 var _git_fetched: bool = false
 var _screen_transition: ScreenTransition
+var editor_session: EditorSession = EditorSession.new()
 
 
 func _ready() -> void:
@@ -27,6 +29,11 @@ func _ready() -> void:
 	
 	_screen_transition = SCREEN_TRANSITION.instantiate()
 	add_child(_screen_transition)
+	add_child(TOOLTIP.instantiate())
+
+
+func _exit_tree() -> void:
+	editor_session.discard()
 
 
 func build_screen_transition() -> ScreenTransition.Builder:

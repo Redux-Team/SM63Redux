@@ -85,7 +85,7 @@ func _get_speed_scale() -> float:
 
 
 func _play_slow_spin() -> void:
-	var frames: SpriteFrames = sprite.diffuse_frames
-	var fps: float = sprite.speed_scale * frames.get_animation_speed(sprite.current_animation)
+	var sprite_frames: SpriteFrames = sprite.diffuse_frames
+	var fps: float = sprite.speed_scale * sprite_frames.get_animation_speed(sprite.current_animation)
 	sprite.play_at_frame(slow_animation, sprite.current_frame)
-	sprite.speed_scale = fps / maxf(frames.get_animation_speed(slow_animation), 0.001)
+	sprite.speed_scale = fps / maxf(sprite_frames.get_animation_speed(slow_animation), 0.001)

@@ -136,12 +136,12 @@
 [sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_3h1ly"]
 cutoff_hz = 2500.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_26jgh"]
-atlas = ExtResource("2_lh4k8")
+[sub_resource type="AtlasTexture" id="AtlasTexture_1p630"]
+atlas = ExtResource("18_sxdt2")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_lou6s"]
-diffuse_texture = SubResource("AtlasTexture_26jgh")
+diffuse_texture = SubResource("AtlasTexture_1p630")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hmgs0"]
 atlas = ExtResource("4_ria7k")
@@ -251,10 +251,6 @@ region = Rect2(64, 0, 64, 64)
 atlas = ExtResource("17_rlrt6")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1p630"]
-atlas = ExtResource("18_sxdt2")
-region = Rect2(0, 0, 64, 64)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_v2l3k"]
 atlas = ExtResource("19_3i503")
 region = Rect2(0, 0, 64, 64)
@@ -270,6 +266,10 @@ region = Rect2(0, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_m2rg5"]
 atlas = ExtResource("20_6b4i6")
 region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_26jgh"]
+atlas = ExtResource("2_lh4k8")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gmxc2"]
 atlas = ExtResource("2_lh4k8")
@@ -2206,13 +2206,14 @@ gravity = Vector2(0, 150)
 lifetime = 0.5
 max_length = 320.0
 
-[node name="Player" type="CharacterBody2D" unique_id=1740348366 node_paths=PackedStringArray("floor_raycast", "fludd", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
+[node name="Player" type="CharacterBody2D" unique_id=1740348366 node_paths=PackedStringArray("floor_raycast", "fludd", "silhouette_targets", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
 collision_mask = 2
 floor_snap_length = 7.0
 script = ExtResource("1_b7m82")
 floor_raycast = NodePath("FloorRaycast")
 fludd = NodePath("Fludd")
 submerged_bus_effects = Array[AudioEffect]([SubResource("AudioEffectLowPassFilter_3h1ly")])
+silhouette_targets = [NodePath("Doll"), NodePath("Doll/Fludd")]
 sprite = NodePath("Doll")
 components_root = NodePath("Components")
 collision_shapes = [NodePath("BaseCollision"), NodePath("GroundPoundCollision"), NodePath("DiveCollision")]
@@ -2238,14 +2239,14 @@ rotation_source = NodePath("..")
 subsprites = [NodePath("Fludd")]
 animated = true
 diffuse_frames = SubResource("SpriteFrames_681d1")
-current_animation = "run_loop"
+current_animation = "idle"
 current_frame = 0
 speed_scale = 1.0
 playing = false
 
 [node name="Fludd" type="Sprite2D" parent="Doll" unique_id=4340549 node_paths=PackedStringArray("subsprites")]
 show_behind_parent = true
-position = Vector2(-6, 0)
+position = Vector2(-6, -1)
 texture = SubResource("CanvasTexture_ckiah")
 region_enabled = true
 region_rect = Rect2(64, 0, 64, 64)
@@ -2286,6 +2287,7 @@ playing = false
 metadata/_custom_type_script = "uid://cvolonferossj"
 
 [node name="Plume" type="Sprite2D" parent="Doll/Fludd" unique_id=606638812]
+visible = false
 show_behind_parent = true
 position = Vector2(-6, 13)
 texture = SubResource("CanvasTexture_ont6s")

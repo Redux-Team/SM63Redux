@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://d2okqon71mrhu"]
+
+[ext_resource type="Script" uid="uid://tyu7kjo0r4x6" path="res://game/object/game_object.gd" id="1_object"]
+[ext_resource type="Script" uid="uid://dy0tps7nno80h" path="res://game/object/snapshot_view.gd" id="2_snapshot"]
+[ext_resource type="Texture2D" uid="uid://ccsrslfjf3xxe" path="res://assets/textures/entity/player/mario/idle.png" id="2_xiw3k"]
+[ext_resource type="PackedScene" uid="uid://c0hjv83unhj0w" path="res://game/entity/player/player.tscn" id="3_player"]
+
+[node name="PlayerMario" type="Node2D" unique_id=2091854056 node_paths=PackedStringArray("game_root", "editor_root")]
+script = ExtResource("1_object")
+id = &"player_mario"
+display_name = "Mario"
+icon = ExtResource("2_xiw3k")
+category = &"Entity"
+group = &"Player"
+unique = true
+flags = 21
+game_root = NodePath("Game")
+editor_root = NodePath("Editor")
+
+[node name="Game" parent="." unique_id=386677439 instance=ExtResource("3_player")]
+
+[node name="Editor" type="Node2D" parent="." unique_id=2008774939 node_paths=PackedStringArray("source")]
+script = ExtResource("2_snapshot")
+source = NodePath("../Game")

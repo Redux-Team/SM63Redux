@@ -3,6 +3,7 @@ class_name HitBox
 extends Area2D
 
 
+@warning_ignore("unused_signal")
 signal landed(hurt_box: HurtBox)
 
 

@@ -22,6 +22,8 @@ const TERRAIN_LAYER_FIRST: int = 25
 @export var fludd: PlayerFludd
 ## Audio effects added to the master bus while underwater and removed on exit.
 @export var submerged_bus_effects: Array[AudioEffect]
+## Sprites drawn into the silhouette shown while the player is behind terrain.
+@export var silhouette_targets: Array[Sprite2D]
 
 ## Buffered player input, polled once per physics tick.
 var controls: PlayerInput = PlayerInput.new()
@@ -98,14 +100,14 @@ func brake(deceleration: float, drag_rate: float, delta: float) -> void:
 
 
 func get_gravity_strength() -> float:
-	var scale: float = gravity_modifiers.product()
+	var gravity_scale: float = gravity_modifiers.product()
 	for state: State in machine.get_active_states():
-		scale *= (state as PlayerState).get_gravity_scale()
+		gravity_scale *= (state as PlayerState).get_gravity_scale()
 	
 	if is_in_water():
-		scale *= water_gravity_scale
+		gravity_scale *= water_gravity_scale
 	
-	return gravity * scale
+	return gravity * gravity_scale
 
 
 func get_fall_speed_cap() -> float:

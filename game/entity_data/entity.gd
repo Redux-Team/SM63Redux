@@ -16,9 +16,7 @@ extends CharacterBody2D
 @export var cull_when_offscreen: bool = true
 
 
-var data: Dictionary
-var properties: Dictionary[StringName, Variant] = {}
-var source_object_id: String = ""
+var object: GameObject
 var components: Array[EntityComponent]
 var _velocity_lock: bool = false
 var _exit_objs_spawned: bool = false
@@ -49,6 +47,11 @@ func _ready() -> void:
 		for child: Node in components_root.get_children():
 			if child is EntityComponent:
 				child.entity = self
+	
+	object = _find_object()
+	if object:
+		object.value_changed.connect(_on_property_changed)
+	_on_init()
 
 
 func _physics_process(delta: float) -> void:
@@ -66,24 +69,13 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 
 
-func init_from_data(obj_data: Dictionary) -> void:
-	data = obj_data
-	source_object_id = obj_data.get("object_id", "")
-	var props: Dictionary = obj_data.get("properties", {})
-	for key: String in props:
-		properties[key] = props[key]
-	position = Packer.array_to_vec2(obj_data.get("position", [0.0, 0.0]))
-	scale = Packer.array_to_vec2(properties.get("scale", [1.0, 1.0]))
-	_on_init()
-
-
 func get_property(key: StringName) -> Variant:
-	return properties.get(key)
+	return object.get_value(key) if object else null
 
 
 func set_property(key: StringName, value: Variant) -> void:
-	properties[key] = value
-	_on_property_changed(key, value)
+	if object:
+		object.set_value(key, value)
 
 
 func get_component(type: Script) -> EntityComponent:
@@ -145,6 +137,16 @@ func kill() -> void:
 		return
 	health.hp = 0.0
 	_on_death(HitBox.DamageType.GENERIC)
+
+
+func _find_object() -> GameObject:
+	var current: Node = get_parent()
+	while current:
+		if current is GameObject:
+			return current
+		current = current.get_parent()
+	
+	return null
 
 
 func _try_step() -> void:

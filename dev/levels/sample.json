@@ -1,0 +1,470 @@
+{
+	"args": [
+		"s:version",
+		"i:2",
+		"s:name",
+		"s:",
+		"s:areas",
+		{
+			"args": [
+				{
+					"args": [
+						"s:uuid",
+						"sn:54016b2e-2543-42a9-8379-2ac003b7e6bf",
+						"s:name",
+						"s:Area 1",
+						"s:camera_position",
+						{
+							"args": [
+								0.0,
+								0.0
+							],
+							"type": "Vector2"
+						},
+						"s:camera_zoom",
+						"f:1.0",
+						"s:active_layer",
+						"i:0",
+						"s:background",
+						{
+							"args": [],
+							"type": "Dictionary"
+						},
+						"s:music",
+						{
+							"args": [],
+							"type": "Dictionary"
+						},
+						"s:layers",
+						{
+							"args": [
+								{
+									"args": [
+										"s:uuid",
+										"sn:8b166206-53f0-4986-a8fc-cc520ab855c4",
+										"s:index",
+										"i:0",
+										"s:name",
+										"s:",
+										"s:distance",
+										"f:0.0",
+										"s:modulation",
+										{
+											"args": [
+												1.0,
+												1.0,
+												1.0,
+												1.0
+											],
+											"type": "Color"
+										},
+										"s:is_decoration",
+										false,
+										"s:objects",
+										{
+											"args": [
+												{
+													"args": [
+														"s:uuid",
+														"sn:fdcac5e2-c6a8-476d-ba50-98ece45c2cfb",
+														"s:id",
+														"sn:debug_block",
+														"s:position",
+														{
+															"args": [
+																0.0,
+																96.0
+															],
+															"type": "Vector2"
+														},
+														"s:rotation",
+														"f:0.0",
+														"s:scale",
+														{
+															"args": [
+																1.0,
+																1.0
+															],
+															"type": "Vector2"
+														},
+														"s:values",
+														{
+															"args": [],
+															"key_type": "StringName",
+															"type": "Dictionary"
+														},
+														"s:shape",
+														{
+															"args": [],
+															"type": "Dictionary"
+														}
+													],
+													"type": "Dictionary"
+												},
+												{
+													"args": [
+														"s:uuid",
+														"sn:a1f37812-10e8-47d8-a577-7fcb466d9ae5",
+														"s:id",
+														"sn:debug_block",
+														"s:position",
+														{
+															"args": [
+																64.0,
+																96.0
+															],
+															"type": "Vector2"
+														},
+														"s:rotation",
+														"f:0.0",
+														"s:scale",
+														{
+															"args": [
+																1.0,
+																1.0
+															],
+															"type": "Vector2"
+														},
+														"s:values",
+														{
+															"args": [],
+															"key_type": "StringName",
+															"type": "Dictionary"
+														},
+														"s:shape",
+														{
+															"args": [],
+															"type": "Dictionary"
+														}
+													],
+													"type": "Dictionary"
+												},
+												{
+													"args": [
+														"s:uuid",
+														"sn:6d515608-cf0a-4721-9061-f836c9872dcc",
+														"s:id",
+														"sn:debug_block",
+														"s:position",
+														{
+															"args": [
+																128.0,
+																96.0
+															],
+															"type": "Vector2"
+														},
+														"s:rotation",
+														"f:0.0",
+														"s:scale",
+														{
+															"args": [
+																1.0,
+																1.0
+															],
+															"type": "Vector2"
+														},
+														"s:values",
+														{
+															"args": [],
+															"key_type": "StringName",
+															"type": "Dictionary"
+														},
+														"s:shape",
+														{
+															"args": [],
+															"type": "Dictionary"
+														}
+													],
+													"type": "Dictionary"
+												},
+												{
+													"args": [
+														"s:uuid",
+														"sn:b9519556-7015-4569-953e-9c186ff37890",
+														"s:id",
+														"sn:debug_block",
+														"s:position",
+														{
+															"args": [
+																192.0,
+																96.0
+															],
+															"type": "Vector2"
+														},
+														"s:rotation",
+														"f:0.0",
+														"s:scale",
+														{
+															"args": [
+																1.0,
+																1.0
+															],
+															"type": "Vector2"
+														},
+														"s:values",
+														{
+															"args": [],
+															"key_type": "StringName",
+															"type": "Dictionary"
+														},
+														"s:shape",
+														{
+															"args": [],
+															"type": "Dictionary"
+														}
+													],
+													"type": "Dictionary"
+												},
+												{
+													"args": [
+														"s:uuid",
+														"sn:7b7056bc-c959-4c73-9523-760032b57230",
+														"s:id",
+														"sn:debug_block",
+														"s:position",
+														{
+															"args": [
+																256.0,
+																96.0
+															],
+															"type": "Vector2"
+														},
+														"s:rotation",
+														"f:0.0",
+														"s:scale",
+														{
+															"args": [
+																1.0,
+																1.0
+															],
+															"type": "Vector2"
+														},
+														"s:values",
+														{
+															"args": [],
+															"key_type": "StringName",
+															"type": "Dictionary"
+														},
+														"s:shape",
+														{
+															"args": [],
+															"type": "Dictionary"
+														}
+													],
+													"type": "Dictionary"
+												},
+												{
+													"args": [
+														"s:uuid",
+														"sn:b81f1962-b149-4841-961c-8d8a0b446e01",
+														"s:id",
+														"sn:debug_block",
+														"s:position",
+														{
+															"args": [
+																320.0,
+																96.0
+															],
+															"type": "Vector2"
+														},
+														"s:rotation",
+														"f:0.0",
+														"s:scale",
+														{
+															"args": [
+																1.0,
+																1.0
+															],
+															"type": "Vector2"
+														},
+														"s:values",
+														{
+															"args": [],
+															"key_type": "StringName",
+															"type": "Dictionary"
+														},
+														"s:shape",
+														{
+															"args": [],
+															"type": "Dictionary"
+														}
+													],
+													"type": "Dictionary"
+												},
+												{
+													"args": [
+														"s:uuid",
+														"sn:6dfde8c7-7e0d-4383-b301-bd1b46ea3f1b",
+														"s:id",
+														"sn:player_mario",
+														"s:position",
+														{
+															"args": [
+																64.0,
+																0.0
+															],
+															"type": "Vector2"
+														},
+														"s:rotation",
+														"f:0.0",
+														"s:scale",
+														{
+															"args": [
+																1.0,
+																1.0
+															],
+															"type": "Vector2"
+														},
+														"s:values",
+														{
+															"args": [],
+															"key_type": "StringName",
+															"type": "Dictionary"
+														},
+														"s:shape",
+														{
+															"args": [],
+															"type": "Dictionary"
+														}
+													],
+													"type": "Dictionary"
+												},
+												{
+													"args": [
+														"s:uuid",
+														"sn:ab5994cb-f3f2-4a35-8602-1b34d2301579",
+														"s:id",
+														"sn:medium_tree",
+														"s:position",
+														{
+															"args": [
+																200.0,
+																40.0
+															],
+															"type": "Vector2"
+														},
+														"s:rotation",
+														"f:0.0",
+														"s:scale",
+														{
+															"args": [
+																1.0,
+																1.0
+															],
+															"type": "Vector2"
+														},
+														"s:values",
+														{
+															"args": [],
+															"key_type": "StringName",
+															"type": "Dictionary"
+														},
+														"s:shape",
+														{
+															"args": [],
+															"type": "Dictionary"
+														}
+													],
+													"type": "Dictionary"
+												}
+											],
+											"elem_type": "Dictionary",
+											"type": "Array"
+										}
+									],
+									"type": "Dictionary"
+								},
+								{
+									"args": [
+										"s:uuid",
+										"sn:7bcaf9e6-e782-42a0-8771-34a8414bd644",
+										"s:index",
+										"i:1",
+										"s:name",
+										"s:",
+										"s:distance",
+										"f:-0.4",
+										"s:modulation",
+										{
+											"args": [
+												1.0,
+												1.0,
+												1.0,
+												1.0
+											],
+											"type": "Color"
+										},
+										"s:is_decoration",
+										false,
+										"s:objects",
+										{
+											"args": [
+												{
+													"args": [
+														"s:uuid",
+														"sn:c3dc1a52-bc5d-4d45-99c2-d065d898dd3e",
+														"s:id",
+														"sn:debug_block",
+														"s:position",
+														{
+															"args": [
+																64.0,
+																32.0
+															],
+															"type": "Vector2"
+														},
+														"s:rotation",
+														"f:0.0",
+														"s:scale",
+														{
+															"args": [
+																1.0,
+																1.0
+															],
+															"type": "Vector2"
+														},
+														"s:values",
+														{
+															"args": [],
+															"key_type": "StringName",
+															"type": "Dictionary"
+														},
+														"s:shape",
+														{
+															"args": [],
+															"type": "Dictionary"
+														}
+													],
+													"type": "Dictionary"
+												}
+											],
+											"elem_type": "Dictionary",
+											"type": "Array"
+										}
+									],
+									"type": "Dictionary"
+								}
+							],
+							"elem_type": "Dictionary",
+							"type": "Array"
+						}
+					],
+					"type": "Dictionary"
+				}
+			],
+			"elem_type": "Dictionary",
+			"type": "Array"
+		},
+		"s:editor",
+		{
+			"args": [],
+			"type": "Dictionary"
+		},
+		"s:extras",
+		{
+			"args": [],
+			"type": "Dictionary"
+		}
+	],
+	"type": "Dictionary"
+}
