@@ -3,11 +3,16 @@ extends FluddMode
 const MODIFIER_KEY: StringName = &"fludd_turbo"
 
 @export_group("Turbo")
+## Run and air speed while the turbo runs.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var speed: float = 450.0
 @export_group("Underwater Aim")
+## Most upward aim underwater.
 @export_range(0.0, 90.0, 0.1, "degrees") var max_up_angle: float = 30.0
+## Most downward aim underwater.
 @export_range(0.0, 90.0, 0.1, "degrees") var max_down_angle: float = 30.0
+## Time for the aim to turn halfway toward the input.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var aim_halflife: float = 0.08
+## Acceleration toward the aimed direction underwater.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var aim_acceleration: float = 1200.0
 
 var _aiming: bool = false

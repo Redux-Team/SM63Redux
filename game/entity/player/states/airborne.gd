@@ -1,6 +1,8 @@
 extends PlayerState
 
+## Floor friction multiplier while touching the floor with directional input.
 @export var floor_friction_scale: float = 1.0
+## Floor friction multiplier while touching the floor without input.
 @export var idle_floor_friction_scale: float = 1.39
 
 

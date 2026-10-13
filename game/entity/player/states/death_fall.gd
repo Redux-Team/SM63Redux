@@ -1,11 +1,17 @@
 extends PlayerState
 
+## Vertical velocity over time during the fall.
 @export var velocity_curve: Curve
+## Sprite rotation in radians over time during the fall.
 @export var rotation_curve: Curve
 @export_group("Transition")
+## Time spent falling before the screen transition starts.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var transition_delay: float = 2.0
+## Time the screen stays covered before the scene reloads.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var screen_hold: float = 0.5
+## Mask shown while the screen is covered.
 @export var screen_texture: Texture2D
+## Mask used for the covering transition.
 @export var out_texture: Texture2D
 
 

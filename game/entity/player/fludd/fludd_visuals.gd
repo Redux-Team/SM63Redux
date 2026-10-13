@@ -1,9 +1,13 @@
 class_name FluddVisuals
 extends Node
 
+## Backpack whose state is displayed.
 @export var fludd: PlayerFludd
+## Backpack sprite that follows the player's animation.
 @export var fludd_sprite: SmartSprite2D
+## Plume sprite shown while spraying.
 @export var plume_sprite: SmartSprite2D
+## Spray particles kept aligned with the plume.
 @export var plume_particles: GPUParticles2D
 
 var _plume_origin: Vector2 = Vector2.ZERO

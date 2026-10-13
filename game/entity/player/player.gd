@@ -6,28 +6,48 @@ signal swimming_changed(swimming: bool)
 const TERRAIN_LAYER_FIRST: int = 25
 
 @export_group("Physics")
+## Downward acceleration applied every physics tick, before the active states' gravity scales.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var gravity: float = 900.0
+## Multiplier on gravity while the water check reports the player as submerged.
 @export var water_gravity_scale: float = 0.1
+## Time for floor friction alone to halve horizontal speed; scaled by the friction modifiers.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var floor_friction_halflife: float = 0.1482
 @export_group("Terrain")
+## Downward ray used to read slope angles and the terrain under the player's feet.
 @export var floor_raycast: RayCast2D
+## Terrain names matched, in order, against the collision layers starting at TERRAIN_LAYER_FIRST.
 @export var terrains: Array[StringName] = [&"grass", &"snow", &"cloud", &"ice", &"metal"]
 @export_group("Nodes")
+## The FLUDD backpack driven alongside the state machine each physics tick.
 @export var fludd: PlayerFludd
+## Audio effects added to the master bus while underwater and removed on exit.
 @export var submerged_bus_effects: Array[AudioEffect]
 
+## Buffered player input, polled once per physics tick.
 var controls: PlayerInput = PlayerInput.new()
+## Horizontal input for this tick; turbo holds it at the facing direction when no direction is pressed.
 var move_input: float = 0.0
+## Stops the sprite from turning to face the move input.
 var lock_flipping: bool = false
+## Allows grounded states to start a jump.
 var can_jump: bool = true
+## Allows horizontal swimming input to accelerate the player.
 var can_walk: bool = true
+## Allows airborne states to start a dive.
 var can_dive: bool = true
+## Allows a ground pound to start from the air.
 var can_ground_pound: bool = true
+## How many jumps of the current chain have been performed.
 var jump_chain: int = 0
+## Time left on the ground before the jump chain resets.
 var jump_chain_timer: float = 0.0
+## Replaces the grounded run speed when above zero.
 var ground_speed_override: float = 0.0
+## Replaces the air control max speed when above zero.
 var air_speed_override: float = 0.0
+## Named gravity multipliers that stack with the active states' gravity scales.
 var gravity_modifiers: ModifierStack = ModifierStack.new()
+## Named floor friction multipliers, such as the floorslide and turbo modifiers.
 var friction_modifiers: ModifierStack = ModifierStack.new()
 
 

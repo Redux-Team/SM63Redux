@@ -2,22 +2,36 @@ class_name DiveState
 extends PlayerState
 
 @export_group("Launch")
+## Horizontal speed the dive launch pulls toward.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var target_speed: float = 900.0
+## Fraction of the gap to target speed added on launch.
 @export_range(0.0, 1.0) var launch_strength: float = 0.2874
+## Downward speed added on launch.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var vertical_boost: float = 40.0
+## Caps upward speed when diving straight out of an idle state.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var standing_max_rise_speed: float = 172.5
+## Caps upward speed on launch.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var max_rise_speed: float = 592.5
+## Caps downward speed on launch.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var max_drop_speed: float = 307.5
 @export_group("Landing")
+## Horizontal speed removed when the dive touches the floor.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var landing_speed_loss: float = 12.84
+## Fraction of horizontal speed kept after the landing loss.
 @export_range(0.0, 1.0) var landing_speed_retention: float = 0.8887
 @export_group("Stomp")
+## Time gravity is suspended after the feet land on an enemy mid-dive.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var stomp_duration: float = 0.15
+## Upward speed set once the mid-dive stomp ends.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var stomp_bounce_speed: float = 272.5
 @export_group("Rotation")
+## Time for the body to turn halfway toward its target angle.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var rotation_halflife: float = 0.0518
+## Most upward body angle while airborne.
 @export_range(-180.0, 180.0, 0.1, "degrees") var min_angle: float = -60.0
+## Most downward body angle while airborne.
 @export_range(-180.0, 180.0, 0.1, "degrees") var max_angle: float = 85.0
+## Body angle used on the floor when no slope is detected.
 @export_range(-180.0, 180.0, 0.1, "degrees") var floor_angle: float = 90.0
 
 var _body_rotation: float = 0.0

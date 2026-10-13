@@ -1,43 +1,70 @@
 class_name SprayStream
 extends Node2D
 
+## Node the stream leaves from, sprayed along its local down axis.
 @export var nozzle: Node2D
+## Body whose movement the water inherits.
 @export var carrier: CharacterBody2D
+## Template line duplicated for each stream piece.
 @export var line: Line2D
+## Particles burst where the stream hits something.
 @export var splash: AnimatedParticles
+## Texture drawn over the start of each stream piece.
 @export var top_cap: Texture2D
+## Sprays water while enabled; turning it off detaches the current stream.
 @export var emitting: bool = false:
 	set(value):
 		if emitting and not value:
 			_detach()
 		emitting = value
 @export_group("Stream")
+## Stream settings used when no profile is assigned.
 @export var default_profile: SprayProfile
+## Water samples emitted per second.
 @export_custom(PROPERTY_HINT_NONE, "suffix:/s") var sample_rate: float = 60.0
+## Random angle added to each sample's direction.
 @export_range(0.0, 45.0, 0.1, "degrees") var spread: float = 1.5
 @export_group("Collision")
+## Layers the stream collides with.
 @export_flags_2d_physics var collision_mask: int = 2
+## Minimum time between splash bursts.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var splash_interval: float = 0.06
+## Time an impact keeps the stream reaching it after the last hit.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var impact_hold: float = 0.05
 @export_group("Drawing")
+## Minimum distance between drawn points.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var min_point_spacing: float = 1.0
+## Distance the stream starts back from the nozzle along its direction.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var start_offset: float = 6.0
 @export_group("Breaking")
+## Nozzle turn within one tick that splits the stream.
 @export_range(0.0, 180.0, 0.1, "degrees") var break_angle: float = 45.0
+## Nozzle jump relative to the carrier within one tick that splits the stream; zero disables it.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var break_distance: float = 0.0
+## Age below which a split restarts the current stream instead of detaching it.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var break_cooldown: float = 0.1
 @export_group("Tail")
+## Width at the end of the stream, relative to its body.
 @export var tail_width_scale: float = 1.5
+## Point along the stream where the width starts changing.
 @export_range(0.0, 1.0) var tail_taper_start: float = 0.7
+## Point along the stream where it starts fading out.
 @export_range(0.0, 1.0) var tail_fade_start: float = 0.55
+## Time for the tail to blend halfway in or out when an impact starts or stops.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var tail_halflife: float = 0.06
 @export_group("Flow")
+## Speed the texture scrolls along the stream.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var flow_speed: float = 280.0
+## Sideways wobble of the stream texture.
 @export var wobble_amount: float = 0.06
+## Wobbles per texture repeat.
 @export var wobble_frequency: float = 1.0
+## Speed of the wobble.
 @export var wobble_speed: float = 8.0
 
+## FLUDD power from zero to one, used to scale the stream's width.
 var power_ratio: float = 1.0
+## Stream settings overriding the default profile; changing it detaches the current stream.
 var profile: SprayProfile:
 	set(value):
 		if value != profile:

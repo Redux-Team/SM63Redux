@@ -1,5 +1,6 @@
 extends PlayerState
 
+## Time spent stunned before returning to swimming.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var duration: float = 0.6
 
 

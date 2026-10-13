@@ -1,5 +1,6 @@
 extends PlayerState
 
+## Downward speed that must be reached before a spin can start.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var spin_min_speed: float = 100.0
 
 

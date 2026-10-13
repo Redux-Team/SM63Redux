@@ -1,15 +1,23 @@
 extends PlayerState
 
 @export_group("Launch")
+## Caps horizontal speed on takeoff.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var max_horizontal_speed: float = 625.0
+## Upward speed set on takeoff.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rise_speed: float = 192.5
 @export_group("Timing")
+## Time before diving is allowed again.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var dive_lock_time: float = 0.275
+## Time before holding dive starts a dive.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var dive_time: float = 0.2
+## Time before touching the floor ends the rollout.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var land_time: float = 0.1
+## Time before spraying FLUDD can turn the rollout into a fall.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var fall_time: float = 0.3
 @export_group("Exits")
+## Downward speed needed before spraying can turn the rollout into a fall.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var fall_min_speed: float = 30.0
+## Downward speed that must be reached before a spin can interrupt the rollout.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var spin_min_speed: float = -40.0
 
 

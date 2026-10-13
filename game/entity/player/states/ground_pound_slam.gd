@@ -1,7 +1,10 @@
 extends PlayerState
 
+## Star burst emitted on impact.
 @export var stars: AnimatedParticles
+## Dust burst emitted on impact.
 @export var dust: AnimatedParticles
+## Time spent recovering after the slam before returning to idle.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var recover_time: float = 0.3
 
 var _settled_at: float = -1.0

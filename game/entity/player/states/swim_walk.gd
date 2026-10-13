@@ -1,5 +1,6 @@
 extends PlayerState
 
+## How long a swim press stays valid for starting a stroke.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var swim_buffer: float = 0.12
 
 

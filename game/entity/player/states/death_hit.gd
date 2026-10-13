@@ -1,7 +1,10 @@
 extends PlayerState
 
+## Hurtbox removed when the player dies.
 @export var hurt_box: HurtBox
+## Draw order given to the player so the death plays above the level.
 @export var z_index: int = 10
+## Time frozen on the hit before falling.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var fall_delay: float = 1.0
 
 

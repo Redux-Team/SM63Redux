@@ -11,7 +11,9 @@ const ACTIONS: Array[StringName] = [
 	&"switch_nozzle",
 ]
 
+## Horizontal movement axis, -1 for left and 1 for right.
 var move: float = 0.0
+## Vertical swim axis, -1 for up and 1 for down.
 var swim: float = 0.0
 
 var _press_ages: Dictionary[StringName, float] = {}

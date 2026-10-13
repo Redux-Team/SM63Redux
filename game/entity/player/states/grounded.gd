@@ -1,12 +1,18 @@
 extends PlayerState
 
 @export_group("Run")
+## Top running speed at full input.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var run_speed: float = 203.5
+## Acceleration toward run speed.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var acceleration: float = 1153.8
+## Acceleration while running against the current direction.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var turn_acceleration: float = 2307.7
 @export_group("Brake")
+## Constant deceleration while braking without input.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var brake_deceleration: float = 16.35
+## Time for braking alone to halve the player's speed.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var brake_halflife: float = 0.0827
+## Floor friction multiplier while braking.
 @export var brake_friction_scale: float = 1.39
 
 

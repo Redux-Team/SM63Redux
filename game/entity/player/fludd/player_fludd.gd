@@ -23,44 +23,62 @@ enum Context {
 const POWER_MAX: float = 100.0
 const FUEL_MAX: float = 100.0
 
+## Player wearing the backpack.
 @export var player: Player
+## Machine holding one mode per nozzle.
 @export var modes: ModeMachine
 @export_group("Tank")
+## Water left in the tank.
 @export var fuel: float = FUEL_MAX:
 	set(value):
 		fuel = clampf(value, 0.0, FUEL_MAX)
 		fuel_changed.emit(fuel)
+## Spray power left before needing to recharge.
 @export var power: float = POWER_MAX:
 	set(value):
 		power = clampf(value, 0.0, POWER_MAX)
 		power_changed.emit(power)
+## Power drained per second while a draining mode runs in the air.
 @export_custom(PROPERTY_HINT_NONE, "suffix:/s") var power_drain_rate: float = 45.0
+## Water drained per unit of power drained.
 @export var fuel_drain_ratio: float = 0.05
 @export_group("Nozzles")
+## Nozzle currently selected.
 @export var equipped_nozzle: Nozzle = Nozzle.NONE:
 	set(value):
 		equipped_nozzle = value
 		if modes:
 			modes.select(_mode_names.get(value, &""))
 		nozzle_changed.emit(value)
+## Nozzles the player has collected.
 @export var held_nozzles: Dictionary[Nozzle, bool] = {
 	Nozzle.NONE: true,
 	Nozzle.HOVER: false,
 	Nozzle.ROCKET: false,
 	Nozzle.TURBO: false,
 }
+## States in which no nozzle can spray.
 @export var blocked_states: Array[StringName] = [&"Spin", &"SwimSpin", &"Strike", &"Crouch", &"RolloutF", &"GroundPoundFall", &"GroundPoundStart", &"GroundPoundSlam"]
 @export_group("Launch")
+## Upward speed set when spraying lifts the player off the ground.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var launch_speed: float = 42.5
 @export_group("Effects")
+## Particles used for spray bursts and as the spray origin.
 @export var spray_particles: GPUParticles2D
+## Water stream shown while a continuous nozzle sprays.
 @export var spray_stream: SprayStream
+## Sound played when hovering starts.
 @export var hover_sfx: AudioStreamPlayer2D
+## Sound looped while spraying.
 @export var spray_loop_sfx: AudioStreamPlayer2D
+## Sound played while the rocket charges.
 @export var rocket_sfx: AudioStreamPlayer2D
+## Sound played when switching nozzles.
 @export var switch_sfx: AudioStream
+## Volume of the nozzle switch sound.
 @export var switch_sfx_db: float = -10.0
 
+## Body angle reported by the dive and floorslide states for directional spraying.
 var body_rotation: float = 0.0
 
 var _spraying: bool = false:

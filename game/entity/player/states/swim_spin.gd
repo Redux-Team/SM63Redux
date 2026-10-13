@@ -1,5 +1,6 @@
 extends SpinState
 
+## Minimum spin length before releasing spin can end it.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var exit_delay: float = 0.6
 
 

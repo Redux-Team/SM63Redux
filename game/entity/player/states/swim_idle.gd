@@ -1,6 +1,8 @@
 extends PlayerState
 
+## Input strength needed to start walking along the floor.
 @export var walk_input_threshold: float = 0.1
+## How long a swim press stays valid for starting a stroke.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var swim_buffer: float = 0.12
 
 

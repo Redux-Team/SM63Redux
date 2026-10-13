@@ -1,31 +1,53 @@
 extends FluddMode
 
 @export_group("Hover")
+## Multiplier on upward speed when hovering starts at full power.
 @export var full_power_impulse: float = 1.3
+## Caps upward speed from the full power impulse.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var max_impulse_speed: float = 500.0
+## Upward speed lift pulls toward before the power factor.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var lift_speed: float = 200.0
+## Upward speed above which lift is used instead of settling.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var lift_threshold: float = 50.0
+## Lift multiplier at empty power.
 @export var lift_factor_empty: float = 0.3
+## Lift multiplier at full power.
 @export var lift_factor_full: float = 0.8
+## Time for lift to close half the gap to its target speed.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var lift_halflife: float = 0.0137
+## Upward speed pulled toward once the hover settles.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var settle_speed: float = 200.0
+## Time for settling to close half the gap to the settle speed.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var settle_halflife: float = 0.1096
 @export_group("Hover Steering")
+## Horizontal speed cap while hovering.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var max_speed: float = 120.0
+## Time for horizontal speed to close half the gap to the hover cap.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var speed_halflife: float = 0.3466
 @export_group("Dive")
+## Push along the body while diving.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var dive_force: float = 600.0
+## Share of the dive push applied vertically.
 @export var dive_vertical_factor: float = 0.0
+## Upward acceleration while diving.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var dive_lift: float = 0.0
+## Time for horizontal drag to halve speed while diving.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var dive_drag_halflife_x: float = 0.3793
+## Time for vertical drag to halve speed while diving.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var dive_drag_halflife_y: float = 0.5718
 @export_group("Floor Slide")
+## Push along the body while floorsliding.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var slide_force: float = 3000.0
+## Share of the slide push applied vertically.
 @export var slide_vertical_factor: float = 0.0
+## Upward acceleration while floorsliding.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var slide_lift: float = 0.0
+## Time for horizontal drag to halve speed while floorsliding.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var slide_drag_halflife: float = 0.3793
 @export_group("Submerged")
+## Upward speed pulled toward underwater.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var submerged_speed: float = 1000.0
+## Time to close half the gap to the underwater speed.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var submerged_halflife: float = 0.3
 
 var _settled: bool = false

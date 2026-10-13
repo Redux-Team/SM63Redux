@@ -1,6 +1,8 @@
 extends PlayerState
 
+## Upward speed held during the windup.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rise_speed: float = 23.0
+## Length of the windup before the fall begins.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var duration: float = 0.3
 
 

@@ -1,17 +1,26 @@
 class_name SpinState
 extends PlayerState
 
+## Hitbox enabled during the fast part of the spin.
 @export var hitbox: HitBox
 @export_group("Rise")
+## Upward speed set when spinning while falling.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rise_from_fall_speed: float = 35.0
+## Upward speed added when spinning while rising.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rise_boost: float = 50.0
+## Time gravity is suspended after an airborne spin starts.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var gravity_suspend_time: float = 0.1
 @export_group("Timing")
+## Length of the fast spin before the slow loop takes over.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var fast_time: float = 0.5
+## Minimum spin length before releasing spin can end it.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var active_time: float = 0.5
+## How long a jump press stays valid for jumping out of a grounded spin.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var jump_buffer: float = 0.2
 @export_group("Animation")
+## Animation speed over the fast spin, sampled across its domain.
 @export var speed_curve: Curve
+## Animation played once the fast spin ends.
 @export var slow_animation: StringName = &"spin_loop"
 
 var _suspended: bool = false

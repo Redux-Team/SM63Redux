@@ -1,8 +1,12 @@
 extends PlayerState
 
+## Time before touching the floor counts as landing.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var land_delay: float = 0.0833
+## Time spent recovering after landing before returning to idle.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var recover_time: float = 0.25
+## Floor friction multiplier with directional input.
 @export var floor_friction_scale: float = 1.0
+## Floor friction multiplier without input.
 @export var idle_floor_friction_scale: float = 1.39
 
 var _landed_at: float = -1.0

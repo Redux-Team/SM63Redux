@@ -1,12 +1,18 @@
 extends PlayerState
 
 @export_group("Stroke")
+## Upward speed each stroke pulls toward.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var stroke_speed: float = 142.85
+## Time for a stroke to close half the gap to the stroke speed.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var stroke_halflife: float = 0.0066
+## Length of each stroke's upward pull.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var stroke_time: float = 0.175
+## Minimum time between strokes.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var stroke_interval: float = 0.2
 @export_group("Input")
+## How long a swim press stays valid for queuing the next stroke.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var press_buffer: float = 0.12
+## Animation restarted on each stroke.
 @export var animation: StringName = &"swim"
 
 var _stroke_age: float = 0.0

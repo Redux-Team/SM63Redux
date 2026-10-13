@@ -1,5 +1,6 @@
 extends PlayerState
 
+## Downward speed at which the jump becomes a fall.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var fall_speed: float = 50.0
 
 

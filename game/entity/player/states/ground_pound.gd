@@ -1,5 +1,6 @@
 extends PlayerState
 
+## Hitbox active for the whole ground pound.
 @export var hitbox: HitBox
 
 

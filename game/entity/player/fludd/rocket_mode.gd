@@ -2,19 +2,29 @@ extends FluddMode
 
 const FRICTION_KEY: StringName = &"fludd_rocket"
 
+## Sprite shaken and tinted while charging.
 @export var sprite: SmartSprite2D
 
 @export_group("Rocket")
+## Time held before the rocket launches.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var charge_time: float = 1.0
+## Speed set along the launch direction.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var launch_speed: float = 692.5
+## Water spent per launch.
 @export var fuel_cost: float = 5.0
+## Time after a launch before charging can resume.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var recovery_time: float = 0.5
 @export_group("Floor Slide")
+## Speed set along the body when launching from a floorslide.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var slide_speed: float = 700.0
+## Floor friction multiplier after a floorslide launch.
 @export var slide_friction_scale: float = 0.2
+## Time the floorslide friction multiplier lasts.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var slide_friction_time: float = 0.75
 @export_group("Burst")
+## Length of the launch particle burst.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var burst_time: float = 0.18
+## Scale of the launch particle burst.
 @export var burst_scale: float = 2.0
 
 var _charge: float = 0.0
