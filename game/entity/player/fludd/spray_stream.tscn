@@ -1,0 +1,113 @@
+[gd_scene format=3 uid="uid://cffnjxsg0savt"]
+
+[ext_resource type="Script" uid="uid://dr1h1iga61h6a" path="res://game/entity/player/fludd/spray_stream.gd" id="1_stream"]
+[ext_resource type="Shader" uid="uid://hw4uo0e1rkta" path="res://shader/spray_stream.gdshader" id="2_shader"]
+[ext_resource type="Texture2D" uid="uid://b1h2fwidh3p1i" path="res://assets/textures/entity/player/shared/fludd_spray.png" id="3_spray"]
+[ext_resource type="Script" uid="uid://df82mcnubnp0h" path="res://util/2d/animated_particles.gd" id="4_particles"]
+[ext_resource type="Texture2D" uid="uid://nga2o0i5f0cr" path="res://assets/textures/particle/entity/enemy_poof.png" id="5_poof"]
+[ext_resource type="Script" uid="uid://cwdgtyt2wh132" path="res://game/entity/player/fludd/spray_profile.gd" id="6_profile"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_top"]
+atlas = ExtResource("3_spray")
+region = Rect2(0, 0, 19, 16)
+
+[sub_resource type="Resource" id="Resource_default_profile"]
+script = ExtResource("6_profile")
+gravity = Vector2(0, 900)
+max_length = 256.0
+empty_width_scale = 0.65
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_stream"]
+shader = ExtResource("2_shader")
+shader_parameter/body_region = Vector4(0, 0, 1, 1)
+shader_parameter/top_region = Vector4(0, 0, 1, 1)
+shader_parameter/uv_length = 10.0
+shader_parameter/body_length = 29.0
+shader_parameter/top_length = 0.0
+shader_parameter/flow_speed = 280.0
+shader_parameter/wobble_amount = 0.06
+shader_parameter/wobble_frequency = 0.5
+shader_parameter/wobble_speed = 8.0
+shader_parameter/width_padding = 1.0
+shader_parameter/tail_width_scale = 1.0
+shader_parameter/tail_taper_start = 0.7
+shader_parameter/tail_fade_start = 0.55
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_body"]
+atlas = ExtResource("3_spray")
+region = Rect2(0, 16, 19, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_poof0"]
+atlas = ExtResource("5_poof")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_poof1"]
+atlas = ExtResource("5_poof")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_poof2"]
+atlas = ExtResource("5_poof")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_poof3"]
+atlas = ExtResource("5_poof")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_poof"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_poof0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_poof1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_poof2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_poof3")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="SprayStream" type="Node2D" unique_id=1688171354 node_paths=PackedStringArray("line", "splash")]
+script = ExtResource("1_stream")
+line = NodePath("Line")
+splash = NodePath("Splash")
+top_cap = SubResource("AtlasTexture_top")
+default_profile = SubResource("Resource_default_profile")
+spread = 0.0
+min_point_spacing = 4.0
+start_offset = 18.0
+flow_speed = 560.0
+wobble_frequency = 0.5
+
+[node name="Line" type="Line2D" parent="." unique_id=926480624]
+texture_filter = 1
+texture_repeat = 2
+material = SubResource("ShaderMaterial_stream")
+width = 12.0
+texture = SubResource("AtlasTexture_body")
+texture_mode = 1
+round_precision = 1
+
+[node name="Splash" type="Node2D" parent="." unique_id=704682661 node_paths=PackedStringArray("spawn_parent")]
+texture_filter = 1
+script = ExtResource("4_particles")
+sprite_frames = SubResource("SpriteFrames_poof")
+spawn_parent = NodePath("..")
+amount = 3
+emission_radius = 4.0
+spread = 70.0
+angles = PackedFloat32Array()
+speed_min = 15.0
+speed_max = 45.0
+damping = 40.0
+scale_min = 0.5
+scale_max = 0.8
+speed_scale_min = 0.9
+speed_scale_max = 1.3
+random_flip = true

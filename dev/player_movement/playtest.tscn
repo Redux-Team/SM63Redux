@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://6u4ran5r3t80"]
+
+[ext_resource type="Script" uid="uid://diouyfah3pe7y" path="res://dev/player_movement/playtest.gd" id="1_jkuof"]
+[ext_resource type="PackedScene" uid="uid://c0hjv83unhj0w" path="res://game/entity/player/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" uid="uid://vgcwqugyqu40" path="res://game/hud/player_hud.tscn" id="4_hud"]
+
+[node name="Playtest" type="Node2D" unique_id=1136589411 node_paths=PackedStringArray("player")]
+script = ExtResource("1_jkuof")
+player = NodePath("Player")
+
+[node name="Player" parent="." unique_id=1446177948 instance=ExtResource("3_player")]
+position = Vector2(0, 346)
+
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=713535306]
+zoom = Vector2(2, 2)
+position_smoothing_enabled = true
+
+[node name="PlayerHUD" parent="." unique_id=1446177949 node_paths=PackedStringArray("player", "coin_counters") instance=ExtResource("4_hud")]
+player = NodePath("../Player")
+coin_counters = {
+&"purple": NodePath("CollectibleContainer/VBoxContainer/PurpleCoinContainer"),
+&"red": NodePath("CollectibleContainer/VBoxContainer/RedCoinContainer"),
+&"yellow": NodePath("CollectibleContainer/VBoxContainer/YellowCoinContainer")
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1019236726]
+collision_layer = 65535
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1003145735]
+position = Vector2(-724, 267)
+polygon = PackedVector2Array(390, 75, 851, 94, 1447, 116, 1485, 48, 2042, 56, 2961, 3, 3544, 100, 3667, 747, 2426, 947, 1130, 906, -155, 1042, -605, 513, -677, -384, -400, -715, -224, -439, -29, -440, 111, -175, 389, -180)
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1207091793]
+color = Color(0.073800005, 0.18, 0.18, 1)
+polygon = PackedVector2Array(109, 9, 390, 9, 328, 388, 188, 380)
