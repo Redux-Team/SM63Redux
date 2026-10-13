@@ -1,0 +1,464 @@
+# TODO - The player is in a relatively stable state; however, I do plan
+# on reworking the API in the future, especially when it comes to class variables
+# affecting states.
+class_name PlayerOld
+extends Entity
+
+
+signal swimming_changed(swimming: bool)
+
+
+const BUFFERED_ACTIONS: PackedStringArray = ["jump"]
+const FOOTSTEP_LAYER_FIRST: int = 25
+## How long a swim (jump-underwater) press stays buffered. Buffering it means the state machine
+## still sees the press even if it samples on a frame after the one-frame "just pressed".
+const SWIM_INPUT_BUFFER_TIME: float = 0.12
+
+@export_group("Movement")
+@export_subgroup("Ground")
+@export var walk_acceleration: float = 20.0
+@export var turn_acceleration_multiplier: float = 2.5
+@export var ground_friction_flat: float = 0.3
+@export var ground_friction_divisor: float = 1.15
+@export var slope_normal_threshold: float = 0.999
+@export var slope_stick_speed: float = 0.5
+@export var dry_friction: float = 0.4
+@export_subgroup("Air")
+@export var air_acceleration: float = 1.0
+@export var air_control_normal: float = 0.85
+@export var air_control_spin: float = 0.35
+@export var air_turn_boost: float = 2.8
+@export var air_turn_boost_spin: float = 1.4
+@export var air_turn_speed_threshold: float = 10.0
+@export var air_momentum_gain: float = 0.5
+@export var air_momentum_max_speed: float = 400.0
+@export var air_drag: float = 2.0
+@export var air_drag_over_speed: float = 5.0
+@export_subgroup("Underwater")
+@export var water_resistance: float = 0.6
+@export_subgroup("Limits")
+@export var run_max_speed: float = 250.0
+@export var midair_max_speed: float = 190.0
+@export var terminal_velocity_x: float = 500.0
+@export var terminal_velocity_y: float = 725.0
+
+@export_group("Jump")
+@export_subgroup("Strength")
+@export var jump_strength: float = 340.0
+@export var double_jump_strength: float = 420.0
+@export var triple_jump_strength: float = 500.0
+@export var triple_jump_min_speed: float = 120.0
+@export_subgroup("Feel")
+@export var jump_chain_time: float = 0.15
+@export_range(0.0, 1.0) var jump_cut_multiplier: float = 0.75
+@export_range(0.0, 1.0) var double_jump_cut_multiplier: float = 0.85
+@export var jump_cut_max_chain: int = 2
+@export var jump_buffer_window: float = 0.2
+@export_subgroup("Exits")
+@export var jump_spin_min_speed: float = -55.0
+@export var fall_spin_min_speed: float = 100.0
+@export var idle_jump_fall_speed: float = 50.0
+
+@export_group("Dive")
+@export_subgroup("Launch")
+@export var dive_target_speed: float = 900.0
+@export var dive_time_to_target_speed: float = 0.058
+@export var dive_launch_y_boost: float = 80.0
+@export var dive_neutral_launch_y_cap: float = -180.0
+@export var dive_launch_y_min: float = -220.0
+@export var dive_launch_y_max: float = 300.0
+@export_subgroup("Ground Physics")
+@export var dive_ground_flat_decel: float = 6.42
+@export var dive_ground_proportional_decel: float = 0.0196
+@export var dive_landing_friction_multiplier: float = 2.0
+@export var dive_slide_stop_threshold: float = 30.0
+@export_subgroup("Air Control")
+@export var dive_air_control: float = 0.35
+@export var dive_air_resistance: float = 0.0
+@export var dive_over_speed_decel: float = 3.0
+@export_subgroup("Rotation")
+@export var dive_air_rotation_blend: float = 0.2
+@export var dive_ground_rotation_blend: float = 0.15
+@export var dive_ground_rotation_blend_fast: float = 0.3
+@export var dive_landing_rotation_smooth_duration: float = 0.3
+@export var dive_grounded_angle_deg: float = 90.0
+@export var dive_rotation_min_deg: float = -60.0
+@export var dive_rotation_max_deg: float = 85.0
+@export var dive_rotation_curve: Curve
+@export var dive_y_velocity_to_rotation_offset_curve: Curve
+@export_subgroup("Recovery")
+@export var dive_slide_stop_duration: float = 0.133
+@export var dive_reset_decel: float = 5.0
+
+@export_group("Moves")
+@export_subgroup("Floor Slide")
+@export var slide_flat_angle: float = 90.0
+@export var slide_max_nosedive_angle: float = 45.0
+@export var slide_angle_lerp_speed: float = 0.5
+@export var slide_airborne_nosedive_speed: float = 0.15
+@export var slide_ledge_buffer_time: float = 0.15
+@export var slide_friction_scale: float = 1.6
+@export var slide_slope_acceleration: float = 12.0
+@export var slide_air_gravity_add: float = 1.0
+@export var slide_terminal_x_divisor: float = 2.0
+@export var slide_terminal_y_divisor: float = 1.5
+@export var slide_terminal_decel: float = 8.0
+@export var slide_exit_speed: float = 5.0
+@export var slide_release_exit_speed: float = 150.0
+@export var slide_rollout_min_speed: float = 50.0
+@export_subgroup("Spin")
+@export var spin_gravity_scale: float = 0.67
+@export var spin_fast_duration: float = 0.25
+@export var spin_speed_scale_curve: Curve
+@export var spin_gravity_resume_time: float = 0.1
+@export var spin_duration: float = 0.5
+@export var spin_rise_from_fall: float = -35.0
+@export var spin_rise_boost: float = 50.0
+@export var spin_fall_cap: float = 270.0
+@export_subgroup("Backflip")
+@export var backflip_x_boost: float = 280.0
+@export var backflip_y_velocity: float = -400.0
+@export var backflip_up_x_boost: float = 50.0
+@export var backflip_up_y_velocity: float = -475.0
+@export var backflip_spin_min_speed: float = 155.0
+@export_subgroup("Rollout")
+@export var rollout_x_clamp: float = 625.0
+@export var rollout_y_velocity: float = -200.0
+@export var rollout_dive_lock_time: float = 0.275
+@export var rollout_idle_time: float = 0.1
+@export var rollout_dive_time: float = 0.2
+@export var rollout_fall_time: float = 0.3
+@export var rollout_fall_min_speed: float = 30.0
+@export var rollout_spin_min_speed: float = -40.0
+@export_subgroup("Stomp")
+@export var stomp_drag: float = 900.0
+@export var stomp_min_speed: float = 45.0
+@export var stomp_duration: float = 0.4
+## Physics frames the feet hitbox stays live for, so one landing can squish everything under it.
+@export var stomp_hitbox_frames: int = 2
+@export var stomp_bounce_speed: float = -280.0
+@export_subgroup("Ground Pound")
+@export var ground_pound_start_rise_speed: float = -38.0
+@export var ground_pound_start_duration: float = 0.3
+@export var ground_pound_fall_speed: float = 800.0
+@export var ground_pound_water_slow_lerp: float = 0.08
+@export var ground_pound_water_swim_speed: float = 50.0
+@export var ground_pound_slam_exit_delay: float = 0.3
+
+@export_group("Swim")
+@export_subgroup("Burst")
+## Peak upward velocity applied during the swim burst (pixels/sec, positive = up in velocity space).
+@export var swim_burst_rise_speed: float = 150.0
+## How quickly velocity lerps toward the burst target each tick during the active burst window.
+## Lower = smoother ramp-up, higher = snappier.
+@export var swim_burst_rise_smoothing: float = 100.0
+## How quickly upward velocity bleeds off toward neutral float after the burst ends.
+## Lower = floatier tail, higher = quicker stop.
+@export var swim_rise_decay_smoothing: float = 0.05
+## How long the active burst window lasts before handing off descent control to Submerged.
+@export var swim_burst_duration: float = 0.2
+## How long the player's swim input is buffered after this state fires,
+## preventing an immediate re-trigger from a held input.
+@export var swim_input_buffer_time: float = 0.35
+@export_subgroup("Drift")
+## Neutral downward drift velocity while submerged and not actively swimming.
+## Kept low so the player feels weightless rather than sinking.
+@export var swim_neutral_sink_speed: float = 1000.0
+## How quickly velocity lerps toward swim_neutral_sink_speed once the burst has fully decayed.
+@export var swim_neutral_sink_smoothing: float = 0.1
+@export var swim_down_speed: float = 140.0
+@export var swim_down_lerp: float = 0.2
+@export var swim_up_speed: float = 140.0
+@export var swim_up_lerp: float = 0.2
+@export var swim_hold_lerp: float = 0.08
+@export var swim_drift_speed: float = 20.0
+@export var swim_drift_lerp: float = 0.1
+@export_subgroup("Handling")
+@export var swim_turn_threshold: float = 10.0
+@export var swim_slope_speed: float = 5.0
+@export var swim_spin_exit_delay: float = 0.6
+@export_subgroup("Exit")
+@export var swim_exit_boost: float = 2.5
+@export var swim_exit_boost_cap: float = -300.0
+
+@export_group("Thresholds")
+@export_subgroup("Movement")
+@export var crouch_max_speed: float = 50.0
+@export var move_input_threshold: float = 0.1
+@export var walk_stop_speed: float = 0.5
+@export_subgroup("Animation")
+@export_range(0.0, 1.0, 0.01) var run_animation_input_threshold: float = 0.7
+@export var walk_animation_stop_speed: float = 30.0
+@export var walk_speed_curve: Curve
+@export_subgroup("Strike")
+@export var strike_grounded_frames: int = 5
+@export var strike_exit_delay: float = 0.25
+@export var swim_strike_duration: float = 0.6
+
+@export_group("Death")
+@export_subgroup("Impact")
+@export var death_z_index: int = 10
+@export var death_camera_zoom: float = 2.0
+@export var death_shake_strength: float = 40.0
+@export var death_shake_time: float = 0.2
+@export_subgroup("Sequence")
+@export var death_fall_delay: float = 1.0
+@export var death_transition_delay: float = 2.0
+@export var death_screen_hold: float = 0.5
+
+@export_group("Footsteps", "footstep_")
+@export var footstep_bank: SFXBank
+@export var footstep_particles: AnimatedParticles
+@export var footstep_terrains: Array[StringName] = [&"grass", &"snow", &"cloud", &"ice", &"metal"]
+@export var footstep_frames: Dictionary[StringName, PackedInt32Array] = {
+	&"walk_loop": PackedInt32Array([0, 4]),
+	&"run_loop": PackedInt32Array([0, 4]),
+}
+
+@export_group("Internal")
+@export var floor_slope_raycast: RayCast2D
+@export var heal_particles: ParticleEmitter
+@export var submerged_bus_effects: Array[AudioEffect]
+@export var _fludd_handler: PlayerFluddHandlerOld
+## lock the sprite flipping
+@export var lock_flipping: bool = false
+
+
+var effective_midair_max_speed: float = 0.0
+var effective_run_max_speed: float = 0.0
+var move_input: float = 0.0
+var swim_input: float = 0.0
+var jump_chain_index: int = 0
+var jump_chain_timer: float = 0.0
+var stomp_timer: float = 0.0
+var swim_hold_timer: float = 0.0
+var swim_input_timer: float = 0.0
+var action_hold_times: Dictionary[String, float]
+
+var is_spinning: bool = false
+var is_crouching: bool = false
+var is_diving: bool = false
+
+var is_input_dive: bool = false
+var is_input_ground_pound: bool = false
+var is_input_spin: bool = false
+var is_input_swim: bool:
+	get:
+		return swim_input_timer > 0.0
+
+var can_jump: bool = true
+var can_walk: bool = true
+var can_dive: bool = true
+var can_ground_pound: bool = true
+
+
+func _ready() -> void:
+	effective_midair_max_speed = midair_max_speed
+	effective_run_max_speed = run_max_speed
+
+
+func _process(delta: float) -> void:
+	move_input = Input.get_axis("move_left", "move_right")
+	if _fludd_handler.is_turbo_active() and is_zero_approx(move_input):
+		move_input = float(get_facing())
+	swim_input = Input.get_axis("swim_up", "swim_down")
+	is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
+	is_input_dive = Input.is_action_pressed("dive") and not is_on_floor()
+	is_input_ground_pound = Input.is_action_pressed("ground_pound")
+	is_input_spin = Input.is_action_pressed("spin")
+	
+	if Input.is_action_just_pressed("jump") and not _fludd_handler.is_aiming():
+		swim_input_timer = SWIM_INPUT_BUFFER_TIME
+	swim_input_timer = max(swim_input_timer - delta, 0.0)
+	
+	for action: String in BUFFERED_ACTIONS:
+		if not Input.is_action_pressed(action):
+			action_hold_times.erase(action)
+		elif action_hold_times.has(action):
+			action_hold_times.set(action, action_hold_times.get(action) + delta)
+		else:
+			action_hold_times.set(action, 0.0)
+
+
+func get_facing() -> int:
+	return (-1 if sprite.flip_h else 1)
+
+
+func get_facing_velocity() -> float:
+	return velocity.x * get_facing()
+
+
+func get_local_floor_normal() -> Vector2:
+	var gravity_component: GravityComponent = get_component(GravityComponent)
+	return get_floor_normal().rotated(-gravity_component.get_angle()) if gravity_component else get_floor_normal()
+
+
+func get_effective_friction() -> float:
+	var friction_component: FrictionComponent = get_component(FrictionComponent)
+	if friction_component:
+		return friction_component.get_effective()
+	return 1.0
+
+
+func get_fludd_handler() -> PlayerFluddHandlerOld:
+	return _fludd_handler
+
+
+func is_action_pressed(action: String) -> bool:
+	return Input.is_action_pressed(action)
+
+
+func is_action_just_pressed(action: String, buffer: float = 0.0) -> bool:
+	if buffer > 0:
+		if action in BUFFERED_ACTIONS and action_hold_times.has(action):
+			return action_hold_times.get(action) < buffer and Input.is_action_pressed(action)
+	return Input.is_action_just_pressed(action)
+
+
+func is_moving_with_facing() -> bool:
+	return signf(move_input) == float(get_facing())
+
+
+func is_moving_against_facing() -> bool:
+	return signf(move_input) == float(-get_facing())
+
+
+func set_gravity_enabled(enabled: bool) -> void:
+	var gravity_component: GravityComponent = get_component(GravityComponent)
+	if gravity_component:
+		gravity_component.enabled = enabled
+
+
+func set_gravity_modifier(key: StringName, value: float, duration: float = 0.0) -> void:
+	var gravity_component: GravityComponent = get_component(GravityComponent)
+	if gravity_component:
+		gravity_component.set_modifier(key, value, duration)
+
+
+func clear_gravity_modifier(key: StringName) -> void:
+	var gravity_component: GravityComponent = get_component(GravityComponent)
+	if gravity_component:
+		gravity_component.clear_modifier(key)
+
+
+func set_friction_modifier(key: StringName, value: float, duration: float = 0.0) -> void:
+	var friction_component: FrictionComponent = get_component(FrictionComponent)
+	if friction_component:
+		friction_component.modifiers.set_modifier(key, value, duration)
+
+
+func clear_friction_modifier(key: StringName) -> void:
+	var friction_component: FrictionComponent = get_component(FrictionComponent)
+	if friction_component:
+		friction_component.modifiers.clear_modifier(key)
+
+
+func add_power(amount: int) -> void:
+	var health_component: HealthComponent = get_component(HealthComponent)
+	health_component.power += amount
+
+
+func add_fludd_power(amount: float) -> void:
+	get_fludd_handler().fludd_power += amount
+
+
+func request_pound_cancel() -> void:
+	if is_input_ground_pound or not machine.is_active(&"GroundPound"):
+		return
+	
+	machine.change_state(&"Fall")
+
+
+func get_terrain() -> StringName:
+	if not floor_slope_raycast.is_colliding():
+		return &""
+	
+	var collider: CollisionObject2D = floor_slope_raycast.get_collider() as CollisionObject2D
+	if not collider:
+		return &""
+	
+	for i: int in footstep_terrains.size():
+		if collider.get_collision_layer_value(FOOTSTEP_LAYER_FIRST + i):
+			return footstep_terrains.get(i)
+	
+	return StringName(collider.get_meta(&"terrain", ""))
+
+
+func get_debug_text() -> String:
+	var debug_text: String = ""
+	debug_text += "State: %s\n" % machine.get_state()
+	debug_text += "Animation: %s\n" % sprite.current_animation
+	debug_text += "Velocity: %s\n" % velocity
+	
+	return debug_text
+
+
+func get_spin_speed_scale(elapsed: float) -> float:
+	if not spin_speed_scale_curve:
+		return 1.0
+	
+	var ratio: float = clampf(elapsed / maxf(spin_fast_duration, 0.001), 0.0, 1.0)
+	return spin_speed_scale_curve.sample(lerpf(spin_speed_scale_curve.min_domain, spin_speed_scale_curve.max_domain, ratio))
+
+
+func enter_slow_spin() -> void:
+	var sprite_frames: SpriteFrames = sprite.diffuse_frames
+	var current_fps: float = sprite.speed_scale * sprite_frames.get_animation_speed(sprite.current_animation)
+	sprite.play_at_frame(&"spin_loop", sprite.current_frame)
+	sprite.speed_scale = current_fps / maxf(sprite_frames.get_animation_speed(&"spin_loop"), 0.001)
+
+
+func play_footstep() -> void:
+	if footstep_bank:
+		footstep_bank.play_sfx_at(global_position, footstep_bank.bank_group, self, sprite)
+	if footstep_particles and abs(velocity.x) > 20:
+		footstep_particles.burst()
+
+
+func begin_stomp() -> void:
+	stomp_timer = stomp_duration
+	set_gravity_enabled(false)
+	if velocity.y > 0.0:
+		velocity.y = 0.0
+
+
+func tick_stomp(delta: float) -> void:
+	if stomp_timer <= 0.0:
+		return
+	
+	stomp_timer -= delta
+	if stomp_timer <= 0.0:
+		stomp_timer = 0.0
+		set_gravity_enabled(true)
+		velocity.y = stomp_bounce_speed
+
+
+func cancel_stomp() -> void:
+	if stomp_timer <= 0.0:
+		return
+	
+	stomp_timer = 0.0
+	set_gravity_enabled(true)
+
+
+func _on_feet_landed(_hurt_box: HurtBox) -> void:
+	if velocity.y < 0.0 or stomp_timer > 0.0 or machine.is_active(&"GroundPound"):
+		return
+	
+	if machine.is_active(&"Dive"):
+		begin_stomp()
+		return
+	
+	machine.change_state(&"Stomp")
+
+
+func _on_water_check_water_entered() -> void:
+	swimming_changed.emit(true)
+	for effect: AudioEffect in submerged_bus_effects:
+		AudioServer.add_bus_effect(0, effect)
+
+
+func _on_water_check_water_exited() -> void:
+	swimming_changed.emit(false)
+	for i: int in submerged_bus_effects.size():
+		AudioServer.remove_bus_effect(0, 0)

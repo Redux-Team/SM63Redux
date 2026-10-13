@@ -41,6 +41,18 @@ func set_screen_transition_visible(visible: bool) -> void:
 	_screen_transition.visible = visible
 
 
+func spawn_sibling(root_node: Node, node: Node, shared_properties: PackedStringArray = ["position", "scale"]) -> void:
+	var parent: Node = root_node.get_parent()
+	if not is_instance_valid(parent) or not parent.is_inside_tree():
+		node.free()
+		return
+	
+	parent.add_child.call_deferred(node)
+	parent.move_child.call_deferred(node, root_node.get_index())
+	for property: String in shared_properties:
+		node.set(property, root_node.get(property))
+
+
 ## Returns the current version of the game as a [Version].
 func get_version() -> Version:
 	_fetch_git()

@@ -1,0 +1,124 @@
+class_name SFX
+extends Resource
+
+
+enum TerrainType {
+	GENERIC,
+	GRASS,
+	SAND,
+	SNOW,
+	CLOUD,
+}
+
+
+const UI_NEXT: AudioStream = preload("uid://c457x4e2iw7b")
+const UI_BACK: AudioStream = preload("uid://dv2aeiyho5qtn")
+const UI_CONFIRM: AudioStream = preload("uid://cg8o8vgknq1li")
+const UI_START: AudioStream = preload("uid://dmop45sygbxda")
+
+const LD_BACK: AudioStream = preload("uid://dje63yjntwtic")
+const LD_CLOSE: AudioStream = preload("uid://ba7fbbaan7823")
+const LD_CONFIRM: AudioStream = preload("uid://dyapufoemwyie")
+const LD_DENY: AudioStream = preload("uid://bjujqv87d3mx0")
+const LD_ERROR: AudioStream = preload("uid://7fdllxb8tiqr")
+const LD_OPEN: AudioStream = preload("uid://b41jeumeks5wp")
+const LD_SELECT: AudioStream = preload("uid://b1fnunf32dpve")
+
+const SPATIAL_MAX_DISTANCE: float = 400.0
+const SPATIAL_ATTENUATION: float = 1.5
+
+#const UI_WINDOW_OPEN: AudioStream
+
+
+static func play(source: Variant, bus: StringName = &"SFX") -> void:
+	if source is SFXBank:
+		(source as SFXBank).play_sfx(bus)
+	elif source is AudioStream:
+		_play_stream(source, bus)
+
+
+static func play_at(source: Variant, at: Variant, bus: StringName = &"Master", max_distance: float = SPATIAL_MAX_DISTANCE, attenuation: float = SPATIAL_ATTENUATION) -> void:
+	if source is SFXBank:
+		(source as SFXBank).play_sfx_at(at, bus)
+	elif source is AudioStream:
+		_play_stream_at(source, at, bus, max_distance, attenuation)
+
+
+static func stop_group(group: StringName) -> void:
+	for bank: SFXBank in SFXBank.all_banks:
+		if bank.is_in_group(group):
+			bank.stop_all()
+
+
+## Plays an [AudioStream] and returns the created [AudioStreamPlayer] so the caller can
+## stop it early. It still frees itself when the sound finishes on its own.
+static func play_tracked(source: AudioStream, bus: StringName = &"SFX") -> AudioStreamPlayer:
+	return _play_stream(source, bus)
+
+
+## Positional variant of [method play_tracked]. Returns the [AudioStreamPlayer2D].
+static func play_tracked_at(source: AudioStream, at: Variant, bus: StringName = &"SFX", max_distance: float = SPATIAL_MAX_DISTANCE, attenuation: float = SPATIAL_ATTENUATION) -> AudioStreamPlayer2D:
+	return _play_stream_at(source, at, bus, max_distance, attenuation)
+
+
+static func _play_stream(stream: AudioStream, bus: StringName) -> AudioStreamPlayer:
+	var player: AudioStreamPlayer = AudioStreamPlayer.new()
+	player.stream = stream
+	player.bus = bus
+	player.finished.connect(player.queue_free)
+	Singleton.add_child(player)
+	player.play()
+	return player
+
+
+static func _play_stream_at(stream: AudioStream, at: Variant, bus: StringName, max_distance: float = SPATIAL_MAX_DISTANCE, attenuation: float = SPATIAL_ATTENUATION) -> AudioStreamPlayer2D:
+	var player: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
+	player.stream = stream
+	player.bus = bus
+	player.max_distance = max_distance
+	player.attenuation = attenuation
+	player.finished.connect(player.queue_free)
+	if at is Node2D:
+		(at as Node2D).add_child(player)
+	else:
+		Singleton.add_child(player)
+		player.global_position = at as Vector2
+	player.play()
+	return player
+
+
+static func build(audio_stream: AudioStream = null) -> SFXBuilder:
+	var builder: SFXBuilder = SFXBuilder.new()
+	if audio_stream:
+		builder.set_stream(audio_stream)
+	return builder
+
+
+class SFXBuilder:
+	var _stream: AudioStream
+	var _bus: StringName = &"SFX"
+	var _db: float = 0
+	
+	func set_stream(audio_stream: AudioStream) -> SFXBuilder:
+		_stream = audio_stream
+		return self
+	
+	
+	func set_bus(bus: StringName) -> SFXBuilder:
+		_bus = bus
+		return self
+	
+	
+	func set_db(db: float) -> SFXBuilder:
+		_db = db
+		return self
+	
+	
+	func play() -> void:
+		var player: AudioStreamPlayer = AudioStreamPlayer.new()
+		player.stream = _stream
+		player.bus = _bus
+		player.volume_db = _db
+		player.finished.connect(player.queue_free)
+		Singleton.add_child(player)
+		player.play()
