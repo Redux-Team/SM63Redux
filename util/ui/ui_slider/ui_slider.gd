@@ -103,7 +103,9 @@ func is_held() -> bool:
 func _update_state() -> void:
 	if grabber == null:
 		return
-	if _held:
+	if not editable:
+		GDSS.set_state(grabber, "disabled")
+	elif _held:
 		GDSS.set_state(grabber, "pressed")
 	elif _hovered or has_focus(true):
 		GDSS.set_state(grabber, "active")

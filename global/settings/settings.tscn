@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://cakoc4anjh8py" path="res://global/settings/categories/audio.gd" id="7_audio"]
 [ext_resource type="Script" uid="uid://cn4vql4iin4ea" path="res://global/settings/categories/gameplay.gd" id="8_gameplay"]
 [ext_resource type="Script" uid="uid://cw7fxfv414cf" path="res://global/settings/categories/misc.gd" id="9_misc"]
+[ext_resource type="Script" path="res://global/settings/categories/level_designer.gd" id="16_level_designer"]
 [ext_resource type="Script" uid="uid://2xkdb7ge8v0l" path="res://global/settings/types/list.gd" id="10_list"]
 [ext_resource type="Script" uid="uid://dqx6u66fpb5ys" path="res://global/settings/types/float.gd" id="11_float"]
 [ext_resource type="Script" uid="uid://wbytn3c5m6h8" path="res://global/settings/types/boolean.gd" id="12_boolean"]
@@ -108,7 +109,7 @@ physical_keycode = 4194325
 button_index = 10
 pressed = true
 
-[node name="Settings" type="Node" unique_id=1964874867 node_paths=PackedStringArray("display", "graphics", "ui", "input", "audio", "gameplay", "misc")]
+[node name="Settings" type="Node" unique_id=1964874867 node_paths=PackedStringArray("display", "graphics", "ui", "input", "audio", "gameplay", "level_designer", "misc")]
 script = ExtResource("1_settings")
 display = NodePath("Display")
 graphics = NodePath("Graphics")
@@ -116,6 +117,7 @@ ui = NodePath("UI")
 input = NodePath("Input")
 audio = NodePath("Audio")
 gameplay = NodePath("Gameplay")
+level_designer = NodePath("Level Designer")
 misc = NodePath("Misc")
 input_presets = Array[ExtResource("2_preset")]([ExtResource("14_classic"), ExtResource("15_modern")])
 
@@ -333,6 +335,21 @@ script = ExtResource("12_boolean")
 setting_key = "faster_death"
 requires_apply = false
 metadata/_custom_type_script = "uid://wbytn3c5m6h8"
+
+[node name="Level Designer" type="Node" parent="." node_paths=PackedStringArray("tooltip_delay")]
+script = ExtResource("16_level_designer")
+tooltip_delay = NodePath("Tooltip Delay")
+
+[node name="Tooltip Delay" type="Node" parent="Level Designer"]
+script = ExtResource("11_float")
+default_value = 0.5
+maximum = 3.0
+step = 0.05
+slider_text = "%.2fs"
+max_text = "Off"
+setting_key = "tooltip_delay"
+requires_apply = false
+metadata/_custom_type_script = "uid://dqx6u66fpb5ys"
 
 [node name="Misc" type="Node" parent="." unique_id=1016970897 node_paths=PackedStringArray("language", "force_touch_controls", "discord_rpc")]
 script = ExtResource("9_misc")

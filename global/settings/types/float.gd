@@ -8,6 +8,7 @@ extends SettingsType
 @export var maximum: float = 1.0
 @export var step: float = 0.1
 @export var slider_text: String = "%.2f"
+@export var max_text: String = ""
 @export var update_on_release: bool = false
 var current_value: float = 0.0:
 	set(value):
@@ -36,4 +37,4 @@ func _get_value() -> Variant:
 
 
 func _property_info() -> Dictionary:
-	return {"hint": PROPERTY_HINT_RANGE, "hint_string": "%s,%s,%s" % [minimum, maximum, step], "format": slider_text, "update_on_release": update_on_release}
+	return {"hint": PROPERTY_HINT_RANGE, "hint_string": "%s,%s,%s" % [minimum, maximum, step], "format": slider_text, "max_text": max_text, "update_on_release": update_on_release}

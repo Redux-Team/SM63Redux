@@ -9,6 +9,7 @@ const SAVE_PATH: String = "user://settings.cfg"
 @export var input: SettingsCategoryInput
 @export var audio: SettingsCategoryAudio
 @export var gameplay: SettingsCategoryGameplay
+@export var level_designer: SettingsCategoryLevelDesigner
 @export var misc: SettingsCategoryMisc
 @export var input_presets: Array[SettingsPreset] = []
 

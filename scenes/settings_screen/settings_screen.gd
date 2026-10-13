@@ -78,6 +78,10 @@ func _on_restore_defaults_pressed() -> void:
 	_show_category(_category)
 
 
+func cancel() -> void:
+	_on_cancel_button_pressed()
+
+
 func _on_cancel_button_pressed() -> void:
 	for setting: SettingsType in _snapshot:
 		if setting._serialize() != _snapshot.get(setting):

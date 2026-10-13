@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://util/ui/tooltip/tooltip.gd" id="1_script"]
+
+[node name="Tooltip" type="CanvasLayer" node_paths=PackedStringArray("root", "bubble", "label", "arrow")]
+layer = 100
+script = ExtResource("1_script")
+root = NodePath("Root")
+bubble = NodePath("Root/Bubble")
+label = NodePath("Root/Bubble/Label")
+arrow = NodePath("Root/Arrow")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/gdss_mode = 1
+
+[node name="Arrow" type="Panel" parent="Root"]
+layout_mode = 0
+offset_right = 10.0
+offset_bottom = 6.0
+mouse_filter = 2
+metadata/gdss_classes = PackedStringArray("TooltipArrow")
+
+[node name="Bubble" type="PanelContainer" parent="Root"]
+layout_mode = 0
+mouse_filter = 2
+metadata/gdss_classes = PackedStringArray("TooltipBubble")
+
+[node name="Label" type="RichTextLabel" parent="Root/Bubble"]
+layout_mode = 2
+mouse_filter = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+metadata/gdss_classes = PackedStringArray("TooltipText")

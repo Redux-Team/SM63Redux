@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/widgets/widget_vector2/widget_vector2.gd" id="1_script"]
+
+[node name="WidgetVector2" type="HBoxContainer" node_paths=PackedStringArray("label", "x_edit", "y_edit")]
+offset_right = 144.0
+offset_bottom = 29.0
+size_flags_horizontal = 3
+script = ExtResource("1_script")
+label = NodePath("Label")
+x_edit = NodePath("X")
+y_edit = NodePath("Y")
+metadata/gdss_mode = 1
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "vector"
+metadata/gdss_overrides = "font_size: 24"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="X" type="LineEdit" parent="."]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 2
+metadata/gdss_classes = PackedStringArray("InputField")
+
+[node name="Y" type="LineEdit" parent="."]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 2
+metadata/gdss_classes = PackedStringArray("InputField")

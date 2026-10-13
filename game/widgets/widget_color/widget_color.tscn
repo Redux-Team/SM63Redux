@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/widgets/widget_color/widget_color.gd" id="1_script"]
+
+[node name="WidgetColor" type="HBoxContainer" node_paths=PackedStringArray("label", "picker")]
+offset_right = 144.0
+offset_bottom = 29.0
+size_flags_horizontal = 3
+script = ExtResource("1_script")
+label = NodePath("Label")
+picker = NodePath("ColorPickerButton")
+metadata/gdss_mode = 1
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "color"
+metadata/gdss_overrides = "font_size: 24"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="."]
+custom_minimum_size = Vector2(48, 20)
+layout_mode = 2
+size_flags_vertical = 4
+edit_alpha = true
+metadata/gdss_classes = PackedStringArray("InputField")

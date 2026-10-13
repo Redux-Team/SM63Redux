@@ -7,6 +7,11 @@ const SCENES: Dictionary[StringName, String] = {
 	&"range": "uid://bpte0j20nd05a",
 	&"enum_slider": "uid://b7ub6g70ijha2",
 	&"Array[InputEvent]": "uid://bnlgql4fauuga",
+	&"int": "res://game/widgets/widget_number/widget_number.tscn",
+	&"float": "res://game/widgets/widget_number/widget_number.tscn",
+	&"String": "res://game/widgets/widget_string/widget_string.tscn",
+	&"Vector2": "res://game/widgets/widget_vector2/widget_vector2.tscn",
+	&"Color": "res://game/widgets/widget_color/widget_color.tscn",
 }
 
 static var _registered: Dictionary[StringName, PackedScene] = {}
@@ -44,6 +49,29 @@ static func create(property_binding: PropertyBinding) -> PropertyWidget:
 
 @abstract func _name(widget_name: String) -> void
 @abstract func _value(widget_value: Variant) -> void
+
+
+func set_editable(editable: bool) -> void:
+	modulate.a = 1.0 if editable else 0.4
+	_set_editable(self, editable)
+
+
+static func _set_editable(node: Node, editable: bool) -> void:
+	for child: Node in node.get_children():
+		if child is BaseButton:
+			(child as BaseButton).disabled = not editable
+			GDSS.refresh(child)
+		elif child is LineEdit:
+			(child as LineEdit).editable = editable
+			GDSS.refresh(child)
+		elif child is Slider:
+			(child as Slider).editable = editable
+		elif child is Panel and child.get_parent() is Slider:
+			if editable:
+				GDSS.clear_state(child)
+			else:
+				GDSS.set_state(child, "disabled")
+		_set_editable(child, editable)
 
 
 func _info(_widget_info: Dictionary) -> void:
