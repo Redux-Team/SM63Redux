@@ -25,7 +25,10 @@ signal fludd_fuel_changed(fuel_amount: float)
 signal fludd_power_changed(power_amount: float)
 signal fludd_nozzle_changed(nozzle: FluddNozzle)
 
-@export var nozzle_switch_sfx: AudioStream
+@export var shift_n: AudioStreamWAV
+@export var shift_h: AudioStreamWAV
+@export var shift_r: AudioStreamWAV
+@export var shift_t: AudioStreamWAV
 @export var _spray_particles: GPUParticles2D
 @export var player: Player
 @export var fludd_fuel: float = 100.0:
@@ -263,11 +266,19 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"switch_fludd_nozzle"):
 		var successful_switch: bool = switch_nozzle()
 		if successful_switch:
+			var stream: Variant
+			match equipped_nozzle:
+					FluddNozzle.NONE: stream = shift_n
+					FluddNozzle.HOVER: stream = shift_h
+					FluddNozzle.ROCKET: stream = shift_r
+					FluddNozzle.TURBO: stream = shift_t
 			SFX.build()\
-				.set_stream(nozzle_switch_sfx)\
-				.set_db(fludd_switch_sfx_db)\
+				.set_stream(stream)\
+				.set_db(6)\
 				.set_bus(&"Player")\
 				.play()
+				
+			
 	if event is InputEventKey:
 		if event.keycode == KEY_I:
 			player.get_fludd_handler().fludd_fuel = 0

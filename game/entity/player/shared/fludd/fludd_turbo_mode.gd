@@ -62,7 +62,7 @@ func _apply_aim(delta: float) -> void:
 	var direction: Vector2 = Vector2(cos(radians) * facing, sin(radians))
 	var speed: float = maxf(turbo_speed, player.velocity.length())
 	
-	player.velocity = player.velocity.move_toward(direction * speed, aim_acceleration * delta)
+	player.velocity = player.velocity.move_toward(direction * speed, aim_acceleration  * delta +1)
 	player.sprite.local_rotation = _aim_degrees
 
 

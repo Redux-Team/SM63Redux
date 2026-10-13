@@ -40,7 +40,6 @@
 [ext_resource type="Texture2D" uid="uid://ba0kx63gegu07" path="res://assets/textures/screen/bowser.png" id="51_26jgh"]
 [ext_resource type="Texture2D" uid="uid://bvpu1uexfy52t" path="res://assets/textures/entity/player/mario/bonk.png" id="51_d635j"]
 [ext_resource type="Script" uid="uid://dyv4j6akddtwa" path="res://game/entity/player/shared/handlers/fludd_handler.gd" id="51_h6qgx"]
-[ext_resource type="AudioStream" uid="uid://0o8t42w7mec4" path="res://assets/sfx/player/fludd/fludd_switch.wav" id="52_j002l"]
 [ext_resource type="Shader" uid="uid://u5nhalc0jfsd" path="res://core/shader/fludd_particle_outlines.gdshader" id="56_681d1"]
 [ext_resource type="Shader" uid="uid://2jfogo5suhia" path="res://core/shader/fludd_particles.gdshader" id="56_fstnu"]
 [ext_resource type="Texture2D" uid="uid://bw4mmc3qtcito" path="res://assets/textures/particle/fludd/fludd_water.png" id="56_kyrvb"]
@@ -52,8 +51,12 @@
 [ext_resource type="Texture2D" uid="uid://cce6dbb0peayy" path="res://assets/textures/entity/player/mario/death.png" id="64_ndkiv"]
 [ext_resource type="Texture2D" uid="uid://d0ybvaiwv7bs6" path="res://assets/textures/entity/player/mario/run.png" id="65_ejgj1"]
 [ext_resource type="Texture2D" uid="uid://djp4pn2tha3uv" path="res://assets/textures/entity/player/mario/fall_l.png" id="68_26jgh"]
+[ext_resource type="AudioStream" uid="uid://b4k0ct2168axe" path="res://assets/sfx/player/fludd/shiftN.wav" id="69_4bt43"]
 [ext_resource type="Texture2D" uid="uid://bextiromas7ym" path="res://assets/textures/entity/player/mario/fall_r.png" id="69_gmxc2"]
 [ext_resource type="Texture2D" uid="uid://djvye7gydqei7" path="res://assets/textures/entity/player/mario/floorslide.png" id="70_6saf5"]
+[ext_resource type="AudioStream" uid="uid://bvn3wm451ukua" path="res://assets/sfx/player/fludd/shiftH.wav" id="70_28gpl"]
+[ext_resource type="AudioStream" uid="uid://cmmleu4bg11ou" path="res://assets/sfx/player/fludd/shiftR.wav" id="71_8vtha"]
+[ext_resource type="AudioStream" uid="uid://kdqpbinbs5js" path="res://assets/sfx/player/fludd/shiftT.wav" id="72_rytxr"]
 [ext_resource type="Texture2D" uid="uid://coj7i075nslst" path="res://assets/textures/entity/player/mario/ground_pound_start.png" id="73_8odgw"]
 [ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="73_ketxm"]
 [ext_resource type="Texture2D" uid="uid://smesftv4mai1" path="res://assets/textures/entity/player/mario/jumpr.png" id="76_wsr8k"]
@@ -63,7 +66,7 @@
 [ext_resource type="Texture2D" uid="uid://dnqpe8w1wgck1" path="res://assets/textures/particle/item/heal_particle.png" id="80_k0v5e"]
 [ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://core/custom_nodes/2d/particle_emitter.gd" id="81_dhqxs"]
 [ext_resource type="AudioStream" uid="uid://bffab71uf61kf" path="res://assets/sfx/player/fludd/hover.mp3" id="81_fstnu"]
-[ext_resource type="AudioStream" uid="uid://dolh40gtancy4" path="res://assets/sfx/player/fludd/hover_loop.mp3" id="82_681d1"]
+[ext_resource type="AudioStream" uid="uid://dolh40gtancy4" path="res://assets/sfx/player/fludd/spray_loop.mp3" id="82_681d1"]
 [ext_resource type="AudioStream" uid="uid://devp686fvykki" path="res://assets/sfx/player/fludd/rocket.wav" id="83_rkt01"]
 [ext_resource type="Script" uid="uid://bt2fjvil3p13m" path="res://game/entity/mode/mode_machine.gd" id="84_modem"]
 [ext_resource type="Script" uid="uid://hvckbgl6cple" path="res://game/entity/player/shared/fludd/fludd_hover_mode.gd" id="85_fmhov"]
@@ -583,7 +586,7 @@ anim_offset_max = 1.0
 atlas = ExtResource("65_ejgj1")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_jjwtc"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_3jt20"]
 diffuse_texture = SubResource("AtlasTexture_26jgh")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hmgs0"]
@@ -1242,7 +1245,7 @@ animations = [{
 atlas = ExtResource("100_sbpf8")
 region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_mj6hf"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_4bt43"]
 diffuse_texture = SubResource("AtlasTexture_opceb")
 
 [sub_resource type="Resource" id="Resource_v2l3k"]
@@ -1873,7 +1876,7 @@ animations = [{
 atlas = ExtResource("114_k6hol")
 region = Rect2(0, 0, 16, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_kups7"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_28gpl"]
 diffuse_texture = SubResource("AtlasTexture_fbvjr")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_is4m5"]
@@ -2419,7 +2422,10 @@ _doll = NodePath("../../Doll")
 
 [node name="FLUDDHandler" type="Node" parent="Handlers" unique_id=468241504 node_paths=PackedStringArray("_spray_particles", "player", "modes", "hover_sfx", "spray_loop_sfx", "rocket_sfx")]
 script = ExtResource("51_h6qgx")
-nozzle_switch_sfx = ExtResource("52_j002l")
+shift_n = ExtResource("69_4bt43")
+shift_h = ExtResource("70_28gpl")
+shift_r = ExtResource("71_8vtha")
+shift_t = ExtResource("72_rytxr")
 _spray_particles = NodePath("../../CanvasGroup/HoverFluddParticles")
 player = NodePath("../..")
 modes = NodePath("Modes")
@@ -2452,7 +2458,7 @@ plume_offset = Vector2(4, -1)
 
 [node name="Turbo" type="Node" parent="Handlers/FLUDDHandler/Modes" unique_id=468241508]
 script = ExtResource("87_fmtrb")
-turbo_speed = 500.0
+turbo_speed = 600.0
 nozzle = 3
 blocked_states = Array[StringName]([&"Floorslide", &"Dive"])
 drains_power = false
@@ -2509,11 +2515,11 @@ process_material = SubResource("ParticleProcessMaterial_kyrvb")
 
 [node name="Doll" type="Sprite2D" parent="." unique_id=1608363101 node_paths=PackedStringArray("rotation_source", "subsprites")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_jjwtc")
+texture = SubResource("CanvasTexture_3jt20")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_jjwtc")
+canvas_texture = SubResource("CanvasTexture_3jt20")
 flip_with_velocity = false
 rotation_source = NodePath("..")
 subsprites = [NodePath("Fludd")]
@@ -2527,11 +2533,11 @@ playing = false
 [node name="Fludd" type="Sprite2D" parent="Doll" unique_id=99316911 node_paths=PackedStringArray("subsprites")]
 show_behind_parent = true
 position = Vector2(-6, 0)
-texture = SubResource("CanvasTexture_mj6hf")
+texture = SubResource("CanvasTexture_4bt43")
 region_enabled = true
 region_rect = Rect2(64, 0, 64, 64)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_mj6hf")
+canvas_texture = SubResource("CanvasTexture_4bt43")
 subsprites = [NodePath("Plume")]
 follow_root = true
 follow_default = &"hover:default"
@@ -2570,11 +2576,11 @@ metadata/_custom_type_script = "uid://dlx4gw1u1xim"
 visible = false
 show_behind_parent = true
 position = Vector2(-6, 13)
-texture = SubResource("CanvasTexture_kups7")
+texture = SubResource("CanvasTexture_28gpl")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 32)
 script = ExtResource("2_cjmyu")
-canvas_texture = SubResource("CanvasTexture_kups7")
+canvas_texture = SubResource("CanvasTexture_28gpl")
 follow_origin = Vector2(-3, -1.9999998)
 animated = true
 diffuse_frames = SubResource("SpriteFrames_m2rg5")
