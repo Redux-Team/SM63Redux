@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://degbc32nhonbt"
+path="res://.godot/imported/pixel_sm64r_yellow.fnt-977cbd9badee0974234f763ce2ac03c1.fontdata"
+
+[deps]
+
+source_file="res://assets/font/hud/pixel_sm64r_yellow.fnt"
+dest_files=["res://.godot/imported/pixel_sm64r_yellow.fnt-977cbd9badee0974234f763ce2ac03c1.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2
