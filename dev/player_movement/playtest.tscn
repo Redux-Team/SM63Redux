@@ -3,6 +3,13 @@
 [ext_resource type="Script" uid="uid://diouyfah3pe7y" path="res://dev/player_movement/playtest.gd" id="1_jkuof"]
 [ext_resource type="PackedScene" uid="uid://c0hjv83unhj0w" path="res://game/entity/player/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" uid="uid://vgcwqugyqu40" path="res://game/hud/player_hud.tscn" id="4_hud"]
+[ext_resource type="Script" uid="uid://bfm66pksrtvtp" path="res://util/2d/silhouette_2d.gd" id="5_silhouette"]
+[ext_resource type="Shader" uid="uid://dbj7imkpljnnh" path="res://shader/silhouette_outline.gdshader" id="6_silhouette"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_silhouette"]
+shader = ExtResource("6_silhouette")
+shader_parameter/outline_color = Color(1, 0, 0, 1)
+shader_parameter/thickness = 1
 
 [node name="Playtest" type="Node2D" unique_id=1136589411 node_paths=PackedStringArray("player")]
 script = ExtResource("1_jkuof")
@@ -32,5 +39,12 @@ position = Vector2(-724, 267)
 polygon = PackedVector2Array(390, 75, 851, 94, 1447, 116, 1485, 48, 2042, 56, 2961, 3, 3544, 100, 3667, 747, 2426, 947, 1130, 906, -155, 1042, -605, 513, -677, -384, -400, -715, -224, -439, -29, -440, 111, -175, 389, -180)
 
 [node name="Polygon2D" type="Polygon2D" parent="." unique_id=1207091793]
+clip_children = 2
 color = Color(0.073800005, 0.18, 0.18, 1)
 polygon = PackedVector2Array(109, 9, 390, 9, 328, 388, 188, 380)
+
+[node name="Silhouette" type="Node2D" parent="Polygon2D" unique_id=1873402915 node_paths=PackedStringArray("anchor", "targets")]
+material = SubResource("ShaderMaterial_silhouette")
+script = ExtResource("5_silhouette")
+anchor = NodePath("../../Player")
+targets = [NodePath("../../Player/Doll"), NodePath("../../Player/Doll/Fludd")]
