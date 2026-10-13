@@ -1,0 +1,681 @@
+[gd_scene format=3 uid="uid://vgcwqugyqu40"]
+
+[ext_resource type="Texture2D" uid="uid://bpmi17yjeho6o" path="res://assets/textures/gui/ingame_hud/health_meter_base.png" id="1_e2fet"]
+[ext_resource type="Script" uid="uid://cs8qrja7oxd3j" path="res://game/hud/player_hud.gd" id="1_reblr"]
+[ext_resource type="Texture2D" uid="uid://d0eb0xoc0aero" path="res://assets/textures/gui/ingame_hud/health_meter_power.png" id="2_fsh6l"]
+[ext_resource type="Texture2D" uid="uid://ck0mlx7surhlu" path="res://assets/textures/gui/ingame_hud/red_coin_icon.png" id="2_pm01n"]
+[ext_resource type="Texture2D" uid="uid://bvc57sf4613ry" path="res://assets/textures/gui/ingame_hud/yellow_coin_icon.png" id="2_pqwxr"]
+[ext_resource type="Texture2D" uid="uid://ur8gi014rt0d" path="res://assets/textures/gui/ingame_hud/health_meter_inner_bg.png" id="3_0c88u"]
+[ext_resource type="Shader" uid="uid://yfcro43orcr0" path="res://shader/hud_health.gdshader" id="3_d64ys"]
+[ext_resource type="Texture2D" uid="uid://cgms5235nrwsb" path="res://assets/textures/gui/ingame_hud/health_meter_inner.png" id="3_hbyb8"]
+[ext_resource type="Texture2D" uid="uid://esu0o3vjd7ve" path="res://assets/textures/gui/ingame_hud/x_icon.png" id="3_pqwxr"]
+[ext_resource type="Texture2D" uid="uid://b2bsul4l4prib" path="res://assets/textures/gui/ingame_hud/purple_coin_icon.png" id="5_sjut3"]
+[ext_resource type="Texture2D" uid="uid://bmuhj0qbolft8" path="res://assets/textures/gui/ingame_hud/fludd_tank.png" id="8_37e64"]
+[ext_resource type="FontFile" uid="uid://degbc32nhonbt" path="res://assets/font/hud/pixel_sm64r_yellow.fnt" id="8_tg085"]
+[ext_resource type="Texture2D" uid="uid://d3nl6uavw7mx7" path="res://assets/textures/gui/ingame_hud/fludd_tank_mask.png" id="9_ia5qx"]
+[ext_resource type="FontFile" uid="uid://7s1xfss77xy0" path="res://assets/font/hud/pixel_sm64r_red.fnt" id="10_1hbjs"]
+[ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://util/2d/particle_emitter.gd" id="11_53twl"]
+[ext_resource type="Script" uid="uid://cvolonferossj" path="res://util/2d/smart_sprite_2d.gd" id="11_fsh6l"]
+[ext_resource type="Texture2D" uid="uid://b4pfo0m8fwi2x" path="res://assets/textures/gui/ingame_hud/fludd_tank_top.png" id="11_ia5qx"]
+[ext_resource type="Texture2D" uid="uid://bcsycatrr3xnh" path="res://assets/textures/particle/fludd/fludd_bubble_big.png" id="11_o5xe2"]
+[ext_resource type="FontFile" uid="uid://dijtgi87u5lr" path="res://assets/font/hud/pixel_sm64r_purple.fnt" id="12_rmsoo"]
+[ext_resource type="Texture2D" uid="uid://dtdw3v85xoeih" path="res://assets/textures/gui/ingame_hud/power_coin_meter.png" id="13_erhw5"]
+[ext_resource type="Texture2D" uid="uid://bwnnu0gwg2i46" path="res://assets/textures/particle/fludd/fludd_bubble_small.png" id="14_cx53y"]
+[ext_resource type="Texture2D" uid="uid://b2pu5aaosla0d" path="res://assets/textures/gui/ingame_hud/fludd_icon_hover.png" id="19_erhw5"]
+[ext_resource type="Script" uid="uid://c4yr6ymtwggl7" path="res://util/ui/scrolling_texture_2d/scrolling_texture_2d.gd" id="20_1f64a"]
+[ext_resource type="Texture2D" uid="uid://bw7vcunhxsfcg" path="res://assets/textures/gui/ingame_hud/fludd_icon_rocket.png" id="20_cp6tr"]
+[ext_resource type="Texture2D" uid="uid://itk76swhtghs" path="res://assets/textures/gui/ingame_hud/fludd_icon_turbo.png" id="21_lfl17"]
+[ext_resource type="Script" uid="uid://ctxo7yjs3ok5c" path="res://util/ui/clipping_texture_2d/clipping_texture_2d.gd" id="22_e6gmi"]
+[ext_resource type="Texture2D" uid="uid://bv5dytipq6km8" path="res://assets/textures/gui/ingame_hud/fludd_tank_power.png" id="23_nygxd"]
+[ext_resource type="FontFile" uid="uid://bn7qpulj0pbwv" path="res://assets/font/hud/pixel_sm64r_blue.fnt" id="26_tg085"]
+[ext_resource type="Script" uid="uid://d23kyv2gma7ie" path="res://game/hud/coin_counter.gd" id="hud_coin"]
+[ext_resource type="Script" uid="uid://0gd67fi8x3rr" path="res://game/hud/fludd_meter.gd" id="hud_fludd"]
+[ext_resource type="Script" uid="uid://iuvdpa51jtfn" path="res://game/hud/health_meter.gd" id="hud_health"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pm01n"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_37e64"]
+light_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_d64ys"]
+offsets = PackedFloat32Array(0, 0.1829653, 0.3280757, 0.4637224, 0.7745536, 1)
+colors = PackedColorArray(0.20784314, 0.49411765, 0.9098039, 1, 0.3567391, 0.62493485, 0.8478261, 1, 0, 1, 0.14999986, 1, 0.84, 0.84, 0, 1, 0.98039216, 0.3019608, 0.2, 1, 0.41355386, 0, 0.002178085, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0c88u"]
+shader = ExtResource("3_d64ys")
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/health_texture = ExtResource("3_hbyb8")
+shader_parameter/total_slices = 8
+shader_parameter/filled_slices = 8
+shader_parameter/start_angle_degrees = 0.0
+shader_parameter/divider_color = Color(0.6392157, 0.6392157, 0.6392157, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1hbjs"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 0, 64, 16)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_3ndyp"]
+diffuse_texture = SubResource("AtlasTexture_1hbjs")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nayuj"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 0, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cp6tr"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 16, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lfl17"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 32, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nygxd"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 48, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1f64a"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 64, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6gmi"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 80, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ycetg"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 96, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fsh6l"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 80, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_erhw5"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 96, 64, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rmsoo"]
+atlas = ExtResource("2_fsh6l")
+region = Rect2(0, 0, 64, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rmsoo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nayuj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cp6tr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lfl17")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nygxd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1f64a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e6gmi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ycetg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1hbjs")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 13.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fsh6l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_erhw5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rmsoo")
+}],
+"loop": 0,
+"name": &"heal",
+"speed": 13.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tg085"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(0, 0, 14, 14)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_0mtn5"]
+diffuse_texture = SubResource("AtlasTexture_tg085")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aqq40"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(14, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7nbg5"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(28, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3knew"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(42, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dxgk1"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(56, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kdsxv"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(70, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_snlrm"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(84, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sovob"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(98, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_871rv"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(0, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w14pq"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(84, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hn64l"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(98, 0, 14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0vmaj"]
+atlas = ExtResource("13_erhw5")
+region = Rect2(0, 0, 14, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_871rv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tg085")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aqq40")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7nbg5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3knew")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dxgk1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kdsxv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_snlrm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sovob")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_871rv")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w14pq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hn64l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0vmaj")
+}],
+"loop": 0,
+"name": &"heal",
+"speed": 13.0
+}]
+
+[sub_resource type="Texture2D" id="Texture2D_1f64a"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("20_1f64a")
+texture = ExtResource("23_nygxd")
+metadata/_custom_type_script = "uid://c4yr6ymtwggl7"
+
+[sub_resource type="Texture2D" id="Texture2D_ycetg"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("22_e6gmi")
+texture = SubResource("Texture2D_1f64a")
+clip_origin = Vector2(0, 1)
+metadata/_custom_type_script = "uid://ctxo7yjs3ok5c"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cx53y"]
+atlas = ExtResource("11_o5xe2")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nygxd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_erhw5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_cp6tr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_lfl17")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="PlayerHUD" type="CanvasLayer" unique_id=1932105440 node_paths=PackedStringArray("health_meter", "fludd_meter", "coin_counters")]
+script = ExtResource("1_reblr")
+health_meter = NodePath("HealthContainer")
+fludd_meter = NodePath("FLUDDContainer")
+coin_counters = {
+&"purple": NodePath("CollectibleContainer/VBoxContainer/PurpleCoinContainer"),
+&"red": NodePath("CollectibleContainer/VBoxContainer/RedCoinContainer"),
+&"yellow": NodePath("CollectibleContainer/VBoxContainer/YellowCoinContainer")
+}
+
+[node name="CollectibleContainer" type="Control" parent="." unique_id=1142767291]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CollectibleContainer" unique_id=2094631082]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 9.0
+offset_right = 55.0
+offset_bottom = 55.0
+theme_override_constants/separation = -10
+
+[node name="YellowCoinContainer" type="HBoxContainer" parent="CollectibleContainer/VBoxContainer" unique_id=1521011646 node_paths=PackedStringArray("label")]
+layout_mode = 2
+theme_override_constants/separation = 0
+script = ExtResource("hud_coin")
+label = NodePath("YellowCoinLabel")
+flash_color = Color(1.5720325, 1.5720325, 1.5720325, 1)
+
+[node name="TextureRect" type="TextureRect" parent="CollectibleContainer/VBoxContainer/YellowCoinContainer" unique_id=784504261]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("2_pqwxr")
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="CollectibleContainer/VBoxContainer/YellowCoinContainer" unique_id=1125386262]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("3_pqwxr")
+stretch_mode = 5
+
+[node name="Control" type="Control" parent="CollectibleContainer/VBoxContainer/YellowCoinContainer" unique_id=791791020]
+custom_minimum_size = Vector2(2, 10)
+layout_mode = 2
+
+[node name="YellowCoinLabel" type="RichTextLabel" parent="CollectibleContainer/VBoxContainer/YellowCoinContainer" unique_id=1851382956]
+clip_contents = false
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_fonts/normal_font = ExtResource("8_tg085")
+theme_override_font_sizes/normal_font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_pm01n")
+bbcode_enabled = true
+text = "0"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+
+[node name="RedCoinContainer" type="HBoxContainer" parent="CollectibleContainer/VBoxContainer" unique_id=475931850 node_paths=PackedStringArray("label")]
+layout_mode = 2
+theme_override_constants/separation = 0
+script = ExtResource("hud_coin")
+label = NodePath("RedCoinLabel")
+requires_total = true
+flash_color = Color(1.9655429, 1.9655429, 1.9655429, 1)
+
+[node name="TextureRect" type="TextureRect" parent="CollectibleContainer/VBoxContainer/RedCoinContainer" unique_id=1783616628]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("2_pm01n")
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="CollectibleContainer/VBoxContainer/RedCoinContainer" unique_id=1525772908]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("3_pqwxr")
+stretch_mode = 5
+
+[node name="Control" type="Control" parent="CollectibleContainer/VBoxContainer/RedCoinContainer" unique_id=1452182003]
+custom_minimum_size = Vector2(2, 10)
+layout_mode = 2
+
+[node name="RedCoinLabel" type="RichTextLabel" parent="CollectibleContainer/VBoxContainer/RedCoinContainer" unique_id=94653577]
+clip_contents = false
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_fonts/normal_font = ExtResource("10_1hbjs")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "0[font_size=24]/0"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+
+[node name="PurpleCoinContainer" type="HBoxContainer" parent="CollectibleContainer/VBoxContainer" unique_id=579334068 node_paths=PackedStringArray("label")]
+layout_mode = 2
+theme_override_constants/separation = 0
+script = ExtResource("hud_coin")
+label = NodePath("PurpleCoinLabel")
+requires_total = true
+flash_color = Color(1.361414, 1.361414, 1.361414, 1)
+
+[node name="TextureRect" type="TextureRect" parent="CollectibleContainer/VBoxContainer/PurpleCoinContainer" unique_id=118686388]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("5_sjut3")
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="CollectibleContainer/VBoxContainer/PurpleCoinContainer" unique_id=1844994863]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("3_pqwxr")
+stretch_mode = 5
+
+[node name="Control" type="Control" parent="CollectibleContainer/VBoxContainer/PurpleCoinContainer" unique_id=1674258766]
+custom_minimum_size = Vector2(2, 10)
+layout_mode = 2
+
+[node name="PurpleCoinLabel" type="RichTextLabel" parent="CollectibleContainer/VBoxContainer/PurpleCoinContainer" unique_id=360876710]
+clip_contents = false
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_fonts/normal_font = ExtResource("12_rmsoo")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "0[font_size=24]/0"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+
+[node name="HealthContainer" type="Control" parent="." unique_id=1581326594 node_paths=PackedStringArray("slices", "background", "power_sprite", "coin_sprite")]
+material = SubResource("CanvasItemMaterial_37e64")
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+script = ExtResource("hud_health")
+gradient = SubResource("Gradient_d64ys")
+slices = NodePath("Base/InnerHPBG/InnerHPTexture")
+background = NodePath("Base/InnerHPBG")
+power_sprite = NodePath("Base/POWER")
+coin_sprite = NodePath("Base/CoinMeter")
+
+[node name="Base" type="TextureRect" parent="HealthContainer" unique_id=379024076]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -32.0
+offset_top = 11.0
+offset_right = 32.0
+offset_bottom = 77.0
+grow_horizontal = 2
+texture = ExtResource("1_e2fet")
+
+[node name="InnerHPBG" type="TextureRect" parent="HealthContainer/Base" unique_id=2134494592]
+show_behind_parent = true
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 56.0
+offset_bottom = 56.0
+texture = ExtResource("3_0c88u")
+
+[node name="InnerHPTexture" type="ColorRect" parent="HealthContainer/Base/InnerHPBG" unique_id=224584427]
+material = SubResource("ShaderMaterial_0c88u")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 24.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="POWER" type="Sprite2D" parent="HealthContainer/Base" unique_id=457957822]
+position = Vector2(31.499989, 9)
+scale = Vector2(1.0781246, 1)
+texture = SubResource("CanvasTexture_3ndyp")
+region_enabled = true
+region_rect = Rect2(0, 0, 64, 16)
+script = ExtResource("11_fsh6l")
+canvas_texture = SubResource("CanvasTexture_3ndyp")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_rmsoo")
+current_animation = "default"
+current_frame = 7
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://cvolonferossj"
+
+[node name="CoinMeter" type="Sprite2D" parent="HealthContainer/Base" unique_id=281389693]
+position = Vector2(32, 32)
+texture = SubResource("CanvasTexture_0mtn5")
+region_enabled = true
+region_rect = Rect2(0, 0, 14, 14)
+script = ExtResource("11_fsh6l")
+canvas_texture = SubResource("CanvasTexture_0mtn5")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_871rv")
+current_animation = "default"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://cvolonferossj"
+
+[node name="FLUDDContainer" type="Control" parent="." unique_id=2013215394 node_paths=PackedStringArray("tank", "nozzle_icon", "fuel_rect", "fuel_label", "power_meter")]
+material = SubResource("CanvasItemMaterial_37e64")
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("hud_fludd")
+tank = NodePath("Tank")
+nozzle_icon = NodePath("Tank/Control/FluddNozzleIcon")
+fuel_rect = NodePath("Tank/FuelMask/FuelRect")
+fuel_label = NodePath("Tank/FuelLabel")
+fuel_color = Color(0, 0.53333336, 1, 0.54901963)
+fuel_full_color = Color(0.26999998, 0.6593333, 1, 1)
+fuel_label_flash = Color(1.5720325, 1.5720325, 1.5720325, 1)
+power_meter = NodePath("Tank/PowerMeter")
+power_scroll = SubResource("Texture2D_1f64a")
+power_clip = SubResource("Texture2D_ycetg")
+power_full_color = Color(1.5720325, 1.5720325, 1.5720325, 1)
+power_scroll_speed = -5.0
+
+[node name="Tank" type="TextureRect" parent="FLUDDContainer" unique_id=1095548232]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -52.0
+offset_top = -113.5
+offset_right = -8.0
+offset_bottom = -13.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_37e64")
+
+[node name="FuelMask" type="TextureRect" parent="FLUDDContainer/Tank" unique_id=2111128244]
+show_behind_parent = true
+clip_children = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_ia5qx")
+expand_mode = 1
+
+[node name="FuelRect" type="ColorRect" parent="FLUDDContainer/Tank/FuelMask" unique_id=2069243308]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 9.5
+offset_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 1)
+color = Color(0, 0.53333336, 1, 0.54901963)
+
+[node name="BubblesClip" type="ColorRect" parent="FLUDDContainer/Tank/FuelMask/FuelRect" unique_id=301712093]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+metadata/_edit_lock_ = true
+
+[node name="Node2D" type="Node2D" parent="FLUDDContainer/Tank/FuelMask/FuelRect/BubblesClip" unique_id=534224923]
+modulate = Color(1, 1, 1, 0.53333336)
+position = Vector2(52, 104)
+
+[node name="BigBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/FuelRect/BubblesClip/Node2D" unique_id=1129601286]
+position = Vector2(-36, -7)
+amount = 2
+texture = SubResource("AtlasTexture_cx53y")
+lifetime = 10.0
+preprocess = 30.0
+direction = Vector2(0, -1)
+gravity = Vector2(0, -10)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+script = ExtResource("11_53twl")
+high_particle_amount = 2
+medium_particle_amount = 2
+low_particle_amount = 1
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="MediumBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/FuelRect/BubblesClip/Node2D" unique_id=892034371]
+position = Vector2(-36, -7)
+texture = SubResource("AtlasTexture_cx53y")
+lifetime = 10.0
+preprocess = 30.0
+direction = Vector2(0, -1)
+gravity = Vector2(0, -10)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+script = ExtResource("11_53twl")
+high_particle_amount = 8
+medium_particle_amount = 4
+low_particle_amount = 2
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="SmallBubbles" type="CPUParticles2D" parent="FLUDDContainer/Tank/FuelMask/FuelRect/BubblesClip/Node2D" unique_id=1860666956]
+position = Vector2(-36, -7)
+amount = 16
+texture = ExtResource("14_cx53y")
+lifetime = 10.0
+preprocess = 30.0
+direction = Vector2(0, -1)
+gravity = Vector2(0, -10)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+script = ExtResource("11_53twl")
+high_particle_amount = 16
+medium_particle_amount = 8
+low_particle_amount = 4
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
+
+[node name="FuelTop" type="TextureRect" parent="FLUDDContainer/Tank/FuelMask/FuelRect" unique_id=2005540370]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -8.5
+offset_right = 33.0
+offset_bottom = 9.5
+texture = ExtResource("11_ia5qx")
+
+[node name="PowerMeter" type="TextureRect" parent="FLUDDContainer/Tank" unique_id=261064672]
+light_mask = 4
+texture_repeat = 3
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = -92.5
+offset_right = 18.0
+offset_bottom = -8.5
+grow_horizontal = 2
+grow_vertical = 0
+texture = SubResource("Texture2D_ycetg")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="FuelLabel" type="Label" parent="FLUDDContainer/Tank" unique_id=333857642]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4090909
+anchor_top = 0.5
+anchor_right = 0.4090909
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -13.0
+offset_right = 20.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("26_tg085")
+theme_override_font_sizes/font_size = 28
+text = "MAX"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="FLUDDContainer/Tank" unique_id=327615050]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -5.0
+offset_top = -7.5
+offset_right = -5.0
+offset_bottom = -7.5
+grow_horizontal = 2
+
+[node name="FluddNozzleIcon" type="AnimatedSprite2D" parent="FLUDDContainer/Tank/Control" unique_id=381679037]
+sprite_frames = SubResource("SpriteFrames_nygxd")
