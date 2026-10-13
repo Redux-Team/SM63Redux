@@ -1,0 +1,545 @@
+[gd_resource type="Resource" script_class="LDInputMap" format=3 uid="uid://wr4wf8y5h7ls"]
+
+[ext_resource type="Script" uid="uid://bcaoc88fyi65x" path="res://scenes/level_designer/core/ld_input_map.gd" id="1_map"]
+[ext_resource type="Script" uid="uid://bi3tcb8ovblho" path="res://scenes/level_designer/core/ld_shortcut.gd" id="2_shortcut"]
+
+[sub_resource type="InputEventKey" id="ev1"]
+command_or_control_autoremap = true
+keycode = 90
+
+[sub_resource type="Resource" id="sc2"]
+script = ExtResource("2_shortcut")
+action = &"ld_undo"
+events = Array[InputEvent]([SubResource("ev1")])
+
+[sub_resource type="InputEventKey" id="ev3"]
+command_or_control_autoremap = true
+shift_pressed = true
+keycode = 90
+
+[sub_resource type="InputEventKey" id="ev4"]
+command_or_control_autoremap = true
+keycode = 89
+
+[sub_resource type="Resource" id="sc5"]
+script = ExtResource("2_shortcut")
+action = &"ld_redo"
+events = Array[InputEvent]([SubResource("ev3"), SubResource("ev4")])
+
+[sub_resource type="InputEventKey" id="ev6"]
+command_or_control_autoremap = true
+keycode = 67
+
+[sub_resource type="Resource" id="sc7"]
+script = ExtResource("2_shortcut")
+action = &"ld_copy"
+events = Array[InputEvent]([SubResource("ev6")])
+
+[sub_resource type="InputEventKey" id="ev8"]
+command_or_control_autoremap = true
+keycode = 88
+
+[sub_resource type="Resource" id="sc9"]
+script = ExtResource("2_shortcut")
+action = &"ld_cut"
+events = Array[InputEvent]([SubResource("ev8")])
+
+[sub_resource type="InputEventKey" id="ev10"]
+command_or_control_autoremap = true
+keycode = 86
+
+[sub_resource type="Resource" id="sc11"]
+script = ExtResource("2_shortcut")
+action = &"ld_paste"
+events = Array[InputEvent]([SubResource("ev10")])
+
+[sub_resource type="InputEventKey" id="ev12"]
+command_or_control_autoremap = true
+keycode = 68
+
+[sub_resource type="Resource" id="sc13"]
+script = ExtResource("2_shortcut")
+action = &"ld_duplicate"
+events = Array[InputEvent]([SubResource("ev12")])
+
+[sub_resource type="InputEventKey" id="ev14"]
+keycode = 4194312
+
+[sub_resource type="InputEventKey" id="ev15"]
+keycode = 4194308
+
+[sub_resource type="Resource" id="sc16"]
+script = ExtResource("2_shortcut")
+action = &"ld_delete"
+events = Array[InputEvent]([SubResource("ev14"), SubResource("ev15")])
+
+[sub_resource type="InputEventKey" id="ev17"]
+command_or_control_autoremap = true
+keycode = 65
+
+[sub_resource type="Resource" id="sc18"]
+script = ExtResource("2_shortcut")
+action = &"ld_select_all"
+events = Array[InputEvent]([SubResource("ev17")])
+
+[sub_resource type="InputEventKey" id="ev19"]
+keycode = 4194305
+
+[sub_resource type="InputEventJoypadButton" id="ev20"]
+button_index = 1
+
+[sub_resource type="Resource" id="sc21"]
+script = ExtResource("2_shortcut")
+action = &"ld_back"
+events = Array[InputEvent]([SubResource("ev19"), SubResource("ev20")])
+
+[sub_resource type="InputEventKey" id="ev22"]
+command_or_control_autoremap = true
+keycode = 83
+
+[sub_resource type="Resource" id="sc23"]
+script = ExtResource("2_shortcut")
+action = &"ld_save"
+events = Array[InputEvent]([SubResource("ev22")])
+
+[sub_resource type="InputEventKey" id="ev24"]
+command_or_control_autoremap = true
+shift_pressed = true
+keycode = 83
+
+[sub_resource type="Resource" id="sc25"]
+script = ExtResource("2_shortcut")
+action = &"ld_save_as"
+events = Array[InputEvent]([SubResource("ev24")])
+
+[sub_resource type="InputEventKey" id="ev26"]
+command_or_control_autoremap = true
+keycode = 79
+
+[sub_resource type="Resource" id="sc27"]
+script = ExtResource("2_shortcut")
+action = &"ld_open"
+events = Array[InputEvent]([SubResource("ev26")])
+
+[sub_resource type="InputEventKey" id="ev28"]
+command_or_control_autoremap = true
+keycode = 78
+
+[sub_resource type="Resource" id="sc29"]
+script = ExtResource("2_shortcut")
+action = &"ld_new"
+events = Array[InputEvent]([SubResource("ev28")])
+
+[sub_resource type="InputEventKey" id="ev30"]
+keycode = 4194336
+
+[sub_resource type="InputEventJoypadButton" id="ev31"]
+button_index = 6
+
+[sub_resource type="Resource" id="sc32"]
+script = ExtResource("2_shortcut")
+action = &"ld_playtest"
+events = Array[InputEvent]([SubResource("ev30"), SubResource("ev31")])
+
+[sub_resource type="InputEventJoypadButton" id="ev33"]
+
+[sub_resource type="Resource" id="sc34"]
+script = ExtResource("2_shortcut")
+action = &"ld_click"
+events = Array[InputEvent]([SubResource("ev33")])
+
+[sub_resource type="InputEventKey" id="ev35"]
+keycode = 4194306
+
+[sub_resource type="InputEventJoypadButton" id="ev36"]
+button_index = 3
+
+[sub_resource type="Resource" id="sc37"]
+script = ExtResource("2_shortcut")
+action = &"ld_panel_objects"
+events = Array[InputEvent]([SubResource("ev35"), SubResource("ev36")])
+
+[sub_resource type="InputEventKey" id="ev38"]
+keycode = 73
+
+[sub_resource type="InputEventJoypadButton" id="ev39"]
+button_index = 2
+
+[sub_resource type="Resource" id="sc40"]
+script = ExtResource("2_shortcut")
+action = &"ld_panel_properties"
+events = Array[InputEvent]([SubResource("ev38"), SubResource("ev39")])
+
+[sub_resource type="InputEventKey" id="ev41"]
+keycode = 76
+
+[sub_resource type="Resource" id="sc42"]
+script = ExtResource("2_shortcut")
+action = &"ld_panel_layers"
+events = Array[InputEvent]([SubResource("ev41")])
+
+[sub_resource type="InputEventKey" id="ev43"]
+keycode = 81
+
+[sub_resource type="Resource" id="sc44"]
+script = ExtResource("2_shortcut")
+action = &"ld_tool_select"
+events = Array[InputEvent]([SubResource("ev43")])
+
+[sub_resource type="InputEventKey" id="ev45"]
+keycode = 77
+
+[sub_resource type="Resource" id="sc46"]
+script = ExtResource("2_shortcut")
+action = &"ld_tool_move"
+events = Array[InputEvent]([SubResource("ev45")])
+
+[sub_resource type="InputEventKey" id="ev47"]
+keycode = 80
+
+[sub_resource type="Resource" id="sc48"]
+script = ExtResource("2_shortcut")
+action = &"ld_tool_place"
+events = Array[InputEvent]([SubResource("ev47")])
+
+[sub_resource type="InputEventKey" id="ev49"]
+keycode = 66
+
+[sub_resource type="Resource" id="sc50"]
+script = ExtResource("2_shortcut")
+action = &"ld_tool_brush"
+events = Array[InputEvent]([SubResource("ev49")])
+
+[sub_resource type="InputEventKey" id="ev51"]
+keycode = 82
+
+[sub_resource type="Resource" id="sc52"]
+script = ExtResource("2_shortcut")
+action = &"ld_tool_rotate"
+events = Array[InputEvent]([SubResource("ev51")])
+
+[sub_resource type="InputEventKey" id="ev53"]
+keycode = 69
+
+[sub_resource type="Resource" id="sc54"]
+script = ExtResource("2_shortcut")
+action = &"ld_tool_scale"
+events = Array[InputEvent]([SubResource("ev53")])
+
+[sub_resource type="InputEventJoypadButton" id="ev55"]
+button_index = 10
+
+[sub_resource type="Resource" id="sc56"]
+script = ExtResource("2_shortcut")
+action = &"ld_tool_next"
+events = Array[InputEvent]([SubResource("ev55")])
+
+[sub_resource type="InputEventJoypadButton" id="ev57"]
+button_index = 9
+
+[sub_resource type="Resource" id="sc58"]
+script = ExtResource("2_shortcut")
+action = &"ld_tool_previous"
+events = Array[InputEvent]([SubResource("ev57")])
+
+[sub_resource type="InputEventKey" id="ev59"]
+keycode = 4194323
+
+[sub_resource type="InputEventJoypadButton" id="ev60"]
+button_index = 11
+
+[sub_resource type="Resource" id="sc61"]
+script = ExtResource("2_shortcut")
+action = &"ld_layer_up"
+events = Array[InputEvent]([SubResource("ev59"), SubResource("ev60")])
+
+[sub_resource type="InputEventKey" id="ev62"]
+keycode = 4194324
+
+[sub_resource type="InputEventJoypadButton" id="ev63"]
+button_index = 12
+
+[sub_resource type="Resource" id="sc64"]
+script = ExtResource("2_shortcut")
+action = &"ld_layer_down"
+events = Array[InputEvent]([SubResource("ev62"), SubResource("ev63")])
+
+[sub_resource type="InputEventJoypadButton" id="ev65"]
+button_index = 14
+
+[sub_resource type="Resource" id="sc66"]
+script = ExtResource("2_shortcut")
+action = &"ld_hotbar_next"
+events = Array[InputEvent]([SubResource("ev65")])
+
+[sub_resource type="InputEventJoypadButton" id="ev67"]
+button_index = 13
+
+[sub_resource type="Resource" id="sc68"]
+script = ExtResource("2_shortcut")
+action = &"ld_hotbar_previous"
+events = Array[InputEvent]([SubResource("ev67")])
+
+[sub_resource type="InputEventKey" id="ev69"]
+keycode = 49
+
+[sub_resource type="Resource" id="sc70"]
+script = ExtResource("2_shortcut")
+action = &"ld_hotbar_1"
+events = Array[InputEvent]([SubResource("ev69")])
+
+[sub_resource type="InputEventKey" id="ev71"]
+keycode = 50
+
+[sub_resource type="Resource" id="sc72"]
+script = ExtResource("2_shortcut")
+action = &"ld_hotbar_2"
+events = Array[InputEvent]([SubResource("ev71")])
+
+[sub_resource type="InputEventKey" id="ev73"]
+keycode = 51
+
+[sub_resource type="Resource" id="sc74"]
+script = ExtResource("2_shortcut")
+action = &"ld_hotbar_3"
+events = Array[InputEvent]([SubResource("ev73")])
+
+[sub_resource type="InputEventKey" id="ev75"]
+keycode = 52
+
+[sub_resource type="Resource" id="sc76"]
+script = ExtResource("2_shortcut")
+action = &"ld_hotbar_4"
+events = Array[InputEvent]([SubResource("ev75")])
+
+[sub_resource type="InputEventKey" id="ev77"]
+keycode = 53
+
+[sub_resource type="Resource" id="sc78"]
+script = ExtResource("2_shortcut")
+action = &"ld_hotbar_5"
+events = Array[InputEvent]([SubResource("ev77")])
+
+[sub_resource type="InputEventKey" id="ev79"]
+keycode = 54
+
+[sub_resource type="Resource" id="sc80"]
+script = ExtResource("2_shortcut")
+action = &"ld_hotbar_6"
+events = Array[InputEvent]([SubResource("ev79")])
+
+[sub_resource type="InputEventKey" id="ev81"]
+keycode = 55
+
+[sub_resource type="Resource" id="sc82"]
+script = ExtResource("2_shortcut")
+action = &"ld_hotbar_7"
+events = Array[InputEvent]([SubResource("ev81")])
+
+[sub_resource type="InputEventKey" id="ev83"]
+keycode = 56
+
+[sub_resource type="Resource" id="sc84"]
+script = ExtResource("2_shortcut")
+action = &"ld_hotbar_8"
+events = Array[InputEvent]([SubResource("ev83")])
+
+[sub_resource type="InputEventKey" id="ev131"]
+keycode = 57
+
+[sub_resource type="Resource" id="sc132"]
+script = ExtResource("2_shortcut")
+action = &"ld_hotbar_9"
+events = Array[InputEvent]([SubResource("ev131")])
+
+[sub_resource type="InputEventKey" id="ev85"]
+keycode = 48
+
+[sub_resource type="Resource" id="sc86"]
+script = ExtResource("2_shortcut")
+action = &"ld_camera_reset"
+events = Array[InputEvent]([SubResource("ev85")])
+
+[sub_resource type="InputEventKey" id="ev87"]
+command_or_control_autoremap = true
+keycode = 61
+
+[sub_resource type="InputEventMouseButton" id="ev88"]
+button_index = 4
+
+[sub_resource type="Resource" id="sc89"]
+script = ExtResource("2_shortcut")
+action = &"ld_zoom_in"
+events = Array[InputEvent]([SubResource("ev87"), SubResource("ev88")])
+
+[sub_resource type="InputEventKey" id="ev90"]
+command_or_control_autoremap = true
+keycode = 45
+
+[sub_resource type="InputEventMouseButton" id="ev91"]
+button_index = 5
+
+[sub_resource type="Resource" id="sc92"]
+script = ExtResource("2_shortcut")
+action = &"ld_zoom_out"
+events = Array[InputEvent]([SubResource("ev90"), SubResource("ev91")])
+
+[sub_resource type="InputEventJoypadMotion" id="ev93"]
+axis = 5
+axis_value = 1.0
+
+[sub_resource type="Resource" id="sc94"]
+script = ExtResource("2_shortcut")
+action = &"ld_zoom_in_axis"
+events = Array[InputEvent]([SubResource("ev93")])
+
+[sub_resource type="InputEventJoypadMotion" id="ev95"]
+axis = 4
+axis_value = 1.0
+
+[sub_resource type="Resource" id="sc96"]
+script = ExtResource("2_shortcut")
+action = &"ld_zoom_out_axis"
+events = Array[InputEvent]([SubResource("ev95")])
+
+[sub_resource type="InputEventMouseButton" id="ev97"]
+button_index = 3
+
+[sub_resource type="Resource" id="sc98"]
+script = ExtResource("2_shortcut")
+action = &"ld_pan"
+events = Array[InputEvent]([SubResource("ev97")])
+
+[sub_resource type="InputEventKey" id="ev99"]
+keycode = 32
+
+[sub_resource type="Resource" id="sc100"]
+script = ExtResource("2_shortcut")
+action = &"ld_pan_hold"
+events = Array[InputEvent]([SubResource("ev99")])
+
+[sub_resource type="InputEventKey" id="ev101"]
+keycode = 65
+
+[sub_resource type="InputEventJoypadMotion" id="ev102"]
+axis = 2
+axis_value = -1.0
+
+[sub_resource type="Resource" id="sc103"]
+script = ExtResource("2_shortcut")
+action = &"ld_pan_left"
+events = Array[InputEvent]([SubResource("ev101"), SubResource("ev102")])
+
+[sub_resource type="InputEventKey" id="ev104"]
+keycode = 68
+
+[sub_resource type="InputEventJoypadMotion" id="ev105"]
+axis = 2
+axis_value = 1.0
+
+[sub_resource type="Resource" id="sc106"]
+script = ExtResource("2_shortcut")
+action = &"ld_pan_right"
+events = Array[InputEvent]([SubResource("ev104"), SubResource("ev105")])
+
+[sub_resource type="InputEventKey" id="ev107"]
+keycode = 87
+
+[sub_resource type="InputEventJoypadMotion" id="ev108"]
+axis = 3
+axis_value = -1.0
+
+[sub_resource type="Resource" id="sc109"]
+script = ExtResource("2_shortcut")
+action = &"ld_pan_up"
+events = Array[InputEvent]([SubResource("ev107"), SubResource("ev108")])
+
+[sub_resource type="InputEventKey" id="ev110"]
+keycode = 83
+
+[sub_resource type="InputEventJoypadMotion" id="ev111"]
+axis = 3
+axis_value = 1.0
+
+[sub_resource type="Resource" id="sc112"]
+script = ExtResource("2_shortcut")
+action = &"ld_pan_down"
+events = Array[InputEvent]([SubResource("ev110"), SubResource("ev111")])
+
+[sub_resource type="InputEventJoypadMotion" id="ev113"]
+axis_value = -1.0
+
+[sub_resource type="Resource" id="sc114"]
+script = ExtResource("2_shortcut")
+action = &"ld_cursor_left"
+events = Array[InputEvent]([SubResource("ev113")])
+
+[sub_resource type="InputEventJoypadMotion" id="ev115"]
+axis_value = 1.0
+
+[sub_resource type="Resource" id="sc116"]
+script = ExtResource("2_shortcut")
+action = &"ld_cursor_right"
+events = Array[InputEvent]([SubResource("ev115")])
+
+[sub_resource type="InputEventJoypadMotion" id="ev117"]
+axis = 1
+axis_value = -1.0
+
+[sub_resource type="Resource" id="sc118"]
+script = ExtResource("2_shortcut")
+action = &"ld_cursor_up"
+events = Array[InputEvent]([SubResource("ev117")])
+
+[sub_resource type="InputEventJoypadMotion" id="ev119"]
+axis = 1
+axis_value = 1.0
+
+[sub_resource type="Resource" id="sc120"]
+script = ExtResource("2_shortcut")
+action = &"ld_cursor_down"
+events = Array[InputEvent]([SubResource("ev119")])
+
+[sub_resource type="InputEventKey" id="ev121"]
+keycode = 4194319
+
+[sub_resource type="Resource" id="sc122"]
+script = ExtResource("2_shortcut")
+action = &"ld_nudge_left"
+events = Array[InputEvent]([SubResource("ev121")])
+
+[sub_resource type="InputEventKey" id="ev123"]
+keycode = 4194321
+
+[sub_resource type="Resource" id="sc124"]
+script = ExtResource("2_shortcut")
+action = &"ld_nudge_right"
+events = Array[InputEvent]([SubResource("ev123")])
+
+[sub_resource type="InputEventKey" id="ev125"]
+keycode = 4194320
+
+[sub_resource type="Resource" id="sc126"]
+script = ExtResource("2_shortcut")
+action = &"ld_nudge_up"
+events = Array[InputEvent]([SubResource("ev125")])
+
+[sub_resource type="InputEventKey" id="ev127"]
+keycode = 4194322
+
+[sub_resource type="Resource" id="sc128"]
+script = ExtResource("2_shortcut")
+action = &"ld_nudge_down"
+events = Array[InputEvent]([SubResource("ev127")])
+
+[sub_resource type="InputEventKey" id="ev129"]
+keycode = 4194328
+
+[sub_resource type="Resource" id="sc130"]
+script = ExtResource("2_shortcut")
+action = &"ld_snap_bypass"
+events = Array[InputEvent]([SubResource("ev129")])
+
+[resource]
+script = ExtResource("1_map")
+shortcuts = Array[ExtResource("2_shortcut")]([SubResource("sc2"), SubResource("sc5"), SubResource("sc7"), SubResource("sc9"), SubResource("sc11"), SubResource("sc13"), SubResource("sc16"), SubResource("sc18"), SubResource("sc21"), SubResource("sc23"), SubResource("sc25"), SubResource("sc27"), SubResource("sc29"), SubResource("sc32"), SubResource("sc34"), SubResource("sc37"), SubResource("sc40"), SubResource("sc42"), SubResource("sc44"), SubResource("sc46"), SubResource("sc48"), SubResource("sc50"), SubResource("sc52"), SubResource("sc54"), SubResource("sc56"), SubResource("sc58"), SubResource("sc61"), SubResource("sc64"), SubResource("sc66"), SubResource("sc68"), SubResource("sc70"), SubResource("sc72"), SubResource("sc74"), SubResource("sc76"), SubResource("sc78"), SubResource("sc80"), SubResource("sc82"), SubResource("sc84"), SubResource("sc132"), SubResource("sc86"), SubResource("sc89"), SubResource("sc92"), SubResource("sc94"), SubResource("sc96"), SubResource("sc98"), SubResource("sc100"), SubResource("sc103"), SubResource("sc106"), SubResource("sc109"), SubResource("sc112"), SubResource("sc114"), SubResource("sc116"), SubResource("sc118"), SubResource("sc120"), SubResource("sc122"), SubResource("sc124"), SubResource("sc126"), SubResource("sc128"), SubResource("sc130")])
