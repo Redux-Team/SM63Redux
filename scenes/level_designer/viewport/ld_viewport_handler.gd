@@ -1,6 +1,8 @@
 class_name LDViewportHandler
 extends LDHandler
 
+const AXIS_THRESHOLD: float = 0.92
+
 @export var input_surface: Control
 @export var camera_control: LDCameraControl
 @export var overlay: LDOverlay
@@ -40,7 +42,7 @@ func pick(world_position: Vector2) -> GameObject:
 	var objects: Array[GameObject] = editor.level_handler.get_selectable_objects()
 	objects.reverse()
 	for object: GameObject in objects:
-		if object.has_flag(GameObject.Flag.SELECTABLE) and object.get_global_bounds().has_point(world_position):
+		if object.has_flag(GameObject.Flag.SELECTABLE) and object.contains_point(world_position):
 			return object
 	
 	return null
@@ -49,10 +51,25 @@ func pick(world_position: Vector2) -> GameObject:
 func objects_in_rect(world_rect: Rect2) -> Array[GameObject]:
 	var found: Array[GameObject] = []
 	for object: GameObject in editor.level_handler.get_selectable_objects():
-		if object.has_flag(GameObject.Flag.SELECTABLE) and world_rect.intersects(object.get_global_bounds()):
+		if object.has_flag(GameObject.Flag.SELECTABLE) and _overlaps(object, world_rect):
 			found.append(object)
 	
 	return found
+
+
+func _overlaps(object: GameObject, world_rect: Rect2) -> bool:
+	if not world_rect.intersects(object.get_global_bounds()):
+		return false
+	if object.shape == null:
+		return true
+	
+	var box: PackedVector2Array = PackedVector2Array([world_rect.position, Vector2(world_rect.end.x, world_rect.position.y), world_rect.end, Vector2(world_rect.position.x, world_rect.end.y)])
+	var to_world: Transform2D = object.get_global_transform()
+	for outline: PackedVector2Array in object.get_outlines():
+		if not Geometry2D.intersect_polygons(box, to_world * outline).is_empty():
+			return true
+	
+	return false
 
 
 func store_view(area: LevelArea) -> void:
@@ -68,5 +85,22 @@ func _on_gui_input(event: InputEvent) -> void:
 		input_surface.accept_event()
 
 
+func set_cursor(shape: Control.CursorShape) -> void:
+	input_surface.mouse_default_cursor_shape = shape
+
+
+func reset_cursor() -> void:
+	set_cursor(editor.tool_handler.active_tool.cursor)
+
+
+static func resize_cursor(screen_direction: Vector2) -> Control.CursorShape:
+	var direction: Vector2 = screen_direction.normalized()
+	if absf(direction.x) > AXIS_THRESHOLD:
+		return Control.CURSOR_HSIZE
+	if absf(direction.y) > AXIS_THRESHOLD:
+		return Control.CURSOR_VSIZE
+	return Control.CURSOR_FDIAGSIZE if direction.x * direction.y > 0.0 else Control.CURSOR_BDIAGSIZE
+
+
 func _on_tool_changed() -> void:
-	input_surface.mouse_default_cursor_shape = editor.tool_handler.active_tool.cursor
+	reset_cursor()

@@ -2,22 +2,26 @@ class_name LDHotbar
 extends LDComponent
 
 const STATE_KEY: String = "hotbar"
+const VALUES_KEY: String = "hotbar_values"
 
 @export var slots: Array[LDHotbarSlot]
+@export var placement_panel: LDPlacementPanel
 
 var _ids: Array[StringName] = []
+var _values: Array[Dictionary] = []
 var _assigning: int = -1
 
 
 func _setup() -> void:
 	_ids.resize(slots.size())
 	_ids.fill(&"")
+	_values.resize(slots.size())
 	for i: int in slots.size():
 		var slot: LDHotbarSlot = slots.get(i)
 		slot.index = i
 		slot.tapped.connect(func(tapped: LDHotbarSlot) -> void: activate(tapped.index))
 		slot.held.connect(func(held: LDHotbarSlot) -> void: clear_slot(held.index))
-		slot.moved.connect(move_slot)
+		slot.gui_input.connect(_on_slot_input.bind(i))
 	
 	editor.level_handler.level_opened.connect(_load)
 	editor.tool_handler.armed_changed.connect(_refresh.unbind(1))
@@ -55,14 +59,15 @@ func activate(index: int) -> void:
 		editor.object_handler.browser.open()
 		return
 	
-	SFX.play(SFX.LD_SELECT)
-	editor.tool_handler.arm(entry)
+	editor.tool_handler.arm(entry, _values.get(index))
 
 
 func assign(index: int, entry: ObjectRegistry.Entry) -> void:
 	if entry == null:
 		return
 	
+	if _ids.get(index) != entry.id:
+		_values.set(index, {})
 	_ids.set(index, entry.id)
 	_save()
 
@@ -73,13 +78,7 @@ func clear_slot(index: int) -> void:
 	
 	SFX.play(SFX.LD_BACK)
 	_ids.set(index, &"")
-	_save()
-
-
-func move_slot(from: int, to: int) -> void:
-	var id: StringName = _ids.get(from)
-	_ids.set(from, _ids.get(to))
-	_ids.set(to, id)
+	_values.set(index, {})
 	_save()
 
 
@@ -98,6 +97,21 @@ func cycle(direction: int) -> void:
 	activate(filled.get(next))
 
 
+func edit_slot(index: int) -> void:
+	var entry: ObjectRegistry.Entry = ObjectRegistry.get_entry(_ids.get(index))
+	if entry == null:
+		return
+	
+	placement_panel.edit(entry, _values.get(index), _save)
+
+
+func _on_slot_input(event: InputEvent, index: int) -> void:
+	var mouse_button: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_button and mouse_button.button_index == MOUSE_BUTTON_RIGHT and mouse_button.pressed:
+		edit_slot(index)
+		slots.get(index).accept_event()
+
+
 func _on_picked(entry: ObjectRegistry.Entry) -> void:
 	if _assigning >= 0:
 		assign(_assigning, entry)
@@ -106,8 +120,10 @@ func _on_picked(entry: ObjectRegistry.Entry) -> void:
 
 func _load() -> void:
 	var saved: Array = editor.level_handler.editor_state.get(STATE_KEY, [])
+	var saved_values: Array = editor.level_handler.editor_state.get(VALUES_KEY, [])
 	for i: int in _ids.size():
 		_ids.set(i, StringName(saved.get(i)) if i < saved.size() else &"")
+		_values.set(i, (saved_values.get(i) as Dictionary).duplicate() if i < saved_values.size() and saved_values.get(i) is Dictionary else {})
 	_refresh()
 
 
@@ -116,6 +132,7 @@ func _save() -> void:
 	for id: StringName in _ids:
 		saved.append(String(id))
 	editor.level_handler.editor_state.set(STATE_KEY, saved)
+	editor.level_handler.editor_state.set(VALUES_KEY, _values.duplicate(true))
 	_refresh()
 
 
@@ -124,6 +141,8 @@ func _refresh() -> void:
 	for i: int in slots.size():
 		var slot: LDHotbarSlot = slots.get(i)
 		var entry: ObjectRegistry.Entry = ObjectRegistry.get_entry(_ids.get(i))
-		slot.icon = entry.get_icon() if entry else null
-		Tooltip.set_text(slot, "%s (%d)" % [entry.display_name, i + 1] if entry else "Empty slot (%d)" % (i + 1), Tooltip.Placement.ABOVE)
+		slot.icon = entry.get_icon(_values.get(i)) if entry else null
+		var custom: String = "\nCustom placement (right-click to edit)" if entry and not _values.get(i).is_empty() else ""
+		var key: int = (i + 1) % 10
+		Tooltip.set_text(slot, "%s (%d)%s" % [entry.display_name, key, custom] if entry else "Empty slot (%d)" % key, Tooltip.Placement.ABOVE)
 		LD.set_active(slot, entry != null and entry == armed)

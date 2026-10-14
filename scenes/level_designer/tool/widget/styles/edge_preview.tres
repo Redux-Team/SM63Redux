@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="LDHandleStyle" format=3]
+
+[ext_resource type="Script" path="res://scenes/level_designer/tool/widget/ld_handle_style.gd" id="1_style"]
+
+[resource]
+script = ExtResource("1_style")
+shape = 0
+size = Vector2(3.5, 3.5)
+grab_radius = 0.0
+fill = Color(0.392157, 0.588235, 0.929412, 0.85)
+outline = Color(1, 1, 1, 0.8)
+hover_scale = 1.0

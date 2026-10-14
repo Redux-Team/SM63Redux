@@ -1,6 +1,8 @@
 class_name LDSelectTool
 extends LDTool
 
+const CLICK_THRESHOLD: float = 3.0
+
 @export var move_tool: LDMoveTool
 @export var box_color: Color = Color(0.39, 0.59, 0.93, 0.2)
 @export var box_outline_color: Color = Color(0.39, 0.59, 0.93, 0.8)
@@ -35,6 +37,8 @@ func _tool_input(event: InputEvent, world_position: Vector2) -> bool:
 		_box_end = world_position
 		return true
 	
+	if event is InputEventMouseMotion:
+		editor.viewport_handler.set_cursor(Control.CURSOR_POINTING_HAND if editor.viewport_handler.pick(world_position) else cursor)
 	return false
 
 
@@ -45,6 +49,7 @@ func _press(mouse_button: InputEventMouseButton, world_position: Vector2) -> voi
 		_boxing = true
 		_box_start = world_position
 		_box_end = world_position
+		editor.viewport_handler.set_cursor(Control.CURSOR_CROSS)
 		if not (mouse_button.shift_pressed or mouse_button.ctrl_pressed):
 			selection.clear()
 		return
@@ -59,6 +64,8 @@ func _press(mouse_button: InputEventMouseButton, world_position: Vector2) -> voi
 		selection.set_objects([hit])
 	
 	move_tool.begin_drag(world_position)
+	if selection.get_objects().size() == 1:
+		editor.tool_handler.enter_edit_tool(hit)
 
 
 func _release(mouse_button: InputEventMouseButton) -> void:
@@ -66,6 +73,10 @@ func _release(mouse_button: InputEventMouseButton) -> void:
 		return
 	
 	_boxing = false
+	editor.viewport_handler.reset_cursor()
+	if editor.viewport_handler.to_screen(_box_start).distance_to(editor.viewport_handler.to_screen(_box_end)) <= CLICK_THRESHOLD:
+		return
+	
 	var found: Array[GameObject] = editor.viewport_handler.objects_in_rect(_get_box())
 	if mouse_button.shift_pressed or mouse_button.ctrl_pressed:
 		editor.object_handler.selection.add(found)

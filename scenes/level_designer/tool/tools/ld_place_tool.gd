@@ -34,7 +34,7 @@ func _tool_input(event: InputEvent, _world_position: Vector2) -> bool:
 		return false
 	
 	var object: GameObject = create_object(get_snapped_mouse())
-	editor.object_handler.add_objects([object], editor.level_handler.active_layer, "Place %s" % editor.tool_handler.armed.display_name)
+	editor.object_handler.add_objects([object], editor.level_handler.active_layer, "Place %s" % editor.tool_handler.armed.display_name, false)
 	return true
 
 
@@ -45,7 +45,7 @@ func get_snapped_mouse() -> Vector2:
 func create_object(local_position: Vector2) -> GameObject:
 	var object: GameObject = editor.object_handler.spawn(editor.tool_handler.armed.id, local_position)
 	for property: ObjectProperty in object.properties:
-		if property.randomize_on_place:
+		if editor.tool_handler.should_randomize(property):
 			object.set_value(property.key, property.random_value())
 	
 	return object

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LDHandleStyle" format=3]
+
+[ext_resource type="Script" path="res://scenes/level_designer/tool/widget/ld_handle_style.gd" id="1_style"]
+
+[resource]
+script = ExtResource("1_style")
+shape = 3
+size = Vector2(3, 9)
+grab_radius = 14.0
+corner_radius = 3.0

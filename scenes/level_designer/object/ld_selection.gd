@@ -7,6 +7,7 @@ signal changed
 @export var delete_button: BaseButton
 
 var _objects: Array[GameObject] = []
+var _forgotten: bool = false
 
 
 func _setup() -> void:
@@ -84,9 +85,16 @@ func get_global_bounds() -> Rect2:
 	return bounds
 
 
+func forget(object: GameObject) -> void:
+	if _objects.has(object):
+		_objects.erase(object)
+		_forgotten = true
+
+
 func _prune() -> void:
-	var kept: Array[GameObject] = _objects.filter(func(object: GameObject) -> bool: return object.is_inside_tree())
-	if kept.size() != _objects.size():
+	var kept: Array[GameObject] = _objects.filter(func(object: GameObject) -> bool: return is_instance_valid(object) and object.is_inside_tree())
+	if kept.size() != _objects.size() or _forgotten:
+		_forgotten = false
 		_objects = kept
 		changed.emit()
 

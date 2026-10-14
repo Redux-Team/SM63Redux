@@ -50,7 +50,7 @@ func _end_stroke() -> void:
 	for object: GameObject in _stroke:
 		object.get_parent().remove_child(object)
 	
-	editor.object_handler.add_objects(_stroke, editor.level_handler.active_layer, "Brush %s" % editor.tool_handler.armed.display_name)
+	editor.object_handler.add_objects(_stroke, editor.level_handler.active_layer, "Brush %s" % editor.tool_handler.armed.display_name, false)
 	_stroke = []
 
 

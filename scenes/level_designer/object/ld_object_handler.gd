@@ -3,19 +3,35 @@ extends LDHandler
 
 signal objects_changed
 
+const BY_PLACEMENT: int = -2
+
 @export var selection: LDSelection
 @export var clipboard: LDClipboard
 @export var browser: LDObjectBrowser
 @export var inspector: LDInspector
 
+var _change_queued: bool = false
+
+
+func notify_changed() -> void:
+	if not _change_queued:
+		_change_queued = true
+		_flush_changed.call_deferred()
+
+
+func _flush_changed() -> void:
+	_change_queued = false
+	objects_changed.emit()
+
 
 func spawn(object_id: StringName, local_position: Vector2) -> GameObject:
 	var data: ObjectData = ObjectData.create(object_id)
 	data.position = local_position
+	editor.tool_handler.apply_placement_values(data)
 	return ObjectRegistry.spawn(data, GameObject.Context.EDITOR)
 
 
-func add_objects(objects: Array[GameObject], layer: LevelLayer, action_name: String = "Add Objects") -> void:
+func add_objects(objects: Array[GameObject], layer: LevelLayer, action_name: String = "Add Objects", select: bool = true) -> void:
 	if objects.is_empty():
 		return
 	
@@ -24,12 +40,13 @@ func add_objects(objects: Array[GameObject], layer: LevelLayer, action_name: Str
 		if object.unique:
 			for existing: GameObject in editor.level_handler.active_area.get_all_objects():
 				if existing.id == object.id:
-					_queue_removal(action, existing)
+					queue_removal(action, existing)
 		
-		action.do(_attach.bind(object, layer, -1)).undo(_detach.bind(object)).keep_on_do(object)
+		queue_addition(action, object, layer)
 	
 	action.commit()
-	selection.set_objects(objects)
+	if select:
+		selection.set_objects(objects)
 
 
 func remove_objects(objects: Array[GameObject], action_name: String = "Delete Objects") -> void:
@@ -40,7 +57,7 @@ func remove_objects(objects: Array[GameObject], action_name: String = "Delete Ob
 	removable.sort_custom(func(a: GameObject, b: GameObject) -> bool: return a.get_index() < b.get_index())
 	var action: LDHistoryHandler.Action = editor.history_handler.create(action_name)
 	for object: GameObject in removable:
-		_queue_removal(action, object)
+		queue_removal(action, object)
 	
 	action.commit()
 
@@ -71,6 +88,16 @@ func set_values(objects: Array[GameObject], key: StringName, value: Variant) -> 
 		.commit()
 
 
+func commit_values(objects: Array[GameObject], key: StringName, before: Array, after: Array, action_name: String) -> void:
+	if before == after:
+		return
+	
+	editor.history_handler.create(action_name) \
+		.do(_set_values.bind(objects, key, after)) \
+		.undo(_set_values.bind(objects, key, before)) \
+		.commit()
+
+
 func reorder_objects(objects: Array[GameObject], to_front: bool) -> void:
 	if objects.is_empty():
 		return
@@ -95,33 +122,55 @@ static func get_transforms(objects: Array[GameObject]) -> Array[Transform2D]:
 	return transforms
 
 
-func _queue_removal(action: LDHistoryHandler.Action, object: GameObject) -> void:
+func queue_addition(action: LDHistoryHandler.Action, object: GameObject, layer: LevelLayer) -> void:
+	action.do(_attach.bind(object, layer, BY_PLACEMENT)).undo(_detach.bind(object)).keep_on_do(object)
+
+
+func queue_removal(action: LDHistoryHandler.Action, object: GameObject) -> void:
 	var layer: LevelLayer = editor.level_handler.active_area.get_layer_of(object)
 	action.do(_detach.bind(object)).undo(_attach.bind(object, layer, object.get_index())).keep_on_undo(object)
 
 
 func _attach(object: GameObject, layer: LevelLayer, at: int) -> void:
-	layer.add_object(object, at)
-	objects_changed.emit()
+	layer.add_object(object, _placement_index(object, layer) if at == BY_PLACEMENT else at)
+	notify_changed()
+
+
+func _placement_index(object: GameObject, layer: LevelLayer) -> int:
+	var player: GameObject = null
+	for each: GameObject in layer.get_objects():
+		if each.id == &"player_mario":
+			player = each
+	
+	match object.placement:
+		GameObject.Placement.BEHIND_ALL:
+			return 0
+		GameObject.Placement.BEHIND_PLAYER:
+			return player.get_index() if player else -1
+		GameObject.Placement.FRONT_PLAYER:
+			return player.get_index() + 1 if player else -1
+	
+	return -1
 
 
 func _detach(object: GameObject) -> void:
 	object.get_parent().remove_child(object)
-	objects_changed.emit()
+	selection.forget(object)
+	notify_changed()
 
 
 func _move_to_end(objects: Array[GameObject], to_front: bool) -> void:
 	for i: int in objects.size():
 		var object: GameObject = objects.get(i if to_front else objects.size() - 1 - i)
 		object.get_parent().move_child(object, -1 if to_front else 0)
-	objects_changed.emit()
+	notify_changed()
 
 
 func _restore_indices(objects: Array[GameObject], indices: Array[int]) -> void:
 	for i: int in objects.size():
 		var object: GameObject = objects.get(i)
 		object.get_parent().move_child(object, indices.get(i))
-	objects_changed.emit()
+	notify_changed()
 
 
 func _set_transforms(objects: Array[GameObject], transforms: Array[Transform2D]) -> void:
@@ -130,11 +179,11 @@ func _set_transforms(objects: Array[GameObject], transforms: Array[Transform2D])
 		object.transform = transforms.get(i)
 		object.invalidate_bounds()
 	
-	objects_changed.emit()
+	notify_changed()
 
 
 func _set_values(objects: Array[GameObject], key: StringName, values: Array) -> void:
 	for i: int in objects.size():
 		(objects.get(i) as GameObject).set_value(key, values.get(i))
 	
-	objects_changed.emit()
+	notify_changed()
