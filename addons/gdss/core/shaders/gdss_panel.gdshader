@@ -266,5 +266,5 @@ void fragment() {
 		col.a *= 1.0 - smoothstep(-aa, aa, clip_sd(p, full));
 	}
 	
-	COLOR = col;
+	COLOR = col * COLOR;
 }

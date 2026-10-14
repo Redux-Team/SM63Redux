@@ -32,7 +32,6 @@ const WARM_TIME: float = 0.4
 @export var margin: float = 4.0
 @export var slide: float = 4.0
 @export var fade_duration: float = 0.12
-@export var tint: float = 0.6
 
 var _target: Control
 var _hover_time: float = 0.0
@@ -56,7 +55,6 @@ static func get_text(control: Control) -> String:
 func _ready() -> void:
 	root.modulate = Color.TRANSPARENT
 	root.visible = false
-	_set_fade(0.0)
 
 
 func _process(delta: float) -> void:
@@ -132,15 +130,7 @@ func _animate(target: Color) -> Tween:
 	
 	_tween = create_tween().set_parallel().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	_tween.tween_property(root, ^"modulate", target, _duration())
-	_tween.tween_method(_set_fade, root.modulate.a, target.a, _duration())
 	return _tween
-
-
-func _set_fade(weight: float) -> void:
-	var blur: float = GDSS.get_global_var("blur_amount", 5.0)
-	for panel: Control in [bubble, arrow]:
-		GDSS.set_instance_var(panel, "tooltip_blur", blur * weight)
-		GDSS.set_instance_var(panel, "tooltip_tint", tint * weight)
 
 
 func _duration() -> float:

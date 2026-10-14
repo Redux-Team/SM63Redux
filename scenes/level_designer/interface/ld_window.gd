@@ -17,14 +17,13 @@ const SWITCH_DURATION: float = 0.16
 @export var title_label: Label
 @export var close_button: BaseButton
 @export var backdrop: BlurRect
-@export var glass: Panel
-@export var glass_tint: float = 0.8
 @export var backdrop_tint: Color = Color(0.0, 0.0, 0.0, 0.4)
 @export var screen_margin: float = 16.0
 
 var _view_scale: Vector2 = Vector2.ONE
 var _fit: float = 1.0
-var _presence: float = 0.0
+var _backdrop_weight: float = 0.0
+var _dim: float = 1.0
 var _open: bool = false
 var _tween: Tween
 
@@ -38,15 +37,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	glass.position = frame.position
-	glass.size = frame.size
-	glass.pivot_offset = frame.pivot_offset
-	glass.scale = frame.scale
-	glass.rotation = frame.rotation
-	var weight: float = _presence
-	GDSS.set_instance_var(glass, "window_blur", 5.0 * Settings.ui.blur_strength.current_value / 100.0 * weight)
-	GDSS.set_instance_var(glass, "window_tint", glass_tint * weight)
-	GDSS.set_instance_var(glass, "window_edge", weight)
+	_set_backdrop(_backdrop_weight * _dim)
 
 
 func is_open() -> bool:
@@ -59,11 +50,14 @@ func set_title(title: String) -> void:
 	title_margin.add_theme_constant_override(&"margin_top", title_space if title_plate.visible else 0)
 
 
-func show_view(view: Control, title: String, view_scale: Vector2) -> void:
+func show_view(view: Control, title: String, view_scale: Vector2, dim: bool = true) -> void:
+	var dim_weight: float = 1.0 if dim else 0.0
 	if _open:
+		create_tween().tween_property(self, ^"_dim", dim_weight, SWITCH_DURATION if Settings.ui.animations.current_value else 0.0)
 		_switch(view, title, view_scale)
 		return
 	
+	_dim = dim_weight
 	_apply(view, title, view_scale)
 	_open = true
 	visible = true
@@ -124,8 +118,7 @@ func _animate(target_scale: Vector2, target_rotation: float, target_modulate: Co
 	_tween.tween_property(frame, ^"scale", target_scale, duration)
 	_tween.tween_property(frame, ^"rotation", target_rotation, duration)
 	_tween.tween_property(fade, ^"modulate", target_modulate, duration).set_trans(Tween.TRANS_CUBIC)
-	_tween.tween_property(self, ^"_presence", target_modulate.a, duration).set_trans(Tween.TRANS_CUBIC)
-	_tween.tween_method(_set_backdrop, 1.0 - backdrop_weight, backdrop_weight, duration * 1.5).set_trans(Tween.TRANS_CUBIC)
+	_tween.tween_property(self, ^"_backdrop_weight", backdrop_weight, duration * 1.5).set_trans(Tween.TRANS_CUBIC)
 	return _tween
 
 

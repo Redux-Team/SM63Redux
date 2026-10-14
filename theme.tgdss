@@ -378,7 +378,7 @@ Button {
 			var accent: "#2FBF71"
 			var art: $PLAYTEST_TEXTURE 
 			
-			font_size: 20
+			font_size: 26
 			padding: 22 22 12 12
 		}
 		
@@ -692,7 +692,17 @@ PanelContainer {
 	}
 	
 	Window {
-		bg_color: TRANSPARENT
+		bg_color: blur($blur_amount, $base_shadow_col, 0.92)
+		border: 2
+		border_color: $base_shadow_col
+		shadow_color: $base_shadow_col
+		shadow_bottom: 1
+		shadow_right: 1
+		shadow_offset: 3
+		shadow_blur: 0
+		corner_radius: 14
+		corner_radius_top_right: 5
+		corner_radius_bottom_left: 5
 		padding: 8 8 8 8
 	}
 	
@@ -796,32 +806,10 @@ ColorPickerButton {
 
 
 # @chunk Tooltip
-@instance var window_blur: 5.0
-@instance var window_tint: 0.8
-@instance var window_edge: 1.0
-
-Panel {
-	WindowGlass {
-		bg_color: blur($window_blur, $base_shadow_col, $window_tint)
-		border: 2
-		border_color: alpha($base_shadow_col, $window_edge)
-		shadow_color: alpha($base_shadow_col, $window_edge)
-		shadow_bottom: 1
-		shadow_right: 1
-		shadow_offset: 3
-		shadow_blur: 0
-		corner_radius: 14
-		corner_radius_top_right: 5
-		corner_radius_bottom_left: 5
-	}
-}
-
-@instance var tooltip_blur: 5.0
-@instance var tooltip_tint: 0.6
 
 PanelContainer {
 	TooltipBubble {
-		bg_color: blur($tooltip_blur, BLACK, $tooltip_tint)
+		bg_color: blur($blur_amount, BLACK, 0.6)
 		corner_radius: 6
 		padding: 8 8 4 4
 	}
@@ -829,7 +817,7 @@ PanelContainer {
 
 Panel {
 	TooltipArrow {
-		bg_color: blur($tooltip_blur, BLACK, $tooltip_tint)
+		bg_color: blur($blur_amount, BLACK, 0.6)
 		clip_path: polygon(0,1, 0.5,0, 1,1)
 		
 		TooltipArrowDown {

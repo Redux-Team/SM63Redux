@@ -14,13 +14,15 @@ func open() -> void:
 	sprite.play(Array(sprite.diffuse_frames.get_animation_names()).pick_random())
 	modulate.a = 0.0
 	show()
-	_fade(1.0)
+	await _fade(1.0).finished
 
 
 func close() -> void:
 	if not visible:
 		return
 	
+	if _tween and _tween.is_running():
+		await _tween.finished
 	await _fade(0.0).finished
 	hide()
 	sprite.stop()

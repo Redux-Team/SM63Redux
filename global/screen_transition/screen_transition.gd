@@ -8,6 +8,10 @@ const SHADERS: Dictionary[Type, Shader] = {
 	Type.WAVE: preload("uid://drycsk0p628ig"),
 	Type.FADE: preload("uid://dt48274q57v41"),
 }
+const DEFAULT_TEXTURES: Dictionary[Type, Texture2D] = {
+	Type.CENTER: preload("uid://34v4s1d3h4ag"),
+	Type.WAVE: preload("uid://c0rwnbt8w3qel"),
+}
 
 @export var mask_rect: ColorRect
 @export var loading_screen: LoadingScreen
@@ -45,25 +49,26 @@ func play(builder: Builder) -> void:
 	var loading_timer: SceneTreeTimer = get_tree().create_timer(builder.loading_delay)
 	loading_timer.timeout.connect(loading_screen.open)
 	if builder.loading_delay <= 0.0:
-		loading_screen.open()
+		await loading_screen.open()
 	
 	await _run_tasks(builder.tasks)
 	for callable: Callable in builder.callables:
 		await callable.call()
 	
 	var scene: PackedScene = await _await_scene(builder.destination)
-	loading_timer.timeout.disconnect(loading_screen.open)
-	_set_mask_texture(builder.get_in_texture())
-	await loading_screen.close()
-	if hold.time_left > 0.0:
-		await hold.timeout
-	
 	if builder.swap.is_valid():
 		await builder.swap.call()
 	elif scene:
 		get_tree().change_scene_to_packed(scene)
 	
 	await _settle()
+	if hold.time_left > 0.0:
+		await hold.timeout
+	
+	loading_timer.timeout.disconnect(loading_screen.open)
+	_set_mask_texture(builder.get_in_texture())
+	await loading_screen.close()
+	
 	if builder.type == Type.WAVE:
 		_material.set_shader_parameter(&"flip", false)
 	
@@ -245,11 +250,15 @@ class Builder:
 	
 	
 	func get_out_texture() -> Texture2D:
-		return out_texture if out_texture else texture
+		return out_texture if out_texture else get_default_texture()
 	
 	
 	func get_in_texture() -> Texture2D:
-		return in_texture if in_texture else texture
+		return in_texture if in_texture else get_default_texture()
+	
+	
+	func get_default_texture() -> Texture2D:
+		return texture if texture else ScreenTransition.DEFAULT_TEXTURES.get(type)
 	
 	
 	func done() -> void:
