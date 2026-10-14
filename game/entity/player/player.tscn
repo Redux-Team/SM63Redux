@@ -2139,7 +2139,6 @@ animation = &"ground_pound_start"
 restart_if_playing = false
 speed_scale = 0.0
 lock_flipping = true
-collision_mask_override = 512
 player_animation = &"ground_pound_start"
 sfx_enter_enabled = true
 sfx_enter_sound = ExtResource("113_o2cds")
@@ -2148,14 +2147,12 @@ sfx_enter_sound = ExtResource("113_o2cds")
 script = ExtResource("64_dl333")
 animation = &"ground_pound_fall"
 lock_flipping = true
-collision_mask_override = 512
 
 [sub_resource type="Resource" id="Resource_rylnt"]
 script = ExtResource("64_dl333")
 animation = &"ground_pound_slam"
 restart_if_playing = false
 speed_scale = 0.0
-collision_mask_override = 512
 sfx_enter_enabled = true
 sfx_enter_sound = ExtResource("116_763ns")
 

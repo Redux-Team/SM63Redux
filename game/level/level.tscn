@@ -5,13 +5,15 @@
 [ext_resource type="Script" path="res://util/2d/silhouette_source.gd" id="3_silhouette"]
 [ext_resource type="Shader" uid="uid://dbj7imkpljnnh" path="res://shader/silhouette_outline.gdshader" id="4_outline"]
 [ext_resource type="PackedScene" uid="uid://vgcwqugyqu40" path="res://game/hud/player_hud.tscn" id="5_hud"]
+[ext_resource type="Script" path="res://game/level/background/level_background.gd" id="6_background"]
+[ext_resource type="Script" path="res://game/level/level_camera.gd" id="7_camera"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_silhouette"]
 shader = ExtResource("4_outline")
 shader_parameter/outline_color = Color(1, 0, 0, 1)
 shader_parameter/thickness = 1
 
-[node name="Level" type="Node2D" node_paths=PackedStringArray("world", "culler", "camera", "hud", "silhouette_source")]
+[node name="Level" type="Node2D" node_paths=PackedStringArray("world", "culler", "camera", "hud", "silhouette_source", "background")]
 script = ExtResource("1_level")
 world = NodePath("World")
 culler = NodePath("Culler")
@@ -19,10 +21,16 @@ camera = NodePath("Camera")
 hud = NodePath("PlayerHUD")
 silhouette_source = NodePath("SilhouetteSource")
 silhouette_material = SubResource("ShaderMaterial_silhouette")
+background = NodePath("Background")
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -10
+script = ExtResource("6_background")
 
 [node name="World" type="Node2D" parent="."]
 
 [node name="Camera" type="Camera2D" parent="."]
+script = ExtResource("7_camera")
 zoom = Vector2(2, 2)
 process_callback = 0
 position_smoothing_enabled = true

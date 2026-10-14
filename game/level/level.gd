@@ -5,10 +5,11 @@ signal loaded
 
 @export var world: Node2D
 @export var culler: LevelCuller
-@export var camera: Camera2D
+@export var camera: LevelCamera
 @export var hud: PlayerHUD
 @export var silhouette_source: SilhouetteSource
 @export var silhouette_material: Material
+@export var background: LevelBackground
 
 var _area: LevelArea
 var _player: Player
@@ -21,11 +22,13 @@ func load_data(data: LevelData, area_uuid: StringName = &"") -> void:
 	
 	_area = LevelArea.build(area_data, GameObject.Context.GAME)
 	world.add_child(_area)
+	background.apply_data(area_data.background)
 	
 	for object: GameObject in _area.get_all_objects():
-		_track(object)
 		if object.game_root is Player:
 			_player = object.game_root
+		else:
+			_track(object)
 	
 	if _player:
 		_bind_player()
@@ -51,9 +54,7 @@ func _track(object: GameObject) -> void:
 
 
 func _bind_player() -> void:
-	camera.reparent(_player, false)
-	camera.position = Vector2.ZERO
-	camera.reset_smoothing()
+	camera.follow(_player)
 	hud.bind(_player)
 	silhouette_source.anchor = _player
 	silhouette_source.targets = _player.silhouette_targets

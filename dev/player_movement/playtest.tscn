@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://c0hjv83unhj0w" path="res://game/entity/player/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" uid="uid://vgcwqugyqu40" path="res://game/hud/player_hud.tscn" id="4_hud"]
 [ext_resource type="Script" uid="uid://bfm66pksrtvtp" path="res://util/2d/silhouette_source.gd" id="5_silhouette"]
-[ext_resource type="Script" path="res://util/2d/silhouette_view.gd" id="7_silhouette_view"]
 [ext_resource type="Shader" uid="uid://dbj7imkpljnnh" path="res://shader/silhouette_outline.gdshader" id="6_silhouette"]
+[ext_resource type="Script" uid="uid://b0388ha661bax" path="res://util/2d/silhouette_view.gd" id="7_silhouette_view"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_silhouette"]
 shader = ExtResource("6_silhouette")
@@ -43,7 +43,7 @@ polygon = PackedVector2Array(390, 75, 851, 94, 1392, 106, 1433, 83, 1461, 55, 14
 clip_children = 2
 position = Vector2(-16, -59)
 color = Color(0.073800005, 0.18, 0.18, 1)
-polygon = PackedVector2Array(109, 9, 516, 3, 469, 384, 328, 388, 188, 380)
+polygon = PackedVector2Array(109, 9, 516, 3, 330, 361, 331, 486, 231, 508, 234, 369)
 
 [node name="Silhouette" type="Node2D" parent="Polygon2D" unique_id=1873402915 node_paths=PackedStringArray("source")]
 material = SubResource("ShaderMaterial_silhouette")

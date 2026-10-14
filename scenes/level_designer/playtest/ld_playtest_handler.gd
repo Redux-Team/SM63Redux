@@ -26,5 +26,6 @@ func start() -> void:
 	editor.file_handler.autosave.save_now()
 	Singleton.build_screen_transition() \
 		.set_center() \
+		.set_loading_delay(0.0) \
 		.set_swap(session.suspend_into.bind(get_tree(), load(PLAYTEST_SCENE))) \
 		.done()
