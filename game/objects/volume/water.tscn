@@ -1,0 +1,78 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/volume/water/water_ld.png" id="1_r"]
+[ext_resource type="Script" path="res://game/polygon_styles/polygon_base_style.gd" id="2_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/volume/water/water_top.png" id="3_r"]
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="4_r"]
+[ext_resource type="Script" path="res://game/object/shapes/polygon_shape.gd" id="5_r"]
+[ext_resource type="Script" path="res://util/poly/polygon_surface.gd" id="6_r"]
+[ext_resource type="Script" path="res://util/poly/terrain_decorations.gd" id="7_r"]
+[ext_resource type="Script" path="res://game/object/shapes/polygon_collision.gd" id="8_r"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon"]
+atlas = ExtResource("1_r")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="Resource" id="BaseStyle_water"]
+script = ExtResource("2_r")
+color = Color(0.46666667, 0.5921569, 0.8117647, 0.53333336)
+outline_texture = ExtResource("3_r")
+outline_width = 13.0
+outline_scroll_speed = 0.5
+outline_ripple_amplitude = 1.3
+outline_ripple_frequency = 3.0
+outline_ripple_speed = 3.3
+
+[node name="Water" type="Node2D" node_paths=PackedStringArray("shape", "game_root")]
+script = ExtResource("4_r")
+id = &"water"
+display_name = "Water"
+icon = SubResource("AtlasTexture_icon")
+category = &"Volume"
+group = &"Liquid"
+placement = 2
+flags = 31
+shape = NodePath("Shape")
+game_root = NodePath("Game")
+
+[node name="Shape" type="Node2D" parent="." node_paths=PackedStringArray("surface")]
+script = ExtResource("5_r")
+surface = NodePath("Surface")
+
+[node name="Surface" type="Node2D" parent="Shape" node_paths=PackedStringArray("fill", "shadow_container", "decorations", "outline_container", "topline_container")]
+script = ExtResource("6_r")
+line_mode = 1
+base_style = SubResource("BaseStyle_water")
+fill = NodePath("Fill")
+shadow_container = NodePath("Fill/ShadowContainer")
+decorations = NodePath("Decorations")
+outline_container = NodePath("Outlines")
+topline_container = NodePath("Toplines")
+
+[node name="Fill" type="Polygon2D" parent="Shape/Surface"]
+clip_children = 2
+texture_repeat = 2
+
+[node name="ShadowContainer" type="Node2D" parent="Shape/Surface/Fill"]
+
+[node name="Decorations" type="Node2D" parent="Shape/Surface"]
+script = ExtResource("7_r")
+
+[node name="Outlines" type="Node2D" parent="Shape/Surface"]
+
+[node name="Toplines" type="Node2D" parent="Shape/Surface"]
+
+[node name="Game" type="Node2D" parent="."]
+
+[node name="WaterArea" type="Area2D" parent="Game"]
+collision_layer = 4
+collision_mask = 0
+metadata/water = true
+
+[node name="Polygon" type="CollisionPolygon2D" parent="Game/WaterArea"]
+
+[node name="Collision" type="Node" parent="Game" node_paths=PackedStringArray("shape", "area_polygons")]
+script = ExtResource("8_r")
+mode = 2
+shape = NodePath("../../Shape")
+area_polygons = [NodePath("../WaterArea/Polygon")]

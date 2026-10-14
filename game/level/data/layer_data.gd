@@ -8,6 +8,9 @@ var layer_name: String = ""
 var distance: float = 0.0
 var modulation: Color = Color.WHITE
 var is_decoration: bool = false
+var silhouette: bool = true
+var enabled: bool = true
+var editor_visible: bool = true
 var group: StringName = &""
 var objects: Array[ObjectData] = []
 
@@ -27,6 +30,9 @@ static func from_dict(dict: Dictionary) -> LayerData:
 	data.distance = dict.get("distance", 0.0)
 	data.modulation = dict.get("modulation", Color.WHITE)
 	data.is_decoration = dict.get("is_decoration", false)
+	data.silhouette = dict.get("silhouette", true)
+	data.enabled = dict.get("enabled", true)
+	data.editor_visible = dict.get("visible", true)
 	data.group = StringName(dict.get("group", ""))
 	for object: Dictionary in dict.get("objects", []):
 		data.objects.append(ObjectData.from_dict(object))
@@ -45,6 +51,9 @@ func to_dict() -> Dictionary:
 		"distance": distance,
 		"modulation": modulation,
 		"is_decoration": is_decoration,
+		"silhouette": silhouette,
+		"enabled": enabled,
+		"visible": editor_visible,
 		"group": group,
 		"objects": object_dicts,
 	}

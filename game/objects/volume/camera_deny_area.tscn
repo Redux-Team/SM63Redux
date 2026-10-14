@@ -1,0 +1,70 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/polygon_styles/polygon_base_style.gd" id="1_r"]
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="2_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/camera_deny.svg" id="3_r"]
+[ext_resource type="Script" path="res://game/object/shapes/polygon_shape.gd" id="4_r"]
+[ext_resource type="Script" path="res://util/poly/polygon_surface.gd" id="5_r"]
+[ext_resource type="Script" path="res://util/poly/terrain_decorations.gd" id="6_r"]
+[ext_resource type="Script" path="res://game/object/shapes/polygon_collision.gd" id="7_r"]
+
+[sub_resource type="Resource" id="BaseStyle_deny"]
+script = ExtResource("1_r")
+color = Color(0.88, 0.2376, 0.2376, 0.33)
+outline_color = Color(0.88, 0.2376, 0.2376, 1)
+outline_width = 2.0
+
+[node name="CameraDenyArea" type="Node2D" node_paths=PackedStringArray("shape", "game_root", "editor_root")]
+script = ExtResource("2_r")
+id = &"camera_deny_area"
+display_name = "Camera Deny Area"
+icon = ExtResource("3_r")
+category = &"Volume"
+group = &"Camera"
+flags = 31
+shape = NodePath("Shape")
+game_root = NodePath("Game")
+editor_root = NodePath("Editor")
+
+[node name="Shape" type="Node2D" parent="." node_paths=PackedStringArray("surface")]
+script = ExtResource("4_r")
+surface = NodePath("../Editor/Surface")
+
+[node name="Editor" type="Node2D" parent="."]
+
+[node name="Surface" type="Node2D" parent="Editor" node_paths=PackedStringArray("fill", "shadow_container", "decorations", "outline_container", "topline_container")]
+script = ExtResource("5_r")
+line_mode = 1
+base_style = SubResource("BaseStyle_deny")
+fill = NodePath("Fill")
+shadow_container = NodePath("Fill/ShadowContainer")
+decorations = NodePath("Decorations")
+outline_container = NodePath("Outlines")
+topline_container = NodePath("Toplines")
+
+[node name="Fill" type="Polygon2D" parent="Editor/Surface"]
+clip_children = 2
+texture_repeat = 2
+
+[node name="ShadowContainer" type="Node2D" parent="Editor/Surface/Fill"]
+
+[node name="Decorations" type="Node2D" parent="Editor/Surface"]
+script = ExtResource("6_r")
+
+[node name="Outlines" type="Node2D" parent="Editor/Surface"]
+
+[node name="Toplines" type="Node2D" parent="Editor/Surface"]
+
+[node name="Game" type="Node2D" parent="."]
+
+[node name="Body" type="StaticBody2D" parent="Game"]
+collision_layer = 4096
+collision_mask = 0
+
+[node name="Polygon" type="CollisionPolygon2D" parent="Game/Body"]
+
+[node name="Collision" type="Node" parent="Game" node_paths=PackedStringArray("shape", "body", "polygon")]
+script = ExtResource("7_r")
+shape = NodePath("../../Shape")
+body = NodePath("../Body")
+polygon = NodePath("../Body/Polygon")

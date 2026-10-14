@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/twisted_crystal_ld.png" id="2"]
+[ext_resource type="Script" path="res://game/object/shapes/path_shape.gd" id="3"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/twisted_crystal_stem.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/twisted_crystal.png" id="5"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(-12, -15, 48, 48)
+
+[node name="TwistedCrystal" type="Node2D" node_paths=PackedStringArray("shape")]
+script = ExtResource("1")
+id = &"twisted_crystal"
+display_name = "Twisted Crystal"
+category = &"Decoration"
+group = &"Cave"
+order = 140
+flags = 31
+icon = SubResource("IconAtlas")
+shape = NodePath("Shape")
+
+[node name="Shape" type="Node2D" parent="." node_paths=PackedStringArray("stem", "head")]
+script = ExtResource("3")
+stem = NodePath("Stem")
+head = NodePath("Head")
+stem_width = 10
+
+[node name="Stem" type="Line2D" parent="Shape"]
+texture_repeat = 2
+width = 16.0
+texture = ExtResource("4")
+texture_mode = 1
+
+[node name="Head" type="Sprite2D" parent="Shape"]
+texture = ExtResource("5")

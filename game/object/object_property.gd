@@ -2,6 +2,11 @@
 class_name ObjectProperty
 extends Resource
 
+enum Gizmo {
+	NONE,
+	ROTATION,
+}
+
 enum Type {
 	BOOL,
 	INT,
@@ -30,6 +35,7 @@ const VARIANT_TYPES: Dictionary[Type, Variant.Type] = {
 @export var type: Type = Type.FLOAT
 @export var default_value: Variant
 @export var hidden: bool = false
+@export var gizmo: Gizmo = Gizmo.NONE
 @export_group("Range")
 @export var min_value: float = -INF
 @export var max_value: float = INF
@@ -113,6 +119,8 @@ func to_info() -> Dictionary:
 			if is_finite(min_value) and is_finite(max_value):
 				info.set("hint", PROPERTY_HINT_RANGE)
 				info.set("hint_string", "%s,%s,%s" % [min_value, max_value, step])
+				if type == Type.INT:
+					info.set("format", "%d")
 			else:
 				info.set("step", step)
 	

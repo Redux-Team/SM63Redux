@@ -3,7 +3,7 @@ static func run_test() -> void:
 	var level: LevelData = LevelData.create()
 	var area: AreaData = level.areas.front()
 	var layer: LayerData = area.layers.front()
-	var block: ObjectData = ObjectData.create(&"debug_block")
+	var block: ObjectData = ObjectData.create(&"big_rock")
 	block.position = Vector2(12.5, 64.0)
 	block.values.set(&"amount", 3)
 	block.shape = {"outer": PackedVector2Array([Vector2.ZERO, Vector2(32.0, 0.0), Vector2(32.0, 32.0)])}

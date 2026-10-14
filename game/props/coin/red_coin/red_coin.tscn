@@ -1,0 +1,109 @@
+[gd_scene format=3 uid="uid://di4vwkiyscdbh"]
+
+[ext_resource type="PackedScene" uid="uid://clo423ijbljko" path="res://game/props/coin/yellow_coin/yellow_coin.tscn" id="1_qed2w"]
+[ext_resource type="Script" uid="uid://bkgvijdv2dnpe" path="res://game/props/coin/red_coin/red_coin.gd" id="2_c4m15"]
+[ext_resource type="Texture2D" uid="uid://bvoffibtcyve5" path="res://assets/textures/item/collectible/red_coin_spin.png" id="2_y2pdo"]
+[ext_resource type="AudioStream" uid="uid://d3xbvld6puryg" path="res://assets/sfx/item/red_coin_collect.ogg" id="3_c4m15"]
+[ext_resource type="Texture2D" uid="uid://bjx2gx7ao7dgu" path="res://assets/textures/particle/item/red_coin_particle.png" id="3_y2pdo"]
+[ext_resource type="AudioStream" uid="uid://cnrwwp2g17u5y" path="res://assets/sfx/item/red_coin_collect_all.wav" id="6_bfrqi"]
+[ext_resource type="FontFile" uid="uid://7s1xfss77xy0" path="res://assets/font/hud/pixel_sm64r_red.fnt" id="7_uekj6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1v6jc"]
+atlas = ExtResource("2_y2pdo")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_p1qeo"]
+diffuse_texture = SubResource("AtlasTexture_1v6jc")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_40f15"]
+atlas = ExtResource("2_y2pdo")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mhq32"]
+atlas = ExtResource("2_y2pdo")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5miw0"]
+atlas = ExtResource("2_y2pdo")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_buaj6"]
+atlas = ExtResource("2_y2pdo")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4n0tu"]
+atlas = ExtResource("2_y2pdo")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_e1rsr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1v6jc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_40f15")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mhq32")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5miw0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_buaj6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4n0tu")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="RedCoin" unique_id=187434736 node_paths=PackedStringArray("all_collected_sfx", "collect_label") instance=ExtResource("1_qed2w")]
+script = ExtResource("2_c4m15")
+group = "default"
+all_collected_sfx = NodePath("AllCollected")
+collect_label = NodePath("CollectLabel")
+
+[node name="Sprite" parent="." index="1" unique_id=1781944590]
+texture = SubResource("CanvasTexture_p1qeo")
+canvas_texture = SubResource("CanvasTexture_p1qeo")
+diffuse_frames = SubResource("SpriteFrames_e1rsr")
+
+[node name="ParticleEmitter" parent="." index="3" unique_id=1981334313]
+texture = ExtResource("3_y2pdo")
+
+[node name="AudioStreamPlayer2D" parent="." index="4" unique_id=1763400765]
+stream = ExtResource("3_c4m15")
+volume_db = -4.0
+pitch_scale = 1.1
+
+[node name="AllCollected" type="AudioStreamPlayer2D" parent="." index="5" unique_id=2065951676]
+stream = ExtResource("6_bfrqi")
+volume_db = -4.0
+bus = &"SFX"
+
+[node name="CollectLabel" type="Label" parent="." index="8" unique_id=448966562]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+z_index = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -7.5
+offset_right = 20.0
+offset_bottom = 7.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.68, 0.68, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("7_uekj6")
+theme_override_font_sizes/font_size = 20
+text = "1/8"
+horizontal_alignment = 1
+vertical_alignment = 1

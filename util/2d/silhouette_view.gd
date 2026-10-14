@@ -6,16 +6,15 @@ extends Node2D
 
 func _init() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 
 
-func _ready() -> void:
-	process_physics_priority = 1
-	_follow_anchor()
-	reset_physics_interpolation()
+func _enter_tree() -> void:
+	RenderingServer.frame_pre_draw.connect(_follow_anchor)
 
 
-func _physics_process(_delta: float) -> void:
-	_follow_anchor()
+func _exit_tree() -> void:
+	RenderingServer.frame_pre_draw.disconnect(_follow_anchor)
 
 
 func _draw() -> void:
@@ -25,4 +24,4 @@ func _draw() -> void:
 
 func _follow_anchor() -> void:
 	if is_instance_valid(source) and is_instance_valid(source.anchor):
-		global_transform = source.anchor.global_transform
+		global_transform = source.get_anchor_transform()

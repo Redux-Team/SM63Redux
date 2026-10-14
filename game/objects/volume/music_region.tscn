@@ -1,0 +1,82 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/polygon_styles/polygon_base_style.gd" id="1_r"]
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="2_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/music_region.svg" id="3_r"]
+[ext_resource type="Script" path="res://game/object/shapes/polygon_shape.gd" id="4_r"]
+[ext_resource type="Script" path="res://util/poly/polygon_surface.gd" id="5_r"]
+[ext_resource type="Script" path="res://util/poly/terrain_decorations.gd" id="6_r"]
+[ext_resource type="Script" path="res://game/object/shapes/polygon_collision.gd" id="7_r"]
+[ext_resource type="Script" path="res://game/object/object_property.gd" id="9_r"]
+
+[sub_resource type="Resource" id="BaseStyle_music"]
+script = ExtResource("1_r")
+color = Color(0.45, 0.3, 0.85, 0.28)
+
+[sub_resource type="Resource" id="Property_region"]
+script = ExtResource("9_r")
+key = &"music_region"
+label = "Region"
+type = 3
+default_value = ""
+targets = Array[NodePath]([NodePath("Game/RegionArea")])
+member = &"metadata/music_region"
+
+[node name="MusicRegion" type="Node2D" node_paths=PackedStringArray("shape", "game_root", "editor_root")]
+script = ExtResource("2_r")
+id = &"music_region"
+display_name = "Music Region"
+icon = ExtResource("3_r")
+category = &"Volume"
+group = &"Music"
+flags = 31
+browsable = false
+properties = Array[ExtResource("9_r")]([SubResource("Property_region")])
+shape = NodePath("Shape")
+game_root = NodePath("Game")
+editor_root = NodePath("Editor")
+
+[node name="Shape" type="Node2D" parent="." node_paths=PackedStringArray("surface")]
+script = ExtResource("4_r")
+surface = NodePath("../Editor/Surface")
+
+[node name="Editor" type="Node2D" parent="."]
+
+[node name="Surface" type="Node2D" parent="Editor" node_paths=PackedStringArray("fill", "shadow_container", "decorations", "outline_container", "topline_container")]
+script = ExtResource("5_r")
+line_mode = 1
+base_style = SubResource("BaseStyle_music")
+fill = NodePath("Fill")
+shadow_container = NodePath("Fill/ShadowContainer")
+decorations = NodePath("Decorations")
+outline_container = NodePath("Outlines")
+topline_container = NodePath("Toplines")
+
+[node name="Fill" type="Polygon2D" parent="Editor/Surface"]
+clip_children = 2
+texture_repeat = 2
+
+[node name="ShadowContainer" type="Node2D" parent="Editor/Surface/Fill"]
+
+[node name="Decorations" type="Node2D" parent="Editor/Surface"]
+script = ExtResource("6_r")
+
+[node name="Outlines" type="Node2D" parent="Editor/Surface"]
+
+[node name="Toplines" type="Node2D" parent="Editor/Surface"]
+
+[node name="Game" type="Node2D" parent="."]
+
+[node name="RegionArea" type="Area2D" parent="Game"]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+metadata/music_region = ""
+
+[node name="Polygon" type="CollisionPolygon2D" parent="Game/RegionArea"]
+
+[node name="Collision" type="Node" parent="Game" node_paths=PackedStringArray("shape", "area_polygons")]
+script = ExtResource("7_r")
+mode = 2
+shape = NodePath("../../Shape")
+area_polygons = [NodePath("../RegionArea/Polygon")]

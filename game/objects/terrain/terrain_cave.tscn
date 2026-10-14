@@ -1,0 +1,154 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/terrain/cave/terrain_cave_ld.png" id="1_r"]
+[ext_resource type="Script" path="res://game/object/object_property.gd" id="2_r"]
+[ext_resource type="Script" path="res://game/object/style_property.gd" id="3_r"]
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="4_r"]
+[ext_resource type="Script" path="res://game/object/shapes/polygon_shape.gd" id="5_r"]
+[ext_resource type="Resource" path="res://game/polygon_styles/presets/base/cave.tres" id="6_r"]
+[ext_resource type="Resource" path="res://game/polygon_styles/presets/topline/cave.tres" id="7_r"]
+[ext_resource type="Resource" path="res://game/polygon_styles/presets/decoration/cave.tres" id="8_r"]
+[ext_resource type="Script" path="res://util/poly/polygon_surface.gd" id="9_r"]
+[ext_resource type="Script" path="res://util/poly/terrain_decorations.gd" id="10_r"]
+[ext_resource type="Script" path="res://game/object/shapes/polygon_collision.gd" id="11_r"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon"]
+atlas = ExtResource("1_r")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="Resource" id="Property_collision"]
+script = ExtResource("2_r")
+key = &"collision_mode"
+label = "Collision"
+group = &"Collision"
+type = 6
+default_value = 0
+options = PackedStringArray("Solid", "Semisolid", "None")
+targets = Array[NodePath]([NodePath("Game/Collision")])
+member = &"mode"
+
+[sub_resource type="Resource" id="Property_base"]
+script = ExtResource("3_r")
+key = &"base_style"
+label = "Fill"
+group = &"Style"
+type = 3
+default_value = ""
+style_kind = 0
+targets = Array[NodePath]([NodePath("Shape/Surface")])
+member = &"base_style_name"
+
+[sub_resource type="Resource" id="Property_topline"]
+script = ExtResource("3_r")
+key = &"topline_style"
+label = "Topline"
+group = &"Style"
+type = 3
+default_value = ""
+style_kind = 1
+targets = Array[NodePath]([NodePath("Shape/Surface")])
+member = &"topline_style_name"
+
+[sub_resource type="Resource" id="Property_auto_toplines"]
+script = ExtResource("2_r")
+key = &"auto_toplines"
+label = "Use Toplines"
+group = &"Style"
+type = 0
+default_value = true
+targets = Array[NodePath]([NodePath("Shape")])
+member = &"auto_toplines"
+
+[sub_resource type="Resource" id="Property_decoration"]
+script = ExtResource("3_r")
+key = &"decoration_set"
+label = "Decorations"
+group = &"Style"
+type = 3
+default_value = ""
+style_kind = 2
+targets = Array[NodePath]([NodePath("Shape/Surface")])
+member = &"decoration_style_name"
+
+[sub_resource type="Resource" id="Property_decorations_enabled"]
+script = ExtResource("2_r")
+key = &"decorations_enabled"
+label = "Show Decorations"
+group = &"Style"
+type = 0
+default_value = true
+targets = Array[NodePath]([NodePath("Shape/Surface")])
+member = &"decorations_enabled"
+
+[sub_resource type="Resource" id="Property_seed"]
+script = ExtResource("2_r")
+key = &"rng_seed"
+label = "Decoration Seed"
+group = &"Style"
+type = 1
+default_value = 0
+min_value = 0.0
+max_value = 99999.0
+step = 1.0
+randomize_on_place = true
+hidden = true
+targets = Array[NodePath]([NodePath("Shape/Surface")])
+member = &"rng_seed"
+
+[node name="Cave" type="Node2D" node_paths=PackedStringArray("shape", "game_root", "occluders")]
+script = ExtResource("4_r")
+id = &"terrain_cave"
+display_name = "Cave"
+icon = SubResource("AtlasTexture_icon")
+category = &"Solids"
+group = &"Terrain"
+biome = &"Cave"
+placement = 2
+flags = 31
+properties = Array[ExtResource("2_r")]([SubResource("Property_collision"), SubResource("Property_base"), SubResource("Property_topline"), SubResource("Property_auto_toplines"), SubResource("Property_decoration"), SubResource("Property_decorations_enabled"), SubResource("Property_seed")])
+shape = NodePath("Shape")
+game_root = NodePath("Game")
+occluders = [NodePath("Shape/Surface/Fill")]
+
+[node name="Shape" type="Node2D" parent="." node_paths=PackedStringArray("surface")]
+script = ExtResource("5_r")
+surface = NodePath("Surface")
+
+[node name="Surface" type="Node2D" parent="Shape" node_paths=PackedStringArray("fill", "shadow_container", "decorations", "outline_container", "topline_container")]
+script = ExtResource("9_r")
+base_style = ExtResource("6_r")
+topline_style = ExtResource("7_r")
+decoration_style = ExtResource("8_r")
+fill = NodePath("Fill")
+shadow_container = NodePath("Fill/ShadowContainer")
+decorations = NodePath("Decorations")
+outline_container = NodePath("Outlines")
+topline_container = NodePath("Toplines")
+
+[node name="Fill" type="Polygon2D" parent="Shape/Surface"]
+clip_children = 2
+texture_repeat = 2
+
+[node name="ShadowContainer" type="Node2D" parent="Shape/Surface/Fill"]
+
+[node name="Decorations" type="Node2D" parent="Shape/Surface"]
+script = ExtResource("10_r")
+
+[node name="Outlines" type="Node2D" parent="Shape/Surface"]
+
+[node name="Toplines" type="Node2D" parent="Shape/Surface"]
+
+[node name="Game" type="Node2D" parent="."]
+
+[node name="Body" type="StaticBody2D" parent="Game"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="Polygon" type="CollisionPolygon2D" parent="Game/Body"]
+
+[node name="Collision" type="Node" parent="Game" node_paths=PackedStringArray("shape", "body", "polygon")]
+script = ExtResource("11_r")
+terrain_type = &"cave"
+shape = NodePath("../../Shape")
+body = NodePath("../Body")
+polygon = NodePath("../Body/Polygon")

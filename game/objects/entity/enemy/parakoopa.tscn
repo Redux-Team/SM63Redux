@@ -1,0 +1,34 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/entity/enemy/koopa/parakoopa.png" id="2"]
+[ext_resource type="PackedScene" path="res://game/entity/enemy/koopa/koopa.tscn" id="3"]
+[ext_resource type="Script" path="res://game/object/snapshot_view.gd" id="4"]
+[ext_resource type="Script" path="res://game/object/respawnable_component.gd" id="respawnable"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(0, -2, 48, 48)
+
+[node name="Parakoopa" type="Node2D" node_paths=PackedStringArray("game_root", "editor_root")]
+script = ExtResource("1")
+id = &"parakoopa"
+display_name = "Parakoopa"
+category = &"Entity"
+group = &"Enemy"
+order = 901
+flags = 95
+icon = SubResource("IconAtlas")
+game_root = NodePath("Game")
+editor_root = NodePath("Editor")
+
+[node name="Game" parent="." instance=ExtResource("3")]
+form = 1
+
+[node name="Editor" type="Node2D" parent="." node_paths=PackedStringArray("source")]
+script = ExtResource("4")
+source = NodePath("../Game")
+
+[node name="Respawnable" type="Node" parent="Game"]
+script = ExtResource("respawnable")
+mode = 1

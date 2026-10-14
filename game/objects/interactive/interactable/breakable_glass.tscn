@@ -1,0 +1,62 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/interactive/interactable/breakable_glass_0.png" id="2"]
+[ext_resource type="Script" path="res://game/object/object_property.gd" id="3"]
+[ext_resource type="PackedScene" path="res://game/props/breakable_glass/breakable_glass.tscn" id="4"]
+[ext_resource type="Script" path="res://game/object/snapshot_view.gd" id="5"]
+[ext_resource type="Script" path="res://game/object/value_badge.gd" id="6"]
+[ext_resource type="Texture2D" path="res://assets/textures/item/collectible/yellow_coin.png" id="7"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(-7, -7, 48, 48)
+
+[sub_resource type="Resource" id="Resource_1"]
+script = ExtResource("3")
+key = &"disabled"
+label = "Disabled"
+type = 0
+default_value = false
+targets = Array[NodePath]([NodePath("Game")])
+member = &"disabled"
+
+[sub_resource type="Resource" id="Resource_2"]
+script = ExtResource("3")
+key = &"coin_amount"
+label = "Coins"
+group = &"Behavior"
+type = 1
+default_value = 0
+min_value = 0.0
+max_value = 100.0
+step = 1.0
+
+[node name="BreakableGlass" type="Node2D" node_paths=PackedStringArray("game_root", "editor_root")]
+script = ExtResource("1")
+id = &"breakable_glass"
+display_name = "Breakable Glass"
+category = &"Interactive"
+group = &"Interactable"
+order = 900
+flags = 127
+icon = SubResource("IconAtlas")
+game_root = NodePath("Game")
+editor_root = NodePath("Editor")
+properties = Array[ExtResource("3")]([SubResource("Resource_1"), SubResource("Resource_2")])
+
+[node name="Game" parent="." instance=ExtResource("4")]
+
+[node name="Editor" type="Node2D" parent="." node_paths=PackedStringArray("source")]
+script = ExtResource("5")
+source = NodePath("../Game")
+prefer_icon = false
+
+[node name="Badge" type="Node2D" parent="Editor"]
+z_index = 5
+position = Vector2(0, -24)
+script = ExtResource("6")
+key = &"coin_amount"
+format = "x%d"
+hide_when_zero = true
+icon = ExtResource("7")

@@ -7,6 +7,8 @@ extends Node
 
 var _viewport: SubViewport
 var _canvas: RID
+var _previous: Transform2D
+var _current: Transform2D
 
 
 func _init() -> void:
@@ -23,6 +25,24 @@ func _init() -> void:
 
 func _ready() -> void:
 	_viewport.size = canvas_size
+	process_physics_priority = 1
+	reset_anchor()
+
+
+func _physics_process(_delta: float) -> void:
+	if is_instance_valid(anchor):
+		_previous = _current
+		_current = anchor.global_transform
+
+
+func get_anchor_transform() -> Transform2D:
+	return _previous.interpolate_with(_current, Engine.get_physics_interpolation_fraction())
+
+
+func reset_anchor() -> void:
+	if is_instance_valid(anchor):
+		_previous = anchor.global_transform
+		_current = anchor.global_transform
 
 
 func _enter_tree() -> void:

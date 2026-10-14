@@ -20,7 +20,7 @@ static func create() -> LevelData:
 static func from_dict(dict: Dictionary) -> LevelData:
 	var file_version: int = dict.get("version", 0)
 	if file_version != VERSION:
-		push_error("LevelData: unsupported level version %d. Convert older levels with dev/tools/ld_v1_migrator." % file_version)
+		push_error("LevelData: unsupported level version %d." % file_version)
 		return null
 	
 	var data: LevelData = LevelData.new()

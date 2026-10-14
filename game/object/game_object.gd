@@ -9,6 +9,13 @@ enum Context {
 	GAME,
 }
 
+enum Placement {
+	BEHIND_ALL,
+	BEHIND_PLAYER,
+	FRONT_PLAYER,
+	FRONT_ALL,
+}
+
 enum Flag {
 	SELECTABLE = 1,
 	DELETABLE = 2,
@@ -23,10 +30,15 @@ enum Flag {
 @export var id: StringName
 @export var display_name: String
 @export var icon: Texture2D
+@export var icon_tint: StringName
 @export var category: StringName
 @export var group: StringName
+@export var biome: StringName
+@export var order: int = 0
+@export var placement: Placement = Placement.BEHIND_PLAYER
 @export var browsable: bool = true
 @export var unique: bool = false
+@export var cullable: bool = true
 @export_flags("Selectable", "Deletable", "Layerable", "Copyable", "Movable", "Rotatable", "Scalable") var flags: int = 31
 @export var properties: Array[ObjectProperty]
 @export_group("Nodes")
@@ -41,6 +53,14 @@ var context: Context = Context.GAME
 var _values: Dictionary[StringName, Variant] = {}
 var _bounds: Rect2
 var _bounds_valid: bool = false
+
+
+static func of(node: Node) -> GameObject:
+	var current: Node = node
+	while current and not current is GameObject:
+		current = current.get_parent()
+	
+	return current as GameObject
 
 
 static func spawn(scene: PackedScene, spawn_context: Context, data: ObjectData = null) -> GameObject:
@@ -147,7 +167,7 @@ func get_occluders() -> Array[CanvasItem]:
 		return found
 	
 	if occluders.is_empty():
-		found.assign(_find_sprites(self))
+		found.assign(_find_visuals(self))
 	else:
 		found.assign(occluders)
 	
@@ -173,6 +193,22 @@ func get_local_bounds() -> Rect2:
 		_bounds_valid = true
 	
 	return _bounds
+
+
+func contains_point(world_point: Vector2) -> bool:
+	var local_point: Vector2 = get_global_transform().affine_inverse() * world_point
+	if shape and not bounds_override.has_area():
+		return shape.contains_point(local_point)
+	
+	return get_local_bounds().has_point(local_point)
+
+
+func get_outlines() -> Array[PackedVector2Array]:
+	if shape and not bounds_override.has_area():
+		return shape.get_outlines()
+	
+	var rect: Rect2 = get_local_bounds()
+	return [PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)])]
 
 
 func get_global_bounds() -> Rect2:
@@ -206,6 +242,19 @@ static func relative_transform(ancestor: Node, node: Node) -> Transform2D:
 		current = current.get_parent()
 	
 	return result
+
+
+static func _find_visuals(root: Node) -> Array[CanvasItem]:
+	var visuals: Array[CanvasItem] = []
+	for child: Node in root.get_children():
+		var item: CanvasItem = child as CanvasItem
+		if item and not item.visible:
+			continue
+		if item is Sprite2D or item is AnimatedSprite2D or item is Line2D or item is NinePatchRect or item is TextureRect:
+			visuals.append(item)
+		visuals.append_array(_find_visuals(child))
+	
+	return visuals
 
 
 static func _find_sprites(root: Node) -> Array[Sprite2D]:

@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/item/collectible/purple_coin.png" id="2"]
+[ext_resource type="Script" path="res://game/object/object_property.gd" id="3"]
+[ext_resource type="PackedScene" path="res://game/props/coin/purple_coin/purple_coin.tscn" id="4"]
+[ext_resource type="Script" path="res://game/object/snapshot_view.gd" id="5"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(-15, -15, 48, 48)
+
+[sub_resource type="Resource" id="Resource_1"]
+script = ExtResource("3")
+key = &"group"
+label = "Group"
+type = 3
+default_value = "default"
+targets = Array[NodePath]([NodePath("Game")])
+member = &"group"
+
+[node name="PurpleCoin" type="Node2D" node_paths=PackedStringArray("game_root", "editor_root")]
+script = ExtResource("1")
+id = &"purple_coin"
+display_name = "Purple Coin"
+category = &"Item"
+group = &"Collectible"
+order = 40
+flags = 31
+icon = SubResource("IconAtlas")
+game_root = NodePath("Game")
+editor_root = NodePath("Editor")
+properties = Array[ExtResource("3")]([SubResource("Resource_1")])
+
+[node name="Game" parent="." instance=ExtResource("4")]
+
+[node name="Editor" type="Node2D" parent="." node_paths=PackedStringArray("source")]
+script = ExtResource("5")
+source = NodePath("../Game")
+prefer_icon = false

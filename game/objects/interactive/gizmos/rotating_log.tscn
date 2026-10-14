@@ -1,0 +1,66 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/platform/rotating_log.png" id="2"]
+[ext_resource type="Script" path="res://game/object/shapes/telescoping_shape.gd" id="3"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/platform/rotating_log_center.png" id="4"]
+[ext_resource type="Script" path="res://game/props/rotating_log/rotating_log.gd" id="5"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/platform/rotating_log_ld.png" id="6"]
+[ext_resource type="Script" path="res://game/props/rotating_log/rotating_log_preview.gd" id="7"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("6")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+resource_local_to_scene = true
+size = Vector2(32, 10)
+
+[node name="RotatingLog" type="Node2D" node_paths=PackedStringArray("shape", "game_root", "editor_root")]
+script = ExtResource("1")
+id = &"rotating_log"
+display_name = "Rotating Log"
+category = &"Interactive"
+group = &"Gizmos"
+order = 900
+flags = 127
+icon = SubResource("IconAtlas")
+shape = NodePath("Shape")
+game_root = NodePath("Game")
+editor_root = NodePath("Editor")
+
+[node name="Editor" type="Node2D" parent="." node_paths=PackedStringArray("source")]
+script = ExtResource("7")
+source = NodePath("../Shape/Patch")
+
+[node name="Shape" type="Node2D" parent="." node_paths=PackedStringArray("patch", "collision_shapes")]
+script = ExtResource("3")
+patch = NodePath("Patch")
+default_units = 1
+max_units = 64
+collision_shapes = [NodePath("../Game/Body/Collision")]
+collision_expand = -4
+
+[node name="Patch" type="NinePatchRect" parent="Shape"]
+offset_right = 58
+offset_bottom = 14
+mouse_filter = 2
+texture = ExtResource("2")
+patch_margin_left = 18
+patch_margin_right = 18
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="Center" type="Sprite2D" parent="."]
+position = Vector2(0, 1)
+texture = ExtResource("4")
+
+[node name="Game" type="Node2D" parent="."]
+script = ExtResource("5")
+
+[node name="Body" type="StaticBody2D" parent="Game"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape2D" parent="Game/Body"]
+shape = SubResource("RectangleShape2D_1")

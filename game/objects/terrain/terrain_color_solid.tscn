@@ -1,0 +1,90 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/polygon_styles/polygon_base_style.gd" id="1_r"]
+[ext_resource type="Script" path="res://game/object/object_property.gd" id="2_r"]
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="3_r"]
+[ext_resource type="Script" path="res://game/object/shapes/polygon_shape.gd" id="4_r"]
+[ext_resource type="Script" path="res://util/poly/polygon_surface.gd" id="5_r"]
+[ext_resource type="Script" path="res://util/poly/terrain_decorations.gd" id="6_r"]
+[ext_resource type="Script" path="res://game/object/shapes/polygon_collision.gd" id="7_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/terrain/terrain_color_solid_ld.png" id="8_r"]
+
+[sub_resource type="Resource" id="BaseStyle_solid"]
+script = ExtResource("1_r")
+outline_width = 0.0
+
+[sub_resource type="Resource" id="Property_collision"]
+script = ExtResource("2_r")
+key = &"collision_mode"
+label = "Collision"
+group = &"Collision"
+type = 6
+default_value = 0
+options = PackedStringArray("Solid", "Semisolid", "None")
+targets = Array[NodePath]([NodePath("Game/Collision")])
+member = &"mode"
+
+[sub_resource type="Resource" id="Property_color"]
+script = ExtResource("2_r")
+key = &"color"
+label = "Color"
+group = &"Style"
+type = 5
+default_value = Color(0.62, 0.66, 0.74, 1)
+targets = Array[NodePath]([NodePath("Shape/Surface")])
+member = &"fill_color"
+
+[node name="SolidColor" type="Node2D" node_paths=PackedStringArray("shape", "game_root", "occluders")]
+script = ExtResource("3_r")
+id = &"terrain_color_solid"
+display_name = "Solid Color"
+icon = ExtResource("8_r")
+icon_tint = &"color"
+category = &"Solids"
+group = &"Terrain"
+flags = 31
+properties = Array[ExtResource("2_r")]([SubResource("Property_collision"), SubResource("Property_color")])
+shape = NodePath("Shape")
+game_root = NodePath("Game")
+occluders = [NodePath("Shape/Surface/Fill")]
+
+[node name="Shape" type="Node2D" parent="." node_paths=PackedStringArray("surface")]
+script = ExtResource("4_r")
+surface = NodePath("Surface")
+
+[node name="Surface" type="Node2D" parent="Shape" node_paths=PackedStringArray("fill", "shadow_container", "decorations", "outline_container", "topline_container")]
+script = ExtResource("5_r")
+line_mode = 1
+base_style = SubResource("BaseStyle_solid")
+fill = NodePath("Fill")
+shadow_container = NodePath("Fill/ShadowContainer")
+decorations = NodePath("Decorations")
+outline_container = NodePath("Outlines")
+topline_container = NodePath("Toplines")
+
+[node name="Fill" type="Polygon2D" parent="Shape/Surface"]
+clip_children = 2
+texture_repeat = 2
+
+[node name="ShadowContainer" type="Node2D" parent="Shape/Surface/Fill"]
+
+[node name="Decorations" type="Node2D" parent="Shape/Surface"]
+script = ExtResource("6_r")
+
+[node name="Outlines" type="Node2D" parent="Shape/Surface"]
+
+[node name="Toplines" type="Node2D" parent="Shape/Surface"]
+
+[node name="Game" type="Node2D" parent="."]
+
+[node name="Body" type="StaticBody2D" parent="Game"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="Polygon" type="CollisionPolygon2D" parent="Game/Body"]
+
+[node name="Collision" type="Node" parent="Game" node_paths=PackedStringArray("shape", "body", "polygon")]
+script = ExtResource("7_r")
+shape = NodePath("../../Shape")
+body = NodePath("../Body")
+polygon = NodePath("../Body/Polygon")

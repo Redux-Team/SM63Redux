@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/item/collectible/blue_coin.png" id="2"]
+[ext_resource type="PackedScene" path="res://game/props/coin/blue_coin/blue_coin.tscn" id="3"]
+[ext_resource type="Script" path="res://game/object/snapshot_view.gd" id="4"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(-15, -15, 48, 48)
+
+[node name="BlueCoin" type="Node2D" node_paths=PackedStringArray("game_root", "editor_root")]
+script = ExtResource("1")
+id = &"blue_coin"
+display_name = "Blue Coin"
+category = &"Item"
+group = &"Collectible"
+order = 30
+flags = 31
+icon = SubResource("IconAtlas")
+game_root = NodePath("Game")
+editor_root = NodePath("Editor")
+
+[node name="Game" parent="." instance=ExtResource("3")]
+
+[node name="Editor" type="Node2D" parent="." node_paths=PackedStringArray("source")]
+script = ExtResource("4")
+source = NodePath("../Game")
+prefer_icon = false

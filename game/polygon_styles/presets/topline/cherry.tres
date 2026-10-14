@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PolygonToplineStyle" format=3 uid="uid://e8qo5hfrpiwj"]
+
+[ext_resource type="Script" uid="uid://b0a30bvojfokg" path="res://game/polygon_styles/polygon_topline_style.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cgyyi0511gj0h" path="res://assets/textures/terrain/cherry/terrain_cherry_top.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://swub1ysw3qli" path="res://assets/textures/terrain/cherry/terrain_cherry_top_shadow.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://b1j6n43pw8fy7" path="res://assets/textures/terrain/cherry/terrain_cherry_top_left.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://d01yjahubjcbd" path="res://assets/textures/terrain/cherry/terrain_cherry_top_right.png" id="5"]
+
+[resource]
+script = ExtResource("1")
+style_name = "Cherry"
+texture = ExtResource("2")
+width = 28.0
+angle_threshold = 0.6499999999999999
+cap_left = ExtResource("4")
+cap_right = ExtResource("5")
+shadow_texture = ExtResource("3")

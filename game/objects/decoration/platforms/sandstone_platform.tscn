@@ -1,0 +1,54 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/platform/sandstone_platform_ld.png" id="2"]
+[ext_resource type="Script" path="res://game/object/shapes/telescoping_shape.gd" id="3"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/platform/sandstone_platform.png" id="4"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(-7, -17, 48, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+resource_local_to_scene = true
+size = Vector2(66, 4)
+
+[node name="SandstonePlatform" type="Node2D" node_paths=PackedStringArray("game_root", "shape")]
+script = ExtResource("1")
+id = &"sandstone_platform"
+display_name = "Sandstone Platform"
+category = &"Decoration"
+group = &"Platforms"
+order = 900
+flags = 127
+icon = SubResource("IconAtlas")
+game_root = NodePath("Game")
+shape = NodePath("Shape")
+
+[node name="Shape" type="Node2D" parent="." node_paths=PackedStringArray("patch", "collision_shapes")]
+script = ExtResource("3")
+patch = NodePath("Patch")
+default_units = 1
+max_units = 64
+collision_shapes = [NodePath("../Game/Collision")]
+collision_expand = 0
+
+[node name="Patch" type="NinePatchRect" parent="Shape"]
+offset_right = 66
+offset_bottom = 13
+mouse_filter = 2
+texture = ExtResource("4")
+patch_margin_left = 17
+patch_margin_right = 17
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="Game" type="StaticBody2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape2D" parent="Game"]
+position = Vector2(0, -2.5)
+shape = SubResource("RectangleShape2D_1")
+one_way_collision = true
+one_way_collision_margin = 1.0

@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/golden_jungle_bulb.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(-13, -10, 48, 48)
+
+[node name="GoldenJungleBulb" type="Node2D"]
+script = ExtResource("1")
+id = &"golden_jungle_bulb"
+display_name = "Golden Jungle Bulb"
+category = &"Decoration"
+group = &"Jungle"
+order = 314
+flags = 127
+icon = SubResource("IconAtlas")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2")

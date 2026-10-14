@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/cherry_flower.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(-9, 1, 48, 48)
+
+[node name="CherryFlower" type="Node2D"]
+script = ExtResource("1")
+id = &"cherry_flower"
+display_name = "Cherry Flower"
+category = &"Decoration"
+group = &"Cherry"
+order = 302
+flags = 127
+icon = SubResource("IconAtlas")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2")

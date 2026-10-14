@@ -9,7 +9,8 @@ extends Node2D
 func capture(object: GameObject) -> void:
 	if prefer_icon and object.icon:
 		var sprite: Sprite2D = Sprite2D.new()
-		sprite.texture = object.icon
+		var atlas: AtlasTexture = object.icon as AtlasTexture
+		sprite.texture = atlas.atlas if atlas else object.icon
 		add_child(sprite)
 		return
 	

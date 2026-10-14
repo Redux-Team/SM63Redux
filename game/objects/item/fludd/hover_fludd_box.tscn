@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/item/fludd/fludd_box_hover.png" id="2"]
+[ext_resource type="PackedScene" path="res://game/props/fludd_box/fludd_box_hover.tscn" id="3"]
+[ext_resource type="Script" path="res://game/object/snapshot_view.gd" id="4"]
+[ext_resource type="Script" path="res://game/object/respawnable_component.gd" id="respawnable"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(-5, -6, 48, 48)
+
+[node name="HoverFLUDDBox" type="Node2D" node_paths=PackedStringArray("game_root", "editor_root")]
+script = ExtResource("1")
+id = &"hover_fludd_box"
+display_name = "Hover FLUDD Box"
+category = &"Item"
+group = &"FLUDD"
+order = 30
+flags = 31
+icon = SubResource("IconAtlas")
+game_root = NodePath("Game")
+editor_root = NodePath("Editor")
+
+[node name="Game" parent="." instance=ExtResource("3")]
+
+[node name="Editor" type="Node2D" parent="." node_paths=PackedStringArray("source")]
+script = ExtResource("4")
+source = NodePath("../Game")
+prefer_icon = false
+
+[node name="Respawnable" type="Node" parent="Game"]
+script = ExtResource("respawnable")

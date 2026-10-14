@@ -1,0 +1,139 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/interactive/gizmos/spinning_block_mono.png" id="2"]
+[ext_resource type="Script" path="res://game/object/object_property.gd" id="3"]
+[ext_resource type="Script" path="res://game/object/shapes/block_shape.gd" id="4"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/interactive/gizmos/spinning_block_pattern_stripes.png" id="5"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/interactive/gizmos/spinning_block_center.png" id="6"]
+[ext_resource type="Script" path="res://game/props/spinning_block/spinning_block.gd" id="7"]
+[ext_resource type="Script" path="res://game/props/spinning_block/spinning_block_preview.gd" id="8"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/interactive/gizmos/spinning_block_mono_ld.png" id="9"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("9")
+region = Rect2(-3, -3, 48, 48)
+
+[sub_resource type="Resource" id="Resource_1"]
+script = ExtResource("3")
+key = &"b_wait_time"
+label = "Wait Time"
+group = &"Behavior"
+type = 2
+default_value = 2.0
+min_value = 0.0
+max_value = 100.0
+step = 0.1
+
+[sub_resource type="Resource" id="Resource_2"]
+script = ExtResource("3")
+key = &"b_rotate_speed"
+label = "Speed"
+group = &"Behavior"
+type = 2
+default_value = 1.0
+min_value = -16.0
+max_value = 16.0
+step = 0.1
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3"]
+size = Vector2(34, 34)
+
+[node name="SpinningBlockMono" type="Node2D" node_paths=PackedStringArray("shape", "game_root", "editor_root")]
+script = ExtResource("1")
+id = &"spinning_block_mono"
+display_name = "Spinning Block (Mono)"
+category = &"Interactive"
+group = &"Gizmos"
+order = 900
+flags = 63
+icon = SubResource("IconAtlas")
+shape = NodePath("Shape")
+game_root = NodePath("Game")
+editor_root = NodePath("Editor")
+properties = Array[ExtResource("3")]([SubResource("Resource_1"), SubResource("Resource_2")])
+
+[node name="Shape" type="Node2D" parent="." node_paths=PackedStringArray("rects", "collision_shapes")]
+script = ExtResource("4")
+rects = [NodePath("Rect")]
+collision_shapes = [NodePath("../Game/Body/Collision")]
+
+[node name="Rect" type="Control" parent="Shape"]
+offset_left = -17.0
+offset_top = -17.0
+offset_right = 17.0
+offset_bottom = 17.0
+pivot_offset = Vector2(17, 17)
+mouse_filter = 2
+
+[node name="BG" type="ColorRect" parent="Shape/Rect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+color = Color(0.5176471, 0.61960787, 0.7607843, 0.59607846)
+
+[node name="Pattern" type="TextureRect" parent="Shape/Rect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+texture = ExtResource("5")
+stretch_mode = 1
+
+[node name="Edges" type="NinePatchRect" parent="Shape/Rect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+
+[node name="Center" type="TextureRect" parent="Shape/Rect"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6")
+
+[node name="Game" type="Node2D" parent="." node_paths=PackedStringArray("rect", "body")]
+script = ExtResource("7")
+rect = NodePath("../Shape/Rect")
+body = NodePath("Body")
+
+[node name="Body" type="StaticBody2D" parent="Game"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape2D" parent="Game/Body"]
+shape = SubResource("RectangleShape2D_3")
+
+[node name="Editor" type="Node" parent="." node_paths=PackedStringArray("rect", "ghost_source")]
+script = ExtResource("8")
+rect = NodePath("../Shape/Rect")
+ghost_source = NodePath("../Shape/Rect/Edges")

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PolygonToplineStyle" format=3]
+
+[ext_resource type="Script" path="res://game/polygon_styles/polygon_topline_style.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/terrain/jungle/terrain_jungle_top.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/textures/terrain/grass/terrain_grass_shadow.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/textures/terrain/jungle/terrain_jungle_top_left.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/textures/terrain/jungle/terrain_jungle_top_right.png" id="5"]
+
+[resource]
+script = ExtResource("1")
+style_name = "Jungle"
+texture = ExtResource("2")
+shadow_texture = ExtResource("3")
+cap_left = ExtResource("4")
+cap_right = ExtResource("5")
+angle_threshold = 0.6499999999999999

@@ -1,0 +1,270 @@
+[gd_scene format=3 uid="uid://b75x42q76j2xy"]
+
+[ext_resource type="Script" uid="uid://dre4kqjrhdfrw" path="res://dev/tools/object_catalog/object_catalog.gd" id="1"]
+
+[node name="ObjectCatalog" type="Control" unique_id=1808266833 node_paths=PackedStringArray("tree", "search", "new_button", "duplicate_button", "delete_button", "reload_button", "details", "id_label", "path_label", "icon_preview", "name_edit", "category_edit", "group_edit", "order_spin", "placement_option", "browsable_check", "unique_check", "flags_container", "status_label", "texture_dialog", "delete_dialog", "biome_edit", "icon_region_spins", "icon_texture_button", "icon_full_button", "context_menu", "name_dialog", "name_dialog_edit")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+tree = NodePath("Margin/Split/Left/Tree")
+search = NodePath("Margin/Split/Left/Toolbar/Search")
+new_button = NodePath("Margin/Split/Left/Toolbar/New")
+duplicate_button = NodePath("Margin/Split/Left/Toolbar/Duplicate")
+delete_button = NodePath("Margin/Split/Left/Toolbar/Delete")
+reload_button = NodePath("Margin/Split/Left/Toolbar/Reload")
+details = NodePath("Margin/Split/Right/Details")
+id_label = NodePath("Margin/Split/Right/Details/Header/Info/Id")
+path_label = NodePath("Margin/Split/Right/Details/Header/Info/Path")
+icon_preview = NodePath("Margin/Split/Right/Details/Header/Icon")
+name_edit = NodePath("Margin/Split/Right/Details/Grid/Name")
+category_edit = NodePath("Margin/Split/Right/Details/Grid/Category")
+group_edit = NodePath("Margin/Split/Right/Details/Grid/Group")
+order_spin = NodePath("Margin/Split/Right/Details/Grid/Order")
+placement_option = NodePath("Margin/Split/Right/Details/Grid/Placement")
+browsable_check = NodePath("Margin/Split/Right/Details/Grid/Browsable")
+unique_check = NodePath("Margin/Split/Right/Details/Grid/Unique")
+flags_container = NodePath("Margin/Split/Right/Details/Flags")
+status_label = NodePath("Margin/Split/Left/Status")
+texture_dialog = NodePath("TextureDialog")
+delete_dialog = NodePath("DeleteDialog")
+biome_edit = NodePath("Margin/Split/Right/Details/Grid/Biome")
+icon_region_spins = [NodePath("Margin/Split/Right/Details/IconRow/X"), NodePath("Margin/Split/Right/Details/IconRow/Y"), NodePath("Margin/Split/Right/Details/IconRow/W"), NodePath("Margin/Split/Right/Details/IconRow/H")]
+icon_texture_button = NodePath("Margin/Split/Right/Details/IconRow/Texture")
+icon_full_button = NodePath("Margin/Split/Right/Details/IconRow/Full")
+context_menu = NodePath("ContextMenu")
+name_dialog = NodePath("NameDialog")
+name_dialog_edit = NodePath("NameDialog/Name")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=2083321887]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Split" type="HSplitContainer" parent="Margin" unique_id=1120236889]
+layout_mode = 2
+
+[node name="Left" type="VBoxContainer" parent="Margin/Split" unique_id=269254227]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Toolbar" type="HBoxContainer" parent="Margin/Split/Left" unique_id=44072917]
+layout_mode = 2
+
+[node name="Search" type="LineEdit" parent="Margin/Split/Left/Toolbar" unique_id=299228844]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search by name, id or group"
+clear_button_enabled = true
+
+[node name="New" type="Button" parent="Margin/Split/Left/Toolbar" unique_id=926167001]
+layout_mode = 2
+tooltip_text = "Create a sprite object from a texture, in the selected object's group"
+text = "New"
+
+[node name="Duplicate" type="Button" parent="Margin/Split/Left/Toolbar" unique_id=986949851]
+layout_mode = 2
+text = "Duplicate"
+
+[node name="Delete" type="Button" parent="Margin/Split/Left/Toolbar" unique_id=1942980721]
+layout_mode = 2
+text = "Delete"
+
+[node name="Reload" type="Button" parent="Margin/Split/Left/Toolbar" unique_id=1823649316]
+layout_mode = 2
+tooltip_text = "Re-read every object scene from disk"
+text = "Reload"
+
+[node name="Tree" type="Tree" parent="Margin/Split/Left" unique_id=1237994250]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Status" type="Label" parent="Margin/Split/Left" unique_id=505805003]
+modulate = Color(1, 1, 1, 0.6)
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="Right" type="ScrollContainer" parent="Margin/Split" unique_id=135250970]
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Details" type="VBoxContainer" parent="Margin/Split/Right" unique_id=1356534039]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="Margin/Split/Right/Details" unique_id=1087374382]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Icon" type="TextureRect" parent="Margin/Split/Right/Details/Header" unique_id=1187525930]
+texture_filter = 1
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Info" type="VBoxContainer" parent="Margin/Split/Right/Details/Header" unique_id=1242444188]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Id" type="Label" parent="Margin/Split/Right/Details/Header/Info" unique_id=436311724]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+
+[node name="Path" type="Label" parent="Margin/Split/Right/Details/Header/Info" unique_id=58635439]
+modulate = Color(1, 1, 1, 0.5)
+layout_mode = 2
+autowrap_mode = 1
+
+[node name="IconRow" type="HFlowContainer" parent="Margin/Split/Right/Details" unique_id=2075912905]
+layout_mode = 2
+
+[node name="IconLabel" type="Label" parent="Margin/Split/Right/Details/IconRow" unique_id=1398700978]
+layout_mode = 2
+text = "Icon"
+
+[node name="X" type="SpinBox" parent="Margin/Split/Right/Details/IconRow" unique_id=514487985]
+layout_mode = 2
+min_value = -4096.0
+max_value = 4096.0
+prefix = "x"
+
+[node name="Y" type="SpinBox" parent="Margin/Split/Right/Details/IconRow" unique_id=1508803661]
+layout_mode = 2
+min_value = -4096.0
+max_value = 4096.0
+prefix = "y"
+
+[node name="W" type="SpinBox" parent="Margin/Split/Right/Details/IconRow" unique_id=1512344398]
+layout_mode = 2
+min_value = 1.0
+max_value = 4096.0
+value = 48.0
+prefix = "w"
+
+[node name="H" type="SpinBox" parent="Margin/Split/Right/Details/IconRow" unique_id=97133760]
+layout_mode = 2
+min_value = 1.0
+max_value = 4096.0
+value = 48.0
+prefix = "h"
+
+[node name="Texture" type="Button" parent="Margin/Split/Right/Details/IconRow" unique_id=1370170137]
+layout_mode = 2
+text = "Texture…"
+
+[node name="Full" type="Button" parent="Margin/Split/Right/Details/IconRow" unique_id=1134653510]
+layout_mode = 2
+tooltip_text = "Use the whole texture as the icon"
+text = "Full"
+
+[node name="Grid" type="GridContainer" parent="Margin/Split/Right/Details" unique_id=1141347261]
+layout_mode = 2
+theme_override_constants/h_separation = 12
+columns = 2
+
+[node name="NameLabel" type="Label" parent="Margin/Split/Right/Details/Grid" unique_id=116524293]
+layout_mode = 2
+text = "Name"
+
+[node name="Name" type="LineEdit" parent="Margin/Split/Right/Details/Grid" unique_id=375444667]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CategoryLabel" type="Label" parent="Margin/Split/Right/Details/Grid" unique_id=1311792483]
+layout_mode = 2
+text = "Category"
+
+[node name="Category" type="LineEdit" parent="Margin/Split/Right/Details/Grid" unique_id=347846795]
+layout_mode = 2
+placeholder_text = "(mixed)"
+
+[node name="GroupLabel" type="Label" parent="Margin/Split/Right/Details/Grid" unique_id=1556431310]
+layout_mode = 2
+text = "Group"
+
+[node name="Group" type="LineEdit" parent="Margin/Split/Right/Details/Grid" unique_id=592767463]
+layout_mode = 2
+placeholder_text = "(mixed)"
+
+[node name="BiomeLabel" type="Label" parent="Margin/Split/Right/Details/Grid" unique_id=335793155]
+layout_mode = 2
+tooltip_text = "Section used in the browser's All tab (falls back to Group)"
+mouse_filter = 1
+text = "Biome"
+
+[node name="Biome" type="LineEdit" parent="Margin/Split/Right/Details/Grid" unique_id=1714064739]
+layout_mode = 2
+placeholder_text = "(none)"
+
+[node name="OrderLabel" type="Label" parent="Margin/Split/Right/Details/Grid" unique_id=1340667643]
+layout_mode = 2
+text = "Order"
+
+[node name="Order" type="SpinBox" parent="Margin/Split/Right/Details/Grid" unique_id=1228731297]
+layout_mode = 2
+min_value = -10000.0
+max_value = 10000.0
+
+[node name="PlacementLabel" type="Label" parent="Margin/Split/Right/Details/Grid" unique_id=1707946405]
+layout_mode = 2
+text = "Placement"
+
+[node name="Placement" type="OptionButton" parent="Margin/Split/Right/Details/Grid" unique_id=205897911]
+layout_mode = 2
+
+[node name="BrowsableLabel" type="Label" parent="Margin/Split/Right/Details/Grid" unique_id=1506874556]
+layout_mode = 2
+text = "In Browser"
+
+[node name="Browsable" type="CheckBox" parent="Margin/Split/Right/Details/Grid" unique_id=2018942459]
+layout_mode = 2
+
+[node name="UniqueLabel" type="Label" parent="Margin/Split/Right/Details/Grid" unique_id=1524966991]
+layout_mode = 2
+text = "Unique"
+
+[node name="Unique" type="CheckBox" parent="Margin/Split/Right/Details/Grid" unique_id=1681167093]
+layout_mode = 2
+
+[node name="FlagsLabel" type="Label" parent="Margin/Split/Right/Details" unique_id=1459399334]
+layout_mode = 2
+text = "Flags"
+
+[node name="Flags" type="HFlowContainer" parent="Margin/Split/Right/Details" unique_id=986760802]
+layout_mode = 2
+
+[node name="TextureDialog" type="FileDialog" parent="." unique_id=1039002088]
+title = "Open a File"
+file_mode = 0
+root_subfolder = "assets/textures"
+filters = PackedStringArray("*.png ; Textures")
+
+[node name="DeleteDialog" type="ConfirmationDialog" parent="." unique_id=556232218]
+title = "Delete Objects"
+
+[node name="ContextMenu" type="PopupMenu" parent="." unique_id=1132400178]
+
+[node name="NameDialog" type="AcceptDialog" parent="." unique_id=1107759385]
+title = "Name"
+ok_button_text = "Apply"
+
+[node name="Name" type="LineEdit" parent="NameDialog" unique_id=1474016170]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 292.0
+offset_bottom = 39.0

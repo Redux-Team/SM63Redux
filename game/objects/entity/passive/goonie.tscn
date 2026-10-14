@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/entity/passive/goonie_glide.png" id="2"]
+[ext_resource type="PackedScene" path="res://game/entity/passive/goonie/goonie.tscn" id="3"]
+[ext_resource type="Script" path="res://game/object/snapshot_view.gd" id="4"]
+[ext_resource type="Texture2D" path="res://assets/textures/entity/passive/goonie_flap.png" id="5"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("5")
+region = Rect2(288, -5, 48, 48)
+
+[node name="Goonie" type="Node2D" node_paths=PackedStringArray("game_root", "editor_root")]
+script = ExtResource("1")
+id = &"goonie"
+display_name = "Goonie"
+category = &"Entity"
+group = &"Passive"
+placement = 3
+order = 900
+flags = 31
+icon = SubResource("IconAtlas")
+game_root = NodePath("Game")
+editor_root = NodePath("Editor")
+
+[node name="Game" parent="." instance=ExtResource("3")]
+
+[node name="Editor" type="Node2D" parent="." node_paths=PackedStringArray("source")]
+script = ExtResource("4")
+source = NodePath("../Game")
+prefer_icon = false

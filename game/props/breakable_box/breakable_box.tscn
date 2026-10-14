@@ -1,0 +1,148 @@
+[gd_scene format=3 uid="uid://c7ler7lqg61m1"]
+
+[ext_resource type="Script" uid="uid://bw61lwjx4knif" path="res://game/props/breakable_box/breakable_box.gd" id="1_qhjox"]
+[ext_resource type="PackedScene" uid="uid://tf6mq1quvwdw" path="res://game/props/coin/yellow_coin/yellow_coin_spawn.tscn" id="2_4xhut"]
+[ext_resource type="Texture2D" uid="uid://bgu3tbp5yyymq" path="res://assets/textures/objects/interactive/interactable/breakable_box_0.png" id="2_qhjox"]
+[ext_resource type="Texture2D" uid="uid://bppjnj2wb5fqe" path="res://assets/textures/objects/interactive/interactable/breakable_box_2.png" id="3_8nl6k"]
+[ext_resource type="Texture2D" uid="uid://c8vi7fcgcrxm2" path="res://assets/textures/objects/interactive/interactable/breakable_box_1.png" id="3_ju08t"]
+[ext_resource type="Script" uid="uid://cvolonferossj" path="res://util/2d/smart_sprite_2d.gd" id="3_prsgq"]
+[ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="4_po2cq"]
+[ext_resource type="AudioStream" uid="uid://cwxgel8xnrt2m" path="res://assets/sfx/object/breakable_box/box_break.wav" id="4_prsgq"]
+[ext_resource type="Texture2D" uid="uid://2vcfa37p1h7t" path="res://assets/textures/objects/interactive/interactable/breakable_box_particles.png" id="5_3wji2"]
+[ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="5_key8f"]
+[ext_resource type="Script" uid="uid://df82mcnubnp0h" path="res://util/2d/animated_particles.gd" id="7_debris"]
+[ext_resource type="Script" uid="uid://bua0v2wcixcy" path="res://game/entity_data/components/pound_cancel_component.gd" id="8_sustain"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_ju08t"]
+diffuse_texture = ExtResource("2_qhjox")
+
+[sub_resource type="Resource" id="Resource_4xhut"]
+script = ExtResource("5_key8f")
+accepted_hitbox_ids = PackedStringArray("spin", "ground_pound", "bobomb")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4xhut"]
+size = Vector2(30, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3wji2"]
+size = Vector2(32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2pebe"]
+atlas = ExtResource("5_3wji2")
+region = Rect2(0, 1, 11, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rbqaj"]
+atlas = ExtResource("5_3wji2")
+region = Rect2(0, 9, 11, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tmrtw"]
+atlas = ExtResource("5_3wji2")
+region = Rect2(0, 17, 11, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ipbxf"]
+atlas = ExtResource("5_3wji2")
+region = Rect2(0, 25, 11, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cir5m"]
+atlas = ExtResource("5_3wji2")
+region = Rect2(0, 33, 11, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ndpu"]
+atlas = ExtResource("5_3wji2")
+region = Rect2(0, 41, 11, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tt2s6"]
+atlas = ExtResource("5_3wji2")
+region = Rect2(0, 49, 11, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m2ut4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2pebe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rbqaj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tmrtw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ipbxf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cir5m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ndpu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tt2s6")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="BreakableBox" type="Node2D" unique_id=1219245977 node_paths=PackedStringArray("break_sfx", "debris", "sprite", "collision_shape", "hurt_box")]
+script = ExtResource("1_qhjox")
+break_sfx = NodePath("BreakSFX")
+textures = Array[Texture2D]([ExtResource("2_qhjox"), ExtResource("3_ju08t"), ExtResource("3_8nl6k")])
+break_sfx_list = Array[AudioStream]([ExtResource("4_prsgq")])
+debris = NodePath("Debris")
+sprite = NodePath("Sprite")
+collision_shape = NodePath("StaticBody2D/CollisionShape2D")
+hurt_box = NodePath("HurtBox")
+coin = ExtResource("2_4xhut")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=286401553]
+texture = SubResource("CanvasTexture_ju08t")
+script = ExtResource("3_prsgq")
+canvas_texture = SubResource("CanvasTexture_ju08t")
+diffuse_texture = ExtResource("2_qhjox")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+
+[node name="HurtBox" type="Area2D" parent="." unique_id=920770686]
+script = ExtResource("4_po2cq")
+components = Array[ExtResource("5_key8f")]([SubResource("Resource_4xhut")])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=113921858]
+shape = SubResource("RectangleShape2D_4xhut")
+debug_color = Color(0.68833333, 0.7, 0, 0.41960785)
+
+[node name="PoundCancel" type="Node" parent="." unique_id=664497309 node_paths=PackedStringArray("hurt_box")]
+script = ExtResource("8_sustain")
+hurt_box = NodePath("../HurtBox")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=664497308]
+collision_layer = 514
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1498151830]
+shape = SubResource("RectangleShape2D_3wji2")
+
+[node name="BreakSFX" type="AudioStreamPlayer2D" parent="." unique_id=593496812]
+stream = ExtResource("4_prsgq")
+bus = &"SFX"
+
+[node name="Debris" type="Node2D" parent="." unique_id=1781001774]
+script = ExtResource("7_debris")
+sprite_frames = SubResource("SpriteFrames_m2ut4")
+amount = 10
+emission_radius = 9.0
+spread = 180.0
+angles = PackedFloat32Array()
+speed_min = 45.0
+speed_max = 130.0
+gravity = Vector2(0, 420)
+damping = 30.0
+scale_min = 0.8
+scale_max = 1.25
+speed_scale_min = 0.7
+speed_scale_max = 1.4
+random_start_frame = true
+random_flip = true
+
+[connection signal="damaged" from="HurtBox" to="." method="_on_hurt_box_damaged"]

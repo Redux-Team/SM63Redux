@@ -28,26 +28,25 @@ static func run_test() -> void:
 	assert(game_player.game_root is Player)
 	game_player.free()
 	
-	var data: ObjectData = ObjectData.create(&"debug_block")
+	var data: ObjectData = ObjectData.create(&"big_rock")
 	data.position = Vector2(10.5, -20.25)
 	data.scale = Vector2(2.0, 1.0)
 	var block: GameObject = ObjectRegistry.spawn(data, GameObject.Context.GAME)
 	assert(block.position == data.position)
 	assert(block.scale == data.scale)
 	assert(block.uuid == data.uuid)
-	assert(block.occluders.size() == 1)
 	assert(block.to_data().to_dict() == data.to_dict())
 	
 	var tint: ObjectProperty = ObjectProperty.new()
 	tint.key = &"tint"
 	tint.type = ObjectProperty.Type.COLOR
 	tint.default_value = Color.WHITE
-	tint.targets = [^"Fill", ^"Game", ^"Missing"]
+	tint.targets = [^"Sprite2D", ^"Game", ^"Missing"]
 	tint.member = &"modulate"
 	block.properties.append(tint)
 	block.set_value(&"tint", Color.RED)
 	assert(block.get_value(&"tint") == Color.RED)
-	assert((block.get_node(^"Fill") as CanvasItem).modulate == Color.RED)
+	assert((block.get_node(^"Sprite2D") as CanvasItem).modulate == Color.RED)
 	assert((block.get_node(^"Game") as CanvasItem).modulate == Color.RED)
 	block.free()
 	

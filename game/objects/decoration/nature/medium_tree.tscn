@@ -1,15 +1,21 @@
 [gd_scene format=3 uid="uid://bsiakuyr6w727"]
 
-[ext_resource type="Script" uid="uid://tyu7kjo0r4x6" path="res://game/object/game_object.gd" id="1_object"]
-[ext_resource type="Texture2D" uid="uid://u36r15ijlqeb" path="res://assets/textures/objects/decoration/nature/medium_tree.png" id="2_texture"]
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/medium_tree.png" id="2"]
 
-[node name="MediumTree" type="Node2D" unique_id=1752679527]
-script = ExtResource("1_object")
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(-3, -1, 48, 48)
+
+[node name="MediumTree" type="Node2D"]
+script = ExtResource("1")
 id = &"medium_tree"
 display_name = "Medium Tree"
 category = &"Decoration"
-group = &"Nature"
+group = &"Grass"
+order = 1
 flags = 127
+icon = SubResource("IconAtlas")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1177788320]
-texture = ExtResource("2_texture")
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2")

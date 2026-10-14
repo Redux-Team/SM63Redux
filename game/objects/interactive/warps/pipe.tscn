@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/interactive/warps/pipe.png" id="2"]
+[ext_resource type="Shader" path="res://shader/palette_swap.gdshader" id="3"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/interactive/warps/pipe_palette.png" id="4"]
+[ext_resource type="Script" path="res://game/object/object_property.gd" id="5"]
+[ext_resource type="Script" path="res://game/object/shapes/telescoping_shape.gd" id="6"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(-7, -7, 48, 48)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1"]
+resource_local_to_scene = true
+shader = ExtResource("3")
+shader_parameter/palette_index = 0
+shader_parameter/palette_texture = ExtResource("4")
+
+[sub_resource type="Resource" id="Resource_2"]
+script = ExtResource("5")
+key = &"palette"
+label = "Palette"
+group = &"Appearance"
+type = 1
+default_value = 0
+min_value = 0.0
+max_value = 7.0
+step = 1.0
+targets = Array[NodePath]([NodePath("Shape/Patch")])
+member = &"material:shader_parameter/palette_index"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3"]
+resource_local_to_scene = true
+size = Vector2(28, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4"]
+size = Vector2(32, 14)
+
+[node name="Pipe" type="Node2D" node_paths=PackedStringArray("shape", "game_root")]
+script = ExtResource("1")
+id = &"pipe"
+display_name = "Pipe"
+category = &"Interactive"
+group = &"Warps"
+order = 900
+flags = 127
+icon = SubResource("IconAtlas")
+shape = NodePath("Shape")
+game_root = NodePath("Game")
+properties = Array[ExtResource("5")]([SubResource("Resource_2")])
+
+[node name="Shape" type="Node2D" parent="." node_paths=PackedStringArray("patch", "collision_shapes", "start_anchors")]
+script = ExtResource("6")
+axis = 1
+patch = NodePath("Patch")
+default_units = 1
+max_units = 64
+collision_shapes = [NodePath("../Game/Body/Collision")]
+collision_expand = -4
+start_anchors = [NodePath("../Game/Cap")]
+
+[node name="Patch" type="NinePatchRect" parent="Shape"]
+offset_right = 34
+offset_bottom = 34
+mouse_filter = 2
+material = SubResource("ShaderMaterial_1")
+texture = ExtResource("2")
+patch_margin_top = 17
+patch_margin_bottom = 1
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="Game" type="Node2D" parent="."]
+
+[node name="Body" type="StaticBody2D" parent="Game"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape2D" parent="Game/Body"]
+shape = SubResource("RectangleShape2D_3")
+
+[node name="Cap" type="StaticBody2D" parent="Game"]
+position = Vector2(0, 7)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape2D" parent="Game/Cap"]
+shape = SubResource("RectangleShape2D_4")

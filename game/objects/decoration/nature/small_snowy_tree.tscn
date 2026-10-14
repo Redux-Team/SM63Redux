@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/small_snowy_tree.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(-9, -4, 48, 48)
+
+[node name="SmallSnowyTree" type="Node2D"]
+script = ExtResource("1")
+id = &"small_snowy_tree"
+display_name = "Small Snowy Tree"
+category = &"Decoration"
+group = &"Snow"
+order = 6
+flags = 127
+icon = SubResource("IconAtlas")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2")

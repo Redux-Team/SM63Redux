@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/large_rock.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(17, -4, 48, 48)
+
+[node name="BigRock" type="Node2D" node_paths=PackedStringArray("game_root")]
+script = ExtResource("1")
+id = &"big_rock"
+display_name = "Big Rock"
+category = &"Decoration"
+group = &"Grass"
+order = 502
+flags = 127
+icon = SubResource("IconAtlas")
+game_root = NodePath("Game")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2")
+
+[node name="Game" type="StaticBody2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="Collision" type="CollisionPolygon2D" parent="Game"]
+polygon = PackedVector2Array(-27, 1, -39, 32, 40, 32, 34, 12, 21, 0, 19, -22, -4, -31, -10, -31, -22, 1)

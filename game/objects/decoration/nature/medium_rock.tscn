@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/medium_rock.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(1, -14, 48, 48)
+
+[node name="MediumRock" type="Node2D" node_paths=PackedStringArray("game_root")]
+script = ExtResource("1")
+id = &"medium_rock"
+display_name = "Medium Rock"
+category = &"Decoration"
+group = &"Grass"
+order = 501
+flags = 127
+icon = SubResource("IconAtlas")
+game_root = NodePath("Game")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2")
+
+[node name="Game" type="StaticBody2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="Collision" type="CollisionPolygon2D" parent="Game"]
+polygon = PackedVector2Array(-23, 21, -16, -9, -14, -14, -2, -20, 12, -11, 16, 5, 19, 6, 23, 21)

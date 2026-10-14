@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/tall_mushroom_ld.png" id="2"]
+[ext_resource type="Script" path="res://game/object/shapes/path_shape.gd" id="3"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/tall_mushroom_stem.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/tall_mushroom_head.png" id="5"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 48, 48)
+
+[node name="TallMushroom" type="Node2D" node_paths=PackedStringArray("game_root", "shape")]
+script = ExtResource("1")
+id = &"tall_mushroom"
+display_name = "Tall Mushroom"
+category = &"Decoration"
+group = &"Grass"
+order = 403
+flags = 31
+icon = SubResource("IconAtlas")
+shape = NodePath("Shape")
+game_root = NodePath("Game")
+
+[node name="Shape" type="Node2D" parent="." node_paths=PackedStringArray("stem", "head", "head_body")]
+script = ExtResource("3")
+stem = NodePath("Stem")
+head = NodePath("Head")
+head_body = NodePath("../Game/HeadBody")
+stem_width = 16
+
+[node name="Stem" type="Line2D" parent="Shape"]
+texture_repeat = 2
+width = 16.0
+texture = ExtResource("4")
+texture_mode = 1
+
+[node name="Head" type="Sprite2D" parent="Shape"]
+texture = ExtResource("5")
+
+[node name="Game" type="Node2D" parent="."]
+
+[node name="HeadBody" type="StaticBody2D" parent="Game"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="Collision" type="CollisionPolygon2D" parent="Game/HeadBody"]
+polygon = PackedVector2Array(-27, -5, -19, -8, -5, -10, 5, -10, 19, -8, 27, -4, 26, 3, -26, 3)
+one_way_collision = true

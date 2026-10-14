@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/small_rock.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("2")
+region = Rect2(1, -28, 48, 48)
+
+[node name="SmallRock" type="Node2D" node_paths=PackedStringArray("game_root")]
+script = ExtResource("1")
+id = &"small_rock"
+display_name = "Small Rock"
+category = &"Decoration"
+group = &"Grass"
+order = 500
+flags = 127
+icon = SubResource("IconAtlas")
+game_root = NodePath("Game")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2")
+
+[node name="Game" type="StaticBody2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="Collision" type="CollisionPolygon2D" parent="Game"]
+polygon = PackedVector2Array(-23, 9, -11, -9, -8, -9, -2, -7, 3, -4, 7, -2, 13, -1, 17, 3, 23, 5, 22, 9)
