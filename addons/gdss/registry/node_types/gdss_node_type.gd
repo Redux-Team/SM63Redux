@@ -52,6 +52,7 @@ var theme_defaults: Dictionary[String, Variant]:
 		pass
 
 var _states: PackedStringArray
+var _pending_updates: Dictionary[Node, bool] = {}
 var _icons: PackedStringArray
 var _font_sizes: PackedStringArray
 var _fonts: PackedStringArray
@@ -291,13 +292,31 @@ func get_style_props() -> Array[GdssProp]:
 
 
 func _update_state(...a: Array) -> void:
-	update_state(a.get(a.size() - 1))
+	var canvas_item: Node = a.get(a.size() - 1)
+	if canvas_item is CanvasItem and canvas_item.is_inside_tree() and not (canvas_item as CanvasItem).is_visible_in_tree():
+		return
+	if _pending_updates.is_empty():
+		_flush_updates.call_deferred()
+	_pending_updates.set(canvas_item, true)
+
+
+func _flush_updates() -> void:
+	var nodes: Array[Node] = _pending_updates.keys()
+	_pending_updates.clear()
+	for node: Node in nodes:
+		if is_instance_valid(node):
+			update_state(node)
 
 
 func update_state(canvas_item: Node) -> void:
 	if not canvas_item:
 		return
 	if is_static:
+		if canvas_item is Control:
+			var applied_key: Array = [(canvas_item as Control).get_rect(), (canvas_item as Control).visible]
+			if canvas_item.get_meta(&"_gdss_applied", []) == applied_key:
+				return
+			canvas_item.set_meta(&"_gdss_applied", applied_key)
 		var slots: Dictionary = GdssNodeBinder.get_slots(canvas_item)
 		var applied: bool = false
 		for state: String in slots:

@@ -77,7 +77,7 @@ custom_minimum_size = Vector2(34, 34)
 focus_mode = 0
 icon = ExtResource("2_r")
 expand_icon = true
-metadata/tooltip = "Move Layer Up"
+metadata/tooltip = "Move Layer Back"
 metadata/tooltip_mode = 0
 metadata/gdss_classes = PackedStringArray("IconButton")
 
@@ -87,7 +87,7 @@ custom_minimum_size = Vector2(34, 34)
 focus_mode = 0
 icon = ExtResource("3_r")
 expand_icon = true
-metadata/tooltip = "Move Layer Down"
+metadata/tooltip = "Move Layer Forward"
 metadata/tooltip_mode = 0
 metadata/gdss_classes = PackedStringArray("IconButton")
 

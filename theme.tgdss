@@ -254,6 +254,14 @@ PopupMenu {
 	}
 }
 
+PopupPanel {
+	bg_color: WHITE
+	border: 2
+	border_color: $base_shadow_col
+	corner_radius: 8
+	padding: 6 6 6 6
+}
+
 
 # @chunk Title Screen
 @global var blur_amount: 5.0
@@ -362,6 +370,15 @@ Button {
 			transform_rotation: 0
 			font_color: darken($accent, 0.4)
 			bg_color: darken($accent, 0.2)
+		}
+		
+		::launched {
+			transition_time: 0.1 "bg_texture"
+			transform_rotation: 0
+			transform_scale: 1.1
+			font_color: WHITE
+			bg_color: $accent
+			bg_texture: $art
 		}
 		
 		CampaignButton {

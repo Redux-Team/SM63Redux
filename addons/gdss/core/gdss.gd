@@ -521,6 +521,16 @@ static func refresh(node: Node) -> void:
 		node_type.update_state(canvas_item)
 
 
+## Re-resolves [param node]'s active state (hover, pressed, disabled, ...) without re-applying
+## its whole style, for when only a state-driving property such as [code]disabled[/code] changed.
+static func update_state(node: Node) -> void:
+	if node == null or not node is CanvasItem:
+		return
+	var node_type: GdssNodeType = _get_node_types().get(node.get_class())
+	if node_type != null:
+		node_type.update_state(node)
+
+
 ## Sets [param node]'s visibility, playing its GDSS [code]on_show()[/code] /
 ## [code]on_hide()[/code] transition if one is defined. Unlike toggling
 ## [code]visible[/code] directly, this is interrupt-safe during an exit animation

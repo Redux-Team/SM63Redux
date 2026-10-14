@@ -352,8 +352,16 @@ script = ExtResource("2_shortcut")
 action = &"ld_hotbar_9"
 events = Array[InputEvent]([SubResource("ev131")])
 
-[sub_resource type="InputEventKey" id="ev85"]
+[sub_resource type="InputEventKey" id="ev133"]
 keycode = 48
+
+[sub_resource type="Resource" id="sc134"]
+script = ExtResource("2_shortcut")
+action = &"ld_hotbar_10"
+events = Array[InputEvent]([SubResource("ev133")])
+
+[sub_resource type="InputEventKey" id="ev85"]
+keycode = 4194317
 
 [sub_resource type="Resource" id="sc86"]
 script = ExtResource("2_shortcut")
@@ -540,6 +548,17 @@ script = ExtResource("2_shortcut")
 action = &"ld_snap_bypass"
 events = Array[InputEvent]([SubResource("ev129")])
 
+[sub_resource type="InputEventKey" id="ev_confirm"]
+keycode = 4194309
+
+[sub_resource type="InputEventKey" id="ev_confirm_kp"]
+keycode = 4194310
+
+[sub_resource type="Resource" id="sc_confirm"]
+script = ExtResource("2_shortcut")
+action = &"ld_confirm"
+events = Array[InputEvent]([SubResource("ev_confirm"), SubResource("ev_confirm_kp")])
+
 [resource]
 script = ExtResource("1_map")
-shortcuts = Array[ExtResource("2_shortcut")]([SubResource("sc2"), SubResource("sc5"), SubResource("sc7"), SubResource("sc9"), SubResource("sc11"), SubResource("sc13"), SubResource("sc16"), SubResource("sc18"), SubResource("sc21"), SubResource("sc23"), SubResource("sc25"), SubResource("sc27"), SubResource("sc29"), SubResource("sc32"), SubResource("sc34"), SubResource("sc37"), SubResource("sc40"), SubResource("sc42"), SubResource("sc44"), SubResource("sc46"), SubResource("sc48"), SubResource("sc50"), SubResource("sc52"), SubResource("sc54"), SubResource("sc56"), SubResource("sc58"), SubResource("sc61"), SubResource("sc64"), SubResource("sc66"), SubResource("sc68"), SubResource("sc70"), SubResource("sc72"), SubResource("sc74"), SubResource("sc76"), SubResource("sc78"), SubResource("sc80"), SubResource("sc82"), SubResource("sc84"), SubResource("sc132"), SubResource("sc86"), SubResource("sc89"), SubResource("sc92"), SubResource("sc94"), SubResource("sc96"), SubResource("sc98"), SubResource("sc100"), SubResource("sc103"), SubResource("sc106"), SubResource("sc109"), SubResource("sc112"), SubResource("sc114"), SubResource("sc116"), SubResource("sc118"), SubResource("sc120"), SubResource("sc122"), SubResource("sc124"), SubResource("sc126"), SubResource("sc128"), SubResource("sc130")])
+shortcuts = Array[ExtResource("2_shortcut")]([SubResource("sc2"), SubResource("sc5"), SubResource("sc7"), SubResource("sc9"), SubResource("sc11"), SubResource("sc13"), SubResource("sc16"), SubResource("sc18"), SubResource("sc21"), SubResource("sc23"), SubResource("sc25"), SubResource("sc27"), SubResource("sc29"), SubResource("sc32"), SubResource("sc34"), SubResource("sc37"), SubResource("sc40"), SubResource("sc42"), SubResource("sc44"), SubResource("sc46"), SubResource("sc48"), SubResource("sc50"), SubResource("sc52"), SubResource("sc54"), SubResource("sc56"), SubResource("sc58"), SubResource("sc61"), SubResource("sc64"), SubResource("sc66"), SubResource("sc68"), SubResource("sc70"), SubResource("sc72"), SubResource("sc74"), SubResource("sc76"), SubResource("sc78"), SubResource("sc80"), SubResource("sc82"), SubResource("sc84"), SubResource("sc132"), SubResource("sc134"), SubResource("sc86"), SubResource("sc89"), SubResource("sc92"), SubResource("sc94"), SubResource("sc96"), SubResource("sc98"), SubResource("sc100"), SubResource("sc103"), SubResource("sc106"), SubResource("sc109"), SubResource("sc112"), SubResource("sc114"), SubResource("sc116"), SubResource("sc118"), SubResource("sc120"), SubResource("sc122"), SubResource("sc124"), SubResource("sc126"), SubResource("sc128"), SubResource("sc130"), SubResource("sc_confirm")])

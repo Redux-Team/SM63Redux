@@ -32,8 +32,17 @@ func _ready() -> void:
 	visible = false
 	close_button.pressed.connect(close)
 	backdrop.gui_input.connect(_on_backdrop_input)
-	get_viewport().size_changed.connect(_on_viewport_resized)
 	set_process(false)
+
+
+func _enter_tree() -> void:
+	get_viewport().size_changed.connect(_on_viewport_resized)
+	if is_node_ready():
+		_on_viewport_resized()
+
+
+func _exit_tree() -> void:
+	get_viewport().size_changed.disconnect(_on_viewport_resized)
 
 
 func _process(_delta: float) -> void:

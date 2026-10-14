@@ -13,6 +13,7 @@ var _last_modified: int = 0
 var _pending_purge: Dictionary[int, int] = {}
 var _sfx_players: Array[AudioStreamPlayer] = []
 var _sfx_next: int = 0
+var _last_visibility: Dictionary[int, bool] = {}
 
 
 func _process(_delta: float) -> void:
@@ -208,7 +209,7 @@ func _ensure_parsed() -> void:
 		for key: String in (data.get("local_vars") as Dictionary):
 			GdssStylesheet._local_vars.set(key, (data.get("local_vars") as Dictionary).get(key))
 	_apply_scheme_meta(data)
-
+	
 	# Nodes can bind before this runs - a script that enables GDSS from _init() does exactly
 	# that - and they resolved against an empty stylesheet. Now that one is loaded, they have
 	# to pick it up; without this they stay unstyled for the whole run.
@@ -308,6 +309,7 @@ func _connect_event_signals(canvas_item: Node) -> void:
 
 
 func _disconnect_node_signals(canvas_item: Node) -> void:
+	_last_visibility.erase(canvas_item.get_instance_id())
 	if canvas_item.has_signal(&"visibility_changed"):
 		var vis_cb: Callable = _on_styled_visibility_changed.bind(canvas_item)
 		if canvas_item.visibility_changed.is_connected(vis_cb):
@@ -344,6 +346,12 @@ func _on_styled_node_exited(id: int) -> void:
 func _on_styled_visibility_changed(canvas_item: Node) -> void:
 	if not is_instance_valid(canvas_item):
 		return
+	if canvas_item is CanvasItem:
+		var id: int = canvas_item.get_instance_id()
+		var shown: bool = (canvas_item as CanvasItem).visible
+		if _last_visibility.get(id, not shown) == shown:
+			return
+		_last_visibility.set(id, shown)
 	var stylebox: GdssStylebox = GdssNodeBinder.get_primary_stylebox(canvas_item)
 	if stylebox != null:
 		stylebox._on_node_visibility_changed()

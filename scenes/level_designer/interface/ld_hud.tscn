@@ -26,14 +26,18 @@
 [ext_resource type="Texture2D" uid="uid://b2rthm7cwu5f7" path="res://assets/textures/level_designer/ui_icons/properties.svg" id="23_r"]
 [ext_resource type="Texture2D" uid="uid://bab4d65df10qt" path="res://assets/textures/level_designer/ui_icons/select.svg" id="24_r"]
 [ext_resource type="Texture2D" uid="uid://dxl3d6p8p8abe" path="res://assets/textures/level_designer/ui_icons/brush.svg" id="25_r"]
-[ext_resource type="Texture2D" uid="uid://nbdvk7pss2q6" path="res://assets/textures/level_designer/ui_icons/tile.svg" id="26_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/terrain_draw.svg" id="26_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/terrain_fill.svg" id="26_fill"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/terrain_tile.svg" id="26_tile"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/terrain_line.svg" id="26_line"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/terrain_rect.svg" id="26_rect"]
 [ext_resource type="Texture2D" uid="uid://c0t02y00tbi4v" path="res://assets/textures/level_designer/ui_icons/move.svg" id="27_r"]
 [ext_resource type="Texture2D" uid="uid://c81rcaj0gayug" path="res://assets/textures/level_designer/ui_icons/rotate.svg" id="28_r"]
 [ext_resource type="Texture2D" uid="uid://befcyokqxrxmb" path="res://assets/textures/level_designer/ui_icons/scale.svg" id="29_r"]
 [ext_resource type="Texture2D" uid="uid://x3thrperd2h" path="res://assets/textures/level_designer/ui_icons/place.svg" id="30_r"]
-[ext_resource type="Texture2D" uid="uid://dgwk8rteoin2n" path="res://assets/textures/level_designer/ui_icons/poly_edit.svg" id="31_r"]
-[ext_resource type="Texture2D" uid="uid://t56qffjb1o1v" path="res://assets/textures/level_designer/ui_icons/poly_add.svg" id="32_r"]
-[ext_resource type="Texture2D" uid="uid://bfgi7fllhubb1" path="res://assets/textures/level_designer/ui_icons/poly_cut.svg" id="33_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/terrain_edit.svg" id="31_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/terrain_add.svg" id="32_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/terrain_cut.svg" id="33_r"]
 [ext_resource type="Texture2D" uid="uid://cnmqrty555op" path="res://assets/textures/level_designer/ui_icons/topline.svg" id="34_r"]
 [ext_resource type="Texture2D" uid="uid://btl2agxeb00f0" path="res://assets/textures/level_designer/ui_icons/layers.svg" id="35_r"]
 [ext_resource type="Texture2D" uid="uid://bg3fpaudox0nq" path="res://assets/textures/level_designer/ui_icons/areas.svg" id="36_r"]
@@ -44,7 +48,7 @@
 [ext_resource type="Texture2D" uid="uid://dcgs3ybhnoflf" path="res://assets/textures/level_designer/ui_icons/music.svg" id="41_r"]
 [ext_resource type="Texture2D" uid="uid://dt8c6fyko40cw" path="res://assets/textures/level_designer/ui_icons/grid.svg" id="grid_r"]
 
-[node name="Chrome" type="Panel" unique_id=2092673143]
+[node name="HUD" type="Panel" unique_id=2092673143]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -461,6 +465,17 @@ expand_icon = true
 script = ExtResource("21_r")
 metadata/gdss_classes = PackedStringArray("Hotbar")
 
+[node name="HotbarButton10" type="Button" parent="BottomBar/Row/Hotbar" unique_id=1770274893]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_r")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
 [node name="ToolRail" type="PanelContainer" parent="." unique_id=1564315177]
 texture_filter = 4
 layout_mode = 0
@@ -525,17 +540,6 @@ metadata/tooltip = "Paint (B)"
 metadata/tooltip_mode = 2
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
-[node name="TileButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=195312659]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-focus_mode = 0
-icon = ExtResource("26_r")
-expand_icon = true
-metadata/tooltip = "Tile"
-metadata/tooltip_mode = 2
-metadata/gdss_classes = PackedStringArray("ToolButton")
-
 [node name="MoveButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=1695892751]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -574,39 +578,6 @@ focus_mode = 0
 icon = ExtResource("30_r")
 expand_icon = true
 metadata/tooltip = "Place"
-metadata/tooltip_mode = 2
-metadata/gdss_classes = PackedStringArray("ToolButton")
-
-[node name="PolyEditButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=1791890227]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-focus_mode = 0
-icon = ExtResource("31_r")
-expand_icon = true
-metadata/tooltip = "Edit Polygon"
-metadata/tooltip_mode = 2
-metadata/gdss_classes = PackedStringArray("ToolButton")
-
-[node name="PolyAddButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=258786325]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-focus_mode = 0
-icon = ExtResource("32_r")
-expand_icon = true
-metadata/tooltip = "Add to Polygon"
-metadata/tooltip_mode = 2
-metadata/gdss_classes = PackedStringArray("ToolButton")
-
-[node name="PolyCutButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=761265868]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-focus_mode = 0
-icon = ExtResource("33_r")
-expand_icon = true
-metadata/tooltip = "Cut Polygon"
 metadata/tooltip_mode = 2
 metadata/gdss_classes = PackedStringArray("ToolButton")
 
@@ -737,3 +708,98 @@ text = "Test Level"
 metadata/tooltip = "Playtest the level (F5)"
 metadata/tooltip_mode = 4
 metadata/gdss_classes = PackedStringArray("TestLevelButton")
+
+[node name="SubtoolFlyout" type="PanelContainer" parent="."]
+visible = false
+texture_filter = 4
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 36.0
+mouse_filter = 1
+metadata/gdss_classes = PackedStringArray("Bar")
+
+[node name="Subtools" type="HBoxContainer" parent="SubtoolFlyout"]
+layout_mode = 2
+
+[node name="PaintTileButton" type="Button" parent="SubtoolFlyout/Subtools"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("26_tile")
+expand_icon = true
+metadata/tooltip = "Paint Tiles"
+metadata/tooltip_mode = 4
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="LineButton" type="Button" parent="SubtoolFlyout/Subtools"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("26_line")
+expand_icon = true
+metadata/tooltip = "Tile Line"
+metadata/tooltip_mode = 4
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="RectButton" type="Button" parent="SubtoolFlyout/Subtools"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("26_rect")
+expand_icon = true
+metadata/tooltip = "Tile Rectangle"
+metadata/tooltip_mode = 4
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="FillButton" type="Button" parent="SubtoolFlyout/Subtools"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("26_fill")
+expand_icon = true
+metadata/tooltip = "Fill (Enclosed Area)"
+metadata/tooltip_mode = 4
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="Separator" type="VSeparator" parent="SubtoolFlyout/Subtools"]
+layout_mode = 2
+
+[node name="DrawButton" type="Button" parent="SubtoolFlyout/Subtools"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("26_r")
+expand_icon = true
+metadata/tooltip = "Draw (Freeform Polygon)"
+metadata/tooltip_mode = 4
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="PolyEditButton" type="Button" parent="SubtoolFlyout/Subtools" unique_id=1791890227]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("31_r")
+expand_icon = true
+metadata/tooltip = "Edit Points"
+metadata/tooltip_mode = 4
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="PolyAddButton" type="Button" parent="SubtoolFlyout/Subtools" unique_id=258786325]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("32_r")
+expand_icon = true
+metadata/tooltip = "Add Shape"
+metadata/tooltip_mode = 4
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="PolyCutButton" type="Button" parent="SubtoolFlyout/Subtools" unique_id=761265868]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("33_r")
+expand_icon = true
+metadata/tooltip = "Cut Shape"
+metadata/tooltip_mode = 4
+metadata/gdss_classes = PackedStringArray("ToolButton")

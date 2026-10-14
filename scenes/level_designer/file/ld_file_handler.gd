@@ -4,6 +4,7 @@ extends LDHandler
 signal file_changed
 
 const SESSION_PATH: String = "user://ld/session.cfg"
+const LEGACY_BACKUP_SUFFIX: String = ".v1.bak"
 const FILTERS: PackedStringArray = ["*.63rl ; Level", "*.json ; Level (JSON)"]
 
 @export var autosave: LDAutosave
@@ -17,6 +18,10 @@ const FILTERS: PackedStringArray = ["*.63rl ; Level", "*.json ; Level (JSON)"]
 @export var confirm_dialog: ConfirmationDialog
 
 var file_path: String = ""
+var _legacy_path: String = ""
+var _pending_data: LevelData
+var _pending_areas: Array[LevelArea] = []
+var _pending_legacy: bool = false
 var _saved_version: int = 0
 var _pending: Callable
 
@@ -82,14 +87,62 @@ func open() -> void:
 
 
 func open_path(path: String) -> void:
-	var data: LevelData = LevelFile.read(path)
-	if data == null:
+	if Singleton.is_transitioning():
 		return
 	
-	_load(data, path)
+	editor.viewport_handler.camera_control.depart()
+	Singleton.build_screen_transition() \
+		.set_blur() \
+		.set_hold_duration(0.0) \
+		.set_loading_delay(0.0) \
+		.add_threaded_task(_prepare.bind(path), _finish_open.bind(path, true)) \
+		.done()
+
+
+func _open_now(path: String) -> void:
+	_prepare(path)
+	_finish_open(path)
+
+
+func _prepare(path: String) -> void:
+	_pending_legacy = LevelFile.is_legacy(path)
+	_prepare_data(LevelFile.read(path))
+
+
+func _prepare_data(data: LevelData) -> void:
+	_pending_data = data
+	_pending_areas = LDLevelHandler.build_areas(data) if data else []
+
+
+func _finish_open(path: String, reveal: bool = false) -> void:
+	if not _apply_pending(path):
+		return
+	
+	_legacy_path = path if _pending_legacy else ""
 	_remember(path)
 	autosave.discard()
 	_mark_saved()
+	if reveal:
+		await editor.viewport_handler.camera_control.reveal(editor.level_handler.active_area)
+
+
+func _finish_recovery(path: String) -> void:
+	if _apply_pending(path):
+		_saved_version = -1
+		_refresh_title()
+
+
+func _apply_pending(path: String) -> bool:
+	var data: LevelData = _pending_data
+	var built: Array[LevelArea] = _pending_areas
+	_pending_data = null
+	_pending_areas = []
+	if data == null:
+		return false
+	
+	editor.level_handler.open(data, built)
+	file_path = path
+	return true
 
 
 func save() -> void:
@@ -105,6 +158,9 @@ func save_as() -> void:
 
 
 func save_to(path: String) -> void:
+	if path == _legacy_path and not FileAccess.file_exists(path + LEGACY_BACKUP_SUFFIX):
+		DirAccess.copy_absolute(path, path + LEGACY_BACKUP_SUFFIX)
+	
 	var error: Error = LevelFile.write(path, editor.level_handler.capture())
 	if error != OK:
 		push_error("LDFileHandler: could not save '%s' (%s)." % [path, error_string(error)])
@@ -124,15 +180,18 @@ func _open_initial() -> void:
 	var session: EditorSession = Singleton.editor_session
 	var remembered: String = _read_session_path()
 	var recovered: LevelData = LevelFile.read(LDAutosave.PATH) if autosave.has_recovery() else null
-	if session.level:
-		_load(session.level, remembered)
-		session.level = null
-		_saved_version = -1
-	elif recovered:
-		_load(recovered, remembered)
-		_saved_version = -1
+	var recovery: LevelData = session.level if session.level else recovered
+	session.level = null
+	if recovery:
+		_pending_legacy = false
+		editor.level_handler.new_level()
+		if not Singleton.defer_threaded(_prepare_data.bind(recovery), _finish_recovery.bind(remembered)):
+			_prepare_data(recovery)
+			_finish_recovery(remembered)
 	elif FileAccess.file_exists(remembered):
-		open_path(remembered)
+		editor.level_handler.new_level()
+		if not Singleton.defer_threaded(_prepare.bind(remembered), _finish_open.bind(remembered)):
+			_open_now(remembered)
 	else:
 		_start_new_level()
 	
@@ -144,11 +203,6 @@ func _start_new_level() -> void:
 	file_path = ""
 	autosave.discard()
 	_mark_saved()
-
-
-func _load(data: LevelData, path: String) -> void:
-	editor.level_handler.open(data)
-	file_path = path
 
 
 func _mark_saved() -> void:

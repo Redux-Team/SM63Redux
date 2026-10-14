@@ -6,7 +6,7 @@ signal panel_changed(panel: LDPanel)
 const DESKTOP_SCALE: float = 0.8
 const TOUCH_SCALE: float = 1.0
 
-@export var chrome: Control
+@export var hud: Control
 @export var window: LDWindow
 
 var current_panel: LDPanel
@@ -14,8 +14,17 @@ var current_panel: LDPanel
 
 func _setup() -> void:
 	window.closed.connect(_on_window_closed)
-	get_viewport().size_changed.connect(_rescale)
 	_rescale()
+
+
+func _enter_tree() -> void:
+	get_viewport().size_changed.connect(_rescale)
+	if is_node_ready():
+		_rescale()
+
+
+func _exit_tree() -> void:
+	get_viewport().size_changed.disconnect(_rescale)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -65,6 +74,6 @@ func _on_window_closed() -> void:
 func _rescale() -> void:
 	var ui_scale: float = get_ui_scale()
 	var view: Vector2 = get_viewport().get_visible_rect().size
-	chrome.scale = Vector2.ONE * ui_scale
-	chrome.offset_right = view.x * (1.0 / ui_scale - 1.0)
-	chrome.offset_bottom = view.y * (1.0 / ui_scale - 1.0)
+	hud.scale = Vector2.ONE * ui_scale
+	hud.offset_right = view.x * (1.0 / ui_scale - 1.0)
+	hud.offset_bottom = view.y * (1.0 / ui_scale - 1.0)

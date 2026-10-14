@@ -8,6 +8,8 @@ extends LDComponent
 @export var window_scale: Vector2 = Vector2.ONE
 @export var dim_backdrop: bool = true
 @export var screen_margin: Vector2 = Vector2(300, 100)
+@export var shrink_vertically: bool = false
+@export var max_size: Vector2 = Vector2.INF
 
 var _base_size: Vector2
 
@@ -15,9 +17,18 @@ var _base_size: Vector2
 func _setup() -> void:
 	view.visible = false
 	_base_size = view.custom_minimum_size
-	view.get_viewport().size_changed.connect(fit_view)
 	LD.bind_button(toggle_button, toggle)
 	editor.interface_handler.panel_changed.connect(func(panel: LDPanel) -> void: LD.set_active(toggle_button, panel == self))
+
+
+func _enter_tree() -> void:
+	get_viewport().size_changed.connect(fit_view)
+	if is_node_ready():
+		fit_view()
+
+
+func _exit_tree() -> void:
+	get_viewport().size_changed.disconnect(fit_view)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -44,7 +55,16 @@ func is_open() -> bool:
 
 
 func fit_view() -> void:
-	view.custom_minimum_size = (view.get_viewport_rect().size - screen_margin).max(_base_size)
+	var fitted: Vector2 = (view.get_viewport_rect().size - screen_margin).min(max_size).max(_base_size)
+	if shrink_vertically:
+		fitted.y = _base_size.y
+	view.custom_minimum_size = fitted
+
+
+func refit() -> void:
+	await get_tree().process_frame
+	if is_open():
+		editor.interface_handler.window.fit()
 
 
 func get_title() -> String:

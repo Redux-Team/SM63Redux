@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [node name="InspectorView" type="MarginContainer"]
-custom_minimum_size = Vector2(320, 0)
+custom_minimum_size = Vector2(220, 0)
 visible = false
 offset_right = 40.0
 offset_bottom = 40.0

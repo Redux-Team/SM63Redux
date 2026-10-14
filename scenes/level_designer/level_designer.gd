@@ -3,6 +3,11 @@ extends Node
 
 const TITLE_SCREEN: String = "uid://dp3ocrpop234v"
 const ACTIVE_CLASS: String = "Active"
+const STATE_UPDATES_PER_FRAME: int = 1
+
+static var _state_queue: Array[BaseButton] = []
+
+var _shown: Dictionary[Node, bool] = {}
 
 @export var world: Node2D
 @export var camera: Camera2D
@@ -48,11 +53,33 @@ static func set_disabled(button: BaseButton, disabled: bool) -> void:
 		return
 	
 	button.disabled = disabled
-	GDSS.refresh(button)
+	if not _state_queue.has(button):
+		_state_queue.append(button)
+
+
+func _process(_delta: float) -> void:
+	for i: int in mini(STATE_UPDATES_PER_FRAME, _state_queue.size()):
+		var button: BaseButton = _state_queue.pop_front()
+		if is_instance_valid(button):
+			GDSS.update_state(button)
 
 
 func set_suspended(suspended: bool) -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED if suspended else Node.PROCESS_MODE_INHERIT
+	camera.enabled = not suspended
+	for child: Node in get_children():
+		if not (child is CanvasItem or child is CanvasLayer):
+			continue
+		
+		if suspended:
+			_shown.set(child, child.get(&"visible"))
+			child.set(&"visible", false)
+		else:
+			child.set(&"visible", _shown.get(child, true))
+	
+	if not suspended:
+		_shown.clear()
+		camera.make_current()
 
 
 func accepts_shortcuts() -> bool:
@@ -75,4 +102,10 @@ func _leave() -> void:
 	Singleton.build_screen_transition() \
 		.set_center() \
 		.set_destination(TITLE_SCREEN) \
+		.load(_dismantle) \
 		.done()
+
+
+func _dismantle() -> void:
+	set_suspended(true)
+	await level_handler.dismantle()

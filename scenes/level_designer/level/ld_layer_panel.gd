@@ -5,6 +5,9 @@ const ROW_CLASS: String = "ListRow"
 const INDENT: int = 14
 const DROP_EDGE: float = 0.3
 const MARKER_COLOR: Color = Color("#6496ed")
+const DISABLED_ROW_ALPHA: float = 0.45
+const ICON_SIZE: float = 12.0
+const ICON_SLOT: float = 16.0
 
 @export var row_container: VBoxContainer
 @export var count_label: Label
@@ -17,6 +20,8 @@ const MARKER_COLOR: Color = Color("#6496ed")
 @export var lock_icon: Texture2D
 @export var folder_icon: Texture2D
 @export var folder_open_icon: Texture2D
+@export var visible_icon: Texture2D
+@export var hidden_icon: Texture2D
 
 var _rows: Array[Button] = []
 var _row_group: ButtonGroup = ButtonGroup.new()
@@ -37,8 +42,8 @@ func _setup() -> void:
 	level.structure_changed.connect(_refresh)
 	add_button.pressed.connect(func() -> void: level.add_layer(level.active_layer))
 	group_button.pressed.connect(_on_group_pressed)
-	move_up_button.pressed.connect(func() -> void: level.move_layer(level.active_layer, 1))
-	move_down_button.pressed.connect(func() -> void: level.move_layer(level.active_layer, -1))
+	move_up_button.pressed.connect(func() -> void: level.move_layer(level.active_layer, -1))
+	move_down_button.pressed.connect(func() -> void: level.move_layer(level.active_layer, 1))
 	remove_button.pressed.connect(_on_remove)
 	_marker = ColorRect.new()
 	_marker.top_level = true
@@ -91,8 +96,8 @@ func _refresh() -> void:
 	var grouped: bool = not _selected_group.is_empty()
 	var count: int = level.get_group_members(_selected_group).size() if grouped else layer.get_objects().size()
 	count_label.text = "%d %s" % [count, ("layer" if count == 1 else "layers") if grouped else ("object" if count == 1 else "objects")]
-	LD.set_disabled(move_up_button, grouped or layer == layers.back())
-	LD.set_disabled(move_down_button, grouped or layer == layers.front())
+	LD.set_disabled(move_up_button, grouped or layer == layers.front())
+	LD.set_disabled(move_down_button, grouped or layer == layers.back())
 	LD.set_disabled(remove_button, grouped or locked or layers.size() <= 1)
 	Tooltip.set_text(group_button, "Ungroup" if grouped else "Remove from Group" if not layer.group.is_empty() else "Group Layer")
 	for widget: PropertyWidget in _widgets.values():
@@ -100,9 +105,12 @@ func _refresh() -> void:
 	for widget: PropertyWidget in _group_widgets.values():
 		widget.visible = grouped
 	_group_widgets.get(&"is_decoration").set_editable(not level.group_contains_anchor(_selected_group))
+	_group_widgets.get(&"enabled").set_editable(not level.group_contains_anchor(_selected_group))
 	_widgets.get(&"layer_name").set_editable(not locked)
+	_widgets.get(&"enabled").set_editable(not locked)
 	_widgets.get(&"is_decoration").set_editable(not locked)
 	_widgets.get(&"distance").set_editable(not locked and layer.is_decoration)
+	_widgets.get(&"silhouette").visible = not grouped and layer.is_effective_decoration()
 	for binding: PropertyBinding in _bindings + _group_bindings:
 		binding.refresh()
 
@@ -116,7 +124,6 @@ func _rebuild_rows() -> void:
 		child.queue_free()
 	
 	var layers: Array[LevelLayer] = level.active_area.get_layers()
-	layers.reverse()
 	var anchor: LevelLayer = level.get_anchor_layer()
 	var listed: Array[StringName] = []
 	for layer: LevelLayer in layers:
@@ -134,6 +141,11 @@ func _rebuild_rows() -> void:
 		row.icon = folder_open_icon if expanded else folder_icon
 		row.pressed.connect(_select_group.bind(layer.group))
 		_forward_drag(row, null, layer.group)
+		var group_enabled: bool = group.get("enabled", true)
+		var group_visible: bool = group.get("visible", true)
+		_add_row_icons(row, group_visible, func() -> void: level.set_layer_group_property(layer.group, &"visible", not group_visible), false)
+		if not group_enabled:
+			row.modulate.a = DISABLED_ROW_ALPHA
 		if not expanded:
 			continue
 		
@@ -145,11 +157,11 @@ func _rebuild_rows() -> void:
 func _add_layer_row(layer: LevelLayer, anchor: LevelLayer, depth: int) -> void:
 	var level: LDLevelHandler = editor.level_handler
 	var row: Button = _add_row(level.get_layer_label(layer), depth, _selected_group.is_empty() and layer == level.active_layer)
-	if layer == anchor:
-		row.icon = lock_icon
-		row.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	row.pressed.connect(_select_layer.bind(layer))
 	_forward_drag(row, layer, &"")
+	_add_row_icons(row, layer.editor_visible, func() -> void: level.set_layer_property(layer, &"editor_visible", not layer.editor_visible), layer == anchor)
+	if not layer.is_effective_enabled():
+		row.modulate.a = DISABLED_ROW_ALPHA
 
 
 func _add_row(text: String, depth: int, pressed: bool) -> Button:
@@ -165,12 +177,45 @@ func _add_row(text: String, depth: int, pressed: bool) -> Button:
 	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	row.set_pressed_no_signal(pressed)
 	GDSS.add_class(row, ROW_CLASS)
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var line: HBoxContainer = HBoxContainer.new()
+	line.add_child(row)
 	var indent: MarginContainer = MarginContainer.new()
 	indent.add_theme_constant_override(&"margin_left", INDENT * depth)
-	indent.add_child(row)
+	indent.add_child(line)
 	row_container.add_child(indent)
 	_rows.append(row)
 	return row
+
+
+func _add_row_icons(row: Button, is_visible: bool, on_toggle: Callable, locked: bool) -> void:
+	var eye: TextureButton = TextureButton.new()
+	eye.focus_mode = Control.FOCUS_NONE
+	eye.texture_normal = visible_icon if is_visible else hidden_icon
+	eye.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	eye.pressed.connect(on_toggle)
+	Tooltip.set_text(eye, "Hide in Editor" if is_visible else "Show in Editor", Tooltip.Placement.RIGHT)
+	row.get_parent().add_child(_icon_slot(eye))
+	var lock: TextureRect = TextureRect.new()
+	lock.texture = lock_icon if locked else null
+	if locked:
+		Tooltip.set_text(lock, "Player layer (always enabled)", Tooltip.Placement.RIGHT)
+	row.get_parent().add_child(_icon_slot(lock))
+
+
+func _icon_slot(icon: Control) -> Control:
+	var slot: CenterContainer = CenterContainer.new()
+	slot.custom_minimum_size = Vector2(ICON_SLOT, ICON_SLOT)
+	slot.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	icon.custom_minimum_size = Vector2(ICON_SIZE, ICON_SIZE)
+	if icon is TextureButton:
+		(icon as TextureButton).ignore_texture_size = true
+		(icon as TextureButton).stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	elif icon is TextureRect:
+		(icon as TextureRect).expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		(icon as TextureRect).stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	slot.add_child(icon)
+	return slot
 
 
 func _select_layer(layer: LevelLayer) -> void:
@@ -193,7 +238,10 @@ func _select_group(group: StringName) -> void:
 func _build_fields() -> void:
 	_add_field(&"layer_name", "Name", {"type": TYPE_STRING})
 	_add_field(&"modulation", "Modulate", {"type": TYPE_COLOR})
+	_add_field(&"editor_visible", "Visible", {"type": TYPE_BOOL})
+	_add_field(&"enabled", "Enabled", {"type": TYPE_BOOL})
 	_add_field(&"is_decoration", "Decoration", {"type": TYPE_BOOL})
+	_add_field(&"silhouette", "Render Silhouette", {"type": TYPE_BOOL})
 	_add_field(&"distance", "Distance", {
 		"type": TYPE_FLOAT,
 		"hint": PROPERTY_HINT_RANGE,
@@ -202,6 +250,8 @@ func _build_fields() -> void:
 	})
 	_add_group_field(&"name", "Group Name", "", {"type": TYPE_STRING})
 	_add_group_field(&"modulation", "Modulate", Color.WHITE, {"type": TYPE_COLOR})
+	_add_group_field(&"visible", "Visible", true, {"type": TYPE_BOOL})
+	_add_group_field(&"enabled", "Enabled", true, {"type": TYPE_BOOL})
 	_add_group_field(&"is_decoration", "Decoration", false, {"type": TYPE_BOOL})
 	_add_group_field(&"distance", "Distance", 0.0, {
 		"type": TYPE_FLOAT,
@@ -315,12 +365,12 @@ func _resolve_drop(at: Vector2, data: Variant, row: Button, layer: LevelLayer, g
 	
 	var drop: Dictionary = {"moved": moved, "above": above, "into": into}
 	if not group.is_empty():
-		drop.set("target", members.back() if above or into else members.front())
-		drop.set("in_front", above or into)
+		drop.set("target", members.front() if above and not into else members.back())
+		drop.set("in_front", into or not above)
 		drop.set("group", group if into else dragged_group)
 	else:
 		drop.set("target", layer)
-		drop.set("in_front", above)
+		drop.set("in_front", not above)
 		drop.set("group", dragged_group if not dragged_group.is_empty() else target_group)
 	
 	if moved.has(drop.get("target")) or drop.get("target") == null:

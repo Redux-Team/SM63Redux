@@ -21,6 +21,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="OptionButton" type="OptionButton" parent="." unique_id=386225943]
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 selected = 0
 item_count = 1

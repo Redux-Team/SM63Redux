@@ -7,10 +7,12 @@ signal layer_changed(layer: LevelLayer)
 signal structure_changed
 signal background_changed(area: LevelArea)
 
-const LAYER_PROPERTIES: Array[StringName] = [&"layer_name", &"distance", &"modulation", &"is_decoration"]
+const PLAYER_ID: StringName = &"player_mario"
+const DISMANTLE_BATCH: int = 24
+const LAYER_PROPERTIES: Array[StringName] = [&"layer_name", &"distance", &"modulation", &"is_decoration", &"silhouette", &"enabled", &"editor_visible"]
 
 @export var background: LevelBackground
-@export var ghost_tint: Color = Color(1.0, 1.0, 1.0, 0.35)
+@export var ghost_tint: Color = Color(1.0, 1.0, 1.0, 0.2)
 @export var fade_duration: float = 0.25
 @export var depth_duration: float = 0.2
 
@@ -53,7 +55,7 @@ func new_level() -> void:
 	open(LevelData.create())
 
 
-func open(data: LevelData) -> void:
+func open(data: LevelData, built: Array[LevelArea] = []) -> void:
 	editor.history_handler.clear()
 	if active_area:
 		editor.world.remove_child(active_area)
@@ -64,12 +66,20 @@ func open(data: LevelData) -> void:
 	level_name = data.level_name
 	extras = data.extras
 	editor_state = data.editor.duplicate(true)
-	for area_data: AreaData in data.areas:
-		areas.append(LevelArea.build(area_data, GameObject.Context.EDITOR))
-	
+	areas.assign(built if not built.is_empty() else build_areas(data))
+	for area: LevelArea in areas:
+		_ensure_player(area)
 	var active_index: int = data.editor.get("active_area", 0)
 	set_active_area(areas.get(clampi(active_index, 0, areas.size() - 1)))
 	level_opened.emit()
+
+
+static func build_areas(data: LevelData) -> Array[LevelArea]:
+	var built: Array[LevelArea] = []
+	for area_data: AreaData in data.areas:
+		built.append(LevelArea.build(area_data, GameObject.Context.EDITOR))
+	
+	return built
 
 
 func capture() -> LevelData:
@@ -133,9 +143,13 @@ func refresh_layer_visuals(animate: bool = false) -> void:
 	else:
 		_set_focus_distance(focus)
 	
+	var shown: Array[LevelLayer] = active_area.get_layers().filter(func(layer: LevelLayer) -> bool: return layer == active_layer or layer.is_effective_visible())
+	var active_index: int = shown.find(active_layer)
 	for layer: LevelLayer in active_area.get_layers():
 		layer.modulation_enabled = modulation_enabled
-		var target: Color = ghost_tint if focus_enabled and layer != active_layer else Color.WHITE
+		var target: Color = Color.WHITE
+		if focus_enabled and layer != active_layer:
+			target = ghost_tint if absi(shown.find(layer) - active_index) == 1 else Color(1.0, 1.0, 1.0, 0.0)
 		if duration <= 0.0:
 			layer.tint = target
 			continue
@@ -166,12 +180,18 @@ func add_layer(behind: LevelLayer) -> void:
 
 
 func get_selectable_objects() -> Array[GameObject]:
-	return active_layer.get_objects() if focus_enabled else active_area.get_all_objects()
+	if focus_enabled:
+		var own: Array[GameObject] = []
+		if active_layer.is_effective_visible():
+			own = active_layer.get_objects()
+		return own
+	
+	return active_area.get_all_objects().filter(func(object: GameObject) -> bool: return active_area.get_layer_of(object).is_effective_visible())
 
 
 func get_anchor_layer(area: LevelArea = active_area) -> LevelLayer:
 	for object: GameObject in area.get_all_objects():
-		if object.unique and object.id == &"player_mario":
+		if object.unique and object.id == PLAYER_ID:
 			return area.get_layer_of(object)
 	
 	return area.get_layer(0)
@@ -241,7 +261,7 @@ func ungroup_layers(group: StringName) -> void:
 
 
 func set_layer_group_property(group: StringName, property: StringName, value: Variant) -> void:
-	if get_layer_group(group).get(property) == value:
+	if get_layer_group(group).get(property) == value or (property == &"enabled" and not value and group_contains_anchor(group)):
 		return
 	
 	var layout: Dictionary = _capture_layout(active_area)
@@ -305,7 +325,7 @@ func _apply_layout(area: LevelArea, layout: Dictionary) -> void:
 
 
 func set_layer_property(layer: LevelLayer, property: StringName, value: Variant) -> void:
-	if not LAYER_PROPERTIES.has(property) or layer.get(property) == value:
+	if not LAYER_PROPERTIES.has(property) or layer.get(property) == value or (property == &"enabled" and not value and layer == get_anchor_layer()):
 		return
 	
 	editor.history_handler.create("Edit Layer %s" % String(property).capitalize(), UndoRedo.MERGE_ENDS) \
@@ -328,8 +348,20 @@ func _apply_background(area: LevelArea, data: Dictionary) -> void:
 	background_changed.emit(area)
 
 
+func _ensure_player(area: LevelArea) -> void:
+	if area.get_all_objects().any(func(object: GameObject) -> bool: return object.id == PLAYER_ID):
+		return
+	
+	var data: ObjectData = ObjectData.create(PLAYER_ID)
+	var player: GameObject = ObjectRegistry.spawn(data, GameObject.Context.EDITOR)
+	var layer: LevelLayer = area.get_layer(0)
+	if player and layer:
+		layer.add_object(player)
+
+
 func add_area() -> void:
 	var area: LevelArea = LevelArea.build(AreaData.create("Area %d" % (areas.size() + 1)), GameObject.Context.EDITOR)
+	_ensure_player(area)
 	editor.history_handler.create("Add Area") \
 		.do(_insert_area.bind(area, areas.size())) \
 		.undo(_remove_area.bind(area)) \
@@ -409,6 +441,8 @@ func _swap_layers(area: LevelArea, first: LevelLayer, second: LevelLayer) -> voi
 
 func _set_layer_property(layer: LevelLayer, property: StringName, value: Variant) -> void:
 	layer.set(property, value)
+	if property == &"editor_visible":
+		refresh_layer_visuals()
 	structure_changed.emit()
 
 
@@ -429,6 +463,20 @@ func _remove_area(area: LevelArea) -> void:
 func _set_area_name(area: LevelArea, area_name: String) -> void:
 	area.area_name = area_name
 	structure_changed.emit()
+
+
+func dismantle() -> void:
+	editor.object_handler.selection.clear()
+	editor.history_handler.clear()
+	var objects: Array[GameObject] = []
+	for area: LevelArea in areas:
+		if is_instance_valid(area):
+			objects.append_array(area.get_all_objects())
+	
+	for i: int in objects.size():
+		objects.get(i).free()
+		if i % DISMANTLE_BATCH == DISMANTLE_BATCH - 1:
+			await get_tree().process_frame
 
 
 func _free_detached_areas() -> void:

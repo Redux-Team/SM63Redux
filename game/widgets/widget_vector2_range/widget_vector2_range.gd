@@ -20,7 +20,10 @@ func _info(widget_info: Dictionary) -> void:
 		var axis_info: Dictionary = widget_info.duplicate()
 		axis_info.erase("widget")
 		axis_info.set("type", TYPE_FLOAT)
-		axis_info.set("hint", PROPERTY_HINT_RANGE)
+		if widget_info.has("hint_string"):
+			axis_info.set("hint", PROPERTY_HINT_RANGE)
+		else:
+			axis_info.erase("hint")
 		var axis_binding: PropertyBinding = PropertyBinding.new(_get_axis.bind(axis), _set_axis.bind(axis), AXES.get(axis), axis_info)
 		axes.add_child(PropertyWidget.create(axis_binding))
 		_bindings.append(axis_binding)

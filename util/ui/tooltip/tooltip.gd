@@ -22,6 +22,7 @@ const ARROW_CLASSES: Dictionary[Placement, String] = {
 }
 const AUTO_ORDER: Array[Placement] = [Placement.UNDER, Placement.ABOVE, Placement.RIGHT, Placement.LEFT]
 const WARM_TIME: float = 0.4
+const OPAQUE_THRESHOLD: float = 0.99
 
 @export var root: Control
 @export var bubble: PanelContainer
@@ -40,6 +41,7 @@ var _mode: Placement = Placement.UNDER
 var _slide: Vector2 = Vector2.ZERO
 var _warm: float = 0.0
 var _tween: Tween
+var _placement: Array = []
 
 
 static func set_text(control: Control, text: String, mode: Placement = Placement.AUTO) -> void:
@@ -59,14 +61,21 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	var target: Control = _current_target() if Settings.level_designer.is_tooltip_enabled() else null
+	if not is_instance_valid(_target):
+		_target = null
+		if _shown:
+			_hide_now()
 	if target != _target:
 		var was_shown: bool = _shown
+		var vanished: bool = _target != null and not _is_presentable(_target)
 		_target = target
 		_hover_time = 0.0
 		if was_shown:
-			_warm = WARM_TIME
+			_warm = 0.0 if vanished else WARM_TIME
 		if was_shown and target:
 			_show(false)
+		elif vanished:
+			_hide_now()
 		else:
 			_hide()
 	
@@ -89,24 +98,50 @@ func _current_target() -> Control:
 	if hovered:
 		return hovered
 	
-	var focused: Control = _find_target(get_viewport().gui_get_focus_owner())
+	var focus_owner: Control = get_viewport().gui_get_focus_owner()
+	if focus_owner == null or not focus_owner.has_focus(true):
+		return null
+	
+	var focused: Control = _find_target(focus_owner)
 	return focused if focused and focused.get_meta(FOCUS_META, true) else null
 
 
 func _find_target(control: Control) -> Control:
 	var current: Node = control
 	while current is Control:
-		if not get_text(current).is_empty() and (current as Control).is_visible_in_tree():
-			return current
+		if not get_text(current).is_empty():
+			return current if _is_presentable(current) else null
 		current = current.get_parent()
 	
 	return null
+
+
+func _is_presentable(control: Variant) -> bool:
+	if not is_instance_valid(control) or not (control as Control).is_inside_tree() or not (control as Control).is_visible_in_tree():
+		return false
+	
+	var alpha: float = 1.0
+	var current: Node = control
+	while current is CanvasItem:
+		alpha *= (current as CanvasItem).modulate.a
+		current = current.get_parent()
+	
+	return alpha >= OPAQUE_THRESHOLD
+
+
+func _hide_now() -> void:
+	_shown = false
+	if _tween and _tween.is_valid():
+		_tween.kill()
+	root.modulate = Color.TRANSPARENT
+	root.visible = false
 
 
 func _show(slide_in: bool) -> void:
 	_shown = true
 	label.text = get_text(_target)
 	bubble.reset_size()
+	_placement.clear()
 	root.visible = true
 	_place()
 	_animate(Color.WHITE)
@@ -141,6 +176,11 @@ func _place() -> void:
 	var anchor: Rect2 = _target.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, _target.size)
 	var size: Vector2 = bubble.size
 	var screen: Rect2 = root.get_viewport_rect().grow(-margin)
+	var placement: Array = [anchor, size, screen, _slide, _target]
+	if placement == _placement:
+		return
+	
+	_placement = placement
 	var mode: Placement = _target.get_meta(MODE_META, Placement.AUTO)
 	if mode == Placement.AUTO:
 		mode = AUTO_ORDER.front()
