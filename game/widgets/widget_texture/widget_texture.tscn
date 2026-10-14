@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/widgets/widget_texture/widget_texture.gd" id="1_script"]
+
+[node name="WidgetTexture" type="HBoxContainer" node_paths=PackedStringArray("label", "preview", "option_button")]
+offset_right = 144.0
+offset_bottom = 29.0
+size_flags_horizontal = 3
+script = ExtResource("1_script")
+label = NodePath("Label")
+preview = NodePath("Preview")
+option_button = NodePath("OptionButton")
+metadata/gdss_mode = 1
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "texture"
+metadata/gdss_overrides = "font_size: 24"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Preview" type="TextureRect" parent="."]
+texture_filter = 1
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="OptionButton" type="OptionButton" parent="."]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+clip_text = true
+fit_to_longest_item = false

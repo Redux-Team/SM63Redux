@@ -33,7 +33,8 @@ func show_panel(panel: LDPanel) -> void:
 		current_panel._on_close()
 	
 	current_panel = panel
-	window.show_view(panel.view, panel.get_title(), panel.window_scale)
+	panel.fit_view()
+	window.show_view(panel.view, panel.get_title(), panel.window_scale, panel.dim_backdrop)
 	panel._on_open()
 	panel_changed.emit(panel)
 

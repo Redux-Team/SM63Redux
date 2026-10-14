@@ -1,0 +1,136 @@
+[gd_scene format=3 uid="uid://c1jortny7spy2"]
+
+[ext_resource type="Texture2D" uid="uid://boi5n5utdpqmj" path="res://assets/textures/level_designer/ui_icons/add.svg" id="1_r"]
+[ext_resource type="Texture2D" uid="uid://duoeaneyqnaw0" path="res://assets/textures/level_designer/ui_icons/folder.svg" id="2_r"]
+[ext_resource type="Texture2D" uid="uid://cyjlsmgjeixte" path="res://assets/textures/level_designer/ui_icons/up.svg" id="3_r"]
+[ext_resource type="Texture2D" uid="uid://dtcx7p5e7ovqf" path="res://assets/textures/level_designer/ui_icons/down.svg" id="4_r"]
+[ext_resource type="Texture2D" uid="uid://bfddipbluy8s3" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="5_r"]
+[ext_resource type="Texture2D" uid="uid://ckpn15rmdxikj" path="res://assets/textures/level_designer/ui_icons/duplicate.svg" id="6_r"]
+
+[node name="BackgroundView" type="MarginContainer" unique_id=1074189132]
+visible = false
+custom_minimum_size = Vector2(590, 300)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="Columns" type="HBoxContainer" parent="." unique_id=1599652640]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="ListColumn" type="VBoxContainer" parent="Columns" unique_id=611756504]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PresetOption" type="OptionButton" parent="Columns/ListColumn" unique_id=870641305]
+layout_mode = 2
+focus_mode = 0
+metadata/tooltip = "Replace this area's background with a preset"
+metadata/tooltip_mode = 4
+
+[node name="ListInset" type="PanelContainer" parent="Columns/ListColumn" unique_id=1300955279]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="ListScroll" type="ScrollContainer" parent="Columns/ListColumn/ListInset" unique_id=541159397]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="RowList" type="VBoxContainer" parent="Columns/ListColumn/ListInset/ListScroll" unique_id=1550107857]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="Toolbar" type="HBoxContainer" parent="Columns/ListColumn" unique_id=795961783]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AddButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=897236761]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("1_r")
+expand_icon = true
+metadata/tooltip = "Add Layer"
+metadata/tooltip_mode = 0
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="AddGroupButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=385742457]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("2_r")
+expand_icon = true
+metadata/tooltip = "Add Group"
+metadata/tooltip_mode = 0
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="DuplicateButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=1055353225]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("6_r")
+expand_icon = true
+metadata/tooltip = "Duplicate"
+metadata/tooltip_mode = 0
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="MoveUpButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=1859774935]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("3_r")
+expand_icon = true
+metadata/tooltip = "Move Up"
+metadata/tooltip_mode = 0
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="MoveDownButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=36552553]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("4_r")
+expand_icon = true
+metadata/tooltip = "Move Down"
+metadata/tooltip_mode = 0
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="Spacer" type="Control" parent="Columns/ListColumn/Toolbar" unique_id=2008624379]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="RemoveButton" type="Button" parent="Columns/ListColumn/Toolbar" unique_id=942052697]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("5_r")
+expand_icon = true
+metadata/tooltip = "Remove"
+metadata/tooltip_mode = 0
+metadata/gdss_classes = PackedStringArray("IconButton", "Danger")
+
+[node name="Detail" type="VBoxContainer" parent="Columns" unique_id=1307962120]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DetailInset" type="PanelContainer" parent="Columns/Detail" unique_id=349805364]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Card")
+
+[node name="DetailScroll" type="ScrollContainer" parent="Columns/Detail/DetailInset" unique_id=46779885]
+layout_mode = 2
+horizontal_scroll_mode = 3
+
+[node name="Rows" type="VBoxContainer" parent="Columns/Detail/DetailInset/DetailScroll" unique_id=1852125063]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10

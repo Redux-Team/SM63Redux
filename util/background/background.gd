@@ -63,7 +63,7 @@ func _validate_property(property: Dictionary) -> void:
 func _refresh_background() -> void:
 	if not is_node_ready():
 		return
-	follow_viewport_enabled = true
+	follow_viewport_enabled = false
 	for bg_layer: BackgroundLayer in _active:
 		if bg_layer.changed.is_connected(_queue_refresh):
 			bg_layer.changed.disconnect(_queue_refresh)
@@ -74,6 +74,7 @@ func _refresh_background() -> void:
 		child.queue_free()
 	if background_texture:
 		_backdrop = _build_backdrop()
+		_backdrop.follow_viewport = false
 		add_child(_backdrop, false, INTERNAL_MODE_FRONT)
 	for bg_layer: BackgroundLayer in layers:
 		if not bg_layer:
@@ -83,6 +84,7 @@ func _refresh_background() -> void:
 		var node: Node = bg_layer._build()
 		for parallax: Parallax2D in BackgroundLayerGroup.collect_parallax(node):
 			parallax.ignore_camera_scroll = not follow_camera
+			parallax.follow_viewport = false
 			parallax.autoscroll += autoscroll
 		add_child(node, false, INTERNAL_MODE_FRONT)
 		_active.append(bg_layer)
@@ -117,9 +119,7 @@ func _get_visible_size(content_scale: float) -> Vector2:
 	var viewport: Viewport = get_viewport()
 	if Engine.is_editor_hint() or not viewport:
 		return _get_design_size()
-	var camera: Camera2D = viewport.get_camera_2d()
-	var size: Vector2 = viewport.get_visible_rect().size * content_scale
-	return size / (camera.zoom if camera else Vector2.ONE)
+	return viewport.get_visible_rect().size * content_scale
 
 
 func _get_content_scale() -> float:

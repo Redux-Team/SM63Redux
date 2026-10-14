@@ -16,7 +16,7 @@ func _name(widget_name: String) -> void:
 
 
 func _value(widget_value: Variant) -> void:
-	var vector: Vector2 = widget_value
+	var vector: Vector2 = Vector2(widget_value)
 	x_edit.text = String.num(vector.x, 3)
 	y_edit.text = String.num(vector.y, 3)
 

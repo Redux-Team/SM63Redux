@@ -24,7 +24,9 @@ func _value(widget_value: Variant) -> void:
 
 
 func _commit_text() -> void:
-	if line_edit.text.is_valid_float():
-		_commit(line_edit.text.to_int() if _integer else line_edit.text.to_float())
-	else:
+	if not line_edit.text.is_valid_float():
 		_value(binding.get_value())
+	elif _integer:
+		_commit(line_edit.text.to_int())
+	else:
+		_commit(line_edit.text.to_float())

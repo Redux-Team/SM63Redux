@@ -44,13 +44,19 @@ func refresh() -> void:
 
 
 func kind() -> StringName:
-	if info.has("widget"):
-		return info.get("widget")
-	match info.get("hint", PROPERTY_HINT_NONE):
+	return kind_of(info if info.has("type") else info.merged({"type": typeof(get_value())}))
+
+
+static func kind_of(property_info: Dictionary) -> StringName:
+	if property_info.has("widget"):
+		return property_info.get("widget")
+	match property_info.get("hint", PROPERTY_HINT_NONE):
 		PROPERTY_HINT_ENUM:
 			return &"enum"
 		PROPERTY_HINT_RANGE:
 			return &"range"
+		PROPERTY_HINT_FLAGS:
+			return &"flags"
 		PROPERTY_HINT_ARRAY_TYPE:
-			return StringName("Array[%s]" % info.get("hint_string"))
-	return StringName(type_string(info.get("type", typeof(get_value()))))
+			return StringName("Array[%s]" % property_info.get("hint_string"))
+	return StringName(type_string(property_info.get("type", TYPE_NIL)))

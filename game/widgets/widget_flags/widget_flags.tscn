@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/widgets/widget_flags/widget_flags.gd" id="1_script"]
+
+[node name="WidgetFlags" type="HBoxContainer" node_paths=PackedStringArray("label", "chips")]
+offset_right = 144.0
+offset_bottom = 29.0
+size_flags_horizontal = 3
+script = ExtResource("1_script")
+label = NodePath("Label")
+chips = NodePath("Chips")
+metadata/gdss_mode = 1
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "flags"
+metadata/gdss_overrides = "font_size: 24"
+
+[node name="Chips" type="HFlowContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+alignment = 2

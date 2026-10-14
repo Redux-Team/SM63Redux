@@ -42,6 +42,7 @@
 [ext_resource type="Texture2D" uid="uid://bplaqhn46tmar" path="res://assets/textures/level_designer/ui_icons/scenarios.svg" id="39_r"]
 [ext_resource type="Texture2D" uid="uid://bt8u6qrpfh11r" path="res://assets/textures/level_designer/ui_icons/background.svg" id="40_r"]
 [ext_resource type="Texture2D" uid="uid://dcgs3ybhnoflf" path="res://assets/textures/level_designer/ui_icons/music.svg" id="41_r"]
+[ext_resource type="Texture2D" uid="uid://dt8c6fyko40cw" path="res://assets/textures/level_designer/ui_icons/grid.svg" id="grid_r"]
 
 [node name="Chrome" type="Panel" unique_id=2092673143]
 anchors_preset = 15
@@ -326,6 +327,18 @@ button_pressed = true
 icon = ExtResource("20_r")
 expand_icon = true
 metadata/tooltip = "Layer Modulation"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("ViewportToggle")
+
+[node name="GridButton" type="Button" parent="LayerVisualsHBox" unique_id=685225945]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+button_pressed = true
+icon = ExtResource("grid_r")
+expand_icon = true
+metadata/tooltip = "Show Grid"
 metadata/tooltip_mode = 3
 metadata/gdss_classes = PackedStringArray("ViewportToggle")
 
@@ -651,6 +664,16 @@ metadata/tooltip = "Areas"
 metadata/tooltip_mode = 1
 metadata/gdss_classes = PackedStringArray("IconButton")
 
+[node name="BackgroundButton" type="Button" parent="PanelRail/Panels" unique_id=38518387]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("40_r")
+expand_icon = true
+metadata/tooltip = "Background"
+metadata/tooltip_mode = 1
+metadata/gdss_classes = PackedStringArray("IconButton")
+
 [node name="TagsButton" type="Button" parent="PanelRail/Panels" unique_id=1694429843]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -684,17 +707,6 @@ metadata/tooltip = "Scenarios (coming soon)"
 metadata/tooltip_mode = 1
 metadata/gdss_classes = PackedStringArray("IconButton")
 
-[node name="BackgroundButton" type="Button" parent="PanelRail/Panels" unique_id=38518387]
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-focus_mode = 0
-disabled = true
-icon = ExtResource("40_r")
-expand_icon = true
-metadata/tooltip = "Background (coming soon)"
-metadata/tooltip_mode = 1
-metadata/gdss_classes = PackedStringArray("IconButton")
-
 [node name="MusicButton" type="Button" parent="PanelRail/Panels" unique_id=10996308]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -714,10 +726,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -109.0
-offset_top = -41.0
-offset_right = -12.0
-offset_bottom = -12.0
+offset_left = -139.0
+offset_top = -57.0
+offset_right = -13.0
+offset_bottom = -13.0
 grow_horizontal = 0
 grow_vertical = 0
 focus_mode = 0

@@ -11,6 +11,10 @@ const SCENES: Dictionary[StringName, String] = {
 	&"float": "res://game/widgets/widget_number/widget_number.tscn",
 	&"String": "res://game/widgets/widget_string/widget_string.tscn",
 	&"Vector2": "res://game/widgets/widget_vector2/widget_vector2.tscn",
+	&"Vector2i": "res://game/widgets/widget_vector2/widget_vector2.tscn",
+	&"vector2_range": "res://game/widgets/widget_vector2_range/widget_vector2_range.tscn",
+	&"Texture2D": "res://game/widgets/widget_texture/widget_texture.tscn",
+	&"flags": "res://game/widgets/widget_flags/widget_flags.tscn",
 	&"Color": "res://game/widgets/widget_color/widget_color.tscn",
 }
 
@@ -31,6 +35,10 @@ var binding: PropertyBinding:
 
 static func register(kind: StringName, scene: PackedScene) -> void:
 	_registered.set(kind, scene)
+
+
+static func supports(kind: StringName) -> bool:
+	return _registered.has(kind) or SCENES.has(kind)
 
 
 static func create(property_binding: PropertyBinding) -> PropertyWidget:

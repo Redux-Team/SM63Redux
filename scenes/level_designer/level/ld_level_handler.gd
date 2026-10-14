@@ -5,11 +5,12 @@ signal level_opened
 signal area_changed(area: LevelArea)
 signal layer_changed(layer: LevelLayer)
 signal structure_changed
+signal background_changed(area: LevelArea)
 
 const LAYER_PROPERTIES: Array[StringName] = [&"layer_name", &"distance", &"modulation", &"is_decoration"]
 
+@export var background: LevelBackground
 @export var ghost_tint: Color = Color(1.0, 1.0, 1.0, 0.35)
-@export var pulse_tint: Color = Color(1.0, 1.0, 1.0, 0.4)
 @export var fade_duration: float = 0.25
 @export var depth_duration: float = 0.2
 
@@ -95,6 +96,7 @@ func set_active_area(area: LevelArea) -> void:
 	active_area = area
 	editor.world.add_child(area)
 	editor.viewport_handler.restore_view(area)
+	background.apply_data(area.background)
 	area_changed.emit(area)
 	var layer: LevelLayer = area.get_layer(area.active_layer)
 	set_active_layer(layer if layer else area.get_layers().front())
@@ -104,7 +106,7 @@ func set_active_layer(layer: LevelLayer) -> void:
 	var switched: bool = active_layer != null and active_layer != layer
 	active_layer = layer
 	active_area.active_layer = layer.index
-	refresh_layer_visuals(switched, switched)
+	refresh_layer_visuals(switched)
 	layer_changed.emit(layer)
 
 
@@ -114,7 +116,7 @@ func step_layer(direction: int) -> void:
 	set_active_layer(layers.get(at))
 
 
-func refresh_layer_visuals(animate: bool = false, pulse: bool = false) -> void:
+func refresh_layer_visuals(animate: bool = false) -> void:
 	if active_area == null:
 		return
 	
@@ -125,7 +127,7 @@ func refresh_layer_visuals(animate: bool = false, pulse: bool = false) -> void:
 	if duration > 0.0:
 		_visual_tween = create_tween().set_parallel().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	
-	var focus: float = active_layer.distance if focus_enabled and active_layer else 0.0
+	var focus: float = active_layer.get_effective_distance() if focus_enabled and active_layer else 0.0
 	if duration > 0.0:
 		_visual_tween.tween_method(_set_focus_distance, _focus_distance, focus, depth_duration)
 	else:
@@ -138,8 +140,6 @@ func refresh_layer_visuals(animate: bool = false, pulse: bool = false) -> void:
 			layer.tint = target
 			continue
 		
-		if pulse and layer == active_layer and not focus_enabled:
-			layer.tint = pulse_tint
 		_visual_tween.tween_property(layer, ^"tint", target, duration)
 
 
@@ -209,6 +209,101 @@ func move_layer(layer: LevelLayer, direction: int) -> void:
 		.commit()
 
 
+func get_layer_group(group: StringName, area: LevelArea = active_area) -> Dictionary:
+	for entry: Dictionary in area.layer_groups:
+		if entry.get("uuid") == group:
+			return entry
+	
+	return {}
+
+
+func get_group_members(group: StringName, area: LevelArea = active_area) -> Array[LevelLayer]:
+	return area.get_layers().filter(func(layer: LevelLayer) -> bool: return layer.group == group)
+
+
+func group_layer(layer: LevelLayer) -> StringName:
+	var group: StringName = StringName(Packer.generate_uuid())
+	var layout: Dictionary = _capture_layout(active_area)
+	(layout.get("groups") as Array).append({"uuid": group, "name": "Group %d" % (active_area.layer_groups.size() + 1)})
+	(layout.get("membership") as Dictionary).set(layer, group)
+	_commit_layout("Group Layer", layout)
+	return group
+
+
+func ungroup_layers(group: StringName) -> void:
+	var layout: Dictionary = _capture_layout(active_area)
+	layout.set("groups", (layout.get("groups") as Array).filter(func(entry: Dictionary) -> bool: return entry.get("uuid") != group))
+	var membership: Dictionary = layout.get("membership")
+	for layer: LevelLayer in membership:
+		if membership.get(layer) == group:
+			membership.set(layer, &"")
+	_commit_layout("Ungroup Layers", layout)
+
+
+func set_layer_group_property(group: StringName, property: StringName, value: Variant) -> void:
+	if get_layer_group(group).get(property) == value:
+		return
+	
+	var layout: Dictionary = _capture_layout(active_area)
+	for entry: Dictionary in layout.get("groups"):
+		if entry.get("uuid") == group:
+			entry.set(property, value)
+	_commit_layout("Edit Layer Group %s" % String(property).capitalize(), layout, UndoRedo.MERGE_ENDS)
+
+
+func group_contains_anchor(group: StringName) -> bool:
+	return get_group_members(group).has(get_anchor_layer())
+
+
+func move_layers(moved: Array[LevelLayer], target: LevelLayer, in_front: bool, group: StringName) -> void:
+	if moved.has(target) or (moved.has(get_anchor_layer()) and get_layer_group(group).get("is_decoration", false)):
+		return
+	
+	var layout: Dictionary = _capture_layout(active_area)
+	var order: Array[LevelLayer] = layout.get("order")
+	for layer: LevelLayer in moved:
+		order.erase(layer)
+	var at: int = order.find(target) + (1 if in_front else 0)
+	for i: int in moved.size():
+		order.insert(at + i, moved.get(i))
+		(layout.get("membership") as Dictionary).set(moved.get(i), group)
+	_commit_layout("Move Layers", layout)
+
+
+func _capture_layout(area: LevelArea) -> Dictionary:
+	var membership: Dictionary = {}
+	for layer: LevelLayer in area.get_layers():
+		membership.set(layer, layer.group)
+	
+	return {"order": area.get_layers(), "membership": membership, "groups": area.layer_groups.duplicate(true)}
+
+
+func _commit_layout(action_name: String, layout: Dictionary, merge: UndoRedo.MergeMode = UndoRedo.MERGE_DISABLE) -> void:
+	editor.history_handler.create(action_name, merge) \
+		.do(_apply_layout.bind(active_area, layout)) \
+		.undo(_apply_layout.bind(active_area, _capture_layout(active_area))) \
+		.commit()
+
+
+func _apply_layout(area: LevelArea, layout: Dictionary) -> void:
+	var order: Array[LevelLayer] = layout.get("order")
+	var indices: Array[int] = []
+	for layer: LevelLayer in order:
+		indices.append(layer.index)
+	indices.sort()
+	
+	var membership: Dictionary = layout.get("membership")
+	for i: int in order.size():
+		var layer: LevelLayer = order.get(i)
+		layer.index = indices.get(i)
+		layer.group = membership.get(layer, &"")
+	area.layer_groups.assign((layout.get("groups") as Array).duplicate(true))
+	area.apply_layer_groups()
+	area.sort_layers()
+	refresh_layer_visuals()
+	structure_changed.emit()
+
+
 func set_layer_property(layer: LevelLayer, property: StringName, value: Variant) -> void:
 	if not LAYER_PROPERTIES.has(property) or layer.get(property) == value:
 		return
@@ -217,6 +312,20 @@ func set_layer_property(layer: LevelLayer, property: StringName, value: Variant)
 		.do(_set_layer_property.bind(layer, property, value)) \
 		.undo(_set_layer_property.bind(layer, property, layer.get(property))) \
 		.commit()
+
+
+func set_background(area: LevelArea, data: Dictionary, action_name: String = "Edit Background", merge: UndoRedo.MergeMode = UndoRedo.MERGE_DISABLE) -> void:
+	editor.history_handler.create(action_name, merge) \
+		.do(_apply_background.bind(area, data)) \
+		.undo(_apply_background.bind(area, area.background)) \
+		.commit()
+
+
+func _apply_background(area: LevelArea, data: Dictionary) -> void:
+	area.background = data
+	if area == active_area:
+		background.apply_data(data)
+	background_changed.emit(area)
 
 
 func add_area() -> void:

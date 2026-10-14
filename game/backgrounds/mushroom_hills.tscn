@@ -1,0 +1,79 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://util/background/background.gd" id="1_ls0ll"]
+[ext_resource type="Script" path="res://util/background/background_layer.gd" id="2_8uc0w"]
+[ext_resource type="Script" path="res://util/background/background_layer_2d.gd" id="3_il4n6"]
+[ext_resource type="Texture2D" path="res://assets/textures/world/background/clouds_0/bg_clouds_02.png" id="4_iyo06"]
+[ext_resource type="Texture2D" path="res://assets/textures/world/background/clouds_0/bg_clouds_01.png" id="5_lon28"]
+[ext_resource type="Script" path="res://util/background/background_layer_group.gd" id="6_bxc80"]
+[ext_resource type="Texture2D" path="res://assets/textures/world/background/hills_0/bg_hills_0.png" id="7_4pbhn"]
+[ext_resource type="Texture2D" path="res://assets/textures/world/background/hills_0/bg_hills_2.png" id="8_qjgtf"]
+[ext_resource type="Texture2D" path="res://assets/textures/world/background/hills_0/bg_hills_1.png" id="9_0v85r"]
+
+[sub_resource type="Gradient" id="Gradient_4xypt"]
+colors = PackedColorArray(0.30980393, 0.49019608, 0.8352941, 1, 0.4, 0.6313726, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lh04x"]
+gradient = SubResource("Gradient_4xypt")
+fill_from = Vector2(0, 1)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="Resource" id="Resource_5qpor"]
+resource_name = "Upper Clouds"
+script = ExtResource("3_il4n6")
+texture = ExtResource("4_iyo06")
+anchor = 0
+layer_name = "Upper Clouds"
+scroll_rate = Vector2(0, 0)
+autoscroll = Vector2(-4, 0)
+
+[sub_resource type="Resource" id="Resource_d6isw"]
+resource_name = "Bottom Clouds"
+script = ExtResource("3_il4n6")
+texture = ExtResource("5_lon28")
+texture_scale = Vector2(2, 2)
+layer_name = "Bottom Clouds"
+scroll_rate = Vector2(0, 0)
+autoscroll = Vector2(-1, 0)
+scroll_offset = Vector2(0, 14)
+
+[sub_resource type="Resource" id="Resource_ecrg4"]
+resource_name = "Clouds"
+script = ExtResource("6_bxc80")
+layers = Array[ExtResource("2_8uc0w")]([SubResource("Resource_5qpor"), SubResource("Resource_d6isw")])
+layer_name = "Clouds"
+
+[sub_resource type="Resource" id="Resource_ciibh"]
+resource_name = "Distant Hills"
+script = ExtResource("3_il4n6")
+texture = ExtResource("7_4pbhn")
+anchor_offset = Vector2(0, 40)
+layer_name = "Distant Hills"
+scroll_rate = Vector2(0.03, 0)
+
+[sub_resource type="Resource" id="Resource_urvy6"]
+resource_name = "Near Hills"
+script = ExtResource("3_il4n6")
+texture = ExtResource("8_qjgtf")
+layer_name = "Near Hills"
+scroll_rate = Vector2(0.06, 0)
+
+[sub_resource type="Resource" id="Resource_4xjdx"]
+resource_name = "Rolling Hills"
+script = ExtResource("3_il4n6")
+texture = ExtResource("9_0v85r")
+anchor_offset = Vector2(0, 70)
+layer_name = "Rolling Hills"
+scroll_rate = Vector2(0.09, 0)
+
+[sub_resource type="Resource" id="Resource_2mhsn"]
+resource_name = "Hills"
+script = ExtResource("6_bxc80")
+layers = Array[ExtResource("2_8uc0w")]([SubResource("Resource_ciibh"), SubResource("Resource_urvy6"), SubResource("Resource_4xjdx")])
+layer_name = "Hills"
+
+[node name="MushroomHills" type="CanvasLayer" unique_id=1761085590]
+layer = -10
+script = ExtResource("1_ls0ll")
+background_texture = SubResource("GradientTexture2D_lh04x")
+layers = Array[ExtResource("2_8uc0w")]([SubResource("Resource_ecrg4"), SubResource("Resource_2mhsn")])

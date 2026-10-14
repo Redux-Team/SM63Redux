@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/level_designer/interface/ld_fold_section.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/down.svg" id="2_down"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/next.svg" id="3_next"]
+
+[node name="LDFoldSection" type="VBoxContainer" node_paths=PackedStringArray("toggle_button", "content")]
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+script = ExtResource("1_script")
+toggle_button = NodePath("Header/ToggleButton")
+content = NodePath("Content")
+expanded_icon = ExtResource("2_down")
+collapsed_icon = ExtResource("3_next")
+
+[node name="Header" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ToggleButton" type="Button" parent="Header"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+toggle_mode = true
+button_pressed = true
+text = "Section"
+alignment = 0
+metadata/gdss_classes = PackedStringArray("Flat")
+
+[node name="Line" type="HSeparator" parent="Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
