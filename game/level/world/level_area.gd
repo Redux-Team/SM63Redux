@@ -8,6 +8,7 @@ var camera_zoom: float = 1.0
 var active_layer: int = 0
 var background: Dictionary = {}
 var music: Dictionary = {}
+var layer_groups: Array[Dictionary] = []
 
 
 static func build(data: AreaData, context: GameObject.Context) -> LevelArea:
@@ -15,7 +16,7 @@ static func build(data: AreaData, context: GameObject.Context) -> LevelArea:
 	area.apply_data(data)
 	for layer_data: LayerData in data.layers:
 		area.insert_layer(LevelLayer.build(layer_data, context))
-	
+	area.apply_layer_groups()
 	return area
 
 
@@ -27,6 +28,7 @@ func apply_data(data: AreaData) -> void:
 	active_layer = data.active_layer
 	background = data.background
 	music = data.music
+	layer_groups = data.layer_groups.duplicate(true)
 	name = area_name.validate_node_name()
 
 
@@ -39,6 +41,7 @@ func to_data() -> AreaData:
 	data.active_layer = active_layer
 	data.background = background
 	data.music = music
+	data.layer_groups = layer_groups.duplicate(true)
 	return data
 
 
@@ -76,6 +79,15 @@ func get_or_create_layer(index: int) -> LevelLayer:
 		insert_layer(layer)
 	
 	return layer
+
+
+func apply_layer_groups() -> void:
+	for layer: LevelLayer in get_layers():
+		var entry: Dictionary = {}
+		for group: Dictionary in layer_groups:
+			if group.get("uuid") == layer.group:
+				entry = group
+		layer.inherit(entry)
 
 
 func insert_layer(layer: LevelLayer) -> void:

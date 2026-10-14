@@ -8,10 +8,11 @@ const Z_STRIDE: int = 16
 var uuid: StringName
 var index: int = 0
 var layer_name: String = ""
+var group: StringName = &""
 var is_decoration: bool = false:
 	set(value):
 		is_decoration = value
-		_objects_root.process_mode = Node.PROCESS_MODE_DISABLED if is_decoration else Node.PROCESS_MODE_INHERIT
+		_apply_decoration()
 var distance: float = 0.0:
 	set(value):
 		distance = clampf(value, DISTANCE_MIN, DISTANCE_MAX)
@@ -32,6 +33,18 @@ var modulation_enabled: bool = true:
 	set(value):
 		modulation_enabled = value
 		_apply_modulate()
+var group_modulation: Color = Color.WHITE:
+	set(value):
+		group_modulation = value
+		_apply_modulate()
+var group_distance: float = 0.0:
+	set(value):
+		group_distance = value
+		_apply_distance()
+var group_decoration: bool = false:
+	set(value):
+		group_decoration = value
+		_apply_decoration()
 
 var _parallax: Parallax2D
 var _objects_root: Node2D
@@ -76,6 +89,7 @@ func apply_data(data: LayerData) -> void:
 	distance = data.distance
 	modulation = data.modulation
 	is_decoration = data.is_decoration
+	group = data.group
 	name = "Layer%d" % index
 
 
@@ -87,6 +101,7 @@ func to_data() -> LayerData:
 	data.distance = distance
 	data.modulation = modulation
 	data.is_decoration = is_decoration
+	data.group = group
 	return data
 
 
@@ -127,8 +142,27 @@ func get_display_name() -> String:
 	return layer_name if not layer_name.is_empty() else "Layer %d" % index
 
 
+func inherit(group_data: Dictionary) -> void:
+	group_modulation = group_data.get("modulation", Color.WHITE)
+	group_distance = group_data.get("distance", 0.0)
+	group_decoration = group_data.get("is_decoration", false)
+
+
+func is_effective_decoration() -> bool:
+	return is_decoration or group_decoration
+
+
+func get_effective_distance() -> float:
+	return distance + (group_distance if is_effective_decoration() else 0.0)
+
+
+func _apply_decoration() -> void:
+	_objects_root.process_mode = Node.PROCESS_MODE_DISABLED if is_effective_decoration() else Node.PROCESS_MODE_INHERIT
+	_apply_distance()
+
+
 func _apply_distance() -> void:
-	var factor: Vector2 = Vector2.ONE * scale_from_distance(distance) / scale_from_distance(focus_distance)
+	var factor: Vector2 = Vector2.ONE * scale_from_distance(get_effective_distance()) / scale_from_distance(focus_distance)
 	var half_view: Vector2 = get_viewport_rect().size / 2.0 if is_inside_tree() else Vector2.ZERO
 	_parallax.scroll_scale = factor
 	_parallax.scroll_offset = (Vector2.ONE - factor) * half_view
@@ -139,4 +173,4 @@ func _apply_distance() -> void:
 
 
 func _apply_modulate() -> void:
-	modulate = (modulation if modulation_enabled else Color.WHITE) * tint
+	modulate = (modulation * group_modulation if modulation_enabled else Color.WHITE) * tint

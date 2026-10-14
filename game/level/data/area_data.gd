@@ -9,6 +9,7 @@ var camera_zoom: float = 1.0
 var active_layer: int = 0
 var background: Dictionary = {}
 var music: Dictionary = {}
+var layer_groups: Array[Dictionary] = []
 var layers: Array[LayerData] = []
 
 
@@ -29,6 +30,7 @@ static func from_dict(dict: Dictionary) -> AreaData:
 	data.active_layer = dict.get("active_layer", 0)
 	data.background = dict.get("background", {})
 	data.music = dict.get("music", {})
+	data.layer_groups.assign(dict.get("layer_groups", []))
 	for layer: Dictionary in dict.get("layers", []):
 		data.layers.append(LayerData.from_dict(layer))
 	return data
@@ -47,5 +49,6 @@ func to_dict() -> Dictionary:
 		"active_layer": active_layer,
 		"background": background,
 		"music": music,
+		"layer_groups": layer_groups,
 		"layers": layer_dicts,
 	}

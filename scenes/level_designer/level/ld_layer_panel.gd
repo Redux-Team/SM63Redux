@@ -2,35 +2,73 @@ class_name LDLayerPanel
 extends LDPanel
 
 const ROW_CLASS: String = "ListRow"
+const INDENT: int = 14
+const DROP_EDGE: float = 0.3
+const MARKER_COLOR: Color = Color("#6496ed")
 
 @export var row_container: VBoxContainer
 @export var count_label: Label
 @export var add_button: BaseButton
+@export var group_button: BaseButton
 @export var move_up_button: BaseButton
 @export var move_down_button: BaseButton
 @export var remove_button: BaseButton
 @export var detail_container: VBoxContainer
 @export var lock_icon: Texture2D
+@export var folder_icon: Texture2D
+@export var folder_open_icon: Texture2D
 
 var _rows: Array[Button] = []
 var _row_group: ButtonGroup = ButtonGroup.new()
 var _bindings: Array[PropertyBinding] = []
 var _widgets: Dictionary[StringName, PropertyWidget] = {}
+var _group_bindings: Array[PropertyBinding] = []
+var _group_widgets: Dictionary[StringName, PropertyWidget] = {}
+var _selected_group: StringName = &""
+var _marker: ColorRect
+var _open_groups: Array[StringName] = []
+var _revealed: Array = []
 
 
 func _setup() -> void:
 	super()
 	var level: LDLevelHandler = editor.level_handler
-	level.layer_changed.connect(_refresh.unbind(1))
+	level.layer_changed.connect(_on_layer_changed.unbind(1))
 	level.structure_changed.connect(_refresh)
 	add_button.pressed.connect(func() -> void: level.add_layer(level.active_layer))
+	group_button.pressed.connect(_on_group_pressed)
 	move_up_button.pressed.connect(func() -> void: level.move_layer(level.active_layer, 1))
 	move_down_button.pressed.connect(func() -> void: level.move_layer(level.active_layer, -1))
 	remove_button.pressed.connect(_on_remove)
+	_marker = ColorRect.new()
+	_marker.top_level = true
+	_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_marker.visible = false
+	view.add_child(_marker)
+
+
+func _process(_delta: float) -> void:
+	if _marker.visible and not view.get_viewport().gui_is_dragging():
+		_marker.visible = false
 
 
 func _on_open() -> void:
 	_refresh()
+
+
+func _on_layer_changed() -> void:
+	_selected_group = &""
+	_refresh()
+
+
+func _reveal(layer: LevelLayer) -> void:
+	var revealed: Array = [layer, layer.group]
+	if revealed == _revealed:
+		return
+	
+	_revealed = revealed
+	if not layer.group.is_empty() and not _open_groups.has(layer.group):
+		_open_groups.append(layer.group)
 
 
 func _refresh() -> void:
@@ -38,36 +76,118 @@ func _refresh() -> void:
 	if not is_open() or level.active_layer == null:
 		return
 	
-	var layers: Array[LevelLayer] = level.active_area.get_layers()
-	layers.reverse()
-	var anchor: LevelLayer = level.get_anchor_layer()
-	for row: Button in _rows:
-		row.button_group = null
-		row.queue_free()
-	_rows.clear()
+	if not _selected_group.is_empty() and level.get_layer_group(_selected_group).is_empty():
+		_selected_group = &""
 	
-	for layer: LevelLayer in layers:
-		var row: Button = _make_row(level.get_layer_label(layer), layer == anchor)
-		row.set_pressed_no_signal(layer == level.active_layer)
-		row.pressed.connect(level.set_active_layer.bind(layer))
-		row_container.add_child(row)
-		_rows.append(row)
+	_reveal(level.active_layer)
 	
+	_rebuild_rows()
 	if _widgets.is_empty():
 		_build_fields()
 	
+	var layers: Array[LevelLayer] = level.active_area.get_layers()
 	var layer: LevelLayer = level.active_layer
-	var locked: bool = layer == anchor
-	var count: int = layer.get_objects().size()
-	count_label.text = "%d %s" % [count, "object" if count == 1 else "objects"]
-	LD.set_disabled(move_up_button, layer == layers.front())
-	LD.set_disabled(move_down_button, layer == layers.back())
-	LD.set_disabled(remove_button, locked or layers.size() <= 1)
+	var locked: bool = layer == level.get_anchor_layer()
+	var grouped: bool = not _selected_group.is_empty()
+	var count: int = level.get_group_members(_selected_group).size() if grouped else layer.get_objects().size()
+	count_label.text = "%d %s" % [count, ("layer" if count == 1 else "layers") if grouped else ("object" if count == 1 else "objects")]
+	LD.set_disabled(move_up_button, grouped or layer == layers.back())
+	LD.set_disabled(move_down_button, grouped or layer == layers.front())
+	LD.set_disabled(remove_button, grouped or locked or layers.size() <= 1)
+	Tooltip.set_text(group_button, "Ungroup" if grouped else "Remove from Group" if not layer.group.is_empty() else "Group Layer")
+	for widget: PropertyWidget in _widgets.values():
+		widget.visible = not grouped
+	for widget: PropertyWidget in _group_widgets.values():
+		widget.visible = grouped
+	_group_widgets.get(&"is_decoration").set_editable(not level.group_contains_anchor(_selected_group))
 	_widgets.get(&"layer_name").set_editable(not locked)
 	_widgets.get(&"is_decoration").set_editable(not locked)
 	_widgets.get(&"distance").set_editable(not locked and layer.is_decoration)
-	for binding: PropertyBinding in _bindings:
+	for binding: PropertyBinding in _bindings + _group_bindings:
 		binding.refresh()
+
+
+func _rebuild_rows() -> void:
+	var level: LDLevelHandler = editor.level_handler
+	for row: Button in _rows:
+		row.button_group = null
+	_rows.clear()
+	for child: Node in row_container.get_children():
+		child.queue_free()
+	
+	var layers: Array[LevelLayer] = level.active_area.get_layers()
+	layers.reverse()
+	var anchor: LevelLayer = level.get_anchor_layer()
+	var listed: Array[StringName] = []
+	for layer: LevelLayer in layers:
+		var group: Dictionary = level.get_layer_group(layer.group)
+		if group.is_empty():
+			_add_layer_row(layer, anchor, 0)
+			continue
+		
+		if listed.has(layer.group):
+			continue
+		
+		listed.append(layer.group)
+		var expanded: bool = _open_groups.has(layer.group)
+		var row: Button = _add_row(group.get("name"), 0, _selected_group == layer.group)
+		row.icon = folder_open_icon if expanded else folder_icon
+		row.pressed.connect(_select_group.bind(layer.group))
+		_forward_drag(row, null, layer.group)
+		if not expanded:
+			continue
+		
+		for member: LevelLayer in layers:
+			if member.group == layer.group:
+				_add_layer_row(member, anchor, 1)
+
+
+func _add_layer_row(layer: LevelLayer, anchor: LevelLayer, depth: int) -> void:
+	var level: LDLevelHandler = editor.level_handler
+	var row: Button = _add_row(level.get_layer_label(layer), depth, _selected_group.is_empty() and layer == level.active_layer)
+	if layer == anchor:
+		row.icon = lock_icon
+		row.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	row.pressed.connect(_select_layer.bind(layer))
+	_forward_drag(row, layer, &"")
+
+
+func _add_row(text: String, depth: int, pressed: bool) -> Button:
+	var row: Button = Button.new()
+	row.text = text
+	row.toggle_mode = true
+	row.button_group = _row_group
+	row.focus_mode = Control.FOCUS_NONE
+	row.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	row.clip_text = true
+	row.expand_icon = true
+	row.add_theme_constant_override(&"icon_max_width", 16)
+	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	row.set_pressed_no_signal(pressed)
+	GDSS.add_class(row, ROW_CLASS)
+	var indent: MarginContainer = MarginContainer.new()
+	indent.add_theme_constant_override(&"margin_left", INDENT * depth)
+	indent.add_child(row)
+	row_container.add_child(indent)
+	_rows.append(row)
+	return row
+
+
+func _select_layer(layer: LevelLayer) -> void:
+	_selected_group = &""
+	if layer == editor.level_handler.active_layer:
+		_refresh()
+	else:
+		editor.level_handler.set_active_layer(layer)
+
+
+func _select_group(group: StringName) -> void:
+	_selected_group = group
+	if _open_groups.has(group):
+		_open_groups.erase(group)
+	else:
+		_open_groups.append(group)
+	_refresh()
 
 
 func _build_fields() -> void:
@@ -80,6 +200,29 @@ func _build_fields() -> void:
 		"hint_string": "%s,%s,0.1" % [LevelLayer.DISTANCE_MIN, LevelLayer.DISTANCE_MAX],
 		"format": "%.1fx",
 	})
+	_add_group_field(&"name", "Group Name", "", {"type": TYPE_STRING})
+	_add_group_field(&"modulation", "Modulate", Color.WHITE, {"type": TYPE_COLOR})
+	_add_group_field(&"is_decoration", "Decoration", false, {"type": TYPE_BOOL})
+	_add_group_field(&"distance", "Distance", 0.0, {
+		"type": TYPE_FLOAT,
+		"hint": PROPERTY_HINT_RANGE,
+		"hint_string": "%s,%s,0.1" % [LevelLayer.DISTANCE_MIN, LevelLayer.DISTANCE_MAX],
+		"format": "%+.1fx",
+	})
+
+
+func _add_group_field(property: StringName, label: String, default: Variant, info: Dictionary) -> void:
+	var level: LDLevelHandler = editor.level_handler
+	var binding: PropertyBinding = PropertyBinding.new(
+		func() -> Variant: return level.get_layer_group(_selected_group).get(property, default),
+		func(value: Variant) -> void:
+			if property != &"name" or not String(value).is_empty():
+				level.set_layer_group_property(_selected_group, property, value),
+		label, info)
+	var widget: PropertyWidget = PropertyWidget.create(binding)
+	detail_container.add_child(widget)
+	_group_bindings.append(binding)
+	_group_widgets.set(property, widget)
 
 
 func _add_field(property: StringName, label: String, info: Dictionary) -> void:
@@ -94,20 +237,96 @@ func _add_field(property: StringName, label: String, info: Dictionary) -> void:
 	_widgets.set(property, widget)
 
 
-func _make_row(text: String, locked: bool) -> Button:
-	var row: Button = Button.new()
-	row.text = text
-	row.toggle_mode = true
-	row.button_group = _row_group
-	row.focus_mode = Control.FOCUS_NONE
-	row.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	row.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	GDSS.add_class(row, ROW_CLASS)
-	if locked:
-		row.icon = lock_icon
-		row.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		row.expand_icon = true
-	return row
+func _on_group_pressed() -> void:
+	var level: LDLevelHandler = editor.level_handler
+	if not _selected_group.is_empty():
+		level.ungroup_layers(_selected_group)
+	elif level.active_layer.group.is_empty():
+		_selected_group = level.group_layer(level.active_layer)
+		_refresh()
+	else:
+		var others: Array[LevelLayer] = level.get_group_members(level.active_layer.group)
+		others.erase(level.active_layer)
+		if others.is_empty():
+			level.ungroup_layers(level.active_layer.group)
+		else:
+			level.move_layers([level.active_layer], others.back(), true, &"")
+
+
+func _forward_drag(row: Button, layer: LevelLayer, group: StringName) -> void:
+	row.set_drag_forwarding(_get_drag_data.bind(row, layer, group), _can_drop_data.bind(row, layer, group), _drop_data.bind(row, layer, group))
+
+
+func _get_drag_data(_at: Vector2, row: Button, layer: LevelLayer, group: StringName) -> Variant:
+	var preview: Label = Label.new()
+	preview.text = row.text
+	row.set_drag_preview(preview)
+	return {"layer": layer, "group": group}
+
+
+func _can_drop_data(at: Vector2, data: Variant, row: Button, layer: LevelLayer, group: StringName) -> bool:
+	var drop: Dictionary = _resolve_drop(at, data, row, layer, group)
+	if drop.is_empty():
+		_marker.visible = false
+		return false
+	
+	var rect: Rect2 = row.get_global_rect()
+	_marker.visible = true
+	if drop.get("into"):
+		_marker.global_position = rect.position
+		_marker.size = rect.size
+		_marker.color = Color(MARKER_COLOR, 0.35)
+	else:
+		_marker.global_position = Vector2(rect.position.x, rect.position.y - 1.0 if drop.get("above") else rect.end.y - 1.0)
+		_marker.size = Vector2(rect.size.x, 2.0)
+		_marker.color = MARKER_COLOR
+	return true
+
+
+func _drop_data(at: Vector2, data: Variant, row: Button, layer: LevelLayer, group: StringName) -> void:
+	_marker.visible = false
+	var drop: Dictionary = _resolve_drop(at, data, row, layer, group)
+	if not drop.is_empty():
+		editor.level_handler.move_layers(drop.get("moved"), drop.get("target"), drop.get("in_front"), drop.get("group"))
+
+
+func _resolve_drop(at: Vector2, data: Variant, row: Button, layer: LevelLayer, group: StringName) -> Dictionary:
+	if not data is Dictionary or not (data as Dictionary).has("group"):
+		return {}
+	
+	var level: LDLevelHandler = editor.level_handler
+	var dragged_group: StringName = (data as Dictionary).get("group")
+	var moved: Array[LevelLayer] = []
+	if dragged_group.is_empty():
+		moved.append((data as Dictionary).get("layer"))
+	else:
+		moved = level.get_group_members(dragged_group)
+	var ratio: float = at.y / maxf(row.size.y, 1.0)
+	var above: bool = ratio < 0.5
+	var members: Array[LevelLayer] = []
+	if not group.is_empty():
+		members = level.get_group_members(group)
+	var target_group: StringName = layer.group if layer else &""
+	var into: bool = not group.is_empty() and dragged_group.is_empty() and ratio >= DROP_EDGE
+	if not dragged_group.is_empty() and not target_group.is_empty():
+		members = level.get_group_members(target_group)
+		group = target_group
+		layer = null
+	
+	var drop: Dictionary = {"moved": moved, "above": above, "into": into}
+	if not group.is_empty():
+		drop.set("target", members.back() if above or into else members.front())
+		drop.set("in_front", above or into)
+		drop.set("group", group if into else dragged_group)
+	else:
+		drop.set("target", layer)
+		drop.set("in_front", above)
+		drop.set("group", dragged_group if not dragged_group.is_empty() else target_group)
+	
+	if moved.has(drop.get("target")) or drop.get("target") == null:
+		return {}
+	
+	return drop
 
 
 func _on_remove() -> void:

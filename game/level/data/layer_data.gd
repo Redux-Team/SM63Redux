@@ -8,6 +8,7 @@ var layer_name: String = ""
 var distance: float = 0.0
 var modulation: Color = Color.WHITE
 var is_decoration: bool = false
+var group: StringName = &""
 var objects: Array[ObjectData] = []
 
 
@@ -26,6 +27,7 @@ static func from_dict(dict: Dictionary) -> LayerData:
 	data.distance = dict.get("distance", 0.0)
 	data.modulation = dict.get("modulation", Color.WHITE)
 	data.is_decoration = dict.get("is_decoration", false)
+	data.group = StringName(dict.get("group", ""))
 	for object: Dictionary in dict.get("objects", []):
 		data.objects.append(ObjectData.from_dict(object))
 	return data
@@ -43,5 +45,6 @@ func to_dict() -> Dictionary:
 		"distance": distance,
 		"modulation": modulation,
 		"is_decoration": is_decoration,
+		"group": group,
 		"objects": object_dicts,
 	}
