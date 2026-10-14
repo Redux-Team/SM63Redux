@@ -1,12 +1,13 @@
 class_name ScreenTransition
 extends CanvasLayer
 
-enum Type { CENTER, WAVE, FADE }
+enum Type { CENTER, WAVE, FADE, BLUR }
 
 const SHADERS: Dictionary[Type, Shader] = {
 	Type.CENTER: preload("uid://dcewkclyl2vjk"),
 	Type.WAVE: preload("uid://drycsk0p628ig"),
 	Type.FADE: preload("uid://dt48274q57v41"),
+	Type.BLUR: preload("uid://dt48274q57v41"),
 }
 const DEFAULT_TEXTURES: Dictionary[Type, Texture2D] = {
 	Type.CENTER: preload("uid://34v4s1d3h4ag"),
@@ -22,6 +23,8 @@ var _covered: float
 var _revealed: float
 var _duration_scale: float
 var _transition_type: Tween.TransitionType
+var _deferred_work: Array[Callable] = []
+var _deferred_then: Array[Callable] = []
 
 
 func _ready() -> void:
@@ -30,6 +33,15 @@ func _ready() -> void:
 
 func is_transitioning() -> bool:
 	return mask_rect.visible
+
+
+func defer_threaded(work: Callable, then: Callable = Callable()) -> bool:
+	if not is_transitioning():
+		return false
+	
+	_deferred_work.append(work)
+	_deferred_then.append(then)
+	return true
 
 
 func play(builder: Builder) -> void:
@@ -48,10 +60,10 @@ func play(builder: Builder) -> void:
 	var hold: SceneTreeTimer = get_tree().create_timer(builder.hold_duration)
 	var loading_timer: SceneTreeTimer = get_tree().create_timer(builder.loading_delay)
 	loading_timer.timeout.connect(loading_screen.open)
-	if builder.loading_delay <= 0.0:
-		await loading_screen.open()
+	if builder.loading_delay <= 0.0 or builder.type == Type.BLUR:
+		await loading_screen.open(builder.type == Type.BLUR)
 	
-	await _run_tasks(builder.tasks)
+	await _run_threaded(builder.tasks, builder.task_thens)
 	for callable: Callable in builder.callables:
 		await callable.call()
 	
@@ -59,9 +71,15 @@ func play(builder: Builder) -> void:
 	if builder.swap.is_valid():
 		await builder.swap.call()
 	elif scene:
-		get_tree().change_scene_to_packed(scene)
+		get_tree().change_scene_to_node(await _instantiate(scene))
 	
 	await _settle()
+	while not _deferred_work.is_empty():
+		var work: Array[Callable] = _deferred_work.duplicate()
+		var thens: Array[Callable] = _deferred_then.duplicate()
+		_deferred_work.clear()
+		_deferred_then.clear()
+		await _run_threaded(work, thens)
 	if hold.time_left > 0.0:
 		await hold.timeout
 	
@@ -102,9 +120,14 @@ func _setup(builder: Builder) -> void:
 			_parameter = &"fade"
 			_revealed = 0.0
 			_covered = 1.0
+		Type.BLUR:
+			_parameter = &"fade"
+			_revealed = 0.0
+			_covered = 0.0
+			_duration_scale = 0.0
 
 
-func _run_tasks(tasks: Array[Callable]) -> void:
+func _run_threaded(tasks: Array[Callable], thens: Array[Callable]) -> void:
 	var task_ids: Array[int] = []
 	for task: Callable in tasks:
 		task_ids.append(WorkerThreadPool.add_task(task))
@@ -113,6 +136,19 @@ func _run_tasks(tasks: Array[Callable]) -> void:
 		while not WorkerThreadPool.is_task_completed(task_id):
 			await get_tree().process_frame
 		WorkerThreadPool.wait_for_task_completion(task_id)
+	
+	for then: Callable in thens:
+		if then.is_valid():
+			await then.call()
+
+
+func _instantiate(scene: PackedScene) -> Node:
+	var result: Array[Node] = []
+	var task_id: int = WorkerThreadPool.add_task(func() -> void: result.append(scene.instantiate()))
+	while not WorkerThreadPool.is_task_completed(task_id):
+		await get_tree().process_frame
+	WorkerThreadPool.wait_for_task_completion(task_id)
+	return result.front()
 
 
 func _await_scene(path: String) -> PackedScene:
@@ -159,6 +195,7 @@ class Builder:
 	var swap: Callable
 	var callables: Array[Callable] = []
 	var tasks: Array[Callable] = []
+	var task_thens: Array[Callable] = []
 	
 	var _transition: ScreenTransition
 	
@@ -182,6 +219,10 @@ class Builder:
 	
 	func set_fade() -> Builder:
 		return set_type(Type.FADE)
+	
+	
+	func set_blur() -> Builder:
+		return set_type(Type.BLUR)
 	
 	
 	func set_wave_scale(value: float) -> Builder:
@@ -244,8 +285,9 @@ class Builder:
 		return self
 	
 	
-	func add_task(callable: Callable) -> Builder:
-		tasks.append(callable)
+	func add_threaded_task(work: Callable, then: Callable = Callable()) -> Builder:
+		tasks.append(work)
+		task_thens.append(then)
 		return self
 	
 	

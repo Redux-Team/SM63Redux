@@ -7,6 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://bo4bpi80efao4" path="res://assets/textures/entity/passive/fat_goonie_flap.png" id="5_hy25t"]
 [ext_resource type="Texture2D" uid="uid://bh4jhqvk5nh4r" path="res://assets/textures/item/collectible/shine_sprite_spin.png" id="5_rtbv3"]
 [ext_resource type="FontFile" uid="uid://cnmgtcgow66hp" path="res://assets/font/pixel_redux_border.fnt" id="7_ipoqj"]
+[ext_resource type="Shader" path="res://shader/loading_blur.gdshader" id="8_blur"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
+shader = ExtResource("8_blur")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gktkh"]
 atlas = ExtResource("5_rtbv3")
@@ -279,17 +283,18 @@ animations = [{
 "speed": 12.0
 }]
 
-[node name="LoadingScreen" type="ColorRect" unique_id=1307813770 node_paths=PackedStringArray("sprite")]
+[node name="LoadingScreen" type="ColorRect" unique_id=1307813770 node_paths=PackedStringArray("sprite", "indicator")]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+material = SubResource("ShaderMaterial_blur")
 mouse_filter = 2
-color = Color(0, 0, 0, 1)
 script = ExtResource("1_qw5jm")
 sprite = NodePath("Control/SmartSprite2D")
+indicator = NodePath("Control")
 
 [node name="Control" type="Control" parent="." unique_id=1134091019]
 modulate = Color(1, 1, 1, 0.3137255)

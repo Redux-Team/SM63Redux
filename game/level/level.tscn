@@ -30,10 +30,10 @@ script = ExtResource("6_background")
 [node name="World" type="Node2D" parent="."]
 
 [node name="Camera" type="Camera2D" parent="."]
+physics_interpolation_mode = 2
+process_physics_priority = 1000
 script = ExtResource("7_camera")
 zoom = Vector2(2, 2)
-process_callback = 0
-position_smoothing_enabled = true
 
 [node name="Culler" type="Node" parent="."]
 script = ExtResource("2_culler")

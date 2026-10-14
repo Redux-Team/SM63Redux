@@ -40,6 +40,10 @@ func build_screen_transition() -> ScreenTransition.Builder:
 	return ScreenTransition.Builder.new(_screen_transition)
 
 
+func defer_threaded(work: Callable, then: Callable = Callable()) -> bool:
+	return _screen_transition.defer_threaded(work, then)
+
+
 func is_transitioning() -> bool:
 	return _screen_transition.is_transitioning()
 

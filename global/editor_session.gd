@@ -15,7 +15,8 @@ func suspend_into(tree: SceneTree, scene: PackedScene) -> void:
 	discard()
 	if editor.has_method(&"set_suspended"):
 		editor.call(&"set_suspended", true)
-	tree.root.remove_child(editor)
+	else:
+		tree.root.remove_child(editor)
 	_held = editor
 	
 	var next: Node = scene.instantiate()
@@ -32,7 +33,8 @@ func resume(tree: SceneTree) -> bool:
 	var outgoing: Node = tree.current_scene
 	_held = null
 	level = null
-	tree.root.add_child(editor)
+	if not editor.is_inside_tree():
+		tree.root.add_child(editor)
 	if editor.has_method(&"set_suspended"):
 		editor.call(&"set_suspended", false)
 	tree.current_scene = editor
