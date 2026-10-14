@@ -4,6 +4,7 @@ extends Node2D
 const DISTANCE_MIN: float = -0.8
 const DISTANCE_MAX: float = 9.0
 const Z_STRIDE: int = 16
+const DISABLED_ALPHA: float = 0.3
 
 var uuid: StringName
 var index: int = 0
@@ -13,6 +14,19 @@ var is_decoration: bool = false:
 	set(value):
 		is_decoration = value
 		_apply_decoration()
+var silhouette: bool = true
+var editor_visible: bool = true:
+	set(value):
+		editor_visible = value
+		_apply_visibility()
+var group_visible: bool = true:
+	set(value):
+		group_visible = value
+		_apply_visibility()
+var enabled: bool = true:
+	set(value):
+		enabled = value
+		_apply_modulate()
 var distance: float = 0.0:
 	set(value):
 		distance = clampf(value, DISTANCE_MIN, DISTANCE_MAX)
@@ -45,6 +59,10 @@ var group_decoration: bool = false:
 	set(value):
 		group_decoration = value
 		_apply_decoration()
+var group_enabled: bool = true:
+	set(value):
+		group_enabled = value
+		_apply_modulate()
 
 var _parallax: Parallax2D
 var _objects_root: Node2D
@@ -69,6 +87,7 @@ func _init() -> void:
 	_parallax = Parallax2D.new()
 	add_child(_parallax)
 	_objects_root = Node2D.new()
+	_objects_root.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
 	_parallax.add_child(_objects_root)
 	_apply_distance()
 
@@ -89,6 +108,9 @@ func apply_data(data: LayerData) -> void:
 	distance = data.distance
 	modulation = data.modulation
 	is_decoration = data.is_decoration
+	silhouette = data.silhouette
+	enabled = data.enabled
+	editor_visible = data.editor_visible
 	group = data.group
 	name = "Layer%d" % index
 
@@ -101,6 +123,9 @@ func to_data() -> LayerData:
 	data.distance = distance
 	data.modulation = modulation
 	data.is_decoration = is_decoration
+	data.silhouette = silhouette
+	data.enabled = enabled
+	data.editor_visible = editor_visible
 	data.group = group
 	return data
 
@@ -146,6 +171,16 @@ func inherit(group_data: Dictionary) -> void:
 	group_modulation = group_data.get("modulation", Color.WHITE)
 	group_distance = group_data.get("distance", 0.0)
 	group_decoration = group_data.get("is_decoration", false)
+	group_enabled = group_data.get("enabled", true)
+	group_visible = group_data.get("visible", true)
+
+
+func is_effective_visible() -> bool:
+	return editor_visible and group_visible
+
+
+func is_effective_enabled() -> bool:
+	return enabled and group_enabled
 
 
 func is_effective_decoration() -> bool:
@@ -172,5 +207,9 @@ func _apply_distance() -> void:
 	_parallax.screen_offset = screen_offset
 
 
+func _apply_visibility() -> void:
+	visible = is_effective_visible()
+
+
 func _apply_modulate() -> void:
-	modulate = (modulation * group_modulation if modulation_enabled else Color.WHITE) * tint
+	modulate = (modulation * group_modulation if modulation_enabled else Color.WHITE) * tint * Color(1.0, 1.0, 1.0, 1.0 if is_effective_enabled() else DISABLED_ALPHA)

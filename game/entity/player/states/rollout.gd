@@ -37,7 +37,7 @@ func _exit() -> void:
 
 
 func _next() -> StringName:
-	var grounded: bool = player.is_on_floor()
+	var grounded: bool = player.has_landed()
 	if grounded and time > land_time:
 		return &"Idle"
 	if not grounded and player.can_dive and time > dive_time and controls.is_held(&"dive"):

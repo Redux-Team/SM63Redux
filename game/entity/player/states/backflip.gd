@@ -19,7 +19,7 @@ func _exit() -> void:
 
 
 func _next() -> StringName:
-	if player.is_on_floor():
+	if player.has_landed():
 		return &"Idle"
 	if player.can_dive and controls.is_just_pressed(&"dive"):
 		return &"Dive"

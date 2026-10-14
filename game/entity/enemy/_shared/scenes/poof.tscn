@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://dssc62dfv747q"]
+
+[ext_resource type="Texture2D" uid="uid://nga2o0i5f0cr" path="res://assets/textures/particle/entity/enemy_poof.png" id="1_ldajr"]
+[ext_resource type="Script" uid="uid://ylx4w8oov1g0" path="res://game/entity/enemy/_shared/scenes/poof.gd" id="2_ldr3n"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ldr3n"]
+atlas = ExtResource("1_ldajr")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_knxt3"]
+atlas = ExtResource("1_ldajr")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mucl0"]
+atlas = ExtResource("1_ldajr")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pno56"]
+atlas = ExtResource("1_ldajr")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cekup"]
+atlas = ExtResource("1_ldajr")
+region = Rect2(120, 0, 8, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_y406x"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ldr3n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_knxt3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mucl0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pno56")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cekup")
+}],
+"loop": false,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="Poof" type="AnimatedSprite2D" unique_id=1670926763]
+sprite_frames = SubResource("SpriteFrames_y406x")
+script = ExtResource("2_ldr3n")

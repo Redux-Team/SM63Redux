@@ -1,6 +1,8 @@
 class_name SprayStream
 extends Node2D
 
+const DETACH_LOOKAHEAD_STEPS: float = 4.0
+
 ## Node the stream leaves from, sprayed along its local down axis.
 @export var nozzle: Node2D
 ## Body whose movement the water inherits.
@@ -72,6 +74,7 @@ var profile: SprayProfile:
 		profile = value
 
 var _segments: Array[Segment] = []
+var _detached: Array[Segment] = []
 var _active: Segment
 var _emit_clock: float = 0.0
 var _splash_clock: float = 0.0
@@ -82,7 +85,11 @@ var _carrier_current: Vector2
 
 
 func _ready() -> void:
-	top_level = true
+	var anchor: GameObject = GameObject.of(self)
+	if anchor:
+		_attach.call_deferred(anchor)
+	else:
+		top_level = true
 	global_transform = Transform2D.IDENTITY
 	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	process_physics_priority = 1
@@ -91,6 +98,12 @@ func _ready() -> void:
 	_previous = _current
 	_carrier_current = carrier.global_position if carrier else _current.origin
 	_carrier_previous = _carrier_current
+
+
+func _attach(anchor: GameObject) -> void:
+	reparent(anchor, false)
+	anchor.move_child(self, 0)
+	global_transform = Transform2D.IDENTITY
 
 
 func _physics_process(delta: float) -> void:
@@ -104,6 +117,10 @@ func _physics_process(delta: float) -> void:
 	var space: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
 	for segment: Segment in _segments:
 		_advance(segment, space, delta)
+	while not _detached.is_empty():
+		var detached: Segment = _detached.pop_back()
+		_segments.append(detached)
+		_advance(detached, space, delta)
 	
 	if emitting:
 		_emit(delta)
@@ -221,6 +238,7 @@ func _advance(segment: Segment, space: PhysicsDirectSpaceState2D, delta: float) 
 		
 		if not hit.is_empty():
 			_impact(segment, hit.get("position"))
+			_split(segment, index + 1, space, delta)
 			segment.samples.resize(index)
 			return
 		
@@ -229,6 +247,26 @@ func _advance(segment: Segment, space: PhysicsDirectSpaceState2D, delta: float) 
 	
 	while not segment.samples.is_empty() and segment.samples.back().age > segment.profile.lifetime:
 		segment.samples.pop_back()
+
+
+func _split(segment: Segment, from: int, space: PhysicsDirectSpaceState2D, delta: float) -> void:
+	if segment.samples.size() - from < 2:
+		return
+	
+	var head: Sample = segment.samples.get(from)
+	var ahead: Vector2 = head.position + head.velocity * delta * DETACH_LOOKAHEAD_STEPS
+	if not space.intersect_ray(PhysicsRayQueryParameters2D.create(head.position, ahead, collision_mask)).is_empty():
+		return
+	
+	var detached: Segment = Segment.new(line.duplicate() as Line2D, segment.profile)
+	detached.attached = false
+	detached.width = segment.width
+	detached.age = segment.age
+	detached.samples.assign(segment.samples.slice(from))
+	detached.line.visible = true
+	detached.line.width = segment.line.width
+	add_child(detached.line)
+	_detached.append(detached)
 
 
 func _move(sample: Sample, next: Vector2, gravity: Vector2, delta: float) -> void:

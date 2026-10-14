@@ -62,10 +62,10 @@ func _tick(delta: float) -> void:
 	fludd.launch_off_ground()
 	player.air_speed_override = 0.0
 	match fludd.get_context():
-		PlayerFludd.Context.DIVE:
-			_push(dive_force, dive_vertical_factor, dive_lift, dive_drag_halflife_x, dive_drag_halflife_y, delta)
-		PlayerFludd.Context.FLOOR_SLIDE:
+		PlayerFludd.Context.FLOOR_SLIDE when player.is_on_floor():
 			_push(slide_force, slide_vertical_factor, slide_lift, slide_drag_halflife, 0.0, delta)
+		PlayerFludd.Context.DIVE, PlayerFludd.Context.FLOOR_SLIDE:
+			_push(dive_force, dive_vertical_factor, dive_lift, dive_drag_halflife_x, dive_drag_halflife_y, delta)
 		PlayerFludd.Context.SUBMERGED:
 			fludd.begin_spray_loop()
 			player.velocity.y = Motion.damp(player.velocity.y, -submerged_speed, submerged_halflife, delta)

@@ -4,6 +4,8 @@ extends Entity
 signal swimming_changed(swimming: bool)
 
 const TERRAIN_LAYER_FIRST: int = 25
+const DIVE_STRIKE_SPEED: float = 180.0
+const TOPLINE_TOLERANCE: float = 4.0
 
 @export_group("Physics")
 ## Downward acceleration applied every physics tick, before the active states' gravity scales.
@@ -12,6 +14,8 @@ const TERRAIN_LAYER_FIRST: int = 25
 @export var water_gravity_scale: float = 0.1
 ## Time for floor friction alone to halve horizontal speed; scaled by the friction modifiers.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var floor_friction_halflife: float = 0.1482
+@export_group("Turbo Strike")
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var turbo_strike_min_speed: float = 300.0
 @export_group("Terrain")
 ## Downward ray used to read slope angles and the terrain under the player's feet.
 @export var floor_raycast: RayCast2D
@@ -24,6 +28,7 @@ const TERRAIN_LAYER_FIRST: int = 25
 @export var submerged_bus_effects: Array[AudioEffect]
 ## Sprites drawn into the silhouette shown while the player is behind terrain.
 @export var silhouette_targets: Array[Sprite2D]
+@export var ground_pound_fall: GroundPoundFallState
 
 ## Buffered player input, polled once per physics tick.
 var controls: PlayerInput = PlayerInput.new()
@@ -156,6 +161,35 @@ func is_swim_pressed(buffer: float) -> bool:
 	return controls.was_pressed_within(&"jump", buffer) and not fludd.is_aiming()
 
 
+func is_turbo_striking() -> bool:
+	return fludd.is_turbo_active() and absf(velocity.x) >= turbo_strike_min_speed
+
+
+func is_dive_striking() -> bool:
+	return (machine.is_active(&"Dive") or machine.is_active(&"Floorslide")) and absf(velocity.x) > DIVE_STRIKE_SPEED
+
+
+func has_landed() -> bool:
+	return is_on_floor() and velocity.y >= 0.0
+
+
+func is_pound_impacting() -> bool:
+	return velocity.y > 0.0 or machine.is_active(&"GroundPoundFall") or machine.is_active(&"GroundPoundSlam")
+
+
+func request_pound_cancel() -> void:
+	if not machine.is_active(&"GroundPound"):
+		return
+	
+	if not controls.is_held(&"ground_pound"):
+		machine.change_state(&"Fall")
+		return
+	
+	if not machine.is_active(&"GroundPoundFall"):
+		machine.change_state(&"GroundPoundFall")
+	ground_pound_fall.pierce()
+
+
 func get_slope_angle(fallback: float) -> float:
 	if not floor_raycast.is_colliding():
 		return fallback
@@ -169,6 +203,10 @@ func get_terrain() -> StringName:
 	
 	var collider: CollisionObject2D = floor_raycast.get_collider() as CollisionObject2D
 	if not collider:
+		return &""
+	
+	var object: GameObject = GameObject.of(collider)
+	if object and object.shape is PolygonShape and not (object.shape as PolygonShape).is_on_topline(floor_raycast.get_collision_point(), TOPLINE_TOLERANCE):
 		return &""
 	
 	for i: int in terrains.size():

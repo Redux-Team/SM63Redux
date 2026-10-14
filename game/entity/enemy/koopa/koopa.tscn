@@ -1,0 +1,428 @@
+[gd_scene format=3 uid="uid://cobjo5kj7heeo"]
+
+[ext_resource type="Script" uid="uid://s77sl0w730u" path="res://game/entity/enemy/koopa/koopa.gd" id="koopa"]
+[ext_resource type="Script" uid="uid://cvolonferossj" path="res://util/2d/smart_sprite_2d.gd" id="smart_sprite"]
+[ext_resource type="Texture2D" uid="uid://bh5q4brjmpql0" path="res://assets/textures/entity/enemy/koopa/koopa_walk.png" id="tex_walk"]
+[ext_resource type="Texture2D" uid="uid://d2rb6fcbfwjmo" path="res://assets/textures/entity/enemy/koopa/parakoopa_flap.png" id="tex_fly"]
+[ext_resource type="Texture2D" uid="uid://6xw6a6v37qee" path="res://assets/textures/entity/enemy/koopa/koopa_shell_spin.png" id="tex_shell"]
+[ext_resource type="Texture2D" uid="uid://cg8hsvx10i5eo" path="res://assets/textures/entity/enemy/koopa/parakoopa_wing_0.png" id="tex_wing_front"]
+[ext_resource type="Texture2D" uid="uid://dhalm6vfgheu4" path="res://assets/textures/entity/enemy/koopa/parakoopa_wing_1.png" id="tex_wing_back"]
+[ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="hurtbox"]
+[ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="hurtbox_component"]
+[ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="hitbox"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_data/components/gravity_component.gd" id="gravity"]
+[ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_data/components/friction_component.gd" id="friction"]
+[ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://util/2d/particle_emitter.gd" id="particles"]
+[ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://util/2d/water_check_area.gd" id="water_check"]
+[ext_resource type="AudioStream" uid="uid://bepvphyfaeuk5" path="res://assets/sfx/entity/koopa/shell_kick.ogg" id="sfx_kick"]
+[ext_resource type="Script" path="res://game/entity_data/state/state_machine.gd" id="state_machine"]
+[ext_resource type="Script" path="res://game/entity_data/state/state_effects.gd" id="state_effects"]
+[ext_resource type="Script" uid="uid://bd8l4ri83uu5a" path="res://game/entity/enemy/_shared/states/patrol.gd" id="state_patrol"]
+[ext_resource type="Script" path="res://game/entity/enemy/koopa/states/glide.gd" id="state_glide"]
+[ext_resource type="Script" path="res://game/entity/enemy/koopa/states/shell.gd" id="state_shell"]
+
+[sub_resource type="AtlasTexture" id="Walk_0"]
+atlas = ExtResource("tex_walk")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Walk_1"]
+atlas = ExtResource("tex_walk")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Walk_2"]
+atlas = ExtResource("tex_walk")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Walk_3"]
+atlas = ExtResource("tex_walk")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Walk_4"]
+atlas = ExtResource("tex_walk")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Walk_5"]
+atlas = ExtResource("tex_walk")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Walk_6"]
+atlas = ExtResource("tex_walk")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Walk_7"]
+atlas = ExtResource("tex_walk")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Walk_8"]
+atlas = ExtResource("tex_walk")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Walk_9"]
+atlas = ExtResource("tex_walk")
+region = Rect2(288, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Fly_0"]
+atlas = ExtResource("tex_fly")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="Fly_1"]
+atlas = ExtResource("tex_fly")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="Fly_2"]
+atlas = ExtResource("tex_fly")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="Fly_3"]
+atlas = ExtResource("tex_fly")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="Fly_4"]
+atlas = ExtResource("tex_fly")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="Fly_5"]
+atlas = ExtResource("tex_fly")
+region = Rect2(240, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="Fly_6"]
+atlas = ExtResource("tex_fly")
+region = Rect2(288, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="Shell_0"]
+atlas = ExtResource("tex_shell")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Shell_1"]
+atlas = ExtResource("tex_shell")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Shell_2"]
+atlas = ExtResource("tex_shell")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Shell_3"]
+atlas = ExtResource("tex_shell")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Shell_4"]
+atlas = ExtResource("tex_shell")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Shell_5"]
+atlas = ExtResource("tex_shell")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Shell_6"]
+atlas = ExtResource("tex_shell")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Shell_7"]
+atlas = ExtResource("tex_shell")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_koopa"]
+diffuse_texture = SubResource("Walk_0")
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_koopa"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Walk_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk_7")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk_8")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk_9")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Fly_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Fly_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Fly_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Fly_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Fly_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Fly_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("Fly_6")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Shell_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Shell_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Shell_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Shell_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Shell_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Shell_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("Shell_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("Shell_7")
+}],
+"loop": true,
+"name": &"shell",
+"speed": 10.0
+}]
+
+[sub_resource type="Resource" id="Component_WalkerStrike"]
+script = ExtResource("hurtbox_component")
+accepted_hitbox_ids = PackedStringArray("spin", "dive", "turbo")
+override_knockback = true
+knockback = Vector2(350, 50)
+
+[sub_resource type="Resource" id="Component_WalkerSquish"]
+script = ExtResource("hurtbox_component")
+accepted_hitbox_ids = PackedStringArray("feet", "ground_pound")
+
+[sub_resource type="Resource" id="Component_ShellKick"]
+script = ExtResource("hurtbox_component")
+accepted_hitbox_ids = PackedStringArray("feet", "spin", "dive", "ground_pound", "turbo")
+
+[sub_resource type="RectangleShape2D" id="Shape_WalkerHurtTop"]
+size = Vector2(20, 5)
+
+[sub_resource type="RectangleShape2D" id="Shape_WalkerHurtBody"]
+size = Vector2(16, 13)
+
+[sub_resource type="RectangleShape2D" id="Shape_WalkerHit"]
+size = Vector2(20, 12)
+
+[sub_resource type="RectangleShape2D" id="Shape_WalkerCollider"]
+size = Vector2(11, 2)
+
+[sub_resource type="RectangleShape2D" id="Shape_ShellHurt"]
+size = Vector2(16, 12)
+
+[sub_resource type="CircleShape2D" id="Shape_ShellHit"]
+radius = 9.0
+
+[sub_resource type="RectangleShape2D" id="Shape_ShellCollider"]
+size = Vector2(10, 8)
+
+[sub_resource type="RectangleShape2D" id="Shape_WaterCheck"]
+resource_local_to_scene = true
+size = Vector2(18, 26)
+
+[sub_resource type="Curve" id="Curve_Patrol"]
+_limits = [-1.0, 1.0, -1.0, 1.0]
+_data = [Vector2(-1, -1), 0.0, 0.0, 0, 0, Vector2(-0.35, -1), 0.0, 0.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_Wing"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_Wing"]
+offsets = PackedFloat32Array(0, 0.37425148)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.003921569)
+
+[sub_resource type="Resource" id="Effects_Patrol"]
+script = ExtResource("state_effects")
+animation = &"walk"
+
+[sub_resource type="Resource" id="Effects_Glide"]
+script = ExtResource("state_effects")
+animation = &"fly"
+
+[sub_resource type="Resource" id="Effects_Shell"]
+script = ExtResource("state_effects")
+animation = &"shell"
+
+[node name="Koopa" type="CharacterBody2D" node_paths=PackedStringArray("sfx_player", "wing_emitter", "walker_boxes", "shell_boxes", "sprite", "components_root", "machine", "water_check")]
+collision_layer = 8
+collision_mask = 514
+script = ExtResource("koopa")
+sfx_player = NodePath("AudioStreamPlayer2D")
+wing_emitter = NodePath("WingEmitter")
+back_wing_texture = ExtResource("tex_wing_back")
+walker_boxes = [NodePath("WalkerHurtBox"), NodePath("WalkerHitBox"), NodePath("WalkerCollider")]
+shell_boxes = [NodePath("ShellHurtBox"), NodePath("ShellHitBox"), NodePath("ShellCollider")]
+sprite = NodePath("Sprite")
+components_root = NodePath("Components")
+machine = NodePath("StateMachine")
+water_check = NodePath("WaterCheckArea")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = SubResource("CanvasTexture_koopa")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
+script = ExtResource("smart_sprite")
+canvas_texture = SubResource("CanvasTexture_koopa")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_koopa")
+current_animation = "walk"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+
+[node name="Components" type="Node" parent="."]
+
+[node name="GravityComponent" type="Node" parent="Components"]
+script = ExtResource("gravity")
+
+[node name="FrictionComponent" type="Node" parent="Components"]
+script = ExtResource("friction")
+
+[node name="WalkerHurtBox" type="Area2D" parent="."]
+position = Vector2(-2, 6)
+script = ExtResource("hurtbox")
+components = Array[ExtResource("hurtbox_component")]([SubResource("Component_WalkerStrike"), SubResource("Component_WalkerSquish")])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WalkerHurtBox"]
+position = Vector2(0, -5.5)
+shape = SubResource("Shape_WalkerHurtTop")
+debug_color = Color(0.7, 0.68833333, 0, 0.41960785)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="WalkerHurtBox"]
+position = Vector2(0, 1.5)
+shape = SubResource("Shape_WalkerHurtBody")
+debug_color = Color(0.7, 0.68833333, 0, 0.41960785)
+
+[node name="WalkerHitBox" type="Area2D" parent="."]
+position = Vector2(-2, 7)
+script = ExtResource("hitbox")
+hitbox_ids = Array[String](["enemy", "koopa"])
+damage_amount = 1.0
+damage_type = 1
+has_knockback = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WalkerHitBox"]
+position = Vector2(0, 3)
+shape = SubResource("Shape_WalkerHit")
+debug_color = Color(0.7, 0, 0, 0.41960785)
+
+[node name="WalkerCollider" type="CollisionShape2D" parent="."]
+position = Vector2(-2.5, 15)
+shape = SubResource("Shape_WalkerCollider")
+
+[node name="ShellHurtBox" type="Area2D" parent="."]
+script = ExtResource("hurtbox")
+components = Array[ExtResource("hurtbox_component")]([SubResource("Component_ShellKick")])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShellHurtBox"]
+position = Vector2(0, 3)
+shape = SubResource("Shape_ShellHurt")
+debug_color = Color(0.61833334, 0.7, 0, 0.41960785)
+
+[node name="ShellHitBox" type="Area2D" parent="."]
+script = ExtResource("hitbox")
+hitbox_ids = Array[String](["koopa_shell"])
+hit_expression = "abs(velocity.x) > 150"
+damage_type = 1
+has_knockback = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShellHitBox"]
+shape = SubResource("Shape_ShellHit")
+debug_color = Color(0.7, 0, 0, 0.41960785)
+
+[node name="ShellCollider" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("Shape_ShellCollider")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("sfx_kick")
+bus = &"SFX"
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("entity", "initial_state")]
+script = ExtResource("state_machine")
+entity = NodePath("..")
+initial_state = NodePath("Patrol")
+
+[node name="Patrol" type="Node" parent="StateMachine"]
+script = ExtResource("state_patrol")
+effects = SubResource("Effects_Patrol")
+displacement = SubResource("Curve_Patrol")
+
+[node name="Glide" type="Node" parent="StateMachine"]
+script = ExtResource("state_glide")
+effects = SubResource("Effects_Glide")
+
+[node name="Shell" type="Node" parent="StateMachine"]
+script = ExtResource("state_shell")
+effects = SubResource("Effects_Shell")
+
+[node name="WingEmitter" type="CPUParticles2D" parent="."]
+show_behind_parent = true
+light_mask = 2
+emitting = false
+amount = 2
+texture = ExtResource("tex_wing_front")
+lifetime = 3.0
+one_shot = true
+speed_scale = 1.2
+explosiveness = 1.0
+emission_shape = 2
+emission_sphere_radius = 4.0
+gravity = Vector2(0, 90)
+initial_velocity_min = 40.0
+initial_velocity_max = 75.0
+angle_max = 90.0
+scale_amount_curve = SubResource("Curve_Wing")
+color_ramp = SubResource("Gradient_Wing")
+script = ExtResource("particles")
+high_particle_amount = 2
+medium_particle_amount = 1
+free_on_finish = true
+
+[node name="WaterCheckArea" type="Area2D" parent="."]
+script = ExtResource("water_check")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WaterCheckArea"]
+position = Vector2(-2, 2)
+shape = SubResource("Shape_WaterCheck")
+
+[connection signal="damaged" from="WalkerHurtBox" to="." method="_on_hurt_box_damaged"]
+[connection signal="damaged" from="ShellHurtBox" to="." method="_on_hurt_box_damaged"]

@@ -1,7 +1,7 @@
 class_name LevelCuller
 extends Node
 
-@export var margin: float = 320.0
+@export var margin: float = 448.0
 @export var frames_between_updates: int = 4
 
 var _objects: Array[Node2D] = []

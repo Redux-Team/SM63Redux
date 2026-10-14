@@ -1,6 +1,9 @@
 class_name DiveState
 extends PlayerState
 
+## Hitbox that strikes enemies while diving fast enough.
+@export var hitbox: HitBox
+
 @export_group("Launch")
 ## Horizontal speed the dive launch pulls toward.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var target_speed: float = 900.0
@@ -42,6 +45,7 @@ var _was_grounded: bool = false
 func _enter() -> void:
 	player.jump_chain = 0
 	player.lock_flipping = true
+	hitbox.enable()
 	_stomp_time = 0.0
 	_was_grounded = player.is_on_floor()
 	_launch()
@@ -51,6 +55,7 @@ func _enter() -> void:
 
 
 func _exit() -> void:
+	hitbox.disable()
 	_stomp_time = 0.0
 	player.lock_flipping = false
 	sprite.local_rotation = 0.0

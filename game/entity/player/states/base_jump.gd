@@ -40,6 +40,6 @@ func _next() -> StringName:
 		return &"Dive"
 	if player.velocity.y > 0.0 and not player.is_on_floor():
 		return &"Fall"
-	if player.is_on_floor():
+	if player.has_landed():
 		return &"Idle"
 	return _jump.name if is_current() else &""

@@ -17,6 +17,14 @@ static func build(data: AreaData, context: GameObject.Context) -> LevelArea:
 	for layer_data: LayerData in data.layers:
 		area.insert_layer(LevelLayer.build(layer_data, context))
 	area.apply_layer_groups()
+	if context == GameObject.Context.GAME:
+		for layer: LevelLayer in area.get_layers():
+			layer.editor_visible = true
+			layer.group_visible = true
+			if not layer.is_effective_enabled():
+				area.remove_layer(layer)
+				layer.free()
+	
 	return area
 
 

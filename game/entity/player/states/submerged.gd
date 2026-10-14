@@ -1,3 +1,4 @@
+class_name SubmergedState
 extends PlayerState
 
 @export_group("Swim")
@@ -11,6 +12,7 @@ extends PlayerState
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var turn_acceleration: float = 849.6
 ## Minimum opposing speed before turn acceleration is used.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var turn_speed_threshold: float = 10.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:s") var overspeed_halflife: float = 0.12
 @export_group("Vertical")
 ## Upward speed steered toward while holding swim up.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rise_speed: float = 140.0
@@ -58,6 +60,10 @@ func _swim(delta: float) -> void:
 		player.velocity.x = Motion.drift(player.velocity.x, 0.0, player.get_floor_drag_rate() + floor_drag, delta)
 	elif not player.is_crouching():
 		player.drive(input, player.get_ground_speed(swim_speed) * water_resistance, acceleration, turn_acceleration, turn_speed_threshold, floor_drag, delta)
+	
+	var cap: float = player.get_ground_speed(swim_speed) * water_resistance
+	if absf(player.velocity.x) > cap:
+		player.velocity.x = maxf(Motion.drift(absf(player.velocity.x), 0.0, Motion.rate(overspeed_halflife), delta), cap) * signf(player.velocity.x)
 	
 	if player.is_on_floor() and player.get_floor_normal().y < 0.999 and player.velocity.y >= 0.0:
 		player.velocity.y = maxf(player.velocity.y, slope_speed)

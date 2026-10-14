@@ -1,0 +1,446 @@
+[gd_scene format=3 uid="uid://bu0cpqsoc43la"]
+
+[ext_resource type="Script" uid="uid://gx548aea8dxr" path="res://game/entity/enemy/goomba/goomba.gd" id="1_hysx3"]
+[ext_resource type="Script" uid="uid://ckt07dpulg2mq" path="res://game/entity_data/state/state_machine.gd" id="2_e0p0p"]
+[ext_resource type="PackedScene" uid="uid://tf6mq1quvwdw" path="res://game/props/coin/yellow_coin/yellow_coin_spawn.tscn" id="2_onrng"]
+[ext_resource type="PackedScene" uid="uid://dssc62dfv747q" path="res://game/entity/enemy/_shared/scenes/poof.tscn" id="3_7e3mf"]
+[ext_resource type="Texture2D" uid="uid://djgg3rgm58230" path="res://assets/textures/entity/enemy/goomba/goomba_walk.png" id="3_hysx3"]
+[ext_resource type="Script" uid="uid://4hwxabxucpuh" path="res://game/entity_data/state/state.gd" id="3_tx7nd"]
+[ext_resource type="Texture2D" uid="uid://dtakiqymwlidq" path="res://assets/textures/entity/enemy/goomba/goomba_alert.png" id="4_kyaey"]
+[ext_resource type="Script" uid="uid://cvolonferossj" path="res://util/2d/smart_sprite_2d.gd" id="4_whnfo"]
+[ext_resource type="Script" uid="uid://ckuqr7ws7p6tk" path="res://game/entity/enemy/goomba/states/alert.gd" id="4_x5cu4"]
+[ext_resource type="Script" uid="uid://bd8l4ri83uu5a" path="res://game/entity/enemy/_shared/states/patrol.gd" id="5_4grvk"]
+[ext_resource type="Script" uid="uid://c103bnb5445y3" path="res://util/entity/hitbox.gd" id="5_n0olq"]
+[ext_resource type="Script" uid="uid://cs4dlhsjhinrv" path="res://game/entity_data/components/health_component.gd" id="5_whnfo"]
+[ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="6_prjr3"]
+[ext_resource type="Texture2D" uid="uid://bpp7wgte6dq0l" path="res://assets/textures/entity/enemy/goomba/goomba_squish.png" id="7_phpar"]
+[ext_resource type="Script" uid="uid://cb672xli6i2ns" path="res://game/entity_data/components/gravity_component.gd" id="10_d6enh"]
+[ext_resource type="Script" uid="uid://cye3eo0tyv6vx" path="res://game/entity_data/components/friction_component.gd" id="11_8wobc"]
+[ext_resource type="Script" uid="uid://bu81quiseko6w" path="res://game/entity/enemy/goomba/states/squish.gd" id="12_6f57m"]
+[ext_resource type="Script" uid="uid://bxmdlmivclqhf" path="res://game/entity/enemy/goomba/states/strike.gd" id="14_xvu80"]
+[ext_resource type="Texture2D" uid="uid://djcybawlcos34" path="res://assets/textures/entity/enemy/goomba/goomba_hit.png" id="20_4grvk"]
+[ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="26_15o45"]
+[ext_resource type="Script" uid="uid://dnsd2a8oriy3" path="res://util/entity/forcebox.gd" id="26_a7n3c"]
+[ext_resource type="Script" uid="uid://bhoysiia8munh" path="res://util/2d/water_check_area.gd" id="29_rakc8"]
+[ext_resource type="Script" uid="uid://dir75hkr2361s" path="res://game/entity_data/state/state_effects.gd" id="30_effects"]
+[ext_resource type="Script" uid="uid://dx3f5mhdkhnrw" path="res://game/entity_data/components/player_detector_component.gd" id="detector"]
+[ext_resource type="AudioStream" uid="uid://dgmayxvw7oy3w" path="res://assets/sfx/entity/goomba/goomba_step.wav" id="sfxres1"]
+[ext_resource type="AudioStream" uid="uid://y56kvftd2idy" path="res://assets/sfx/entity/goomba/goomba_jump.ogg" id="sfxres2"]
+[ext_resource type="AudioStream" uid="uid://cucdekyl58ypv" path="res://assets/sfx/entity/goomba/goomba_stomped.wav" id="sfxres3"]
+[ext_resource type="AudioStream" uid="uid://dq4csxy68lb4q" path="res://assets/sfx/entity/goomba/goomba_struck.wav" id="sfxres4"]
+[ext_resource type="Script" uid="uid://owie463aj20g" path="res://game/entity/enemy/_shared/states/chase.gd" id="shared_chase"]
+
+[sub_resource type="Curve" id="Curve_g7wuw"]
+_limits = [-1.0, 1.0, -1.0, 1.0]
+_data = [Vector2(-1, -1), 0.0, 0.0, 0, 0, Vector2(-0.35, -1), 0.0, 0.0, 0, 0, Vector2(0.35, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Resource" id="Effects_Patrol"]
+script = ExtResource("30_effects")
+animation = &"walk"
+sfx_frame_enabled = true
+sfx_frame_sound = ExtResource("sfxres1")
+sfx_frame_indices = Array[int]([0, 3])
+
+[sub_resource type="Resource" id="Effects_Alert"]
+script = ExtResource("30_effects")
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres2")
+
+[sub_resource type="Resource" id="Effects_Chase"]
+script = ExtResource("30_effects")
+animation = &"walk"
+speed_scale = 1.5
+sfx_frame_enabled = true
+sfx_frame_sound = ExtResource("sfxres1")
+sfx_frame_indices = Array[int]([0, 3])
+
+[sub_resource type="Resource" id="Effects_Squish"]
+script = ExtResource("30_effects")
+animation = &"squish"
+speed_scale = 1.5
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres3")
+
+[sub_resource type="Resource" id="Effects_Strike"]
+script = ExtResource("30_effects")
+player_animation = &"strike_hit"
+sfx_enter_enabled = true
+sfx_enter_sound = ExtResource("sfxres4")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0olq"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_rakc8"]
+diffuse_texture = SubResource("AtlasTexture_n0olq")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyaey"]
+atlas = ExtResource("4_kyaey")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x5cu4"]
+atlas = ExtResource("4_kyaey")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d6enh"]
+atlas = ExtResource("4_kyaey")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8wobc"]
+atlas = ExtResource("4_kyaey")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g7wuw"]
+atlas = ExtResource("7_phpar")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wjeoi"]
+atlas = ExtResource("7_phpar")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0js5a"]
+atlas = ExtResource("7_phpar")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dc2fh"]
+atlas = ExtResource("7_phpar")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_15o45"]
+atlas = ExtResource("20_4grvk")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_prjr3"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_whnfo"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e0p0p"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tx7nd"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_phpar"]
+atlas = ExtResource("3_hysx3")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x5cu4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kyaey")
+}],
+"loop": 0,
+"name": &"alert_fall",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x5cu4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d6enh")
+}],
+"loop": 0,
+"name": &"alert_jump",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8wobc")
+}],
+"loop": 0,
+"name": &"alert_landed",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g7wuw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wjeoi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0js5a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dc2fh")
+}],
+"loop": 0,
+"name": &"squish",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_15o45")
+}],
+"loop": 1,
+"name": &"strike",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n0olq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_prjr3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_whnfo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e0p0p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tx7nd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_phpar")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hysx3"]
+size = Vector2(9, 13)
+
+[sub_resource type="Animation" id="Animation_eqg5w"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SmartSprite2D:local_rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_xvu80"]
+resource_name = "strike_hit"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SmartSprite2D:local_rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6333333),
+"transitions": PackedFloat32Array(0.4, 1),
+"update": 0,
+"values": [0.0, -30.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lgdot"]
+_data = {
+&"RESET": SubResource("Animation_eqg5w"),
+&"strike_hit": SubResource("Animation_xvu80")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_prjr3"]
+size = Vector2(17, 7)
+
+[sub_resource type="Resource" id="Resource_onrng"]
+script = ExtResource("26_15o45")
+accepted_hitbox_ids = PackedStringArray("spin", "bobomb", "koopa_shell", "dive", "turbo")
+override_knockback = true
+disable_on_hit = true
+override_damage_state = true
+damage_state_name = &"strike"
+
+[sub_resource type="Resource" id="Resource_7e3mf"]
+script = ExtResource("26_15o45")
+accepted_hitbox_ids = PackedStringArray("feet")
+disable_on_hit = true
+override_damage_state = true
+damage_state_name = &"squish"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_whnfo"]
+size = Vector2(15.25, 10)
+
+[sub_resource type="Curve" id="Curve_a7n3c"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a7n3c"]
+size = Vector2(14, 15)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_42vey"]
+size = Vector2(16, 16)
+
+[node name="Goomba" type="CharacterBody2D" unique_id=2109535957 node_paths=PackedStringArray("sprite", "components_root", "machine", "water_check")]
+collision_layer = 8
+collision_mask = 514
+script = ExtResource("1_hysx3")
+sprite = NodePath("SmartSprite2D")
+components_root = NodePath("Components")
+machine = NodePath("StateMachine")
+exit_objects = Dictionary[PackedScene, int]({
+ExtResource("2_onrng"): 1,
+ExtResource("3_7e3mf"): 1
+})
+water_check = NodePath("WaterCheckArea")
+
+[node name="StateMachine" type="Node" parent="." unique_id=48097513 node_paths=PackedStringArray("entity", "initial_state", "animation_player")]
+script = ExtResource("2_e0p0p")
+entity = NodePath("..")
+initial_state = NodePath("Wander/Patrol")
+animation_player = NodePath("../AnimationPlayer")
+
+[node name="Wander" type="Node" parent="StateMachine" unique_id=288151632]
+script = ExtResource("3_tx7nd")
+
+[node name="Patrol" type="Node" parent="StateMachine/Wander" unique_id=392367863 node_paths=PackedStringArray("floor_check_l", "floor_check_r")]
+script = ExtResource("5_4grvk")
+displacement = SubResource("Curve_g7wuw")
+floor_check_l = NodePath("../../../FloorCheckL")
+floor_check_r = NodePath("../../../FloorCheckR")
+effects = SubResource("Effects_Patrol")
+
+[node name="Alert" type="Node" parent="StateMachine/Wander" unique_id=1129696963]
+script = ExtResource("4_x5cu4")
+effects = SubResource("Effects_Alert")
+
+[node name="Chase" type="Node" parent="StateMachine" unique_id=1835913114]
+script = ExtResource("shared_chase")
+snap_to_speed_on_enter = true
+effects = SubResource("Effects_Chase")
+
+[node name="Squish" type="Node" parent="StateMachine" unique_id=354975756 node_paths=PackedStringArray("hit_box")]
+script = ExtResource("12_6f57m")
+hit_box = NodePath("../../HitBox")
+effects = SubResource("Effects_Squish")
+
+[node name="Strike" type="Node" parent="StateMachine" unique_id=440686515 node_paths=PackedStringArray("hit_box")]
+script = ExtResource("14_xvu80")
+hit_box = NodePath("../../HitBox")
+effects = SubResource("Effects_Strike")
+
+[node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=1834512589 node_paths=PackedStringArray("rotation_source")]
+position = Vector2(0, -7)
+texture = SubResource("CanvasTexture_rakc8")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
+script = ExtResource("4_whnfo")
+canvas_texture = SubResource("CanvasTexture_rakc8")
+flip_with_velocity = false
+rotation_source = NodePath("..")
+animated = true
+diffuse_frames = SubResource("SpriteFrames_x5cu4")
+current_animation = "walk"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=757983848]
+visible = false
+position = Vector2(-0.5, 1.5)
+shape = SubResource("RectangleShape2D_hysx3")
+
+[node name="WallCheckR" type="RayCast2D" parent="." unique_id=1858743073]
+position = Vector2(6, 1)
+target_position = Vector2(10, 0)
+collision_mask = 2
+
+[node name="WallCheckL" type="RayCast2D" parent="." unique_id=1455851295]
+position = Vector2(0, 1)
+target_position = Vector2(-15, 0)
+collision_mask = 2
+
+[node name="FloorCheckR" type="RayCast2D" parent="." unique_id=148762016]
+position = Vector2(8, -4)
+target_position = Vector2(0, 22)
+collision_mask = 2
+
+[node name="FloorCheckL" type="RayCast2D" parent="." unique_id=2107847826]
+position = Vector2(-7, -4)
+target_position = Vector2(0, 22)
+collision_mask = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2006720516]
+libraries/ = SubResource("AnimationLibrary_lgdot")
+
+[node name="Components" type="Node" parent="." unique_id=434262041]
+
+[node name="HealthComponent" type="Node" parent="Components" unique_id=1886471158]
+script = ExtResource("5_whnfo")
+
+[node name="GravityComponent" type="Node" parent="Components" unique_id=638734915 node_paths=PackedStringArray("entity")]
+script = ExtResource("10_d6enh")
+entity = NodePath("../..")
+
+[node name="FrictionComponent" type="Node" parent="Components" unique_id=1864046007 node_paths=PackedStringArray("entity")]
+script = ExtResource("11_8wobc")
+base_friction = 0.5
+entity = NodePath("../..")
+
+[node name="PlayerDetectorComponent" type="Node" parent="Components" unique_id=1423924392 node_paths=PackedStringArray("detection_area", "entity")]
+script = ExtResource("detector")
+detection_area = NodePath("../../PlayerCheck")
+alert_state = &"Alert"
+ignored_states = Array[StringName]([&"Squish", &"Strike"])
+entity = NodePath("../..")
+
+[node name="PlayerCheck" type="Area2D" parent="." unique_id=1423924391]
+visible = false
+collision_layer = 0
+monitorable = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PlayerCheck" unique_id=450489105]
+polygon = PackedVector2Array(10, 9, 10, -8, 34, -23, 62, -32, 185, -46, 185, 40, 59, 24, 32, 19)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="PlayerCheck" unique_id=389414123]
+position = Vector2(-112, -3)
+polygon = PackedVector2Array(100.796, 12.128, 100.796, -4.872, 76.796, -19.872, 48.796, -28.872, -74.204, -42.872, -74.204, 43.128, 51.796, 27.128, 78.796, 22.128)
+
+[node name="HitBox" type="Area2D" parent="." unique_id=271769825]
+script = ExtResource("5_n0olq")
+hitbox_ids = Array[String](["enemy", "goomba"])
+damage_amount = 1.0
+damage_type = 1
+has_knockback = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=1578956589]
+position = Vector2(-0.5, 3.5)
+shape = SubResource("RectangleShape2D_prjr3")
+debug_color = Color(0.7, 0, 0, 0.41960785)
+
+[node name="HurtBox" type="Area2D" parent="." unique_id=1587410193]
+script = ExtResource("6_prjr3")
+components = Array[ExtResource("26_15o45")]([SubResource("Resource_onrng"), SubResource("Resource_7e3mf")])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=856276483]
+position = Vector2(-0.375, -1)
+shape = SubResource("RectangleShape2D_whnfo")
+debug_color = Color(0.7, 0.66499996, 0, 0.41960785)
+
+[node name="ForceBox" type="Area2D" parent="." unique_id=511850477]
+script = ExtResource("26_a7n3c")
+force_ids = Array[String](["goomba"])
+axis_restriction = 1
+force_curve = SubResource("Curve_a7n3c")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ForceBox" unique_id=1592173543]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_a7n3c")
+
+[node name="WaterCheckArea" type="Area2D" parent="." unique_id=1160325996]
+visible = false
+script = ExtResource("29_rakc8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WaterCheckArea" unique_id=749598814]
+shape = SubResource("RectangleShape2D_42vey")
+
+[connection signal="damaged" from="HurtBox" to="." method="_on_hurt_box_damaged"]

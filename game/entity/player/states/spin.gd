@@ -16,7 +16,7 @@ extends PlayerState
 ## Minimum spin length before releasing spin can end it.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var active_time: float = 0.5
 ## How long a jump press stays valid for jumping out of a grounded spin.
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var jump_buffer: float = 0.2
+@export_custom(PROPERTY_HINT_NONE, "suffix:s") var jump_buffer: float = 0.25
 @export_group("Animation")
 ## Animation speed over the fast spin, sampled across its domain.
 @export var speed_curve: Curve
@@ -63,7 +63,7 @@ func _next() -> StringName:
 	if player.is_on_floor() and controls.is_buffered(&"jump", jump_buffer):
 		return &"BaseJump"
 	if not controls.is_held(&"spin") and time >= active_time:
-		if player.is_on_floor():
+		if player.has_landed():
 			return &"Idle"
 		if player.velocity.y > 0.0:
 			return &"Fall"

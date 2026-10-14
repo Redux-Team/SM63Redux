@@ -1,5 +1,8 @@
 extends PlayerState
 
+## Hitbox that strikes enemies while sliding fast enough.
+@export var hitbox: HitBox
+
 const FRICTION_KEY: StringName = &"floorslide"
 
 @export_group("Ground")
@@ -24,7 +27,7 @@ const FRICTION_KEY: StringName = &"floorslide"
 ## Forward speed needed to roll out with a jump.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rollout_min_speed: float = 50.0
 ## How long a jump press stays valid for a backflip.
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var jump_buffer: float = 0.2
+@export_custom(PROPERTY_HINT_NONE, "suffix:s") var jump_buffer: float = 0.25
 @export_group("Rotation")
 ## Body angle used when no slope is detected.
 @export_range(-180.0, 180.0, 0.1, "degrees") var flat_angle: float = 90.0
@@ -43,6 +46,7 @@ var _airborne_time: float = 0.0
 
 
 func _enter() -> void:
+	hitbox.enable()
 	player.lock_flipping = true
 	player.friction_modifiers.set_modifier(FRICTION_KEY, friction_scale)
 	_airborne_time = 0.0
@@ -52,6 +56,7 @@ func _enter() -> void:
 
 
 func _exit() -> void:
+	hitbox.disable()
 	player.lock_flipping = false
 	player.friction_modifiers.clear_modifier(FRICTION_KEY)
 	sprite.rotation_degrees = 0.0

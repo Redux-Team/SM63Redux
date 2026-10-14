@@ -3,6 +3,7 @@
 @abstract class_name Entity
 extends CharacterBody2D
 
+const STEP_EPSILON: float = 0.05
 
 @export var sprite: SmartSprite2D
 @export var components_root: Node
@@ -18,6 +19,7 @@ extends CharacterBody2D
 
 var object: GameObject
 var components: Array[EntityComponent]
+var drops_coins: bool = true
 var _velocity_lock: bool = false
 var _exit_objs_spawned: bool = false
 
@@ -150,36 +152,32 @@ func _find_object() -> GameObject:
 
 
 func _try_step() -> void:
-	if velocity.x == 0.0 or is_in_air() or not is_on_floor():
+	if is_zero_approx(velocity.x) or not is_on_floor():
 		return
 	
-	var motion: Vector2 = Vector2(1.0 * sign(velocity.x), 0.0)
-	
-	if not test_move(transform, motion):
+	var reach: Vector2 = Vector2(signf(velocity.x) * maxf(absf(velocity.x) * get_physics_process_delta_time(), 1.0), 0.0)
+	var blocked: KinematicCollision2D = KinematicCollision2D.new()
+	if not test_move(global_transform, reach, blocked) or blocked.get_angle(up_direction) <= floor_max_angle:
 		return
 	
-	var stepped: Transform2D = transform.translated(Vector2(0.0, -step_height))
-	
-	if test_move(stepped, motion):
+	var lift: Vector2 = up_direction * (step_height + safe_margin * 2.0)
+	if test_move(global_transform, lift):
 		return
 	
-	var landed: Transform2D = stepped.translated(motion)
+	var lifted: Transform2D = global_transform.translated(lift)
+	if test_move(lifted, reach):
+		return
+	
 	var params: PhysicsTestMotionParameters2D = PhysicsTestMotionParameters2D.new()
-	params.from = landed
-	params.motion = Vector2(0.0, step_height)
-	
+	params.from = lifted.translated(reach)
+	params.motion = -lift
 	var result: PhysicsTestMotionResult2D = PhysicsTestMotionResult2D.new()
-	
-	if not PhysicsServer2D.body_test_motion(get_rid(), params, result):
+	if not PhysicsServer2D.body_test_motion(get_rid(), params, result) or absf(result.get_collision_normal().angle_to(up_direction)) > floor_max_angle:
 		return
 	
-	var collision_normal: Vector2 = result.get_collision_normal()
-	var slope_angle: float = acos(collision_normal.dot(Vector2.UP))
-	
-	if slope_angle > floor_max_angle:
-		return
-	
-	global_position.y -= step_height
+	var rise: float = lift.length() - result.get_travel().length() + safe_margin
+	if rise > STEP_EPSILON:
+		global_position += up_direction * rise
 
 
 func _on_init() -> void:
@@ -231,14 +229,22 @@ func move_and_slide_with_gravity() -> void:
 		rotation = angle
 
 
-func spawn_exit_objects(shared_properties: Array = ["position", "scale", "rotation"]) -> void:
+func despawn() -> void:
+	_exit_objs_spawned = true
+	queue_free()
+
+
+func spawn_exit_objects() -> void:
 	if _exit_objs_spawned:
 		return
 	
 	for packed: PackedScene in exit_objects:
 		for i: int in exit_objects.get(packed):
 			var node: Node = packed.instantiate()
-			Singleton.spawn_sibling(self, node, shared_properties)
+			if node is Coin and not drops_coins:
+				node.free()
+			else:
+				Spawner.spawn_near(self, node)
 	
 	_exit_objs_spawned = true
 

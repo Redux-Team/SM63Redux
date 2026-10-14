@@ -33,6 +33,11 @@ shader_parameter/tail_width_scale = 1.0
 shader_parameter/tail_taper_start = 0.7
 shader_parameter/tail_fade_start = 0.55
 
+[sub_resource type="Curve" id="Curve_12xtr"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 0.84720135), 0.0, 1.1493958, 0, 0, Vector2(1, 1.567039), 1.1702969, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_body"]
 atlas = ExtResource("3_spray")
 region = Rect2(0, 16, 19, 32)
@@ -82,7 +87,7 @@ default_profile = SubResource("Resource_default_profile")
 spread = 0.0
 min_point_spacing = 4.0
 start_offset = 18.0
-flow_speed = 560.0
+flow_speed = 650.0
 wobble_frequency = 0.5
 
 [node name="Line" type="Line2D" parent="." unique_id=926480624]
@@ -90,6 +95,7 @@ texture_filter = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_stream")
 width = 12.0
+width_curve = SubResource("Curve_12xtr")
 texture = SubResource("AtlasTexture_body")
 texture_mode = 1
 round_precision = 1

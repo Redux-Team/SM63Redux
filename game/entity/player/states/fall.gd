@@ -16,7 +16,7 @@ func _enter() -> void:
 
 
 func _next() -> StringName:
-	if player.is_on_floor():
+	if player.has_landed():
 		return &"Idle"
 	if controls.is_held(&"spin") and player.velocity.y > spin_min_speed:
 		return &"Spin"

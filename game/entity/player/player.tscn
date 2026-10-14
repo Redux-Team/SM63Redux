@@ -1575,11 +1575,15 @@ size = Vector2(12, 8)
 script = ExtResource("54_jjwtc")
 accepted_hitbox_ids = PackedStringArray("enemy")
 accepted_damage_types = Array[int]([1])
+expression = "not (entity.is_dive_striking() or entity.is_turbo_striking()) or hitbox.hitbox_ids.has(\"bobomb\")"
 disable_on_hit = true
 disable_on_hit_duration = 2.0
 override_damage_state = true
 damage_state_name = &"strike"
 metadata/_custom_type_script = "uid://drtqc6at2evph"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_turbo"]
+size = Vector2(16, 26)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2swmp"]
 size = Vector2(8, 23)
@@ -2203,14 +2207,16 @@ gravity = Vector2(0, 150)
 lifetime = 0.5
 max_length = 320.0
 
-[node name="Player" type="CharacterBody2D" unique_id=1740348366 node_paths=PackedStringArray("floor_raycast", "fludd", "silhouette_targets", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
+[node name="Player" type="CharacterBody2D" unique_id=1740348366 node_paths=PackedStringArray("floor_raycast", "fludd", "silhouette_targets", "ground_pound_fall", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
 collision_mask = 2
 floor_snap_length = 7.0
 script = ExtResource("1_b7m82")
+step_height = 8.0
 floor_raycast = NodePath("FloorRaycast")
 fludd = NodePath("Fludd")
 submerged_bus_effects = Array[AudioEffect]([SubResource("AudioEffectLowPassFilter_3h1ly")])
 silhouette_targets = [NodePath("Doll"), NodePath("Doll/Fludd")]
+ground_pound_fall = NodePath("StateMachine/GroundPound/GroundPoundFall")
 sprite = NodePath("Doll")
 components_root = NodePath("Components")
 collision_shapes = [NodePath("BaseCollision"), NodePath("GroundPoundCollision"), NodePath("DiveCollision")]
@@ -2220,7 +2226,6 @@ metadata/_custom_type_script = "uid://c0jtt8j5mk6sr"
 
 [node name="SprayStream" parent="." unique_id=1268559864 node_paths=PackedStringArray("nozzle", "carrier") instance=ExtResource("spray_stream")]
 show_behind_parent = true
-z_index = -1
 nozzle = NodePath("../CanvasGroup/HoverFluddParticles")
 carrier = NodePath("..")
 
@@ -2396,6 +2401,25 @@ shape = SubResource("RectangleShape2D_ketxm")
 disabled = true
 debug_color = Color(0.7, 0, 0, 0.41960785)
 
+[node name="Turbo" type="Area2D" parent="Hitboxes"]
+position = Vector2(2, -10)
+collision_layer = 16
+collision_mask = 32
+monitoring = false
+script = ExtResource("52_tqdqa")
+hitbox_ids = Array[String](["player", "turbo"])
+hit_expression = "is_turbo_striking()"
+damage_amount = 1.0
+damage_type = 1
+has_knockback = true
+knockback_vector = Vector2(150, -135)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/Turbo"]
+position = Vector2(0, 6.5)
+shape = SubResource("RectangleShape2D_turbo")
+disabled = true
+debug_color = Color(0.9, 0.5, 0, 0.42)
+
 [node name="Feet" type="Area2D" parent="Hitboxes" unique_id=1546638905]
 position = Vector2(2, -10)
 collision_layer = 16
@@ -2421,7 +2445,7 @@ collision_mask = 32
 monitoring = false
 script = ExtResource("52_tqdqa")
 hitbox_ids = Array[String](["player", "ground_pound"])
-hit_expression = "velocity.y > 0"
+hit_expression = "is_pound_impacting()"
 damage_type = 2
 metadata/_custom_type_script = "uid://c103bnb5445y3"
 
@@ -2599,8 +2623,9 @@ effects = SubResource("Resource_o5est")
 script = ExtResource("69_ie8qq")
 air_control = SubResource("Resource_hjdmk")
 
-[node name="Dive" type="Node" parent="StateMachine/Dry/Airborne" unique_id=742182963]
+[node name="Dive" type="Node" parent="StateMachine/Dry/Airborne" unique_id=742182963 node_paths=PackedStringArray("hitbox")]
 script = ExtResource("71_0d8i1")
+hitbox = NodePath("../../../../Hitboxes/Dive")
 air_control = SubResource("Resource_q6670")
 effects = SubResource("Resource_la3n7")
 
@@ -2633,12 +2658,14 @@ particles = NodePath("../../../../JumpParticles")
 
 [node name="Jump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" unique_id=2105690536]
 script = ExtResource("89_h5pm1")
+chain_window = 0.08
 effects = SubResource("Resource_2qfp3")
 
 [node name="DoubleJump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" unique_id=473863514]
 script = ExtResource("89_h5pm1")
 strength = 412.5
 cut_multiplier = 0.85
+chain_window = 0.08
 effects = SubResource("Resource_yyr3d")
 
 [node name="TripleJump" type="Node" parent="StateMachine/Dry/Airborne/BaseJump" unique_id=128165842]
@@ -2664,8 +2691,9 @@ script = ExtResource("99_qwmux")
 hitbox = NodePath("../../../Hitboxes/Feet")
 effects = SubResource("Resource_xi4k6")
 
-[node name="Floorslide" type="Node" parent="StateMachine/Dry" unique_id=1771606833]
+[node name="Floorslide" type="Node" parent="StateMachine/Dry" unique_id=1771606833 node_paths=PackedStringArray("hitbox")]
 script = ExtResource("100_opa2o")
+hitbox = NodePath("../../../Hitboxes/Dive")
 max_fall_speed = 498.33
 effects = SubResource("Resource_1jrtl")
 
@@ -2688,8 +2716,9 @@ effects = SubResource("Resource_dlwgk")
 script = ExtResource("106_khj77")
 effects = SubResource("Resource_141y4")
 
-[node name="SwimSpin" type="Node" parent="StateMachine/Submerged" unique_id=918955483 node_paths=PackedStringArray("hitbox")]
+[node name="SwimSpin" type="Node" parent="StateMachine/Submerged" unique_id=918955483 node_paths=PackedStringArray("submerged", "hitbox")]
 script = ExtResource("107_7wjw0")
+submerged = NodePath("..")
 hitbox = NodePath("../../../Hitboxes/Spin")
 gravity_suspend_time = 0.0
 speed_curve = SubResource("Curve_spinspeed")
@@ -2711,6 +2740,7 @@ effects = SubResource("Resource_8n2vb")
 
 [node name="GroundPoundFall" type="Node" parent="StateMachine/GroundPound" unique_id=1174339687]
 script = ExtResource("114_rnjo6")
+pierce_damping = 0.35
 max_fall_speed = 815.0
 effects = SubResource("Resource_dd1vg")
 
@@ -2781,8 +2811,9 @@ plume_animation = &"rocket"
 continuous_spray = false
 plume_offset = Vector2(4, -1)
 
-[node name="Turbo" type="Node" parent="Fludd/Modes" unique_id=1248448107]
+[node name="Turbo" type="Node" parent="Fludd/Modes" unique_id=1248448107 node_paths=PackedStringArray("hitbox")]
 script = ExtResource("129_wrpqp")
+hitbox = NodePath("../../../Hitboxes/Turbo")
 speed = 500.0
 nozzle = 3
 blocked_states = Array[StringName]([&"Floorslide", &"Dive"])

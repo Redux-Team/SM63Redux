@@ -3,6 +3,9 @@ extends FluddMode
 const MODIFIER_KEY: StringName = &"fludd_turbo"
 
 @export_group("Turbo")
+@export var hitbox: HitBox
+@export_range(0.0, 1.0) var bump_damp: float = 0.75
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var rebuild_acceleration: float = 250.0
 ## Run and air speed while the turbo runs.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var speed: float = 450.0
 @export_group("Underwater Aim")
@@ -17,6 +20,7 @@ const MODIFIER_KEY: StringName = &"fludd_turbo"
 
 var _aiming: bool = false
 var _aim_degrees: float = 0.0
+var _cap: float = 0.0
 
 
 func is_aiming() -> bool:
@@ -26,11 +30,17 @@ func is_aiming() -> bool:
 func _enter() -> void:
 	fludd.begin_spray_loop()
 	player.friction_modifiers.set_modifier(MODIFIER_KEY, 0.0)
+	_cap = speed
+	if hitbox:
+		if not hitbox.landed.is_connected(_on_hitbox_landed):
+			hitbox.landed.connect(_on_hitbox_landed)
+		hitbox.enable()
 
 
 func _tick(delta: float) -> void:
-	player.ground_speed_override = speed
-	player.air_speed_override = speed
+	_cap = move_toward(_cap, speed, rebuild_acceleration * delta)
+	player.ground_speed_override = _cap
+	player.air_speed_override = _cap
 	if not player.is_in_water():
 		_stop_aiming()
 		return
@@ -42,6 +52,8 @@ func _tick(delta: float) -> void:
 
 
 func _exit() -> void:
+	if hitbox:
+		hitbox.disable()
 	_stop_aiming()
 	player.friction_modifiers.clear_modifier(MODIFIER_KEY)
 	player.ground_speed_override = 0.0
@@ -61,6 +73,11 @@ func _aim(delta: float) -> void:
 	direction.x *= float(player.get_facing())
 	player.velocity = player.velocity.move_toward(direction * maxf(speed, player.velocity.length()), aim_acceleration * delta)
 	player.sprite.local_rotation = _aim_degrees
+
+
+func _on_hitbox_landed(_hurt_box: HurtBox) -> void:
+	player.velocity.x *= bump_damp
+	_cap = minf(_cap, absf(player.velocity.x))
 
 
 func _stop_aiming() -> void:

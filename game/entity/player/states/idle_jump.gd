@@ -7,7 +7,7 @@ extends PlayerState
 func _next() -> StringName:
 	if player.can_dive and time > 0.0 and controls.is_just_pressed(&"dive"):
 		return &"Dive"
-	if player.is_on_floor():
+	if player.has_landed():
 		return &"Idle"
 	if player.velocity.y > fall_speed:
 		return &"Fall"
