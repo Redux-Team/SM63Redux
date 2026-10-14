@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/level_designer/interface/ld_object_group.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/down.svg" id="2_down"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/next.svg" id="3_next"]
+
+[node name="LDObjectGroup" type="PanelContainer" node_paths=PackedStringArray("list", "toggle_button")]
+size_flags_vertical = 0
+script = ExtResource("1_script")
+list = NodePath("VBoxContainer/List")
+toggle_button = NodePath("VBoxContainer/Header/ToggleButton")
+expanded_icon = ExtResource("2_down")
+collapsed_icon = ExtResource("3_next")
+metadata/gdss_classes = PackedStringArray("Group")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = 6
+
+[node name="Header" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ToggleButton" type="Button" parent="VBoxContainer/Header"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+toggle_mode = true
+button_pressed = true
+text = "Group"
+alignment = 0
+metadata/gdss_classes = PackedStringArray("Flat")
+
+[node name="Line" type="HSeparator" parent="VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="List" type="HFlowContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6

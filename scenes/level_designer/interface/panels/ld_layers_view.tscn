@@ -1,0 +1,111 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/add.svg" id="1_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/up.svg" id="2_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/down.svg" id="3_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/remove.svg" id="4_r"]
+
+[node name="LayersView" type="MarginContainer"]
+custom_minimum_size = Vector2(520, 280)
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="Columns" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="ListColumn" type="VBoxContainer" parent="Columns"]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 0)
+size_flags_horizontal = 1
+theme_override_constants/separation = 8
+
+[node name="ListInset" type="PanelContainer" parent="Columns/ListColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Inset")
+
+[node name="ListScroll" type="ScrollContainer" parent="Columns/ListColumn/ListInset"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 150)
+horizontal_scroll_mode = 0
+
+[node name="RowList" type="VBoxContainer" parent="Columns/ListColumn/ListInset/ListScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="CountLabel" type="Label" parent="Columns/ListColumn"]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0.55)
+horizontal_alignment = 1
+metadata/gdss_classes = PackedStringArray("Mute")
+
+[node name="Toolbar" type="HBoxContainer" parent="Columns/ListColumn"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AddButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+layout_mode = 2
+custom_minimum_size = Vector2(34, 34)
+focus_mode = 0
+icon = ExtResource("1_r")
+expand_icon = true
+metadata/tooltip = "Add Layer"
+metadata/tooltip_mode = 0
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="MoveUpButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+layout_mode = 2
+custom_minimum_size = Vector2(34, 34)
+focus_mode = 0
+icon = ExtResource("2_r")
+expand_icon = true
+metadata/tooltip = "Move Layer Up"
+metadata/tooltip_mode = 0
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="MoveDownButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+layout_mode = 2
+custom_minimum_size = Vector2(34, 34)
+focus_mode = 0
+icon = ExtResource("3_r")
+expand_icon = true
+metadata/tooltip = "Move Layer Down"
+metadata/tooltip_mode = 0
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="Spacer" type="Control" parent="Columns/ListColumn/Toolbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="RemoveButton" type="Button" parent="Columns/ListColumn/Toolbar"]
+layout_mode = 2
+custom_minimum_size = Vector2(34, 34)
+focus_mode = 0
+icon = ExtResource("4_r")
+expand_icon = true
+metadata/tooltip = "Remove Layer"
+metadata/tooltip_mode = 0
+metadata/gdss_classes = PackedStringArray("IconButton", "Danger")
+
+[node name="Detail" type="VBoxContainer" parent="Columns"]
+layout_mode = 2
+custom_minimum_size = Vector2(240, 0)
+size_flags_horizontal = 3
+
+[node name="DetailInset" type="PanelContainer" parent="Columns/Detail"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/gdss_classes = PackedStringArray("Card")
+
+[node name="Rows" type="VBoxContainer" parent="Columns/Detail/DetailInset"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 14

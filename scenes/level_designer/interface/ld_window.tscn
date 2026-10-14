@@ -1,0 +1,123 @@
+[gd_scene format=3 uid="uid://41xe70yxbo1t"]
+
+[ext_resource type="Theme" uid="uid://djulxh0eccwag" path="res://scenes/level_designer/interface/ld_window_theme.tres" id="1_r"]
+[ext_resource type="Shader" uid="uid://wxepa6euigw5" path="res://shader/blur.gdshader" id="2_7pvns"]
+[ext_resource type="Script" uid="uid://v420tonoywqp" path="res://scenes/level_designer/interface/ld_window.gd" id="2_r"]
+[ext_resource type="Script" uid="uid://djwxqlemhil25" path="res://util/ui/ui_blur_rect/ui_blur_rect.gd" id="3_r"]
+[ext_resource type="Texture2D" uid="uid://b2mhv8xfkj2ge" path="res://assets/textures/level_designer/ui_icons/close.svg" id="4_r"]
+[ext_resource type="FontFile" uid="uid://cnmgtcgow66hp" path="res://assets/font/pixel_redux_border.fnt" id="5_wr636"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ymejj"]
+shader = ExtResource("2_7pvns")
+shader_parameter/tint = Color(0, 0, 0, 0.4)
+shader_parameter/blur = 8.0
+
+[node name="Window" type="Panel" unique_id=945386025 node_paths=PackedStringArray("fade", "frame", "content", "title_plate", "title_margin", "title_label", "close_button", "backdrop", "glass")]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_r")
+script = ExtResource("2_r")
+fade = NodePath("Fade")
+frame = NodePath("Fade/Frame")
+content = NodePath("Fade/Frame/VBoxContainer/MarginContainer/VBoxContainer/Content")
+title_plate = NodePath("Fade/Frame/CloseLayer/TitlePlate")
+title_margin = NodePath("Fade/Frame/VBoxContainer/MarginContainer")
+title_label = NodePath("Fade/Frame/CloseLayer/TitlePlate/TitleLabel")
+close_button = NodePath("Fade/Frame/CloseLayer/CloseButton")
+backdrop = NodePath("Backdrop")
+glass = NodePath("Glass")
+metadata/gdss_mode = 1
+metadata/gdss_classes = PackedStringArray("LDRoot")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=401875608]
+material = SubResource("ShaderMaterial_ymejj")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_r")
+
+[node name="Glass" type="Panel" parent="." unique_id=1496190379]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+metadata/gdss_classes = PackedStringArray("WindowGlass")
+
+[node name="Fade" type="Control" parent="." unique_id=805435214]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Frame" type="PanelContainer" parent="Fade" unique_id=1711595448]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/gdss_classes = PackedStringArray("Window")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Fade/Frame" unique_id=1761972996]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Fade/Frame/VBoxContainer" unique_id=1655913322]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_top = 18
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Fade/Frame/VBoxContainer/MarginContainer" unique_id=1750339942]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Content" type="PanelContainer" parent="Fade/Frame/VBoxContainer/MarginContainer/VBoxContainer" unique_id=1857792142]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CloseLayer" type="Control" parent="Fade/Frame" unique_id=1778474299]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TitlePlate" type="PanelContainer" parent="Fade/Frame/CloseLayer" unique_id=166305565]
+layout_mode = 1
+offset_left = -22.0
+offset_top = -16.0
+rotation = -0.04
+mouse_filter = 2
+metadata/gdss_classes = PackedStringArray("WindowTitle")
+
+[node name="TitleLabel" type="Label" parent="Fade/Frame/CloseLayer/TitlePlate" unique_id=31437968]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_wr636")
+theme_override_font_sizes/font_size = 24
+text = "Window Title"
+metadata/gdss_classes = PackedStringArray("Title")
+
+[node name="CloseButton" type="Button" parent="Fade/Frame/CloseLayer" unique_id=1251591968]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -16.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 16.0
+grow_horizontal = 0
+pivot_offset = Vector2(13, 13)
+focus_mode = 0
+icon = ExtResource("4_r")
+expand_icon = true
+metadata/tooltip = "Close (Esc)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("Close")

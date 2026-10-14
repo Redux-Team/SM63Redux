@@ -1,0 +1,35 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/level_designer/interface/ld_object_entry.gd" id="1_script"]
+
+[node name="LDObjectEntry" type="Button" node_paths=PackedStringArray("preview")]
+custom_minimum_size = Vector2(56, 56)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_default_cursor_shape = 2
+script = ExtResource("1_script")
+preview = NodePath("VBoxContainer/Preview")
+metadata/gdss_classes = PackedStringArray("Tile")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Preview" type="TextureRect" parent="VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+

@@ -1,0 +1,727 @@
+[gd_scene format=3 uid="uid://c4pxgbqsdvg2u"]
+
+[ext_resource type="Texture2D" uid="uid://datc01a7vb6pb" path="res://assets/textures/level_designer/ui_icons/save.svg" id="1_r"]
+[ext_resource type="Texture2D" uid="uid://doo3j04k8g04x" path="res://assets/textures/level_designer/ui_icons/save_as.svg" id="2_r"]
+[ext_resource type="Texture2D" uid="uid://c687phmm1ui5d" path="res://assets/textures/level_designer/ui_icons/load.svg" id="3_r"]
+[ext_resource type="Texture2D" uid="uid://0o252anyb2n6" path="res://assets/textures/level_designer/ui_icons/reset_level.svg" id="4_r"]
+[ext_resource type="Texture2D" uid="uid://cdvkqplpbxa0q" path="res://assets/textures/level_designer/ui_icons/settings.svg" id="5_r"]
+[ext_resource type="Texture2D" uid="uid://noedtsilxu8q" path="res://assets/textures/level_designer/ui_icons/undo.svg" id="6_r"]
+[ext_resource type="Texture2D" uid="uid://6tjh88q2g2eg" path="res://assets/textures/level_designer/ui_icons/redo.svg" id="7_r"]
+[ext_resource type="Texture2D" uid="uid://cy2fwmvt1qb8m" path="res://assets/textures/level_designer/ui_icons/cut.svg" id="8_r"]
+[ext_resource type="Texture2D" uid="uid://4d45lckanwet" path="res://assets/textures/level_designer/ui_icons/copy.svg" id="9_r"]
+[ext_resource type="Texture2D" uid="uid://6gsw2a3tl24c" path="res://assets/textures/level_designer/ui_icons/paste.svg" id="10_r"]
+[ext_resource type="Texture2D" uid="uid://ckpn15rmdxikj" path="res://assets/textures/level_designer/ui_icons/duplicate.svg" id="11_r"]
+[ext_resource type="Texture2D" uid="uid://cydterukyixtc" path="res://assets/textures/level_designer/ui_icons/deselect.svg" id="12_r"]
+[ext_resource type="Texture2D" uid="uid://d3e3c2uxp1rug" path="res://assets/textures/level_designer/ui_icons/front.svg" id="13_r"]
+[ext_resource type="Texture2D" uid="uid://cosmmki8kuy3b" path="res://assets/textures/level_designer/ui_icons/back.svg" id="14_r"]
+[ext_resource type="Texture2D" uid="uid://h1c6arheylxs" path="res://assets/textures/level_designer/ui_icons/delete.svg" id="15_r"]
+[ext_resource type="Texture2D" uid="uid://dupps81nqleq" path="res://assets/textures/level_designer/ui_icons/prev.svg" id="16_r"]
+[ext_resource type="Texture2D" uid="uid://dc3oaou1gm27a" path="res://assets/textures/level_designer/ui_icons/next.svg" id="17_r"]
+[ext_resource type="Texture2D" uid="uid://chn4l2chy35bf" path="res://assets/textures/level_designer/ui_icons/reset_cam.svg" id="18_r"]
+[ext_resource type="Texture2D" uid="uid://bcwxbcnfeorko" path="res://assets/textures/level_designer/ui_icons/parallax.svg" id="19_r"]
+[ext_resource type="Texture2D" uid="uid://c3wjnompc3ko1" path="res://assets/textures/level_designer/ui_icons/modulate.svg" id="20_r"]
+[ext_resource type="Script" uid="uid://buc7q8erxg4jo" path="res://scenes/level_designer/interface/ld_hotbar_slot.gd" id="21_r"]
+[ext_resource type="FontFile" uid="uid://cnmgtcgow66hp" path="res://assets/font/pixel_redux_border.fnt" id="22_jqau8"]
+[ext_resource type="Texture2D" uid="uid://c6nnr2y5wa4kb" path="res://assets/textures/level_designer/ui_icons/obj_browser.svg" id="22_r"]
+[ext_resource type="Texture2D" uid="uid://b2rthm7cwu5f7" path="res://assets/textures/level_designer/ui_icons/properties.svg" id="23_r"]
+[ext_resource type="Texture2D" uid="uid://bab4d65df10qt" path="res://assets/textures/level_designer/ui_icons/select.svg" id="24_r"]
+[ext_resource type="Texture2D" uid="uid://dxl3d6p8p8abe" path="res://assets/textures/level_designer/ui_icons/brush.svg" id="25_r"]
+[ext_resource type="Texture2D" uid="uid://nbdvk7pss2q6" path="res://assets/textures/level_designer/ui_icons/tile.svg" id="26_r"]
+[ext_resource type="Texture2D" uid="uid://c0t02y00tbi4v" path="res://assets/textures/level_designer/ui_icons/move.svg" id="27_r"]
+[ext_resource type="Texture2D" uid="uid://c81rcaj0gayug" path="res://assets/textures/level_designer/ui_icons/rotate.svg" id="28_r"]
+[ext_resource type="Texture2D" uid="uid://befcyokqxrxmb" path="res://assets/textures/level_designer/ui_icons/scale.svg" id="29_r"]
+[ext_resource type="Texture2D" uid="uid://x3thrperd2h" path="res://assets/textures/level_designer/ui_icons/place.svg" id="30_r"]
+[ext_resource type="Texture2D" uid="uid://dgwk8rteoin2n" path="res://assets/textures/level_designer/ui_icons/poly_edit.svg" id="31_r"]
+[ext_resource type="Texture2D" uid="uid://t56qffjb1o1v" path="res://assets/textures/level_designer/ui_icons/poly_add.svg" id="32_r"]
+[ext_resource type="Texture2D" uid="uid://bfgi7fllhubb1" path="res://assets/textures/level_designer/ui_icons/poly_cut.svg" id="33_r"]
+[ext_resource type="Texture2D" uid="uid://cnmqrty555op" path="res://assets/textures/level_designer/ui_icons/topline.svg" id="34_r"]
+[ext_resource type="Texture2D" uid="uid://btl2agxeb00f0" path="res://assets/textures/level_designer/ui_icons/layers.svg" id="35_r"]
+[ext_resource type="Texture2D" uid="uid://bg3fpaudox0nq" path="res://assets/textures/level_designer/ui_icons/areas.svg" id="36_r"]
+[ext_resource type="Texture2D" uid="uid://biiwxx0evmvuj" path="res://assets/textures/level_designer/ui_icons/tags.svg" id="37_r"]
+[ext_resource type="Texture2D" uid="uid://c6so00y5lshit" path="res://assets/textures/level_designer/ui_icons/stamps.svg" id="38_r"]
+[ext_resource type="Texture2D" uid="uid://bplaqhn46tmar" path="res://assets/textures/level_designer/ui_icons/scenarios.svg" id="39_r"]
+[ext_resource type="Texture2D" uid="uid://bt8u6qrpfh11r" path="res://assets/textures/level_designer/ui_icons/background.svg" id="40_r"]
+[ext_resource type="Texture2D" uid="uid://dcgs3ybhnoflf" path="res://assets/textures/level_designer/ui_icons/music.svg" id="41_r"]
+
+[node name="Chrome" type="Panel" unique_id=2092673143]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/gdss_mode = 1
+metadata/gdss_classes = PackedStringArray("LDRoot")
+
+[node name="TopBarL" type="PanelContainer" parent="." unique_id=5050156]
+texture_filter = 4
+layout_mode = 0
+offset_left = 12.0
+offset_top = 10.0
+offset_right = 12.0
+offset_bottom = 46.0
+mouse_filter = 1
+metadata/gdss_classes = PackedStringArray("Bar")
+
+[node name="Row" type="HBoxContainer" parent="TopBarL" unique_id=1073855046]
+layout_mode = 2
+
+[node name="FileGroup" type="HBoxContainer" parent="TopBarL/Row" unique_id=1048811493]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="TopBarL/Row/FileGroup" unique_id=623265045]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("1_r")
+expand_icon = true
+metadata/tooltip = "Save (Ctrl+S)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="SaveNewButton" type="Button" parent="TopBarL/Row/FileGroup" unique_id=948263356]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("2_r")
+expand_icon = true
+metadata/tooltip = "Save As... (Ctrl+Shift+S)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="LoadButton" type="Button" parent="TopBarL/Row/FileGroup" unique_id=1864281572]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("3_r")
+expand_icon = true
+metadata/tooltip = "Open (Ctrl+O)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="HistSep" type="VSeparator" parent="TopBarL/Row/FileGroup" unique_id=983541108]
+layout_mode = 2
+
+[node name="ResetButton" type="Button" parent="TopBarL/Row/FileGroup" unique_id=1395754445]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("4_r")
+expand_icon = true
+metadata/tooltip = "Reset Level"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("Danger")
+
+[node name="SettingsButton" type="Button" parent="TopBarL/Row/FileGroup" unique_id=1328044218]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("5_r")
+expand_icon = true
+metadata/tooltip = "Settings"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="Sep" type="VSeparator" parent="TopBarL/Row/FileGroup" unique_id=1731373063]
+layout_mode = 2
+
+[node name="UndoButton" type="Button" parent="TopBarL/Row/FileGroup" unique_id=1896061838]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("6_r")
+expand_icon = true
+metadata/tooltip = "Undo (Ctrl+Z)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="RedoButton" type="Button" parent="TopBarL/Row/FileGroup" unique_id=1788069802]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("7_r")
+expand_icon = true
+metadata/tooltip = "Redo (Ctrl+Shift+Z)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="TopBarR" type="PanelContainer" parent="." unique_id=314761335]
+texture_filter = 4
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -276.0
+offset_top = 10.0
+offset_right = -16.0
+offset_bottom = 46.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+mouse_filter = 1
+metadata/gdss_classes = PackedStringArray("Bar")
+
+[node name="EditGroup" type="HBoxContainer" parent="TopBarR" unique_id=686369227]
+layout_mode = 2
+alignment = 2
+
+[node name="CutButton" type="Button" parent="TopBarR/EditGroup" unique_id=300595454]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("8_r")
+expand_icon = true
+metadata/tooltip = "Cut (Ctrl+X)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="CopyButton" type="Button" parent="TopBarR/EditGroup" unique_id=545587578]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("9_r")
+expand_icon = true
+metadata/tooltip = "Copy (Ctrl+C)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="PasteButton" type="Button" parent="TopBarR/EditGroup" unique_id=1947804291]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("10_r")
+expand_icon = true
+metadata/tooltip = "Paste (Ctrl+V)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="DuplicateButton" type="Button" parent="TopBarR/EditGroup" unique_id=1951380462]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("11_r")
+expand_icon = true
+metadata/tooltip = "Duplicate (Ctrl+D)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="DeselectButton" type="Button" parent="TopBarR/EditGroup" unique_id=1547519147]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("12_r")
+expand_icon = true
+metadata/tooltip = "Deselect (Esc)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="Sep1" type="VSeparator" parent="TopBarR/EditGroup" unique_id=1408011698]
+layout_mode = 2
+
+[node name="MoveToFrontButton" type="Button" parent="TopBarR/EditGroup" unique_id=1468831944]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("13_r")
+expand_icon = true
+metadata/tooltip = "Bring to Front"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="MoveToBackButton" type="Button" parent="TopBarR/EditGroup" unique_id=1559521615]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("14_r")
+expand_icon = true
+metadata/tooltip = "Send to Back"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="Sep2" type="VSeparator" parent="TopBarR/EditGroup" unique_id=1493249349]
+layout_mode = 2
+
+[node name="DeleteButton" type="Button" parent="TopBarR/EditGroup" unique_id=316255124]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("15_r")
+expand_icon = true
+metadata/tooltip = "Delete (Del)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("Danger")
+
+[node name="LayerVisualsHBox" type="HBoxContainer" parent="." unique_id=1139787678]
+texture_filter = 4
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -19.0
+offset_top = 52.0
+offset_right = -19.0
+offset_bottom = 80.0
+grow_horizontal = 0
+alignment = 2
+
+[node name="LayerBar" type="PanelContainer" parent="LayerVisualsHBox" unique_id=830720014]
+layout_mode = 2
+mouse_filter = 1
+metadata/gdss_classes = PackedStringArray("Bar")
+
+[node name="LayerNav" type="HBoxContainer" parent="LayerVisualsHBox/LayerBar" unique_id=1496329144]
+layout_mode = 2
+
+[node name="PrevLayer" type="Button" parent="LayerVisualsHBox/LayerBar/LayerNav" unique_id=360705723]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("16_r")
+expand_icon = true
+metadata/tooltip = "Layer Behind (Page Down)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="LayerName" type="Label" parent="LayerVisualsHBox/LayerBar/LayerNav" unique_id=1669675165]
+custom_minimum_size = Vector2(46, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("22_jqau8")
+text = "Layer 0"
+horizontal_alignment = 1
+
+[node name="NextLayer" type="Button" parent="LayerVisualsHBox/LayerBar/LayerNav" unique_id=1276151884]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("17_r")
+expand_icon = true
+metadata/tooltip = "Layer in Front (Page Up)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="ResetCamButton" type="Button" parent="LayerVisualsHBox" unique_id=24388996]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("18_r")
+expand_icon = true
+metadata/tooltip = "Reset Camera (0)"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("ViewportToggle")
+
+[node name="FocusButton" type="Button" parent="LayerVisualsHBox" unique_id=1875819110]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+icon = ExtResource("19_r")
+expand_icon = true
+metadata/tooltip = "Focus Layer"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("ViewportToggle")
+
+[node name="ModulationButton" type="Button" parent="LayerVisualsHBox" unique_id=1771605591]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+button_pressed = true
+icon = ExtResource("20_r")
+expand_icon = true
+metadata/tooltip = "Layer Modulation"
+metadata/tooltip_mode = 3
+metadata/gdss_classes = PackedStringArray("ViewportToggle")
+
+[node name="BottomBar" type="PanelContainer" parent="." unique_id=1720514383]
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -50.0
+offset_right = 12.0
+offset_bottom = -7.0
+grow_vertical = 0
+mouse_filter = 1
+metadata/gdss_classes = PackedStringArray("Bar", "Bottom")
+
+[node name="Row" type="HBoxContainer" parent="BottomBar" unique_id=1404258565]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Hotbar" type="HBoxContainer" parent="BottomBar/Row" unique_id=2012393110]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="HotbarButton" type="Button" parent="BottomBar/Row/Hotbar" unique_id=816686893]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_r")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton2" type="Button" parent="BottomBar/Row/Hotbar" unique_id=1492395935]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_r")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton3" type="Button" parent="BottomBar/Row/Hotbar" unique_id=572780064]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_r")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton4" type="Button" parent="BottomBar/Row/Hotbar" unique_id=2039971000]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_r")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton5" type="Button" parent="BottomBar/Row/Hotbar" unique_id=308385712]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_r")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton6" type="Button" parent="BottomBar/Row/Hotbar" unique_id=1196923518]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_r")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton7" type="Button" parent="BottomBar/Row/Hotbar" unique_id=497008755]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_r")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton8" type="Button" parent="BottomBar/Row/Hotbar" unique_id=509822897]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_r")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="HotbarButton9" type="Button" parent="BottomBar/Row/Hotbar" unique_id=1770274892]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_r")
+metadata/gdss_classes = PackedStringArray("Hotbar")
+
+[node name="ToolRail" type="PanelContainer" parent="." unique_id=1564315177]
+texture_filter = 4
+layout_mode = 0
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 12.0
+offset_top = -66.0
+offset_right = 48.0
+offset_bottom = 66.0
+grow_vertical = 2
+size_flags_vertical = 4
+mouse_filter = 1
+metadata/gdss_classes = PackedStringArray("Bar")
+
+[node name="Clip" type="Control" parent="ToolRail" unique_id=2058133198]
+clip_contents = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Tools" type="BoxContainer" parent="ToolRail/Clip" unique_id=374697164]
+layout_mode = 1
+offset_right = 28.0
+vertical = true
+
+[node name="ObjectBrowserButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=562783349]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("22_r")
+expand_icon = true
+metadata/tooltip = "Objects (Tab)"
+metadata/tooltip_mode = 2
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="PropertiesButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=920425042]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("23_r")
+expand_icon = true
+metadata/tooltip = "Properties (I)"
+metadata/tooltip_mode = 2
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="SelectButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=2013627005]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("24_r")
+expand_icon = true
+metadata/tooltip = "Select (Q)"
+metadata/tooltip_mode = 2
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="BrushButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=2105437904]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("25_r")
+expand_icon = true
+metadata/tooltip = "Paint (B)"
+metadata/tooltip_mode = 2
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="TileButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=195312659]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("26_r")
+expand_icon = true
+metadata/tooltip = "Tile"
+metadata/tooltip_mode = 2
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="MoveButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=1695892751]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("27_r")
+expand_icon = true
+metadata/tooltip = "Move (M)"
+metadata/tooltip_mode = 2
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="RotateButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=570604084]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("28_r")
+expand_icon = true
+metadata/tooltip = "Rotate (R)"
+metadata/tooltip_mode = 2
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="ScaleButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=1064545994]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("29_r")
+expand_icon = true
+metadata/tooltip = "Scale (E)"
+metadata/tooltip_mode = 2
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="PlaceButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=194377933]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("30_r")
+expand_icon = true
+metadata/tooltip = "Place"
+metadata/tooltip_mode = 2
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="PolyEditButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=1791890227]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("31_r")
+expand_icon = true
+metadata/tooltip = "Edit Polygon"
+metadata/tooltip_mode = 2
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="PolyAddButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=258786325]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("32_r")
+expand_icon = true
+metadata/tooltip = "Add to Polygon"
+metadata/tooltip_mode = 2
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="PolyCutButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=761265868]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("33_r")
+expand_icon = true
+metadata/tooltip = "Cut Polygon"
+metadata/tooltip_mode = 2
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="ToplineButton" type="Button" parent="ToolRail/Clip/Tools" unique_id=1237648839]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("34_r")
+expand_icon = true
+metadata/tooltip = "Toplines"
+metadata/tooltip_mode = 2
+metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="Control" type="Control" parent="ToolRail/Clip/Tools" unique_id=2096277194]
+layout_mode = 2
+
+[node name="PanelRail" type="PanelContainer" parent="." unique_id=1641423110]
+texture_filter = 4
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -52.0
+offset_top = -81.5
+offset_right = -16.0
+offset_bottom = 109.5
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+metadata/gdss_classes = PackedStringArray("Bar")
+
+[node name="Panels" type="BoxContainer" parent="PanelRail" unique_id=1447968410]
+layout_mode = 2
+vertical = true
+
+[node name="LayerProperties" type="Button" parent="PanelRail/Panels" unique_id=1096620650]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("35_r")
+expand_icon = true
+metadata/tooltip = "Layers (L)"
+metadata/tooltip_mode = 1
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="AreasButton" type="Button" parent="PanelRail/Panels" unique_id=278179190]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("36_r")
+expand_icon = true
+metadata/tooltip = "Areas"
+metadata/tooltip_mode = 1
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="TagsButton" type="Button" parent="PanelRail/Panels" unique_id=1694429843]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+disabled = true
+icon = ExtResource("37_r")
+expand_icon = true
+metadata/tooltip = "Tags (coming soon)"
+metadata/tooltip_mode = 1
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="StampsButton" type="Button" parent="PanelRail/Panels" unique_id=2126229367]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+disabled = true
+icon = ExtResource("38_r")
+expand_icon = true
+metadata/tooltip = "Stamps (coming soon)"
+metadata/tooltip_mode = 1
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="ScenariosButton" type="Button" parent="PanelRail/Panels" unique_id=1115360504]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+disabled = true
+icon = ExtResource("39_r")
+expand_icon = true
+metadata/tooltip = "Scenarios (coming soon)"
+metadata/tooltip_mode = 1
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="BackgroundButton" type="Button" parent="PanelRail/Panels" unique_id=38518387]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+disabled = true
+icon = ExtResource("40_r")
+expand_icon = true
+metadata/tooltip = "Background (coming soon)"
+metadata/tooltip_mode = 1
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="MusicButton" type="Button" parent="PanelRail/Panels" unique_id=10996308]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+focus_mode = 0
+disabled = true
+icon = ExtResource("41_r")
+expand_icon = true
+metadata/tooltip = "Music (coming soon)"
+metadata/tooltip_mode = 1
+metadata/gdss_classes = PackedStringArray("IconButton")
+
+[node name="TestButton" type="Button" parent="." unique_id=985695470]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -109.0
+offset_top = -41.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_mode = 0
+text = "Test Level"
+metadata/tooltip = "Playtest the level (F5)"
+metadata/tooltip_mode = 4
+metadata/gdss_classes = PackedStringArray("TestLevelButton")

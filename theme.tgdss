@@ -8,6 +8,7 @@
 	MYSTERY_TEXTURE: texture("uid://uxsyer7box1s", NEAREST, true, true)
 	MAIN_FONT: font("uid://cnmgtcgow66hp")
 	HOLLOW_FONT: font("uid://k76pvtok3f2u")
+	PLAYTEST_TEXTURE: texture("uid://br1pxo7vu7i6m", NEAREST, true, true)
 }
 
 
@@ -114,6 +115,12 @@ Button {
 			border_color: $base_shadow_col
 			transform_scale: 1
 		}
+		
+		:disabled {
+			bg_color: mix(WHITE, $base_shadow_col, 0.35)
+			border_color: alpha($base_shadow_col, 0.5)
+			transform_scale: 1
+		}
 	}
 }
 
@@ -137,11 +144,20 @@ Panel {
 		border: 2
 		border_color: $base_shadow_col
 		corner_radius: 99
+		
+		::disabled {
+			bg_color: mix(WHITE, $base_shadow_col, 0.35)
+			border_color: alpha($base_shadow_col, 0.5)
+		}
 	}
 	
 	SliderFill {
 		bg_color: $global_accent 
 		corner_radius: 99
+		
+		::disabled {
+			bg_color: desaturate(alpha($global_accent, 0.5), 0.8)
+		}
 	}
 	
 	SliderGrabber {
@@ -161,6 +177,12 @@ Panel {
 		
 		::pressed {
 			bg_color: $base_shadow_col 
+		}
+		
+		::disabled {
+			bg_color: mix(WHITE, $base_shadow_col, 0.35)
+			border_color: alpha($base_shadow_col, 0.5)
+			transform_scale: 1
 		}
 	}
 	
@@ -191,6 +213,12 @@ OptionButton {
 	:hover, :focus {
 		bg_color: $global_accent
 		font_color: WHITE
+	}
+	
+	:disabled {
+		bg_color: mix(WHITE, $base_shadow_col, 0.35)
+		font_color: alpha($base_shadow_col, 0.5)
+		border_color: alpha($base_shadow_col, 0.5)
 	}
 }
 
@@ -346,6 +374,22 @@ Button {
 			var art: $LD_TEXTURE
 		}
 		
+		TestLevelButton {
+			var accent: "#2FBF71"
+			var art: $PLAYTEST_TEXTURE 
+			
+			font_size: 20
+			padding: 22 22 12 12
+		}
+		
+		ReturnToLDButton {
+			var accent: "#8B93A1"
+			var art: $LD_TEXTURE
+			
+			font_size: 20
+			padding: 22 22 12 12
+		}
+		
 		TitleButtonSecondary {
 			padding: 20 20 10 10
 			font_size: 22
@@ -369,5 +413,443 @@ Button {
 				var art: $MYSTERY_TEXTURE
 			}
 		}
+	}
+}
+
+
+# @chunk Level Designer
+var ld_danger: "#E85A5A"
+
+Panel {
+	LDRoot {
+		bg_color: TRANSPARENT
+		
+		>> Label {
+			font: $MAIN_FONT
+			font_size: 16
+			font_color: WHITE
+		}
+		
+		>> RichTextLabel {
+			normal_font: $BUTTON_FONT
+			normal_font_size: 8
+			default_color: WHITE
+		}
+		
+		>> PanelContainer {
+			bg_color: TRANSPARENT
+			border: 0
+		}
+		
+		>> ScrollContainer {
+			bg_color: TRANSPARENT
+		}
+		
+		>> VSeparator {
+			padding_left: 1
+			bg_color: alpha(WHITE, 0.2)
+		}
+		
+		>> HSeparator {
+			padding_top: 1
+			bg_color: alpha(WHITE, 0.2)
+		}
+	}
+}
+
+Button {
+	EditorButton {
+		transition_time: 0.1
+		transition_func: QUAD
+		transition_type: EASE_OUT
+		transform_enabled: true
+		transform_rotation: 0
+		font: $BUTTON_FONT
+		font_size: 8
+		font_color: WHITE
+		icon_color: WHITE
+		bg_color: TRANSPARENT
+		border: 0
+		corner_radius: 8
+		padding: 6 6 6 6
+		
+		:hover, :focus {
+			font_color: WHITE
+			icon_color: WHITE
+			bg_color: alpha(WHITE, 0.3)
+			transform_scale: 1.05
+		}
+		
+		:pressed, :hover_pressed {
+			font_color: WHITE
+			bg_color: $global_accent
+			transform_scale: 1.05
+		}
+		
+		:disabled {
+			cursor: ARROW
+			font_color: alpha(WHITE, 0.3)
+			icon_color: alpha(WHITE, 0.3)
+			bg_color: TRANSPARENT
+			transform_scale: 1
+		}
+		
+		IconButton {
+			padding: 5 5 5 5
+		}
+		
+		ToolButton {
+			padding: 5 5 5 5
+		}
+		
+		Active {
+			bg_color: $global_accent
+			
+			:hover, :focus {
+				bg_color: lighten($global_accent, 0.15)
+			}
+		}
+		
+		ListRow {
+			corner_radius: 6
+			padding: 10 10 6 6
+		}
+		
+		Chip {
+			corner_radius: 6
+			padding: 10 10 6 6
+			
+			:pressed, :hover_pressed {
+				bg_color: $global_accent
+				transform_scale: 1
+			}
+		}
+		
+		Flat {
+			font_color: alpha(WHITE, 0.6)
+			icon_color: alpha(WHITE, 0.6)
+			icon_max_width: 10
+			corner_radius: 4
+			padding: 2 6 2 2
+			
+			:hover, :focus {
+				font_color: WHITE
+				icon_color: WHITE
+				bg_color: TRANSPARENT
+				transform_scale: 1
+			}
+			
+			:pressed, :hover_pressed {
+				font_color: alpha(WHITE, 0.6)
+				icon_color: alpha(WHITE, 0.6)
+				bg_color: TRANSPARENT
+				transform_scale: 1
+			}
+		}
+		
+		Tile {
+			font_color: WHITE
+			bg_color: alpha(WHITE, 0.1)
+			border: 2
+			border_color: alpha(WHITE, 0.08)
+			corner_radius: 8
+			corner_radius_top_right: 3
+			corner_radius_bottom_left: 3
+			padding: 4 4 4 4
+			
+			:hover, :focus {
+				bg_color: alpha(WHITE, 0.18)
+				border_color: $global_accent
+				transform_scale: 1.06
+			}
+			
+			:pressed, :hover_pressed {
+				bg_color: alpha($global_accent, 0.5)
+				border_color: $global_accent
+				transform_scale: 1
+			}
+		}
+		
+		Hotbar {
+			bg_color: alpha(WHITE, 0.1)
+			border: 2
+			border_color: alpha(WHITE, 0.15)
+			corner_radius: 8
+			corner_radius_top_right: 3
+			corner_radius_bottom_left: 3
+			padding: 3 3 3 3
+			
+			:hover, :focus {
+				bg_color: alpha(WHITE, 0.25)
+				transform_rotation: -0.05rad
+				transform_scale: 1.08
+			}
+			
+			:disabled {
+				bg_color: alpha(WHITE, 0.1)
+			}
+		}
+		
+		ViewportToggle {
+			bg_color: liquid_blur($blur_amount, $base_shadow_col, 0.55, 1, 0.25)
+			corner_radius: 10
+			corner_radius_top_right: 4
+			corner_radius_bottom_left: 4
+			padding: 5 5 5 5
+			
+			:hover, :focus {
+				bg_color: liquid_blur($blur_amount, lighten($base_shadow_col, 0.3), 0.6, 1, 0.3)
+			}
+		}
+		
+		Danger {
+			:hover, :focus {
+				bg_color: $ld_danger
+			}
+			
+			:pressed, :hover_pressed {
+				bg_color: darken($ld_danger, 0.2)
+			}
+		}
+		
+		Close {
+			icon_color: $base_shadow_col
+			bg_color: WHITE
+			border: 2
+			border_color: $base_shadow_col
+			shadow_color: $base_shadow_col
+			shadow_bottom: 1
+			shadow_right: 1
+			shadow_offset: 2
+			shadow_blur: 0
+			corner_radius: 99
+			padding: 4 4 4 4
+			
+			:hover, :focus {
+				icon_color: WHITE
+				bg_color: $ld_danger
+				transform_rotation: 0.1rad
+			}
+			
+			:pressed, :hover_pressed {
+				icon_color: WHITE
+				bg_color: darken($ld_danger, 0.2)
+			}
+		}
+		
+		Primary {
+			var accent: $global_accent
+			
+			font_color: $base_shadow_col
+			icon_color: $base_shadow_col
+			bg_color: WHITE
+			border: 2
+			border_color: $base_shadow_col
+			shadow_color: $base_shadow_col
+			shadow_bottom: 1
+			shadow_right: 1
+			shadow_offset: 2
+			shadow_blur: 0
+			corner_radius: 8
+			corner_radius_top_right: 3
+			corner_radius_bottom_left: 3
+			padding: 12 12 8 8
+			
+			:hover, :focus {
+				font_color: WHITE
+				icon_color: WHITE
+				bg_color: $accent
+				transform_rotation: -0.04rad
+			}
+			
+			:pressed, :hover_pressed {
+				font_color: WHITE
+				bg_color: darken($accent, 0.3)
+				transform_rotation: 0
+			}
+			
+			:disabled {
+				font_color: alpha($base_shadow_col, 0.5)
+				bg_color: alpha(WHITE, 0.5)
+				transform_rotation: 0
+				transform_scale: 1
+			}
+		}
+	}
+}
+
+PanelContainer {
+	Bar {
+		bg_color: liquid_blur($blur_amount, $base_shadow_col, 0.55, 1, 0.25)
+		corner_radius: 12
+		corner_radius_top_right: 4
+		corner_radius_bottom_left: 4
+		padding: 4 4 4 4
+	}
+	
+	Bottom {
+		padding: 8
+	}
+	
+	Window {
+		bg_color: TRANSPARENT
+		padding: 8 8 8 8
+	}
+	
+	WindowTitle {
+		bg_color: $global_accent
+		border: 2
+		border_color: $base_shadow_col
+		shadow_color: $base_shadow_col
+		shadow_bottom: 1
+		shadow_right: 1
+		shadow_offset: 2
+		shadow_blur: 0
+		corner_radius: 10
+		corner_radius_top_right: 3
+		corner_radius_bottom_left: 3
+		padding: 12 12 2 2
+	}
+	
+	Card {
+		bg_color: alpha(BLACK, 0.25)
+		corner_radius: 8
+		padding: 10 10 10 10
+	}
+	
+	Inset {
+		bg_color: alpha(BLACK, 0.25)
+		corner_radius: 8
+		padding: 6 6 6 6
+	}
+	
+	Group {
+		bg_color: TRANSPARENT
+		padding: 0 0 0 0
+	}
+}
+
+Label {
+	Title {
+		font_size: 24
+	}
+	
+	Dim {
+		font_color: alpha(WHITE, 0.7)
+	}
+	
+	Mute {
+		font_color: alpha(WHITE, 0.5)
+	}
+	
+	SectionHeader {
+		font_color: alpha(WHITE, 0.6)
+	}
+}
+
+LineEdit {
+	InputField {
+		cursor: IBEAM
+		font: $BUTTON_FONT
+		font_size: 8
+		font_color: $base_shadow_col
+		font_placeholder_color: alpha($base_shadow_col, 0.5)
+		caret_color: $global_accent
+		selection_color: alpha($global_accent, 0.45)
+		bg_color: WHITE
+		border: 2
+		border_color: $base_shadow_col
+		corner_radius: 8
+		padding: 8 8 10 10
+		
+		:focus {
+			border_color: $global_accent
+		}
+		
+		:read_only {
+			bg_color: mix(WHITE, $base_shadow_col, 0.35)
+			font_color: alpha($base_shadow_col, 0.5)
+			border_color: alpha($base_shadow_col, 0.5)
+		}
+	}
+}
+
+ColorPickerButton {
+	InputField {
+		cursor: POINTING
+		bg_color: WHITE
+		border: 2
+		border_color: $base_shadow_col
+		corner_radius: 0
+		padding: 4 4 4 4
+		
+		:hover, :focus {
+			border_color: $global_accent
+		}
+		
+		:disabled {
+			bg_color: mix(WHITE, $base_shadow_col, 0.35)
+			border_color: alpha($base_shadow_col, 0.5)
+		}
+	}
+}
+
+
+# @chunk Tooltip
+@instance var window_blur: 5.0
+@instance var window_tint: 0.8
+@instance var window_edge: 1.0
+
+Panel {
+	WindowGlass {
+		bg_color: blur($window_blur, $base_shadow_col, $window_tint)
+		border: 2
+		border_color: alpha($base_shadow_col, $window_edge)
+		shadow_color: alpha($base_shadow_col, $window_edge)
+		shadow_bottom: 1
+		shadow_right: 1
+		shadow_offset: 3
+		shadow_blur: 0
+		corner_radius: 14
+		corner_radius_top_right: 5
+		corner_radius_bottom_left: 5
+	}
+}
+
+@instance var tooltip_blur: 5.0
+@instance var tooltip_tint: 0.6
+
+PanelContainer {
+	TooltipBubble {
+		bg_color: blur($tooltip_blur, BLACK, $tooltip_tint)
+		corner_radius: 6
+		padding: 8 8 4 4
+	}
+}
+
+Panel {
+	TooltipArrow {
+		bg_color: blur($tooltip_blur, BLACK, $tooltip_tint)
+		clip_path: polygon(0,1, 0.5,0, 1,1)
+		
+		TooltipArrowDown {
+			clip_path: polygon(0,0, 0.5,1, 1,0)
+		}
+		
+		TooltipArrowLeft {
+			clip_path: polygon(1,0, 0,0.5, 1,1)
+		}
+		
+		TooltipArrowRight {
+			clip_path: polygon(0,0, 1,0.5, 0,1)
+		}
+	}
+}
+
+RichTextLabel {
+	TooltipText {
+		normal_font: $BUTTON_FONT
+		normal_font_size: 8
+		default_color: WHITE
 	}
 }

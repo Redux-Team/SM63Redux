@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[node name="SectionHeader" type="Label"]
+custom_minimum_size = Vector2(0, 20)
+size_flags_vertical = 8
+text = "Section"
+vertical_alignment = 2
+metadata/gdss_classes = PackedStringArray("SectionHeader")

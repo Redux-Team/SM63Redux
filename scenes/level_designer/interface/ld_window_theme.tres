@@ -1,0 +1,45 @@
+[gd_resource type="Theme" format=3 uid="uid://djulxh0eccwag"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grabber"]
+bg_color = Color(1, 1, 1, 0.3)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_highlight"]
+bg_color = Color(1, 1, 1, 0.5)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pressed"]
+bg_color = Color(0.392157, 0.588235, 0.929412, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_track"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(1, 1, 1, 0.06)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[resource]
+HScrollBar/styles/grabber = SubResource("StyleBoxFlat_grabber")
+HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_highlight")
+HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_pressed")
+HScrollBar/styles/scroll = SubResource("StyleBoxFlat_track")
+HScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_track")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_grabber")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_highlight")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_pressed")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_track")
+VScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_track")

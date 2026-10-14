@@ -1,0 +1,76 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/search.svg" id="1_r"]
+
+[node name="ObjectBrowserView" type="Control"]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+custom_minimum_size = Vector2(500, 270)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SearchRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SearchIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/SearchRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(20, 20)
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("1_r")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SearchLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/SearchRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search objects..."
+metadata/gdss_classes = PackedStringArray("InputField")
+
+[node name="CategoryScroll" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 28)
+size_flags_vertical = 0
+vertical_scroll_mode = 0
+
+[node name="CategoryBar" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CategoryScroll"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 6
+
+[node name="ContentScroll" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ContentMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/ContentScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="GroupsVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ContentScroll/ContentMargin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10

@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/settings_screen/settings_screen.tscn" id="1_r"]
+
+[node name="SettingsView" type="Control"]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+custom_minimum_size = Vector2(600, 300)
+
+[node name="SettingsScreen" parent="." instance=ExtResource("1_r")]
+layout_mode = 1
+
+[node name="ExitButton" type="Button" parent="."]
+layout_mode = 0
+text = "Exit to Title"
+metadata/gdss_classes = PackedStringArray("GenericButton")

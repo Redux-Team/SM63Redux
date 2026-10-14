@@ -1,3 +1,378 @@
 [gd_scene format=3 uid="uid://b6ofp5p155oy2"]
 
-[node name="Level Designer" type="Node" unique_id=30344516]
+[ext_resource type="Resource" path="res://scenes/level_designer/core/ld_input_map.tres" id="1_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/level_designer.gd" id="2_r"]
+[ext_resource type="PackedScene" path="res://scenes/level_designer/interface/ld_chrome.tscn" id="3_r"]
+[ext_resource type="PackedScene" path="res://scenes/level_designer/interface/ld_window.tscn" id="4_r"]
+[ext_resource type="PackedScene" path="res://scenes/level_designer/interface/panels/ld_object_browser_view.tscn" id="5_r"]
+[ext_resource type="PackedScene" path="res://scenes/level_designer/interface/panels/ld_inspector_view.tscn" id="6_r"]
+[ext_resource type="PackedScene" path="res://scenes/level_designer/interface/panels/ld_layers_view.tscn" id="7_r"]
+[ext_resource type="PackedScene" path="res://scenes/level_designer/interface/panels/ld_areas_view.tscn" id="8_r"]
+[ext_resource type="PackedScene" path="res://scenes/level_designer/interface/panels/ld_settings_view.tscn" id="9_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/history/ld_history_handler.gd" id="10_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/level/ld_level_handler.gd" id="11_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/lock.svg" id="12_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/level/ld_layer_panel.gd" id="13_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/level/ld_area_panel.gd" id="14_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/level/ld_layer_navigation.gd" id="15_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/object/ld_object_handler.gd" id="16_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/object/ld_selection.gd" id="17_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/object/ld_clipboard.gd" id="18_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/object/ld_arrange.gd" id="19_r"]
+[ext_resource type="PackedScene" path="res://scenes/level_designer/interface/ld_object_group.tscn" id="20_r"]
+[ext_resource type="PackedScene" path="res://scenes/level_designer/interface/ld_object_entry.tscn" id="21_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/object/ld_object_browser.gd" id="22_r"]
+[ext_resource type="PackedScene" path="res://scenes/level_designer/interface/ld_section_header.tscn" id="23_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/object/ld_inspector.gd" id="24_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/tool/ld_tool_handler.gd" id="25_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/tool/tools/ld_select_tool.gd" id="26_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/tool/tools/ld_brush_tool.gd" id="27_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/tool/tools/ld_move_tool.gd" id="28_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/tool/tools/ld_rotate_tool.gd" id="29_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/tool/tools/ld_scale_tool.gd" id="30_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/brush.svg" id="31_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/polygon.svg" id="32_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/path.svg" id="33_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/ui_icons/telescoping.svg" id="34_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/tool/ld_tool_rail.gd" id="35_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/tool/ld_hotbar.gd" id="36_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/viewport/ld_viewport_handler.gd" id="37_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/viewport/ld_camera_control.gd" id="38_r"]
+[ext_resource type="Texture2D" path="res://assets/textures/level_designer/viewport/bg_texture.png" id="39_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/viewport/ld_grid.gd" id="40_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/viewport/ld_overlay.gd" id="41_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/viewport/ld_view_toggles.gd" id="42_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/viewport/ld_touch_input.gd" id="43_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/viewport/ld_gamepad_cursor.gd" id="44_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/file/ld_file_handler.gd" id="45_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/file/ld_autosave.gd" id="46_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/playtest/ld_playtest_handler.gd" id="47_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/interface/ld_interface_handler.gd" id="48_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/interface/ld_settings_panel.gd" id="49_r"]
+
+[sub_resource type="Gradient" id="Gradient_sky"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0.57, 0.74, 1, 1, 0.3, 0.46, 0.78, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_sky"]
+gradient = SubResource("Gradient_sky")
+width = 4
+height = 64
+fill_to = Vector2(0, 1)
+
+[node name="LevelDesigner" type="Node" node_paths=PackedStringArray("world", "camera", "history_handler", "level_handler", "object_handler", "tool_handler", "viewport_handler", "file_handler", "playtest_handler", "interface_handler")]
+script = ExtResource("2_r")
+physics_interpolation_mode = 2
+input_map = ExtResource("1_r")
+world = NodePath("World")
+camera = NodePath("Camera")
+history_handler = NodePath("HistoryHandler")
+level_handler = NodePath("LevelHandler")
+object_handler = NodePath("ObjectHandler")
+tool_handler = NodePath("ToolHandler")
+viewport_handler = NodePath("ViewportHandler")
+file_handler = NodePath("FileHandler")
+playtest_handler = NodePath("PlaytestHandler")
+interface_handler = NodePath("InterfaceHandler")
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -10
+
+[node name="Sky" type="TextureRect" parent="Background"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_sky")
+expand_mode = 1
+
+[node name="GridCanvas" type="Node2D" parent="."]
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="PreviewRoot" type="Node2D" parent="."]
+
+[node name="Camera" type="Camera2D" parent="."]
+
+[node name="Viewport" type="CanvasLayer" parent="."]
+layer = 1
+
+[node name="ViewportInput" type="Control" parent="Viewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 1
+
+[node name="Overlay" type="Control" parent="Viewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Interface" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="Chrome" parent="Interface" instance=ExtResource("3_r")]
+
+[node name="Windows" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="Window" parent="Windows" instance=ExtResource("4_r")]
+
+[node name="Panels" type="Control" parent="Windows"]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="ObjectBrowserView" parent="Windows/Panels" instance=ExtResource("5_r")]
+
+[node name="InspectorView" parent="Windows/Panels" instance=ExtResource("6_r")]
+
+[node name="LayersView" parent="Windows/Panels" instance=ExtResource("7_r")]
+
+[node name="AreasView" parent="Windows/Panels" instance=ExtResource("8_r")]
+
+[node name="SettingsView" parent="Windows/Panels" instance=ExtResource("9_r")]
+
+[node name="OpenDialog" type="FileDialog" parent="Windows"]
+title = "Open Level"
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+use_native_dialog = true
+
+[node name="SaveDialog" type="FileDialog" parent="Windows"]
+title = "Save Level"
+file_mode = 4
+access = 2
+use_native_dialog = true
+
+[node name="ConfirmDialog" type="ConfirmationDialog" parent="Windows"]
+title = "Level Designer"
+
+[node name="Cursor" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="CursorCanvas" type="Control" parent="Cursor"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HistoryHandler" type="Node" parent="." node_paths=PackedStringArray("undo_button", "redo_button")]
+script = ExtResource("10_r")
+undo_button = NodePath("../Interface/Chrome/TopBarL/Row/FileGroup/UndoButton")
+redo_button = NodePath("../Interface/Chrome/TopBarL/Row/FileGroup/RedoButton")
+
+[node name="LevelHandler" type="Node" parent="."]
+script = ExtResource("11_r")
+
+[node name="LayerPanel" type="Node" parent="LevelHandler" node_paths=PackedStringArray("view", "toggle_button", "row_container", "count_label", "add_button", "move_up_button", "move_down_button", "remove_button", "detail_container")]
+script = ExtResource("13_r")
+title = "Layers"
+action = &"ld_panel_layers"
+lock_icon = ExtResource("12_r")
+view = NodePath("../../Windows/Panels/LayersView")
+toggle_button = NodePath("../../Interface/Chrome/PanelRail/Panels/LayerProperties")
+row_container = NodePath("../../Windows/Panels/LayersView/Columns/ListColumn/ListInset/ListScroll/RowList")
+count_label = NodePath("../../Windows/Panels/LayersView/Columns/ListColumn/CountLabel")
+add_button = NodePath("../../Windows/Panels/LayersView/Columns/ListColumn/Toolbar/AddButton")
+move_up_button = NodePath("../../Windows/Panels/LayersView/Columns/ListColumn/Toolbar/MoveUpButton")
+move_down_button = NodePath("../../Windows/Panels/LayersView/Columns/ListColumn/Toolbar/MoveDownButton")
+remove_button = NodePath("../../Windows/Panels/LayersView/Columns/ListColumn/Toolbar/RemoveButton")
+detail_container = NodePath("../../Windows/Panels/LayersView/Columns/Detail/DetailInset/Rows")
+
+[node name="AreaPanel" type="Node" parent="LevelHandler" node_paths=PackedStringArray("view", "toggle_button", "row_container", "count_label", "add_button", "move_up_button", "move_down_button", "remove_button", "detail_container", "switch_button")]
+script = ExtResource("14_r")
+title = "Areas"
+view = NodePath("../../Windows/Panels/AreasView")
+toggle_button = NodePath("../../Interface/Chrome/PanelRail/Panels/AreasButton")
+row_container = NodePath("../../Windows/Panels/AreasView/Columns/ListColumn/ListInset/ListScroll/RowList")
+count_label = NodePath("../../Windows/Panels/AreasView/Columns/ListColumn/CountLabel")
+add_button = NodePath("../../Windows/Panels/AreasView/Columns/ListColumn/Toolbar/AddButton")
+move_up_button = NodePath("../../Windows/Panels/AreasView/Columns/ListColumn/Toolbar/MoveUpButton")
+move_down_button = NodePath("../../Windows/Panels/AreasView/Columns/ListColumn/Toolbar/MoveDownButton")
+remove_button = NodePath("../../Windows/Panels/AreasView/Columns/ListColumn/Toolbar/RemoveButton")
+detail_container = NodePath("../../Windows/Panels/AreasView/Columns/Detail/DetailInset/Rows")
+switch_button = NodePath("../../Windows/Panels/AreasView/Columns/Detail/DetailInset/Rows/SwitchButton")
+
+[node name="LayerNavigation" type="Node" parent="LevelHandler" node_paths=PackedStringArray("previous_button", "next_button", "layer_label")]
+script = ExtResource("15_r")
+previous_button = NodePath("../../Interface/Chrome/LayerVisualsHBox/LayerBar/LayerNav/PrevLayer")
+next_button = NodePath("../../Interface/Chrome/LayerVisualsHBox/LayerBar/LayerNav/NextLayer")
+layer_label = NodePath("../../Interface/Chrome/LayerVisualsHBox/LayerBar/LayerNav/LayerName")
+
+[node name="ObjectHandler" type="Node" parent="." node_paths=PackedStringArray("selection", "clipboard", "browser", "inspector")]
+script = ExtResource("16_r")
+selection = NodePath("Selection")
+clipboard = NodePath("Clipboard")
+browser = NodePath("ObjectBrowser")
+inspector = NodePath("Inspector")
+
+[node name="Selection" type="Node" parent="ObjectHandler" node_paths=PackedStringArray("deselect_button", "delete_button")]
+script = ExtResource("17_r")
+deselect_button = NodePath("../../Interface/Chrome/TopBarR/EditGroup/DeselectButton")
+delete_button = NodePath("../../Interface/Chrome/TopBarR/EditGroup/DeleteButton")
+
+[node name="Clipboard" type="Node" parent="ObjectHandler" node_paths=PackedStringArray("cut_button", "copy_button", "paste_button", "duplicate_button")]
+script = ExtResource("18_r")
+cut_button = NodePath("../../Interface/Chrome/TopBarR/EditGroup/CutButton")
+copy_button = NodePath("../../Interface/Chrome/TopBarR/EditGroup/CopyButton")
+paste_button = NodePath("../../Interface/Chrome/TopBarR/EditGroup/PasteButton")
+duplicate_button = NodePath("../../Interface/Chrome/TopBarR/EditGroup/DuplicateButton")
+
+[node name="Arrange" type="Node" parent="ObjectHandler" node_paths=PackedStringArray("front_button", "back_button")]
+script = ExtResource("19_r")
+front_button = NodePath("../../Interface/Chrome/TopBarR/EditGroup/MoveToFrontButton")
+back_button = NodePath("../../Interface/Chrome/TopBarR/EditGroup/MoveToBackButton")
+
+[node name="ObjectBrowser" type="Node" parent="ObjectHandler" node_paths=PackedStringArray("view", "toggle_button", "search", "category_bar", "groups")]
+script = ExtResource("22_r")
+title = "Objects"
+action = &"ld_panel_objects"
+group_scene = ExtResource("20_r")
+entry_scene = ExtResource("21_r")
+view = NodePath("../../Windows/Panels/ObjectBrowserView")
+toggle_button = NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/ObjectBrowserButton")
+search = NodePath("../../Windows/Panels/ObjectBrowserView/MarginContainer/VBoxContainer/SearchRow/SearchLineEdit")
+category_bar = NodePath("../../Windows/Panels/ObjectBrowserView/MarginContainer/VBoxContainer/CategoryScroll/CategoryBar")
+groups = NodePath("../../Windows/Panels/ObjectBrowserView/MarginContainer/VBoxContainer/ContentScroll/ContentMargin/GroupsVBox")
+
+[node name="Inspector" type="Node" parent="ObjectHandler" node_paths=PackedStringArray("view", "toggle_button", "container", "empty_label")]
+script = ExtResource("24_r")
+title = "Properties"
+action = &"ld_panel_properties"
+section_scene = ExtResource("23_r")
+view = NodePath("../../Windows/Panels/InspectorView")
+toggle_button = NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/PropertiesButton")
+container = NodePath("../../Windows/Panels/InspectorView/VBoxContainer/Fields")
+empty_label = NodePath("../../Windows/Panels/InspectorView/VBoxContainer/EmptyLabel")
+
+[node name="ToolHandler" type="Node" parent="." node_paths=PackedStringArray("default_tool")]
+script = ExtResource("25_r")
+default_tool = NodePath("SelectTool")
+
+[node name="SelectTool" type="Node" parent="ToolHandler" node_paths=PackedStringArray("button", "move_tool")]
+script = ExtResource("26_r")
+action = &"ld_tool_select"
+button = NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/SelectButton")
+move_tool = NodePath("../MoveTool")
+
+[node name="BrushTool" type="Node" parent="ToolHandler" node_paths=PackedStringArray("button", "preview_root")]
+script = ExtResource("27_r")
+action = &"ld_tool_brush"
+shape_kinds = Array[int]([0])
+cursor = 3
+button = NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/BrushButton")
+preview_root = NodePath("../../PreviewRoot")
+
+[node name="MoveTool" type="Node" parent="ToolHandler" node_paths=PackedStringArray("button")]
+script = ExtResource("28_r")
+action = &"ld_tool_move"
+cursor = 13
+button = NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/MoveButton")
+
+[node name="RotateTool" type="Node" parent="ToolHandler" node_paths=PackedStringArray("button")]
+script = ExtResource("29_r")
+action = &"ld_tool_rotate"
+cursor = 6
+button = NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/RotateButton")
+
+[node name="ScaleTool" type="Node" parent="ToolHandler" node_paths=PackedStringArray("button")]
+script = ExtResource("30_r")
+action = &"ld_tool_scale"
+cursor = 12
+button = NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/ScaleButton")
+
+[node name="ToolRail" type="Node" parent="ToolHandler" node_paths=PackedStringArray("bar", "clip", "placement_button", "rotate_button", "scale_button", "hidden_buttons")]
+script = ExtResource("35_r")
+placement_icons = Dictionary[int, Texture2D]({0: ExtResource("31_r"), 1: ExtResource("32_r"), 2: ExtResource("33_r"), 3: ExtResource("34_r")})
+placement_tooltips = Dictionary[int, String]({0: "Paint (B)", 1: "Polygon", 2: "Path", 3: "Telescoping"})
+bar = NodePath("../../Interface/Chrome/ToolRail/Clip/Tools")
+clip = NodePath("../../Interface/Chrome/ToolRail/Clip")
+placement_button = NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/BrushButton")
+rotate_button = NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/RotateButton")
+scale_button = NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/ScaleButton")
+hidden_buttons = [NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/TileButton"), NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/PlaceButton"), NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/PolyEditButton"), NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/PolyAddButton"), NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/PolyCutButton"), NodePath("../../Interface/Chrome/ToolRail/Clip/Tools/ToplineButton")]
+
+[node name="Hotbar" type="Node" parent="ToolHandler" node_paths=PackedStringArray("slots")]
+script = ExtResource("36_r")
+slots = [NodePath("../../Interface/Chrome/BottomBar/Row/Hotbar/HotbarButton"), NodePath("../../Interface/Chrome/BottomBar/Row/Hotbar/HotbarButton2"), NodePath("../../Interface/Chrome/BottomBar/Row/Hotbar/HotbarButton3"), NodePath("../../Interface/Chrome/BottomBar/Row/Hotbar/HotbarButton4"), NodePath("../../Interface/Chrome/BottomBar/Row/Hotbar/HotbarButton5"), NodePath("../../Interface/Chrome/BottomBar/Row/Hotbar/HotbarButton6"), NodePath("../../Interface/Chrome/BottomBar/Row/Hotbar/HotbarButton7"), NodePath("../../Interface/Chrome/BottomBar/Row/Hotbar/HotbarButton8"), NodePath("../../Interface/Chrome/BottomBar/Row/Hotbar/HotbarButton9")]
+
+[node name="ViewportHandler" type="Node" parent="." node_paths=PackedStringArray("input_surface", "camera_control", "overlay", "touch_input")]
+script = ExtResource("37_r")
+input_surface = NodePath("../Viewport/ViewportInput")
+camera_control = NodePath("CameraControl")
+overlay = NodePath("Overlay")
+touch_input = NodePath("TouchInput")
+
+[node name="CameraControl" type="Node" parent="ViewportHandler" node_paths=PackedStringArray("camera")]
+script = ExtResource("38_r")
+camera = NodePath("../../Camera")
+
+[node name="Grid" type="Node" parent="ViewportHandler" node_paths=PackedStringArray("canvas")]
+script = ExtResource("40_r")
+texture = ExtResource("39_r")
+canvas = NodePath("../../GridCanvas")
+
+[node name="Overlay" type="Node" parent="ViewportHandler" node_paths=PackedStringArray("canvas")]
+script = ExtResource("41_r")
+canvas = NodePath("../../Viewport/Overlay")
+
+[node name="ViewToggles" type="Node" parent="ViewportHandler" node_paths=PackedStringArray("reset_camera_button", "focus_button", "modulation_button")]
+script = ExtResource("42_r")
+reset_camera_button = NodePath("../../Interface/Chrome/LayerVisualsHBox/ResetCamButton")
+focus_button = NodePath("../../Interface/Chrome/LayerVisualsHBox/FocusButton")
+modulation_button = NodePath("../../Interface/Chrome/LayerVisualsHBox/ModulationButton")
+
+[node name="TouchInput" type="Node" parent="ViewportHandler"]
+script = ExtResource("43_r")
+
+[node name="GamepadCursor" type="Node" parent="ViewportHandler" node_paths=PackedStringArray("canvas")]
+script = ExtResource("44_r")
+canvas = NodePath("../../Cursor/CursorCanvas")
+
+[node name="FileHandler" type="Node" parent="." node_paths=PackedStringArray("autosave", "new_button", "open_button", "save_button", "save_as_button", "open_dialog", "save_dialog", "confirm_dialog")]
+script = ExtResource("45_r")
+autosave = NodePath("Autosave")
+new_button = NodePath("../Interface/Chrome/TopBarL/Row/FileGroup/ResetButton")
+open_button = NodePath("../Interface/Chrome/TopBarL/Row/FileGroup/LoadButton")
+save_button = NodePath("../Interface/Chrome/TopBarL/Row/FileGroup/SaveButton")
+save_as_button = NodePath("../Interface/Chrome/TopBarL/Row/FileGroup/SaveNewButton")
+open_dialog = NodePath("../Windows/OpenDialog")
+save_dialog = NodePath("../Windows/SaveDialog")
+confirm_dialog = NodePath("../Windows/ConfirmDialog")
+
+[node name="Autosave" type="Node" parent="FileHandler" node_paths=PackedStringArray("timer")]
+script = ExtResource("46_r")
+timer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="FileHandler/Autosave"]
+wait_time = 60.0
+autostart = true
+
+[node name="PlaytestHandler" type="Node" parent="." node_paths=PackedStringArray("playtest_button")]
+script = ExtResource("47_r")
+playtest_button = NodePath("../Interface/Chrome/TestButton")
+
+[node name="InterfaceHandler" type="Node" parent="." node_paths=PackedStringArray("chrome", "window")]
+script = ExtResource("48_r")
+chrome = NodePath("../Interface/Chrome")
+window = NodePath("../Windows/Window")
+
+[node name="SettingsPanel" type="Node" parent="InterfaceHandler" node_paths=PackedStringArray("view", "toggle_button", "screen", "exit_button", "action_row")]
+script = ExtResource("49_r")
+view = NodePath("../../Windows/Panels/SettingsView")
+toggle_button = NodePath("../../Interface/Chrome/TopBarL/Row/FileGroup/SettingsButton")
+screen = NodePath("../../Windows/Panels/SettingsView/SettingsScreen")
+exit_button = NodePath("../../Windows/Panels/SettingsView/ExitButton")
+action_row = NodePath("../../Windows/Panels/SettingsView/SettingsScreen/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer")
