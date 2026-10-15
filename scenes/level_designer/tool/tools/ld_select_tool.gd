@@ -63,6 +63,9 @@ func _press(mouse_button: InputEventMouseButton, world_position: Vector2) -> voi
 	elif not selection.has(hit):
 		selection.set_objects([hit])
 	
+	if mouse_button.double_click and editor.object_handler.text_editor.begin(hit):
+		return
+	
 	move_tool.begin_drag(world_position)
 	if selection.get_objects().size() == 1:
 		editor.tool_handler.enter_edit_tool(hit)

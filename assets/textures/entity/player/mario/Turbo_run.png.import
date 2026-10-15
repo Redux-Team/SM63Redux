@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://du3efwyky6d5g"
-path="res://.godot/imported/text_button_generic.png-5b69a9926ae8aca556fbe028e85b884f.ctex"
+uid="uid://boto7mpqqap02"
+path="res://.godot/imported/Turbo_run.png-7d5b7831b9ee2606ecee81f8add91fd0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/gui/button/generic/text_button_generic.png"
-dest_files=["res://.godot/imported/text_button_generic.png-5b69a9926ae8aca556fbe028e85b884f.ctex"]
+source_file="res://assets/textures/entity/player/mario/Turbo_run.png"
+dest_files=["res://.godot/imported/Turbo_run.png-7d5b7831b9ee2606ecee81f8add91fd0.ctex"]
 
 [params]
 

@@ -34,7 +34,6 @@ func _apply_setting(setting: SettingsType) -> void:
 
 
 func _apply_bus(bus: StringName, volume: SettingsTypeFloat) -> void:
-	AudioServer.set_bus_volume_db(
-		AudioServer.get_bus_index(bus),
-		lerpf(-60, 0, volume.current_value / 100.0)
-	)
+	var index: int = AudioServer.get_bus_index(bus)
+	AudioServer.set_bus_volume_db(index, lerpf(-60, 0, volume.current_value / 100.0))
+	AudioServer.set_bus_mute(index, is_zero_approx(volume.current_value))

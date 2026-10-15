@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MusicTrack" format=3]
+
+[ext_resource type="Script" path="res://game/music/music_track.gd" id="1_t"]
+
+[resource]
+script = ExtResource("1_t")
+id = &"bowser_koopa_king_of_the_stars"
+display_name = "Bowser, Koopa King of the Stars"
+path = "res://assets/music/level_bowser_koopa_king_of_the_stars.mp3"
+loop_offset = 21.359

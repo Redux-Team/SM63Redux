@@ -39,6 +39,7 @@ enum Flag {
 @export var browsable: bool = true
 @export var unique: bool = false
 @export var cullable: bool = true
+@export var inspect_transform: bool = true
 @export_flags("Selectable", "Deletable", "Layerable", "Copyable", "Movable", "Rotatable", "Scalable") var flags: int = 31
 @export var properties: Array[ObjectProperty]
 @export_group("Nodes")

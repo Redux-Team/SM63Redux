@@ -801,6 +801,33 @@ LineEdit {
 	}
 }
 
+TextEdit {
+	InputField {
+		cursor: IBEAM
+		font: $BUTTON_FONT
+		font_size: 8
+		font_color: $base_shadow_col
+		font_placeholder_color: alpha($base_shadow_col, 0.5)
+		caret_color: $global_accent
+		selection_color: alpha($global_accent, 0.45)
+		bg_color: WHITE
+		border: 2
+		border_color: $base_shadow_col
+		corner_radius: 8
+		padding: 8 8 10 10
+		
+		:focus {
+			border_color: $global_accent
+		}
+		
+		:read_only {
+			bg_color: mix(WHITE, $base_shadow_col, 0.35)
+			font_color: alpha($base_shadow_col, 0.5)
+			border_color: alpha($base_shadow_col, 0.5)
+		}
+	}
+}
+
 ColorPickerButton {
 	InputField {
 		cursor: POINTING

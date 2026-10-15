@@ -21,6 +21,7 @@ var _shown: Dictionary[Node, bool] = {}
 @export var file_handler: LDFileHandler
 @export var playtest_handler: LDPlaytestHandler
 @export var interface_handler: LDInterfaceHandler
+@export var music_handler: LDMusicHandler
 
 
 func _ready() -> void:

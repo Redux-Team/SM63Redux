@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" format=3]
+
+[ext_resource type="FontFile" path="res://assets/font/pixel_redux_border.fnt" id="1_border"]
+
+[resource]
+base_font = ExtResource("1_border")
+baseline_offset = 0.25
+spacing_top = -16

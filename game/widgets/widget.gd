@@ -10,6 +10,7 @@ const SCENES: Dictionary[StringName, String] = {
 	&"int": "res://game/widgets/widget_number/widget_number.tscn",
 	&"float": "res://game/widgets/widget_number/widget_number.tscn",
 	&"String": "res://game/widgets/widget_string/widget_string.tscn",
+	&"text": "res://game/widgets/widget_text/widget_text.tscn",
 	&"Vector2": "res://game/widgets/widget_vector2/widget_vector2.tscn",
 	&"Vector2i": "res://game/widgets/widget_vector2/widget_vector2.tscn",
 	&"vector2_range": "res://game/widgets/widget_vector2_range/widget_vector2_range.tscn",
@@ -71,6 +72,9 @@ static func _set_editable(node: Node, editable: bool) -> void:
 			GDSS.refresh(child)
 		elif child is LineEdit:
 			(child as LineEdit).editable = editable
+			GDSS.refresh(child)
+		elif child is TextEdit:
+			(child as TextEdit).editable = editable
 			GDSS.refresh(child)
 		elif child is Slider:
 			(child as Slider).editable = editable

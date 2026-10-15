@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MusicTrack" format=3]
+
+[ext_resource type="Script" path="res://game/music/music_track.gd" id="1_t"]
+
+[resource]
+script = ExtResource("1_t")
+id = &"editor_galaxy"
+display_name = "Level Editor - Galaxy"
+category = 1
+path = "res://assets/music/ld_galaxy.mp3"

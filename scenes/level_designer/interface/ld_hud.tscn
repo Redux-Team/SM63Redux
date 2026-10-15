@@ -803,3 +803,34 @@ expand_icon = true
 metadata/tooltip = "Cut Shape"
 metadata/tooltip_mode = 4
 metadata/gdss_classes = PackedStringArray("ToolButton")
+
+[node name="SongPanel" type="PanelContainer" parent="."]
+visible = false
+texture_filter = 4
+layout_mode = 0
+mouse_filter = 2
+metadata/gdss_classes = PackedStringArray("Bar")
+
+[node name="Row" type="HBoxContainer" parent="SongPanel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Icon" type="TextureRect" parent="SongPanel/Row"]
+texture_filter = 4
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("41_r")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Clip" type="Control" parent="SongPanel/Row"]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="SongLabel" type="Label" parent="SongPanel/Row/Clip"]
+layout_mode = 0
+theme_override_fonts/font = ExtResource("22_jqau8")

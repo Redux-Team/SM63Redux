@@ -1,0 +1,67 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/hints/text_ld.png" id="2"]
+[ext_resource type="Script" path="res://game/object/object_property.gd" id="3"]
+[ext_resource type="Script" path="res://game/object/text_display.gd" id="4"]
+[ext_resource type="FontFile" path="res://assets/font/pixel_redux.fnt" id="5"]
+[ext_resource type="FontVariation" path="res://assets/font/pixel_redux_bold.tres" id="6"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/hints/Text_LD.png" id="icon_texture"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBox_margin"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+
+[sub_resource type="Resource" id="Property_text"]
+script = ExtResource("3")
+key = &"text"
+label = "Text"
+group = &"Text"
+type = 3
+default_value = "Text"
+multiline = true
+bbcode = true
+targets = Array[NodePath]([NodePath("Label")])
+method = &"set_content"
+
+[sub_resource type="Resource" id="Property_font"]
+script = ExtResource("3")
+key = &"font"
+label = "Font"
+group = &"Text"
+type = 6
+default_value = 0
+options = PackedStringArray("Pixel Redux")
+targets = Array[NodePath]([NodePath("Label")])
+method = &"set_font_index"
+
+[sub_resource type="AtlasTexture" id="IconAtlas"]
+atlas = ExtResource("icon_texture")
+region = Rect2(0, 0, 48, 48)
+
+[node name="Text" type="Node2D"]
+script = ExtResource("1")
+id = &"text"
+display_name = "Text"
+category = &"Decoration"
+group = &"Hints"
+order = 903
+flags = 127
+inspect_transform = false
+icon = SubResource("IconAtlas")
+properties = Array[ExtResource("3")]([SubResource("Property_text"), SubResource("Property_font")])
+
+[node name="Label" type="RichTextLabel" parent="."]
+script = ExtResource("4")
+process_mode = 3
+offset_right = 40.0
+offset_bottom = 16.0
+mouse_filter = 2
+theme_override_styles/normal = SubResource("StyleBox_margin")
+bbcode_enabled = true
+text = "Text"
+autowrap_mode = 0
+fonts = Array[Font]([ExtResource("5")])
+bold_fonts = Array[Font]([ExtResource("6")])

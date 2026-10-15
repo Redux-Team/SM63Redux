@@ -88,7 +88,18 @@
 [ext_resource type="PackedScene" path="res://scenes/level_designer/interface/panels/ld_placement_view.tscn" id="x23"]
 [ext_resource type="Script" path="res://scenes/level_designer/tool/tools/ld_tile_shape_tool.gd" id="x24"]
 
-[node name="LevelDesigner" type="Node" node_paths=PackedStringArray("world", "camera", "history_handler", "level_handler", "object_handler", "tool_handler", "viewport_handler", "file_handler", "playtest_handler", "interface_handler")]
+[ext_resource type="Script" path="res://scenes/level_designer/music/ld_music_handler.gd" id="music_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/object/ld_text_editor.gd" id="text_r"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_inline"]
+bg_color = Color(0.105882, 0.164706, 0.254902, 0.6)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.392157, 0.588235, 0.929412, 1)
+
+[node name="LevelDesigner" type="Node" node_paths=PackedStringArray("world", "camera", "history_handler", "level_handler", "object_handler", "tool_handler", "viewport_handler", "file_handler", "playtest_handler", "interface_handler", "music_handler")]
 script = ExtResource("2_r")
 physics_interpolation_mode = 2
 input_map = ExtResource("1_r")
@@ -102,6 +113,7 @@ viewport_handler = NodePath("ViewportHandler")
 file_handler = NodePath("FileHandler")
 playtest_handler = NodePath("PlaytestHandler")
 interface_handler = NodePath("InterfaceHandler")
+music_handler = NodePath("MusicHandler")
 
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -10
@@ -133,6 +145,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="InlineText" type="TextEdit" parent="Viewport"]
+visible = false
+offset_right = 8.0
+offset_bottom = 8.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/caret_color = Color(1, 1, 1, 1)
+theme_override_colors/selection_color = Color(0.39, 0.59, 0.93, 0.5)
+theme_override_styles/normal = SubResource("StyleBox_inline")
+theme_override_styles/focus = SubResource("StyleBox_inline")
+scroll_fit_content_height = true
+scroll_fit_content_width = true
 
 [node name="Interface" type="CanvasLayer" parent="."]
 layer = 2
@@ -259,12 +283,13 @@ previous_button = NodePath("../../Interface/HUD/LayerVisualsHBox/LayerBar/LayerN
 next_button = NodePath("../../Interface/HUD/LayerVisualsHBox/LayerBar/LayerNav/NextLayer")
 layer_label = NodePath("../../Interface/HUD/LayerVisualsHBox/LayerBar/LayerNav/LayerName")
 
-[node name="ObjectHandler" type="Node" parent="." node_paths=PackedStringArray("selection", "clipboard", "browser", "inspector")]
+[node name="ObjectHandler" type="Node" parent="." node_paths=PackedStringArray("selection", "clipboard", "browser", "inspector", "text_editor")]
 script = ExtResource("16_r")
 selection = NodePath("Selection")
 clipboard = NodePath("Clipboard")
 browser = NodePath("ObjectBrowser")
 inspector = NodePath("Inspector")
+text_editor = NodePath("TextEditor")
 
 [node name="Selection" type="Node" parent="ObjectHandler" node_paths=PackedStringArray("deselect_button", "delete_button")]
 script = ExtResource("17_r")
@@ -574,3 +599,22 @@ screen = NodePath("../../Windows/Panels/SettingsView/SettingsScreen")
 exit_button = NodePath("../../Windows/Panels/SettingsView/ExitButton")
 action_row = NodePath("../../Windows/Panels/SettingsView/SettingsScreen/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer")
 layout = NodePath("../../Windows/Panels/SettingsView/SettingsScreen/MarginContainer")
+
+[node name="MusicHandler" type="Node" parent="." node_paths=PackedStringArray("player", "song_panel", "song_row", "song_icon", "song_clip", "song_label", "left_bar", "right_bar")]
+script = ExtResource("music_r")
+player = NodePath("Player")
+song_panel = NodePath("../Interface/HUD/SongPanel")
+song_row = NodePath("../Interface/HUD/SongPanel/Row")
+song_icon = NodePath("../Interface/HUD/SongPanel/Row/Icon")
+song_clip = NodePath("../Interface/HUD/SongPanel/Row/Clip")
+song_label = NodePath("../Interface/HUD/SongPanel/Row/Clip/SongLabel")
+left_bar = NodePath("../Interface/HUD/TopBarL")
+right_bar = NodePath("../Interface/HUD/TopBarR")
+
+[node name="Player" type="AudioStreamPlayer" parent="MusicHandler"]
+volume_db = -5.0
+bus = &"Music"
+
+[node name="TextEditor" type="Node" parent="ObjectHandler" node_paths=PackedStringArray("text_edit")]
+script = ExtResource("text_r")
+text_edit = NodePath("../../Viewport/InlineText")

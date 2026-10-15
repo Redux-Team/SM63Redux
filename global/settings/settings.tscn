@@ -336,9 +336,11 @@ setting_key = "faster_death"
 requires_apply = false
 metadata/_custom_type_script = "uid://wbytn3c5m6h8"
 
-[node name="Level Designer" type="Node" parent="." node_paths=PackedStringArray("tooltip_delay")]
+[node name="Level Designer" type="Node" parent="." node_paths=PackedStringArray("tooltip_delay", "editor_music", "loop_music")]
 script = ExtResource("16_level_designer")
 tooltip_delay = NodePath("Tooltip Delay")
+editor_music = NodePath("Editor Music")
+loop_music = NodePath("Loop Editor Music")
 
 [node name="Tooltip Delay" type="Node" parent="Level Designer"]
 script = ExtResource("11_float")
@@ -350,6 +352,18 @@ max_text = "Off"
 setting_key = "tooltip_delay"
 requires_apply = false
 metadata/_custom_type_script = "uid://dqx6u66fpb5ys"
+
+[node name="Editor Music" type="Node" parent="Level Designer"]
+script = ExtResource("10_list")
+options = PackedStringArray("Shuffle", "Off")
+setting_key = "editor_music"
+metadata/_custom_type_script = "uid://2xkdb7ge8v0l"
+
+[node name="Loop Editor Music" type="Node" parent="Level Designer"]
+script = ExtResource("12_boolean")
+default_value = false
+setting_key = "loop_editor_music"
+metadata/_custom_type_script = "uid://wbytn3c5m6h8"
 
 [node name="Misc" type="Node" parent="." unique_id=1016970897 node_paths=PackedStringArray("language", "force_touch_controls", "discord_rpc")]
 script = ExtResource("9_misc")

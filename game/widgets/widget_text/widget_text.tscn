@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/widgets/widget_text/widget_text.gd" id="1_script"]
+[ext_resource type="FontFile" path="res://assets/font/pixel_redux.fnt" id="2_font"]
+[ext_resource type="FontVariation" path="res://assets/font/pixel_redux_bold.tres" id="3_bold"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_preview"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.25)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="WidgetText" type="VBoxContainer" node_paths=PackedStringArray("label", "text_edit", "preview")]
+offset_right = 144.0
+offset_bottom = 100.0
+size_flags_horizontal = 3
+script = ExtResource("1_script")
+label = NodePath("Label")
+text_edit = NodePath("TextEdit")
+preview = NodePath("Preview")
+font = ExtResource("2_font")
+bold_font = ExtResource("3_bold")
+metadata/gdss_mode = 1
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "text"
+metadata/gdss_overrides = "font_size: 24"
+
+[node name="TextEdit" type="TextEdit" parent="."]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+wrap_mode = 1
+scroll_fit_content_height = true
+metadata/gdss_classes = PackedStringArray("InputField")
+
+[node name="Preview" type="RichTextLabel" parent="."]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBox_preview")
+bbcode_enabled = true
+fit_content = true
+metadata/gdss_mode = 2

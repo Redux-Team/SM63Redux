@@ -44,6 +44,9 @@ const VARIANT_TYPES: Dictionary[Type, Variant.Type] = {
 @export var randomize_on_place: bool = false
 @export_group("Enum")
 @export var options: PackedStringArray
+@export_group("String")
+@export var multiline: bool = false
+@export var bbcode: bool = false
 @export_group("Target")
 @export var targets: Array[NodePath] = [^"."]
 @export var member: StringName
@@ -112,6 +115,11 @@ func apply(object: GameObject, value: Variant) -> void:
 func to_info() -> Dictionary:
 	var info: Dictionary = {"type": get_variant_type()}
 	match type:
+		Type.STRING:
+			if multiline:
+				info.set("widget", &"text")
+			if bbcode:
+				info.set("bbcode", true)
 		Type.ENUM:
 			info.set("hint", PROPERTY_HINT_ENUM)
 			info.set("hint_string", ",".join(options))

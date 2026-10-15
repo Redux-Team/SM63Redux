@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://hw4uo0e1rkta" path="res://shader/spray_stream.gdshader" id="2_shader"]
 [ext_resource type="Texture2D" uid="uid://b1h2fwidh3p1i" path="res://assets/textures/entity/player/shared/fludd_spray.png" id="3_spray"]
 [ext_resource type="Script" uid="uid://df82mcnubnp0h" path="res://util/2d/animated_particles.gd" id="4_particles"]
-[ext_resource type="Texture2D" uid="uid://nga2o0i5f0cr" path="res://assets/textures/particle/entity/enemy_poof.png" id="5_poof"]
+[ext_resource type="Texture2D" uid="uid://8mb3v6n2k6er" path="res://assets/textures/entity/player/shared/Splash_water.png" id="6_12xtr"]
 [ext_resource type="Script" uid="uid://cwdgtyt2wh132" path="res://game/entity/player/fludd/spray_profile.gd" id="6_profile"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_top"]
@@ -42,36 +42,43 @@ point_count = 2
 atlas = ExtResource("3_spray")
 region = Rect2(0, 16, 19, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_poof0"]
-atlas = ExtResource("5_poof")
+[sub_resource type="AtlasTexture" id="AtlasTexture_v35x6"]
+atlas = ExtResource("6_12xtr")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_poof1"]
-atlas = ExtResource("5_poof")
+[sub_resource type="AtlasTexture" id="AtlasTexture_lo34q"]
+atlas = ExtResource("6_12xtr")
 region = Rect2(32, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_poof2"]
-atlas = ExtResource("5_poof")
+[sub_resource type="AtlasTexture" id="AtlasTexture_4skcd"]
+atlas = ExtResource("6_12xtr")
 region = Rect2(64, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_poof3"]
-atlas = ExtResource("5_poof")
+[sub_resource type="AtlasTexture" id="AtlasTexture_w1xtp"]
+atlas = ExtResource("6_12xtr")
 region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wg0v8"]
+atlas = ExtResource("6_12xtr")
+region = Rect2(128, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_poof"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_poof0")
+"texture": SubResource("AtlasTexture_v35x6")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_poof1")
+"texture": SubResource("AtlasTexture_lo34q")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_poof2")
+"texture": SubResource("AtlasTexture_4skcd")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_poof3")
+"texture": SubResource("AtlasTexture_w1xtp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wg0v8")
 }],
 "loop": 0,
 "name": &"default",
@@ -112,8 +119,8 @@ angles = PackedFloat32Array()
 speed_min = 15.0
 speed_max = 45.0
 damping = 40.0
-scale_min = 0.5
-scale_max = 0.8
+scale_min = 0.6
+scale_max = 0.9
 speed_scale_min = 0.9
 speed_scale_max = 1.3
 random_flip = true

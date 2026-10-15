@@ -20,6 +20,7 @@ extends PlayerState
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var animation_reference_speed: float = 220.0
 ## Animation speed over normalized running speed.
 @export var animation_speed_curve: Curve
+@export var turbo_animation: StringName = &"turbo_run"
 @export_group("Footsteps")
 ## Sounds played on footstep frames.
 @export var footstep_bank: SFXBank
@@ -76,7 +77,9 @@ func _next() -> StringName:
 func _update_gait() -> void:
 	var input_strength: float = absf(player.move_input)
 	var animation: StringName = sprite.current_animation
-	if input_strength >= walk_input_threshold:
+	if player.is_turbo_striking():
+		animation = turbo_animation
+	elif input_strength >= walk_input_threshold:
 		animation = &"run_loop" if input_strength >= run_input_threshold else &"walk_loop"
 	elif absf(player.velocity.x) <= animation_stop_speed:
 		animation = &"walk_loop"

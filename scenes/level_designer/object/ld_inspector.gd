@@ -57,7 +57,8 @@ func _rebuild() -> void:
 	if objects.is_empty():
 		return
 	
-	_add_transform(objects)
+	if objects.all(func(object: GameObject) -> bool: return object.inspect_transform):
+		_add_transform(objects)
 	refit()
 	var section: StringName = TRANSFORM_SECTION
 	for property: ObjectProperty in _get_shared_properties(objects):
@@ -121,7 +122,7 @@ func _signature_of(objects: Array[GameObject]) -> Array:
 	if objects.is_empty():
 		return []
 	
-	var signature: Array = [objects.size() == 1 and objects.front().has_flag(GameObject.Flag.MOVABLE), _all_have(objects, GameObject.Flag.ROTATABLE), _all_have(objects, GameObject.Flag.SCALABLE)]
+	var signature: Array = [objects.all(func(object: GameObject) -> bool: return object.inspect_transform), objects.size() == 1 and objects.front().has_flag(GameObject.Flag.MOVABLE), _all_have(objects, GameObject.Flag.ROTATABLE), _all_have(objects, GameObject.Flag.SCALABLE)]
 	for property: ObjectProperty in _get_shared_properties(objects):
 		signature.append_array([property.key, property.to_info(), property.coerce(null)])
 	

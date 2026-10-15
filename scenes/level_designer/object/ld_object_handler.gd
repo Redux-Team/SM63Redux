@@ -9,6 +9,7 @@ const BY_PLACEMENT: int = -2
 @export var clipboard: LDClipboard
 @export var browser: LDObjectBrowser
 @export var inspector: LDInspector
+@export var text_editor: LDTextEditor
 
 var _change_queued: bool = false
 
