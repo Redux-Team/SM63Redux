@@ -28,8 +28,6 @@ func _ready() -> void:
 		GDSS.add_class(button, "SidebarButton")
 		button.toggled.connect(_on_category_toggled.bind(category))
 		category_container.add_child(button)
-	if category_container.get_child_count() > 0:
-		(category_container.get_child(0) as Button).button_pressed = true
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -46,6 +44,8 @@ func open() -> void:
 	_snapshot_preset = Settings.active_input_preset
 	if _category != null:
 		_show_category(_category)
+	elif category_container.get_child_count() > 0:
+		(category_container.get_child(0) as Button).button_pressed = true
 
 
 func _categories() -> Array[SettingsCategory]:

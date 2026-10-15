@@ -40,5 +40,6 @@ func return_to_editor() -> void:
 	Singleton.build_screen_transition() \
 		.set_center() \
 		.set_loading_delay(0.0) \
+		.load(level.dismantle) \
 		.set_swap(Singleton.editor_session.resume_or_open.bind(get_tree(), LEVEL_DESIGNER)) \
 		.done()

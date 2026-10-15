@@ -8,7 +8,6 @@ signal structure_changed
 signal background_changed(area: LevelArea)
 
 const PLAYER_ID: StringName = &"player_mario"
-const DISMANTLE_BATCH: int = 24
 const LAYER_PROPERTIES: Array[StringName] = [&"layer_name", &"distance", &"modulation", &"is_decoration", &"silhouette", &"enabled", &"editor_visible"]
 
 @export var background: LevelBackground
@@ -473,10 +472,7 @@ func dismantle() -> void:
 		if is_instance_valid(area):
 			objects.append_array(area.get_all_objects())
 	
-	for i: int in objects.size():
-		objects.get(i).free()
-		if i % DISMANTLE_BATCH == DISMANTLE_BATCH - 1:
-			await get_tree().process_frame
+	await Teardown.free_nodes(objects, get_tree())
 
 
 func _free_detached_areas() -> void:

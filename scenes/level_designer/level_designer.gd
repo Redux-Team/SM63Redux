@@ -109,3 +109,4 @@ func _leave() -> void:
 func _dismantle() -> void:
 	set_suspended(true)
 	await level_handler.dismantle()
+	await Teardown.free_descendants(self)

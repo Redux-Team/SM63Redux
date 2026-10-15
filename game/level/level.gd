@@ -137,6 +137,11 @@ func respawn(old: GameObject, data: ObjectData, drops_coins: bool = false) -> vo
 		_attach_silhouette(object)
 
 
+func dismantle() -> void:
+	process_mode = Node.PROCESS_MODE_DISABLED
+	await Teardown.free_nodes(_area.get_all_objects() if _area else [], get_tree())
+
+
 func get_area() -> LevelArea:
 	return _area
 

@@ -50,6 +50,8 @@ func resume_or_open(tree: SceneTree, scene_path: String) -> void:
 
 
 func discard() -> void:
-	if is_instance_valid(_held):
+	if is_instance_valid(_held) and _held.get_parent():
+		_held.queue_free()
+	elif is_instance_valid(_held):
 		_held.free()
 	_held = null

@@ -566,10 +566,11 @@ script = ExtResource("48_r")
 hud = NodePath("../Interface/HUD")
 window = NodePath("../Windows/Window")
 
-[node name="SettingsPanel" type="Node" parent="InterfaceHandler" node_paths=PackedStringArray("view", "toggle_button", "screen", "exit_button", "action_row")]
+[node name="SettingsPanel" type="Node" parent="InterfaceHandler" node_paths=PackedStringArray("view", "toggle_button", "screen", "exit_button", "action_row", "layout")]
 script = ExtResource("49_r")
 view = NodePath("../../Windows/Panels/SettingsView")
 toggle_button = NodePath("../../Interface/HUD/TopBarL/Row/FileGroup/SettingsButton")
 screen = NodePath("../../Windows/Panels/SettingsView/SettingsScreen")
 exit_button = NodePath("../../Windows/Panels/SettingsView/ExitButton")
 action_row = NodePath("../../Windows/Panels/SettingsView/SettingsScreen/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer")
+layout = NodePath("../../Windows/Panels/SettingsView/SettingsScreen/MarginContainer")

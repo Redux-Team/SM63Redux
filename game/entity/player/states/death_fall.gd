@@ -19,12 +19,15 @@ func _enter() -> void:
 	player.velocity = Vector2.ZERO
 	sprite.lock_flipping = true
 	await get_tree().create_timer(transition_delay).timeout
-	Singleton.build_screen_transition() \
+	var transition: ScreenTransition.Builder = Singleton.build_screen_transition() \
 		.set_texture(screen_texture) \
 		.set_out_texture(out_texture) \
 		.set_hold_duration(screen_hold) \
-		.set_swap(get_tree().reload_current_scene) \
-		.done()
+		.set_swap(get_tree().reload_current_scene)
+	var level: Level = Level.of(player)
+	if level:
+		transition.load(level.dismantle)
+	transition.done()
 
 
 func _tick(_delta: float) -> void:

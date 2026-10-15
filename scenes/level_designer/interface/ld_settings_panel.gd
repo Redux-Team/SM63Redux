@@ -4,6 +4,7 @@ extends LDPanel
 @export var screen: SettingsScreen
 @export var exit_button: BaseButton
 @export var action_row: HBoxContainer
+@export var layout: Control
 
 var _resolved: bool = false
 
@@ -14,6 +15,11 @@ func _setup() -> void:
 	action_row.move_child(exit_button, 0)
 	LD.bind_button(exit_button, editor.quit_to_title)
 	screen.closed.connect(_on_screen_closed)
+
+
+func fit_view() -> void:
+	_base_size = layout.get_combined_minimum_size()
+	super()
 
 
 func _on_open() -> void:
