@@ -13,8 +13,8 @@ script = ExtResource("1")
 id = &"medium_daisy_flower_bush"
 display_name = "Medium Daisy Flower Bush"
 category = &"Decoration"
-group = &"Flowers"
-order = 321
+group = &"Cherry"
+order = 100
 flags = 127
 icon = SubResource("IconAtlas")
 

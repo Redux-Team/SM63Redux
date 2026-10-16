@@ -13,7 +13,7 @@ id = &"medium_cherry_tree"
 display_name = "Medium Cherry Tree"
 category = &"Decoration"
 group = &"Cherry"
-order = 4
+order = 20
 flags = 127
 icon = SubResource("IconAtlas")
 

@@ -13,7 +13,7 @@ id = &"arrow_invisibility"
 display_name = "Invisibility Arrow"
 category = &"Decoration"
 group = &"Hints"
-order = 902
+order = 40
 flags = 127
 icon = SubResource("IconAtlas")
 

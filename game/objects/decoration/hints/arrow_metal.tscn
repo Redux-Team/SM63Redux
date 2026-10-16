@@ -13,7 +13,7 @@ id = &"arrow_metal"
 display_name = "Metal Arrow"
 category = &"Decoration"
 group = &"Hints"
-order = 901
+order = 30
 flags = 127
 icon = SubResource("IconAtlas")
 

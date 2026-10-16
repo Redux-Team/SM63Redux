@@ -13,7 +13,7 @@ id = &"cherry_flower"
 display_name = "Cherry Flower"
 category = &"Decoration"
 group = &"Cherry"
-order = 302
+order = 50
 flags = 127
 icon = SubResource("IconAtlas")
 
