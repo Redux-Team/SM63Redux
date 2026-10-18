@@ -339,7 +339,7 @@ size = Vector2(8, 14)
 
 [sub_resource type="Resource" id="Resource_glled"]
 script = ExtResource("12_200vj")
-accepted_hitbox_ids = PackedStringArray("spin", "ground_pound", "bobomb", "dive", "turbo")
+accepted_hitbox_ids = PackedStringArray("spin", "ground_pound", "bobomb", "dive", "turbo", "invincible")
 override_knockback = true
 disable_on_hit = true
 override_damage_state = true

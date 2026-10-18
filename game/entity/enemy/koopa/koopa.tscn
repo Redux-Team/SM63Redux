@@ -219,7 +219,7 @@ animations = [{
 
 [sub_resource type="Resource" id="Component_WalkerStrike"]
 script = ExtResource("hurtbox_component")
-accepted_hitbox_ids = PackedStringArray("spin", "dive", "turbo")
+accepted_hitbox_ids = PackedStringArray("spin", "dive", "turbo", "invincible")
 override_knockback = true
 knockback = Vector2(350, 50)
 
