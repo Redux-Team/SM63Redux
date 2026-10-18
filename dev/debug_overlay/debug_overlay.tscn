@@ -1,17 +1,14 @@
 [gd_scene format=3 uid="uid://kbh00qr7ptb0"]
 
-[ext_resource type="Script" uid="uid://cspo44xkemqn8" path="res://dev/debug_overlay/debug_overlay.gd" id="1_5k3mp"]
 [ext_resource type="FontFile" uid="uid://cf4ehcuf6rt7p" path="res://assets/font/pixel_redux.fnt" id="1_eii55"]
 [ext_resource type="FontFile" uid="uid://cnmgtcgow66hp" path="res://assets/font/pixel_redux_border.fnt" id="1_skb2b"]
 [ext_resource type="Script" uid="uid://bjig2y52v1jnp" path="res://dev/debug_overlay/hardware.gd" id="3_tl1ce"]
 [ext_resource type="Script" uid="uid://cunqbbo1l5dfc" path="res://dev/debug_overlay/profile.gd" id="4_a3h30"]
 [ext_resource type="Script" uid="uid://5kwl53ml1k3b" path="res://dev/debug_overlay/input.gd" id="6_2p8dq"]
 
-[node name="DebugOverlay" type="CanvasLayer" unique_id=1072152519 node_paths=PackedStringArray("debug_root")]
+[node name="DebugOverlay" type="CanvasLayer" unique_id=1072152519 groups=["debug_display"]]
 layer = 99
 visible = false
-script = ExtResource("1_5k3mp")
-debug_root = NodePath("DebugRoot")
 
 [node name="DebugRoot" type="Control" parent="." unique_id=2050599083]
 layout_mode = 3

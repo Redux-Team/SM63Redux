@@ -10,6 +10,7 @@ enum DiscordMode {
 const DISCORD_APP_ID: String = "1496255367607488562"
 const SCREEN_TRANSITION: PackedScene = preload("uid://dc1a8llb7l88l")
 const TOOLTIP: PackedScene = preload("res://util/ui/tooltip/tooltip.tscn")
+const DEBUG_DISPLAY_GROUP: StringName = &"debug_display"
 
 var _discord: DiscordRichPresence
 var _discord_mode: DiscordMode = DiscordMode.OFF
@@ -21,6 +22,8 @@ var _git_branch: String = ""
 var _git_fetched: bool = false
 var _screen_transition: ScreenTransition
 var editor_session: EditorSession = EditorSession.new()
+var debug_display_shown: bool = false
+var debug_time: DebugTime = DebugTime.new()
 
 
 func _ready() -> void:
@@ -30,6 +33,30 @@ func _ready() -> void:
 	_screen_transition = SCREEN_TRANSITION.instantiate()
 	add_child(_screen_transition)
 	add_child(TOOLTIP.instantiate())
+	add_child(debug_time)
+	get_tree().node_added.connect(_on_node_added)
+
+
+func _input(event: InputEvent) -> void:
+	if not Engine.is_editor_hint() and event.is_action_pressed(&"toggle_debug"):
+		set_debug_display(not debug_display_shown)
+
+
+func set_debug_display(shown: bool) -> void:
+	debug_display_shown = shown and OS.is_debug_build()
+	for node: Node in get_tree().get_nodes_in_group(DEBUG_DISPLAY_GROUP):
+		_apply_debug_display(node)
+
+
+func _on_node_added(node: Node) -> void:
+	if node.is_in_group(DEBUG_DISPLAY_GROUP):
+		_apply_debug_display(node)
+
+
+func _apply_debug_display(node: Node) -> void:
+	node.process_mode = Node.PROCESS_MODE_INHERIT if debug_display_shown else Node.PROCESS_MODE_DISABLED
+	if node is CanvasItem or node is CanvasLayer:
+		node.set(&"visible", debug_display_shown)
 
 
 func _exit_tree() -> void:

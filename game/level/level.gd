@@ -25,6 +25,10 @@ var _pending: Array[GameObject] = []
 var _pending_layers: Array[LevelLayer] = []
 
 
+func _enter_tree() -> void:
+	add_to_group(&"level")
+
+
 static func of(node: Node) -> Level:
 	var current: Node = node
 	while current and not current is Level:

@@ -8,6 +8,10 @@ var _history: Array[Dictionary] = []
 var _tracked: Dictionary[Object, PackedStringArray] = {}
 
 
+func _ready() -> void:
+	Singleton.debug_time.rewind_requested.connect(rewind)
+
+
 func _physics_process(_delta: float) -> void:
 	if not enabled or not entity:
 		return
