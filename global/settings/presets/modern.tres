@@ -69,6 +69,24 @@ script = ExtResource("2")
 setting_key = "dive"
 events = Array[InputEvent]([SubResource("Key_S"), SubResource("Joy_B")])
 
+[sub_resource type="InputEventJoypadMotion" id="Joy_StickUp"]
+axis = 1
+axis_value = -1.0
+
+[sub_resource type="Resource" id="Binding_GlideUp"]
+script = ExtResource("2")
+setting_key = "glide_up"
+events = Array[InputEvent]([SubResource("Key_Space"), SubResource("Joy_StickUp")])
+
+[sub_resource type="InputEventJoypadMotion" id="Joy_StickDown"]
+axis = 1
+axis_value = 1.0
+
+[sub_resource type="Resource" id="Binding_GlideDown"]
+script = ExtResource("2")
+setting_key = "glide_down"
+events = Array[InputEvent]([SubResource("Key_S"), SubResource("Joy_StickDown")])
+
 [sub_resource type="InputEventKey" id="Key_Z"]
 device = -1
 physical_keycode = 90
@@ -137,4 +155,4 @@ events = Array[InputEvent]([SubResource("Key_Shift"), SubResource("Joy_RB")])
 [resource]
 script = ExtResource("1")
 preset_name = "Modern"
-bindings = Array[ExtResource("2")]([SubResource("Binding_MoveLeft"), SubResource("Binding_MoveRight"), SubResource("Binding_Jump"), SubResource("Binding_Crouch"), SubResource("Binding_Dive"), SubResource("Binding_GroundPound"), SubResource("Binding_Interact"), SubResource("Binding_Spin"), SubResource("Binding_SkipDialogue"), SubResource("Binding_UseFludd"), SubResource("Binding_SwitchNozzle")])
+bindings = Array[ExtResource("2")]([SubResource("Binding_MoveLeft"), SubResource("Binding_MoveRight"), SubResource("Binding_Jump"), SubResource("Binding_Crouch"), SubResource("Binding_Dive"), SubResource("Binding_GlideUp"), SubResource("Binding_GlideDown"), SubResource("Binding_GroundPound"), SubResource("Binding_Interact"), SubResource("Binding_Spin"), SubResource("Binding_SkipDialogue"), SubResource("Binding_UseFludd"), SubResource("Binding_SwitchNozzle")])

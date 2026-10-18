@@ -15,6 +15,7 @@ const ACTIONS: Array[StringName] = [
 var move: float = 0.0
 ## Vertical swim axis, -1 for up and 1 for down.
 var swim: float = 0.0
+var glide: float = 0.0
 
 var _press_ages: Dictionary[StringName, float] = {}
 
@@ -22,6 +23,7 @@ var _press_ages: Dictionary[StringName, float] = {}
 func poll(delta: float) -> void:
 	move = Input.get_axis(&"move_left", &"move_right")
 	swim = Input.get_axis(&"swim_up", &"swim_down")
+	glide = Input.get_axis(&"glide_up", &"glide_down")
 	for action: StringName in ACTIONS:
 		if Input.is_action_just_pressed(action):
 			_press_ages.set(action, 0.0)

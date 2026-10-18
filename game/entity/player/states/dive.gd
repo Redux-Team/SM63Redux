@@ -85,7 +85,9 @@ func _rotate(delta: float) -> void:
 
 
 func _next() -> StringName:
-	return &"Floorslide" if player.is_on_floor() else &""
+	if player.is_on_floor():
+		return &"Floorslide"
+	return &"Glide" if player.can_glide() else &""
 
 
 func get_gravity_scale() -> float:
@@ -106,7 +108,7 @@ func _tick_stomp(delta: float) -> void:
 	
 	_stomp_time -= delta
 	if _stomp_time <= 0.0:
-		player.velocity.y = -stomp_bounce_speed
+		player.velocity.y = -player.get_jump_speed(stomp_bounce_speed)
 
 
 func _launch() -> void:
@@ -120,7 +122,7 @@ func _launch() -> void:
 	if machine.get_last_state() and machine.get_last_state().name == &"Idle":
 		player.velocity.y = maxf(player.velocity.y, -standing_max_rise_speed)
 	
-	player.velocity.y = clampf(player.velocity.y, -max_rise_speed, max_drop_speed)
+	player.velocity.y = maxf(player.velocity.y, -max_rise_speed) if player.dive_keeps_fall_speed() else clampf(player.velocity.y, -max_rise_speed, max_drop_speed)
 
 
 func _get_heading() -> float:

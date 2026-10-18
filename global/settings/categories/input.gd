@@ -7,6 +7,8 @@ extends SettingsCategory
 @export var jump: SettingsTypeInput
 @export var crouch: SettingsTypeInput
 @export var dive: SettingsTypeInput
+@export var glide_up: SettingsTypeInput
+@export var glide_down: SettingsTypeInput
 @export var ground_pound: SettingsTypeInput
 @export var spin: SettingsTypeInput
 @export var use_fludd: SettingsTypeInput

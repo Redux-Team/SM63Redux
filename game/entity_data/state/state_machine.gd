@@ -70,7 +70,7 @@ func _process(delta: float) -> void:
 
 
 func change_state(state_name: StringName) -> void:
-	var target: State = _states.get(state_name)
+	var target: State = _states.get(_redirect(state_name))
 	if not target:
 		push_error("StateMachine (%s): no state named '%s'" % [_owner_name(), state_name])
 		return
@@ -161,12 +161,18 @@ func _poll() -> void:
 	if requested.is_empty():
 		return
 	
+	requested = _redirect(requested)
+	
 	var target: State = _states.get(requested)
 	if not target:
 		push_error("StateMachine (%s): '%s' requested unknown state '%s'" % [_owner_name(), _current.name, requested])
 		return
 	if target != _current:
 		_switch_to(target)
+
+
+func _redirect(state_name: StringName) -> StringName:
+	return entity.redirect_state(_current, state_name) if entity else state_name
 
 
 func _request_from_stack() -> StringName:

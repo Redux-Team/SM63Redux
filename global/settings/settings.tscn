@@ -49,6 +49,14 @@ pressed = true
 [sub_resource type="InputEventJoypadMotion" id="InputEventJoypadMotion_ke4p5"]
 axis_value = 1.0
 
+[sub_resource type="InputEventJoypadMotion" id="Joy_StickUp"]
+axis = 1
+axis_value = -1.0
+
+[sub_resource type="InputEventJoypadMotion" id="Joy_StickDown"]
+axis = 1
+axis_value = 1.0
+
 [sub_resource type="InputEventKey" id="Key_Up"]
 device = -1
 physical_keycode = 4194320
@@ -189,13 +197,15 @@ script = ExtResource("12_boolean")
 setting_key = "animations"
 metadata/_custom_type_script = "uid://wbytn3c5m6h8"
 
-[node name="Input" type="Node" parent="." unique_id=1479907878 node_paths=PackedStringArray("move_left", "move_right", "jump", "crouch", "dive", "ground_pound", "spin", "use_fludd", "switch_nozzle", "interact", "skip_dialogue")]
+[node name="Input" type="Node" parent="." unique_id=1479907878 node_paths=PackedStringArray("move_left", "move_right", "jump", "crouch", "dive", "glide_up", "glide_down", "ground_pound", "spin", "use_fludd", "switch_nozzle", "interact", "skip_dialogue")]
 script = ExtResource("6_input")
 move_left = NodePath("Move Left")
 move_right = NodePath("Move Right")
 jump = NodePath("Jump")
 crouch = NodePath("Crouch")
 dive = NodePath("Dive")
+glide_up = NodePath("Glide Up")
+glide_down = NodePath("Glide Down")
 ground_pound = NodePath("Ground Pound")
 spin = NodePath("Spin")
 use_fludd = NodePath("Use FLUDD")
@@ -231,6 +241,18 @@ metadata/_custom_type_script = "uid://bjib53snokv2m"
 script = ExtResource("13_action")
 default_value = Array[InputEvent]([SubResource("Key_Down"), SubResource("Key_S"), SubResource("JoyButton_B")])
 setting_key = "dive"
+metadata/_custom_type_script = "uid://bjib53snokv2m"
+
+[node name="Glide Up" type="Node" parent="Input"]
+script = ExtResource("13_action")
+default_value = Array[InputEvent]([SubResource("Key_Up"), SubResource("InputEventKey_jump"), SubResource("Joy_StickUp")])
+setting_key = "glide_up"
+metadata/_custom_type_script = "uid://bjib53snokv2m"
+
+[node name="Glide Down" type="Node" parent="Input"]
+script = ExtResource("13_action")
+default_value = Array[InputEvent]([SubResource("Key_Down"), SubResource("Key_S"), SubResource("Joy_StickDown")])
+setting_key = "glide_down"
 metadata/_custom_type_script = "uid://bjib53snokv2m"
 
 [node name="Ground Pound" type="Node" parent="Input" unique_id=1366211424]
