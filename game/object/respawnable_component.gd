@@ -9,7 +9,7 @@ enum RespawnMode { COUNTDOWN, OFF_SCREEN }
 @export var check_interval: int = 6
 @export var despawn_off_screen: bool = true
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var despawn_margin: float = 384.0
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var despawn_delay: float = 3.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:s") var despawn_delay: float = 10.0
 
 var _object: GameObject
 var _snapshot: ObjectData

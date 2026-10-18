@@ -24,6 +24,7 @@ const FRICTION_KEY: StringName = &"floorslide"
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var crouch_exit_speed: float = 5.0
 ## Speed below which the slide ends once crouch is released.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var exit_speed: float = 150.0
+@export var slope_exit_margin: float = 1.1
 ## Forward speed needed to roll out with a jump.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rollout_min_speed: float = 50.0
 ## How long a jump press stays valid for a backflip.
@@ -106,4 +107,8 @@ func get_gravity_scale() -> float:
 
 
 func _get_exit_speed() -> float:
-	return crouch_exit_speed if player.is_crouching() else exit_speed
+	if not player.is_crouching():
+		return exit_speed
+	
+	var settle_speed: float = absf(player.get_floor_normal().x) * slope_acceleration / player.get_floor_drag_rate()
+	return maxf(crouch_exit_speed, settle_speed * slope_exit_margin)

@@ -25,6 +25,7 @@ var _shown: Dictionary[Node, bool] = {}
 
 
 func _ready() -> void:
+	_state_queue.clear()
 	input_map.apply()
 	world.process_mode = Node.PROCESS_MODE_DISABLED
 	for child: Node in get_children():
@@ -60,9 +61,9 @@ static func set_disabled(button: BaseButton, disabled: bool) -> void:
 
 func _process(_delta: float) -> void:
 	for i: int in mini(STATE_UPDATES_PER_FRAME, _state_queue.size()):
-		var button: BaseButton = _state_queue.pop_front()
+		var button: Variant = _state_queue.pop_front()
 		if is_instance_valid(button):
-			GDSS.update_state(button)
+			GDSS.update_state(button as BaseButton)
 
 
 func set_suspended(suspended: bool) -> void:
