@@ -10,7 +10,7 @@ region = Rect2(-2, 8, 48, 48)
 [node name="BigCherryStem" type="Node2D"]
 script = ExtResource("1")
 id = &"big_cherry_stem"
-display_name = "Big Cherry Stem"
+display_name = "Medium Cherry Stem"
 category = &"Decoration"
 group = &"Cherry"
 order = 40

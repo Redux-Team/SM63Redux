@@ -13,7 +13,7 @@ id = &"medium_tree"
 display_name = "Medium Tree"
 category = &"Decoration"
 group = &"Grass"
-order = 1
+order = 20
 flags = 127
 icon = SubResource("IconAtlas")
 

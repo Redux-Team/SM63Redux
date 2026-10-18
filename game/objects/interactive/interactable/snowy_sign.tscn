@@ -13,7 +13,6 @@ id = &"snowy_sign"
 display_name = "Snowy Sign"
 category = &"Interactive"
 group = &"Signs"
-biome = &"Snow"
 order = 900
 flags = 127
 icon = SubResource("IconAtlas")

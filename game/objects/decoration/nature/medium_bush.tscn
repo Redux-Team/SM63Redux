@@ -13,7 +13,7 @@ id = &"medium_bush"
 display_name = "Medium Bush"
 category = &"Decoration"
 group = &"Grass"
-order = 201
+order = 80
 flags = 127
 icon = SubResource("IconAtlas")
 

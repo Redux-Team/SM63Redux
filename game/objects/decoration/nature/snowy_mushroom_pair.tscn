@@ -13,7 +13,7 @@ id = &"snowy_mushroom_pair"
 display_name = "Snowy Mushroom Pair"
 category = &"Decoration"
 group = &"Snow"
-order = 407
+order = 80
 flags = 127
 icon = SubResource("IconAtlas")
 

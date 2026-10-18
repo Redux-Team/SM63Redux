@@ -13,7 +13,7 @@ id = &"medium_snowy_tree"
 display_name = "Medium Snowy Tree"
 category = &"Decoration"
 group = &"Snow"
-order = 7
+order = 20
 flags = 127
 icon = SubResource("IconAtlas")
 

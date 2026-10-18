@@ -43,6 +43,7 @@ icon_tint = &"color"
 category = &"Solids"
 group = &"Terrain"
 flags = 31
+order = 60
 properties = Array[ExtResource("2_r")]([SubResource("Property_collision"), SubResource("Property_color")])
 shape = NodePath("Shape")
 game_root = NodePath("Game")

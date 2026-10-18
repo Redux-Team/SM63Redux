@@ -13,7 +13,7 @@ id = &"snowman"
 display_name = "Snowman"
 category = &"Decoration"
 group = &"Snow"
-order = 800
+order = 50
 flags = 127
 icon = SubResource("IconAtlas")
 

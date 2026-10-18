@@ -13,7 +13,7 @@ id = &"medium_cave_stalagmite"
 display_name = "Medium Cave Stalagmite"
 category = &"Decoration"
 group = &"Cave"
-order = 110
+order = 90
 flags = 127
 icon = SubResource("IconAtlas")
 

@@ -13,7 +13,7 @@ id = &"small_cave_tree"
 display_name = "Small Cave Tree"
 category = &"Decoration"
 group = &"Cave"
-order = 10
+order = 30
 flags = 127
 icon = SubResource("IconAtlas")
 

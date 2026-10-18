@@ -10,10 +10,10 @@ region = Rect2(-8, -9, 48, 48)
 [node name="CaveBush" type="Node2D"]
 script = ExtResource("1")
 id = &"cave_bush"
-display_name = "Cave Bush"
+display_name = "Overgrown Bush"
 category = &"Decoration"
-group = &"Cave"
-order = 50
+group = &"Plants"
+order = 140
 flags = 127
 icon = SubResource("IconAtlas")
 

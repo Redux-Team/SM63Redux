@@ -14,6 +14,7 @@ display_name = "Small Tree"
 category = &"Decoration"
 group = &"Grass"
 flags = 127
+order = 30
 icon = SubResource("IconAtlas")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

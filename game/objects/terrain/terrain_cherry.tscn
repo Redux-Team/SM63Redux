@@ -104,6 +104,7 @@ category = &"Solids"
 group = &"Terrain"
 biome = &"Cherry"
 placement = 2
+order = 40
 properties = Array[ExtResource("2_r")]([SubResource("Property_collision"), SubResource("Property_base"), SubResource("Property_topline"), SubResource("Property_auto_toplines"), SubResource("Property_decoration"), SubResource("Property_decorations_enabled"), SubResource("Property_seed")])
 game_root = NodePath("Game")
 shape = NodePath("Shape")
