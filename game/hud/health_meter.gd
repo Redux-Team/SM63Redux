@@ -11,11 +11,14 @@ extends Control
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var hide_delay: float = 4.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var slide_time: float = 0.3
 @export var hidden_anchor: float = -0.3
+@export_group("Caps")
+@export var cap_effects: Array[HUDCapEffect] = []
 
 var _health: HealthComponent
 var _shown: bool = true
 var _slide: Tween
 var _healing: int = 0
+var _caps: MultiModeMachine
 
 
 func bind(health: HealthComponent) -> void:
@@ -27,6 +30,21 @@ func bind(health: HealthComponent) -> void:
 	_on_power_updated(health.power)
 
 
+func bind_caps(caps: MultiModeMachine) -> void:
+	_caps = caps
+	for effect: HUDCapEffect in cap_effects:
+		effect.bind(caps)
+	
+	caps.mode_started.connect(_refresh_shown.unbind(1))
+	caps.mode_stopped.connect(_refresh_shown.unbind(1))
+	_refresh_shown()
+
+
+func _refresh_shown() -> void:
+	var caps_running: bool = _caps != null and not _caps.get_running_modes().is_empty()
+	_slide_to(caps_running or (_health != null and _health.get_hp() < _health.max_hp))
+
+
 func _on_hp_updated(hp: float) -> void:
 	var ratio: float = hp / _health.max_hp
 	var color: Color = gradient.sample(1.0 - ratio if hp > 1.0 else critical_gradient_offset)
@@ -35,7 +53,7 @@ func _on_hp_updated(hp: float) -> void:
 	slice_material.set_shader_parameter(&"filled_slices", roundi(hp))
 	slice_material.set_shader_parameter(&"modulate_color", color)
 	background.modulate = color
-	_slide_to(hp < _health.max_hp)
+	_refresh_shown()
 
 
 func _on_power_updated(power: int) -> void:

@@ -1,5 +1,7 @@
 shader_type canvas_item;
 
+#include "res://shader/hud_cap.gdshaderinc"
+
 uniform vec4 modulate_color : source_color = vec4(1.0);
 uniform sampler2D health_texture : source_color, filter_nearest;
 uniform int total_slices = 8;
@@ -46,5 +48,5 @@ void fragment() {
 		}
 	}
 	
-	COLOR = tex_color * modulate_color;
+	COLOR = hud_apply_caps(tex_color * modulate_color, floor(UV * tex_size), tex_size * 0.5, tex_size);
 }

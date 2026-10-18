@@ -28,9 +28,13 @@
 [ext_resource type="Script" uid="uid://ctxo7yjs3ok5c" path="res://util/ui/clipping_texture_2d/clipping_texture_2d.gd" id="22_e6gmi"]
 [ext_resource type="Texture2D" uid="uid://bv5dytipq6km8" path="res://assets/textures/gui/ingame_hud/fludd_tank_power.png" id="23_nygxd"]
 [ext_resource type="FontFile" uid="uid://bn7qpulj0pbwv" path="res://assets/font/hud/pixel_sm64r_blue.fnt" id="26_tg085"]
+[ext_resource type="Script" uid="uid://dlc3kimuc0nec" path="res://game/hud/hud_cap_effect.gd" id="hud_cap_effect"]
 [ext_resource type="Script" uid="uid://d23kyv2gma7ie" path="res://game/hud/coin_counter.gd" id="hud_coin"]
 [ext_resource type="Script" uid="uid://0gd67fi8x3rr" path="res://game/hud/fludd_meter.gd" id="hud_fludd"]
 [ext_resource type="Script" uid="uid://iuvdpa51jtfn" path="res://game/hud/health_meter.gd" id="hud_health"]
+[ext_resource type="Shader" uid="uid://ckfhgfselhw1l" path="res://shader/hud_cap_overlay.gdshader" id="hud_overlay_shader"]
+[ext_resource type="Shader" uid="uid://cryu32fppqg1h" path="res://shader/hud_cap_rainbow.gdshader" id="hud_rainbow_shader"]
+[ext_resource type="FontFile" path="res://assets/font/pixel_redux_border.fnt" id="wing_font"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pm01n"]
 
@@ -41,20 +45,76 @@ light_mode = 1
 offsets = PackedFloat32Array(0, 0.1829653, 0.3280757, 0.4637224, 0.7745536, 1)
 colors = PackedColorArray(0.20784314, 0.49411765, 0.9098039, 1, 0.3567391, 0.62493485, 0.8478261, 1, 0, 1, 0.14999986, 1, 0.84, 0.84, 0, 1, 0.98039216, 0.3019608, 0.2, 1, 0.41355386, 0, 0.002178085, 1)
 
+[sub_resource type="Gradient" id="Gradient_hud_metal"]
+offsets = PackedFloat32Array(0, 0.18280376, 0.5522062, 0.60051537, 0.72897077, 0.8497278, 0.9991907)
+colors = PackedColorArray(0.078, 0.086, 0.114, 1, 0.31, 0.333, 0.388, 1, 0.7734206, 0.801309, 0.8484876, 1, 0.784, 0.812, 0.859, 1, 0.392, 0.42, 0.478, 1, 0.902, 0.922, 0.949, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_hud_metal"]
+gradient = SubResource("Gradient_hud_metal")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hud_overlay"]
+shader = ExtResource("hud_overlay_shader")
+shader_parameter/outline_width = 1.0
+shader_parameter/center = Vector2(32, 32)
+shader_parameter/metal_progress = 0.0
+shader_parameter/metal_ramp = SubResource("GradientTexture1D_hud_metal")
+shader_parameter/metal_tint = Color(0.85, 0.9, 1, 1)
+shader_parameter/metal_outline = Color(0.12, 0.13, 0.17, 1)
+shader_parameter/metal_contrast = 1.3
+shader_parameter/metal_sheen = 0.35
+shader_parameter/metal_sheen_width = 4.0
+shader_parameter/metal_sheen_interval = 720.0
+shader_parameter/metal_sheen_speed = 120.0
+shader_parameter/ghost_progress = 0.0
+shader_parameter/ghost_tint = Color(0.6, 0.85, 1, 1)
+shader_parameter/ghost_outline = Color(0.88, 0.96, 1, 1)
+shader_parameter/ghost_tint_strength = 0.5
+shader_parameter/ghost_alpha = 0.45
+shader_parameter/ghost_stripe_alpha = 0.3
+shader_parameter/ghost_stripe_spacing = 3.0
+shader_parameter/ghost_stripe_speed = 10.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hud_overlay_inner"]
+shader = ExtResource("hud_overlay_shader")
+shader_parameter/metal_ramp = SubResource("GradientTexture1D_hud_metal")
+shader_parameter/fill_top = 0.1667
+shader_parameter/fill_bottom = 0.8333
+shader_parameter/center = Vector2(24, 24)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0c88u"]
 shader = ExtResource("3_d64ys")
+shader_parameter/outline_width = 1.0
 shader_parameter/modulate_color = Color(1, 1, 1, 1)
 shader_parameter/health_texture = ExtResource("3_hbyb8")
 shader_parameter/total_slices = 8
 shader_parameter/filled_slices = 8
 shader_parameter/start_angle_degrees = 0.0
 shader_parameter/divider_color = Color(0.6392157, 0.6392157, 0.6392157, 1)
+shader_parameter/metal_progress = 0.0
+shader_parameter/metal_ramp = SubResource("GradientTexture1D_hud_metal")
+shader_parameter/metal_tint = Color(0.85, 0.9, 1, 1)
+shader_parameter/metal_outline = Color(0.12, 0.13, 0.17, 1)
+shader_parameter/metal_contrast = 1.3
+shader_parameter/metal_sheen = 0.35
+shader_parameter/metal_sheen_width = 4.0
+shader_parameter/metal_sheen_interval = 720.0
+shader_parameter/metal_sheen_speed = 120.0
+shader_parameter/ghost_progress = 0.0
+shader_parameter/ghost_tint = Color(0.6, 0.85, 1, 1)
+shader_parameter/ghost_outline = Color(0.88, 0.96, 1, 1)
+shader_parameter/ghost_tint_strength = 0.5
+shader_parameter/ghost_alpha = 0.45
+shader_parameter/ghost_stripe_alpha = 0.3
+shader_parameter/ghost_stripe_spacing = 3.0
+shader_parameter/ghost_stripe_speed = 10.0
+shader_parameter/fill_top = 0.1667
+shader_parameter/fill_bottom = 0.8333
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1hbjs"]
 atlas = ExtResource("2_fsh6l")
 region = Rect2(0, 0, 64, 16)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_3ndyp"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_f6djn"]
 diffuse_texture = SubResource("AtlasTexture_1hbjs")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nayuj"]
@@ -147,7 +207,7 @@ animations = [{
 atlas = ExtResource("13_erhw5")
 region = Rect2(0, 0, 14, 14)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_0mtn5"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_6aeor"]
 diffuse_texture = SubResource("AtlasTexture_tg085")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aqq40"]
@@ -242,6 +302,17 @@ animations = [{
 "name": &"heal",
 "speed": 13.0
 }]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hud_rainbow"]
+shader = ExtResource("hud_rainbow_shader")
+shader_parameter/progress = 1.0
+shader_parameter/half_width = 32.0
+shader_parameter/saturation = 0.85
+shader_parameter/shading = 0.6
+shader_parameter/cycle_speed = 0.6
+shader_parameter/spread = 0.01
+shader_parameter/fill_left = 0.0625
+shader_parameter/fill_right = 0.9375
 
 [sub_resource type="Texture2D" id="Texture2D_1f64a"]
 resource_local_to_scene = false
@@ -412,7 +483,7 @@ scroll_active = false
 autowrap_mode = 0
 shortcut_keys_enabled = false
 
-[node name="HealthContainer" type="Control" parent="." unique_id=1581326594 node_paths=PackedStringArray("slices", "background", "power_sprite", "coin_sprite")]
+[node name="HealthContainer" type="Control" parent="." unique_id=1581326594 node_paths=PackedStringArray("slices", "background", "power_sprite", "coin_sprite", "cap_effects")]
 material = SubResource("CanvasItemMaterial_37e64")
 layout_mode = 3
 anchors_preset = 5
@@ -425,8 +496,10 @@ slices = NodePath("Base/InnerHPBG/InnerHPTexture")
 background = NodePath("Base/InnerHPBG")
 power_sprite = NodePath("Base/POWER")
 coin_sprite = NodePath("Base/CoinMeter")
+cap_effects = [NodePath("CapEffects/Metal"), NodePath("CapEffects/Invisible"), NodePath("CapEffects/Invincible"), NodePath("CapEffects/Wing")]
 
 [node name="Base" type="TextureRect" parent="HealthContainer" unique_id=379024076]
+material = SubResource("ShaderMaterial_hud_overlay")
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -439,6 +512,7 @@ grow_horizontal = 2
 texture = ExtResource("1_e2fet")
 
 [node name="InnerHPBG" type="TextureRect" parent="HealthContainer/Base" unique_id=2134494592]
+material = SubResource("ShaderMaterial_hud_overlay_inner")
 show_behind_parent = true
 layout_mode = 0
 offset_left = 8.0
@@ -465,11 +539,11 @@ grow_vertical = 2
 [node name="POWER" type="Sprite2D" parent="HealthContainer/Base" unique_id=457957822]
 position = Vector2(31.499989, 9)
 scale = Vector2(1.0781246, 1)
-texture = SubResource("CanvasTexture_3ndyp")
+texture = SubResource("CanvasTexture_f6djn")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 16)
 script = ExtResource("11_fsh6l")
-canvas_texture = SubResource("CanvasTexture_3ndyp")
+canvas_texture = SubResource("CanvasTexture_f6djn")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_rmsoo")
 current_animation = "default"
@@ -480,11 +554,11 @@ metadata/_custom_type_script = "uid://cvolonferossj"
 
 [node name="CoinMeter" type="Sprite2D" parent="HealthContainer/Base" unique_id=281389693]
 position = Vector2(32, 32)
-texture = SubResource("CanvasTexture_0mtn5")
+texture = SubResource("CanvasTexture_6aeor")
 region_enabled = true
 region_rect = Rect2(0, 0, 14, 14)
 script = ExtResource("11_fsh6l")
-canvas_texture = SubResource("CanvasTexture_0mtn5")
+canvas_texture = SubResource("CanvasTexture_6aeor")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_871rv")
 current_animation = "default"
@@ -492,6 +566,46 @@ current_frame = 0
 speed_scale = 1.0
 playing = false
 metadata/_custom_type_script = "uid://cvolonferossj"
+
+[node name="CapEffects" type="Node" parent="HealthContainer" unique_id=886497731]
+
+[node name="Metal" type="Node" parent="HealthContainer/CapEffects" unique_id=568424315 node_paths=PackedStringArray("targets")]
+script = ExtResource("hud_cap_effect")
+cap = &"Metal"
+targets = [NodePath("../../Base/InnerHPBG"), NodePath("../../Base/InnerHPBG/InnerHPTexture")]
+parameter = &"metal_progress"
+
+[node name="Invisible" type="Node" parent="HealthContainer/CapEffects" unique_id=1190881520 node_paths=PackedStringArray("targets")]
+script = ExtResource("hud_cap_effect")
+cap = &"Invisible"
+targets = [NodePath("../../Base")]
+parameter = &"ghost_progress"
+
+[node name="Invincible" type="Node" parent="HealthContainer/CapEffects" unique_id=1200727080 node_paths=PackedStringArray("targets")]
+script = ExtResource("hud_cap_effect")
+cap = &"Invincible"
+targets = [NodePath("../../Base/POWER")]
+material = SubResource("ShaderMaterial_hud_rainbow")
+
+[node name="Wing" type="Node" parent="HealthContainer/CapEffects" node_paths=PackedStringArray("indicators")]
+script = ExtResource("hud_cap_effect")
+cap = &"Wing"
+indicators = [NodePath("../../WingIndicator")]
+
+[node name="WingIndicator" type="Label" parent="HealthContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -40.0
+offset_top = 80.0
+offset_right = 40.0
+offset_bottom = 96.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("wing_font")
+text = "WING"
+horizontal_alignment = 1
 
 [node name="FLUDDContainer" type="Control" parent="." unique_id=2013215394 node_paths=PackedStringArray("tank", "nozzle_icon", "fuel_rect", "fuel_label", "power_meter")]
 material = SubResource("CanvasItemMaterial_37e64")

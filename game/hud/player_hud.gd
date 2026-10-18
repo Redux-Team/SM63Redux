@@ -15,6 +15,7 @@ func _ready() -> void:
 func bind(target: Player) -> void:
 	player = target
 	health_meter.bind(target.get_component(HealthComponent) as HealthComponent)
+	health_meter.bind_caps(target.caps)
 	fludd_meter.bind(target.fludd)
 
 
