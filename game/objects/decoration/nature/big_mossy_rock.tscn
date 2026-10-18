@@ -1,29 +1,29 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dne2uw1wkg53g"]
 
-[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/nature/big_mossy_rock.png" id="2"]
+[ext_resource type="Script" uid="uid://tyu7kjo0r4x6" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://bk7g713fkw45a" path="res://assets/textures/objects/decoration/nature/big_mossy_rock.png" id="2"]
 
 [sub_resource type="AtlasTexture" id="IconAtlas"]
 atlas = ExtResource("2")
 region = Rect2(1, 8, 48, 48)
 
-[node name="BigMossyRock" type="Node2D" node_paths=PackedStringArray("game_root")]
+[node name="BigMossyRock" type="Node2D" unique_id=1349143053 node_paths=PackedStringArray("game_root")]
 script = ExtResource("1")
 id = &"big_mossy_rock"
 display_name = "Big Mossy Rock"
+icon = SubResource("IconAtlas")
 category = &"Decoration"
 group = &"Rocks"
 order = 60
 flags = 127
-icon = SubResource("IconAtlas")
 game_root = NodePath("Game")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=260136616]
 texture = ExtResource("2")
 
-[node name="Game" type="StaticBody2D" parent="."]
+[node name="Game" type="StaticBody2D" parent="." unique_id=122528217]
 collision_layer = 2
 collision_mask = 0
 
-[node name="Collision" type="CollisionPolygon2D" parent="Game"]
-polygon = PackedVector2Array(-36, 30, -34, 14, -20, -21, -15, -26, -5, -31, -1, -32, 9, -31, 19, -25, 23, -22, 29, -10, 35, 7, 36, 23, 35, 32, -36, 32)
+[node name="Collision" type="CollisionPolygon2D" parent="Game" unique_id=1631919301]
+polygon = PackedVector2Array(-36, 30, -34, 14, -24, 10, -24, -7, -20, -21, -15, -26, -5, -31, -1, -32, 9, -31, 19, -25, 23, -22, 29, -10, 35, 7, 36, 23, 35, 32, -36, 32)
