@@ -21,6 +21,6 @@ func _tick(delta: float) -> void:
 	if is_zero_approx(player.move_input) or machine.is_active(&"Crouch"):
 		player.brake(brake_deceleration, Motion.rate(brake_halflife) + drag * brake_friction_scale, delta)
 	else:
-		player.drive(player.move_input, player.get_ground_speed(run_speed), acceleration, turn_acceleration, 0.0, drag, delta)
+		player.drive(player.move_input, player.get_ground_speed(run_speed), player.get_ground_acceleration(acceleration), player.get_ground_acceleration(turn_acceleration), 0.0, drag, delta)
 	
 	player.velocity.y = 0.0

@@ -66,20 +66,21 @@ func process(hitbox: HitBox, hurtbox: HurtBox, entity: Entity) -> void:
 	if entity.has_component(HealthComponent):
 		var health_component: HealthComponent = entity.get_component(HealthComponent)
 		
-		if not hitbox.damage_curve:
-			health_component.damage(hitbox.damage_amount, hitbox.damage_type)
-		else:
-			var dist: float = hitbox.global_position.distance_to(hurtbox.global_position)
-			health_component.damage(hitbox.damage_curve.sample(dist), hitbox.damage_type)
+		var amount: float = hitbox.damage_amount
+		if hitbox.damage_curve:
+			amount = hitbox.damage_curve.sample(hitbox.global_position.distance_to(hurtbox.global_position))
+		amount *= entity.get_attribute_scale(&"damage_scale")
+		if amount > 0.0:
+			health_component.damage(amount, hitbox.damage_type)
 		
-		entity.velocity = _resolve_knockback(hitbox, hurtbox, entity.velocity)
+		entity.velocity = _resolve_knockback(hitbox, hurtbox, entity.velocity) * entity.get_attribute_scale(&"knockback_scale")
 		
 		var state: StringName = _resolve_damage_state(hitbox, hurtbox)
 		if not state.is_empty() and entity.machine:
 			entity.machine.change_state(state)
 	
 	if disable_on_hit:
-		var duration: float = hitbox.override_disable_duration if hitbox.override_disable_on_hit else disable_on_hit_duration
+		var duration: float = (hitbox.override_disable_duration if hitbox.override_disable_on_hit else disable_on_hit_duration) * entity.get_attribute_scale(&"recovery_scale")
 		var target: DisableTarget = hitbox.override_disable_target if hitbox.override_disable_on_hit else disable_on_hit_target
 		match target:
 			DisableTarget.HURTBOX:

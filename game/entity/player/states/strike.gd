@@ -23,7 +23,7 @@ func _tick(delta: float) -> void:
 	
 	var scale: float = idle_floor_friction_scale if is_zero_approx(player.move_input) else floor_friction_scale
 	player.velocity.x = Motion.drift(player.velocity.x, 0.0, player.get_floor_drag_rate() * scale, delta)
-	if _landed_at < 0.0 and time > land_delay:
+	if _landed_at < 0.0 and time > land_delay * player.get_attribute_scale(&"recovery_scale"):
 		_landed_at = time
 
 
@@ -32,6 +32,6 @@ func _exit() -> void:
 
 
 func _next() -> StringName:
-	if player.is_in_water():
+	if player.is_swimming():
 		return &"SwimStrike"
-	return &"Idle" if _landed_at >= 0.0 and time - _landed_at >= recover_time else &""
+	return &"Idle" if _landed_at >= 0.0 and time - _landed_at >= recover_time * player.get_attribute_scale(&"recovery_scale") else &""

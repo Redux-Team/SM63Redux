@@ -17,7 +17,7 @@ func _enter() -> void:
 	_jump = jumps.get(index)
 	_cut = false
 	particles.burst()
-	player.velocity.y = -_jump.strength
+	player.velocity.y = -player.get_jump_speed(_jump.strength)
 	player.jump_chain = index + 1
 	player.jump_chain_timer = _jump.chain_window
 	player.can_jump = false

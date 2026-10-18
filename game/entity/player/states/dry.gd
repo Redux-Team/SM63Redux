@@ -8,7 +8,7 @@ func _tick(delta: float) -> void:
 
 
 func _next() -> StringName:
-	return &"SwimIdle" if player.is_in_water() else &""
+	return &"SwimIdle" if player.is_swimming() else &""
 
 
 func _tick_jump_chain(delta: float) -> void:

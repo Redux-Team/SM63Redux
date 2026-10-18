@@ -41,7 +41,7 @@ func _tick(delta: float) -> void:
 	_cap = move_toward(_cap, speed, rebuild_acceleration * delta)
 	player.ground_speed_override = _cap
 	player.air_speed_override = _cap
-	if not player.is_in_water():
+	if not player.is_swimming():
 		_stop_aiming()
 		return
 	

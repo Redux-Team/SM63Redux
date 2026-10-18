@@ -28,7 +28,7 @@ func _tick(delta: float) -> void:
 		player.velocity.x = maxf(speed - drag * delta, min_speed) * signf(player.velocity.x)
 	
 	if time >= duration and time - delta < duration:
-		player.velocity.y = -bounce_speed
+		player.velocity.y = -player.get_jump_speed(bounce_speed)
 
 
 func _exit() -> void:

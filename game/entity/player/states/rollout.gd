@@ -23,7 +23,7 @@ extends PlayerState
 
 func _enter() -> void:
 	player.velocity.x = clampf(player.velocity.x, -max_horizontal_speed, max_horizontal_speed)
-	player.velocity.y = -rise_speed
+	player.velocity.y = -player.get_jump_speed(rise_speed)
 	player.can_dive = false
 
 

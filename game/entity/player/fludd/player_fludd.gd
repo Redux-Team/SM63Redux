@@ -58,7 +58,7 @@ const FUEL_MAX: float = 100.0
 	Nozzle.TURBO: false,
 }
 ## States in which no nozzle can spray.
-@export var blocked_states: Array[StringName] = [&"Spin", &"SwimSpin", &"Strike", &"Crouch", &"RolloutF", &"GroundPoundFall", &"GroundPoundStart", &"GroundPoundSlam"]
+@export var blocked_states: Array[StringName] = [&"Spin", &"SwimSpin", &"Strike", &"Crouch", &"RolloutF", &"GroundPoundFall", &"GroundPoundStart", &"GroundPoundSlam", &"Glide"]
 @export_group("Launch")
 ## Upward speed set when spraying lifts the player off the ground.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var launch_speed: float = 42.5
@@ -171,7 +171,7 @@ func set_body_rotation(rotation: float, context: Context) -> void:
 
 
 func get_context() -> Context:
-	if player.is_in_water() and equipped_nozzle == Nozzle.HOVER:
+	if player.is_swimming() and equipped_nozzle == Nozzle.HOVER:
 		return Context.SUBMERGED
 	return _context
 
@@ -233,7 +233,7 @@ func _tick_refill(delta: float) -> void:
 	if is_equal_approx(power, POWER_MAX):
 		return
 	
-	if player.is_on_floor() or player.is_in_water():
+	if player.is_on_floor() or player.is_swimming():
 		power = POWER_MAX
 		return
 	

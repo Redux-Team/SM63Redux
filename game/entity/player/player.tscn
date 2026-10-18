@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c0jtt8j5mk6sr" path="res://game/entity/player/player.gd" id="1_b7m82"]
 [ext_resource type="Script" uid="uid://cvolonferossj" path="res://util/2d/smart_sprite_2d.gd" id="2_0b5cm"]
 [ext_resource type="Texture2D" uid="uid://d0ybvaiwv7bs6" path="res://assets/textures/entity/player/mario/run.png" id="2_lh4k8"]
+[ext_resource type="Shader" uid="uid://k4vpk6sg3fam" path="res://shader/metallic.gdshader" id="3_ont6s"]
 [ext_resource type="Texture2D" uid="uid://bvpu1uexfy52t" path="res://assets/textures/entity/player/mario/bonk.png" id="4_ria7k"]
 [ext_resource type="Texture2D" uid="uid://2gs8g3k5v6ti" path="res://assets/textures/entity/player/mario/crouch.png" id="5_6rqdb"]
 [ext_resource type="Texture2D" uid="uid://p854wdvg3nbj" path="res://assets/textures/entity/player/mario/crouch_up.png" id="6_l0vtf"]
@@ -21,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://c0tt8a0cxaba" path="res://assets/textures/entity/player/mario/Idle_animation_a.png" id="19_ckiah"]
 [ext_resource type="Texture2D" uid="uid://smesftv4mai1" path="res://assets/textures/entity/player/mario/jumpr.png" id="20_6b4i6"]
 [ext_resource type="Texture2D" uid="uid://dj1tgjgh6y6nr" path="res://assets/textures/entity/player/mario/spin_fast.png" id="21_001bj"]
+[ext_resource type="Texture2D" uid="uid://0rulwtknne2h" path="res://assets/textures/entity/player/mario/Idle_animation_1hp.png" id="21_dhwyu"]
 [ext_resource type="Texture2D" uid="uid://b650qi54j8l3l" path="res://assets/textures/entity/player/mario/spin_slow.png" id="22_6suq8"]
 [ext_resource type="Texture2D" uid="uid://dv2fexr0a6o8t" path="res://assets/textures/entity/player/mario/stomp.png" id="23_eo5je"]
 [ext_resource type="Texture2D" uid="uid://dyhvdtvga7w8k" path="res://assets/textures/entity/player/mario/swim_up.png" id="24_d635j"]
@@ -126,22 +128,37 @@
 [ext_resource type="Script" uid="uid://dh843etuxv6e4" path="res://game/entity_data/components/entity_debug_component.gd" id="123_ngukv"]
 [ext_resource type="Script" uid="uid://cs3i8qtc0267t" path="res://game/entity/player/fludd/player_fludd.gd" id="124_lettu"]
 [ext_resource type="AudioStream" uid="uid://0o8t42w7mec4" path="res://assets/sfx/player/fludd/fludd_switch.wav" id="125_mwgd8"]
-[ext_resource type="Script" uid="uid://bt2fjvil3p13m" path="res://game/entity_data/mode/mode_machine.gd" id="126_5bmbv"]
+[ext_resource type="Script" uid="uid://bt2fjvil3p13m" path="res://util/mode/mode_machine.gd" id="126_5bmbv"]
 [ext_resource type="Script" uid="uid://cf4aneet4pcru" path="res://game/entity/player/fludd/hover_mode.gd" id="127_6mmss"]
 [ext_resource type="Script" uid="uid://di35rcwpwcvsk" path="res://game/entity/player/fludd/rocket_mode.gd" id="128_cv6e0"]
 [ext_resource type="Script" uid="uid://craiphw3sblr1" path="res://game/entity/player/fludd/turbo_mode.gd" id="129_wrpqp"]
 [ext_resource type="Script" uid="uid://bsy5mcihyby6l" path="res://game/entity/player/fludd/fludd_visuals.gd" id="130_dica1"]
+[ext_resource type="Shader" uid="uid://bm5fsqqhfpwhm" path="res://shader/afterimage.gdshader" id="afterimage_shader"]
+[ext_resource type="Script" uid="uid://bh81o6mx3b5er" path="res://util/2d/afterimage_trail.gd" id="afterimage_trail"]
+[ext_resource type="Script" uid="uid://cxh84rwbfcbg3" path="res://util/2d/force_display.gd" id="force_display"]
+[ext_resource type="Script" uid="uid://cdop1kyo5yive" path="res://game/entity/player/states/glide.gd" id="glide_state"]
+[ext_resource type="Script" uid="uid://btn6teb10fw8a" path="res://game/entity/player/caps/invincible_cap.gd" id="invincible_cap"]
+[ext_resource type="Shader" uid="uid://bfn0lwca1nsxh" path="res://shader/invisibility.gdshader" id="invisibility_shader"]
+[ext_resource type="Script" uid="uid://vy87wi60y7de" path="res://game/entity/player/caps/invisible_cap.gd" id="invisible_cap"]
+[ext_resource type="Script" uid="uid://dp7giav3da2cr" path="res://game/entity/player/caps/metal_cap.gd" id="metal_cap"]
+[ext_resource type="Script" uid="uid://cxru7dwdcpoty" path="res://util/mode/multi_mode_machine.gd" id="multi_mode_machine"]
+[ext_resource type="Shader" uid="uid://bi837rlw40dbv" path="res://shader/silhouette_rainbow.gdshader" id="rainbow_shader"]
 [ext_resource type="Script" uid="uid://cwdgtyt2wh132" path="res://game/entity/player/fludd/spray_profile.gd" id="spray_profile"]
 [ext_resource type="PackedScene" uid="uid://cffnjxsg0savt" path="res://game/entity/player/fludd/spray_stream.tscn" id="spray_stream"]
+[ext_resource type="Script" uid="uid://buutpx71ehkax" path="res://game/entity/player/caps/wing_cap.gd" id="wing_cap"]
 
 [sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_3h1ly"]
 cutoff_hz = 2500.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_afterimage"]
+shader = ExtResource("afterimage_shader")
+shader_parameter/tint_strength = 0.999999977648
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tbkto"]
 atlas = ExtResource("19_ckiah")
 region = Rect2(320, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_ckiah"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_woak8"]
 diffuse_texture = SubResource("AtlasTexture_tbkto")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hmgs0"]
@@ -271,6 +288,30 @@ region = Rect2(192, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_vf32f"]
 atlas = ExtResource("19_ckiah")
 region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g0chk"]
+atlas = ExtResource("21_dhwyu")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ibhy"]
+atlas = ExtResource("21_dhwyu")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bse6c"]
+atlas = ExtResource("21_dhwyu")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kfnww"]
+atlas = ExtResource("21_dhwyu")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ks7r8"]
+atlas = ExtResource("21_dhwyu")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5xxv0"]
+atlas = ExtResource("21_dhwyu")
+region = Rect2(320, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_v2l3k"]
 atlas = ExtResource("19_3i503")
@@ -673,6 +714,29 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_g0chk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ibhy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bse6c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kfnww")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ks7r8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5xxv0")
+}],
+"loop": 1,
+"name": &"idle_low_hp",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_v2l3k")
 }, {
 "duration": 1.0,
@@ -896,7 +960,7 @@ animations = [{
 atlas = ExtResource("28_r4b01")
 region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_o0m62"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_orwi0"]
 diffuse_texture = SubResource("AtlasTexture_opceb")
 
 [sub_resource type="Resource" id="Resource_v2l3k"]
@@ -1576,7 +1640,7 @@ animations = [{
 atlas = ExtResource("43_kyrvb")
 region = Rect2(0, 0, 16, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_tqdqa"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_2qfp3"]
 diffuse_texture = SubResource("AtlasTexture_fbvjr")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_is4m5"]
@@ -1733,6 +1797,9 @@ metadata/_custom_type_script = "uid://drtqc6at2evph"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2swmp"]
 size = Vector2(8, 23)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_invincible"]
+size = Vector2(14, 26)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3h1ly"]
 size = Vector2(12, 23)
@@ -1948,7 +2015,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Doll:local_rotation")
+tracks/0/path = NodePath("Visuals/Doll:local_rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1963,7 +2030,7 @@ resource_name = "backflip"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Doll:local_rotation")
+tracks/0/path = NodePath("Visuals/Doll:local_rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1993,7 +2060,7 @@ length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Doll:local_rotation")
+tracks/0/path = NodePath("Visuals/Doll:local_rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -2008,7 +2075,7 @@ resource_name = "backflip"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Doll:local_rotation")
+tracks/0/path = NodePath("Visuals/Doll:local_rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -2023,7 +2090,7 @@ resource_name = "triple_jump"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Doll:local_rotation")
+tracks/0/path = NodePath("Visuals/Doll:local_rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -2226,6 +2293,20 @@ sfx_enter_enabled = true
 sfx_enter_sound = SubResource("AudioStreamRandomizer_yod3m")
 sfx_enter_stop_on_exit = true
 
+[sub_resource type="Resource" id="Resource_qwmux"]
+script = ExtResource("70_e60mc")
+acceleration = 0.0
+turn_acceleration = 0.0
+momentum_acceleration = 0.0
+drag = 0.0
+over_speed_drag = 0.0
+metadata/_custom_type_script = "uid://dryys1f20nrgn"
+
+[sub_resource type="Resource" id="Resource_opa2o"]
+script = ExtResource("64_dl333")
+animation = &"dive"
+metadata/_custom_type_script = "uid://dir75hkr2361s"
+
 [sub_resource type="Resource" id="Resource_xi4k6"]
 script = ExtResource("64_dl333")
 animation = &"stomp"
@@ -2353,16 +2434,64 @@ gravity = Vector2(0, 150)
 lifetime = 0.5
 max_length = 320.0
 
-[node name="Player" type="CharacterBody2D" unique_id=1740348366 node_paths=PackedStringArray("floor_raycast", "fludd", "silhouette_targets", "ground_pound_fall", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
-collision_mask = 2
+[sub_resource type="Gradient" id="Gradient_metal"]
+offsets = PackedFloat32Array(0, 0.18280376, 0.5522062, 0.60051537, 0.72897077, 0.8497278, 0.9991907)
+colors = PackedColorArray(0.078, 0.086, 0.114, 1, 0.31, 0.333, 0.388, 1, 0.7734206, 0.801309, 0.8484876, 1, 0.784, 0.812, 0.859, 1, 0.392, 0.42, 0.478, 1, 0.902, 0.922, 0.949, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_metal"]
+gradient = SubResource("Gradient_metal")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ont6s"]
+shader = ExtResource("3_ont6s")
+shader_parameter/ramp = SubResource("GradientTexture1D_metal")
+shader_parameter/tint = Color(0.85, 0.9, 1, 1)
+shader_parameter/accent = Color(0.61, 0.74000007, 1, 1)
+shader_parameter/accent_strength = 0.30000000447036
+shader_parameter/ramp_contrast = 1.2500000111759
+shader_parameter/sheen_strength = 0.35
+shader_parameter/sheen_width = 5.0
+shader_parameter/sheen_interval = 180.0
+shader_parameter/sheen_speed = 60.0
+shader_parameter/sheen_slant = 0.6
+shader_parameter/rim_strength = 0.7500000111759
+shader_parameter/light_direction = Vector2(-1, -1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_invisibility"]
+shader = ExtResource("invisibility_shader")
+shader_parameter/tint = Color(0.6, 0.85, 1, 1)
+shader_parameter/edge_color = Color(0.88, 0.96, 1, 1)
+shader_parameter/fringe_warm = Color(1, 0.35, 0.7, 1)
+shader_parameter/fringe_cool = Color(0.3, 0.7, 1, 1)
+shader_parameter/body_alpha = 0.6999999843536
+shader_parameter/tint_strength = 0.35
+shader_parameter/edge_alpha = 0.7
+shader_parameter/fringe_alpha = 0.35
+shader_parameter/fringe_offset = 1.0
+shader_parameter/stripe_alpha = 0.18
+shader_parameter/stripe_brightness = 0.3
+shader_parameter/stripe_spacing = 4.0
+shader_parameter/stripe_speed = 12.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rainbow"]
+shader = ExtResource("rainbow_shader")
+shader_parameter/thickness = 1
+shader_parameter/saturation = 0.8
+shader_parameter/brightness = 1.0
+shader_parameter/cycle_speed = 1.2
+shader_parameter/spread = 0.03
+shader_parameter/fill_alpha = 0.0
+
+[node name="Player" type="CharacterBody2D" unique_id=1740348366 node_paths=PackedStringArray("floor_raycast", "fludd", "caps", "silhouette_targets", "ground_pound_fall", "sprite", "components_root", "collision_shapes", "machine", "water_check")]
+collision_mask = 2050
 floor_snap_length = 7.0
 script = ExtResource("1_b7m82")
 floor_raycast = NodePath("FloorRaycast")
 fludd = NodePath("Fludd")
+caps = NodePath("Caps")
 submerged_bus_effects = Array[AudioEffect]([SubResource("AudioEffectLowPassFilter_3h1ly")])
-silhouette_targets = [NodePath("Doll"), NodePath("Doll/Fludd")]
+silhouette_targets = [NodePath("Visuals/Doll"), NodePath("Visuals/Doll/Fludd")]
 ground_pound_fall = NodePath("StateMachine/GroundPound/GroundPoundFall")
-sprite = NodePath("Doll")
+sprite = NodePath("Visuals/Doll")
 components_root = NodePath("Components")
 collision_shapes = [NodePath("BaseCollision"), NodePath("GroundPoundCollision"), NodePath("DiveCollision")]
 machine = NodePath("StateMachine")
@@ -2375,15 +2504,26 @@ show_behind_parent = true
 nozzle = NodePath("../CanvasGroup/HoverFluddParticles")
 carrier = NodePath("..")
 
-[node name="Doll" type="Sprite2D" parent="." unique_id=1587082698 node_paths=PackedStringArray("rotation_source", "subsprites")]
+[node name="Trail" type="Node2D" parent="." unique_id=913843507 node_paths=PackedStringArray("source")]
+process_mode = 4
+script = ExtResource("afterimage_trail")
+source = NodePath("../Visuals")
+ghost_material = SubResource("ShaderMaterial_afterimage")
+interval = 0.0
+start_alpha = 0.3
+saturation = 1.0
+
+[node name="Visuals" type="CanvasGroup" parent="." unique_id=1285199715]
+
+[node name="Doll" type="Sprite2D" parent="Visuals" unique_id=1587082698 node_paths=PackedStringArray("rotation_source", "subsprites")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_ckiah")
+texture = SubResource("CanvasTexture_woak8")
 region_enabled = true
 region_rect = Rect2(320, 0, 64, 64)
 script = ExtResource("2_0b5cm")
-canvas_texture = SubResource("CanvasTexture_ckiah")
+canvas_texture = SubResource("CanvasTexture_woak8")
 flip_with_velocity = false
-rotation_source = NodePath("..")
+rotation_source = NodePath("../..")
 subsprites = [NodePath("Fludd")]
 animated = true
 diffuse_frames = SubResource("SpriteFrames_681d1")
@@ -2392,14 +2532,15 @@ current_frame = 5
 speed_scale = 1.0
 playing = false
 
-[node name="Fludd" type="Sprite2D" parent="Doll" unique_id=4340549 node_paths=PackedStringArray("subsprites")]
+[node name="Fludd" type="Sprite2D" parent="Visuals/Doll" unique_id=4340549 node_paths=PackedStringArray("subsprites")]
+visible = false
 show_behind_parent = true
 position = Vector2(-5, -1)
-texture = SubResource("CanvasTexture_o0m62")
+texture = SubResource("CanvasTexture_orwi0")
 region_enabled = true
 region_rect = Rect2(64, 0, 64, 64)
 script = ExtResource("2_0b5cm")
-canvas_texture = SubResource("CanvasTexture_o0m62")
+canvas_texture = SubResource("CanvasTexture_orwi0")
 subsprites = [NodePath("Plume")]
 follow_root = true
 follow_default = &"hover:default"
@@ -2426,7 +2567,6 @@ follow_poses = Dictionary[StringName, Array]({
 &"turbo_run": [SubResource("Resource_q8jn1"), SubResource("Resource_ngse8"), SubResource("Resource_7m3k1"), SubResource("Resource_c557u"), null, SubResource("Resource_nidux"), SubResource("Resource_hwm31"), SubResource("Resource_4no0n")],
 &"walk_loop": [SubResource("Resource_tqdqa"), SubResource("Resource_3xuna"), SubResource("Resource_sloyf"), SubResource("Resource_3fsxb"), SubResource("Resource_lou6s"), SubResource("Resource_j8dis"), SubResource("Resource_o0m62"), SubResource("Resource_3yv7w")]
 })
-follow_record = true
 animated = true
 diffuse_frames = SubResource("SpriteFrames_563ve")
 current_animation = "hover:default"
@@ -2435,15 +2575,15 @@ speed_scale = 1.0
 playing = false
 metadata/_custom_type_script = "uid://cvolonferossj"
 
-[node name="Plume" type="Sprite2D" parent="Doll/Fludd" unique_id=606638812]
+[node name="Plume" type="Sprite2D" parent="Visuals/Doll/Fludd" unique_id=606638812]
 visible = false
 show_behind_parent = true
 position = Vector2(-6, 13)
-texture = SubResource("CanvasTexture_tqdqa")
+texture = SubResource("CanvasTexture_2qfp3")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 32)
 script = ExtResource("2_0b5cm")
-canvas_texture = SubResource("CanvasTexture_tqdqa")
+canvas_texture = SubResource("CanvasTexture_2qfp3")
 follow_origin = Vector2(-3, -1.9999998)
 animated = true
 diffuse_frames = SubResource("SpriteFrames_ndkiv")
@@ -2608,13 +2748,30 @@ monitorable = false
 script = ExtResource("53_sloyf")
 ignored_hitbox_ids = PackedStringArray("player", "koopa_shell")
 components = Array[ExtResource("54_jjwtc")]([SubResource("Resource_ebtvn")])
-blink_targets = [NodePath("../../Doll")]
+blink_targets = [NodePath("../../Visuals/Doll")]
 metadata/_custom_type_script = "uid://3ara7t8dqmih"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/HurtBox" unique_id=2093513014]
 position = Vector2(2, -3.5)
 shape = SubResource("RectangleShape2D_2swmp")
 debug_color = Color(0.6901961, 0.7019608, 0, 0.41960785)
+
+[node name="Invincible" type="Area2D" parent="Hitboxes" unique_id=1844119228]
+collision_layer = 16
+collision_mask = 32
+monitoring = false
+monitorable = false
+script = ExtResource("52_tqdqa")
+hitbox_ids = Array[String](["player", "invincible"])
+damage_amount = 99.0
+damage_type = 1
+has_knockback = true
+knockback_vector = Vector2(150, -135)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/Invincible" unique_id=586294274]
+position = Vector2(2, -3.5)
+shape = SubResource("RectangleShape2D_invincible")
+disabled = true
 
 [node name="Regions" type="Node2D" parent="." unique_id=168579217]
 visible = false
@@ -2700,12 +2857,12 @@ speed_min = 20.0
 speed_max = 20.0
 metadata/_custom_type_script = "uid://df82mcnubnp0h"
 
-[node name="DebugContainer" type="VBoxContainer" parent="." unique_id=1169941594]
+[node name="DebugContainer" type="VBoxContainer" parent="." unique_id=1169941594 groups=["debug_display"]]
 z_index = 1
 offset_left = -47.0
 offset_top = -32.0
 offset_right = 52.0
-offset_bottom = -20.0
+offset_bottom = -14.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -2717,6 +2874,27 @@ theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 10
 text = "Current State: Idle"
 horizontal_alignment = 1
+
+[node name="Forces" type="Control" parent="." unique_id=296857962 node_paths=PackedStringArray("player") groups=["debug_display"]]
+z_index = 10
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -7.0
+offset_right = 3.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("force_display")
+player = NodePath("..")
+velocity_scale = 0.333
+velocity_color = Color(0.5, 0, 0.5, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1978974016]
 callback_mode_process = 0
@@ -2822,6 +3000,7 @@ required_speed = 120.0
 cut_multiplier = 1.0
 chain_window = 0.0
 can_spin = false
+glide_after = 0.5
 effects = SubResource("Resource_xxpwv")
 
 [node name="Spin" type="Node" parent="StateMachine/Dry/Airborne" unique_id=224071433 node_paths=PackedStringArray("hitbox")]
@@ -2832,6 +3011,13 @@ gravity_scale = 0.67
 max_fall_speed = 280.05
 air_control = SubResource("Resource_g3xgq")
 effects = SubResource("Resource_ltm4p")
+
+[node name="Glide" type="Node" parent="StateMachine/Dry" unique_id=450700623]
+script = ExtResource("glide_state")
+steer_rate = 4.0
+gravity_scale = 0.3
+air_control = SubResource("Resource_qwmux")
+effects = SubResource("Resource_opa2o")
 
 [node name="Stomp" type="Node" parent="StateMachine/Dry" unique_id=524533861 node_paths=PackedStringArray("hitbox")]
 script = ExtResource("99_qwmux")
@@ -2946,7 +3132,7 @@ plume_animation = &"hover"
 
 [node name="Rocket" type="Node" parent="Fludd/Modes" unique_id=1729176442 node_paths=PackedStringArray("sprite")]
 script = ExtResource("128_cv6e0")
-sprite = NodePath("../../../Doll/Fludd")
+sprite = NodePath("../../../Visuals/Doll/Fludd")
 slide_friction_scale = 0.5
 nozzle = 2
 drains_power = false
@@ -2975,9 +3161,62 @@ plume_offset = Vector2(-12, -22)
 [node name="FluddVisuals" type="Node" parent="." unique_id=291908943 node_paths=PackedStringArray("fludd", "fludd_sprite", "plume_sprite", "plume_particles")]
 script = ExtResource("130_dica1")
 fludd = NodePath("../Fludd")
-fludd_sprite = NodePath("../Doll/Fludd")
-plume_sprite = NodePath("../Doll/Fludd/Plume")
+fludd_sprite = NodePath("../Visuals/Doll/Fludd")
+plume_sprite = NodePath("../Visuals/Doll/Fludd/Plume")
 plume_particles = NodePath("../CanvasGroup/HoverFluddParticles")
+
+[node name="Caps" type="Node" parent="." unique_id=974346854 node_paths=PackedStringArray("host")]
+script = ExtResource("multi_mode_machine")
+debug_toggles = Dictionary[int, StringName]({
+49: &"Metal",
+50: &"Invisible",
+51: &"Invincible",
+52: &"Wing"
+})
+debug_clear_key = 48
+host = NodePath("..")
+
+[node name="Metal" type="Node" parent="Caps" unique_id=1036229886]
+script = ExtResource("metal_cap")
+animation_overrides = Dictionary[StringName, StringName]({
+&"run_loop": &"walk_loop"
+})
+ground_speed_scale = 0.95
+air_speed_scale = 0.8
+jump_strength_scale = 0.9
+shake_scale = 1.5
+water_gravity_scale = 0.7
+water_entry_damping = 0.35
+water_max_fall_speed = 160.0
+water_pound_fall_speed = 280.0
+damage_scale = 0.0
+knockback_scale = 0.5
+recovery_scale = 0.4
+duration = 20.0
+material = SubResource("ShaderMaterial_ont6s")
+
+[node name="Invisible" type="Node" parent="Caps" unique_id=129888118 node_paths=PackedStringArray("material_target")]
+script = ExtResource("invisible_cap")
+passable_layers = 2048
+duration = 20.0
+material = SubResource("ShaderMaterial_invisibility")
+material_target = NodePath("../../Visuals")
+
+[node name="Invincible" type="Node" parent="Caps" unique_id=555000642 node_paths=PackedStringArray("hitbox", "trail")]
+script = ExtResource("invincible_cap")
+silhouette_material = SubResource("ShaderMaterial_rainbow")
+hitbox = NodePath("../../Hitboxes/Invincible")
+trail = NodePath("../../Trail")
+ground_speed_scale = 1.25
+trail_min_scale = 0.1
+duration = 15.0
+
+[node name="Wing" type="Node" parent="Caps" unique_id=24034737]
+script = ExtResource("wing_cap")
+state_redirects = Dictionary[String, StringName]({
+"TripleJump>Fall": &"Glide"
+})
+duration = 40.0
 
 [connection signal="landed" from="Hitboxes/Feet" to="." method="_on_feet_landed"]
 [connection signal="water_entered" from="Regions/WaterCheck" to="." method="_on_water_entered"]

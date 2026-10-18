@@ -10,8 +10,8 @@ extends PlayerState
 
 func _enter() -> void:
 	player.lock_flipping = true
-	player.velocity.x -= backward_speed * player.get_facing()
-	player.velocity.y = -rise_speed
+	player.velocity.x -= player.get_jump_speed(backward_speed) * player.get_facing()
+	player.velocity.y = -player.get_jump_speed(rise_speed)
 
 
 func _exit() -> void:

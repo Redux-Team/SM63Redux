@@ -31,7 +31,7 @@ func _tick(_delta: float) -> void:
 	_shake_countdown -= 1
 	var level: Level = Level.of(player)
 	if _shake_countdown <= 0 and player.is_on_floor() and level:
-		level.camera.shake(shake_strength, shake_duration)
+		level.camera.shake(shake_strength * player.get_attribute_scale(&"shake_scale"), shake_duration)
 
 
 func _exit() -> void:
@@ -41,8 +41,9 @@ func _exit() -> void:
 func _next() -> StringName:
 	if controls.is_held(&"ground_pound") and not player.is_on_floor():
 		return &"GroundPoundFall"
+	if player.is_swimming():
+		return &"SwimIdle"
 	if _settled_at < 0.0:
-		if not player.is_in_water():
-			_settled_at = time
+		_settled_at = time
 		return &""
 	return &"Idle" if time - _settled_at >= recover_time else &""

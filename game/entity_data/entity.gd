@@ -105,6 +105,14 @@ func get_terrain() -> StringName:
 	return &""
 
 
+func get_sound_terrain() -> StringName:
+	return get_terrain()
+
+
+func redirect_state(_from: State, to: StringName) -> StringName:
+	return to
+
+
 func get_debug_text() -> String:
 	return ""
 
@@ -115,6 +123,18 @@ func is_in_water() -> bool:
 		return false
 	
 	return water_check.is_in_water()
+
+
+func get_attribute_scale(_attribute: StringName) -> float:
+	return 1.0
+
+
+func is_intangible() -> bool:
+	return false
+
+
+func is_harmless() -> bool:
+	return false
 
 
 func damage(amount: float, type: HitBox.DamageType, source: Node2D = null) -> void:

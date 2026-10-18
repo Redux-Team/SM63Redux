@@ -46,6 +46,10 @@ func _on_area_entered(area: Area2D) -> void:
 	# each other would hit itself the moment it woke up.
 	if hitbox.owner == owner:
 		return
+	if owner is Entity and (owner as Entity).is_intangible():
+		return
+	if owner is Entity and hitbox.owner is Entity and (hitbox.owner as Entity).is_harmless():
+		return
 	if not hitbox.is_valid():
 		return
 	if hitbox.hitbox_ids.any(func(id: String) -> bool: return id in ignored_hitbox_ids):
@@ -61,7 +65,7 @@ func _on_area_entered(area: Area2D) -> void:
 		var should_disable: bool = component.disable_on_hit if component.disable_on_hit else disable_on_hit
 		if should_disable:
 			var duration: float = hitbox.override_disable_duration if hitbox.override_disable_on_hit else (component.disable_on_hit_duration if component.disable_on_hit else disable_on_hit_duration)
-			_push_disable_timer(duration)
+			_push_disable_timer(duration * ((owner as Entity).get_attribute_scale(&"recovery_scale") if owner is Entity else 1.0))
 		_hit_this_frame = true
 		damaged.emit(hitbox)
 		hitbox.landed.emit(self)

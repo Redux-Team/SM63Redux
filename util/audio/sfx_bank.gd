@@ -172,7 +172,7 @@ func _get_active_sound_effects() -> Array[AudioStream]:
 func _get_terrain_effects() -> Array[AudioStream]:
 	if _entity == null or terrain_sfx_entries.is_empty():
 		return []
-	var terrain_key: StringName = _entity.get_terrain()
+	var terrain_key: StringName = _entity.get_sound_terrain()
 	if not terrain_sfx_entries.has(terrain_key):
 		return []
 	var result: Array[AudioStream] = []

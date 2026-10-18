@@ -36,7 +36,7 @@ func _tick(delta: float) -> void:
 		player.velocity.y = maxf(player.velocity.y, _pierce_speed)
 	elif player.velocity.y > 0.0:
 		_impact_speed = player.velocity.y
-	if not player.is_in_water():
+	if not player.is_swimming():
 		return
 	
 	if player.velocity.y <= swim_speed:

@@ -344,7 +344,8 @@ func _apply_pose(root: SmartSprite2D) -> void:
 		pose = _follow_neutral
 	
 	var mirror: float = -1.0 if root.flip_h else 1.0
-	visible = pose.visible
+	if not Engine.is_editor_hint():
+		visible = pose.visible
 	show_behind_parent = not pose.in_front
 	rotation_degrees = pose.rotation_degrees * mirror
 	position = Vector2((follow_origin.x + pose.offset.x) * mirror, follow_origin.y + pose.offset.y)

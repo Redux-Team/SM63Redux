@@ -80,7 +80,7 @@ func _update_gait() -> void:
 	if player.is_turbo_striking():
 		animation = turbo_animation
 	elif input_strength >= walk_input_threshold:
-		animation = &"run_loop" if input_strength >= run_input_threshold else &"walk_loop"
+		animation = player.get_cap_animation(&"run_loop" if input_strength >= run_input_threshold else &"walk_loop")
 	elif absf(player.velocity.x) <= animation_stop_speed:
 		animation = &"walk_loop"
 	
