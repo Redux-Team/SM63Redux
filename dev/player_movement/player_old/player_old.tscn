@@ -65,7 +65,7 @@
 [ext_resource type="AudioStream" uid="uid://bffab71uf61kf" path="res://assets/sfx/player/fludd/hover.mp3" id="81_fstnu"]
 [ext_resource type="AudioStream" uid="uid://dolh40gtancy4" path="res://assets/sfx/player/fludd/hover_loop.mp3" id="82_681d1"]
 [ext_resource type="AudioStream" uid="uid://devp686fvykki" path="res://assets/sfx/player/fludd/rocket.wav" id="83_rkt01"]
-[ext_resource type="Script" uid="uid://bt2fjvil3p13m" path="res://game/entity_data/mode/mode_machine.gd" id="84_modem"]
+[ext_resource type="Script" uid="uid://bt2fjvil3p13m" path="res://util/mode/mode_machine.gd" id="84_modem"]
 [ext_resource type="Script" uid="uid://hvckbgl6cple" path="res://dev/player_movement/player_old/shared/fludd/fludd_hover_mode.gd" id="85_fmhov"]
 [ext_resource type="Script" uid="uid://blqfrnvcx3qb7" path="res://dev/player_movement/player_old/shared/fludd/fludd_rocket_mode.gd" id="86_fmrkt"]
 [ext_resource type="Script" uid="uid://dufilrmpds355" path="res://dev/player_movement/player_old/shared/fludd/fludd_turbo_mode.gd" id="87_fmtrb"]
@@ -2482,7 +2482,7 @@ max_hp = 8.0
 entity = NodePath("../..")
 metadata/_custom_type_script = "uid://cs4dlhsjhinrv"
 
-[node name="EntityDebugComponent" type="Node" parent="Components" unique_id=1079797540 node_paths=PackedStringArray("label", "entity")]
+[node name="EntityDebugComponent" type="Node" parent="Components" unique_id=1079797540 groups=["debug_display"] node_paths=PackedStringArray("label", "entity")]
 script = ExtResource("ed_debug")
 label = NodePath("../../DebugContainer/DebugLabel")
 entity = NodePath("../..")
@@ -2756,7 +2756,7 @@ position = Vector2(2, 0)
 target_position = Vector2(0, 27)
 collision_mask = 515
 
-[node name="DebugContainer" type="VBoxContainer" parent="." unique_id=1243358989]
+[node name="DebugContainer" type="VBoxContainer" parent="." unique_id=1243358989 groups=["debug_display"]]
 z_index = 1
 offset_left = -47.0
 offset_top = -32.0
