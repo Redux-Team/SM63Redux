@@ -224,7 +224,7 @@ size = Vector2(18, 16)
 [sub_resource type="Resource" id="Resource_4q4ff"]
 resource_local_to_scene = true
 script = ExtResource("10_fscfo")
-accepted_hitbox_ids = PackedStringArray("spin", "turbo")
+accepted_hitbox_ids = PackedStringArray("spin", "turbo", "invincible")
 expression = "entity.is_in_water()"
 override_knockback = true
 knockback = Vector2(250, 0)
@@ -235,7 +235,7 @@ damage_state_name = &"strike"
 [sub_resource type="Resource" id="Resource_e3t42"]
 resource_local_to_scene = true
 script = ExtResource("10_fscfo")
-accepted_hitbox_ids = PackedStringArray("spin", "turbo")
+accepted_hitbox_ids = PackedStringArray("spin", "turbo", "invincible")
 override_knockback = true
 override_damage_state = true
 damage_state_name = &"strike"
@@ -424,6 +424,7 @@ shape = SubResource("RectangleShape2D_f1ga4")
 [node name="EntityCheckAreaWater" type="Area2D" parent="." unique_id=334203952]
 visible = false
 script = ExtResource("20_b1y5l")
+detectable_only = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EntityCheckAreaWater" unique_id=1147420269]
 shape = SubResource("CircleShape2D_66cei")
@@ -431,6 +432,7 @@ shape = SubResource("CircleShape2D_66cei")
 [node name="EntityCheckAreaClose" type="Area2D" parent="." unique_id=1061201237]
 visible = false
 script = ExtResource("20_b1y5l")
+detectable_only = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EntityCheckAreaClose" unique_id=1073612814]
 shape = SubResource("CircleShape2D_b1y5l")
@@ -438,6 +440,7 @@ shape = SubResource("CircleShape2D_b1y5l")
 [node name="EntityCheckAreaLost" type="Area2D" parent="." unique_id=2043313430]
 visible = false
 script = ExtResource("20_b1y5l")
+detectable_only = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EntityCheckAreaLost" unique_id=1643060920]
 shape = SubResource("CircleShape2D_4q4ff")

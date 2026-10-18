@@ -4,6 +4,8 @@ extends Area2D
 signal entity_entered(entity: Entity)
 signal player_entered(player: Player)
 
+@export var detectable_only: bool = false
+
 var _players_inside: Array[Player] = []
 var _entities_inside: Array[Entity] = []
 
@@ -41,18 +43,27 @@ func _on_area_exited(area: Area2D) -> void:
 		_players_inside.erase(entity as Player)
 
 
+func get_players() -> Array[Player]:
+	if not detectable_only:
+		return _players_inside
+	
+	var players: Array[Player] = []
+	players.assign(_players_inside.filter(func(player: Player) -> bool: return player.is_detectable()))
+	return players
+
+
 func is_player_inside() -> bool:
-	return not _players_inside.is_empty()
+	return not get_players().is_empty()
 
 
 func get_first_player() -> Player:
-	return _players_inside.front()
+	return get_players().front()
 
 
 func get_closest_player(origin: Vector2) -> Player:
 	var closest: Player = null
 	var closest_dist: float = INF
-	for player: Player in _players_inside:
+	for player: Player in get_players():
 		var d: float = origin.distance_squared_to(player.global_position)
 		if d < closest_dist:
 			closest_dist = d

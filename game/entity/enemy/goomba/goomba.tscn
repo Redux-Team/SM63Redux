@@ -254,7 +254,7 @@ size = Vector2(17, 7)
 
 [sub_resource type="Resource" id="Resource_onrng"]
 script = ExtResource("26_15o45")
-accepted_hitbox_ids = PackedStringArray("spin", "bobomb", "koopa_shell", "dive", "turbo")
+accepted_hitbox_ids = PackedStringArray("spin", "bobomb", "koopa_shell", "dive", "turbo", "invincible")
 override_knockback = true
 disable_on_hit = true
 override_damage_state = true
@@ -391,6 +391,8 @@ script = ExtResource("detector")
 detection_area = NodePath("../../PlayerCheck")
 alert_state = &"Alert"
 ignored_states = Array[StringName]([&"Squish", &"Strike"])
+aggro_states = Array[StringName]([&"Alert", &"Chase"])
+lost_state = &"Patrol"
 entity = NodePath("../..")
 
 [node name="PlayerCheck" type="Area2D" parent="." unique_id=1423924391]

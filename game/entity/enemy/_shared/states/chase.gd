@@ -26,6 +26,6 @@ func _tick(_delta: float) -> void:
 
 
 func _direction_to_target() -> float:
-	if not _detector or not is_instance_valid(_detector.target):
+	if not _detector or not _detector.has_target():
 		return 0.0
 	return signf(_detector.target.global_position.x - entity.global_position.x)
