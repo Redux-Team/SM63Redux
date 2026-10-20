@@ -1,7 +1,7 @@
 shader_type canvas_item;
 
 uniform int state : hint_range(0, 2) = 0;
-uniform int palette_index : hint_range(0, 16) = 0;
+instance uniform int palette_index : hint_range(0, 16) = 0;
 uniform sampler2D palette_texture : filter_nearest, repeat_disable;
 uniform float outline_width : hint_range(0.0, 10.0) = 1.0;
 uniform vec4 selected_outline : source_color = vec4(1.0, 1.0, 1.0, 1.0);

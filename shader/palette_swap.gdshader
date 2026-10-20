@@ -1,5 +1,5 @@
 shader_type canvas_item;
-uniform int palette_index: hint_range(0, 16) = 0;
+instance uniform int palette_index: hint_range(0, 16) = 0;
 uniform sampler2D palette_texture: filter_nearest, repeat_disable;
 
 vec3 swap_palette(sampler2D pal, vec3 rgb, vec2 pal_size) {

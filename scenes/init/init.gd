@@ -10,7 +10,7 @@ func _ready() -> void:
 		.set_out_duration(0.0) \
 		.set_loading_delay(0.0) \
 		.add_threaded_task(_run_debug_tools) \
-		.add_threaded_task(_profile) \
+		.load(_profile) \
 		.add_threaded_task(ObjectRegistry.scan) \
 		.set_destination("uid://dp3ocrpop234v") \
 		.done()

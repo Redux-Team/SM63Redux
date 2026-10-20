@@ -13,10 +13,7 @@ _data = {
 point_count = 6
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g1e0l"]
-resource_local_to_scene = true
-resource_local_to_scene = true
 shader = ExtResource("2_s4w4i")
-shader_parameter/palette_index = 0
 shader_parameter/palette_texture = ExtResource("3_g1e0l")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xol00"]

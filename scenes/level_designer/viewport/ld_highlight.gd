@@ -102,10 +102,6 @@ func _apply(object: GameObject, state: HighlightState) -> void:
 	for item: CanvasItem in _collect(object):
 		if state == HighlightState.NONE:
 			if item.has_meta(ORIGINAL):
-				var restored: ShaderMaterial = item.get_meta(ORIGINAL) as ShaderMaterial
-				var current: ShaderMaterial = item.material as ShaderMaterial
-				if restored and current and restored.get_shader_parameter(&"palette_texture") != null:
-					restored.set_shader_parameter(&"palette_index", current.get_shader_parameter(&"palette_index"))
 				item.material = item.get_meta(ORIGINAL)
 				item.remove_meta(ORIGINAL)
 			continue
@@ -125,7 +121,6 @@ func _make_material(state: HighlightState, palette_source: ShaderMaterial) -> Sh
 	material.set_shader_parameter(&"state", state)
 	if palette_source:
 		material.set_shader_parameter(&"palette_texture", palette_source.get_shader_parameter(&"palette_texture"))
-		material.set_shader_parameter(&"palette_index", palette_source.get_shader_parameter(&"palette_index"))
 	
 	return material
 

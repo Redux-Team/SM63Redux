@@ -21,7 +21,7 @@ min_value = 0.0
 max_value = 6.0
 step = 1.0
 targets = Array[NodePath]([NodePath("Game/Path2D/PathFollow2D/Sprite")])
-member = &"material:shader_parameter/palette_index"
+member = &":instance_shader_parameters/palette_index"
 
 [node name="Butterfly" type="Node2D" node_paths=PackedStringArray("game_root", "editor_root")]
 script = ExtResource("1")
