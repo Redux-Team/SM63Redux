@@ -14,7 +14,7 @@ id = &"medium_daisy_flower_bush"
 display_name = "Medium Daisy Flower Bush"
 category = &"Decoration"
 group = &"Cherry"
-order = 100
+order = 80
 flags = 127
 icon = SubResource("IconAtlas")
 

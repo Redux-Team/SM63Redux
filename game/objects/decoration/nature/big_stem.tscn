@@ -10,10 +10,10 @@ region = Rect2(0, -3, 48, 48)
 [node name="BigStem" type="Node2D"]
 script = ExtResource("1")
 id = &"big_stem"
-display_name = "Big Stem"
+display_name = "Medium Stem"
 category = &"Decoration"
 group = &"Grass"
-order = 100
+order = 40
 flags = 127
 icon = SubResource("IconAtlas")
 

@@ -5,15 +5,15 @@
 
 [sub_resource type="AtlasTexture" id="IconAtlas"]
 atlas = ExtResource("2")
-region = Rect2(-2, -1, 48, 48)
+region = Rect2(-2, -8, 48, 48)
 
 [node name="MediumMossyRock" type="Node2D" node_paths=PackedStringArray("game_root")]
 script = ExtResource("1")
 id = &"medium_mossy_rock"
 display_name = "Medium Mossy Rock"
 category = &"Decoration"
-group = &"Grass"
-order = 504
+group = &"Rocks"
+order = 50
 flags = 127
 icon = SubResource("IconAtlas")
 game_root = NodePath("Game")

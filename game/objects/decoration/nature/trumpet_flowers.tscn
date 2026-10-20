@@ -12,8 +12,8 @@ script = ExtResource("1")
 id = &"trumpet_flowers"
 display_name = "Trumpet Flowers"
 category = &"Decoration"
-group = &"Flowers"
-order = 310
+group = &"Plants"
+order = 80
 flags = 127
 icon = SubResource("IconAtlas")
 

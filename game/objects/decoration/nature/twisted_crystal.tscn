@@ -15,9 +15,10 @@ script = ExtResource("1")
 id = &"twisted_crystal"
 display_name = "Twisted Crystal"
 category = &"Decoration"
-group = &"Cave"
-order = 140
+group = &"Crystal cave"
+order = 10
 flags = 31
+browsable = false
 icon = SubResource("IconAtlas")
 shape = NodePath("Shape")
 

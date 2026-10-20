@@ -13,7 +13,7 @@ id = &"big_tree"
 display_name = "Big Tree"
 category = &"Decoration"
 group = &"Grass"
-order = 2
+order = 10
 flags = 127
 icon = SubResource("IconAtlas")
 

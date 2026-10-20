@@ -13,7 +13,7 @@ id = &"small_mushroom"
 display_name = "Small Mushroom"
 category = &"Decoration"
 group = &"Grass"
-order = 402
+order = 50
 flags = 127
 icon = SubResource("IconAtlas")
 

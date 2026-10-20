@@ -13,7 +13,7 @@ id = &"medium_jungle_tree"
 display_name = "Medium Jungle Tree"
 category = &"Decoration"
 group = &"Jungle"
-order = 9
+order = 20
 flags = 127
 icon = SubResource("IconAtlas")
 

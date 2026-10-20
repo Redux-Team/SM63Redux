@@ -38,6 +38,7 @@ category = &"Interactive"
 group = &"Platforms"
 order = 900
 flags = 95
+biome = &"Grass"
 icon = SubResource("IconAtlas")
 shape = NodePath("Shape")
 game_root = NodePath("Game")

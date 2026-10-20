@@ -8,7 +8,7 @@
 
 [sub_resource type="AtlasTexture" id="IconAtlas"]
 atlas = ExtResource("2")
-region = Rect2(-5, -6, 48, 48)
+region = Rect2(-4, -6, 48, 48)
 
 [node name="HoverFLUDDBox" type="Node2D" node_paths=PackedStringArray("game_root", "editor_root")]
 script = ExtResource("1")

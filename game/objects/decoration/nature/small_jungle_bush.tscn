@@ -13,7 +13,7 @@ id = &"small_jungle_bush"
 display_name = "Small Jungle Bush"
 category = &"Decoration"
 group = &"Jungle"
-order = 202
+order = 50
 flags = 127
 icon = SubResource("IconAtlas")
 

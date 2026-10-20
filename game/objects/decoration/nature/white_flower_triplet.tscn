@@ -10,10 +10,10 @@ region = Rect2(-10, -10, 48, 48)
 [node name="WhiteFlowerTriplet" type="Node2D"]
 script = ExtResource("1")
 id = &"white_flower_triplet"
-display_name = "White Flower Triplet"
+display_name = "White Star Flower Triplet"
 category = &"Decoration"
-group = &"Flowers"
-order = 309
+group = &"Plants"
+order = 60
 flags = 127
 icon = SubResource("IconAtlas")
 

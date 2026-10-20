@@ -13,7 +13,7 @@ id = &"cave_spore_triplet"
 display_name = "Cave Spore Triplet"
 category = &"Decoration"
 group = &"Cave"
-order = 80
+order = 70
 flags = 127
 icon = SubResource("IconAtlas")
 

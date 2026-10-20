@@ -13,8 +13,9 @@ id = &"cave_fungi"
 display_name = "Cave Fungi"
 category = &"Decoration"
 group = &"Cave"
-order = 60
+order = 120
 flags = 127
+browsable = false
 icon = SubResource("IconAtlas")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

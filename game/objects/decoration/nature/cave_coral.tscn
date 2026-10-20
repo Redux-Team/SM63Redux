@@ -13,8 +13,9 @@ id = &"cave_coral"
 display_name = "Cave Coral"
 category = &"Decoration"
 group = &"Cave"
-order = 120
+order = 130
 flags = 127
+browsable = false
 icon = SubResource("IconAtlas")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

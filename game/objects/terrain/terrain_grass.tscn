@@ -105,6 +105,7 @@ group = &"Terrain"
 biome = &"Grass"
 placement = 2
 flags = 31
+order = 10
 properties = Array[ExtResource("2_r")]([SubResource("Property_collision"), SubResource("Property_base"), SubResource("Property_topline"), SubResource("Property_auto_toplines"), SubResource("Property_decoration"), SubResource("Property_decorations_enabled"), SubResource("Property_seed")])
 shape = NodePath("Shape")
 game_root = NodePath("Game")
