@@ -29,6 +29,8 @@ const FRICTION_KEY: StringName = &"floorslide"
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rollout_min_speed: float = 50.0
 ## How long a jump press stays valid for a backflip.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var jump_buffer: float = 0.25
+## Time airborne before the slide turns into a glide when gliding is available.
+@export_custom(PROPERTY_HINT_NONE, "suffix:s") var glide_delay: float = 0.1
 @export_group("Rotation")
 ## Body angle used when no slope is detected.
 @export_range(-180.0, 180.0, 0.1, "degrees") var flat_angle: float = 90.0
@@ -93,6 +95,8 @@ func _rotate(delta: float) -> void:
 
 func _next() -> StringName:
 	var grounded: bool = player.is_on_floor()
+	if not grounded and _airborne_time > glide_delay and player.can_glide():
+		return &"Glide"
 	if grounded and player.is_moving_against_facing() and controls.is_buffered(&"jump", jump_buffer):
 		return &"Backflip"
 	if grounded and controls.is_held(&"jump") and player.get_facing_velocity() > rollout_min_speed:

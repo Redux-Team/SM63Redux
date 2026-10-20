@@ -14,11 +14,6 @@ func _setup() -> void:
 	LD.bind_button(playtest_button, start)
 
 
-func _enter_tree() -> void:
-	if is_node_ready():
-		GDSS.clear_state.call_deferred(playtest_button)
-
-
 func _unhandled_input(event: InputEvent) -> void:
 	if editor.is_shortcut(event, &"ld_playtest"):
 		start()
@@ -45,4 +40,6 @@ func _enter_playtest() -> void:
 	session.level = editor.level_handler.capture()
 	session.area_uuid = editor.level_handler.active_area.uuid
 	editor.file_handler.autosave.save_now()
+	GDSS.clear_state(playtest_button)
+	playtest_button.release_focus()
 	session.suspend_into(get_tree(), load(PLAYTEST_SCENE))

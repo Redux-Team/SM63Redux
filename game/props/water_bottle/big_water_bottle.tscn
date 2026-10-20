@@ -5,22 +5,34 @@
 [ext_resource type="AudioStream" uid="uid://bv0xjii76r1en" path="res://assets/sfx/object/water_bottle/bottle_big_collect.wav" id="2_hle02"]
 [ext_resource type="Script" uid="uid://cvolonferossj" path="res://util/2d/smart_sprite_2d.gd" id="3_lg1go"]
 [ext_resource type="Script" uid="uid://cf0fqotw8gu4p" path="res://util/2d/entity_check_area.gd" id="4_lg1go"]
+[ext_resource type="Texture2D" uid="uid://dpjbbets5ofo2" path="res://assets/textures/particle/item/Water_bottle_big_particle.png" id="6_8vyn5"]
+[ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://util/2d/particle_emitter.gd" id="7_nof14"]
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_hle02"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_8vyn5"]
 diffuse_texture = ExtResource("2_4t1ok")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hle02"]
 size = Vector2(20, 26)
 
-[node name="BigWaterBottle" type="Node2D" unique_id=854273801 node_paths=PackedStringArray("sprite")]
+[sub_resource type="Curve" id="Curve_8vyn5"]
+_limits = [0.0, 1.2, 0.0, 1.0]
+_data = [Vector2(1e-05, 0), 0.0, 0.0, 0, 0, Vector2(0.114027485, 1.2), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_8vyn5"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="BigWaterBottle" type="Node2D" unique_id=854273801 node_paths=PackedStringArray("particle_emitter", "smart_sprite_2d", "entity_check_area")]
 script = ExtResource("1_lg1go")
 pickup_sfx = ExtResource("2_hle02")
-sprite = NodePath("SmartSprite2D")
+particle_emitter = NodePath("ParticleEmitter")
+smart_sprite_2d = NodePath("SmartSprite2D")
+entity_check_area = NodePath("EntityCheckArea")
 
 [node name="SmartSprite2D" type="Sprite2D" parent="." unique_id=77171285]
-texture = SubResource("CanvasTexture_hle02")
+texture = SubResource("CanvasTexture_8vyn5")
 script = ExtResource("3_lg1go")
-canvas_texture = SubResource("CanvasTexture_hle02")
+canvas_texture = SubResource("CanvasTexture_8vyn5")
 diffuse_texture = ExtResource("2_4t1ok")
 current_animation = ""
 current_frame = 0
@@ -32,5 +44,24 @@ script = ExtResource("4_lg1go")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EntityCheckArea" unique_id=1183407697]
 shape = SubResource("RectangleShape2D_hle02")
+
+[node name="ParticleEmitter" type="CPUParticles2D" parent="." unique_id=1980979551]
+emitting = false
+amount = 6
+texture = ExtResource("6_8vyn5")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+spread = 180.0
+gravity = Vector2(0, 400)
+initial_velocity_min = 20.0
+initial_velocity_max = 86.79
+scale_amount_curve = SubResource("Curve_8vyn5")
+color_ramp = SubResource("Gradient_8vyn5")
+script = ExtResource("7_nof14")
+high_particle_amount = 8
+medium_particle_amount = 5
+low_particle_amount = 2
+metadata/_custom_type_script = "uid://c2df6xnsl5aem"
 
 [connection signal="player_entered" from="EntityCheckArea" to="." method="_on_entity_check_area_player_entered"]

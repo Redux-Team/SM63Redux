@@ -11,6 +11,8 @@ enum Spread {
 
 @export var sprite_frames: SpriteFrames
 @export var spawn_parent: Node
+## Particles are placed just before this sibling in the spawn parent, so they draw behind it.
+@export var spawn_before: Node
 @export var animation: StringName = &"default"
 @export var amount: int = 8
 @export var lifetime: float = 0.0
@@ -74,6 +76,8 @@ func _spawn(index: int, count: int) -> void:
 	
 	if spawn_parent:
 		spawn_parent.add_child(particle)
+		if is_instance_valid(spawn_before) and spawn_before.get_parent() == spawn_parent:
+			spawn_parent.move_child(particle, spawn_before.get_index())
 	else:
 		owner.add_sibling(particle)
 	particle.z_index = z_index

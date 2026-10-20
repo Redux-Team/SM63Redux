@@ -90,6 +90,7 @@ var _spraying: bool = false:
 var _holding: bool = false
 var _stop_sfx_pending: bool = false
 var _burst_time: float = 0.0
+var _launch_time: float = 0.0
 var _context: Context = Context.NONE
 var _mode_names: Dictionary[Nozzle, StringName] = {}
 
@@ -111,6 +112,7 @@ func tick(delta: float) -> void:
 	_tick_sfx()
 	_tick_refill(delta)
 	_tick_burst(delta)
+	_launch_time = maxf(_launch_time - delta, 0.0)
 	var selected: FluddMode = get_selected_mode()
 	spray_particles.rotation = selected.get_spray_angle() if selected else player.sprite.rotation
 	modes.tick(delta, _holding and _can_spray())
@@ -153,6 +155,14 @@ func burst_particles(duration: float, scale: float) -> void:
 	_burst_time = duration
 	spray_particles.scale = Vector2.ONE * scale
 	spray_particles.restart()
+
+
+func mark_launch(duration: float) -> void:
+	_launch_time = duration
+
+
+func is_launching() -> bool:
+	return _launch_time > 0.0
 
 
 func launch_off_ground() -> void:

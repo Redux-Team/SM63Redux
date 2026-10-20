@@ -4,6 +4,8 @@ const FRICTION_KEY: StringName = &"fludd_rocket"
 
 ## Sprite shaken and tinted while charging.
 @export var sprite: SmartSprite2D
+## Water explosion fired from the nozzle on launch.
+@export var boom: RocketBoom
 
 @export_group("Rocket")
 ## Time held before the rocket launches.
@@ -26,6 +28,8 @@ const FRICTION_KEY: StringName = &"fludd_rocket"
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var burst_time: float = 0.18
 ## Scale of the launch particle burst.
 @export var burst_scale: float = 2.0
+## Time after a launch during which launch-only effects apply, such as a stronger water exit.
+@export_custom(PROPERTY_HINT_NONE, "suffix:s") var launch_window: float = 1.5
 
 var _charge: float = 0.0
 var _charging: bool = false
@@ -95,6 +99,9 @@ func _launch() -> void:
 	fludd.power = 0.0
 	fludd.fuel -= fuel_cost
 	fludd.burst_particles(burst_time, burst_scale)
+	fludd.mark_launch(launch_window)
+	if boom:
+		boom.fire(fludd.spray_particles.global_position)
 	if sliding:
 		player.friction_modifiers.set_modifier(FRICTION_KEY, slide_friction_scale, slide_friction_time)
 

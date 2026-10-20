@@ -22,6 +22,8 @@ extends PlayerState
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var slide_speed: float = 150.0
 @export_group("Visual")
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var rotation_halflife: float = 0.0
+@export var up_animation: StringName = &"fly_up"
+@export var down_animation: StringName = &"fly_down"
 
 var _input: float = 0.0
 var _body_rotation: float = 0.0
@@ -57,6 +59,9 @@ func _render_tick(delta: float) -> void:
 	else:
 		_body_rotation = Motion.damp_angle(_body_rotation, get_heading(), rotation_halflife, delta)
 	sprite.local_rotation = rad_to_deg(_body_rotation)
+	var animation: StringName = up_animation if controls.glide < 0.0 else down_animation
+	if sprite.current_animation != animation:
+		sprite.play(animation)
 
 
 func _exit() -> void:

@@ -140,9 +140,24 @@
 [ext_resource type="Script" uid="uid://btn6teb10fw8a" path="res://game/entity/player/caps/invincible_cap.gd" id="invincible_cap"]
 [ext_resource type="Shader" uid="uid://bfn0lwca1nsxh" path="res://shader/invisibility.gdshader" id="invisibility_shader"]
 [ext_resource type="Script" uid="uid://vy87wi60y7de" path="res://game/entity/player/caps/invisible_cap.gd" id="invisible_cap"]
+[ext_resource type="Texture2D" uid="uid://dc0omabbjd4u4" path="res://assets/textures/entity/player/mario/dive_back.png" id="layer_db"]
+[ext_resource type="Texture2D" uid="uid://dbygj5gvs04um" path="res://assets/textures/entity/player/mario/Fly_down_back.png" id="layer_dbk"]
+[ext_resource type="Texture2D" uid="uid://ca23jbhulao1k" path="res://assets/textures/entity/player/mario/Fly_down_front.png" id="layer_df"]
+[ext_resource type="Texture2D" uid="uid://g104k86jjtk2" path="res://assets/textures/entity/player/mario/floorslide_back.png" id="layer_fb"]
+[ext_resource type="Texture2D" uid="uid://cxsaxiuf14dxy" path="res://assets/textures/entity/player/mario/run_fast.png" id="layer_rf"]
+[ext_resource type="Texture2D" uid="uid://c1j8ae4p47i7r" path="res://assets/textures/entity/player/mario/Turbo_swim.png" id="layer_sf"]
+[ext_resource type="Texture2D" uid="uid://itjr2ec6ssr4" path="res://assets/textures/entity/player/mario/Fly_up_back.png" id="layer_ub"]
+[ext_resource type="Texture2D" uid="uid://dx38dskf1t7qy" path="res://assets/textures/entity/player/mario/Fly_up_front.png" id="layer_uf"]
+[ext_resource type="Texture2D" uid="uid://cdug34lqmij2d" path="res://assets/textures/entity/player/shared/Wing_cap_idle_animation_back.png" id="layer_wab"]
+[ext_resource type="Texture2D" uid="uid://btyemug4eonmo" path="res://assets/textures/entity/player/shared/Wing_cap_idle_animation_front.png" id="layer_waf"]
+[ext_resource type="Texture2D" uid="uid://chyhoip8bd4pk" path="res://assets/textures/entity/player/shared/Wing_cap_idle_back.png" id="layer_wib"]
+[ext_resource type="Texture2D" uid="uid://d0c4rvmtmpupn" path="res://assets/textures/entity/player/shared/Wing_cap_idle_front.png" id="layer_wif"]
+[ext_resource type="Texture2D" uid="uid://bvrrwwkxvgbou" path="res://assets/textures/entity/player/shared/Wing_cap_spin_back.png" id="layer_wsb"]
+[ext_resource type="Texture2D" uid="uid://caxmfnhih7lpv" path="res://assets/textures/entity/player/shared/Wing_cap_spin_front.png" id="layer_wsf"]
 [ext_resource type="Script" uid="uid://dp7giav3da2cr" path="res://game/entity/player/caps/metal_cap.gd" id="metal_cap"]
 [ext_resource type="Script" uid="uid://cxru7dwdcpoty" path="res://util/mode/multi_mode_machine.gd" id="multi_mode_machine"]
 [ext_resource type="Shader" uid="uid://bi837rlw40dbv" path="res://shader/silhouette_rainbow.gdshader" id="rainbow_shader"]
+[ext_resource type="PackedScene" uid="uid://b4foyjvcjua2u" path="res://game/entity/player/fludd/rocket_boom.tscn" id="rocket_boom"]
 [ext_resource type="Script" uid="uid://cwdgtyt2wh132" path="res://game/entity/player/fludd/spray_profile.gd" id="spray_profile"]
 [ext_resource type="PackedScene" uid="uid://cffnjxsg0savt" path="res://game/entity/player/fludd/spray_stream.tscn" id="spray_stream"]
 [ext_resource type="Script" uid="uid://buutpx71ehkax" path="res://game/entity/player/caps/wing_cap.gd" id="wing_cap"]
@@ -158,7 +173,7 @@ shader_parameter/tint_strength = 0.999999977648
 atlas = ExtResource("19_ckiah")
 region = Rect2(320, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_woak8"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_7h3q2"]
 diffuse_texture = SubResource("AtlasTexture_tbkto")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hmgs0"]
@@ -329,6 +344,38 @@ region = Rect2(0, 0, 64, 64)
 atlas = ExtResource("20_6b4i6")
 region = Rect2(64, 0, 64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_runfast0"]
+atlas = ExtResource("layer_rf")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_runfast1"]
+atlas = ExtResource("layer_rf")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_runfast2"]
+atlas = ExtResource("layer_rf")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_runfast3"]
+atlas = ExtResource("layer_rf")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_runfast4"]
+atlas = ExtResource("layer_rf")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_runfast5"]
+atlas = ExtResource("layer_rf")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_runfast6"]
+atlas = ExtResource("layer_rf")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_runfast7"]
+atlas = ExtResource("layer_rf")
+region = Rect2(448, 0, 64, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_26jgh"]
 atlas = ExtResource("2_lh4k8")
 region = Rect2(0, 0, 64, 64)
@@ -448,6 +495,22 @@ region = Rect2(192, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_dl333"]
 atlas = ExtResource("24_d635j")
 region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_swimfast0"]
+atlas = ExtResource("layer_sf")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_swimfast1"]
+atlas = ExtResource("layer_sf")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_swimfast2"]
+atlas = ExtResource("layer_sf")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_swimfast3"]
+atlas = ExtResource("layer_sf")
+region = Rect2(192, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dauob"]
 atlas = ExtResource("25_ae0hi")
@@ -661,6 +724,22 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("layer_df")
+}],
+"loop": 1,
+"name": &"fly_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("layer_uf")
+}],
+"loop": 1,
+"name": &"fly_up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_cmrqc")
 }, {
 "duration": 1.0,
@@ -756,6 +835,35 @@ animations = [{
 "loop": 0,
 "name": &"jump_r",
 "speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_runfast0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_runfast1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_runfast2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_runfast3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_runfast4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_runfast5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_runfast6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_runfast7")
+}],
+"loop": 1,
+"name": &"run_fast",
+"speed": 18.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -874,6 +982,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_swimfast0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_swimfast1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_swimfast2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_swimfast3")
+}],
+"loop": 1,
+"name": &"swim_fast",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_dauob")
 }, {
 "duration": 1.0,
@@ -956,11 +1081,605 @@ animations = [{
 "speed": 14.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingbidle0"]
+atlas = ExtResource("layer_wib")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_khqwn"]
+diffuse_texture = SubResource("AtlasTexture_wingbidle0")
+
+[sub_resource type="Resource" id="Resource_wingb_bonk_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -7)
+
+[sub_resource type="Resource" id="Resource_wingb_bonk_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_bonk_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_crouch_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -13)
+
+[sub_resource type="Resource" id="Resource_wingb_crouch_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -5)
+
+[sub_resource type="Resource" id="Resource_wingb_crouch_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, 1)
+
+[sub_resource type="Resource" id="Resource_wingb_crouch_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, 1)
+
+[sub_resource type="Resource" id="Resource_wingb_crouch_up_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -5)
+
+[sub_resource type="Resource" id="Resource_wingb_crouch_up_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -13)
+
+[sub_resource type="Resource" id="Resource_wingb_death_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_dive_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(6, -9)
+
+[sub_resource type="Resource" id="Resource_wingb_double_jump_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_double_jump_fall_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_double_jump_fall_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -13)
+
+[sub_resource type="Resource" id="Resource_wingb_double_jump_fall_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+
+[sub_resource type="Resource" id="Resource_wingb_fall_loop_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+
+[sub_resource type="Resource" id="Resource_wingb_fall_start_l_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_fall_start_l_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -13)
+
+[sub_resource type="Resource" id="Resource_wingb_fall_start_l_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+
+[sub_resource type="Resource" id="Resource_wingb_fall_start_r_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_fall_start_r_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -13)
+
+[sub_resource type="Resource" id="Resource_wingb_fall_start_r_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+
+[sub_resource type="Resource" id="Resource_wingb_floor_slide_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(6, -6)
+
+[sub_resource type="Resource" id="Resource_wingb_fly_down_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(6, -9)
+
+[sub_resource type="Resource" id="Resource_wingb_fly_up_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(6, -7)
+
+[sub_resource type="Resource" id="Resource_wingb_ground_pound_fall_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -14)
+
+[sub_resource type="Resource" id="Resource_wingb_ground_pound_fall_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_ground_pound_slam_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -8)
+
+[sub_resource type="Resource" id="Resource_wingb_ground_pound_slam_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_ground_pound_start_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -10)
+
+[sub_resource type="Resource" id="Resource_wingb_idle_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_idle_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_idle_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_idle_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_idle_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_idle_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_idle_low_hp_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_idle_low_hp_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(3, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_idle_low_hp_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(3, -10)
+
+[sub_resource type="Resource" id="Resource_wingb_idle_low_hp_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(3, -9)
+
+[sub_resource type="Resource" id="Resource_wingb_idle_low_hp_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(3, -10)
+
+[sub_resource type="Resource" id="Resource_wingb_idle_low_hp_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(3, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_jump_l_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_jump_l_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_jump_r_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_jump_r_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_run_fast_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_run_fast_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_run_fast_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+
+[sub_resource type="Resource" id="Resource_wingb_run_fast_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_run_fast_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_run_fast_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_run_fast_6"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+
+[sub_resource type="Resource" id="Resource_wingb_run_fast_7"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_run_loop_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_run_loop_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_run_loop_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -13)
+
+[sub_resource type="Resource" id="Resource_wingb_run_loop_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_run_loop_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_run_loop_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_run_loop_6"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -13)
+
+[sub_resource type="Resource" id="Resource_wingb_run_loop_7"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_spin_fast_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 2
+
+[sub_resource type="Resource" id="Resource_wingb_spin_fast_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 3
+
+[sub_resource type="Resource" id="Resource_wingb_spin_fast_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 4
+
+[sub_resource type="Resource" id="Resource_wingb_spin_fast_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 5
+
+[sub_resource type="Resource" id="Resource_wingb_spin_fast_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 6
+
+[sub_resource type="Resource" id="Resource_wingb_spin_fast_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 7
+
+[sub_resource type="Resource" id="Resource_wingb_spin_fast_6"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 0
+
+[sub_resource type="Resource" id="Resource_wingb_spin_fast_7"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 1
+
+[sub_resource type="Resource" id="Resource_wingb_spin_loop_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 2
+
+[sub_resource type="Resource" id="Resource_wingb_spin_loop_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 3
+
+[sub_resource type="Resource" id="Resource_wingb_spin_loop_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 4
+
+[sub_resource type="Resource" id="Resource_wingb_spin_loop_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 5
+
+[sub_resource type="Resource" id="Resource_wingb_spin_loop_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 6
+
+[sub_resource type="Resource" id="Resource_wingb_spin_loop_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 7
+
+[sub_resource type="Resource" id="Resource_wingb_spin_loop_6"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 0
+
+[sub_resource type="Resource" id="Resource_wingb_spin_loop_7"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+frame = 1
+
+[sub_resource type="Resource" id="Resource_wingb_stomp_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(4, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_swim_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_swim_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_swim_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_swim_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_swim_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_swim_fast_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_swim_fast_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -13)
+
+[sub_resource type="Resource" id="Resource_wingb_swim_fast_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -14)
+
+[sub_resource type="Resource" id="Resource_wingb_swim_fast_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -13)
+
+[sub_resource type="Resource" id="Resource_wingb_swim_idle_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_swim_idle_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_swim_idle_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_swim_idle_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_triple_jump_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_turbo_run_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_turbo_run_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_turbo_run_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+
+[sub_resource type="Resource" id="Resource_wingb_turbo_run_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_turbo_run_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_turbo_run_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_turbo_run_6"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+
+[sub_resource type="Resource" id="Resource_wingb_turbo_run_7"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_walk_loop_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_walk_loop_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_walk_loop_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -10)
+
+[sub_resource type="Resource" id="Resource_wingb_walk_loop_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_walk_loop_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+
+[sub_resource type="Resource" id="Resource_wingb_walk_loop_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+
+[sub_resource type="Resource" id="Resource_wingb_walk_loop_6"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -10)
+
+[sub_resource type="Resource" id="Resource_wingb_walk_loop_7"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingbflap0"]
+atlas = ExtResource("layer_wab")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingbflap1"]
+atlas = ExtResource("layer_wab")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingbflap2"]
+atlas = ExtResource("layer_wab")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingbspin0"]
+atlas = ExtResource("layer_wsb")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingbspin1"]
+atlas = ExtResource("layer_wsb")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingbspin2"]
+atlas = ExtResource("layer_wsb")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingbspin3"]
+atlas = ExtResource("layer_wsb")
+region = Rect2(96, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingbspin4"]
+atlas = ExtResource("layer_wsb")
+region = Rect2(128, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingbspin5"]
+atlas = ExtResource("layer_wsb")
+region = Rect2(160, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingbspin6"]
+atlas = ExtResource("layer_wsb")
+region = Rect2(192, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingbspin7"]
+atlas = ExtResource("layer_wsb")
+region = Rect2(224, 0, 32, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wingb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingbflap0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingbflap1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingbflap2")
+}],
+"loop": 1,
+"name": &"flap",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingbidle0")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingbspin0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingbspin1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingbspin2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingbspin3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingbspin4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingbspin5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingbspin6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingbspin7")
+}],
+"loop": 1,
+"name": &"spin",
+"speed": 5.0
+}]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_j57tv"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dollback"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("layer_db")
+}],
+"loop": 1,
+"name": &"dive",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("layer_fb")
+}],
+"loop": 1,
+"name": &"floor_slide",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("layer_dbk")
+}],
+"loop": 1,
+"name": &"fly_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("layer_ub")
+}],
+"loop": 1,
+"name": &"fly_up",
+"speed": 5.0
+}]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_opceb"]
 atlas = ExtResource("28_r4b01")
 region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_orwi0"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_gua6q"]
 diffuse_texture = SubResource("AtlasTexture_opceb")
 
 [sub_resource type="Resource" id="Resource_v2l3k"]
@@ -1032,35 +1751,65 @@ offset = Vector2(0, -1)
 
 [sub_resource type="Resource" id="Resource_n3xeb"]
 script = ExtResource("29_ntea6")
-offset = Vector2(-1, 0)
 
 [sub_resource type="Resource" id="Resource_m2rg5"]
 script = ExtResource("29_ntea6")
-offset = Vector2(-1, -1)
+offset = Vector2(0, -1)
 
 [sub_resource type="Resource" id="Resource_k6hol"]
 script = ExtResource("29_ntea6")
-offset = Vector2(-1, -2)
+offset = Vector2(0, -2)
 
 [sub_resource type="Resource" id="Resource_ont6s"]
 script = ExtResource("29_ntea6")
-offset = Vector2(-1, -1)
+offset = Vector2(0, -1)
 
 [sub_resource type="Resource" id="Resource_p7vsf"]
 script = ExtResource("29_ntea6")
-offset = Vector2(-1, 0)
 
 [sub_resource type="Resource" id="Resource_kdve7"]
 script = ExtResource("29_ntea6")
-offset = Vector2(-1, -1)
+offset = Vector2(0, -1)
 
 [sub_resource type="Resource" id="Resource_f27fj"]
 script = ExtResource("29_ntea6")
-offset = Vector2(-1, -2)
+offset = Vector2(0, -2)
 
 [sub_resource type="Resource" id="Resource_ckiah"]
 script = ExtResource("29_ntea6")
-offset = Vector2(-1, -1)
+offset = Vector2(0, -1)
+
+[sub_resource type="Resource" id="Resource_n3xeb_run"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -1)
+
+[sub_resource type="Resource" id="Resource_m2rg5_run"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -2)
+
+[sub_resource type="Resource" id="Resource_k6hol_run"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -3)
+
+[sub_resource type="Resource" id="Resource_ont6s_run"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -2)
+
+[sub_resource type="Resource" id="Resource_p7vsf_run"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -1)
+
+[sub_resource type="Resource" id="Resource_kdve7_run"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -2)
+
+[sub_resource type="Resource" id="Resource_f27fj_run"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -3)
+
+[sub_resource type="Resource" id="Resource_ckiah_run"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -2)
 
 [sub_resource type="Resource" id="Resource_cmrqc"]
 script = ExtResource("29_ntea6")
@@ -1174,30 +1923,31 @@ offset = Vector2(-1, -1)
 
 [sub_resource type="Resource" id="Resource_q8jn1"]
 script = ExtResource("29_ntea6")
+offset = Vector2(1, 0)
 
 [sub_resource type="Resource" id="Resource_ngse8"]
 script = ExtResource("29_ntea6")
-offset = Vector2(0, -1)
+offset = Vector2(1, -1)
 
 [sub_resource type="Resource" id="Resource_7m3k1"]
 script = ExtResource("29_ntea6")
-offset = Vector2(0, -2)
+offset = Vector2(1, -2)
 
 [sub_resource type="Resource" id="Resource_c557u"]
 script = ExtResource("29_ntea6")
-offset = Vector2(0, -1)
+offset = Vector2(1, -1)
 
 [sub_resource type="Resource" id="Resource_nidux"]
 script = ExtResource("29_ntea6")
-offset = Vector2(0, -1)
+offset = Vector2(1, -1)
 
 [sub_resource type="Resource" id="Resource_hwm31"]
 script = ExtResource("29_ntea6")
-offset = Vector2(0, -2)
+offset = Vector2(1, -2)
 
 [sub_resource type="Resource" id="Resource_4no0n"]
 script = ExtResource("29_ntea6")
-offset = Vector2(0, -1)
+offset = Vector2(1, -1)
 
 [sub_resource type="Resource" id="Resource_tqdqa"]
 script = ExtResource("29_ntea6")
@@ -1640,7 +2390,7 @@ animations = [{
 atlas = ExtResource("43_kyrvb")
 region = Rect2(0, 0, 16, 32)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_2qfp3"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_22vjg"]
 diffuse_texture = SubResource("AtlasTexture_fbvjr")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_is4m5"]
@@ -1718,6 +2468,672 @@ animations = [{
 "loop": 1,
 "name": &"turbo",
 "speed": 12.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingfidle0"]
+atlas = ExtResource("layer_wif")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_3xuna"]
+diffuse_texture = SubResource("AtlasTexture_wingfidle0")
+
+[sub_resource type="Resource" id="Resource_wingf_bonk_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -7)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_bonk_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_bonk_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_crouch_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -13)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_crouch_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -5)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_crouch_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, 1)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_crouch_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, 1)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_crouch_up_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -5)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_crouch_up_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -13)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_death_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(0, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_dive_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(6, -9)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_double_jump_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_double_jump_fall_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_double_jump_fall_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -13)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_double_jump_fall_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_fall_loop_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_fall_start_l_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_fall_start_l_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -13)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_fall_start_l_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_fall_start_r_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_fall_start_r_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -13)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_fall_start_r_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_floor_slide_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(6, -6)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_fly_down_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(6, -9)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_fly_up_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(6, -7)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_ground_pound_fall_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -14)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_ground_pound_fall_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_ground_pound_slam_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -8)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_ground_pound_slam_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_ground_pound_start_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -10)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_idle_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_idle_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_idle_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_idle_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_idle_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_idle_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_idle_low_hp_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_idle_low_hp_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(3, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_idle_low_hp_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(3, -10)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_idle_low_hp_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(3, -9)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_idle_low_hp_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(3, -10)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_idle_low_hp_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(3, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_jump_l_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_jump_l_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_jump_r_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_jump_r_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_fast_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_fast_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_fast_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_fast_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_fast_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_fast_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_fast_6"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_fast_7"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_loop_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_loop_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_loop_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -13)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_loop_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_loop_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_loop_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_loop_6"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -13)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_run_loop_7"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_spin_fast_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 2
+
+[sub_resource type="Resource" id="Resource_wingf_spin_fast_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 3
+
+[sub_resource type="Resource" id="Resource_wingf_spin_fast_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 4
+
+[sub_resource type="Resource" id="Resource_wingf_spin_fast_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 5
+
+[sub_resource type="Resource" id="Resource_wingf_spin_fast_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 6
+
+[sub_resource type="Resource" id="Resource_wingf_spin_fast_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 7
+
+[sub_resource type="Resource" id="Resource_wingf_spin_fast_6"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 0
+
+[sub_resource type="Resource" id="Resource_wingf_spin_fast_7"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 1
+
+[sub_resource type="Resource" id="Resource_wingf_spin_loop_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 2
+
+[sub_resource type="Resource" id="Resource_wingf_spin_loop_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 3
+
+[sub_resource type="Resource" id="Resource_wingf_spin_loop_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 4
+
+[sub_resource type="Resource" id="Resource_wingf_spin_loop_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 5
+
+[sub_resource type="Resource" id="Resource_wingf_spin_loop_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 6
+
+[sub_resource type="Resource" id="Resource_wingf_spin_loop_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 7
+
+[sub_resource type="Resource" id="Resource_wingf_spin_loop_6"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 0
+
+[sub_resource type="Resource" id="Resource_wingf_spin_loop_7"]
+script = ExtResource("29_ntea6")
+offset = Vector2(-1, -12)
+in_front = true
+frame = 1
+
+[sub_resource type="Resource" id="Resource_wingf_stomp_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(4, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_swim_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_swim_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_swim_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_swim_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_swim_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_swim_fast_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_swim_fast_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -13)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_swim_fast_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -14)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_swim_fast_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -13)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_swim_idle_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_swim_idle_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_swim_idle_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_swim_idle_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(1, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_triple_jump_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_turbo_run_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_turbo_run_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_turbo_run_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_turbo_run_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_turbo_run_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_turbo_run_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_turbo_run_6"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -14)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_turbo_run_7"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_walk_loop_0"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_walk_loop_1"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_walk_loop_2"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -10)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_walk_loop_3"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_walk_loop_4"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -12)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_walk_loop_5"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_walk_loop_6"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -10)
+in_front = true
+
+[sub_resource type="Resource" id="Resource_wingf_walk_loop_7"]
+script = ExtResource("29_ntea6")
+offset = Vector2(2, -11)
+in_front = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingfflap0"]
+atlas = ExtResource("layer_waf")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingfflap1"]
+atlas = ExtResource("layer_waf")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingfflap2"]
+atlas = ExtResource("layer_waf")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingfspin0"]
+atlas = ExtResource("layer_wsf")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingfspin1"]
+atlas = ExtResource("layer_wsf")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingfspin2"]
+atlas = ExtResource("layer_wsf")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingfspin3"]
+atlas = ExtResource("layer_wsf")
+region = Rect2(96, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingfspin4"]
+atlas = ExtResource("layer_wsf")
+region = Rect2(128, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingfspin5"]
+atlas = ExtResource("layer_wsf")
+region = Rect2(160, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingfspin6"]
+atlas = ExtResource("layer_wsf")
+region = Rect2(192, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wingfspin7"]
+atlas = ExtResource("layer_wsf")
+region = Rect2(224, 0, 32, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wingf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingfflap0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingfflap1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingfflap2")
+}],
+"loop": 1,
+"name": &"flap",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingfidle0")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingfspin0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingfspin1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingfspin2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingfspin3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingfspin4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingfspin5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingfspin6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wingfspin7")
+}],
+"loop": 1,
+"name": &"spin",
+"speed": 5.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dhqxs"]
@@ -2304,7 +3720,7 @@ metadata/_custom_type_script = "uid://dryys1f20nrgn"
 
 [sub_resource type="Resource" id="Resource_opa2o"]
 script = ExtResource("64_dl333")
-animation = &"dive"
+animation = &"fly_down"
 metadata/_custom_type_script = "uid://dir75hkr2361s"
 
 [sub_resource type="Resource" id="Resource_xi4k6"]
@@ -2489,7 +3905,7 @@ floor_raycast = NodePath("FloorRaycast")
 fludd = NodePath("Fludd")
 caps = NodePath("Caps")
 submerged_bus_effects = Array[AudioEffect]([SubResource("AudioEffectLowPassFilter_3h1ly")])
-silhouette_targets = [NodePath("Visuals/Doll"), NodePath("Visuals/Doll/Fludd")]
+silhouette_targets = [NodePath("Visuals/Doll/WingBack"), NodePath("Visuals/Doll/DollBack"), NodePath("Visuals/Doll"), NodePath("Visuals/Doll/Fludd"), NodePath("Visuals/Doll/WingFront")]
 ground_pound_fall = NodePath("StateMachine/GroundPound/GroundPoundFall")
 sprite = NodePath("Visuals/Doll")
 components_root = NodePath("Components")
@@ -2517,14 +3933,14 @@ saturation = 1.0
 
 [node name="Doll" type="Sprite2D" parent="Visuals" unique_id=1587082698 node_paths=PackedStringArray("rotation_source", "subsprites")]
 position = Vector2(2, -7)
-texture = SubResource("CanvasTexture_woak8")
+texture = SubResource("CanvasTexture_7h3q2")
 region_enabled = true
 region_rect = Rect2(320, 0, 64, 64)
 script = ExtResource("2_0b5cm")
-canvas_texture = SubResource("CanvasTexture_woak8")
+canvas_texture = SubResource("CanvasTexture_7h3q2")
 flip_with_velocity = false
 rotation_source = NodePath("../..")
-subsprites = [NodePath("Fludd")]
+subsprites = [NodePath("WingBack"), NodePath("DollBack"), NodePath("Fludd"), NodePath("WingFront")]
 animated = true
 diffuse_frames = SubResource("SpriteFrames_681d1")
 current_animation = "idle"
@@ -2532,15 +3948,93 @@ current_frame = 5
 speed_scale = 1.0
 playing = false
 
+[node name="WingBack" type="Sprite2D" parent="Visuals/Doll" unique_id=235843240]
+show_behind_parent = true
+use_parent_material = true
+position = Vector2(2, -12)
+texture = SubResource("CanvasTexture_khqwn")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 16)
+script = ExtResource("2_0b5cm")
+canvas_texture = SubResource("CanvasTexture_khqwn")
+follow_root = true
+follow_default = &"idle"
+follow_overrides = Dictionary[StringName, StringName]({
+&"fly_down": &"flap",
+&"fly_up": &"flap",
+&"spin_fast": &"spin",
+&"spin_loop": &"spin"
+})
+follow_offset = true
+follow_free_animations = Array[StringName]([&"flap"])
+follow_shown = false
+follow_poses = Dictionary[StringName, Array]({
+&"bonk": [SubResource("Resource_wingb_bonk_0"), SubResource("Resource_wingb_bonk_1"), SubResource("Resource_wingb_bonk_2")],
+&"crouch": [SubResource("Resource_wingb_crouch_0"), SubResource("Resource_wingb_crouch_1"), SubResource("Resource_wingb_crouch_2"), SubResource("Resource_wingb_crouch_3")],
+&"crouch_up": [SubResource("Resource_wingb_crouch_up_0"), SubResource("Resource_wingb_crouch_up_1")],
+&"death": [SubResource("Resource_wingb_death_0")],
+&"dive": [SubResource("Resource_wingb_dive_0")],
+&"double_jump": [SubResource("Resource_wingb_double_jump_0")],
+&"double_jump_fall": [SubResource("Resource_wingb_double_jump_fall_0"), SubResource("Resource_wingb_double_jump_fall_1"), SubResource("Resource_wingb_double_jump_fall_2")],
+&"fall_loop": [SubResource("Resource_wingb_fall_loop_0")],
+&"fall_start_l": [SubResource("Resource_wingb_fall_start_l_0"), SubResource("Resource_wingb_fall_start_l_1"), SubResource("Resource_wingb_fall_start_l_2")],
+&"fall_start_r": [SubResource("Resource_wingb_fall_start_r_0"), SubResource("Resource_wingb_fall_start_r_1"), SubResource("Resource_wingb_fall_start_r_2")],
+&"floor_slide": [SubResource("Resource_wingb_floor_slide_0")],
+&"fly_down": [SubResource("Resource_wingb_fly_down_0")],
+&"fly_up": [SubResource("Resource_wingb_fly_up_0")],
+&"ground_pound_fall": [SubResource("Resource_wingb_ground_pound_fall_0"), SubResource("Resource_wingb_ground_pound_fall_1")],
+&"ground_pound_slam": [SubResource("Resource_wingb_ground_pound_slam_0"), SubResource("Resource_wingb_ground_pound_slam_1")],
+&"ground_pound_start": [SubResource("Resource_wingb_ground_pound_start_0")],
+&"idle": [SubResource("Resource_wingb_idle_0"), SubResource("Resource_wingb_idle_1"), SubResource("Resource_wingb_idle_2"), SubResource("Resource_wingb_idle_3"), SubResource("Resource_wingb_idle_4"), SubResource("Resource_wingb_idle_5")],
+&"idle_low_hp": [SubResource("Resource_wingb_idle_low_hp_0"), SubResource("Resource_wingb_idle_low_hp_1"), SubResource("Resource_wingb_idle_low_hp_2"), SubResource("Resource_wingb_idle_low_hp_3"), SubResource("Resource_wingb_idle_low_hp_4"), SubResource("Resource_wingb_idle_low_hp_5")],
+&"jump_l": [SubResource("Resource_wingb_jump_l_0"), SubResource("Resource_wingb_jump_l_1")],
+&"jump_r": [SubResource("Resource_wingb_jump_r_0"), SubResource("Resource_wingb_jump_r_1")],
+&"run_fast": [SubResource("Resource_wingb_run_fast_0"), SubResource("Resource_wingb_run_fast_1"), SubResource("Resource_wingb_run_fast_2"), SubResource("Resource_wingb_run_fast_3"), SubResource("Resource_wingb_run_fast_4"), SubResource("Resource_wingb_run_fast_5"), SubResource("Resource_wingb_run_fast_6"), SubResource("Resource_wingb_run_fast_7")],
+&"run_loop": [SubResource("Resource_wingb_run_loop_0"), SubResource("Resource_wingb_run_loop_1"), SubResource("Resource_wingb_run_loop_2"), SubResource("Resource_wingb_run_loop_3"), SubResource("Resource_wingb_run_loop_4"), SubResource("Resource_wingb_run_loop_5"), SubResource("Resource_wingb_run_loop_6"), SubResource("Resource_wingb_run_loop_7")],
+&"spin_fast": [SubResource("Resource_wingb_spin_fast_0"), SubResource("Resource_wingb_spin_fast_1"), SubResource("Resource_wingb_spin_fast_2"), SubResource("Resource_wingb_spin_fast_3"), SubResource("Resource_wingb_spin_fast_4"), SubResource("Resource_wingb_spin_fast_5"), SubResource("Resource_wingb_spin_fast_6"), SubResource("Resource_wingb_spin_fast_7")],
+&"spin_loop": [SubResource("Resource_wingb_spin_loop_0"), SubResource("Resource_wingb_spin_loop_1"), SubResource("Resource_wingb_spin_loop_2"), SubResource("Resource_wingb_spin_loop_3"), SubResource("Resource_wingb_spin_loop_4"), SubResource("Resource_wingb_spin_loop_5"), SubResource("Resource_wingb_spin_loop_6"), SubResource("Resource_wingb_spin_loop_7")],
+&"stomp": [SubResource("Resource_wingb_stomp_0")],
+&"swim": [SubResource("Resource_wingb_swim_0"), SubResource("Resource_wingb_swim_1"), SubResource("Resource_wingb_swim_2"), SubResource("Resource_wingb_swim_3"), SubResource("Resource_wingb_swim_4")],
+&"swim_fast": [SubResource("Resource_wingb_swim_fast_0"), SubResource("Resource_wingb_swim_fast_1"), SubResource("Resource_wingb_swim_fast_2"), SubResource("Resource_wingb_swim_fast_3")],
+&"swim_idle": [SubResource("Resource_wingb_swim_idle_0"), SubResource("Resource_wingb_swim_idle_1"), SubResource("Resource_wingb_swim_idle_2"), SubResource("Resource_wingb_swim_idle_3")],
+&"triple_jump": [SubResource("Resource_wingb_triple_jump_0")],
+&"turbo_run": [SubResource("Resource_wingb_turbo_run_0"), SubResource("Resource_wingb_turbo_run_1"), SubResource("Resource_wingb_turbo_run_2"), SubResource("Resource_wingb_turbo_run_3"), SubResource("Resource_wingb_turbo_run_4"), SubResource("Resource_wingb_turbo_run_5"), SubResource("Resource_wingb_turbo_run_6"), SubResource("Resource_wingb_turbo_run_7")],
+&"walk_loop": [SubResource("Resource_wingb_walk_loop_0"), SubResource("Resource_wingb_walk_loop_1"), SubResource("Resource_wingb_walk_loop_2"), SubResource("Resource_wingb_walk_loop_3"), SubResource("Resource_wingb_walk_loop_4"), SubResource("Resource_wingb_walk_loop_5"), SubResource("Resource_wingb_walk_loop_6"), SubResource("Resource_wingb_walk_loop_7")]
+})
+animated = true
+diffuse_frames = SubResource("SpriteFrames_wingb")
+current_animation = "idle"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://cvolonferossj"
+
+[node name="DollBack" type="Sprite2D" parent="Visuals/Doll" unique_id=426144586]
+show_behind_parent = true
+use_parent_material = true
+texture = SubResource("CanvasTexture_j57tv")
+script = ExtResource("2_0b5cm")
+canvas_texture = SubResource("CanvasTexture_j57tv")
+follow_root = true
+follow_hide_missing = true
+follow_offset = true
+animated = true
+diffuse_frames = SubResource("SpriteFrames_dollback")
+current_animation = ""
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://cvolonferossj"
+
 [node name="Fludd" type="Sprite2D" parent="Visuals/Doll" unique_id=4340549 node_paths=PackedStringArray("subsprites")]
 visible = false
 show_behind_parent = true
 position = Vector2(-5, -1)
-texture = SubResource("CanvasTexture_orwi0")
+texture = SubResource("CanvasTexture_gua6q")
 region_enabled = true
 region_rect = Rect2(64, 0, 64, 64)
 script = ExtResource("2_0b5cm")
-canvas_texture = SubResource("CanvasTexture_orwi0")
+canvas_texture = SubResource("CanvasTexture_gua6q")
 subsprites = [NodePath("Plume")]
 follow_root = true
 follow_default = &"hover:default"
@@ -2548,6 +4042,8 @@ follow_overrides = Dictionary[StringName, StringName]({
 &"crouch": &"hover:crouch",
 &"crouch_up": &"hover:crouch_up",
 &"dive": &"hover:dive",
+&"fly_down": &"hover:dive",
+&"fly_up": &"hover:dive",
 &"spin_fast": &"hover:spin",
 &"spin_loop": &"hover:spin"
 })
@@ -2558,11 +4054,15 @@ follow_poses = Dictionary[StringName, Array]({
 &"death": [SubResource("Resource_gua6q")],
 &"dive": [SubResource("Resource_j57tv")],
 &"floor_slide": [SubResource("Resource_22vjg")],
+&"fly_down": [SubResource("Resource_j57tv")],
+&"fly_up": [SubResource("Resource_j57tv")],
 &"idle": [SubResource("Resource_3jg1m"), SubResource("Resource_53f2h"), SubResource("Resource_gai66"), SubResource("Resource_81308"), SubResource("Resource_b85k8"), SubResource("Resource_r7jop"), SubResource("Resource_h5pm1")],
-&"run_loop": [SubResource("Resource_n3xeb"), SubResource("Resource_m2rg5"), SubResource("Resource_k6hol"), SubResource("Resource_ont6s"), SubResource("Resource_p7vsf"), SubResource("Resource_kdve7"), SubResource("Resource_f27fj"), SubResource("Resource_ckiah")],
+&"run_fast": [SubResource("Resource_n3xeb"), SubResource("Resource_m2rg5"), SubResource("Resource_k6hol"), SubResource("Resource_ont6s"), SubResource("Resource_p7vsf"), SubResource("Resource_kdve7"), SubResource("Resource_f27fj"), SubResource("Resource_ckiah")],
+&"run_loop": [SubResource("Resource_n3xeb_run"), SubResource("Resource_m2rg5_run"), SubResource("Resource_k6hol_run"), SubResource("Resource_ont6s_run"), SubResource("Resource_p7vsf_run"), SubResource("Resource_kdve7_run"), SubResource("Resource_f27fj_run"), SubResource("Resource_ckiah_run")],
 &"spin_fast": [SubResource("Resource_cmrqc"), SubResource("Resource_jjwtc"), SubResource("Resource_mj6hf"), SubResource("Resource_kups7"), SubResource("Resource_3jt20"), SubResource("Resource_4bt43"), SubResource("Resource_28gpl"), SubResource("Resource_8vtha")],
 &"spin_loop": [SubResource("Resource_woak8"), SubResource("Resource_dl333"), SubResource("Resource_dauob"), SubResource("Resource_8ne3h"), SubResource("Resource_k6iy8"), SubResource("Resource_3bupy"), SubResource("Resource_rytxr"), SubResource("Resource_dhwyu")],
 &"swim": [SubResource("Resource_e60mc"), SubResource("Resource_0d8i1"), SubResource("Resource_n2nx3"), SubResource("Resource_gdd4s"), SubResource("Resource_ie8qq")],
+&"swim_fast": [SubResource("Resource_e60mc"), SubResource("Resource_0d8i1"), SubResource("Resource_n2nx3"), SubResource("Resource_gdd4s")],
 &"swim_idle": [SubResource("Resource_khqwn"), SubResource("Resource_nrgrv"), SubResource("Resource_d6ot2"), SubResource("Resource_7h3q2"), SubResource("Resource_f1k64")],
 &"turbo_run": [SubResource("Resource_q8jn1"), SubResource("Resource_ngse8"), SubResource("Resource_7m3k1"), SubResource("Resource_c557u"), null, SubResource("Resource_nidux"), SubResource("Resource_hwm31"), SubResource("Resource_4no0n")],
 &"walk_loop": [SubResource("Resource_tqdqa"), SubResource("Resource_3xuna"), SubResource("Resource_sloyf"), SubResource("Resource_3fsxb"), SubResource("Resource_lou6s"), SubResource("Resource_j8dis"), SubResource("Resource_o0m62"), SubResource("Resource_3yv7w")]
@@ -2579,15 +4079,75 @@ metadata/_custom_type_script = "uid://cvolonferossj"
 visible = false
 show_behind_parent = true
 position = Vector2(-6, 13)
-texture = SubResource("CanvasTexture_2qfp3")
+texture = SubResource("CanvasTexture_22vjg")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 32)
 script = ExtResource("2_0b5cm")
-canvas_texture = SubResource("CanvasTexture_2qfp3")
+canvas_texture = SubResource("CanvasTexture_22vjg")
 follow_origin = Vector2(-3, -1.9999998)
 animated = true
 diffuse_frames = SubResource("SpriteFrames_ndkiv")
 current_animation = "hover"
+current_frame = 0
+speed_scale = 1.0
+playing = false
+metadata/_custom_type_script = "uid://cvolonferossj"
+
+[node name="WingFront" type="Sprite2D" parent="Visuals/Doll" unique_id=386609869]
+use_parent_material = true
+position = Vector2(2, -12)
+texture = SubResource("CanvasTexture_3xuna")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 16)
+script = ExtResource("2_0b5cm")
+canvas_texture = SubResource("CanvasTexture_3xuna")
+follow_root = true
+follow_default = &"idle"
+follow_overrides = Dictionary[StringName, StringName]({
+&"fly_down": &"flap",
+&"fly_up": &"flap",
+&"spin_fast": &"spin",
+&"spin_loop": &"spin"
+})
+follow_offset = true
+follow_free_animations = Array[StringName]([&"flap"])
+follow_shown = false
+follow_poses = Dictionary[StringName, Array]({
+&"bonk": [SubResource("Resource_wingf_bonk_0"), SubResource("Resource_wingf_bonk_1"), SubResource("Resource_wingf_bonk_2")],
+&"crouch": [SubResource("Resource_wingf_crouch_0"), SubResource("Resource_wingf_crouch_1"), SubResource("Resource_wingf_crouch_2"), SubResource("Resource_wingf_crouch_3")],
+&"crouch_up": [SubResource("Resource_wingf_crouch_up_0"), SubResource("Resource_wingf_crouch_up_1")],
+&"death": [SubResource("Resource_wingf_death_0")],
+&"dive": [SubResource("Resource_wingf_dive_0")],
+&"double_jump": [SubResource("Resource_wingf_double_jump_0")],
+&"double_jump_fall": [SubResource("Resource_wingf_double_jump_fall_0"), SubResource("Resource_wingf_double_jump_fall_1"), SubResource("Resource_wingf_double_jump_fall_2")],
+&"fall_loop": [SubResource("Resource_wingf_fall_loop_0")],
+&"fall_start_l": [SubResource("Resource_wingf_fall_start_l_0"), SubResource("Resource_wingf_fall_start_l_1"), SubResource("Resource_wingf_fall_start_l_2")],
+&"fall_start_r": [SubResource("Resource_wingf_fall_start_r_0"), SubResource("Resource_wingf_fall_start_r_1"), SubResource("Resource_wingf_fall_start_r_2")],
+&"floor_slide": [SubResource("Resource_wingf_floor_slide_0")],
+&"fly_down": [SubResource("Resource_wingf_fly_down_0")],
+&"fly_up": [SubResource("Resource_wingf_fly_up_0")],
+&"ground_pound_fall": [SubResource("Resource_wingf_ground_pound_fall_0"), SubResource("Resource_wingf_ground_pound_fall_1")],
+&"ground_pound_slam": [SubResource("Resource_wingf_ground_pound_slam_0"), SubResource("Resource_wingf_ground_pound_slam_1")],
+&"ground_pound_start": [SubResource("Resource_wingf_ground_pound_start_0")],
+&"idle": [SubResource("Resource_wingf_idle_0"), SubResource("Resource_wingf_idle_1"), SubResource("Resource_wingf_idle_2"), SubResource("Resource_wingf_idle_3"), SubResource("Resource_wingf_idle_4"), SubResource("Resource_wingf_idle_5")],
+&"idle_low_hp": [SubResource("Resource_wingf_idle_low_hp_0"), SubResource("Resource_wingf_idle_low_hp_1"), SubResource("Resource_wingf_idle_low_hp_2"), SubResource("Resource_wingf_idle_low_hp_3"), SubResource("Resource_wingf_idle_low_hp_4"), SubResource("Resource_wingf_idle_low_hp_5")],
+&"jump_l": [SubResource("Resource_wingf_jump_l_0"), SubResource("Resource_wingf_jump_l_1")],
+&"jump_r": [SubResource("Resource_wingf_jump_r_0"), SubResource("Resource_wingf_jump_r_1")],
+&"run_fast": [SubResource("Resource_wingf_run_fast_0"), SubResource("Resource_wingf_run_fast_1"), SubResource("Resource_wingf_run_fast_2"), SubResource("Resource_wingf_run_fast_3"), SubResource("Resource_wingf_run_fast_4"), SubResource("Resource_wingf_run_fast_5"), SubResource("Resource_wingf_run_fast_6"), SubResource("Resource_wingf_run_fast_7")],
+&"run_loop": [SubResource("Resource_wingf_run_loop_0"), SubResource("Resource_wingf_run_loop_1"), SubResource("Resource_wingf_run_loop_2"), SubResource("Resource_wingf_run_loop_3"), SubResource("Resource_wingf_run_loop_4"), SubResource("Resource_wingf_run_loop_5"), SubResource("Resource_wingf_run_loop_6"), SubResource("Resource_wingf_run_loop_7")],
+&"spin_fast": [SubResource("Resource_wingf_spin_fast_0"), SubResource("Resource_wingf_spin_fast_1"), SubResource("Resource_wingf_spin_fast_2"), SubResource("Resource_wingf_spin_fast_3"), SubResource("Resource_wingf_spin_fast_4"), SubResource("Resource_wingf_spin_fast_5"), SubResource("Resource_wingf_spin_fast_6"), SubResource("Resource_wingf_spin_fast_7")],
+&"spin_loop": [SubResource("Resource_wingf_spin_loop_0"), SubResource("Resource_wingf_spin_loop_1"), SubResource("Resource_wingf_spin_loop_2"), SubResource("Resource_wingf_spin_loop_3"), SubResource("Resource_wingf_spin_loop_4"), SubResource("Resource_wingf_spin_loop_5"), SubResource("Resource_wingf_spin_loop_6"), SubResource("Resource_wingf_spin_loop_7")],
+&"stomp": [SubResource("Resource_wingf_stomp_0")],
+&"swim": [SubResource("Resource_wingf_swim_0"), SubResource("Resource_wingf_swim_1"), SubResource("Resource_wingf_swim_2"), SubResource("Resource_wingf_swim_3"), SubResource("Resource_wingf_swim_4")],
+&"swim_fast": [SubResource("Resource_wingf_swim_fast_0"), SubResource("Resource_wingf_swim_fast_1"), SubResource("Resource_wingf_swim_fast_2"), SubResource("Resource_wingf_swim_fast_3")],
+&"swim_idle": [SubResource("Resource_wingf_swim_idle_0"), SubResource("Resource_wingf_swim_idle_1"), SubResource("Resource_wingf_swim_idle_2"), SubResource("Resource_wingf_swim_idle_3")],
+&"triple_jump": [SubResource("Resource_wingf_triple_jump_0")],
+&"turbo_run": [SubResource("Resource_wingf_turbo_run_0"), SubResource("Resource_wingf_turbo_run_1"), SubResource("Resource_wingf_turbo_run_2"), SubResource("Resource_wingf_turbo_run_3"), SubResource("Resource_wingf_turbo_run_4"), SubResource("Resource_wingf_turbo_run_5"), SubResource("Resource_wingf_turbo_run_6"), SubResource("Resource_wingf_turbo_run_7")],
+&"walk_loop": [SubResource("Resource_wingf_walk_loop_0"), SubResource("Resource_wingf_walk_loop_1"), SubResource("Resource_wingf_walk_loop_2"), SubResource("Resource_wingf_walk_loop_3"), SubResource("Resource_wingf_walk_loop_4"), SubResource("Resource_wingf_walk_loop_5"), SubResource("Resource_wingf_walk_loop_6"), SubResource("Resource_wingf_walk_loop_7")]
+})
+animated = true
+diffuse_frames = SubResource("SpriteFrames_wingf")
+current_animation = "idle"
 current_frame = 0
 speed_scale = 1.0
 playing = false
@@ -2627,6 +4187,9 @@ lifetime = 0.5
 fixed_fps = 0
 visibility_rect = Rect2(-256, -256, 512, 512)
 process_material = SubResource("ParticleProcessMaterial_kyrvb")
+
+[node name="RocketBoom" parent="." unique_id=248848828 node_paths=PackedStringArray("nozzle") instance=ExtResource("rocket_boom")]
+nozzle = NodePath("../CanvasGroup/HoverFluddParticles")
 
 [node name="HoverSFX" type="AudioStreamPlayer2D" parent="." unique_id=1513206642]
 position = Vector2(0, 1)
@@ -2939,6 +4502,7 @@ animation_speed_curve = SubResource("Curve_walkspeed")
 footstep_bank = ExtResource("68_3bupy")
 footstep_particles = NodePath("../../../../FootstepParticles")
 footstep_frames = Dictionary[StringName, PackedInt32Array]({
+&"run_fast": PackedInt32Array(0, 4),
 &"run_loop": PackedInt32Array(0, 4),
 &"walk_loop": PackedInt32Array(0, 4)
 })
@@ -3130,9 +4694,10 @@ nozzle = 1
 fludd_variant = &"hover"
 plume_animation = &"hover"
 
-[node name="Rocket" type="Node" parent="Fludd/Modes" unique_id=1729176442 node_paths=PackedStringArray("sprite")]
+[node name="Rocket" type="Node" parent="Fludd/Modes" unique_id=1729176442 node_paths=PackedStringArray("sprite", "boom")]
 script = ExtResource("128_cv6e0")
 sprite = NodePath("../../../Visuals/Doll/Fludd")
+boom = NodePath("../../../RocketBoom")
 slide_friction_scale = 0.5
 nozzle = 2
 drains_power = false
@@ -3176,9 +4741,10 @@ debug_toggles = Dictionary[int, StringName]({
 debug_clear_key = 48
 host = NodePath("..")
 
-[node name="Metal" type="Node" parent="Caps" unique_id=1036229886]
+[node name="Metal" type="Node" parent="Caps" unique_id=1036229886 node_paths=PackedStringArray("material_exempt")]
 script = ExtResource("metal_cap")
 animation_overrides = Dictionary[StringName, StringName]({
+&"run_fast": &"walk_loop",
 &"run_loop": &"walk_loop"
 })
 ground_speed_scale = 0.95
@@ -3194,6 +4760,7 @@ knockback_scale = 0.5
 recovery_scale = 0.4
 duration = 20.0
 material = SubResource("ShaderMaterial_ont6s")
+material_exempt = [NodePath("../../Visuals/Doll/WingBack"), NodePath("../../Visuals/Doll/WingFront")]
 
 [node name="Invisible" type="Node" parent="Caps" unique_id=129888118 node_paths=PackedStringArray("material_target")]
 script = ExtResource("invisible_cap")
@@ -3202,20 +4769,22 @@ duration = 20.0
 material = SubResource("ShaderMaterial_invisibility")
 material_target = NodePath("../../Visuals")
 
-[node name="Invincible" type="Node" parent="Caps" unique_id=555000642 node_paths=PackedStringArray("hitbox", "trail")]
+[node name="Invincible" type="Node" parent="Caps" unique_id=555000642 node_paths=PackedStringArray("silhouette_parts", "hitbox", "trail")]
 script = ExtResource("invincible_cap")
 silhouette_material = SubResource("ShaderMaterial_rainbow")
+silhouette_parts = [NodePath("../../Visuals/Doll/WingBack"), NodePath("../../Visuals/Doll/DollBack"), NodePath("../../Visuals/Doll"), NodePath("../../Visuals/Doll/WingFront")]
 hitbox = NodePath("../../Hitboxes/Invincible")
 trail = NodePath("../../Trail")
-ground_speed_scale = 1.25
+ground_speed_scale = 1.6
 trail_min_scale = 0.1
 duration = 15.0
 
-[node name="Wing" type="Node" parent="Caps" unique_id=24034737]
+[node name="Wing" type="Node" parent="Caps" unique_id=24034737 node_paths=PackedStringArray("wings")]
 script = ExtResource("wing_cap")
 state_redirects = Dictionary[String, StringName]({
 "TripleJump>Fall": &"Glide"
 })
+wings = [NodePath("../../Visuals/Doll/WingBack"), NodePath("../../Visuals/Doll/WingFront")]
 duration = 40.0
 
 [connection signal="landed" from="Hitboxes/Feet" to="." method="_on_feet_landed"]

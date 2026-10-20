@@ -185,6 +185,15 @@ func is_harmless() -> bool:
 	return caps_worn.any(func(cap: CapMode) -> bool: return cap.is_harmless()) and not caps_worn.any(func(cap: CapMode) -> bool: return cap.is_lethal())
 
 
+func has_top_speed_run() -> bool:
+	return get_caps().any(func(cap: CapMode) -> bool: return cap.has_top_speed_run())
+
+
+func set_wings_flapping(flapping: bool) -> void:
+	for cap: CapMode in get_caps():
+		cap.set_flapping(flapping)
+
+
 func can_glide() -> bool:
 	return get_caps().any(func(cap: CapMode) -> bool: return cap.allows_glide())
 

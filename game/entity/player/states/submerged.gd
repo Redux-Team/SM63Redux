@@ -30,7 +30,11 @@ extends PlayerState
 ## Multiplier on upward speed when leaving the water.
 @export var exit_boost: float = 2.5
 ## Caps the upward speed from the exit boost.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var max_exit_speed: float = 300.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var max_exit_speed: float = 340.0
+## Multiplier on upward speed already beyond the exit cap.
+@export var fast_exit_boost: float = 1.3
+## Upward speed set when leaving the water shortly after a FLUDD launch, such as a rocket.
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rocket_exit_speed: float = 750.0
 
 
 func _tick(delta: float) -> void:
@@ -43,7 +47,16 @@ func _tick(delta: float) -> void:
 
 
 func _exit() -> void:
-	if player.velocity.y < 0.0:
+	if player.velocity.y >= 0.0:
+		return
+	
+	if player.fludd.is_launching():
+		player.velocity.y = minf(player.velocity.y, -rocket_exit_speed)
+		return
+	
+	if player.velocity.y < -max_exit_speed:
+		player.velocity.y *= fast_exit_boost
+	else:
 		player.velocity.y = maxf(player.velocity.y * exit_boost, -max_exit_speed)
 
 

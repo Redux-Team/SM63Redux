@@ -6,6 +6,8 @@ extends PlayerState
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rise_speed: float = 392.5
 ## Downward speed that must be reached before a spin can interrupt the flip.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var spin_min_speed: float = 155.0
+## Downward speed at which the backflip turns into a fall.
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var fall_min_speed: float = 0.0
 
 
 func _enter() -> void:
@@ -25,6 +27,8 @@ func _next() -> StringName:
 		return &"Dive"
 	if controls.is_held(&"spin") and player.velocity.y > spin_min_speed:
 		return &"Spin"
+	if player.velocity.y > fall_min_speed:
+		return &"Fall"
 	return &""
 
 

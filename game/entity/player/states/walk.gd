@@ -21,6 +21,8 @@ extends PlayerState
 ## Animation speed over normalized running speed.
 @export var animation_speed_curve: Curve
 @export var turbo_animation: StringName = &"turbo_run"
+@export var top_speed_animation: StringName = &"run_fast"
+@export_range(0.0, 1.0, 0.01) var top_speed_ratio: float = 0.95
 @export_group("Footsteps")
 ## Sounds played on footstep frames.
 @export var footstep_bank: SFXBank
@@ -32,9 +34,16 @@ extends PlayerState
 @export var footstep_frames: Dictionary[StringName, PackedInt32Array] = {
 	&"walk_loop": PackedInt32Array([0, 4]),
 	&"run_loop": PackedInt32Array([0, 4]),
+	&"run_fast": PackedInt32Array([0, 4]),
 }
 
 var _footstep_frame: int = -1
+var _grounded: GroundedState
+
+
+func _bind() -> void:
+	super()
+	_grounded = get_parent() as GroundedState
 
 
 func _enter() -> void:
@@ -80,15 +89,30 @@ func _update_gait() -> void:
 	if player.is_turbo_striking():
 		animation = turbo_animation
 	elif input_strength >= walk_input_threshold:
-		animation = player.get_cap_animation(&"run_loop" if input_strength >= run_input_threshold else &"walk_loop")
+		animation = _get_stride(input_strength)
 	elif absf(player.velocity.x) <= animation_stop_speed:
 		animation = &"walk_loop"
 	
 	if sprite.current_animation != animation:
-		sprite.play(animation)
+		if _is_running(sprite.current_animation) and _is_running(animation):
+			sprite.play_at_frame(animation, sprite.current_frame)
+		else:
+			sprite.play(animation)
 	
 	if animation_speed_curve:
 		sprite.speed_scale = animation_speed_curve.sample(clampf(absf(player.velocity.x) / animation_reference_speed, 0.0, 1.0))
+
+
+func _get_stride(input_strength: float) -> StringName:
+	if input_strength < run_input_threshold:
+		return player.get_cap_animation(&"walk_loop")
+	if player.has_top_speed_run() and absf(player.velocity.x) >= player.get_ground_speed(_grounded.run_speed) * top_speed_ratio:
+		return top_speed_animation
+	return player.get_cap_animation(&"run_loop")
+
+
+func _is_running(animation: StringName) -> bool:
+	return animation == &"run_loop" or animation == top_speed_animation
 
 
 func _play_footstep() -> void:

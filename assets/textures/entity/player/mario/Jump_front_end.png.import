@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://xsd8o5fwxh5j"
-path="res://.godot/imported/Mario_culon.png-0f293f8607d18909ae22f407b2249bbe.ctex"
+uid="uid://ekuapirgw4qr"
+path="res://.godot/imported/Jump_front_end.png-c6398cb075438aa7f346fa37a7c2955b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/entity/player/mario/Mario_culon.png"
-dest_files=["res://.godot/imported/Mario_culon.png-0f293f8607d18909ae22f407b2249bbe.ctex"]
+source_file="res://assets/textures/entity/player/mario/Jump_front_end.png"
+dest_files=["res://.godot/imported/Jump_front_end.png-c6398cb075438aa7f346fa37a7c2955b.ctex"]
 
 [params]
 

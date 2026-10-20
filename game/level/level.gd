@@ -159,6 +159,10 @@ func _track(object: GameObject) -> void:
 	if not object.cullable or entity and not entity.cull_when_offscreen:
 		return
 	
+	var layer: LevelLayer = _area.get_layer_of(object)
+	if layer and layer.is_effective_decoration():
+		return
+	
 	if object.game_root is Node2D:
 		culler.track(object.game_root)
 

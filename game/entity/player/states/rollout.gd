@@ -12,10 +12,10 @@ extends PlayerState
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var dive_time: float = 0.2
 ## Time before touching the floor ends the rollout.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var land_time: float = 0.1
-## Time before spraying FLUDD can turn the rollout into a fall.
+## Time before the rollout can turn into a fall.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var fall_time: float = 0.3
 @export_group("Exits")
-## Downward speed needed before spraying can turn the rollout into a fall.
+## Downward speed needed before the rollout turns into a fall.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var fall_min_speed: float = 30.0
 ## Downward speed that must be reached before a spin can interrupt the rollout.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var spin_min_speed: float = -40.0
@@ -42,12 +42,8 @@ func _next() -> StringName:
 		return &"Idle"
 	if not grounded and player.can_dive and time > dive_time and controls.is_held(&"dive"):
 		return &"Dive"
-	if not grounded and time > fall_time and player.velocity.y > fall_min_speed and _is_spraying_fludd():
+	if not grounded and time > fall_time and player.velocity.y > fall_min_speed:
 		return &"Fall"
 	if controls.is_held(&"spin") and player.velocity.y > spin_min_speed:
 		return &"Spin"
 	return &""
-
-
-func _is_spraying_fludd() -> bool:
-	return controls.is_held(&"use_fludd") and player.fludd.equipped_nozzle != PlayerFludd.Nozzle.NONE

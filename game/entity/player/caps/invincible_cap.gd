@@ -2,6 +2,7 @@ class_name InvincibleCap
 extends CapMode
 
 @export var silhouette_material: Material
+@export var silhouette_parts: Array[Sprite2D] = []
 @export var hitbox: HitBox
 @export var trail: AfterimageTrail
 @export var ground_speed_scale: float = 1.0
@@ -9,20 +10,28 @@ extends CapMode
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var trail_shrink_time: float = 4.0
 @export_range(0.0, 1.0, 0.01) var trail_min_scale: float = 0.4
 
-var _overlay: SpriteMirror
+var _overlay: CanvasGroup
 
 
 func _enter() -> void:
-	_overlay = SpriteMirror.new()
-	_overlay.target = player.sprite
+	_overlay = CanvasGroup.new()
 	_overlay.material = silhouette_material
 	_overlay.z_as_relative = false
 	_overlay.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
 	player.add_child(_overlay)
+	for part: Sprite2D in silhouette_parts:
+		var mirror: SpriteMirror = SpriteMirror.new()
+		mirror.target = part
+		_overlay.add_child(mirror)
+	
 	hitbox.enable()
 	trail.process_mode = Node.PROCESS_MODE_INHERIT
 	super()
 	_sync_trail()
+
+
+func has_top_speed_run() -> bool:
+	return true
 
 
 func _tick(delta: float) -> void:

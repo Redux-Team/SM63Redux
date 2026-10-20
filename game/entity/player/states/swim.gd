@@ -14,6 +14,7 @@ extends PlayerState
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var press_buffer: float = 0.12
 ## Animation restarted on each stroke.
 @export var animation: StringName = &"swim"
+@export var turbo_animation: StringName = &"swim_fast"
 
 var _stroke_age: float = 0.0
 var _queued: bool = false
@@ -33,7 +34,7 @@ func _tick(delta: float) -> void:
 		_stroke()
 	
 	if overrides_vertical():
-		player.velocity.y = Motion.damp(player.velocity.y, -stroke_speed, stroke_halflife, delta)
+		player.velocity.y = minf(player.velocity.y, Motion.damp(player.velocity.y, -stroke_speed, stroke_halflife, delta))
 
 
 func _next() -> StringName:
@@ -50,8 +51,12 @@ func _stroke() -> void:
 	_queued = false
 	_stroke_age = 0.0
 	controls.consume(&"jump")
-	sprite.play_at_frame(animation, 0)
+	sprite.play_at_frame(_get_animation(), 0)
 
 
 func _is_stroking() -> bool:
-	return sprite.playing and sprite.current_animation == animation
+	return sprite.playing and sprite.current_animation == _get_animation()
+
+
+func _get_animation() -> StringName:
+	return turbo_animation if player.is_turbo_striking() else animation

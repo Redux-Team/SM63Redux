@@ -4,6 +4,7 @@ extends Mode
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var duration: float = 0.0
 @export var material: Material
 @export var material_target: CanvasItem
+@export var material_exempt: Array[CanvasItem] = []
 @export_group("Blink")
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var blink_time: float = 4.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var blink_interval_start: float = 0.25
@@ -44,6 +45,9 @@ func _show_look(shown: bool) -> void:
 		return
 	
 	var target: CanvasItem = material_target if material_target else player.sprite
+	for item: CanvasItem in material_exempt:
+		item.use_parent_material = not shown
+	
 	if shown:
 		_previous_material = target.material
 		target.material = material
@@ -78,6 +82,14 @@ func get_water_fall_speed(_pounding: bool) -> float:
 
 func redirect_state(_from: StringName, to: StringName) -> StringName:
 	return to
+
+
+func set_flapping(_flapping: bool) -> void:
+	pass
+
+
+func has_top_speed_run() -> bool:
+	return false
 
 
 func allows_glide() -> bool:

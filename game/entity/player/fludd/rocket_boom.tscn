@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://b4foyjvcjua2u"]
+
+[ext_resource type="Script" uid="uid://c7h6sn8qwj7c3" path="res://game/entity/player/fludd/rocket_boom.gd" id="1_boom"]
+[ext_resource type="Script" uid="uid://df82mcnubnp0h" path="res://util/2d/animated_particles.gd" id="4_particles"]
+[ext_resource type="Texture2D" uid="uid://8mb3v6n2k6er" path="res://assets/textures/entity/player/shared/Splash_water.png" id="5_splash"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_splash0"]
+atlas = ExtResource("5_splash")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_splash1"]
+atlas = ExtResource("5_splash")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_splash2"]
+atlas = ExtResource("5_splash")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_splash3"]
+atlas = ExtResource("5_splash")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_splash4"]
+atlas = ExtResource("5_splash")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_splash"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_splash0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_splash1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_splash2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_splash3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_splash4")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="RocketBoom" type="Node2D" unique_id=1698400333 node_paths=PackedStringArray("splash", "down_trail", "jet_trail")]
+script = ExtResource("1_boom")
+splash = NodePath("Splash")
+down_trail = NodePath("DownTrail")
+jet_trail = NodePath("JetTrail")
+
+[node name="Splash" type="Node2D" parent="." unique_id=655486899]
+texture_filter = 1
+script = ExtResource("4_particles")
+sprite_frames = SubResource("SpriteFrames_splash")
+amount = 8
+emission_radius = 4.0
+spread_mode = 1
+spread = 180.0
+angles = PackedFloat32Array()
+speed_min = 40.0
+speed_max = 80.0
+damping = 140.0
+scale_min = 0.8
+scale_max = 1.1
+speed_scale_min = 0.8
+speed_scale_max = 1.2
+random_flip = true
+
+[node name="DownTrail" type="Node2D" parent="."]
+texture_filter = 1
+script = ExtResource("4_particles")
+sprite_frames = SubResource("SpriteFrames_splash")
+amount = 2
+emission_radius = 3.0
+direction = 90.0
+spread = 8.0
+angles = PackedFloat32Array()
+speed_min = 160.0
+speed_max = 220.0
+damping = 120.0
+scale_min = 0.6
+scale_max = 0.9
+speed_scale_min = 0.9
+speed_scale_max = 1.2
+random_flip = true
+
+[node name="JetTrail" type="Node2D" parent="."]
+texture_filter = 1
+script = ExtResource("4_particles")
+sprite_frames = SubResource("SpriteFrames_splash")
+amount = 1
+emission_radius = 2.0
+direction = 90.0
+spread = 10.0
+angles = PackedFloat32Array()
+speed_min = 20.0
+speed_max = 50.0
+damping = 60.0
+scale_min = 0.5
+scale_max = 0.8
+speed_scale_min = 0.9
+speed_scale_max = 1.2
+random_flip = true

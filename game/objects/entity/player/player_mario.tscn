@@ -9,10 +9,6 @@
 atlas = ExtResource("2_xiw3k")
 region = Rect2(8, 8, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xiw3k"]
-atlas = ExtResource("2_xiw3k")
-region = Rect2(11.091644, 10.381216, 41.81671, 43.237564)
-
 [node name="PlayerMario" type="Node2D" unique_id=2091854056 node_paths=PackedStringArray("game_root", "editor_root")]
 script = ExtResource("1_object")
 id = &"player_mario"
@@ -20,8 +16,8 @@ display_name = "Mario"
 icon = SubResource("IconAtlas")
 category = &"Entity"
 group = &"Player"
-unique = true
 order = 900
+unique = true
 flags = 21
 game_root = NodePath("Game")
 editor_root = NodePath("Editor")

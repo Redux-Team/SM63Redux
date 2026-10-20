@@ -77,7 +77,7 @@ var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "follow_") var follow_root: bool = false:
 	set(f):
 		follow_root = f
-		if f and follow_origin == Vector2.ZERO:
+		if f and follow_origin == Vector2.ZERO and is_node_ready():
 			follow_origin = position
 		_sync_processing()
 @export_subgroup("Animation", "follow_")
@@ -91,6 +91,13 @@ var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
 @export var follow_variant: StringName:
 	set(v):
 		follow_variant = v
+		_follow_root_sprite()
+@export var follow_hide_missing: bool = false
+@export var follow_offset: bool = false
+@export var follow_free_animations: Array[StringName] = []
+@export var follow_shown: bool = true:
+	set(s):
+		follow_shown = s
 		_follow_root_sprite()
 @export_subgroup("Pose", "follow_")
 ## The authored base position that recorded poses are applied on top of.
@@ -222,6 +229,7 @@ func _ready() -> void:
 	
 	_follow_applied = position
 	_follow_applied_rotation = rotation_degrees
+	_follow_neutral.in_front = not show_behind_parent
 	_sync_processing()
 
 
@@ -258,12 +266,24 @@ func _follow_root_sprite() -> void:
 		return
 	
 	var pose: SubspritePose = get_pose(StringName(root.current_animation), root.current_frame)
-	var wanted: StringName = follow_overrides.get(StringName(root.current_animation), follow_default)
+	var root_animation: StringName = StringName(root.current_animation)
+	var wanted: StringName = follow_overrides.get(root_animation, root_animation if follow_default.is_empty() else follow_default)
 	if pose and not pose.animation.is_empty():
 		wanted = pose.animation
 	wanted = _variant_of(wanted)
+	var has_wanted: bool = diffuse_frames != null and diffuse_frames.has_animation(wanted)
+	if not Engine.is_editor_hint() and (not follow_shown or (follow_hide_missing and not has_wanted)):
+		visible = false
+		return
+	
 	if diffuse_frames and diffuse_frames.has_animation(wanted) and current_animation != wanted:
 		current_animation = wanted
+	
+	var free: bool = follow_free_animations.has(StringName(current_animation))
+	if free and not playing:
+		play()
+	elif not free and playing:
+		stop()
 	
 	if not playing and diffuse_frames and diffuse_frames.has_animation(current_animation):
 		var count: int = diffuse_frames.get_frame_count(current_animation)
@@ -349,6 +369,8 @@ func _apply_pose(root: SmartSprite2D) -> void:
 	show_behind_parent = not pose.in_front
 	rotation_degrees = pose.rotation_degrees * mirror
 	position = Vector2((follow_origin.x + pose.offset.x) * mirror, follow_origin.y + pose.offset.y)
+	if follow_offset:
+		position += root.offset
 	_follow_applied = position
 	_follow_applied_rotation = rotation_degrees
 
@@ -372,7 +394,7 @@ func _set(property: StringName, value: Variant) -> bool:
 			var original_offset: Vector2 = subsprite_initial_offsets.get(subsprite)
 			
 			subsprite.position.x = original_offset.x * (-1 if value else 1)
-	# Subsprite vertical handling 
+	# Subsprite vertical handling
 	if property == "flip_v":
 		for subsprite: SmartSprite2D in subsprites:
 			subsprite.flip_v = value
@@ -533,7 +555,7 @@ func _update_preview() -> void:
 		return
 	texture = null
 	match preview:
-		COMPOSITE: 
+		COMPOSITE:
 			texture = canvas_texture
 			var diff: Texture2D = canvas_texture.diffuse_texture
 			if diff and diff is not CompressedTexture2D:

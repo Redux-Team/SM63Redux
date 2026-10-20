@@ -28,7 +28,8 @@ func _tick(_delta: float) -> void:
 		return
 	
 	_cut = true
-	player.velocity.y *= _jump.cut_multiplier
+	if player.velocity.y >= -player.get_jump_speed(_jump.strength):
+		player.velocity.y *= _jump.cut_multiplier
 
 
 func _exit() -> void:

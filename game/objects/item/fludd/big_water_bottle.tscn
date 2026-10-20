@@ -1,29 +1,36 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dre5u1x1smhlk"]
 
-[ext_resource type="Script" path="res://game/object/game_object.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/textures/item/fludd/water_bottle_big.png" id="2"]
-[ext_resource type="PackedScene" path="res://game/props/water_bottle/big_water_bottle.tscn" id="3"]
-[ext_resource type="Script" path="res://game/object/snapshot_view.gd" id="4"]
+[ext_resource type="Script" uid="uid://tyu7kjo0r4x6" path="res://game/object/game_object.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cwf68h6bb26lc" path="res://assets/textures/item/fludd/water_bottle_big.png" id="2"]
+[ext_resource type="PackedScene" uid="uid://up0h7h2731q4" path="res://game/props/water_bottle/big_water_bottle.tscn" id="3"]
+[ext_resource type="Script" uid="uid://dy0tps7nno80h" path="res://game/object/snapshot_view.gd" id="4"]
+[ext_resource type="Script" uid="uid://doxs57rilwfdg" path="res://game/object/respawnable_component.gd" id="4_s2g0v"]
 
 [sub_resource type="AtlasTexture" id="IconAtlas"]
 atlas = ExtResource("2")
 region = Rect2(-12, -9, 48, 48)
 
-[node name="BigWaterBottle" type="Node2D" node_paths=PackedStringArray("game_root", "editor_root")]
+[node name="BigWaterBottle" type="Node2D" unique_id=1053039116 node_paths=PackedStringArray("game_root", "editor_root")]
 script = ExtResource("1")
 id = &"big_water_bottle"
 display_name = "Big Water Bottle"
+icon = SubResource("IconAtlas")
 category = &"Item"
 group = &"FLUDD"
 order = 20
 flags = 127
-icon = SubResource("IconAtlas")
 game_root = NodePath("Game")
 editor_root = NodePath("Editor")
 
-[node name="Game" parent="." instance=ExtResource("3")]
+[node name="Game" parent="." unique_id=1484851635 instance=ExtResource("3")]
 
-[node name="Editor" type="Node2D" parent="." node_paths=PackedStringArray("source")]
+[node name="RespawnableComponent" type="Node" parent="Game" unique_id=155541845]
+script = ExtResource("4_s2g0v")
+countdown = 60.0
+despawn_off_screen = false
+metadata/_custom_type_script = "uid://doxs57rilwfdg"
+
+[node name="Editor" type="Node2D" parent="." unique_id=1687449643 node_paths=PackedStringArray("source")]
 script = ExtResource("4")
 source = NodePath("../Game")
 prefer_icon = false
