@@ -25,7 +25,7 @@ vec3 swap_palette(vec3 rgb) {
 	if (palette_index <= 0 || float(palette_index) >= pal_size.y) {
 		return rgb;
 	}
-
+	
 	float base_row = 0.5 / pal_size.y;
 	float target_row = (float(palette_index) + 0.5) / pal_size.y;
 	float best_dist = 0.0001;

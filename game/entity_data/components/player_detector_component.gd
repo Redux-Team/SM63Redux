@@ -26,7 +26,7 @@ func _physics_process(_delta: float) -> void:
 		forget()
 	elif _hidden and _hidden.is_detectable():
 		_detect(_hidden)
-
+	
 	set_physics_process(target != null or _hidden != null)
 
 
@@ -44,7 +44,7 @@ func forget() -> void:
 func _detect(player: Player) -> void:
 	if not enabled or entity.machine.get_state_name() in ignored_states:
 		return
-
+	
 	_hidden = null
 	target = player
 	entity.sprite.flip_h = target.global_position.x < entity.global_position.x
@@ -57,7 +57,7 @@ func _on_detection_area_entered(area: Area2D) -> void:
 	var player: Player = area.owner as Player
 	if not enabled or not area.has_meta("player") or not player:
 		return
-
+	
 	if player.is_detectable():
 		_detect(player)
 	else:

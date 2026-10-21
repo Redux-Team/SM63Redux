@@ -51,7 +51,7 @@ func _on_empty_pressed(world_position: Vector2, screen: Vector2) -> bool:
 	if not _find_edge(world_position):
 		return false
 	
-	_press_world = world_position	
+	_press_world = world_position
 	var rings: Array[PackedVector2Array] = _shape().get_rings()
 	var toplines: Array[Dictionary] = _shape().get_toplines()
 	var points: PackedVector2Array = rings.get(_edge.x)

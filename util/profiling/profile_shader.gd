@@ -15,7 +15,7 @@ const _REFERENCE_MSEC: float = 4.8
 static func run() -> float:
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	
-	if tree == null:
+	if tree == null or DisplayServer.get_name() == "headless":
 		return 0.0
 	
 	await tree.process_frame

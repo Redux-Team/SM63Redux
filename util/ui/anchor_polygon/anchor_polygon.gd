@@ -10,7 +10,7 @@ class_name AnchorPolygon extends Control
 @export var ignored_anchors: Array[VertexAnchor]
 
 
-# Should redraw on: 
+# Should redraw on:
 #	this node resized (done automatically by Godot)
 #	any child moved (done in VertexAnchor script)
 #	child node order changed (done automatically by Godot)

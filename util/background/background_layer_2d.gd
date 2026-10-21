@@ -44,7 +44,7 @@ const ANCHOR_RATIOS: Dictionary[int, Vector2] = {
 @export_group("Layer 2D")
 @export_subgroup("Texture")
 @export var texture: Texture2D:
-	set(t): 
+	set(t):
 		texture = t
 		emit_changed()
 @export var stretch_mode: StretchMode = StretchMode.NATIVE:
@@ -56,7 +56,7 @@ const ANCHOR_RATIOS: Dictionary[int, Vector2] = {
 		texture_scale = ts
 		emit_changed()
 @export var flip_h: bool = false:
-	set(fh): 
+	set(fh):
 		flip_h = fh
 		emit_changed()
 @export var flip_v: bool = false:

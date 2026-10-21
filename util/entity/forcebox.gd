@@ -23,12 +23,12 @@ enum AxisRestriction {
 @export var axis_restriction: AxisRestriction = AxisRestriction.BOTH
 ## Base force multiplier applied to the target entity's velocity.
 @export var force_magnitude: float = 1200.0
-## Maps force intensity precisely over distance. 
+## Maps force intensity precisely over distance.
 ## Left side (0.0) represents the absolute center; Right side (1.0) represents the outer bounds.
 @export var force_curve: Curve
 
 @export_group("Fixed Force Override")
-## If enabled, ignores spatial center points and applies a constant structural vector 
+## If enabled, ignores spatial center points and applies a constant structural vector
 ## (e.g., behaving like a wind tunnel, zone-wide conveyer belt, or fan).
 @export var use_fixed_vector: bool = false
 @export var fixed_vector: Vector2 = Vector2.ZERO

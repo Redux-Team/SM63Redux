@@ -21,6 +21,7 @@ static func run_test() -> void:
 		assert(LevelFile.read(path).to_dict() == dict)
 		DirAccess.remove_absolute(path)
 	
+	UnitTester.expect_error("unsupported level version")
 	assert(LevelData.from_dict({"version": 1}) == null)
 	
 	block.values.clear()

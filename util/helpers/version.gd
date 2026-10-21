@@ -63,7 +63,7 @@ static func is_string_valid(version_string: String) -> bool:
 ## [code]-1[/code] means this version is [b]older[/b] than the compared one, [br]
 ## [code]0[/code] means this version is [b]the same[/b] as the compared one, [br]
 ## [code]1[/code] means this version is [b]newer[/b] than the compared one. [br][br]
-## [b]Note:[/b] Partial versions will treat its incomplete parts like a wildcard, 
+## [b]Note:[/b] Partial versions will treat its incomplete parts like a wildcard,
 ## so [code]0.2[/code] will match and return [code]0[/code] with [i]any[/i] patch number or
 ## branch under [code]0.2.x[/code]. [br][br]
 ## For more explicit and semantically-safe comparisons, see [method is_older_than],
@@ -119,8 +119,8 @@ func as_string_expand() -> String:
 	var version_string: String = ""
 	version_string += str(major_version) if major_version >= 0 else "x"
 	version_string += ("." + str(minor_version)) if minor_version >= 0 else ".x"
-	version_string += ("." + str(patch_number)) if minor_version >= 0 else ".x"
-	version_string += ("-" + str(branch)) if branch >= 0 else ".x"
+	version_string += ("." + str(patch_number)) if patch_number >= 0 else ".x"
+	version_string += ("-" + str(branch)) if branch >= 0 else "-x"
 	version_string += ("." + str(branch_version)) if branch_version >= 0 else ".x"
 	return version_string
 

@@ -15,9 +15,14 @@ static func event_to_string(event: InputEvent) -> String:
 
 static func string_to_event(string: String) -> InputEvent:
 	var parts: PackedStringArray = string.split(":", true, 1)
+	if parts.size() < 2:
+		return null
+	
 	var prefix: String = parts.get(0)
 	if prefix == "a":
 		var axis_parts: PackedStringArray = parts.get(1).split(",", true, 1)
+		if axis_parts.size() < 2:
+			return null
 		var event: InputEventJoypadMotion = InputEventJoypadMotion.new()
 		event.axis = axis_parts.get(0).to_int() as JoyAxis
 		event.axis_value = axis_parts.get(1).to_int()

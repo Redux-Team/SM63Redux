@@ -48,7 +48,10 @@ func sync() -> void:
 	
 	if polygon:
 		polygon.disabled = mode != CollisionMode.SOLID or pieces.is_empty()
-		_fill_polygons(polygon, pieces if mode == CollisionMode.SOLID else [] as Array[PackedVector2Array])
+		if mode == CollisionMode.SOLID:
+			_fill_polygons(polygon, pieces)
+		else:
+			polygon.polygon = PackedVector2Array()
 	
 	if mode == CollisionMode.SEMISOLID and body:
 		for segment: PackedVector2Array in shape.get_topline_segments():

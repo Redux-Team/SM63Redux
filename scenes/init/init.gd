@@ -9,9 +9,8 @@ func _ready() -> void:
 		.set_fade() \
 		.set_out_duration(0.0) \
 		.set_loading_delay(0.0) \
-		.add_threaded_task(_run_debug_tools) \
 		.load(_profile) \
-		.add_threaded_task(ObjectRegistry.scan) \
+		.add_threaded_task(_scan_objects) \
 		.set_destination("uid://dp3ocrpop234v") \
 		.done()
 
@@ -27,6 +26,11 @@ func _run_debug_tools() -> void:
 	
 	if debug_overlay:
 		Singleton.add_child.call_deferred(debug_overlay.instantiate())
+
+
+func _scan_objects() -> void:
+	ObjectRegistry.scan()
+	_run_debug_tools()
 
 
 func _profile() -> void:

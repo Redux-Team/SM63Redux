@@ -1,6 +1,6 @@
 @tool
 ## A vertex for an [AnchorPolygon].
-## Only the [member Control.position] (top-left corner) is used to 
+## Only the [member Control.position] (top-left corner) is used to
 ## determine the polygon vertex position, [member Control.size] has no effect.
 class_name VertexAnchor extends Control
 
@@ -20,7 +20,6 @@ class_name VertexAnchor extends Control
 	set(ro):
 		ratio_offset = ro
 		ratio = ratio
-
 
 
 func _ready() -> void:

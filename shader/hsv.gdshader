@@ -21,24 +21,24 @@ vec3 rgb_to_hsv(vec3 color) {
 		}
 		h /= 6.0;
 	}
-			
+	
 	float s = (max_c == 0.0) ? 0.0 : (delta / max_c);
 	float v = max_c;
-			
+	
 	return vec3(h, s, v);
 }
-		
+
 vec3 hsv_to_rgb(vec3 hsv) {
 	float h = hsv.x * 6.0;
 	float s = hsv.y;
 	float v = hsv.z;
-			
+	
 	int i = int(floor(h));
 	float f = h - float(i);
 	float p = v * (1.0 - s);
 	float q = v * (1.0 - s * f);
 	float t = v * (1.0 - s * (1.0 - f));
-			
+	
 	if (i == 0) return vec3(v, t, p);
 	if (i == 1) return vec3(q, v, p);
 	if (i == 2) return vec3(p, v, t);
@@ -46,16 +46,16 @@ vec3 hsv_to_rgb(vec3 hsv) {
 	if (i == 4) return vec3(t, p, v);
 	return vec3(v, p, q);
 }
-		
+
 void fragment() {
 	float a = COLOR.a;
 	vec4 src_color = texture(TEXTURE, UV);
 	vec3 hsv = rgb_to_hsv(src_color.rgb);
-			
+	
 	hsv.x = mod(hsv.x + hue_shift, 1.0);
 	hsv.y = clamp(hsv.y * saturation_scale, 0.0, 1.0);
 	hsv.z = clamp(hsv.z * value_scale, 0.0, 1.0);
-			
+	
 	vec3 final_color = hsv_to_rgb(hsv);
 	COLOR = vec4(final_color, src_color.a) * modulate_color;
 	COLOR.a = a;

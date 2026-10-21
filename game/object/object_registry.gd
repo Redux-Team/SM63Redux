@@ -133,19 +133,20 @@ class Entry:
 	func _init(scene_path: String, packed: PackedScene, definition: Dictionary) -> void:
 		path = scene_path
 		scene = packed
-		var script: Script = definition.get(&"script")
-		id = _read(definition, script, &"id")
-		display_name = _read(definition, script, &"display_name")
-		icon = _read(definition, script, &"icon")
-		category = _read(definition, script, &"category")
-		group = _read(definition, script, &"group")
-		biome = _read(definition, script, &"biome")
-		order = _read(definition, script, &"order")
-		placement = _read(definition, script, &"placement")
-		browsable = _read(definition, script, &"browsable")
-		unique = _read(definition, script, &"unique")
-		flags = _read(definition, script, &"flags")
-		icon_tint = _read(definition, script, &"icon_tint")
+		var defaults: Object = (definition.get(&"script") as Script).new()
+		id = _read(definition, defaults, &"id")
+		display_name = _read(definition, defaults, &"display_name")
+		icon = _read(definition, defaults, &"icon")
+		category = _read(definition, defaults, &"category")
+		group = _read(definition, defaults, &"group")
+		biome = _read(definition, defaults, &"biome")
+		order = _read(definition, defaults, &"order")
+		placement = _read(definition, defaults, &"placement")
+		browsable = _read(definition, defaults, &"browsable")
+		unique = _read(definition, defaults, &"unique")
+		flags = _read(definition, defaults, &"flags")
+		icon_tint = _read(definition, defaults, &"icon_tint")
+		defaults.free()
 		if display_name.is_empty():
 			display_name = String(id).capitalize()
 	
@@ -197,6 +198,9 @@ class Entry:
 	
 	static func _tint(texture: Texture2D, color: Color) -> Texture2D:
 		var image: Image = texture.get_image()
+		if image == null:
+			return texture
+		
 		image.convert(Image.FORMAT_RGBA8)
 		for y: int in image.get_height():
 			for x: int in image.get_width():
@@ -205,8 +209,5 @@ class Entry:
 		return ImageTexture.create_from_image(image)
 	
 	
-	static func _read(definition: Dictionary, script: Script, property: StringName) -> Variant:
-		if definition.has(property):
-			return definition.get(property)
-		
-		return script.get_property_default_value(property)
+	static func _read(definition: Dictionary, defaults: Object, property: StringName) -> Variant:
+		return definition.get(property, defaults.get(property))
