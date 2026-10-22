@@ -1,0 +1,108 @@
+# this one will come in super clutch- automatically builds for all primary platforms in order to test PRs a bit better
+# todo: see if we can hook this up to a webserver somehow to be able to test PRs in the browser right away
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+
+jobs:
+  verify:
+    name: Verify version
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check the tag matches the project version
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version="$(sed -n 's/^config\/version="\(.*\)"$/\1/p' project.godot)"
+          if [ "v$version" != "$TAG" ]; then
+            echo "::error file=project.godot::Tag $TAG does not match application/config/version ($version)."
+            exit 1
+          fi
+
+  test:
+    name: Test
+    needs: verify
+    uses: ./.github/workflows/test.yml
+
+  export:
+    name: Export
+    needs: test
+    uses: ./.github/workflows/export.yml
+    with:
+      label: ${{ github.ref_name }}
+      retention-days: 3
+
+  github:
+    name: GitHub release
+    needs: export
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Download builds
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: SM63Redux-*
+          path: dist
+          merge-multiple: true
+
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          flags=(--draft --verify-tag --generate-notes --title "Super Mario 63 Redux $TAG")
+          if [[ "$TAG" == *-* ]]; then
+            flags+=(--prerelease)
+          fi
+          gh release create "$TAG" dist/* --repo "$GITHUB_REPOSITORY" "${flags[@]}"
+
+  itch:
+    name: itch.io
+    needs: export
+    if: vars.ITCH_PROJECT != '' && !contains(github.ref_name, '-')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Download builds
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: SM63Redux-*
+          path: dist
+          merge-multiple: true
+
+      - name: Install buttler
+        run: |
+          curl -fsSL -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          unzip -q butler.zip -d "$RUNNER_TEMP/butler"
+          echo "$RUNNER_TEMP/butler" >> "$GITHUB_PATH"
+
+      - name: Push to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+          ITCH_PROJECT: ${{ vars.ITCH_PROJECT }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          for platform in linux windows macos web; do
+            mkdir -p "push/$platform"
+            case "$platform" in
+              linux) tar -xzf "dist/SM63Redux-$TAG-linux.tar.gz" -C "push/$platform" ;;
+              *) unzip -q "dist/SM63Redux-$TAG-$platform.zip" -d "push/$platform" ;;
+            esac
+            butler push "push/$platform" "$ITCH_PROJECT:$platform" --userversion "${TAG#v}"
+          done

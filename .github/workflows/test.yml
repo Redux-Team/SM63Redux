@@ -1,0 +1,25 @@
+name: Test
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  # peak
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Godot
+        uses: ./.github/actions/setup-godot
+
+      - name: Run unit tests
+        run: timeout 900 godot --headless --path . --audio-driver Dummy --fixed-fps 60 -s res://dev/unit_tests/_cli.gd -- --verbose

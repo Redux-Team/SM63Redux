@@ -1,0 +1,49 @@
+// really really useful: https://docs.renovatebot.com/key-concepts/how-renovate-works/
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["helpers:pinGitHubActionDigests"],
+  "enabledManagers": ["github-actions", "custom.regex"],
+  "dependencyDashboard": false,
+  "labels": ["dependencies"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Godot version installed by the setup-godot action",
+      "managerFilePatterns": ["/^\\.github/actions/setup-godot/action\\.yml$/"],
+      "matchStrings": ["# renovate: godot\\s+default: \"(?<currentValue>[^\"]+)\""],
+      "depNameTemplate": "godotengine/godot-builds",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^(?<version>\\d+\\.\\d+(\\.\\d+)?)-stable$"
+    },
+    {
+      "customType": "regex",
+      "description": "actionlint version installed by the lint job",
+      "managerFilePatterns": ["/^\\.github/workflows/ci\\.yml$/"],
+      "matchStrings": ["# renovate: actionlint\\s+ACTIONLINT_VERSION: (?<currentValue>\\S+)"],
+      "depNameTemplate": "rhysd/actionlint",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.+)$"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Actions and tools: one grouped PR a week, only for releases at least 3 days old",
+      "matchDepNames": ["!godotengine/godot-builds"],
+      "groupName": "CI dependencies",
+      "schedule": ["* 0-6 * * 1"],
+      "minimumReleaseAge": "3 days",
+      "internalChecksFilter": "strict"
+    },
+    {
+      "matchDepNames": ["godotengine/godot-builds"],
+      "separateMinorPatch": true,
+      "commitMessageTopic": "Godot"
+    },
+    {
+      "description": "Godot: only patch releases; moving to a new minor is done by hand with the project upgrade",
+      "matchDepNames": ["godotengine/godot-builds"],
+      "matchUpdateTypes": ["major", "minor"],
+      "enabled": false
+    }
+  ]
+}

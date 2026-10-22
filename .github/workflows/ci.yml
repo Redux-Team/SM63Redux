@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+    paths-ignore: ["**.md", "LICENSE*"]
+  pull_request:
+    paths-ignore: ["**.md", "LICENSE*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Okay DONT remove this, this makes sure that only one task is ran per-pr at a time instead of having parallel
+# ones occur when a pr is updated
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, no need to really change this in the future i think
+        with:
+          persist-credentials: false
+
+      # this should hopefully kill like 80% of the random import error headaches when running the proj on different devices
+      - name: Check every script has a committed .uid
+        run: |
+          missing="$(comm -23 <(git ls-files '*.gd' '*.gdshader' | sed 's/$/.uid/' | sort) <(git ls-files '*.uid' | sort))"
+          if [ -n "$missing" ]; then
+            while read -r uid; do
+              echo "::error file=${uid%.uid}::Missing ${uid}. Open the project in Godot to generate it, then commit it."
+            done <<< "$missing"
+            exit 1
+          fi
+
+      - name: Lint workflows
+        env:
+          # renovate: actionlint
+          ACTIONLINT_VERSION: 1.7.12
+          FORMAT: '{{range $err := .}}::error file={{$err.Filepath}},line={{$err.Line}},col={{$err.Column}}::{{$err.Message}}\n{{end}}'
+        run: |
+          # im a bit iffy on depending on something third-party like this but it works pretty damn good
+          name="actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          release="https://github.com/rhysd/actionlint/releases/download/v$ACTIONLINT_VERSION"
+          cd "$RUNNER_TEMP"
+          curl -fsSLO --retry 3 "$release/$name"
+          curl -fsSLO --retry 3 "$release/actionlint_${ACTIONLINT_VERSION}_checksums.txt"
+          grep "  $name$" "actionlint_${ACTIONLINT_VERSION}_checksums.txt" | sha256sum --check --strict
+          tar -xzf "$name" actionlint
+          cd "$GITHUB_WORKSPACE"
+          "$RUNNER_TEMP/actionlint" -format "$FORMAT"
+
+  test:
+    name: Test
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    uses: ./.github/workflows/test.yml
+
+  export:
+    name: Export
+    needs: [lint, test]
+    uses: ./.github/workflows/export.yml

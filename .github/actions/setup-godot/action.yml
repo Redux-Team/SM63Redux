@@ -1,0 +1,104 @@
+# todo: clean this up a bit better and remove the redundant stuff from earlier testing
+name: Set up Godot
+description: Installs godot and imports the project
+
+inputs:
+  version:
+    description: Current godot version
+    # renovate: godot
+    default: "4.7.2"
+  templates:
+    description: The export template files to install from the official templates archive
+    default: ""
+  import:
+    description: Whether to import the project after installing
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - name: Check the project targets this engine version
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+        TEMPLATES: ${{ inputs.templates }}
+      run: |
+        minor="$(cut -d. -f1,2 <<< "$VERSION")"
+        if ! grep -q "^config/features=PackedStringArray(\"$minor\"" project.godot; then
+          echo "::error file=project.godot::project.godot does not target Godot $minor, but CI installs $VERSION. Update the version in .github/actions/setup-godot/action.yml."
+          exit 1
+        fi
+        echo "GODOT_DIR=$RUNNER_TOOL_CACHE/godot/$VERSION" >> "$GITHUB_ENV"
+        echo "GODOT_RELEASE=https://github.com/godotengine/godot-builds/releases/download/$VERSION-stable" >> "$GITHUB_ENV"
+        echo "GODOT_TEMPLATES_DIR=$HOME/.local/share/godot/export_templates/$VERSION.stable" >> "$GITHUB_ENV"
+        echo "GODOT_TEMPLATES_KEY=$(tr ' ' '\n' <<< "$TEMPLATES" | sort | sha256sum | cut -c1-16)" >> "$GITHUB_ENV"
+
+    - name: Restore Godot
+      id: godot-cache
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ env.GODOT_DIR }}
+        key: godot-${{ runner.os }}-${{ inputs.version }}
+
+    - name: Download Godot
+      if: steps.godot-cache.outputs.cache-hit != 'true'
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+      run: |
+        name="Godot_v$VERSION-stable_linux.x86_64"
+        cd "$RUNNER_TEMP"
+        curl -fsSLO --retry 3 "$GODOT_RELEASE/$name.zip"
+        curl -fsSLO --retry 3 "$GODOT_RELEASE/SHA512-SUMS.txt"
+        grep "  $name.zip$" SHA512-SUMS.txt | sha512sum --check --strict
+        mkdir -p "$GODOT_DIR"
+        unzip -q "$name.zip" -d "$GODOT_DIR"
+        mv "$GODOT_DIR/$name" "$GODOT_DIR/godot"
+        rm "$name.zip"
+
+    - name: Add Godot to PATH
+      shell: bash
+      run: |
+        echo "$GODOT_DIR" >> "$GITHUB_PATH"
+        "$GODOT_DIR/godot" --version
+
+    - name: Restore export templates
+      if: inputs.templates != ''
+      id: templates-cache
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ env.GODOT_TEMPLATES_DIR }}
+        key: godot-templates-${{ inputs.version }}-${{ env.GODOT_TEMPLATES_KEY }}
+
+    - name: Download export templates
+      if: inputs.templates != '' && steps.templates-cache.outputs.cache-hit != 'true'
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+        TEMPLATES: ${{ inputs.templates }}
+      run: |
+        name="Godot_v$VERSION-stable_export_templates.tpz"
+        cd "$RUNNER_TEMP"
+        curl -fsSLO --retry 3 "$GODOT_RELEASE/$name"
+        curl -fsSLO --retry 3 "$GODOT_RELEASE/SHA512-SUMS.txt"
+        grep "  $name$" SHA512-SUMS.txt | sha512sum --check --strict
+        files=(templates/version.txt)
+        for template in $TEMPLATES; do
+          files+=("templates/$template")
+        done
+        mkdir -p "$GODOT_TEMPLATES_DIR"
+        unzip -q -j "$name" "${files[@]}" -d "$GODOT_TEMPLATES_DIR"
+        rm "$name"
+
+    - name: Import project
+      if: inputs.import == 'true'
+      shell: bash
+      run: |
+        echo "::group::Cold import (builds the UID cache)"
+        timeout 600 godot --headless --path . --audio-driver Dummy --import || true
+        echo "::endgroup::"
+        timeout 600 godot --headless --path . --audio-driver Dummy --import 2>&1 | tee "$RUNNER_TEMP/import.log"
+        if grep -E '^(ERROR|SCRIPT ERROR)' "$RUNNER_TEMP/import.log" | grep -v 'still in use at exit'; then
+          echo "::error::The project import reported errors."
+          exit 1
+        fi

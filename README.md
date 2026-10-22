@@ -4,6 +4,9 @@
     <img src="meta/logo.png" width="400" alt="Super Mario 63 Redux logo">
   </a>
 </p>
+<p align="center">
+  <a href="https://github.com/Redux-Team/SM63Redux/actions/workflows/ci.yml"><img src="https://github.com/Redux-Team/SM63Redux/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+</p>
 
 ## Remake of Super Mario 63
 Super Mario 63 Redux is intended to be a full remake of the original [Super Mario 63 by Runouw](http://runouw.com/games/sm63/), aiming to improve upon the game's presentation and features, while retaining its core mechanics and charm.

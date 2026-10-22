@@ -1,0 +1,116 @@
+# todo: android and maybe ios? ios would likely only work locally on proper hardware though, so probably not worth it for the time being
+name: Export
+
+on:
+  workflow_call:
+    inputs:
+      label:
+        description: Label used in artifact names. Defaults to the short commit hash.
+        type: string
+        default: ""
+      retention-days:
+        description: How long to keep the exported builds.
+        type: number
+        default: 7
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    name: ${{ matrix.preset }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - preset: Linux
+            platform: linux
+            templates: linux_release.x86_64
+            output: build/linux/SM63Redux.x86_64
+          - preset: Windows
+            platform: windows
+            templates: windows_release_x86_64.exe windows_release_x86_64_console.exe
+            output: build/windows/SM63Redux.exe
+          - preset: macOS
+            platform: macos
+            templates: macos.zip
+            output: build/macos/SM63Redux.zip
+          - preset: Web
+            platform: web
+            templates: web_nothreads_release.zip
+            output: build/web/index.html
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Godot
+        uses: ./.github/actions/setup-godot
+        with:
+          templates: ${{ matrix.templates }}
+
+      - name: Stamp version
+        env:
+          LABEL: ${{ inputs.label }}
+        run: |
+          version="$(sed -n 's/^config\/version="\(.*\)"$/\1/p' project.godot)"
+          IFS=. read -r major minor patch _ <<< "$(grep -oE '^[0-9]+(\.[0-9]+){0,2}' <<< "$version")"
+          numeric="${major:-0}.${minor:-0}.${patch:-0}"
+          sed -i -E \
+            -e "s/^(application\/(file_version|product_version|version))=.*/\1=\"$numeric.0\"/" \
+            -e "s/^(application\/short_version)=.*/\1=\"$numeric\"/" \
+            export_presets.cfg
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+          echo "LABEL=${LABEL:-$(git rev-parse --short HEAD)}" >> "$GITHUB_ENV"
+
+      - name: Export ${{ matrix.preset }}
+        env:
+          PRESET: ${{ matrix.preset }}
+          OUTPUT: ${{ matrix.output }}
+        run: |
+          mkdir -p "$(dirname "$OUTPUT")"
+          timeout 900 godot --headless --path . --audio-driver Dummy --export-release "$PRESET" "$OUTPUT" 2>&1 | tee "$RUNNER_TEMP/export.log"
+          if grep -E '^(ERROR|SCRIPT ERROR)' "$RUNNER_TEMP/export.log" | grep -v 'still in use at exit'; then
+            echo "::error::Exporting $PRESET reported errors."
+            exit 1
+          fi
+          test -s "$OUTPUT"
+
+      - name: Boot the exported build
+        if: matrix.platform == 'linux'
+        env:
+          OUTPUT: ${{ matrix.output }}
+        run: |
+          timeout 120 "./$OUTPUT" --headless --audio-driver Dummy --quit-after 600 2>&1 | tee "$RUNNER_TEMP/boot.log"
+          if grep -E '^(ERROR|SCRIPT ERROR)' "$RUNNER_TEMP/boot.log" | grep -v -e 'still in use at exit' -e 'leaked at exit'; then
+            echo "::error::The exported build reported errors while booting."
+            exit 1
+          fi
+
+      - name: Package
+        env:
+          PLATFORM: ${{ matrix.platform }}
+          OUTPUT: ${{ matrix.output }}
+        run: |
+          mkdir -p dist
+          name="SM63Redux-$LABEL-$PLATFORM"
+          case "$PLATFORM" in
+            linux) tar -czf "dist/$name.tar.gz" -C "$(dirname "$OUTPUT")" . ;;
+            macos) cp "$OUTPUT" "dist/$name.zip" ;;
+            *) (cd "$(dirname "$OUTPUT")" && zip -qr "$GITHUB_WORKSPACE/dist/$name.zip" .) ;;
+          esac
+          echo "ARTIFACT=$name" >> "$GITHUB_ENV"
+          echo "**${{ matrix.preset }}**: \`$name\` ($(du -h dist/* | cut -f1))" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ${{ env.ARTIFACT }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: ${{ inputs.retention-days || 7 }}
+          compression-level: 0
