@@ -5,11 +5,13 @@ extends PlayerState
 @export var hitbox: HitBox
 @export_group("Rise")
 ## Upward speed set when spinning while falling.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rise_from_fall_speed: float = 35.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var rise_from_fall_speed: float = 35.0
 ## Upward speed added when spinning while rising.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rise_boost: float = 50.0
 ## Time gravity is suspended after an airborne spin starts.
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var gravity_suspend_time: float = 0.1
+@export_custom(PROPERTY_HINT_NONE, "suffix:s")
+var gravity_suspend_time: float = 0.1
 @export_group("Timing")
 ## Length of the fast spin before the slow loop takes over.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var fast_time: float = 0.5
@@ -86,6 +88,7 @@ func _get_speed_scale() -> float:
 
 func _play_slow_spin() -> void:
 	var sprite_frames: SpriteFrames = sprite.diffuse_frames
-	var fps: float = sprite.speed_scale * sprite_frames.get_animation_speed(sprite.current_animation)
+	var fps: float = \
+			sprite.speed_scale * sprite_frames.get_animation_speed(sprite.current_animation)
 	sprite.play_at_frame(slow_animation, sprite.current_frame)
 	sprite.speed_scale = fps / maxf(sprite_frames.get_animation_speed(slow_animation), 0.001)

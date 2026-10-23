@@ -1,13 +1,16 @@
 extends PlayerState
 
 ## Horizontal speed added away from the facing direction on takeoff.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var backward_speed: float = 280.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var backward_speed: float = 280.0
 ## Upward speed set on takeoff.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rise_speed: float = 392.5
 ## Downward speed that must be reached before a spin can interrupt the flip.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var spin_min_speed: float = 155.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var spin_min_speed: float = 155.0
 ## Downward speed at which the backflip turns into a fall.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var fall_min_speed: float = 0.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var fall_min_speed: float = 0.0
 
 
 func _enter() -> void:

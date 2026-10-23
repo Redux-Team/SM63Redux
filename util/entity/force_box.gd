@@ -13,7 +13,8 @@ enum AxisRestriction {
 }
 
 @export_group("Identity & Filtering")
-## Unique identifiers to categorize what group this ForceBox belongs to (e.g. "enemy", "hazard").
+## Unique identifiers to categorize what group this ForceBox belongs to (e.g.
+## "enemy", "hazard").
 @export var force_ids: Array[String] = []
 ## ForceBox IDs that this specific box will completely ignore.
 @export var ignored_force_ids: PackedStringArray = []
@@ -24,12 +25,13 @@ enum AxisRestriction {
 ## Base force multiplier applied to the target entity's velocity.
 @export var force_magnitude: float = 1200.0
 ## Maps force intensity precisely over distance.
-## Left side (0.0) represents the absolute center; Right side (1.0) represents the outer bounds.
+## Left side (0.0) represents the absolute center; Right side (1.0) represents
+## the outer bounds.
 @export var force_curve: Curve
 
 @export_group("Fixed Force Override")
-## If enabled, ignores spatial center points and applies a constant structural vector
-## (e.g., behaving like a wind tunnel, zone-wide conveyer belt, or fan).
+## If enabled, ignores spatial center points and applies a constant structural
+## vector (e.g., behaving like a wind tunnel, zone-wide conveyer belt, or fan).
 @export var use_fixed_vector: bool = false
 @export var fixed_vector: Vector2 = Vector2.ZERO
 
@@ -55,6 +57,23 @@ func _physics_process(delta: float) -> void:
 			continue
 		
 		_apply_continuous_force(other, delta)
+
+
+func enable() -> void:
+	for c: Node in get_children():
+		if c is CollisionShape2D or c is CollisionPolygon2D:
+			c.set_deferred(&"disabled", false)
+	set_deferred(&"monitoring", true)
+	set_deferred(&"monitorable", true)
+
+
+func disable() -> void:
+	_overlapping_boxes.clear()
+	for c: Node in get_children():
+		if c is CollisionShape2D or c is CollisionPolygon2D:
+			c.set_deferred(&"disabled", true)
+	set_deferred(&"monitoring", false)
+	set_deferred(&"monitorable", false)
 
 
 func _on_area_entered(area: Area2D) -> void:
@@ -125,20 +144,3 @@ func _get_max_radius() -> float:
 			elif shape is CapsuleShape2D:
 				return shape.height * 0.5
 	return 100.0
-
-
-func enable() -> void:
-	for c: Node in get_children():
-		if c is CollisionShape2D or c is CollisionPolygon2D:
-			c.set_deferred(&"disabled", false)
-	set_deferred(&"monitoring", true)
-	set_deferred(&"monitorable", true)
-
-
-func disable() -> void:
-	_overlapping_boxes.clear()
-	for c: Node in get_children():
-		if c is CollisionShape2D or c is CollisionPolygon2D:
-			c.set_deferred(&"disabled", true)
-	set_deferred(&"monitoring", false)
-	set_deferred(&"monitorable", false)

@@ -1,17 +1,51 @@
 static func run_test() -> void:
 	var samples: Array[ObjectData] = [
-		_sample(&"terrain_grass", {"outer": PackedVector2Array([Vector2(0, 0), Vector2(96, 0), Vector2(96, 96), Vector2(0, 96)]), "holes": [PackedVector2Array([Vector2(32, 32), Vector2(64, 32), Vector2(64, 64), Vector2(32, 64)])], "toplines": [Vector3i(0, 1, 1), Vector3i(1, 0, 0)]}),
-		_sample(&"terrain_color_solid", {"outer": PackedVector2Array([Vector2(0, 0), Vector2(64, -32), Vector2(64, 64)]), "holes": [], "toplines": []}),
-		_sample(&"water", {"outer": PackedVector2Array([Vector2(-50, -50), Vector2(50, -50), Vector2(50, 50), Vector2(-50, 50)]), "holes": [], "toplines": []}),
-		_sample(&"tall_mushroom", {"points": PackedVector2Array([Vector2(0, 0), Vector2(8, -40), Vector2(0, -80)])}),
-		_sample(&"wooden_platform", {"units": 3}),
-		_sample(&"spinning_block", {"size": Vector2(64, 64)}),
+		_sample(
+				&"terrain_grass",
+				{
+					"outer": PackedVector2Array(
+							[Vector2(0, 0), Vector2(96, 0), Vector2(96, 96), Vector2(0, 96)]
+					),
+					"holes": [
+						PackedVector2Array(
+								[Vector2(32, 32), Vector2(64, 32), Vector2(64, 64), Vector2(32, 64)]
+						),
+					],
+					"toplines": [Vector3i(0, 1, 1), Vector3i(1, 0, 0)],
+				},
+		),
+		_sample(
+				&"terrain_color_solid",
+				{
+					"outer": PackedVector2Array([Vector2(0, 0), Vector2(64, -32), Vector2(64, 64)]),
+					"holes": [],
+					"toplines": [],
+				},
+		),
+		_sample(
+				&"water",
+				{
+					"outer": PackedVector2Array(
+							[Vector2(-50, -50), Vector2(50, -50), Vector2(50, 50), Vector2(-50, 50)]
+					),
+					"holes": [],
+					"toplines": [],
+				},
+		),
+		_sample(
+				&"tall_mushroom",
+				{
+					"points": PackedVector2Array([Vector2(0, 0), Vector2(8, -40), Vector2(0, -80)]),
+				},
+		),
+		_sample(&"wooden_platform", { "units": 3 }),
+		_sample(&"spinning_block", { "size": Vector2(64, 64) }),
 		_sample(&"goomba", {}),
 	]
-	(samples.get(1) as ObjectData).values.set(&"color", Color.ORANGE)
-	(samples.get(1) as ObjectData).values.set(&"collision_mode", 0)
-	(samples.get(5) as ObjectData).values.set(&"b_wait_time", 3.5)
-	(samples.get(0) as ObjectData).rotation = 0.25
+	(samples[1] as ObjectData).values[&"color"] = Color.ORANGE
+	(samples[1] as ObjectData).values[&"collision_mode"] = 0
+	(samples[5] as ObjectData).values[&"b_wait_time"] = 3.5
+	(samples[0] as ObjectData).rotation = 0.25
 	
 	for context: GameObject.Context in [GameObject.Context.EDITOR, GameObject.Context.GAME]:
 		for data: ObjectData in samples:
@@ -26,7 +60,7 @@ static func run_test() -> void:
 			if object.has_flag(GameObject.Flag.ROTATABLE):
 				assert(is_equal_approx(saved.rotation, data.rotation))
 			for key: StringName in data.values:
-				assert(saved.values.get(key) == data.values.get(key))
+				assert(saved.values.get(key) == data.values[key])
 			for property: ObjectProperty in object.properties:
 				assert(saved.values.has(property.key))
 			var again: GameObject = ObjectRegistry.spawn(saved, context)
@@ -40,8 +74,8 @@ static func run_test() -> void:
 	var captured: Array[ObjectData] = (built.capture().layers.front() as LayerData).objects
 	assert(captured.size() == samples.size())
 	for i: int in samples.size():
-		assert((captured.get(i) as ObjectData).shape == (samples.get(i) as ObjectData).shape)
-		assert((captured.get(i) as ObjectData).uuid == (samples.get(i) as ObjectData).uuid)
+		assert((captured[i] as ObjectData).shape == (samples[i] as ObjectData).shape)
+		assert((captured[i] as ObjectData).uuid == (samples[i] as ObjectData).uuid)
 	built.free()
 
 

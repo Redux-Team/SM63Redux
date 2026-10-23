@@ -13,6 +13,42 @@ var _objects: Array[GameObject] = []
 var _signature: Array = []
 
 
+static func make_row(binding: PropertyBinding, default: Variant, icon: Texture2D) -> Control:
+	var widget: PropertyWidget = PropertyWidget.create(binding)
+	if widget == null or default == null:
+		return widget
+	
+	var row: HBoxContainer = HBoxContainer.new()
+	widget.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(widget)
+	var reset: TextureButton = TextureButton.new()
+	reset.texture_normal = icon
+	reset.ignore_texture_size = true
+	reset.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	reset.custom_minimum_size = Vector2(18.0, 18.0)
+	reset.focus_mode = Control.FOCUS_NONE
+	reset.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	reset.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	reset.pressed.connect(binding.set_value.bind(default))
+	Tooltip.set_text(reset, "Reset to Default", Tooltip.Placement.ABOVE)
+	row.add_child(reset)
+	var sync: Callable = func(value: Variant) -> void:
+		reset.modulate.a = 0.0 if value == default else 1.0
+		reset.mouse_filter = \
+				Control.MOUSE_FILTER_IGNORE if value == default else Control.MOUSE_FILTER_STOP
+	binding.changed.connect(sync)
+	sync.call(binding.get_value())
+	return row
+
+
+static func is_editable(property: ObjectProperty) -> bool:
+	return not property.hidden and property.type != ObjectProperty.Type.PACKED_VECTOR2
+
+
+static func _all_have(objects: Array[GameObject], flag: GameObject.Flag) -> bool:
+	return objects.all(func(object: GameObject) -> bool: return object.has_flag(flag))
+
+
 func _setup() -> void:
 	super()
 	editor.object_handler.selection.changed.connect(_on_selection_changed)
@@ -67,10 +103,14 @@ func _rebuild() -> void:
 			_add_section(String(section) if not section.is_empty() else "Properties")
 		
 		var key: StringName = property.key
-		_add(PropertyBinding.new(
-			func() -> Variant: return _objects.front().get_value(key),
-			func(value: Variant) -> void: editor.object_handler.set_values(_objects, key, value),
-			property.get_label(), property.to_info()), property.coerce(null))
+		var getter: Callable = func() -> Variant:
+			return _objects.front().get_value(key)
+		var setter: Callable = func(value: Variant) -> void:
+			editor.object_handler.set_values(_objects, key, value)
+		_add(
+				PropertyBinding.new(getter, setter, property.get_label(), property.to_info()),
+				property.coerce(null),
+		)
 
 
 func _refresh() -> void:
@@ -85,33 +125,6 @@ func _add(binding: PropertyBinding, default: Variant = null) -> void:
 		container.add_child(row)
 
 
-static func make_row(binding: PropertyBinding, default: Variant, icon: Texture2D) -> Control:
-	var widget: PropertyWidget = PropertyWidget.create(binding)
-	if widget == null or default == null:
-		return widget
-	
-	var row: HBoxContainer = HBoxContainer.new()
-	widget.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(widget)
-	var reset: TextureButton = TextureButton.new()
-	reset.texture_normal = icon
-	reset.ignore_texture_size = true
-	reset.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
-	reset.custom_minimum_size = Vector2(18.0, 18.0)
-	reset.focus_mode = Control.FOCUS_NONE
-	reset.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	reset.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	reset.pressed.connect(binding.set_value.bind(default))
-	Tooltip.set_text(reset, "Reset to Default", Tooltip.Placement.ABOVE)
-	row.add_child(reset)
-	var sync: Callable = func(value: Variant) -> void:
-		reset.modulate.a = 0.0 if value == default else 1.0
-		reset.mouse_filter = Control.MOUSE_FILTER_IGNORE if value == default else Control.MOUSE_FILTER_STOP
-	binding.changed.connect(sync)
-	sync.call(binding.get_value())
-	return row
-
-
 func _add_section(text: String) -> void:
 	var header: Label = section_scene.instantiate()
 	header.text = text
@@ -122,36 +135,71 @@ func _signature_of(objects: Array[GameObject]) -> Array:
 	if objects.is_empty():
 		return []
 	
-	var signature: Array = [objects.all(func(object: GameObject) -> bool: return object.inspect_transform), objects.size() == 1 and objects.front().has_flag(GameObject.Flag.MOVABLE), _all_have(objects, GameObject.Flag.ROTATABLE), _all_have(objects, GameObject.Flag.SCALABLE)]
+	var transformable: bool = objects.all(
+			func(object: GameObject) -> bool:
+				return object.inspect_transform
+	)
+	var signature: Array = [
+		transformable,
+		(objects.size() == 1 and objects.front().has_flag(GameObject.Flag.MOVABLE)),
+		_all_have(objects, GameObject.Flag.ROTATABLE),
+		_all_have(objects, GameObject.Flag.SCALABLE),
+	]
 	for property: ObjectProperty in _get_shared_properties(objects):
 		signature.append_array([property.key, property.to_info(), property.coerce(null)])
 	
 	return signature
 
 
-static func _all_have(objects: Array[GameObject], flag: GameObject.Flag) -> bool:
-	return objects.all(func(object: GameObject) -> bool: return object.has_flag(flag))
-
-
 func _add_transform(objects: Array[GameObject]) -> void:
 	_add_section(String(TRANSFORM_SECTION))
 	if objects.size() == 1 and objects.front().has_flag(GameObject.Flag.MOVABLE):
-		_add(PropertyBinding.new(
-			func() -> Variant: return _objects.front().position,
-			func(value: Variant) -> void: _edit_transforms(_objects, func(object: GameObject) -> void: object.position = value),
-			"Position", {"type": TYPE_VECTOR2, "widget": &"vector2_range", "step": 1.0}))
+		var getter: Callable = func() -> Variant:
+			return _objects.front().position
+		var setter: Callable = func(value: Variant) -> void:
+			_edit_transforms(_objects, func(object: GameObject) -> void: object.position = value)
+		_add(
+				PropertyBinding.new(
+						getter,
+						setter,
+						"Position",
+						{
+							"type": TYPE_VECTOR2,
+							"widget": &"vector2_range",
+							"step": 1.0,
+						},
+				)
+		)
 	
 	if _all_have(objects, GameObject.Flag.ROTATABLE):
-		_add(PropertyBinding.new(
-			func() -> Variant: return _objects.front().rotation_degrees,
-			func(value: Variant) -> void: _edit_transforms(_objects, func(object: GameObject) -> void: object.rotation_degrees = value),
-			"Rotation", {"type": TYPE_FLOAT}))
+		var getter: Callable = func() -> Variant:
+			return _objects.front().rotation_degrees
+		var setter: Callable = func(value: Variant) -> void:
+			_edit_transforms(
+					_objects,
+					func(object: GameObject) -> void:
+						object.rotation_degrees = value
+			)
+		_add(PropertyBinding.new(getter, setter, "Rotation", { "type": TYPE_FLOAT }))
 	
 	if _all_have(objects, GameObject.Flag.SCALABLE):
-		_add(PropertyBinding.new(
-			func() -> Variant: return _objects.front().scale,
-			func(value: Variant) -> void: _edit_transforms(_objects, func(object: GameObject) -> void: object.scale = value),
-			"Scale", {"type": TYPE_VECTOR2, "widget": &"vector2_range", "hint_string": "0.25,4,0.05", "format": "%.2fx"}))
+		var getter: Callable = func() -> Variant:
+			return _objects.front().scale
+		var setter: Callable = func(value: Variant) -> void:
+			_edit_transforms(_objects, func(object: GameObject) -> void: object.scale = value)
+		_add(
+				PropertyBinding.new(
+						getter,
+						setter,
+						"Scale",
+						{
+							"type": TYPE_VECTOR2,
+							"widget": &"vector2_range",
+							"hint_string": "0.25,4,0.05",
+							"format": "%.2fx",
+						},
+				)
+		)
 
 
 func _edit_transforms(objects: Array[GameObject], edit: Callable) -> void:
@@ -159,11 +207,13 @@ func _edit_transforms(objects: Array[GameObject], edit: Callable) -> void:
 	for object: GameObject in objects:
 		edit.call(object)
 	
-	editor.object_handler.transform_objects(objects, before, LDObjectHandler.get_transforms(objects), "Edit Transform", true)
-
-
-static func is_editable(property: ObjectProperty) -> bool:
-	return not property.hidden and property.type != ObjectProperty.Type.PACKED_VECTOR2
+	editor.object_handler.transform_objects(
+			objects,
+			before,
+			LDObjectHandler.get_transforms(objects),
+			"Edit Transform",
+			true,
+	)
 
 
 func _get_shared_properties(objects: Array[GameObject]) -> Array[ObjectProperty]:
@@ -173,12 +223,19 @@ func _get_shared_properties(objects: Array[GameObject]) -> Array[ObjectProperty]
 		if not is_editable(property):
 			continue
 		
-		if objects.all(func(object: GameObject) -> bool: return object.get_object_property(property.key) != null):
+		if objects.all(
+				func(object: GameObject) -> bool:
+					return object.get_object_property(property.key) != null
+		):
 			shared.append(property)
 			if not order.has(property.group):
 				order.append(property.group)
 	
 	var sorted: Array[ObjectProperty] = []
 	for group: StringName in order:
-		sorted.append_array(shared.filter(func(property: ObjectProperty) -> bool: return property.group == group))
+		sorted.append_array(
+				shared.filter(
+						func(property: ObjectProperty) -> bool: return (property.group == group)
+				)
+		)
 	return sorted

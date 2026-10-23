@@ -12,21 +12,22 @@ extends LDComponent
 var _view: Transform2D
 
 
-@abstract func _tool_input(event: InputEvent, world_position: Vector2) -> bool
+func _process(_delta: float) -> void:
+	if handler == null or not is_active() or editor.level_handler.active_layer == null:
+		return
+	
+	var view: Transform2D = \
+			editor.level_handler.active_layer.get_objects_root().get_global_transform()
+	if view != _view:
+		_view = view
+		_view_changed()
 
 
 func is_active() -> bool:
 	return editor.tool_handler.active_tool == self
 
 
-func _process(_delta: float) -> void:
-	if handler == null or not is_active() or editor.level_handler.active_layer == null:
-		return
-	
-	var view: Transform2D = editor.level_handler.active_layer.get_objects_root().get_global_transform()
-	if view != _view:
-		_view = view
-		_view_changed()
+@abstract func _tool_input(event: InputEvent, world_position: Vector2) -> bool
 
 
 func _view_changed() -> void:

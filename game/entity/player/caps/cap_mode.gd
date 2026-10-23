@@ -7,8 +7,10 @@ extends Mode
 @export var material_exempt: Array[CanvasItem] = []
 @export_group("Blink")
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var blink_time: float = 4.0
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var blink_interval_start: float = 0.25
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var blink_interval_end: float = 0.05
+@export_custom(PROPERTY_HINT_NONE, "suffix:s")
+var blink_interval_start: float = 0.25
+@export_custom(PROPERTY_HINT_NONE, "suffix:s")
+var blink_interval_end: float = 0.05
 
 var player: Player
 
@@ -29,7 +31,11 @@ func _enter() -> void:
 func _tick(delta: float) -> void:
 	var remaining: float = duration - time
 	if is_timed() and blink_time > 0.0 and remaining <= blink_time:
-		_blink_phase += delta / lerpf(blink_interval_start, blink_interval_end, 1.0 - remaining / blink_time)
+		_blink_phase += delta / lerpf(
+				blink_interval_start,
+				blink_interval_end,
+				1.0 - remaining / blink_time,
+		)
 	
 	_set_look_shown(int(_blink_phase) % 2 == 0)
 	if is_timed() and time >= duration:
@@ -38,21 +44,6 @@ func _tick(delta: float) -> void:
 
 func _exit() -> void:
 	_set_look_shown(false)
-
-
-func _show_look(shown: bool) -> void:
-	if not material:
-		return
-	
-	var target: CanvasItem = material_target if material_target else player.sprite
-	for item: CanvasItem in material_exempt:
-		item.use_parent_material = not shown
-	
-	if shown:
-		_previous_material = target.material
-		target.material = material
-	elif target.material == material:
-		target.material = _previous_material
 
 
 func get_remaining_ratio() -> float:
@@ -122,6 +113,21 @@ func has_free_jump_chain() -> bool:
 
 func dive_keeps_fall_speed() -> bool:
 	return false
+
+
+func _show_look(shown: bool) -> void:
+	if not material:
+		return
+	
+	var target: CanvasItem = material_target if material_target else player.sprite
+	for item: CanvasItem in material_exempt:
+		item.use_parent_material = not shown
+	
+	if shown:
+		_previous_material = target.material
+		target.material = material
+	elif target.material == material:
+		target.material = _previous_material
 
 
 func _set_look_shown(shown: bool) -> void:

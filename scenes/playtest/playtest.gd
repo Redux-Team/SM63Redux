@@ -25,11 +25,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		return_to_editor()
 
 
-func _on_kickout() -> void:
-	await get_tree().create_timer(KICKOUT_DELAY).timeout
-	return_to_editor()
-
-
 func return_to_editor() -> void:
 	if _returning or Singleton.is_transitioning():
 		return
@@ -37,9 +32,16 @@ func return_to_editor() -> void:
 	_returning = true
 	GDSS.set_state(return_button, LAUNCHED_STATE)
 	await get_tree().create_timer(RELEASE_DELAY).timeout
-	Singleton.build_screen_transition() \
-		.set_center() \
-		.set_loading_delay(0.0) \
-		.load(level.dismantle) \
-		.set_swap(Singleton.editor_session.resume_or_open.bind(get_tree(), LEVEL_DESIGNER)) \
-		.done()
+	(
+			Singleton.build_screen_transition()
+			.set_center()
+			.set_loading_delay(0.0)
+			.load(level.dismantle)
+			.set_swap(Singleton.editor_session.resume_or_open.bind(get_tree(), LEVEL_DESIGNER))
+			.done()
+	)
+
+
+func _on_kickout() -> void:
+	await get_tree().create_timer(KICKOUT_DELAY).timeout
+	return_to_editor()

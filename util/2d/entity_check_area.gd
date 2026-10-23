@@ -16,39 +16,14 @@ func _ready() -> void:
 	area_exited.connect(_on_area_exited)
 
 
-func _on_area_entered(area: Area2D) -> void:
-	if not (area.has_meta(&"entity_region") and area.owner is Entity):
-		return
-	
-	var entity: Entity = area.owner as Entity
-	
-	_entities_inside.append(entity)
-	entity_entered.emit(entity)
-	
-	if entity is Player:
-		var player: Player = entity as Player
-		_players_inside.append(player)
-		player_entered.emit(player)
-
-
-func _on_area_exited(area: Area2D) -> void:
-	if not (area.has_meta(&"entity_region") and area.owner is Entity):
-		return
-	
-	var entity: Entity = area.owner as Entity
-	
-	_entities_inside.erase(entity)
-	
-	if entity is Player:
-		_players_inside.erase(entity as Player)
-
-
 func get_players() -> Array[Player]:
 	if not detectable_only:
 		return _players_inside
 	
 	var players: Array[Player] = []
-	players.assign(_players_inside.filter(func(player: Player) -> bool: return player.is_detectable()))
+	players.assign(
+			_players_inside.filter(func(player: Player) -> bool: return player.is_detectable())
+	)
 	return players
 
 
@@ -81,3 +56,30 @@ func disable() -> void:
 
 func enable() -> void:
 	set_deferred(&"monitoring", true)
+
+
+func _on_area_entered(area: Area2D) -> void:
+	if not (area.has_meta(&"entity_region") and area.owner is Entity):
+		return
+	
+	var entity: Entity = area.owner as Entity
+	
+	_entities_inside.append(entity)
+	entity_entered.emit(entity)
+	
+	if entity is Player:
+		var player: Player = entity as Player
+		_players_inside.append(player)
+		player_entered.emit(player)
+
+
+func _on_area_exited(area: Area2D) -> void:
+	if not (area.has_meta(&"entity_region") and area.owner is Entity):
+		return
+	
+	var entity: Entity = area.owner as Entity
+	
+	_entities_inside.erase(entity)
+	
+	if entity is Player:
+		_players_inside.erase(entity as Player)

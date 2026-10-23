@@ -23,7 +23,7 @@ func _ready() -> void:
 		mode.machine = self
 		mode.host = host
 		mode._bind()
-		_modes.set(mode.name, mode)
+		_modes[mode.name] = mode
 
 
 func select(mode_name: StringName) -> void:
@@ -71,7 +71,7 @@ func get_mode(mode_name: StringName) -> Mode:
 func get_modes() -> Array[Mode]:
 	var result: Array[Mode] = []
 	for mode_name: StringName in _modes:
-		result.append(_modes.get(mode_name))
+		result.append(_modes[mode_name])
 	
 	return result
 

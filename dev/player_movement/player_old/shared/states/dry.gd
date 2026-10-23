@@ -2,8 +2,14 @@ extends PlayerStateOld
 
 
 func _tick(delta: float) -> void:
-	if is_zero_approx(player.move_input) and not player.is_diving and not machine.is_active(&"Floorslide"):
-		var friction_component: FrictionComponent = player.get_component(FrictionComponent)
+	if (
+		is_zero_approx(player.move_input)
+		and not player.is_diving
+		and not machine.is_active(&"Floorslide")
+	):
+		var friction_component: FrictionComponent = player.get_component(
+			FrictionComponent
+		)
 		friction_component.apply(player.dry_friction)
 	
 	player.velocity.y = min(player.velocity.y, player.terminal_velocity_y)
@@ -28,5 +34,9 @@ func _update_jump_chain(delta: float) -> void:
 
 
 func _handle_ground_pound() -> void:
-	if not player.is_on_floor() and player.is_input_ground_pound and player.can_ground_pound:
+	if (
+		not player.is_on_floor()
+		and player.is_input_ground_pound
+		and player.can_ground_pound
+	):
 		machine.change_state(&"GroundPoundStart")

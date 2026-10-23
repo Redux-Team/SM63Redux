@@ -21,12 +21,19 @@ func _value(widget_value: Variant) -> void:
 
 func _event_text(event: InputEvent) -> String:
 	if event is InputEventKey:
-		return OS.get_keycode_string(DisplayServer.keyboard_get_keycode_from_physical((event as InputEventKey).physical_keycode))
+		return OS.get_keycode_string(
+				DisplayServer.keyboard_get_keycode_from_physical(
+						(event as InputEventKey).physical_keycode
+				)
+		)
 	if event is InputEventMouseButton:
 		return "Mouse %d" % (event as InputEventMouseButton).button_index
 	if event is InputEventJoypadButton:
 		return "Pad %d" % (event as InputEventJoypadButton).button_index
 	if event is InputEventJoypadMotion:
 		var motion: InputEventJoypadMotion = event as InputEventJoypadMotion
-		return "Axis %d%s" % [motion.axis, "+" if motion.axis_value > 0.0 else "-"]
+		return "Axis %d%s" % [
+			motion.axis,
+			"+" if motion.axis_value > 0.0 else "-",
+		]
 	return event.as_text()

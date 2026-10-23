@@ -23,4 +23,13 @@ func contains_point(local_point: Vector2) -> bool:
 
 func get_outlines() -> Array[PackedVector2Array]:
 	var rect: Rect2 = get_local_bounds()
-	return [PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)])]
+	return [
+			PackedVector2Array(
+					[
+						rect.position,
+						Vector2(rect.end.x, rect.position.y),
+						rect.end,
+						Vector2(rect.position.x, rect.end.y),
+					]
+			)
+	]

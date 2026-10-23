@@ -24,17 +24,10 @@ func _ready() -> void:
 	self.load()
 
 
-func _build_settings_map(node: Node) -> void:
-	for child: Node in node.get_children():
-		if child is SettingsType:
-			_settings_map.set(child.setting_key, child)
-		_build_settings_map(child)
-
-
 func save() -> void:
 	var config: ConfigFile = ConfigFile.new()
 	for setting_key: String in _settings_map.keys():
-		var setting: SettingsType = _settings_map.get(setting_key)
+		var setting: SettingsType = _settings_map[setting_key]
 		config.set_value(setting.get_parent().name, setting_key, setting._serialize())
 	config.set_value("Input", "active_preset", active_input_preset)
 	config.set_value("metadata", "version", Singleton.get_version().as_string())
@@ -47,7 +40,7 @@ func load() -> void:
 		restore_defaults()
 		return
 	for setting_key: String in _settings_map.keys():
-		var setting: SettingsType = _settings_map.get(setting_key)
+		var setting: SettingsType = _settings_map[setting_key]
 		var section: String = setting.get_parent().name
 		if config.has_section_key(section, setting_key):
 			setting._deserialize(config.get_value(section, setting_key))
@@ -96,3 +89,10 @@ func get_settings_str(format: String = "\"%s\" = %s;") -> String:
 		settings_str += format % [setting.setting_key, setting.value()]
 	
 	return settings_str
+
+
+func _build_settings_map(node: Node) -> void:
+	for child: Node in node.get_children():
+		if child is SettingsType:
+			_settings_map[child.setting_key] = child
+		_build_settings_map(child)

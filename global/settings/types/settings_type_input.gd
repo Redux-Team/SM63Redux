@@ -15,8 +15,8 @@ func _serialize() -> String:
 	actions.resize(current_value.size())
 	
 	for i: int in current_value.size():
-		var event: InputEvent = current_value.get(i)
-		actions.set(i, InputUtil.event_to_string(event))
+		var event: InputEvent = current_value[i]
+		actions[i] = InputUtil.event_to_string(event)
 	
 	return ";".join(actions)
 
@@ -27,8 +27,8 @@ func _deserialize(string: String) -> void:
 	events.resize(actions.size())
 	
 	for i: int in actions.size():
-		var action_string: String = actions.get(i)
-		events.set(i, InputUtil.string_to_event(action_string))
+		var action_string: String = actions[i]
+		events[i] = InputUtil.string_to_event(action_string)
 	
 	current_value = events
 
@@ -58,7 +58,16 @@ func binding() -> PropertyBinding:
 		return current_value
 	var setter: Callable = func(val: Variant) -> void:
 		Settings.rebind_action(self, val)
-	return PropertyBinding.new(getter, setter, display_name(), {"type": TYPE_ARRAY, "hint": PROPERTY_HINT_ARRAY_TYPE, "hint_string": "InputEvent"})
+	return PropertyBinding.new(
+			getter,
+			setter,
+			display_name(),
+			{
+				"type": TYPE_ARRAY,
+				"hint": PROPERTY_HINT_ARRAY_TYPE,
+				"hint_string": "InputEvent",
+			},
+	)
 
 
 func pressed() -> bool:

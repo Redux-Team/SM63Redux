@@ -31,7 +31,10 @@ func _tool_input(event: InputEvent, _world_position: Vector2) -> bool:
 	
 	if event is InputEventMouseMotion and _painting:
 		var target: Vector2 = get_snapped_mouse()
-		if absf(target.x - _last.x) >= _get_spacing().x or absf(target.y - _last.y) >= _get_spacing().y:
+		if (
+				absf(target.x - _last.x) >= _get_spacing().x
+				or absf(target.y - _last.y) >= _get_spacing().y
+		):
 			_paint(target)
 		return true
 	
@@ -50,9 +53,18 @@ func _end_stroke() -> void:
 	for object: GameObject in _stroke:
 		object.get_parent().remove_child(object)
 	
-	editor.object_handler.add_objects(_stroke, editor.level_handler.active_layer, "Brush %s" % editor.tool_handler.armed.display_name, false)
+	editor.object_handler.add_objects(
+			_stroke,
+			editor.level_handler.active_layer,
+			"Brush %s" % editor.tool_handler.armed.display_name,
+			false,
+	)
 	_stroke = []
 
 
 func _get_spacing() -> Vector2:
-	return _preview.get_local_bounds().size if _preview else Vector2.ONE * editor.viewport_handler.snap_size
+	return (
+			_preview.get_local_bounds().size
+			if _preview
+			else Vector2.ONE * editor.viewport_handler.snap_size
+	)

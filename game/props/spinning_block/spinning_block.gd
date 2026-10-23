@@ -20,6 +20,10 @@ static func get_degrees(elapsed: float, speed: float, wait: float) -> float:
 func _physics_process(_delta: float) -> void:
 	var level: Level = Level.of(self)
 	var elapsed: float = level.get_time() if level else Time.get_ticks_msec() / 1000.0
-	var degrees: float = get_degrees(elapsed, get_property(&"b_rotate_speed", 1.0), get_property(&"b_wait_time", 2.0))
+	var degrees: float = get_degrees(
+			elapsed,
+			get_property(&"b_rotate_speed", 1.0),
+			get_property(&"b_wait_time", 2.0),
+	)
 	rect.rotation_degrees = degrees
 	body.rotation_degrees = degrees

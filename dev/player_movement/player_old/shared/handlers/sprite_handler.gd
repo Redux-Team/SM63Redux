@@ -4,7 +4,8 @@ extends Node
 
 @export_group("FLUDD")
 @export var fludd_sprite: SmartSprite2D
-## Kept on top of the plume sprite so the spray emits from wherever the plume is drawn.
+## Kept on top of the plume sprite so the spray emits from wherever the plume is
+## drawn.
 @export var plume_sprite: SmartSprite2D
 @export var plume_particles: GPUParticles2D
 @export_group("Internal")
@@ -83,8 +84,16 @@ func _apply_nozzle_animation(fludd: PlayerFluddHandlerOld, spraying: bool) -> vo
 		return
 	
 	var mode: FluddModeOld = fludd.get_selected_mode() if fludd else null
-	var using: bool = spraying and mode != null and not mode.use_animation.is_empty()
-	var wanted: StringName = StringName("%s:%s" % [mode.fludd_variant, mode.use_animation]) if using else _fludd_base_default
+	var using: bool = (
+		spraying
+		and mode != null
+		and not mode.use_animation.is_empty()
+	)
+	var wanted: StringName = (
+		StringName("%s:%s" % [mode.fludd_variant, mode.use_animation])
+		if using
+		else _fludd_base_default
+	)
 	
 	if fludd_sprite.follow_default != wanted:
 		fludd_sprite.follow_default = wanted
@@ -100,10 +109,20 @@ func _apply_plume_offsets(fludd: PlayerFluddHandlerOld) -> void:
 	var facing: float = float(_player.get_facing())
 	var offset: Vector2 = mode.plume_offset if mode else Vector2.ZERO
 	
-	plume_sprite.position = Vector2((_plume_base_position.x + offset.x) * facing, _plume_base_position.y + offset.y)
+	plume_sprite.position = Vector2(
+		(_plume_base_position.x + offset.x) * facing,
+		_plume_base_position.y + offset.y,
+	)
 	
 	if not plume_particles:
 		return
 	
-	var particle_offset: Vector2 = mode.particle_offset if mode else Vector2.ZERO
-	plume_particles.global_position = plume_sprite.global_position + Vector2(particle_offset.x * facing, particle_offset.y)
+	var particle_offset: Vector2 = (
+		mode.particle_offset
+		if mode
+		else Vector2.ZERO
+	)
+	plume_particles.global_position = (
+		plume_sprite.global_position
+		+ Vector2(particle_offset.x * facing, particle_offset.y)
+	)

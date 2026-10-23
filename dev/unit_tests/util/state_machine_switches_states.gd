@@ -12,7 +12,18 @@ static func run_test() -> void:
 	machine.state_changed.connect(func(_from: State, to: State) -> void: changes.append(to.name))
 	_get_tree().root.add_child(machine)
 	
-	assert(events == ["bind Ground", "bind Idle", "bind WalkFast", "bind Air", "bind Fall", "enter Ground", "enter Idle"])
+	assert(
+			events
+			== [
+				"bind Ground",
+				"bind Idle",
+				"bind WalkFast",
+				"bind Air",
+				"bind Fall",
+				"enter Ground",
+				"enter Idle",
+			]
+	)
 	assert(machine.get_state() == idle)
 	assert(machine.get_state_name() == &"Idle")
 	assert(idle.is_current())
@@ -26,7 +37,14 @@ static func run_test() -> void:
 	
 	idle.next_state = &"WalkFast"
 	machine.tick(0.25)
-	assert(events == ["tick Ground", "tick Idle", "exit Idle", "enter WalkFast"])
+	assert(
+			events == [
+				"tick Ground",
+				"tick Idle",
+				"exit Idle",
+				"enter WalkFast",
+			]
+	)
 	assert(machine.get_state() == walk)
 	assert(machine.get_last_state() == idle)
 	assert(walk.frames == 0)
@@ -37,7 +55,14 @@ static func run_test() -> void:
 	events.clear()
 	
 	machine.change_state(&"fall")
-	assert(events == ["exit WalkFast", "exit Ground", "enter Air", "enter Fall"])
+	assert(
+			events == [
+				"exit WalkFast",
+				"exit Ground",
+				"enter Air",
+				"enter Fall",
+			]
+	)
 	assert(machine.get_state() == fall)
 	events.clear()
 	
@@ -49,7 +74,17 @@ static func run_test() -> void:
 	air.next_state = &"Idle"
 	machine.tick(0.1)
 	assert(machine.get_state() == idle)
-	assert(events == ["tick Air", "tick Fall", "exit Fall", "exit Air", "enter Ground", "enter Idle"])
+	assert(
+			events
+			== [
+				"tick Air",
+				"tick Fall",
+				"exit Fall",
+				"exit Air",
+				"enter Ground",
+				"enter Idle",
+			]
+	)
 	air.next_state = &""
 	idle.next_state = &""
 	events.clear()
@@ -57,10 +92,31 @@ static func run_test() -> void:
 	idle.change_on_tick = &"Fall"
 	machine.tick(0.1)
 	assert(machine.get_state() == fall)
-	assert(events == ["tick Ground", "tick Idle", "exit Idle", "exit Ground", "enter Air", "enter Fall"])
+	assert(
+			events
+			== [
+				"tick Ground",
+				"tick Idle",
+				"exit Idle",
+				"exit Ground",
+				"enter Air",
+				"enter Fall",
+			]
+	)
 	idle.change_on_tick = &""
 	
-	assert(machine.get_history() == [&"Idle", &"WalkFast", &"Fall", &"WalkFast", &"Fall", &"Idle", &"Fall"])
+	assert(
+			machine.get_history()
+			== [
+				&"Idle",
+				&"WalkFast",
+				&"Fall",
+				&"WalkFast",
+				&"Fall",
+				&"Idle",
+				&"Fall",
+			]
+	)
 	assert(changes == machine.get_history())
 	
 	events.clear()

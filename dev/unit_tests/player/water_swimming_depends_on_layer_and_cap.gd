@@ -7,11 +7,7 @@ static func run_test() -> void:
 	await stage.finish()
 	
 	stage = TestStage.create()
-	stage.add_polygon(
-		&"water",
-		Rect2(-400.0, -100.0, 800.0, 160.0),
-		stage.add_layer(true),
-	)
+	stage.add_polygon(&"water", Rect2(-400.0, -100.0, 800.0, 160.0), stage.add_layer(true))
 	await stage.start()
 	assert(not stage.player.is_swimming())
 	assert(stage.get_state() == &"Idle")

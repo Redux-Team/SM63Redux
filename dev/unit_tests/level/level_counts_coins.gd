@@ -3,7 +3,10 @@ static func run_test() -> void:
 	var changes: Array[Array] = []
 	var shines: Array[int] = []
 	var kickouts: Array[bool] = []
-	level.coins_changed.connect(func(kind: StringName, count: int, total: int) -> void: changes.append([kind, count, total]))
+	level.coins_changed.connect(
+			func(kind: StringName, count: int, total: int) -> void:
+				changes.append([kind, count, total])
+	)
 	level.shine_collected.connect(func(scenario: int) -> void: shines.append(scenario))
 	level.kickout_requested.connect(func() -> void: kickouts.append(true))
 	
@@ -16,7 +19,7 @@ static func run_test() -> void:
 	assert(level.get_coin_counter(&"red", &"secret") == Vector2i(0, 1))
 	assert(level.get_coin_counter(&"purple") == Vector2i(0, 1))
 	assert(changes.back() == [&"purple", 0, 1])
-	assert(changes.get(2) == [&"red", 0, 3])
+	assert(changes[2] == [&"red", 0, 3])
 	
 	assert(level.collect_coin(&"red") == 1)
 	assert(changes.back() == [&"red", 1, 3])

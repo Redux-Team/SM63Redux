@@ -11,22 +11,37 @@ enum PlayOrder {
 
 static var all_banks: Array[SFXBank] = []
 
-@export var sound_effects: Array[AudioStream] ## The pool of audio streams to draw from.
-@export var play_order: PlayOrder ## Determines the order in which streams are selected.
-@export var repeat_list: bool = true ## Whether the list restarts after exhaustion.
-@export var max_stack: int = 1 ## Maximum number of simultaneous players.
-@export var interval: float = 0.0 ## Minimum time in seconds between plays. In frame-driven mode, acts as a cooldown buffer.
-@export var overwrite_group: bool = false ## Stops all other banks in the same group before playing.
-@export var bank_group: StringName ## Group identifier used for overwrite and is_in_group checks.
+## The pool of audio streams to draw from.
+@export var sound_effects: Array[AudioStream]
+## Determines the order in which streams are selected.
+@export var play_order: PlayOrder
+## Whether the list restarts after exhaustion.
+@export var repeat_list: bool = true
+## Maximum number of simultaneous players.
+@export var max_stack: int = 1
+## Minimum time in seconds between plays. In frame-driven mode, acts as a
+## cooldown buffer.
+@export var interval: float = 0.0
+## Stops all other banks in the same group before playing.
+@export var overwrite_group: bool = false
+## Group identifier used for overwrite and is_in_group checks.
+@export var bank_group: StringName
 @export_group("Spatial")
-@export var max_distance: float = SFX.SPATIAL_MAX_DISTANCE ## Distance at which a positional play falls silent.
-@export var attenuation: float = SFX.SPATIAL_ATTENUATION ## Falloff exponent for positional plays.
+## Distance at which a positional play falls silent.
+@export var max_distance: float = SFX.SPATIAL_MAX_DISTANCE
+## Falloff exponent for positional plays.
+@export var attenuation: float = SFX.SPATIAL_ATTENUATION
 @export_group("Terrain SFX")
-@export var terrain_exclusive: bool = false ## If true, only terrain SFX play; base sound_effects are ignored.
-@export var terrain_sfx_entries: Dictionary[StringName, Array] ## Map of terrain key to Array[AudioStream].
+## If true, only terrain SFX play; base sound_effects are ignored.
+@export var terrain_exclusive: bool = false
+## Map of terrain key to Array[AudioStream].
+@export var terrain_sfx_entries: Dictionary[StringName, Array]
 @export_group("Entity")
-@export var stop_on_state_exit: bool = false ## If true, prevents stream cleanup when a player finishes, expecting the state to manage it.
-@export var sprite_frame_indices: Array[int] ## If non-empty, playback is gated to only these sprite frames.
+## If true, prevents stream cleanup when a player finishes, expecting the state
+## to manage it.
+@export var stop_on_state_exit: bool = false
+## If non-empty, playback is gated to only these sprite frames.
+@export var sprite_frame_indices: Array[int]
 
 var _entity: Entity
 var _sprite: SmartSprite2D
@@ -45,7 +60,11 @@ func _init() -> void:
 		all_banks.append(self)
 
 
-func play_sfx(bus: StringName = bank_group, entity: Entity = null, sprite: SmartSprite2D = null) -> void:
+func play_sfx(
+		bus: StringName = bank_group,
+		entity: Entity = null,
+		sprite: SmartSprite2D = null,
+) -> void:
 	_entity = entity
 	_sprite = sprite
 	var current_time: float = Time.get_ticks_msec() / 1000.0
@@ -75,7 +94,12 @@ func play_sfx(bus: StringName = bank_group, entity: Entity = null, sprite: Smart
 	player.play()
 
 
-func play_sfx_at(at: Variant, bus: StringName = bank_group, entity: Entity = null, sprite: SmartSprite2D = null) -> void:
+func play_sfx_at(
+		at: Variant,
+		bus: StringName = bank_group,
+		entity: Entity = null,
+		sprite: SmartSprite2D = null,
+) -> void:
 	_entity = entity
 	_sprite = sprite
 	var current_time: float = Time.get_ticks_msec() / 1000.0
@@ -114,14 +138,6 @@ func play_sfx_at(at: Variant, bus: StringName = bank_group, entity: Entity = nul
 	player.play()
 
 
-func _sprite_frame_valid() -> bool:
-	if sprite_frame_indices.is_empty():
-		return true
-	if _sprite == null:
-		return false
-	return sprite_frame_indices.has(_sprite.current_frame)
-
-
 func stop_all() -> void:
 	for player: Node in _active_players:
 		if player is AudioStreamPlayer and (player as AudioStreamPlayer).playing:
@@ -149,6 +165,14 @@ func cleanup() -> void:
 			player.queue_free()
 	_active_players.clear()
 	all_banks.erase(self)
+
+
+func _sprite_frame_valid() -> bool:
+	if sprite_frame_indices.is_empty():
+		return true
+	if _sprite == null:
+		return false
+	return sprite_frame_indices.has(_sprite.current_frame)
 
 
 func _stop_group_banks() -> void:

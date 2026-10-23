@@ -27,4 +27,8 @@ func _next() -> StringName:
 		if not player.is_in_water():
 			_exit_ready_at = time
 		return &""
-	return &"Idle" if time - _exit_ready_at >= player.ground_pound_slam_exit_delay else &""
+	return (
+		&"Idle"
+		if time - _exit_ready_at >= player.ground_pound_slam_exit_delay
+		else &""
+	)

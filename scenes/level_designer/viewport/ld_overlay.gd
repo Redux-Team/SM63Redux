@@ -18,24 +18,29 @@ const SEMISOLID_HINT_WIDTH: float = 3.0
 @export var hover_pulse_speed: float = 0.6
 
 
-func _setup() -> void:
-	canvas.draw.connect(_on_draw)
-
-
 func _process(_delta: float) -> void:
 	canvas.queue_redraw()
+
+
+func _setup() -> void:
+	canvas.draw.connect(_on_draw)
 
 
 func draw_object_outline(object: GameObject, color: Color, width: float = 1.0) -> void:
 	var to_screen: Transform2D = editor.world.get_canvas_transform() * object.get_global_transform()
 	for outline: PackedVector2Array in object.get_outlines():
 		if outline.size() >= 2:
-			canvas.draw_polyline(to_screen * TerrainPolygon.get_closed_points(outline), color, width)
+			canvas.draw_polyline(
+					to_screen * TerrainPolygon.get_closed_points(outline),
+					color,
+					width,
+			)
 
 
 func draw_world_rect(world_rect: Rect2, color: Color, filled: bool = false) -> void:
 	var to_screen: Transform2D = editor.world.get_canvas_transform()
-	var rect: Rect2 = Rect2(to_screen * world_rect.position, world_rect.size * to_screen.get_scale())
+	var rect: Rect2 = \
+			Rect2(to_screen * world_rect.position, world_rect.size * to_screen.get_scale())
 	canvas.draw_rect(rect, color, filled)
 
 
@@ -88,21 +93,33 @@ func _draw_hover_tint(object: GameObject) -> void:
 	var to_screen: Transform2D = editor.world.get_canvas_transform() * object.get_global_transform()
 	for outline: PackedVector2Array in object.get_outlines():
 		var points: PackedVector2Array = to_screen * outline
-		if points.size() >= PolygonShape.MIN_POINTS and not Geometry2D.triangulate_polygon(points).is_empty():
+		if (
+				points.size() >= PolygonShape.MIN_POINTS
+				and not Geometry2D.triangulate_polygon(points).is_empty()
+		):
 			canvas.draw_colored_polygon(points, tint)
 
 
 func _draw_polygon_highlight(object: GameObject) -> void:
 	var shape: PolygonShape = object.shape as PolygonShape
 	var to_screen: Transform2D = editor.world.get_canvas_transform() * object.get_global_transform()
-	var pulse: float = lerpf(PULSE_MIN, 1.0, sin(Time.get_ticks_msec() / 1000.0 * PULSE_SPEED) * 0.5 + 0.5)
+	var pulse: float = \
+			lerpf(PULSE_MIN, 1.0, sin(Time.get_ticks_msec() / 1000.0 * PULSE_SPEED) * 0.5 + 0.5)
 	var outline: Color = Color(polygon_selected_outline, polygon_selected_outline.a * pulse)
 	var fill: Color = Color(polygon_selected_fill, polygon_selected_fill.a * pulse)
 	var outer: PackedVector2Array = to_screen * shape.outer
-	if outer.size() >= PolygonShape.MIN_POINTS and not Geometry2D.triangulate_polygon(outer).is_empty():
+	if (
+			outer.size() >= PolygonShape.MIN_POINTS
+			and not Geometry2D.triangulate_polygon(outer).is_empty()
+	):
 		canvas.draw_colored_polygon(outer, fill)
 	for ring: PackedVector2Array in shape.get_rings():
-		canvas.draw_polyline(to_screen * TerrainPolygon.get_closed_points(ring), outline, POLYGON_OUTLINE_WIDTH, true)
+		canvas.draw_polyline(
+				to_screen * TerrainPolygon.get_closed_points(ring),
+				outline,
+				POLYGON_OUTLINE_WIDTH,
+				true,
+		)
 	
 	if object.get_value(&"collision_mode") != PolygonCollision.CollisionMode.SEMISOLID:
 		return

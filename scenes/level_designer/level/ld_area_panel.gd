@@ -30,9 +30,11 @@ func _setup() -> void:
 	remove_button.pressed.connect(_on_remove)
 	switch_button.pressed.connect(_switch)
 	_name_binding = PropertyBinding.new(
-		func() -> Variant: return _selected.area_name if _selected else "",
-		func(value: Variant) -> void: level.rename_area(_selected, value),
-		"Name", {"type": TYPE_STRING})
+			func() -> Variant: return _selected.area_name if _selected else "",
+			func(value: Variant) -> void: level.rename_area(_selected, value),
+			"Name",
+			{ "type": TYPE_STRING },
+	)
 	var widget: PropertyWidget = PropertyWidget.create(_name_binding)
 	detail_container.add_child(widget)
 	detail_container.move_child(widget, 0)
@@ -62,7 +64,7 @@ func _refresh() -> void:
 	_rows.clear()
 	
 	for i: int in level.areas.size():
-		var area: LevelArea = level.areas.get(i)
+		var area: LevelArea = level.areas[i]
 		var row: Button = Button.new()
 		row.text = area.area_name if not area.area_name.is_empty() else "Area %d" % (i + 1)
 		row.toggle_mode = true
@@ -96,13 +98,15 @@ func _switch() -> void:
 	if area == editor.level_handler.active_area or Singleton.is_transitioning():
 		return
 	
-	Singleton.build_screen_transition() \
-		.set_wave() \
-		.set_texture(WAVE_MASK) \
-		.set_wave_scale(4.0) \
-		.set_hold_duration(0.0) \
-		.set_swap(editor.level_handler.set_active_area.bind(area)) \
-		.done()
+	(
+			Singleton.build_screen_transition()
+			.set_wave()
+			.set_texture(WAVE_MASK)
+			.set_wave_scale(4.0)
+			.set_hold_duration(0.0)
+			.set_swap(editor.level_handler.set_active_area.bind(area))
+			.done()
+	)
 
 
 func _on_remove() -> void:
@@ -115,10 +119,13 @@ func _on_remove() -> void:
 	
 	var dialog: ConfirmationDialog = ConfirmationDialog.new()
 	dialog.title = "Remove Area"
-	dialog.dialog_text = "Remove \"%s\" and its %d object(s)?" % [area.area_name, count]
+	dialog.dialog_text = "Remove \"%s\" and its %d object(s)?" % [
+		area.area_name,
+		count,
+	]
 	dialog.confirmed.connect(level.remove_area.bind(area))
 	dialog.visibility_changed.connect(func() -> void:
-		if not dialog.visible:
-			dialog.queue_free())
+			if not dialog.visible:
+				dialog.queue_free())
 	view.add_child(dialog)
 	dialog.popup_centered()

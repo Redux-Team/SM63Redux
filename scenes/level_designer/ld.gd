@@ -7,8 +7,6 @@ const STATE_UPDATES_PER_FRAME: int = 1
 
 static var _state_queue: Array[BaseButton] = []
 
-var _shown: Dictionary[Node, bool] = {}
-
 @export var world: Node2D
 @export var camera: Camera2D
 @export var input_map: LDInputMap
@@ -23,16 +21,7 @@ var _shown: Dictionary[Node, bool] = {}
 @export var interface_handler: LDInterfaceHandler
 @export var music_handler: LDMusicHandler
 
-
-func _ready() -> void:
-	_state_queue.clear()
-	input_map.apply()
-	world.process_mode = Node.PROCESS_MODE_DISABLED
-	for child: Node in get_children():
-		if child is LDHandler:
-			(child as LDHandler).setup(self)
-	
-	Singleton.set_discord_activity("Editing a level")
+var _shown: Dictionary[Node, bool] = {}
 
 
 static func bind_button(button: BaseButton, callable: Callable) -> void:
@@ -59,6 +48,17 @@ static func set_disabled(button: BaseButton, disabled: bool) -> void:
 		_state_queue.append(button)
 
 
+func _ready() -> void:
+	_state_queue.clear()
+	input_map.apply()
+	world.process_mode = Node.PROCESS_MODE_DISABLED
+	for child: Node in get_children():
+		if child is LDHandler:
+			(child as LDHandler).setup(self)
+	
+	Singleton.set_discord_activity("Editing a level")
+
+
 func _process(_delta: float) -> void:
 	for i: int in mini(STATE_UPDATES_PER_FRAME, _state_queue.size()):
 		var button: Variant = _state_queue.pop_front()
@@ -74,7 +74,7 @@ func set_suspended(suspended: bool) -> void:
 			continue
 		
 		if suspended:
-			_shown.set(child, child.get(&"visible"))
+			_shown[child] = child.get(&"visible")
 			child.set(&"visible", false)
 		else:
 			child.set(&"visible", _shown.get(child, true))
@@ -86,7 +86,10 @@ func set_suspended(suspended: bool) -> void:
 
 func accepts_shortcuts() -> bool:
 	var focus: Control = get_viewport().gui_get_focus_owner()
-	return not (focus is LineEdit or focus is TextEdit) and interface_handler.current_panel is not LDSettingsPanel
+	return (
+			not (focus is LineEdit or focus is TextEdit)
+			and interface_handler.current_panel is not LDSettingsPanel
+	)
 
 
 func is_shortcut(event: InputEvent, action: StringName) -> bool:
@@ -101,11 +104,13 @@ func _leave() -> void:
 	file_handler.discard_autosave()
 	Singleton.editor_session.discard()
 	Singleton.editor_session.level = null
-	Singleton.build_screen_transition() \
-		.set_center() \
-		.set_destination(TITLE_SCREEN) \
-		.load(_dismantle) \
-		.done()
+	(
+			Singleton.build_screen_transition()
+			.set_center()
+			.set_destination(TITLE_SCREEN)
+			.load(_dismantle)
+			.done()
+	)
 
 
 func _dismantle() -> void:

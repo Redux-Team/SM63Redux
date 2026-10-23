@@ -40,12 +40,16 @@ func open() -> void:
 	_snapshot.clear()
 	for category: SettingsCategory in _categories():
 		for setting: SettingsType in category.settings():
-			_snapshot.set(setting, setting._serialize())
+			_snapshot[setting] = setting._serialize()
 	_snapshot_preset = Settings.active_input_preset
 	if _category != null:
 		_show_category(_category)
 	elif category_container.get_child_count() > 0:
 		(category_container.get_child(0) as Button).button_pressed = true
+
+
+func cancel() -> void:
+	_on_cancel_button_pressed()
 
 
 func _categories() -> Array[SettingsCategory]:
@@ -78,14 +82,10 @@ func _on_restore_defaults_pressed() -> void:
 	_show_category(_category)
 
 
-func cancel() -> void:
-	_on_cancel_button_pressed()
-
-
 func _on_cancel_button_pressed() -> void:
 	for setting: SettingsType in _snapshot:
-		if setting._serialize() != _snapshot.get(setting):
-			setting._deserialize(_snapshot.get(setting))
+		if setting._serialize() != _snapshot[setting]:
+			setting._deserialize(_snapshot[setting])
 	Settings.active_input_preset = _snapshot_preset
 	Settings.save()
 	closed.emit()

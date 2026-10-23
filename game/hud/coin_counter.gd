@@ -11,7 +11,11 @@ extends HBoxContainer
 var _count: int = 0:
 	set(value):
 		_count = value
-		label.text = str(value) if _total <= 0 else "%d[font_size=%d]/%d" % [value, total_font_size, _total]
+		label.text = (
+				str(value)
+				if _total <= 0
+				else "%d[font_size=%d]/%d" % [value, total_font_size, _total]
+		)
 var _total: int = 0
 var _count_tween: Tween
 var _flash_tween: Tween

@@ -1,6 +1,7 @@
 extends SpinState
 
-## Submerged state whose sink speed and steering the spin's vertical swim follows.
+## Submerged state whose sink speed and steering the spin's vertical swim
+## follows.
 @export var submerged: SubmergedState
 ## Minimum spin length before releasing spin can end it.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var exit_delay: float = 0.6
@@ -12,8 +13,14 @@ func _tick(delta: float) -> void:
 	super(delta)
 	var direction: float = _get_direction()
 	if direction != 0.0:
-		var gravity_drift: float = player.get_gravity_strength() * submerged.steer_halflife / log(2.0)
-		player.velocity.y = Motion.damp(player.velocity.y, direction * submerged.sink_speed * speed_ratio - gravity_drift, submerged.steer_halflife, delta)
+		var gravity_drift: float = \
+				player.get_gravity_strength() * submerged.steer_halflife / log(2.0)
+		player.velocity.y = Motion.damp(
+				player.velocity.y,
+				direction * submerged.sink_speed * speed_ratio - gravity_drift,
+				submerged.steer_halflife,
+				delta,
+		)
 	else:
 		player.velocity.y = minf(player.velocity.y, 0.0)
 

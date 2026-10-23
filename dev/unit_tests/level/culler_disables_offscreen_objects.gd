@@ -7,9 +7,16 @@ static func run_test() -> void:
 	tree.root.add_child(root)
 	
 	var water_data: ObjectData = ObjectData.create(&"water")
-	water_data.shape = {"outer": PackedVector2Array([Vector2(-32, -32), Vector2(32, -32), Vector2(32, 32), Vector2(-32, 32)]), "holes": [], "toplines": []}
+	water_data.shape = {
+		"outer": PackedVector2Array(
+				[Vector2(-32, -32), Vector2(32, -32), Vector2(32, 32), Vector2(-32, 32)]
+		),
+		"holes": [],
+		"toplines": [],
+	}
 	var water: GameObject = ObjectRegistry.spawn(water_data, GameObject.Context.GAME)
-	var terrain: GameObject = ObjectRegistry.spawn(ObjectData.create(&"terrain_grass"), GameObject.Context.GAME)
+	var terrain: GameObject = \
+			ObjectRegistry.spawn(ObjectData.create(&"terrain_grass"), GameObject.Context.GAME)
 	root.add_child(water)
 	root.add_child(terrain)
 	var water_areas: Array[Node] = water.find_children("*", "Area2D", true, false)
@@ -35,7 +42,8 @@ static func run_test() -> void:
 	for area: Area2D in water_areas:
 		assert(not area.monitoring)
 	
-	water.position = culler.get_viewport().get_visible_rect().end + Vector2.ONE * (culler.margin - 1.0)
+	water.position = \
+			culler.get_viewport().get_visible_rect().end + Vector2.ONE * (culler.margin - 1.0)
 	culler._physics_process(0.0)
 	assert(water.process_mode == Node.PROCESS_MODE_INHERIT)
 	for area: Area2D in water_areas:

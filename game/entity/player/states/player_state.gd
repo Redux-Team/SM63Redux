@@ -5,8 +5,10 @@ extends State
 ## Multiplier on the player's gravity while this state is active.
 @export var gravity_scale: float = 1.0
 ## Caps downward speed while this state is active; zero disables the cap.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var max_fall_speed: float = 0.0
-## Air steering used while this state is active; inherits the nearest parent's when empty.
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var max_fall_speed: float = 0.0
+## Air steering used while this state is active; inherits the nearest parent's
+## when empty.
 @export var air_control: PlayerAirControl
 
 ## The player this state drives.

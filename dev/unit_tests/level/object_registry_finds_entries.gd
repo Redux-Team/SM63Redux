@@ -9,7 +9,7 @@ static func run_test() -> void:
 	for entry: ObjectRegistry.Entry in entries:
 		assert(not String(entry.id).is_empty())
 		assert(not ids.has(entry.id))
-		ids.set(entry.id, true)
+		ids[entry.id] = true
 		assert(entry.path.begins_with(ObjectRegistry.ROOT))
 		assert(entry.path.get_file().get_basename() == String(entry.id))
 		assert(not entry.path.get_file().begins_with("_"))
@@ -26,7 +26,10 @@ static func run_test() -> void:
 	assert(ObjectRegistry.get_entry(&"terrain_grass").get_shape_kind() == ObjectShape.Kind.POLYGON)
 	assert(ObjectRegistry.get_entry(&"water").get_shape_kind() == ObjectShape.Kind.POLYGON)
 	assert(ObjectRegistry.get_entry(&"tall_mushroom").get_shape_kind() == ObjectShape.Kind.PATH)
-	assert(ObjectRegistry.get_entry(&"wooden_platform").get_shape_kind() == ObjectShape.Kind.TELESCOPING)
+	assert(
+			ObjectRegistry.get_entry(&"wooden_platform").get_shape_kind()
+			== ObjectShape.Kind.TELESCOPING
+	)
 	assert(ObjectRegistry.get_entry(&"spinning_block").get_shape_kind() == ObjectShape.Kind.BLOCK)
 	assert(ObjectRegistry.get_entry(&"goomba").get_shape_kind() == ObjectShape.Kind.NONE)
 	
@@ -40,17 +43,23 @@ static func run_test() -> void:
 	var tinted: ObjectRegistry.Entry = ObjectRegistry.get_entry(&"terrain_color_solid")
 	var default_color: Color = tinted.get_icon_color()
 	assert(default_color != Color.WHITE)
-	assert(tinted.get_icon_color({&"color": Color.RED}) == Color.RED)
-	var red_icon: Texture2D = tinted.get_icon({&"color": Color.RED})
+	assert(tinted.get_icon_color({ &"color": Color.RED }) == Color.RED)
+	var red_icon: Texture2D = tinted.get_icon({ &"color": Color.RED })
 	assert(red_icon != null)
-	assert(tinted.get_icon({&"color": Color.RED}) == red_icon)
-	assert(tinted.get_icon({&"color": Color.BLUE}) != red_icon)
-	assert(tinted.get_icon({&"color": Color.WHITE}) == tinted.icon)
-	assert(ObjectRegistry.get_entry(&"goomba").get_icon_color({&"color": Color.RED}) == Color.WHITE)
+	assert(tinted.get_icon({ &"color": Color.RED }) == red_icon)
+	assert(tinted.get_icon({ &"color": Color.BLUE }) != red_icon)
+	assert(tinted.get_icon({ &"color": Color.WHITE }) == tinted.icon)
+	assert(
+			ObjectRegistry.get_entry(&"goomba").get_icon_color({ &"color": Color.RED })
+			== Color.WHITE
+	)
 	
 	assert(ObjectRegistry.get_entry(&"missing_object_id") == null)
 	assert(ObjectRegistry.get_scene(&"missing_object_id") == null)
-	assert(ObjectRegistry.spawn(ObjectData.create(&"missing_object_id"), GameObject.Context.GAME) == null)
+	assert(
+			ObjectRegistry.spawn(ObjectData.create(&"missing_object_id"), GameObject.Context.GAME)
+			== null
+	)
 	
 	ObjectRegistry.scan(true)
 	assert(ObjectRegistry.get_entries().size() == entries.size())

@@ -1,7 +1,10 @@
 class_name LDTileShapeTool
 extends LDTool
 
-enum ShapeMode { LINE, RECTANGLE }
+enum ShapeMode {
+	LINE,
+	RECTANGLE,
+}
 
 @export var tile_tool: LDTileTool
 @export var mode: ShapeMode = ShapeMode.LINE
@@ -38,7 +41,10 @@ func _tool_input(event: InputEvent, _world_position: Vector2) -> bool:
 		return _stroke_button != MOUSE_BUTTON_NONE
 	
 	var mouse_button: InputEventMouseButton = event as InputEventMouseButton
-	if mouse_button == null or not mouse_button.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
+	if (
+			mouse_button == null
+			or not mouse_button.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]
+	):
 		return false
 	
 	if mouse_button.pressed and _stroke_button == MOUSE_BUTTON_NONE:
@@ -50,7 +56,14 @@ func _tool_input(event: InputEvent, _world_position: Vector2) -> bool:
 		var erasing: bool = _stroke_button == MOUSE_BUTTON_RIGHT
 		var cells: Dictionary[Vector2i, bool] = get_cells()
 		_stroke_button = MOUSE_BUTTON_NONE
-		tile_tool.apply(cells, erasing, "%s %s" % ["Erase" if erasing else "Paint", "Tile Line" if mode == ShapeMode.LINE else "Tile Rectangle"])
+		tile_tool.apply(
+				cells,
+				erasing,
+				"%s %s" % [
+					"Erase" if erasing else "Paint",
+					"Tile Line" if mode == ShapeMode.LINE else "Tile Rectangle",
+				],
+		)
 		_refresh()
 	return true
 
@@ -58,33 +71,6 @@ func _tool_input(event: InputEvent, _world_position: Vector2) -> bool:
 func _view_changed() -> void:
 	if editor.tool_handler.armed:
 		_track_cursor()
-
-
-func _track_cursor() -> void:
-	var cell: Vector2i = _cell_at_cursor()
-	if cell != _end:
-		_end = cell
-		_refresh()
-
-
-func get_cells() -> Dictionary[Vector2i, bool]:
-	var cells: Dictionary[Vector2i, bool] = {}
-	if _stroke_button == MOUSE_BUTTON_NONE:
-		cells.set(_end, true)
-		return cells
-	
-	if mode == ShapeMode.LINE:
-		for cell: Vector2i in TileGrid.line(_start, _end):
-			cells.set(cell, true)
-		return cells
-	
-	var from: Vector2i = _start.min(_end)
-	var to: Vector2i = _start.max(_end)
-	for y: int in range(from.y, to.y + 1):
-		for x: int in range(from.x, to.x + 1):
-			cells.set(Vector2i(x, y), true)
-	
-	return cells
 
 
 func _draw_overlay(overlay: LDOverlay) -> void:
@@ -98,6 +84,33 @@ func _draw_overlay(overlay: LDOverlay) -> void:
 		overlay.draw_world_polyline(to_world * TerrainPolygon.get_closed_points(ring), color, 2.0)
 
 
+func get_cells() -> Dictionary[Vector2i, bool]:
+	var cells: Dictionary[Vector2i, bool] = {}
+	if _stroke_button == MOUSE_BUTTON_NONE:
+		cells[_end] = true
+		return cells
+	
+	if mode == ShapeMode.LINE:
+		for cell: Vector2i in TileGrid.line(_start, _end):
+			cells[cell] = true
+		return cells
+	
+	var from: Vector2i = _start.min(_end)
+	var to: Vector2i = _start.max(_end)
+	for y: int in range(from.y, to.y + 1):
+		for x: int in range(from.x, to.x + 1):
+			cells[Vector2i(x, y)] = true
+	
+	return cells
+
+
+func _track_cursor() -> void:
+	var cell: Vector2i = _cell_at_cursor()
+	if cell != _end:
+		_end = cell
+		_refresh()
+
+
 func _refresh() -> void:
 	_rings.clear()
 	for shape: TileGrid.Shape in TileGrid.trace(get_cells()):
@@ -105,4 +118,6 @@ func _refresh() -> void:
 
 
 func _cell_at_cursor() -> Vector2i:
-	return TileGrid.world_to_cell(editor.viewport_handler.get_layer_mouse(editor.level_handler.active_layer))
+	return TileGrid.world_to_cell(
+			editor.viewport_handler.get_layer_mouse(editor.level_handler.active_layer)
+	)

@@ -22,11 +22,12 @@ func _apply_setting(setting: SettingsType) -> void:
 					DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 					DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
 		fps_cap:
-			Engine.max_fps = FPS_VALUES.get(fps_cap.current_value)
+			Engine.max_fps = FPS_VALUES[fps_cap.current_value]
 		v_sync:
 			DisplayServer.window_set_vsync_mode(
-				DisplayServer.VSYNC_ENABLED if v_sync.current_value \
-				else DisplayServer.VSYNC_DISABLED
+					DisplayServer.VSYNC_ENABLED
+					if v_sync.current_value
+					else DisplayServer.VSYNC_DISABLED
 			)
 		_:
 			super(setting)

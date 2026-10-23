@@ -62,7 +62,11 @@ static func _scan_directory(path: String, reload: bool = false) -> void:
 
 
 static func _register(path: String, reload: bool = false) -> void:
-	var scene: PackedScene = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_REPLACE if reload else ResourceLoader.CACHE_MODE_REUSE) as PackedScene
+	var scene: PackedScene = ResourceLoader.load(
+			path,
+			"",
+			(ResourceLoader.CACHE_MODE_REPLACE if reload else ResourceLoader.CACHE_MODE_REUSE),
+	) as PackedScene
 	if scene == null:
 		return
 	
@@ -77,10 +81,16 @@ static func _register(path: String, reload: bool = false) -> void:
 		return
 	
 	if _entries.has(entry.id):
-		push_error("ObjectRegistry: id '%s' is used by both '%s' and '%s'." % [entry.id, _entries.get(entry.id).path, path])
+		push_error(
+				"ObjectRegistry: id '%s' is used by both '%s' and '%s'." % [
+					entry.id,
+					_entries[entry.id].path,
+					path,
+				]
+		)
 		return
 	
-	_entries.set(entry.id, entry)
+	_entries[entry.id] = entry
 
 
 static func _read_root(state: SceneState) -> Dictionary:
@@ -90,7 +100,7 @@ static func _read_root(state: SceneState) -> Dictionary:
 		definition = _read_root(base.get_state())
 	
 	for i: int in state.get_node_property_count(0):
-		definition.set(state.get_node_property_name(0, i), state.get_node_property_value(0, i))
+		definition[state.get_node_property_name(0, i)] = state.get_node_property_value(0, i)
 	
 	return definition
 
@@ -133,7 +143,7 @@ class Entry:
 	func _init(scene_path: String, packed: PackedScene, definition: Dictionary) -> void:
 		path = scene_path
 		scene = packed
-		var defaults: Object = (definition.get(&"script") as Script).new()
+		var defaults: Object = (definition[&"script"] as Script).new()
 		id = _read(definition, defaults, &"id")
 		display_name = _read(definition, defaults, &"display_name")
 		icon = _read(definition, defaults, &"icon")
@@ -173,8 +183,8 @@ class Entry:
 		if not _tinted.has(color):
 			if _tinted.size() >= MAX_TINTED:
 				_tinted.clear()
-			_tinted.set(color, _tint(icon, color))
-		return _tinted.get(color)
+			_tinted[color] = _tint(icon, color)
+		return _tinted[color]
 	
 	
 	func get_icon_color(values: Dictionary = {}) -> Color:

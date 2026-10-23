@@ -28,7 +28,11 @@ func _draw() -> void:
 	
 	_draw_arrow(player.velocity * velocity_scale, velocity_color, &"velocity")
 	for force_name: StringName in player.debug_forces:
-		_draw_arrow(player.debug_forces.get(force_name) * force_scale, colors.get(force_name, default_color), force_name)
+		_draw_arrow(
+				player.debug_forces[force_name] * force_scale,
+				colors.get(force_name, default_color),
+				force_name,
+		)
 
 
 func _draw_arrow(vector: Vector2, color: Color, label: StringName) -> void:
@@ -37,5 +41,22 @@ func _draw_arrow(vector: Vector2, color: Color, label: StringName) -> void:
 	
 	var direction: Vector2 = vector.normalized()
 	draw_line(Vector2.ZERO, vector, color, line_width)
-	draw_colored_polygon(PackedVector2Array([vector, vector - direction.rotated(0.45) * head_size, vector - direction.rotated(-0.45) * head_size]), color)
-	draw_string(ThemeDB.fallback_font, vector + direction * 3.0, String(label), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, color)
+	draw_colored_polygon(
+			PackedVector2Array(
+					[
+						vector,
+						vector - direction.rotated(0.45) * head_size,
+						vector - direction.rotated(-0.45) * head_size,
+					]
+			),
+			color,
+	)
+	draw_string(
+			ThemeDB.fallback_font,
+			vector + direction * 3.0,
+			String(label),
+			HORIZONTAL_ALIGNMENT_LEFT,
+			-1,
+			font_size,
+			color,
+	)

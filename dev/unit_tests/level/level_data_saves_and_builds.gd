@@ -5,8 +5,14 @@ static func run_test() -> void:
 	var layer: LayerData = area.layers.front()
 	var block: ObjectData = ObjectData.create(&"big_rock")
 	block.position = Vector2(12.5, 64.0)
-	block.values.set(&"amount", 3)
-	block.shape = {"outer": PackedVector2Array([Vector2.ZERO, Vector2(32.0, 0.0), Vector2(32.0, 32.0)])}
+	block.values[&"amount"] = 3
+	block.shape = {
+		"outer": PackedVector2Array([
+			Vector2.ZERO,
+			Vector2(32.0, 0.0),
+			Vector2(32.0, 32.0),
+		]),
+	}
 	layer.objects.append(block)
 	layer.objects.append(ObjectData.create(&"player_mario"))
 	area.layers.append(LayerData.create(1))
@@ -22,7 +28,7 @@ static func run_test() -> void:
 		DirAccess.remove_absolute(path)
 	
 	UnitTester.expect_error("unsupported level version")
-	assert(LevelData.from_dict({"version": 1}) == null)
+	assert(LevelData.from_dict({ "version": 1 }) == null)
 	
 	block.values.clear()
 	block.shape.clear()

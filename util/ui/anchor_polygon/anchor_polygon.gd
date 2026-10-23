@@ -1,6 +1,7 @@
 @tool
-## Draws a solid coloured polygon, with vertices positioned at child [VertexAnchor] positions,
-## thus allowing them to change based on screen sizes, and be animated using an [AnimationPlayer].
+## Draws a solid coloured polygon, with vertices positioned at child
+## [VertexAnchor] positions, thus allowing them to change based on screen
+## sizes, and be animated using an [AnimationPlayer].
 class_name AnchorPolygon extends Control
 
 @export var color: Color:

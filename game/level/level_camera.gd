@@ -5,20 +5,29 @@ const MAX_SLIDES: int = 4
 const PHYSICS_PRIORITY: int = 100
 const BLOCK_EPSILON: float = 0.01
 const LIMIT_REACH: float = 4096.0
-const LIMIT_DIRECTIONS: Array[Vector2] = [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]
+const LIMIT_DIRECTIONS: Array[Vector2] = [
+	Vector2.LEFT,
+	Vector2.RIGHT,
+	Vector2.UP,
+	Vector2.DOWN,
+]
 
 @export var target: CharacterBody2D
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var follow_halflife: float = 0.14
 @export_group("Look Ahead")
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var look_ahead_time: float = 0.45
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var look_ahead_max: float = 96.0
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var look_ahead_halflife: float = 0.35
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var turbo_look_ahead_time: float = 0.6
-@export_custom(PROPERTY_HINT_NONE, "suffix:px") var turbo_look_ahead_max: float = 200.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:s")
+var look_ahead_halflife: float = 0.35
+@export_custom(PROPERTY_HINT_NONE, "suffix:s")
+var turbo_look_ahead_time: float = 0.6
+@export_custom(PROPERTY_HINT_NONE, "suffix:px")
+var turbo_look_ahead_max: float = 200.0
 @export_group("Vertical Bias")
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var ground_bias: float = -20.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var fall_bias: float = 28.0
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var fall_threshold: float = 250.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var fall_threshold: float = 250.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var fall_ramp: float = 400.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var bias_halflife: float = 0.7
 @export_group("Zoom")
@@ -63,6 +72,63 @@ func _ready() -> void:
 	add_child(_stopper)
 
 
+func _process(delta: float) -> void:
+	zoom = Vector2.ONE * lerpf(zoom.x, _target_zoom, 1.0 - exp(-zoom_smoothing_speed * delta))
+	if not is_instance_valid(target):
+		return
+	
+	var followed: Vector2 = _previous.lerp(_current, Engine.get_physics_interpolation_fraction())
+	_focus = Vector2(
+			Motion.damp(_focus.x, followed.x, follow_halflife, delta),
+			Motion.damp(_focus.y, followed.y, follow_halflife, delta),
+	)
+	var turbo: bool = target is Player and (target as Player).fludd.is_turbo_active()
+	var reach: float = turbo_look_ahead_max if turbo else look_ahead_max
+	var lead: float = clampf(
+			(target.velocity.x * (turbo_look_ahead_time if turbo else look_ahead_time)),
+			-reach,
+			reach,
+	)
+	_lead.x = Motion.damp(_lead.x, lead, look_ahead_halflife, delta)
+	_lead.y = Motion.damp(_lead.y, _vertical_bias(), bias_halflife, delta)
+	_desired = _focus + _lead
+	var resolved: Vector2 = \
+			_resolved_previous.lerp(_resolved_current, Engine.get_physics_interpolation_fraction())
+	var free: Vector2 = Vector2(
+			resolved.x if _blocked.x > 0.0 else _desired.x,
+			resolved.y if _blocked.y > 0.0 else _desired.y,
+	)
+	global_position = free.clamp(_limit_min, _limit_max)
+	offset = _shake_offset(delta)
+
+
+func _physics_process(_delta: float) -> void:
+	if not is_instance_valid(target):
+		return
+	
+	_previous = _current
+	_current = target.global_position
+	_resolved_previous = _resolved_current
+	_resolved_current = _resolve(_desired)
+	var correction: Vector2 = _resolved_current - _desired
+	_blocked = Vector2(
+			float(absf(correction.x) > BLOCK_EPSILON),
+			float(absf(correction.y) > BLOCK_EPSILON),
+	)
+	_measure_limits()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"camera_zoom_in"):
+		_target_zoom = clampf(_target_zoom + zoom_step, zoom_min, zoom_max)
+	elif event.is_action_pressed(&"camera_zoom_out"):
+		_target_zoom = clampf(_target_zoom - zoom_step, zoom_min, zoom_max)
+	else:
+		return
+	
+	get_viewport().set_input_as_handled()
+
+
 func follow(body: CharacterBody2D) -> void:
 	target = body
 	_previous = body.global_position
@@ -90,49 +156,6 @@ func shake(strength: float, duration: float) -> void:
 	_shake_elapsed = 0.0
 
 
-func _physics_process(_delta: float) -> void:
-	if not is_instance_valid(target):
-		return
-	
-	_previous = _current
-	_current = target.global_position
-	_resolved_previous = _resolved_current
-	_resolved_current = _resolve(_desired)
-	var correction: Vector2 = _resolved_current - _desired
-	_blocked = Vector2(float(absf(correction.x) > BLOCK_EPSILON), float(absf(correction.y) > BLOCK_EPSILON))
-	_measure_limits()
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed(&"camera_zoom_in"):
-		_target_zoom = clampf(_target_zoom + zoom_step, zoom_min, zoom_max)
-	elif event.is_action_pressed(&"camera_zoom_out"):
-		_target_zoom = clampf(_target_zoom - zoom_step, zoom_min, zoom_max)
-	else:
-		return
-	
-	get_viewport().set_input_as_handled()
-
-
-func _process(delta: float) -> void:
-	zoom = Vector2.ONE * lerpf(zoom.x, _target_zoom, 1.0 - exp(-zoom_smoothing_speed * delta))
-	if not is_instance_valid(target):
-		return
-	
-	var followed: Vector2 = _previous.lerp(_current, Engine.get_physics_interpolation_fraction())
-	_focus = Vector2(Motion.damp(_focus.x, followed.x, follow_halflife, delta), Motion.damp(_focus.y, followed.y, follow_halflife, delta))
-	var turbo: bool = target is Player and (target as Player).fludd.is_turbo_active()
-	var reach: float = turbo_look_ahead_max if turbo else look_ahead_max
-	var lead: float = clampf(target.velocity.x * (turbo_look_ahead_time if turbo else look_ahead_time), -reach, reach)
-	_lead.x = Motion.damp(_lead.x, lead, look_ahead_halflife, delta)
-	_lead.y = Motion.damp(_lead.y, _vertical_bias(), bias_halflife, delta)
-	_desired = _focus + _lead
-	var resolved: Vector2 = _resolved_previous.lerp(_resolved_current, Engine.get_physics_interpolation_fraction())
-	var free: Vector2 = Vector2(resolved.x if _blocked.x > 0.0 else _desired.x, resolved.y if _blocked.y > 0.0 else _desired.y)
-	global_position = free.clamp(_limit_min, _limit_max)
-	offset = _shake_offset(delta)
-
-
 func _resolve(desired: Vector2) -> Vector2:
 	_view_box.size = (get_viewport_rect().size / zoom - Vector2.ONE * stopper_inset * 2.0).maxf(1.0)
 	var motion: Vector2 = desired - _stopper.global_position
@@ -152,11 +175,12 @@ func _measure_limits() -> void:
 	var reach: Dictionary[Vector2, float] = {}
 	var hit: KinematicCollision2D = KinematicCollision2D.new()
 	for direction: Vector2 in LIMIT_DIRECTIONS:
-		var blocked: bool = _stopper.test_move(_stopper.global_transform, direction * LIMIT_REACH, hit)
-		reach.set(direction, hit.get_travel().length() if blocked else INF)
+		var blocked: bool = \
+				_stopper.test_move(_stopper.global_transform, direction * LIMIT_REACH, hit)
+		reach[direction] = hit.get_travel().length() if blocked else INF
 	
-	_limit_min = Vector2(origin.x - reach.get(Vector2.LEFT), origin.y - reach.get(Vector2.UP))
-	_limit_max = Vector2(origin.x + reach.get(Vector2.RIGHT), origin.y + reach.get(Vector2.DOWN))
+	_limit_min = Vector2(origin.x - reach[Vector2.LEFT], origin.y - reach[Vector2.UP])
+	_limit_max = Vector2(origin.x + reach[Vector2.RIGHT], origin.y + reach[Vector2.DOWN])
 
 
 func _vertical_bias() -> float:
@@ -164,7 +188,11 @@ func _vertical_bias() -> float:
 		return ground_bias
 	
 	if target.velocity.y > fall_threshold:
-		return lerpf(_lead.y, fall_bias, smoothstep(0.0, 1.0, (target.velocity.y - fall_threshold) / fall_ramp))
+		return lerpf(
+				_lead.y,
+				fall_bias,
+				smoothstep(0.0, 1.0, (target.velocity.y - fall_threshold) / fall_ramp),
+		)
 	
 	return _lead.y
 

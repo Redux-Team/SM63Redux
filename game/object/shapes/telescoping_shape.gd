@@ -43,7 +43,14 @@ func from_data(data: Dictionary) -> void:
 
 
 func to_data() -> Dictionary:
-	return {"units": units}
+	return { "units": units }
+
+
+func get_local_bounds() -> Rect2:
+	if patch == null:
+		return Rect2(-8.0, -8.0, 16.0, 16.0)
+	
+	return Rect2(patch.position, patch.size)
 
 
 func set_units(value: int) -> void:
@@ -59,9 +66,10 @@ func get_segment_length() -> float:
 	if patch == null or patch.texture == null:
 		return 16.0
 	
-	var texture_size: Vector2 = patch.texture.get_size() if not patch.region_rect.has_area() else patch.region_rect.size
+	var texture_size: Vector2 = \
+			patch.texture.get_size() if not patch.region_rect.has_area() else patch.region_rect.size
 	if axis == Axis.HORIZONTAL:
-		return maxf(texture_size.x - patch.patch_margin_left - patch.patch_margin_right, 1.0)
+		return maxf((texture_size.x - patch.patch_margin_left - patch.patch_margin_right), 1.0)
 	
 	return maxf(texture_size.y - patch.patch_margin_top - patch.patch_margin_bottom, 1.0)
 
@@ -78,13 +86,6 @@ func get_caps_length() -> float:
 
 func get_length(for_units: int = units) -> float:
 	return get_caps_length() + get_segment_length() * maxi(for_units, 0)
-
-
-func get_local_bounds() -> Rect2:
-	if patch == null:
-		return Rect2(-8.0, -8.0, 16.0, 16.0)
-	
-	return Rect2(patch.position, patch.size)
 
 
 func _apply() -> void:
@@ -114,6 +115,9 @@ func _apply() -> void:
 	for target: Node2D in stretch_targets:
 		target.set(&"size", size)
 	for anchor: Node2D in start_anchors:
-		anchor.position = _anchor_offsets.get_or_add(anchor, anchor.position) - get_axis_vector() * length * 0.5
+		anchor.position = (
+				_anchor_offsets.get_or_add(anchor, anchor.position)
+				- get_axis_vector() * length * 0.5
+		)
 	
 	changed.emit()

@@ -20,6 +20,17 @@ func _init() -> void:
 	area_exited.connect(_on_area_exited)
 
 
+func _physics_process(_delta: float) -> void:
+	for body: Entity in bodies:
+		if body.is_on_floor() and body not in _signalled:
+			_signalled.append(body)
+			if body is Player:
+				new_player_rider.emit(body)
+			new_entity_rider.emit(body)
+	
+	riders_updated.emit(get_riders())
+
+
 func has_rider() -> bool:
 	for rider: Entity in bodies:
 		if rider.is_on_floor():
@@ -37,17 +48,6 @@ func get_riders() -> Array[Entity]:
 
 func get_entity_offset(entity: Entity) -> Vector2:
 	return entity.global_position - global_position
-
-
-func _physics_process(_delta: float) -> void:
-	for body: Entity in bodies:
-		if body.is_on_floor() and body not in _signalled:
-			_signalled.append(body)
-			if body is Player:
-				new_player_rider.emit(body)
-			new_entity_rider.emit(body)
-	
-	riders_updated.emit(get_riders())
 
 
 func _on_area_entered(area: Area2D) -> void:

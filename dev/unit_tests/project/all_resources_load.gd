@@ -1,5 +1,7 @@
 const Files: GDScript = preload("res://dev/unit_tests/project/_files.gd")
-const SKIPPED: PackedStringArray = ["res://assets/textures/level_designer/tool_widgets"]
+const SKIPPED: PackedStringArray = [
+	"res://assets/textures/level_designer/tool_widgets",
+]
 
 
 static func run_test() -> void:

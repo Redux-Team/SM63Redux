@@ -5,14 +5,16 @@ extends Control
 
 
 func _ready() -> void:
-	Singleton.build_screen_transition() \
-		.set_fade() \
-		.set_out_duration(0.0) \
-		.set_loading_delay(0.0) \
-		.load(_profile) \
-		.add_threaded_task(_scan_objects) \
-		.set_destination("uid://dp3ocrpop234v") \
-		.done()
+	(
+			Singleton.build_screen_transition()
+			.set_fade()
+			.set_out_duration(0.0)
+			.set_loading_delay(0.0)
+			.load(_profile)
+			.add_threaded_task(_scan_objects)
+			.set_destination("uid://dp3ocrpop234v")
+			.done()
+	)
 
 
 func _run_debug_tools() -> void:
@@ -34,6 +36,6 @@ func _scan_objects() -> void:
 
 
 func _profile() -> void:
-	print_rich("\nProfiling... ([color=red]-1.0[/color] to [color=green]1.0[/color])")
+	print_rich("\nProfiling... ([color=red]-1.0[/color] to " + "[color=green]1.0[/color])")
 	await Profile.run()
 	print()

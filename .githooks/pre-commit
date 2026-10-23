@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+cd "$(git rev-parse --show-toplevel)" || exit 1
+if ! git diff --cached --name-only --diff-filter=ACMR | grep -qE '\.(gd|gdshader)$'; then
+	exit 0
+fi
+
+godot="${GODOT:-godot}"
+if ! command -v "$godot" > /dev/null; then
+	echo "pre-commit: '$godot' is not on PATH. Set GODOT to your Godot binary, or skip with git commit --no-verify." >&2
+	exit 1
+fi
+
+cache=".godot/global_script_class_cache.cfg"
+stale=0
+if [ ! -f "$cache" ]; then
+	stale=1
+else
+	while read -r script; do
+		if ! grep -qF "\"res://${script#./}\"" "$cache"; then
+			stale=1
+			break
+		fi
+	done < <(grep -rlE --include='*.gd' --exclude-dir=.godot '^class_name\s' .)
+fi
+if [ "$stale" -eq 1 ]; then
+	echo "pre-commit: updating Godot's class cache first..." >&2
+	"$godot" --headless --path . --audio-driver Dummy --import > /dev/null 2>&1
+fi
+
+log="$(mktemp)"
+trap 'rm -f "$log" "$log.err"' EXIT
+"$godot" --headless --path . --audio-driver Dummy -s res://dev/unit_tests/_cli.gd -- --filter code_follows_styleguide,names_follow_conventions,members_follow_godot_order,string_literals_match_their_types > "$log" 2> "$log.err"
+status=$?
+if [ "$status" -ne 0 ]; then
+    echo "pre-commit: the styleguide check failed. Fix the lines below, or skip with git commit --no-verify (this is not recommended)." >&2
+	if ! sed 's/\x1b\[[0-9;]*m//g' "$log" | grep -E '^(FAIL|    [^ ])|passed,' >&2; then
+		cat "$log" "$log.err" >&2
+	fi
+fi
+rm -f "$log.err"
+exit "$status"

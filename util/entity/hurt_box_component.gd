@@ -25,22 +25,30 @@ enum DisableTarget {
 @export var ignored_damage_types: Array[HitBox.DamageType]
 @export_custom(PROPERTY_HINT_EXPRESSION, "") var expression: String
 @export_group("Knockback")
-@export_custom(PROPERTY_HINT_GROUP_ENABLE, "knockback") var override_knockback: bool = false
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "knockback")
+var override_knockback: bool = false
 @export var knockback: Vector2 = Vector2(150, 135)
 @export var knockback_mode_x: KnockbackMode = KnockbackMode.SET_RELATIVE
 @export var knockback_mode_y: KnockbackMode = KnockbackMode.SET_ABSOLUTE
 @export_group("Disable on Hit")
-@export_custom(PROPERTY_HINT_GROUP_ENABLE, "disable_on_hit") var disable_on_hit: bool = false
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "disable_on_hit")
+var disable_on_hit: bool = false
 @export var disable_on_hit_duration: float = 0.0
 @export var disable_on_hit_target: DisableTarget = DisableTarget.HURTBOX
 @export_group("Damage State")
-@export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var override_damage_state: bool = false
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "")
+var override_damage_state: bool = false
 @export var damage_state_map: Dictionary[HitBox.DamageType, StringName]
 @export var damage_state_name: StringName
 
 
 func matches(hitbox: HitBox, hurtbox: HurtBox = null, entity: Entity = null) -> bool:
-	if accepted_hitbox_ids and not hitbox.hitbox_ids.any(func(id: String) -> bool: return id in accepted_hitbox_ids):
+	if (
+			accepted_hitbox_ids
+			and not hitbox.hitbox_ids.any(
+					func(id: String) -> bool: return id in accepted_hitbox_ids
+			)
+	):
 		return false
 	if hitbox.hitbox_ids.any(func(id: String) -> bool: return id in ignored_hitbox_ids):
 		return false
@@ -68,20 +76,33 @@ func process(hitbox: HitBox, hurtbox: HurtBox, entity: Entity) -> void:
 		
 		var amount: float = hitbox.damage_amount
 		if hitbox.damage_curve:
-			amount = hitbox.damage_curve.sample(hitbox.global_position.distance_to(hurtbox.global_position))
+			amount = hitbox.damage_curve.sample(
+					hitbox.global_position.distance_to(hurtbox.global_position)
+			)
 		amount *= entity.get_attribute_scale(&"damage_scale")
 		if amount > 0.0:
 			health_component.damage(amount, hitbox.damage_type)
 		
-		entity.velocity = _resolve_knockback(hitbox, hurtbox, entity.velocity) * entity.get_attribute_scale(&"knockback_scale")
+		entity.velocity = (
+				_resolve_knockback(hitbox, hurtbox, entity.velocity)
+				* entity.get_attribute_scale(&"knockback_scale")
+		)
 		
 		var state: StringName = _resolve_damage_state(hitbox, hurtbox)
 		if not state.is_empty() and entity.machine:
 			entity.machine.change_state(state)
 	
 	if disable_on_hit:
-		var duration: float = (hitbox.override_disable_duration if hitbox.override_disable_on_hit else disable_on_hit_duration) * entity.get_attribute_scale(&"recovery_scale")
-		var target: DisableTarget = hitbox.override_disable_target if hitbox.override_disable_on_hit else disable_on_hit_target
+		var duration: float = (
+				hitbox.override_disable_duration
+				if hitbox.override_disable_on_hit
+				else disable_on_hit_duration
+		) * entity.get_attribute_scale(&"recovery_scale")
+		var target: DisableTarget = (
+				hitbox.override_disable_target
+				if hitbox.override_disable_on_hit
+				else disable_on_hit_target
+		)
 		match target:
 			DisableTarget.HURTBOX:
 				hurtbox.disable()

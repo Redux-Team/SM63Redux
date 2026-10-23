@@ -15,4 +15,8 @@ func coerce(value: Variant) -> Variant:
 func to_info() -> Dictionary:
 	var names: PackedStringArray = [DEFAULT_LABEL]
 	names.append_array(PolygonStyleRegistry.get_names(style_kind))
-	return {"type": TYPE_STRING, "hint": PROPERTY_HINT_ENUM, "hint_string": ",".join(names)}
+	return {
+		"type": TYPE_STRING,
+		"hint": PROPERTY_HINT_ENUM,
+		"hint_string": ",".join(names),
+	}

@@ -25,11 +25,11 @@ static func load_preset(id: StringName) -> Dictionary:
 	if not _presets.has(id):
 		var scene: PackedScene = load(PRESETS_ROOT.path_join("%s.tscn" % id)) as PackedScene
 		var root: Background = scene.instantiate() as Background if scene else null
-		_presets.set(id, encode(root) if root else {})
+		_presets[id] = encode(root) if root else {}
 		if root:
 			root.free()
 	
-	return (_presets.get(id) as Dictionary).duplicate(true)
+	return (_presets[id] as Dictionary).duplicate(true)
 
 
 static func resolve(data: Dictionary) -> Dictionary:

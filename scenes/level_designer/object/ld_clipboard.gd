@@ -12,15 +12,6 @@ var _entries: Array[ObjectData] = []
 var _anchor: Vector2 = Vector2.ZERO
 
 
-func _setup() -> void:
-	editor.object_handler.selection.changed.connect(_refresh_buttons)
-	LD.bind_button(cut_button, func() -> void: cut(editor.object_handler.selection.get_objects()))
-	LD.bind_button(copy_button, func() -> void: copy(editor.object_handler.selection.get_objects()))
-	LD.bind_button(paste_button, func() -> void: paste(_get_paste_position()))
-	LD.bind_button(duplicate_button, func() -> void: duplicate_objects(editor.object_handler.selection.get_objects()))
-	_refresh_buttons()
-
-
 func _unhandled_input(event: InputEvent) -> void:
 	var selected: Array[GameObject] = editor.object_handler.selection.get_objects()
 	if editor.is_shortcut(event, &"ld_copy"):
@@ -37,8 +28,24 @@ func _unhandled_input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 
+func _setup() -> void:
+	editor.object_handler.selection.changed.connect(_refresh_buttons)
+	LD.bind_button(cut_button, func() -> void: cut(editor.object_handler.selection.get_objects()))
+	LD.bind_button(copy_button, func() -> void: copy(editor.object_handler.selection.get_objects()))
+	LD.bind_button(paste_button, func() -> void: paste(_get_paste_position()))
+	LD.bind_button(
+			duplicate_button,
+			func() -> void:
+				duplicate_objects(editor.object_handler.selection.get_objects())
+	)
+	_refresh_buttons()
+
+
 func copy(objects: Array[GameObject]) -> void:
-	var copyable: Array[GameObject] = objects.filter(func(object: GameObject) -> bool: return object.has_flag(GameObject.Flag.COPYABLE))
+	var copyable: Array[GameObject] = objects.filter(
+			func(object: GameObject) -> bool:
+				return object.has_flag(GameObject.Flag.COPYABLE)
+	)
 	if copyable.is_empty():
 		return
 	
@@ -57,7 +64,11 @@ func cut(objects: Array[GameObject]) -> void:
 
 
 func paste(local_position: Vector2) -> void:
-	editor.object_handler.add_objects(_instantiate(_entries, local_position - _anchor), editor.level_handler.active_layer, "Paste Objects")
+	editor.object_handler.add_objects(
+			_instantiate(_entries, local_position - _anchor),
+			editor.level_handler.active_layer,
+			"Paste Objects",
+	)
 
 
 func duplicate_objects(objects: Array[GameObject]) -> void:
@@ -66,7 +77,11 @@ func duplicate_objects(objects: Array[GameObject]) -> void:
 		if object.has_flag(GameObject.Flag.COPYABLE):
 			entries.append(object.to_data())
 	
-	editor.object_handler.add_objects(_instantiate(entries, DUPLICATE_OFFSET), editor.level_handler.active_layer, "Duplicate Objects")
+	editor.object_handler.add_objects(
+			_instantiate(entries, DUPLICATE_OFFSET),
+			editor.level_handler.active_layer,
+			"Duplicate Objects",
+	)
 
 
 func _instantiate(entries: Array[ObjectData], offset: Vector2) -> Array[GameObject]:

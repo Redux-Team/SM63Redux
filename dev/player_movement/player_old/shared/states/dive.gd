@@ -14,7 +14,11 @@ func _enter() -> void:
 	player.jump_chain_index = 0
 	player.is_diving = true
 	player.lock_flipping = true
-	_previous_state_name = machine.get_last_state().name if machine.get_last_state() else &""
+	_previous_state_name = (
+		machine.get_last_state().name
+		if machine.get_last_state()
+		else &""
+	)
 	_resetting = false
 	_reset_timer = 0.0
 	_just_landed = false
@@ -22,7 +26,11 @@ func _enter() -> void:
 	_was_grounded = player.is_on_floor()
 	
 	_apply_impulse()
-	_body_rotation = _get_air_rotation_angle() if not player.is_on_floor() else _get_slope_angle()
+	_body_rotation = (
+		_get_air_rotation_angle()
+		if not player.is_on_floor()
+		else _get_slope_angle()
+	)
 	player.sprite.local_rotation = rad_to_deg(_body_rotation)
 
 
@@ -41,7 +49,10 @@ func _tick(delta: float) -> void:
 		_update_reset(delta)
 		return
 	
-	player.get_fludd_handler().set_dive_rotation(_body_rotation, PlayerFluddHandlerOld.FluddContext.DIVE)
+	player.get_fludd_handler().set_dive_rotation(
+		_body_rotation,
+		PlayerFluddHandlerOld.FluddContext.DIVE,
+	)
 	
 	if player.is_on_floor():
 		_apply_ground_physics(delta)
@@ -67,35 +78,72 @@ func _apply_impulse() -> void:
 		player.velocity.x = 0.0
 	
 	var speed_difference: float = player.dive_target_speed - current_speed
-	player.velocity.x += (speed_difference / (player.dive_time_to_target_speed * 60.0)) * facing
+	player.velocity.x += (
+		(speed_difference / (player.dive_time_to_target_speed * 60.0))
+		* facing
+	)
 	
 	if _previous_state_name == &"Idle":
-		player.velocity.y = max(player.dive_neutral_launch_y_cap, player.velocity.y + player.dive_launch_y_boost)
+		player.velocity.y = max(
+			player.dive_neutral_launch_y_cap,
+			player.velocity.y + player.dive_launch_y_boost,
+		)
 	else:
 		player.velocity.y += player.dive_launch_y_boost
 	
-	player.velocity.y = clamp(player.velocity.y, player.dive_launch_y_min, player.dive_launch_y_max)
+	player.velocity.y = clamp(
+		player.velocity.y,
+		player.dive_launch_y_min,
+		player.dive_launch_y_max,
+	)
 	
-	if player.is_on_floor() and player.floor_slope_raycast and player.floor_slope_raycast.is_colliding():
+	if (
+		player.is_on_floor()
+		and player.floor_slope_raycast
+		and player.floor_slope_raycast.is_colliding()
+	):
 		_body_rotation = _get_slope_angle()
 
 
 func _apply_ground_physics(delta: float) -> void:
 	_apply_ground_friction(delta)
 	
-	if abs(player.velocity.x) < player.dive_slide_stop_threshold and not player.is_action_pressed("dive"):
+	if (
+		abs(player.velocity.x) < player.dive_slide_stop_threshold
+		and not player.is_action_pressed("dive")
+	):
 		_resetting = true
 		_reset_timer = 0.0
 
 
 func _apply_ground_friction(delta: float) -> void:
-	var friction_multiplier: float = player.dive_landing_friction_multiplier if _just_landed else 1.0
+	var friction_multiplier: float = (
+		player.dive_landing_friction_multiplier
+		if _just_landed
+		else 1.0
+	)
 	_just_landed = false
 	
 	var velocity_sign: float = sign(player.velocity.x)
 	var speed: float = abs(player.velocity.x)
-	speed = max(0.0, speed - player.dive_ground_flat_decel * friction_multiplier * delta * 60.0)
-	speed = max(0.0, speed - speed * player.dive_ground_proportional_decel * friction_multiplier)
+	speed = max(
+		0.0,
+		(
+			speed
+			- player.dive_ground_flat_decel * friction_multiplier * delta * 60.0
+		),
+	)
+	speed = max(
+		0.0,
+		(
+			speed
+			- (
+				speed
+				* player.dive_ground_proportional_decel
+				* friction_multiplier
+			)
+		),
+	)
 	player.velocity.x = speed * velocity_sign
 
 
@@ -113,9 +161,17 @@ func _apply_air_control(delta: float) -> void:
 	var move_input: float = player.move_input
 	
 	if abs(speed_x) < max_speed or sign(speed_x) != sign(move_input):
-		speed_x = move_toward(speed_x, max_speed * move_input, acceleration * delta * 60.0)
+		speed_x = move_toward(
+			speed_x,
+			max_speed * move_input,
+			acceleration * delta * 60.0,
+		)
 	else:
-		speed_x = move_toward(speed_x, max_speed * sign(speed_x), acceleration * delta * player.dive_over_speed_decel)
+		speed_x = move_toward(
+			speed_x,
+			max_speed * sign(speed_x),
+			acceleration * delta * player.dive_over_speed_decel,
+		)
 	
 	player.velocity.x = speed_x
 
@@ -138,16 +194,27 @@ func _update_rotation(delta: float) -> void:
 		_landing_timer += delta
 		
 		var target_angle: float
-		if player.floor_slope_raycast and player.floor_slope_raycast.is_colliding():
+		if (
+			player.floor_slope_raycast
+			and player.floor_slope_raycast.is_colliding()
+		):
 			target_angle = _get_slope_angle()
 		else:
 			target_angle = deg_to_rad(player.dive_grounded_angle_deg)
 		
-		var lerp_speed: float = player.dive_ground_rotation_blend if _landing_timer < player.dive_landing_rotation_smooth_duration else player.dive_ground_rotation_blend_fast
+		var lerp_speed: float = (
+			player.dive_ground_rotation_blend
+			if _landing_timer < player.dive_landing_rotation_smooth_duration
+			else player.dive_ground_rotation_blend_fast
+		)
 		_body_rotation = lerp_angle(_body_rotation, target_angle, lerp_speed)
 	else:
 		_landing_timer = 0.0
-		_body_rotation = lerp_angle(_body_rotation, _get_air_rotation_angle(), player.dive_air_rotation_blend)
+		_body_rotation = lerp_angle(
+			_body_rotation,
+			_get_air_rotation_angle(),
+			player.dive_air_rotation_blend,
+		)
 	
 	player.sprite.local_rotation = rad_to_deg(_body_rotation)
 
@@ -168,20 +235,35 @@ func _update_reset(delta: float) -> void:
 		_body_rotation += (PI / 2.0) * facing
 	
 	player.sprite.local_rotation = rad_to_deg(_body_rotation)
-	player.velocity.x = move_toward(player.velocity.x, 0.0, player.dive_reset_decel)
+	player.velocity.x = move_toward(
+		player.velocity.x,
+		0.0,
+		player.dive_reset_decel,
+	)
 
 
-## The dive angle tracks the velocity vector rather than a timed curve, so the body points where the
-## player is actually travelling.
+## The dive angle tracks the velocity vector rather than a timed curve, so the
+## body points where the player is actually travelling.
 func _get_air_rotation_angle() -> float:
 	var facing: float = -1.0 if player.sprite.flip_h else 1.0
-	var heading: float = rad_to_deg(Vector2(player.velocity.x * facing, player.velocity.y).angle())
+	var heading: float = rad_to_deg(
+		Vector2(player.velocity.x * facing, player.velocity.y).angle()
+	)
 	
-	return deg_to_rad(clamp(heading, player.dive_rotation_min_deg, player.dive_rotation_max_deg))
+	return deg_to_rad(
+		clamp(
+			heading,
+			player.dive_rotation_min_deg,
+			player.dive_rotation_max_deg,
+		)
+	)
 
 
 func _get_slope_angle() -> float:
-	if not player.floor_slope_raycast or not player.floor_slope_raycast.is_colliding():
+	if (
+		not player.floor_slope_raycast
+		or not player.floor_slope_raycast.is_colliding()
+	):
 		return deg_to_rad(player.dive_grounded_angle_deg)
 	
 	var normal: Vector2 = player.floor_slope_raycast.get_collision_normal()

@@ -34,7 +34,11 @@ func _tool_input(event: InputEvent, _world_position: Vector2) -> bool:
 		return false
 	
 	var mouse_button: InputEventMouseButton = event as InputEventMouseButton
-	if mouse_button == null or mouse_button.button_index != MOUSE_BUTTON_LEFT or not mouse_button.pressed:
+	if (
+			mouse_button == null
+			or mouse_button.button_index != MOUSE_BUTTON_LEFT
+			or not mouse_button.pressed
+	):
 		return false
 	
 	_hover = _cell_at_cursor()
@@ -51,13 +55,6 @@ func _view_changed() -> void:
 		_track_cursor()
 
 
-func _track_cursor() -> void:
-	var cell: Vector2i = _cell_at_cursor()
-	if cell != _hover or _stale:
-		_hover = cell
-		_refresh()
-
-
 func _draw_overlay(overlay: LDOverlay) -> void:
 	var layer: LevelLayer = editor.level_handler.active_layer
 	if layer == null or editor.tool_handler.armed == null:
@@ -67,6 +64,13 @@ func _draw_overlay(overlay: LDOverlay) -> void:
 	var color: Color = fill_color if not _region.is_empty() else blocked_color
 	for ring: PackedVector2Array in _rings:
 		overlay.draw_world_polyline(to_world * TerrainPolygon.get_closed_points(ring), color, 2.0)
+
+
+func _track_cursor() -> void:
+	var cell: Vector2i = _cell_at_cursor()
+	if cell != _hover or _stale:
+		_hover = cell
+		_refresh()
 
 
 func _invalidate() -> void:
@@ -79,10 +83,12 @@ func _refresh() -> void:
 	_rings.clear()
 	var outline: Dictionary[Vector2i, bool] = _region.duplicate()
 	if outline.is_empty():
-		outline.set(_hover, true)
+		outline[_hover] = true
 	for shape: TileGrid.Shape in TileGrid.trace(outline):
 		_rings.append_array(shape.get_rings())
 
 
 func _cell_at_cursor() -> Vector2i:
-	return TileGrid.world_to_cell(editor.viewport_handler.get_layer_mouse(editor.level_handler.active_layer))
+	return TileGrid.world_to_cell(
+			editor.viewport_handler.get_layer_mouse(editor.level_handler.active_layer)
+	)

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b6ofp5p155oy2"]
 
 [ext_resource type="Resource" path="res://scenes/level_designer/core/ld_input_map.tres" id="1_r"]
-[ext_resource type="Script" path="res://scenes/level_designer/level_designer.gd" id="2_r"]
+[ext_resource type="Script" path="res://scenes/level_designer/ld.gd" id="2_r"]
 [ext_resource type="PackedScene" path="res://scenes/level_designer/interface/ld_hud.tscn" id="3_r"]
 [ext_resource type="PackedScene" path="res://scenes/level_designer/interface/ld_window.tscn" id="4_r"]
 [ext_resource type="PackedScene" path="res://scenes/level_designer/interface/panels/ld_object_browser_view.tscn" id="5_r"]

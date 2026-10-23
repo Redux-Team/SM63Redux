@@ -29,7 +29,10 @@ static func get_ring_keys(object: GameObject) -> Array[StringName]:
 
 
 func _get_targets(objects: Array[GameObject]) -> Array[GameObject]:
-	return objects.filter(func(object: GameObject) -> bool: return not get_ring_keys(object).is_empty())
+	return objects.filter(
+			func(object: GameObject) -> bool:
+				return not get_ring_keys(object).is_empty()
+	)
 
 
 func refresh() -> void:
@@ -42,23 +45,36 @@ func refresh() -> void:
 		for key: StringName in get_ring_keys(object):
 			if not _rings.has(key):
 				_rings.append(key)
-	_rings.sort_custom(func(a: StringName, b: StringName) -> bool: return a != NODE_RING and b == NODE_RING)
+	_rings.sort_custom(
+			func(a: StringName, b: StringName) -> bool:
+				return a != NODE_RING and b == NODE_RING
+	)
 
 
 func _layout_handles() -> void:
 	for i: int in _rings.size():
-		var key: StringName = _rings.get(i)
-		var handle: LDHandle = place_handle(key, _to_world(_center_screen() + Vector2.from_angle(_get_angle(key)) * _radius(i)), knob_style)
+		var key: StringName = _rings[i]
+		var handle: LDHandle = place_handle(
+				key,
+				_to_world(_center_screen() + Vector2.from_angle(_get_angle(key)) * _radius(i)),
+				knob_style,
+		)
 		handle.cursor = Control.CURSOR_DRAG if is_pressed(key) else Control.CURSOR_POINTING_HAND
 
 
 func _draw_guides(overlay: LDOverlay) -> void:
 	var center: Vector2 = _center_screen()
 	for i: int in _rings.size():
-		var key: StringName = _rings.get(i)
+		var key: StringName = _rings[i]
 		var color: Color = active_color if is_hovered(key) or is_pressed(key) else ring_color
 		overlay.canvas.draw_arc(center, _radius(i), 0.0, TAU, 64, color, 1.0, true)
-		overlay.canvas.draw_line(center, center + Vector2.from_angle(_get_angle(key)) * _radius(i), color, 1.0, true)
+		overlay.canvas.draw_line(
+				center,
+				center + Vector2.from_angle(_get_angle(key)) * _radius(i),
+				color,
+				1.0,
+				true,
+		)
 	overlay.canvas.draw_circle(center, 2.5, active_color)
 
 
@@ -67,15 +83,29 @@ func _on_handle_pressed(handle: LDHandle) -> void:
 	_members = targets.filter(func(each: GameObject) -> bool: return get_ring_keys(each).has(key))
 	_before_transforms = LDObjectHandler.get_transforms(_members)
 	_before_values = _members.map(func(object: GameObject) -> Variant: return object.get_value(key))
-	_start_angle = (editor.viewport_handler.to_screen(editor.viewport_handler.get_world_mouse()) - _center_screen()).angle()
+	_start_angle = (
+			editor.viewport_handler.to_screen(editor.viewport_handler.get_world_mouse())
+			- _center_screen()
+	).angle()
 
 
 func _on_handle_dragged(handle: LDHandle, world_position: Vector2) -> void:
-	var delta: float = angle_difference(_start_angle, (editor.viewport_handler.to_screen(world_position) - _center_screen()).angle())
+	var delta: float = angle_difference(
+			_start_angle,
+			(editor.viewport_handler.to_screen(world_position) - _center_screen()).angle(),
+	)
 	if not Input.is_action_pressed(&"ld_snap_bypass"):
 		delta = snappedf(delta, deg_to_rad(snap_degrees))
 	
-	_apply(handle.key, func(i: int) -> float: return delta + (_before_transforms.get(i).get_rotation() if handle.key == NODE_RING else deg_to_rad(_before_values.get(i))))
+	_apply(
+			handle.key,
+			func(i: int) -> float:
+				return delta + (
+					_before_transforms[i].get_rotation()
+					if handle.key == NODE_RING
+					else deg_to_rad(_before_values[i])
+				)
+	)
 
 
 func _on_handle_released(handle: LDHandle) -> void:
@@ -83,7 +113,15 @@ func _on_handle_released(handle: LDHandle) -> void:
 
 
 func _on_handle_cancelled(handle: LDHandle) -> void:
-	_apply(handle.key, func(i: int) -> float: return _before_transforms.get(i).get_rotation() if handle.key == NODE_RING else deg_to_rad(_before_values.get(i)))
+	_apply(
+			handle.key,
+			func(i: int) -> float:
+				return (
+					_before_transforms[i].get_rotation()
+					if handle.key == NODE_RING
+					else deg_to_rad(_before_values[i])
+				)
+	)
 
 
 func _on_handle_reset(handle: LDHandle) -> void:
@@ -94,7 +132,7 @@ func _on_handle_reset(handle: LDHandle) -> void:
 
 func _apply(key: StringName, angle_of: Callable) -> void:
 	for i: int in _members.size():
-		var object: GameObject = _members.get(i)
+		var object: GameObject = _members[i]
 		var angle: float = angle_of.call(i)
 		if key == NODE_RING:
 			object.rotation = angle
@@ -105,18 +143,31 @@ func _apply(key: StringName, angle_of: Callable) -> void:
 
 func _commit(key: StringName, action_name: String) -> void:
 	if key == NODE_RING:
-		editor.object_handler.transform_objects(_members, _before_transforms, LDObjectHandler.get_transforms(_members), action_name)
+		editor.object_handler.transform_objects(
+				_members,
+				_before_transforms,
+				LDObjectHandler.get_transforms(_members),
+				action_name,
+		)
 	else:
-		editor.object_handler.commit_values(_members, key, _before_values, _members.map(func(object: GameObject) -> Variant: return object.get_value(key)), action_name)
+		editor.object_handler.commit_values(
+				_members,
+				key,
+				_before_values,
+				_members.map(func(object: GameObject) -> Variant: return (object.get_value(key))),
+				action_name,
+		)
 
 
 func _get_angle(key: StringName) -> float:
-	var owners: Array[GameObject] = targets.filter(func(each: GameObject) -> bool: return get_ring_keys(each).has(key))
+	var owners: Array[GameObject] = \
+			targets.filter(func(each: GameObject) -> bool: return get_ring_keys(each).has(key))
 	if owners.is_empty():
 		return 0.0
 	
 	var object: GameObject = owners.front()
-	var screen_rotation: float = (editor.world.get_canvas_transform() * object.get_global_transform()).get_rotation()
+	var screen_rotation: float = \
+			(editor.world.get_canvas_transform() * object.get_global_transform()).get_rotation()
 	if key == NODE_RING:
 		return screen_rotation
 	

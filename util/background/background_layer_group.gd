@@ -21,6 +21,13 @@ static var _notifying: bool = false
 		emit_changed()
 
 
+static func collect_parallax(node: Node) -> Array[Node]:
+	var nodes: Array[Node] = node.find_children("*", "Parallax2D", true, false)
+	if node is Parallax2D:
+		nodes.append(node)
+	return nodes
+
+
 func _build() -> Node:
 	var group: Node2D = Node2D.new()
 	group.position = offset
@@ -62,13 +69,6 @@ func _compose(node: Node) -> void:
 		if limited:
 			parallax.limit_begin = limit.position
 			parallax.limit_end = limit.end
-
-
-static func collect_parallax(node: Node) -> Array[Node]:
-	var nodes: Array[Node] = node.find_children("*", "Parallax2D", true, false)
-	if node is Parallax2D:
-		nodes.append(node)
-	return nodes
 
 
 func _on_layer_changed() -> void:

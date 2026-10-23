@@ -1,8 +1,9 @@
 static func run_test() -> void:
 	var tree: SceneTree = Engine.get_main_loop()
-	var outer: PackedVector2Array = PackedVector2Array([Vector2(0, 0), Vector2(128, 0), Vector2(128, 64), Vector2(0, 64)])
+	var outer: PackedVector2Array = \
+			PackedVector2Array([Vector2(0, 0), Vector2(128, 0), Vector2(128, 64), Vector2(0, 64)])
 	var data: ObjectData = ObjectData.create(&"terrain_grass")
-	data.shape = {"outer": outer, "holes": [], "toplines": []}
+	data.shape = { "outer": outer, "holes": [], "toplines": [] }
 	var terrain: GameObject = ObjectRegistry.spawn(data, GameObject.Context.GAME)
 	tree.root.add_child(terrain)
 	
@@ -16,7 +17,8 @@ static func run_test() -> void:
 	assert(terrain.is_solid())
 	
 	var shape: PolygonShape = terrain.shape as PolygonShape
-	var hole: PackedVector2Array = PackedVector2Array([Vector2(32, 16), Vector2(96, 16), Vector2(96, 48), Vector2(32, 48)])
+	var hole: PackedVector2Array = \
+			PackedVector2Array([Vector2(32, 16), Vector2(96, 16), Vector2(96, 48), Vector2(32, 48)])
 	shape.set_rings([outer, hole] as Array[PackedVector2Array], [] as Array[Dictionary])
 	collision.sync()
 	var polygons: Array[CollisionPolygon2D] = []
@@ -30,7 +32,14 @@ static func run_test() -> void:
 	
 	shape.set_rings([outer] as Array[PackedVector2Array], [] as Array[Dictionary])
 	collision.sync()
-	assert(body.get_children().filter(func(child: Node) -> bool: return child is CollisionPolygon2D and not child.is_queued_for_deletion()).size() == 1)
+	assert(
+			body.get_children().filter(
+					func(child: Node) -> bool: return (
+							child is CollisionPolygon2D
+							and not child.is_queued_for_deletion()
+					)
+			).size() == 1
+	)
 	
 	var edges: int = 0
 	for segment: PackedVector2Array in shape.get_topline_segments():

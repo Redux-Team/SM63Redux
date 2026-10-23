@@ -19,7 +19,10 @@ func _render_tick(_delta: float) -> void:
 		return
 	
 	_footstep_frame = frame
-	var trigger_frames: PackedInt32Array = player.footstep_frames.get(sprite.current_animation, PackedInt32Array())
+	var trigger_frames: PackedInt32Array = player.footstep_frames.get(
+		sprite.current_animation,
+		PackedInt32Array(),
+	)
 	if trigger_frames.has(frame):
 		player.play_footstep()
 
@@ -28,7 +31,11 @@ func _apply_gait() -> void:
 	var input_strength: float = absf(player.move_input)
 	var wanted_animation: StringName = sprite.current_animation
 	if input_strength >= player.move_input_threshold:
-		wanted_animation = &"run_loop" if input_strength >= player.run_animation_input_threshold else &"walk_loop"
+		wanted_animation = (
+			&"run_loop"
+			if input_strength >= player.run_animation_input_threshold
+			else &"walk_loop"
+		)
 	elif absf(player.velocity.x) <= player.walk_animation_stop_speed:
 		wanted_animation = &"walk_loop"
 	
@@ -36,14 +43,21 @@ func _apply_gait() -> void:
 		sprite.play(wanted_animation)
 	
 	if player.walk_speed_curve:
-		var speed_ratio: float = clampf(absf(player.velocity.x) / maxf(player.run_max_speed, 1.0), 0.0, 1.0)
+		var speed_ratio: float = clampf(
+			absf(player.velocity.x) / maxf(player.run_max_speed, 1.0),
+			0.0,
+			1.0,
+		)
 		sprite.speed_scale = player.walk_speed_curve.sample(speed_ratio)
 
 
 func _next() -> StringName:
 	if not player.is_on_floor() and player.velocity.y >= 0.0:
 		return &"Fall"
-	if absf(player.move_input) < player.move_input_threshold and absf(player.velocity.x) < player.walk_stop_speed:
+	if (
+		absf(player.move_input) < player.move_input_threshold
+		and absf(player.velocity.x) < player.walk_stop_speed
+	):
 		return &"Idle"
 	if player.is_action_just_pressed("crouch") and player.is_on_floor():
 		if absf(player.velocity.x) <= player.crouch_max_speed:
@@ -52,6 +66,10 @@ func _next() -> StringName:
 			return &"Floorslide"
 	if player.is_input_spin:
 		return &"Spin"
-	if player.is_on_floor() and player.is_action_just_pressed("jump", player.jump_buffer_window) and player.can_jump:
+	if (
+		player.is_on_floor()
+		and player.is_action_just_pressed("jump", player.jump_buffer_window)
+		and player.can_jump
+	):
 		return &"BaseJump"
 	return &""

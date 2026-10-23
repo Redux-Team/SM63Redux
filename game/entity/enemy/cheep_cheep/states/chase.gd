@@ -5,7 +5,8 @@ const CHASE_SPEED: float = 50.0
 
 
 func _tick(_delta: float) -> void:
-	var player: Player = cheep_cheep.lost_vision_area.get_closest_player(cheep_cheep.global_position)
+	var player: Player = \
+			cheep_cheep.lost_vision_area.get_closest_player(cheep_cheep.global_position)
 	if not player:
 		return
 	

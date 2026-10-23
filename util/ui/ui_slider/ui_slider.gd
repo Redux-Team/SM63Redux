@@ -47,6 +47,10 @@ func _set(property: StringName, _value: Variant) -> bool:
 	return false
 
 
+func is_held() -> bool:
+	return _held
+
+
 func _update_layout() -> void:
 	if fill == null or grabber == null:
 		return
@@ -56,7 +60,7 @@ func _update_layout() -> void:
 	grabber.set_anchor_and_offset(SIDE_RIGHT, ratio, inset - shift + grabber_width)
 	fill.set_anchor_and_offset(SIDE_RIGHT, ratio, grabber_width + inset * 2.0 - shift)
 	for tick: Panel in _ticks:
-		if _ticks.get(tick) <= ratio:
+		if _ticks[tick] <= ratio:
 			GDSS.set_state(tick, "filled")
 		else:
 			GDSS.clear_state(tick)
@@ -76,7 +80,7 @@ func _rebuild_ticks() -> void:
 		GDSS.add_class(tick, "TickMark")
 		add_child(tick)
 		move_child(tick, grabber.get_index())
-		_ticks.set(tick, float(i) / float(tick_count - 1))
+		_ticks[tick] = float(i) / float(tick_count - 1)
 	_place_ticks()
 	_update_layout()
 
@@ -86,18 +90,15 @@ func _place_ticks() -> void:
 		return
 	var span: float = grabber.size.x + inset * 2.0
 	for tick: Panel in _ticks:
-		var center: float = span * 0.5 + _ticks.get(tick) * (size.x - span)
-		tick.position = Vector2(roundf(center - tick_size.x * 0.5), roundf((size.y - tick_size.y) * 0.5))
+		var center: float = span * 0.5 + _ticks[tick] * (size.x - span)
+		tick.position = \
+				Vector2(roundf(center - tick_size.x * 0.5), roundf((size.y - tick_size.y) * 0.5))
 		tick.size = tick_size
 
 
 func _set_hovered(hovered: bool) -> void:
 	_hovered = hovered
 	_update_state()
-
-
-func is_held() -> bool:
-	return _held
 
 
 func _update_state() -> void:

@@ -2,8 +2,14 @@ static func run_test() -> void:
 	assert(LevelLayer.scale_from_distance(0.0) == 1.0)
 	assert(LevelLayer.scale_from_distance(1.0) == 0.5)
 	assert(LevelLayer.scale_from_distance(-0.5) == 2.0)
-	assert(LevelLayer.scale_from_distance(100.0) == LevelLayer.scale_from_distance(LevelLayer.DISTANCE_MAX))
-	assert(LevelLayer.scale_from_distance(-100.0) == LevelLayer.scale_from_distance(LevelLayer.DISTANCE_MIN))
+	assert(
+			LevelLayer.scale_from_distance(100.0)
+			== LevelLayer.scale_from_distance(LevelLayer.DISTANCE_MAX)
+	)
+	assert(
+			LevelLayer.scale_from_distance(-100.0)
+			== LevelLayer.scale_from_distance(LevelLayer.DISTANCE_MIN)
+	)
 	
 	var data: LayerData = LayerData.create(4)
 	data.layer_name = "Hills"
@@ -73,9 +79,12 @@ static func run_test() -> void:
 	layer.group_visible = true
 	assert(layer.visible)
 	
-	var first: GameObject = ObjectRegistry.spawn(ObjectData.create(&"yellow_coin"), GameObject.Context.EDITOR)
-	var second: GameObject = ObjectRegistry.spawn(ObjectData.create(&"goomba"), GameObject.Context.EDITOR)
-	var third: GameObject = ObjectRegistry.spawn(ObjectData.create(&"blue_coin"), GameObject.Context.EDITOR)
+	var first: GameObject = \
+			ObjectRegistry.spawn(ObjectData.create(&"yellow_coin"), GameObject.Context.EDITOR)
+	var second: GameObject = \
+			ObjectRegistry.spawn(ObjectData.create(&"goomba"), GameObject.Context.EDITOR)
+	var third: GameObject = \
+			ObjectRegistry.spawn(ObjectData.create(&"blue_coin"), GameObject.Context.EDITOR)
 	layer.add_object(first)
 	layer.add_object(second)
 	layer.add_object(third, 0)

@@ -16,19 +16,19 @@ func _ready() -> void:
 	_show_indicators(false)
 
 
+func _process(_delta: float) -> void:
+	_set_progress(_cap_mode.get_remaining_ratio())
+
+
 func bind(caps: MultiModeMachine) -> void:
 	_cap_mode = caps.get_mode(cap) as CapMode
 	for target: CanvasItem in targets:
-		_base_materials.set(target, target.material)
+		_base_materials[target] = target.material
 	
 	caps.mode_started.connect(_on_mode_started)
 	caps.mode_stopped.connect(_on_mode_stopped)
 	if caps.is_running(cap):
 		_on_mode_started(_cap_mode)
-
-
-func _process(_delta: float) -> void:
-	_set_progress(_cap_mode.get_remaining_ratio())
 
 
 func _set_progress(value: float) -> void:
@@ -59,7 +59,7 @@ func _on_mode_stopped(mode: Mode) -> void:
 	
 	if material:
 		for target: CanvasItem in targets:
-			target.material = _base_materials.get(target)
+			target.material = _base_materials[target]
 	else:
 		_set_progress(0.0)
 	_show_indicators(false)

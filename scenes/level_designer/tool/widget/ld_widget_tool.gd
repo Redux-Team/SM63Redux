@@ -17,8 +17,22 @@ var _last_click_key: Variant
 var _last_click_time: float = -INF
 
 
-@abstract func _get_targets(objects: Array[GameObject]) -> Array[GameObject]
-@abstract func _layout_handles() -> void
+func _input(event: InputEvent) -> void:
+	if is_active() and _pressed and editor.is_shortcut(event, &"ld_back"):
+		_cancel()
+		get_viewport().set_input_as_handled()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if (
+			is_active()
+			and _hovered
+			and not _pressed
+			and editor.is_shortcut(event, &"ld_delete")
+			and _on_handle_deleted(_hovered)
+	):
+		_hovered = null
+		get_viewport().set_input_as_handled()
 
 
 func _setup() -> void:
@@ -44,18 +58,6 @@ func _cancel() -> void:
 		_on_handle_cancelled(handle)
 
 
-func _input(event: InputEvent) -> void:
-	if is_active() and _pressed and editor.is_shortcut(event, &"ld_back"):
-		_cancel()
-		get_viewport().set_input_as_handled()
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if is_active() and _hovered and not _pressed and editor.is_shortcut(event, &"ld_delete") and _on_handle_deleted(_hovered):
-		_hovered = null
-		get_viewport().set_input_as_handled()
-
-
 func _tool_input(event: InputEvent, world_position: Vector2) -> bool:
 	if _forwarding or targets.is_empty():
 		return _forward(event, world_position)
@@ -65,7 +67,13 @@ func _tool_input(event: InputEvent, world_position: Vector2) -> bool:
 			_update_hover()
 			return false
 		
-		_moved = _moved or (event as InputEventMouseMotion).position.distance_to(_press_screen) > DRAG_THRESHOLD
+		_moved = (
+				_moved
+				or (
+						(event as InputEventMouseMotion).position.distance_to(_press_screen)
+						> DRAG_THRESHOLD
+				)
+		)
 		if _moved:
 			_on_handle_dragged(_pressed, world_position)
 		return true
@@ -92,7 +100,10 @@ func _tool_input(event: InputEvent, world_position: Vector2) -> bool:
 		return false
 	
 	if _hovered and _hovered.enabled:
-		if _hovered.key == _last_click_key and Time.get_ticks_msec() / 1000.0 - _last_click_time <= DOUBLE_CLICK_TIME:
+		if (
+				_hovered.key == _last_click_key
+				and (Time.get_ticks_msec() / 1000.0 - _last_click_time <= DOUBLE_CLICK_TIME)
+		):
 			_last_click_key = null
 			_on_handle_reset(_hovered)
 		else:
@@ -104,6 +115,22 @@ func _tool_input(event: InputEvent, world_position: Vector2) -> bool:
 	
 	_forwarding = true
 	return _forward(event, world_position)
+
+
+func _draw_overlay(overlay: LDOverlay) -> void:
+	if targets.is_empty():
+		return
+	
+	_sync_handles()
+	_draw_guides(overlay)
+	var delta: float = get_process_delta_time()
+	for handle: LDHandle in _handles.values():
+		handle.draw(
+				overlay.canvas,
+				editor.viewport_handler.to_screen(handle.world),
+				handle.get_state(handle == _hovered, handle == _pressed),
+				delta,
+		)
 
 
 func continue_forwarding() -> void:
@@ -132,7 +159,7 @@ func place_handle(key: Variant, world: Vector2, style: LDHandleStyle) -> LDHandl
 	var handle: LDHandle = _handles.get(key)
 	if handle == null or handle.style != style:
 		handle = LDHandle.new(key, style)
-		_handles.set(key, handle)
+		_handles[key] = handle
 	
 	handle.world = world
 	handle.alive = true
@@ -156,23 +183,21 @@ func is_dragging() -> bool:
 
 
 func to_parent(object: GameObject, world_position: Vector2, snap: bool = true) -> Vector2:
-	var local: Vector2 = (object.get_parent() as Node2D).get_global_transform().affine_inverse() * world_position
+	var parent: Node2D = object.get_parent() as Node2D
+	var local: Vector2 = parent.get_global_transform().affine_inverse() * world_position
 	return editor.viewport_handler.snap(local) if snap else local
 
 
 func screen_distance(world_a: Vector2, world_b: Vector2) -> float:
-	return editor.viewport_handler.to_screen(world_a).distance_to(editor.viewport_handler.to_screen(world_b))
+	return editor.viewport_handler.to_screen(world_a).distance_to(
+			editor.viewport_handler.to_screen(world_b)
+	)
 
 
-func _draw_overlay(overlay: LDOverlay) -> void:
-	if targets.is_empty():
-		return
-	
-	_sync_handles()
-	_draw_guides(overlay)
-	var delta: float = get_process_delta_time()
-	for handle: LDHandle in _handles.values():
-		handle.draw(overlay.canvas, editor.viewport_handler.to_screen(handle.world), handle.get_state(handle == _hovered, handle == _pressed), delta)
+@abstract func _get_targets(objects: Array[GameObject]) -> Array[GameObject]
+
+
+@abstract func _layout_handles() -> void
 
 
 func _draw_guides(_overlay: LDOverlay) -> void:
@@ -222,13 +247,14 @@ func _sync_handles() -> void:
 		handle.alive = false
 	_layout_handles()
 	for key: Variant in _handles.keys():
-		if not _handles.get(key).alive:
+		if not _handles[key].alive:
 			_handles.erase(key)
 
 
 func _update_hover() -> void:
 	_sync_handles()
-	var mouse: Vector2 = editor.viewport_handler.to_screen(editor.viewport_handler.get_world_mouse())
+	var mouse: Vector2 = \
+			editor.viewport_handler.to_screen(editor.viewport_handler.get_world_mouse())
 	var nearest: float = INF
 	_hovered = null
 	for handle: LDHandle in _handles.values():
@@ -241,13 +267,22 @@ func _update_hover() -> void:
 
 
 func _get_idle_cursor() -> Control.CursorShape:
-	return Control.CURSOR_POINTING_HAND if editor.viewport_handler.pick(editor.viewport_handler.get_world_mouse()) else cursor
+	return (
+			Control.CURSOR_POINTING_HAND
+			if editor.viewport_handler.pick(editor.viewport_handler.get_world_mouse())
+			else cursor
+	)
 
 
 func _forward(event: InputEvent, world_position: Vector2) -> bool:
 	var mouse_button: InputEventMouseButton = event as InputEventMouseButton
 	var handled: bool = select_tool._tool_input(event, world_position)
-	if mouse_button and mouse_button.button_index == MOUSE_BUTTON_LEFT and not mouse_button.pressed and _forwarding:
+	if (
+			mouse_button
+			and mouse_button.button_index == MOUSE_BUTTON_LEFT
+			and not mouse_button.pressed
+			and _forwarding
+	):
 		_forwarding = false
 		refresh()
 		if targets.is_empty() and is_active():

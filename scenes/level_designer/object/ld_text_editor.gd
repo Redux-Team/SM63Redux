@@ -10,10 +10,22 @@ var _key: StringName
 
 static func get_text_property(object: GameObject) -> ObjectProperty:
 	for property: ObjectProperty in object.properties:
-		if property.bbcode and not property.targets.is_empty() and object.get_node_or_null(property.targets.front()) is TextDisplay:
+		if (
+				property.bbcode
+				and not property.targets.is_empty()
+				and object.get_node_or_null(property.targets.front()) is TextDisplay
+		):
 			return property
 	
 	return null
+
+
+func _process(_delta: float) -> void:
+	if not is_instance_valid(_object) or not _object.is_inside_tree():
+		cancel()
+		return
+	
+	_follow()
 
 
 func _setup() -> void:
@@ -34,7 +46,10 @@ func begin(object: GameObject) -> bool:
 	_key = property.key
 	_display = object.get_node(property.targets.front()) as TextDisplay
 	text_edit.add_theme_font_override(&"font", _display.get_theme_font(&"normal_font"))
-	text_edit.add_theme_font_size_override(&"font_size", _display.get_theme_font_size(&"normal_font_size"))
+	text_edit.add_theme_font_size_override(
+			&"font_size",
+			_display.get_theme_font_size(&"normal_font_size"),
+	)
 	text_edit.text = str(object.get_value(_key))
 	_display.hide()
 	text_edit.show()
@@ -64,19 +79,12 @@ func cancel() -> void:
 	finish()
 
 
-func _process(_delta: float) -> void:
-	if not is_instance_valid(_object) or not _object.is_inside_tree():
-		cancel()
-		return
-	
-	_follow()
-
-
 func _follow() -> void:
 	if _object == null:
 		return
 	
-	var to_screen: Transform2D = editor.world.get_canvas_transform() * _display.get_global_transform()
+	var to_screen: Transform2D = \
+			editor.world.get_canvas_transform() * _display.get_global_transform()
 	text_edit.rotation = to_screen.get_rotation()
 	text_edit.position = to_screen * _display.get_theme_stylebox(&"normal").get_offset()
 

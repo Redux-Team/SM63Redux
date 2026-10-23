@@ -1,7 +1,12 @@
 class_name ScreenTransition
 extends CanvasLayer
 
-enum Type { CENTER, WAVE, FADE, BLUR }
+enum Type {
+	CENTER,
+	WAVE,
+	FADE,
+	BLUR,
+}
 
 const SHADERS: Dictionary[Type, Shader] = {
 	Type.CENTER: preload("uid://dcewkclyl2vjk"),
@@ -52,7 +57,8 @@ func play(builder: Builder) -> void:
 		ResourceLoader.load_threaded_request(builder.destination)
 	
 	_setup(builder)
-	mask_rect.mouse_filter = Control.MOUSE_FILTER_STOP if builder.block_input else Control.MOUSE_FILTER_IGNORE
+	mask_rect.mouse_filter = \
+			Control.MOUSE_FILTER_STOP if builder.block_input else Control.MOUSE_FILTER_IGNORE
 	mask_rect.show()
 	await _tween_mask(_revealed, _covered, builder.out_duration, Tween.EASE_OUT).finished
 	await _settle()
@@ -96,7 +102,7 @@ func play(builder: Builder) -> void:
 
 
 func _setup(builder: Builder) -> void:
-	_material.shader = SHADERS.get(builder.type)
+	_material.shader = SHADERS[builder.type]
 	_set_mask_texture(builder.get_out_texture())
 	_duration_scale = 1.0
 	_transition_type = Tween.TRANS_LINEAR

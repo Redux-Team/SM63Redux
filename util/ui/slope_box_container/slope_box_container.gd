@@ -14,7 +14,7 @@ class_name SlopeBoxContainer extends BoxContainer
 
 func _notification(what: int) -> void:
 	# This is always run after BoxContainer sort.
-	if (what == NOTIFICATION_SORT_CHILDREN):
+	if what == NOTIFICATION_SORT_CHILDREN:
 		# Offsets are only done when slope is not 0.
 		if slope != 0.0:
 			var control_children: Array[Control] = []
@@ -35,17 +35,19 @@ func _offset_children(controls: Array[Control], offset_slope: float) -> void:
 	
 	var running_offset: float = 0
 	
-	# Offset the first control to keep it in the corner after the for-loop offsets are applied
+	# Offset the first control to keep it in the corner after the for-loop
+	# offsets are applied
 	running_offset -= controls[0].size[0^v] / 2
 	# Offset each control to have them follow the slope
 	for node: Control in controls:
 		running_offset += node.size[0^v] / 2
 		node.position[1^v] += running_offset * offset_slope
 		running_offset += node.size[0^v] / 2
-		running_offset += get_theme_constant("separation")
-	# Offset the last control to keep it in the corner after the for-loop offsets are applied
+		running_offset += get_theme_constant(&"separation")
+	# Offset the last control to keep it in the corner after the for-loop
+	# offsets are applied
 	running_offset -= controls[-1].size[0^v] / 2
-	running_offset -= get_theme_constant("separation")
+	running_offset -= get_theme_constant(&"separation")
 	
 	# Resize all nodes to fit it within the rect after the offsets
 	for node: Control in controls:

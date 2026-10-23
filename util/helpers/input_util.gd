@@ -18,16 +18,16 @@ static func string_to_event(string: String) -> InputEvent:
 	if parts.size() < 2:
 		return null
 	
-	var prefix: String = parts.get(0)
+	var prefix: String = parts[0]
 	if prefix == "a":
-		var axis_parts: PackedStringArray = parts.get(1).split(",", true, 1)
+		var axis_parts: PackedStringArray = parts[1].split(",", true, 1)
 		if axis_parts.size() < 2:
 			return null
 		var event: InputEventJoypadMotion = InputEventJoypadMotion.new()
-		event.axis = axis_parts.get(0).to_int() as JoyAxis
-		event.axis_value = axis_parts.get(1).to_int()
+		event.axis = axis_parts[0].to_int() as JoyAxis
+		event.axis_value = axis_parts[1].to_int()
 		return event
-	var value: int = parts.get(1).to_int()
+	var value: int = parts[1].to_int()
 	if prefix == "k":
 		var event: InputEventKey = InputEventKey.new()
 		event.physical_keycode = value as Key

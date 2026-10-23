@@ -23,11 +23,27 @@ extends Resource
 
 
 func make_line_style() -> TerrainPolygon.LineStyle:
-	return TerrainPolygon.LineStyle.new(width, texture, color, scroll_speed, ripple_amplitude, ripple_frequency, ripple_speed)
+	return TerrainPolygon.LineStyle.new(
+			width,
+			texture,
+			color,
+			scroll_speed,
+			ripple_amplitude,
+			ripple_frequency,
+			ripple_speed,
+	)
 
 
 func make_shadow_style() -> TerrainPolygon.LineStyle:
-	return TerrainPolygon.LineStyle.new(shadow_width, shadow_texture, shadow_color, scroll_speed, ripple_amplitude, ripple_frequency, ripple_speed)
+	return TerrainPolygon.LineStyle.new(
+			shadow_width,
+			shadow_texture,
+			shadow_color,
+			scroll_speed,
+			ripple_amplitude,
+			ripple_frequency,
+			ripple_speed,
+	)
 
 
 func make_cap_style() -> TerrainPolygon.CapStyle:

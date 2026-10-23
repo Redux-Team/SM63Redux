@@ -103,6 +103,19 @@ const ANCHOR_RATIOS: Dictionary[int, Vector2] = {
 		emit_changed()
 
 
+func _validate_property(property: Dictionary) -> void:
+	match property.name:
+		&"anchor_ratio":
+			if anchor != AnchorPos.CUSTOM:
+				property.usage = PROPERTY_USAGE_NONE
+		&"repeat_amount":
+			if repeat_mode != RepeatMode.CUSTOM:
+				property.usage = PROPERTY_USAGE_NONE
+		&"spacing", &"mirror":
+			if repeat_mode == RepeatMode.NONE:
+				property.usage = PROPERTY_USAGE_NONE
+
+
 func _build() -> Node:
 	var parallax: Parallax2D = _build_parallax()
 	if not texture:
@@ -127,7 +140,8 @@ func _update(node: Node, visible_rect: Rect2) -> void:
 	var period: Vector2 = (tile * Vector2(grid)).maxf(1.0)
 	var repeat_size: Vector2 = _get_repeat_size(period)
 	var repeat_times: int = _get_repeat_times(period, visible_rect.size)
-	var origin: Vector2 = _get_origin(visible_rect.size, draw_size, period, repeat_size, repeat_times)
+	var origin: Vector2 = \
+			_get_origin(visible_rect.size, draw_size, period, repeat_size, repeat_times)
 	var sprite_scale: Vector2 = draw_size / texture.get_size().maxf(1.0)
 	var cursor: int = 0
 	for iy: int in grid.y:
@@ -172,7 +186,13 @@ func _build_edge(ix: int, iy: int, edge: int) -> Sprite2D:
 	return sprite
 
 
-func _fit_edge(sprite: Sprite2D, edge: int, cell: Vector2, visible_size: Vector2, draw_size: Vector2) -> void:
+func _fit_edge(
+		sprite: Sprite2D,
+		edge: int,
+		cell: Vector2,
+		visible_size: Vector2,
+		draw_size: Vector2,
+) -> void:
 	var strip: Vector2 = draw_size / texture.get_size().maxf(1.0)
 	match edge:
 		Edge.TOP:
@@ -202,21 +222,21 @@ func _get_draw_size(visible_size: Vector2) -> Vector2:
 
 
 func _get_grid() -> Vector2i:
-	return Vector2i(
-		2 if mirror & Mirror.HORIZONTAL else 1,
-		2 if mirror & Mirror.VERTICAL else 1
-	)
+	return Vector2i(2 if mirror & Mirror.HORIZONTAL else 1, 2 if mirror & Mirror.VERTICAL else 1)
 
 
 func _get_custom_periods() -> Vector2i:
 	var grid: Vector2i = _get_grid()
-	return Vector2i(
-		ceili(float(repeat_amount.x) / grid.x),
-		ceili(float(repeat_amount.y) / grid.y)
-	)
+	return Vector2i(ceili(float(repeat_amount.x) / grid.x), ceili(float(repeat_amount.y) / grid.y))
 
 
-func _get_origin(visible_size: Vector2, draw_size: Vector2, period: Vector2, repeat_size: Vector2, repeat_times: int) -> Vector2:
+func _get_origin(
+		visible_size: Vector2,
+		draw_size: Vector2,
+		period: Vector2,
+		repeat_size: Vector2,
+		repeat_times: int,
+) -> Vector2:
 	var ratio: Vector2 = ANCHOR_RATIOS.get(anchor, anchor_ratio)
 	var origin: Vector2 = (visible_size - draw_size) * ratio + anchor_offset
 	if repeat_mode == RepeatMode.CUSTOM:
@@ -240,10 +260,7 @@ func _get_repeat_size(period: Vector2) -> Vector2:
 			return period
 		RepeatMode.CUSTOM:
 			var periods: Vector2i = _get_custom_periods()
-			return Vector2(
-				period.x if periods.x > 1 else 0.0,
-				period.y if periods.y > 1 else 0.0
-			)
+			return Vector2(period.x if periods.x > 1 else 0.0, period.y if periods.y > 1 else 0.0)
 	return Vector2.ZERO
 
 
@@ -260,16 +277,3 @@ func _get_repeat_times(period: Vector2, visible_size: Vector2) -> int:
 			var periods: Vector2i = _get_custom_periods()
 			return maxi(1, maxi(periods.x, periods.y) - 1)
 	return 1
-
-
-func _validate_property(property: Dictionary) -> void:
-	match property.name:
-		&"anchor_ratio":
-			if anchor != AnchorPos.CUSTOM:
-				property.usage = PROPERTY_USAGE_NONE
-		&"repeat_amount":
-			if repeat_mode != RepeatMode.CUSTOM:
-				property.usage = PROPERTY_USAGE_NONE
-		&"spacing", &"mirror":
-			if repeat_mode == RepeatMode.NONE:
-				property.usage = PROPERTY_USAGE_NONE

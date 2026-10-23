@@ -17,6 +17,24 @@ var _drawn: Transform2D
 var _state: Array = []
 
 
+func _process(_delta: float) -> void:
+	if not _is_drawable(_layer):
+		return
+	
+	canvas.z_index = _layer.z_index - (LevelLayer.Z_STRIDE >> 1)
+	var state: Array = [
+		_target_transform(),
+		editor.world.get_canvas_transform(),
+		canvas.get_viewport_rect().size,
+		_blend,
+	]
+	if state == _state:
+		return
+	
+	_state = state
+	canvas.queue_redraw()
+
+
 func _setup() -> void:
 	canvas.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	canvas.draw.connect(_on_draw)
@@ -28,24 +46,15 @@ func _invalidate() -> void:
 	_state.clear()
 
 
-func _process(_delta: float) -> void:
-	if not _is_drawable(_layer):
-		return
-	
-	canvas.z_index = _layer.z_index - (LevelLayer.Z_STRIDE >> 1)
-	var state: Array = [_target_transform(), editor.world.get_canvas_transform(), canvas.get_viewport_rect().size, _blend]
-	if state == _state:
-		return
-	
-	_state = state
-	canvas.queue_redraw()
-
-
 func _on_layer_changed(layer: LevelLayer) -> void:
 	if layer == _layer:
 		return
 	
-	var animate: bool = _is_drawable(_layer) and Settings.ui.animations.current_value and not editor.level_handler.focus_enabled
+	var animate: bool = (
+			_is_drawable(_layer)
+			and Settings.ui.animations.current_value
+			and not editor.level_handler.focus_enabled
+	)
 	_layer = layer
 	if _blend_tween and _blend_tween.is_valid():
 		_blend_tween.kill()
@@ -91,7 +100,11 @@ func _target_transform() -> Transform2D:
 
 
 func _transform_of(layer: Variant) -> Transform2D:
-	return (layer as LevelLayer).get_objects_root().get_global_transform() if _is_drawable(layer) else Transform2D.IDENTITY
+	return (
+			(layer as LevelLayer).get_objects_root().get_global_transform()
+			if _is_drawable(layer)
+			else Transform2D.IDENTITY
+	)
 
 
 func _is_drawable(layer: Variant) -> bool:

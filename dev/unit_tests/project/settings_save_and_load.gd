@@ -71,10 +71,16 @@ static func run_test() -> void:
 		keys.append(setting.setting_key)
 		if setting is SettingsTypeList:
 			var options: PackedStringArray = (setting as SettingsTypeList).options
-			assert(options.is_empty() or (setting as SettingsTypeList).default_value < options.size())
+			assert(
+					options.is_empty()
+					or ((setting as SettingsTypeList).default_value < options.size())
+			)
 		elif setting is SettingsTypeFloat:
 			var range_setting: SettingsTypeFloat = setting
-			assert(range_setting.minimum <= range_setting.default_value and range_setting.default_value <= range_setting.maximum)
+			assert(
+					range_setting.minimum <= range_setting.default_value
+					and range_setting.default_value <= range_setting.maximum
+			)
 		elif setting is SettingsTypeInput:
 			for event: InputEvent in (setting as SettingsTypeInput).default_value:
 				assert(not InputUtil.event_to_string(event).is_empty())

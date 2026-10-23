@@ -7,7 +7,18 @@ const SCALE_DOWN_KEY: Key = KEY_BRACKETLEFT
 const SCALE_UP_KEY: Key = KEY_BRACKETRIGHT
 const STEP_KEY: Key = KEY_PERIOD
 const REWIND_KEY: Key = KEY_COMMA
-const SCALES: Array[float] = [0.0, 0.1, 0.25, 0.5, 1.0, 1.25, 1.5, 2.0, 4.0, 8.0]
+const SCALES: Array[float] = [
+	0.0,
+	0.1,
+	0.25,
+	0.5,
+	1.0,
+	1.25,
+	1.5,
+	2.0,
+	4.0,
+	8.0,
+]
 const DEFAULT_INDEX: int = 4
 
 var _index: int = DEFAULT_INDEX
@@ -21,14 +32,6 @@ func _ready() -> void:
 	_base_physics_ticks = Engine.physics_ticks_per_second
 
 
-func _physics_process(_delta: float) -> void:
-	if _step_frames <= 0:
-		return
-	
-	_step_frames -= 1
-	_step_done = _step_frames <= 0
-
-
 func _process(_delta: float) -> void:
 	if _index != DEFAULT_INDEX and not is_in_level():
 		reset()
@@ -38,9 +41,23 @@ func _process(_delta: float) -> void:
 		get_tree().paused = true
 
 
+func _physics_process(_delta: float) -> void:
+	if _step_frames <= 0:
+		return
+	
+	_step_frames -= 1
+	_step_done = _step_frames <= 0
+
+
 func _unhandled_key_input(event: InputEvent) -> void:
 	var key: InputEventKey = event as InputEventKey
-	if not key or not key.pressed or key.echo or not Singleton.debug_display_shown or not is_in_level():
+	if (
+			not key
+			or not key.pressed
+			or key.echo
+			or not Singleton.debug_display_shown
+			or not is_in_level()
+	):
 		return
 	
 	match key.keycode:
@@ -78,7 +95,7 @@ func reset() -> void:
 
 
 func get_scale() -> float:
-	return SCALES.get(_index)
+	return SCALES[_index]
 
 
 func is_frozen() -> bool:

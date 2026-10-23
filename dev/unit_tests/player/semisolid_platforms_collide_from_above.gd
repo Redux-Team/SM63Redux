@@ -33,5 +33,6 @@ static func _land_from_above(mode: PolygonCollision.CollisionMode) -> float:
 
 
 static func _add_platform(stage: TestStage, mode: PolygonCollision.CollisionMode) -> void:
-	var platform: ObjectData = stage.add_polygon(&"terrain_grass", Rect2(-200.0, PLATFORM_TOP, 400.0, 10.0))
-	platform.values.set(&"collision_mode", mode)
+	var platform: ObjectData = \
+			stage.add_polygon(&"terrain_grass", Rect2(-200.0, PLATFORM_TOP, 400.0, 10.0))
+	platform.values[&"collision_mode"] = mode

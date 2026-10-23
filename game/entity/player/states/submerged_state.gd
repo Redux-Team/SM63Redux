@@ -7,34 +7,43 @@ extends PlayerState
 ## Multiplier on swim speed underwater.
 @export_range(0.0, 1.0) var water_resistance: float = 0.6
 ## Horizontal swim acceleration.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var acceleration: float = 720.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s^2")
+var acceleration: float = 720.0
 ## Horizontal swim acceleration while reversing direction.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var turn_acceleration: float = 849.6
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s^2")
+var turn_acceleration: float = 849.6
 ## Minimum opposing speed before turn acceleration is used.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var turn_speed_threshold: float = 10.0
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var overspeed_halflife: float = 0.12
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var turn_speed_threshold: float = 10.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:s")
+var overspeed_halflife: float = 0.12
 @export_group("Vertical")
 ## Upward speed steered toward while holding swim up.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rise_speed: float = 140.0
 ## Downward speed steered toward while holding swim down.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var sink_speed: float = 140.0
 ## Time for vertical steering to close half the gap to its target speed.
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var steer_halflife: float = 0.0518
+@export_custom(PROPERTY_HINT_NONE, "suffix:s")
+var steer_halflife: float = 0.0518
 ## Downward speed drifted toward without vertical input.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var drift_speed: float = 20.0
 ## Time for the drift to close half the gap to the drift speed.
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var drift_halflife: float = 0.1096
+@export_custom(PROPERTY_HINT_NONE, "suffix:s")
+var drift_halflife: float = 0.1096
 ## Minimum downward speed kept on slopes so the player hugs the floor.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var slope_speed: float = 3.0
 @export_group("Exit")
 ## Multiplier on upward speed when leaving the water.
 @export var exit_boost: float = 2.5
 ## Caps the upward speed from the exit boost.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var max_exit_speed: float = 340.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var max_exit_speed: float = 340.0
 ## Multiplier on upward speed already beyond the exit cap.
 @export var fast_exit_boost: float = 1.3
-## Upward speed set when leaving the water shortly after a FLUDD launch, such as a rocket.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rocket_exit_speed: float = 750.0
+## Upward speed set when leaving the water shortly after a FLUDD launch, such as
+## a rocket.
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var rocket_exit_speed: float = 750.0
 
 
 func _tick(delta: float) -> void:
@@ -70,13 +79,37 @@ func _swim(delta: float) -> void:
 	var input: float = player.move_input
 	var floor_drag: float = player.get_floor_drag_rate() if player.is_on_floor() else 0.0
 	if is_zero_approx(input) or not player.can_walk:
-		player.velocity.x = Motion.drift(player.velocity.x, 0.0, player.get_floor_drag_rate() + floor_drag, delta)
+		player.velocity.x = Motion.drift(
+				player.velocity.x,
+				0.0,
+				player.get_floor_drag_rate() + floor_drag,
+				delta,
+		)
 	elif not player.is_crouching():
-		player.drive(input, player.get_ground_speed(swim_speed) * water_resistance, acceleration, turn_acceleration, turn_speed_threshold, floor_drag, delta)
+		player.drive(
+				input,
+				player.get_ground_speed(swim_speed) * water_resistance,
+				acceleration,
+				turn_acceleration,
+				turn_speed_threshold,
+				floor_drag,
+				delta,
+		)
 	
 	var cap: float = player.get_ground_speed(swim_speed) * water_resistance
 	if absf(player.velocity.x) > cap:
-		player.velocity.x = maxf(Motion.drift(absf(player.velocity.x), 0.0, Motion.rate(overspeed_halflife), delta), cap) * signf(player.velocity.x)
+		player.velocity.x = (
+				maxf(
+						Motion.drift(
+								absf(player.velocity.x),
+								0.0,
+								Motion.rate(overspeed_halflife),
+								delta,
+						),
+						cap,
+				)
+				* signf(player.velocity.x)
+		)
 	
 	if player.is_on_floor() and player.get_floor_normal().y < 0.999 and player.velocity.y >= 0.0:
 		player.velocity.y = maxf(player.velocity.y, slope_speed)

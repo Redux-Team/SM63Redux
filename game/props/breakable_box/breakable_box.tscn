@@ -6,10 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://bppjnj2wb5fqe" path="res://assets/textures/objects/interactive/interactable/breakable_box_2.png" id="3_8nl6k"]
 [ext_resource type="Texture2D" uid="uid://c8vi7fcgcrxm2" path="res://assets/textures/objects/interactive/interactable/breakable_box_1.png" id="3_ju08t"]
 [ext_resource type="Script" uid="uid://cvolonferossj" path="res://util/2d/smart_sprite_2d.gd" id="3_prsgq"]
-[ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="4_po2cq"]
+[ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurt_box.gd" id="4_po2cq"]
 [ext_resource type="AudioStream" uid="uid://cwxgel8xnrt2m" path="res://assets/sfx/object/breakable_box/box_break.wav" id="4_prsgq"]
 [ext_resource type="Texture2D" uid="uid://2vcfa37p1h7t" path="res://assets/textures/objects/interactive/interactable/breakable_box_particles.png" id="5_3wji2"]
-[ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="5_key8f"]
+[ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurt_box_component.gd" id="5_key8f"]
 [ext_resource type="Script" uid="uid://df82mcnubnp0h" path="res://util/2d/animated_particles.gd" id="7_debris"]
 [ext_resource type="Script" uid="uid://bua0v2wcixcy" path="res://game/entity_data/components/pound_cancel_component.gd" id="8_sustain"]
 

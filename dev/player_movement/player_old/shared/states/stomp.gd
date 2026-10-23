@@ -22,7 +22,10 @@ func _tick(delta: float) -> void:
 	if speed <= player.stomp_min_speed:
 		return
 	
-	player.velocity.x = maxf(speed - player.stomp_drag * delta, player.stomp_min_speed) * signf(player.velocity.x)
+	player.velocity.x = (
+		maxf(speed - player.stomp_drag * delta, player.stomp_min_speed)
+		* signf(player.velocity.x)
+	)
 
 
 func _exit() -> void:

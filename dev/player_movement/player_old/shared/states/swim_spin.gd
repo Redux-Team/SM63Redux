@@ -35,4 +35,8 @@ func _exit() -> void:
 
 
 func _next() -> StringName:
-	return &"SwimIdle" if not player.is_input_spin and time > player.swim_spin_exit_delay else &""
+	return (
+		&"SwimIdle"
+		if not player.is_input_spin and time > player.swim_spin_exit_delay
+		else &""
+	)

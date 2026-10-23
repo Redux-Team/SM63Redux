@@ -24,6 +24,22 @@ func _ready() -> void:
 	set_physics_process(true)
 
 
+func _process(_delta: float) -> void:
+	if enabled and entity and rotate_root:
+		entity.rotation = get_angle()
+		entity.up_direction = direction.rotated(PI)
+
+
+func _physics_process(delta: float) -> void:
+	modifiers.tick(delta)
+	if enabled and entity:
+		entity.velocity.y += get_effective_strength() * (
+				water_multiplier
+				if entity.water_check and entity.is_in_water()
+				else 1.0
+		)
+
+
 func lock() -> void:
 	_locks += 1
 	enabled = false
@@ -49,15 +65,3 @@ func clear_modifier(key: StringName) -> void:
 
 func get_effective_strength() -> float:
 	return strength * scale_factor * modifiers.product()
-
-
-func _process(_delta: float) -> void:
-	if enabled and entity and rotate_root:
-		entity.rotation = get_angle()
-		entity.up_direction = direction.rotated(PI)
-
-
-func _physics_process(delta: float) -> void:
-	modifiers.tick(delta)
-	if enabled and entity:
-		entity.velocity.y += get_effective_strength() * (water_multiplier if entity.water_check and entity.is_in_water() else 1.0)

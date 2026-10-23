@@ -16,6 +16,18 @@ var mask_backup: int = -1
 var last_variant: StringName = &""
 
 
+func _to_string() -> String:
+	return String(name)
+
+
+func is_current() -> bool:
+	return machine != null and machine.get_state() == self
+
+
+func is_active() -> bool:
+	return machine != null and machine.is_active(name)
+
+
 func _bind() -> void:
 	pass
 
@@ -43,15 +55,3 @@ func _next() -> StringName:
 func _on_chain_advance() -> void:
 	if effects:
 		effects.advance_chain(self)
-
-
-func is_current() -> bool:
-	return machine != null and machine.get_state() == self
-
-
-func is_active() -> bool:
-	return machine != null and machine.is_active(name)
-
-
-func _to_string() -> String:
-	return String(name)

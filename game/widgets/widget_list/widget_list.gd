@@ -26,9 +26,16 @@ func _info(widget_info: Dictionary) -> void:
 	for entry: String in String(widget_info.get("hint_string", "")).split(",", false):
 		var parts: PackedStringArray = entry.split(":")
 		if parts.size() > 1:
-			next_id = parts.get(1).to_int()
-		var text: String = parts.get(0)
-		option_button.add_item(text if text.length() <= MAX_ITEM_LENGTH else text.left(MAX_ITEM_LENGTH - 1) + "…", next_id)
+			next_id = parts[1].to_int()
+		var text: String = parts[0]
+		option_button.add_item(
+				(
+						text
+						if text.length() <= MAX_ITEM_LENGTH
+						else text.left(MAX_ITEM_LENGTH - 1) + "..."
+				),
+				next_id,
+		)
 		var index: int = option_button.item_count - 1
 		option_button.set_item_metadata(index, text)
 		option_button.set_item_tooltip(index, text)

@@ -8,6 +8,10 @@ var _dragging: bool = false
 var _tiles: Array[bool] = []
 
 
+static func _is_tile(object: GameObject) -> bool:
+	return object.shape is PolygonShape and (object.shape as PolygonShape).is_tiled()
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	var direction: Vector2 = Vector2.ZERO
 	if editor.is_shortcut(event, &"ld_nudge_left"):
@@ -36,7 +40,7 @@ func _cancel() -> void:
 	
 	_dragging = false
 	for i: int in _objects.size():
-		_objects.get(i).transform = _before.get(i)
+		_objects[i].transform = _before[i]
 
 
 func _tool_input(event: InputEvent, world_position: Vector2) -> bool:
@@ -44,7 +48,11 @@ func _tool_input(event: InputEvent, world_position: Vector2) -> bool:
 		return handle_drag(event, world_position)
 	
 	var mouse_button: InputEventMouseButton = event as InputEventMouseButton
-	if mouse_button == null or mouse_button.button_index != MOUSE_BUTTON_LEFT or not mouse_button.pressed:
+	if (
+			mouse_button == null
+			or mouse_button.button_index != MOUSE_BUTTON_LEFT
+			or not mouse_button.pressed
+	):
 		return false
 	
 	var selection: LDSelection = editor.object_handler.selection
@@ -92,30 +100,42 @@ func nudge(offset: Vector2) -> void:
 	for object: GameObject in objects:
 		object.position += offset.sign() * TileGrid.CELL_SIZE if _is_tile(object) else offset
 	
-	editor.object_handler.transform_objects(objects, before, LDObjectHandler.get_transforms(objects), "Nudge Objects", true)
+	editor.object_handler.transform_objects(
+			objects,
+			before,
+			LDObjectHandler.get_transforms(objects),
+			"Nudge Objects",
+			true,
+	)
 
 
 func _drag_to(world_position: Vector2) -> void:
 	var delta: Vector2 = world_position - _start
 	for i: int in _objects.size():
-		var object: GameObject = _objects.get(i)
-		var parent_inverse: Transform2D = (object.get_parent() as Node2D).get_global_transform().affine_inverse()
+		var object: GameObject = _objects[i]
+		var parent_inverse: Transform2D = \
+				(object.get_parent() as Node2D).get_global_transform().affine_inverse()
 		var local_delta: Vector2 = parent_inverse.basis_xform(delta)
-		if _tiles.get(i):
-			object.position = _before.get(i).origin + local_delta.snapped(Vector2.ONE * TileGrid.CELL_SIZE)
+		if _tiles[i]:
+			object.position = \
+					_before[i].origin + local_delta.snapped(Vector2.ONE * TileGrid.CELL_SIZE)
 		else:
-			object.position = editor.viewport_handler.snap(_before.get(i).origin + local_delta)
+			object.position = editor.viewport_handler.snap(_before[i].origin + local_delta)
 
 
 func _end_drag() -> void:
 	_dragging = false
 	editor.viewport_handler.reset_cursor()
-	editor.object_handler.transform_objects(_objects, _before, LDObjectHandler.get_transforms(_objects), "Move Objects")
-
-
-static func _is_tile(object: GameObject) -> bool:
-	return object.shape is PolygonShape and (object.shape as PolygonShape).is_tiled()
+	editor.object_handler.transform_objects(
+			_objects,
+			_before,
+			LDObjectHandler.get_transforms(_objects),
+			"Move Objects",
+	)
 
 
 func _get_movable() -> Array[GameObject]:
-	return editor.object_handler.selection.get_objects().filter(func(object: GameObject) -> bool: return object.has_flag(GameObject.Flag.MOVABLE))
+	return editor.object_handler.selection.get_objects().filter(
+			func(object: GameObject) -> bool:
+				return object.has_flag(GameObject.Flag.MOVABLE)
+	)

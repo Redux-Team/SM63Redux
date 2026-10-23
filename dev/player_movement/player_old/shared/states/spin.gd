@@ -51,7 +51,10 @@ func _exit() -> void:
 
 
 func _next() -> StringName:
-	if player.is_on_floor() and player.is_action_just_pressed("jump", player.jump_buffer_window):
+	if (
+		player.is_on_floor()
+		and player.is_action_just_pressed("jump", player.jump_buffer_window)
+	):
 		return &"BaseJump"
 	if not player.is_input_spin and not player.is_spinning:
 		if player.is_on_floor():

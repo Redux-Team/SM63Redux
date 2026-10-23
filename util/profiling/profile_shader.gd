@@ -60,8 +60,8 @@ static func _sync(viewport: SubViewport) -> void:
 static func _build_viewport() -> SubViewport:
 	var material: ShaderMaterial = ShaderMaterial.new()
 	material.shader = SHADER
-	material.set_shader_parameter("noise_texture", _build_texture())
-	material.set_shader_parameter("iterations", _ITERATIONS)
+	material.set_shader_parameter(&"noise_texture", _build_texture())
+	material.set_shader_parameter(&"iterations", _ITERATIONS)
 	
 	var rect: ColorRect = ColorRect.new()
 	rect.material = material
@@ -81,11 +81,11 @@ static func _build_texture() -> ImageTexture:
 	var row: PackedByteArray = PackedByteArray()
 	row.resize(stride)
 	
-	var state: int = 0x2F6E2B1
+	var state: int = 0x2f6e2b1
 	
 	for i: int in stride:
-		state = (state * 1103515245 + 12345) & 0x7FFFFFFF
-		row.set(i, (state >> 16) & 0xFF)
+		state = (state * 1_103_515_245 + 12345) & 0x7fffffff
+		row[i] = (state >> 16) & 0xff
 	
 	var data: PackedByteArray = PackedByteArray()
 	
@@ -94,8 +94,7 @@ static func _build_texture() -> ImageTexture:
 		data.append_array(row.slice(split))
 		data.append_array(row.slice(0, split))
 	
-	var image: Image = Image.create_from_data(
-		_TEXTURE_SIZE, _TEXTURE_SIZE, false, Image.FORMAT_RGBA8, data
-	)
+	var image: Image = \
+			Image.create_from_data(_TEXTURE_SIZE, _TEXTURE_SIZE, false, Image.FORMAT_RGBA8, data)
 	
 	return ImageTexture.create_from_image(image)

@@ -7,8 +7,16 @@ extends LDComponent
 
 func _setup() -> void:
 	var objects: LDObjectHandler = editor.object_handler
-	LD.bind_button(front_button, func() -> void: objects.reorder_objects(objects.selection.get_objects(), true))
-	LD.bind_button(back_button, func() -> void: objects.reorder_objects(objects.selection.get_objects(), false))
+	LD.bind_button(
+			front_button,
+			func() -> void:
+				objects.reorder_objects(objects.selection.get_objects(), true)
+	)
+	LD.bind_button(
+			back_button,
+			func() -> void:
+				objects.reorder_objects(objects.selection.get_objects(), false)
+	)
 	objects.selection.changed.connect(_refresh)
 	_refresh()
 

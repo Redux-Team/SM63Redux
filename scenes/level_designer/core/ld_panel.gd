@@ -14,13 +14,6 @@ extends LDComponent
 var _base_size: Vector2
 
 
-func _setup() -> void:
-	view.visible = false
-	_base_size = view.custom_minimum_size
-	LD.bind_button(toggle_button, toggle)
-	editor.interface_handler.panel_changed.connect(func(panel: LDPanel) -> void: LD.set_active(toggle_button, panel == self))
-
-
 func _enter_tree() -> void:
 	get_viewport().size_changed.connect(fit_view)
 	if is_node_ready():
@@ -35,6 +28,16 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not action.is_empty() and editor.is_shortcut(event, action):
 		toggle()
 		get_viewport().set_input_as_handled()
+
+
+func _setup() -> void:
+	view.visible = false
+	_base_size = view.custom_minimum_size
+	LD.bind_button(toggle_button, toggle)
+	editor.interface_handler.panel_changed.connect(
+			func(panel: LDPanel) -> void:
+				LD.set_active(toggle_button, panel == self)
+	)
 
 
 func open() -> void:
@@ -55,7 +58,8 @@ func is_open() -> bool:
 
 
 func fit_view() -> void:
-	var fitted: Vector2 = (view.get_viewport_rect().size - screen_margin).min(max_size).max(_base_size)
+	var fitted: Vector2 = \
+			(view.get_viewport_rect().size - screen_margin).min(max_size).max(_base_size)
 	if shrink_vertically:
 		fitted.y = _base_size.y
 	view.custom_minimum_size = fitted

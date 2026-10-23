@@ -7,8 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://chlxalycii75t" path="res://assets/textures/item/fludd/fludd_box_hover_open.png" id="4_748og"]
 [ext_resource type="AudioStream" uid="uid://dwbia6vwx81o7" path="res://assets/sfx/object/fludd/fludd_box_break.wav" id="5_fkvjd"]
 [ext_resource type="Texture2D" uid="uid://boy5g2xfm5w7k" path="res://assets/textures/item/fludd/fludd_box_hover_stretch.png" id="6_8x4kl"]
-[ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurtbox.gd" id="8_6q8s3"]
-[ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurtbox_component.gd" id="9_ebuor"]
+[ext_resource type="Script" uid="uid://3ara7t8dqmih" path="res://util/entity/hurt_box.gd" id="8_6q8s3"]
+[ext_resource type="Script" uid="uid://drtqc6at2evph" path="res://util/entity/hurt_box_component.gd" id="9_ebuor"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s2tvu"]
 atlas = ExtResource("3_748og")

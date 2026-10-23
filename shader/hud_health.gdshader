@@ -37,7 +37,9 @@ void fragment() {
 		for (int i = 0; i < total_slices; i++) {
 			float line_angle = start_rad + float(i) * slice_angle;
 			vec2 line_dir = vec2(sin(line_angle), -cos(line_angle));
-			float cross_dist = abs(centered.x * line_dir.y - centered.y * line_dir.x);
+			float cross_dist = abs(
+				centered.x * line_dir.y - centered.y * line_dir.x
+			);
 			float along = dot(centered, line_dir);
 			
 			if (cross_dist < half_width && along > 0.0 && dist < 0.5) {
@@ -48,5 +50,10 @@ void fragment() {
 		}
 	}
 	
-	COLOR = hud_apply_caps(tex_color * modulate_color, floor(UV * tex_size), tex_size * 0.5, tex_size);
+	COLOR = hud_apply_caps(
+		tex_color * modulate_color,
+		floor(UV * tex_size),
+		tex_size * 0.5,
+		tex_size
+	);
 }

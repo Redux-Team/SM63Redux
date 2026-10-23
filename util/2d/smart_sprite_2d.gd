@@ -6,19 +6,18 @@ extends Sprite2D
 signal animation_finished
 signal animation_looped
 
-
-const FOLLOW_NO_OVERRIDE: StringName = &"(default)"
-
 enum {
 	COMPOSITE,
 	DIFFUSE,
 	NORMAL,
-	SHEEN
+	SHEEN,
 }
 
+const FOLLOW_NO_OVERRIDE: StringName = &"(default)"
 
 @export_storage var canvas_texture: CanvasTexture
-@export_custom(PROPERTY_HINT_ENUM, "Composite,Diffuse,Normal,Sheen") var preview: int = COMPOSITE:
+@export_custom(PROPERTY_HINT_ENUM, "Composite,Diffuse,Normal,Sheen")
+var preview: int = COMPOSITE:
 	set(p):
 		preview = p
 		_update_preview()
@@ -26,7 +25,8 @@ enum {
 	set(l):
 		lock_flipping = l
 		_sync_processing()
-## Draws the sprite unflipped while [member flip_h] keeps tracking the real facing direction.
+## Draws the sprite unflipped while [member flip_h] keeps tracking the real
+## facing direction.
 @export var hide_flipping: bool = false:
 	set(h):
 		hide_flipping = h
@@ -68,26 +68,30 @@ enum {
 			canvas_texture.specular_texture = t
 			_update_preview()
 
-## Subsprites will respect this sprite's flip properties such that the offsets of the subsprites will
-## remain consistent with the current sprite as if they were one.
+## Subsprites will respect this sprite's flip properties such that the offsets
+## of the subsprites will remain consistent with the current sprite as if they
+## were one.
 @export var subsprites: Array[SmartSprite2D]
-var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
 
 @export_group("Subsprite", "follow_")
-@export_custom(PROPERTY_HINT_GROUP_ENABLE, "follow_") var follow_root: bool = false:
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "follow_")
+var follow_root: bool = false:
 	set(f):
 		follow_root = f
 		if f and follow_origin == Vector2.ZERO and is_node_ready():
 			follow_origin = position
 		_sync_processing()
 @export_subgroup("Animation", "follow_")
-## Played whenever the root's current animation has no entry in [member follow_overrides].
+## Played whenever the root's current animation has no entry in
+## [member follow_overrides].
 @export var follow_default: StringName
-## Maps a root animation name to the animation this sprite should play instead of the default.
+## Maps a root animation name to the animation this sprite should play instead
+## of the default.
 @export var follow_overrides: Dictionary[StringName, StringName]
-## Swaps the segment before ":" in the resolved animation name, so one set of overrides can drive
-## several variants of the same rig. Falls back to the resolved name when the variant has no such
-## animation. Set it at runtime to switch variants, such as between FLUDD nozzles.
+## Swaps the segment before ":" in the resolved animation name, so one set of
+## overrides can drive several variants of the same rig. Falls back to the
+## resolved name when the variant has no such animation. Set it at runtime to
+## switch variants, such as between FLUDD nozzles.
 @export var follow_variant: StringName:
 	set(v):
 		follow_variant = v
@@ -104,11 +108,14 @@ var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
 @export var follow_origin: Vector2
 @export var follow_poses: Dictionary[StringName, Array]
 @export_subgroup("Authoring", "follow_")
-## While on, moving this sprite in the editor stores its transform for the root's current frame.
+## While on, moving this sprite in the editor stores its transform for the
+## root's current frame.
 @export var follow_record: bool = false
-## Drives the root's animation from here, so a subsprite can be posed without reselecting the root.
-## Not stored: it reads and writes the root's current animation directly.
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR) var follow_preview: StringName:
+## Drives the root's animation from here, so a subsprite can be posed without
+## reselecting the root. Not stored: it reads and writes the root's current
+## animation directly.
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR)
+var follow_preview: StringName:
 	get:
 		var root: SmartSprite2D = get_parent() as SmartSprite2D
 		return StringName(root.current_animation) if root else &""
@@ -117,9 +124,11 @@ var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
 		if root and not a.is_empty():
 			root.current_animation = a
 			root.current_frame = root.current_frame
-## The animation this sprite plays for the root's current animation. Not stored: it reads and writes
-## [member follow_overrides]. Set it to [constant FOLLOW_NO_OVERRIDE] to fall back to the default.
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR) var follow_override: StringName:
+## The animation this sprite plays for the root's current animation. Not stored:
+## it reads and writes [member follow_overrides]. Set it to
+## [constant FOLLOW_NO_OVERRIDE] to fall back to the default.
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR)
+var follow_override: StringName:
 	get:
 		var root: SmartSprite2D = get_parent() as SmartSprite2D
 		if not root:
@@ -134,10 +143,12 @@ var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
 		if a == FOLLOW_NO_OVERRIDE or a.is_empty():
 			follow_overrides.erase(StringName(root.current_animation))
 		else:
-			follow_overrides.set(StringName(root.current_animation), a)
+			follow_overrides[StringName(root.current_animation)] = a
 		_follow_root_sprite()
-## Rotation stored for the frame being previewed. Not stored on the node: it reads and writes the pose.
-@export_custom(PROPERTY_HINT_RANGE, "-360,360,0.1,degrees", PROPERTY_USAGE_EDITOR) var follow_rotation: float:
+## Rotation stored for the frame being previewed. Not stored on the node: it
+## reads and writes the pose.
+@export_custom(PROPERTY_HINT_RANGE, "-360,360,0.1,degrees", PROPERTY_USAGE_EDITOR)
+var follow_rotation: float:
 	get:
 		var pose: SubspritePose = _current_pose()
 		return pose.rotation_degrees if pose else 0.0
@@ -147,7 +158,8 @@ var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
 			pose.rotation_degrees = r
 			_follow_root_sprite()
 ## Draws this sprite in front of the root for the frame being previewed.
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR) var follow_in_front: bool:
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR)
+var follow_in_front: bool:
 	get:
 		var pose: SubspritePose = _current_pose()
 		return pose.in_front if pose else false
@@ -156,8 +168,10 @@ var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
 		if pose:
 			pose.in_front = f
 			show_behind_parent = not f
-## Pins this frame to a specific animation of this sprite, ignoring the per-root-animation mapping.
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR) var follow_frame_animation: StringName:
+## Pins this frame to a specific animation of this sprite, ignoring the
+## per-root-animation mapping.
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR)
+var follow_frame_animation: StringName:
 	get:
 		var pose: SubspritePose = _current_pose()
 		return pose.animation if pose and not pose.animation.is_empty() else FOLLOW_NO_OVERRIDE
@@ -166,8 +180,10 @@ var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
 		if pose:
 			pose.animation = &"" if a == FOLLOW_NO_OVERRIDE else a
 			_follow_root_sprite()
-## Pins this frame to a specific frame of that animation. Negative follows the root's frame.
-@export_custom(PROPERTY_HINT_RANGE, "-1,64,1", PROPERTY_USAGE_EDITOR) var follow_frame_index: int:
+## Pins this frame to a specific frame of that animation. Negative follows the
+## root's frame.
+@export_custom(PROPERTY_HINT_RANGE, "-1,64,1", PROPERTY_USAGE_EDITOR)
+var follow_frame_index: int:
 	get:
 		var pose: SubspritePose = _current_pose()
 		return pose.frame if pose else -1
@@ -176,9 +192,12 @@ var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
 		if pose:
 			pose.frame = f
 			_follow_root_sprite()
-@export_tool_button("Previous Frame") var follow_previous: Callable = _step_follow_frame.bind(-1)
-@export_tool_button("Next Frame") var follow_next: Callable = _step_follow_frame.bind(1)
-@export_tool_button("Clear Frame Pose") var follow_clear: Callable = _clear_follow_pose
+@export_tool_button("Previous Frame")
+var follow_previous: Callable = _step_follow_frame.bind(-1)
+@export_tool_button("Next Frame")
+var follow_next: Callable = _step_follow_frame.bind(1)
+@export_tool_button("Clear Frame Pose")
+var follow_clear: Callable = _clear_follow_pose
 
 @export_group("Animated")
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "Animated") var animated: bool:
@@ -194,6 +213,12 @@ var current_animation: String:
 		current_animation = ca
 		notify_property_list_changed()
 		apply_frame(current_animation, current_frame)
+@export_storage var looping: bool = true:
+	set(l):
+		looping = l
+		notify_property_list_changed()
+
+var subsprite_initial_offsets: Dictionary[SmartSprite2D, Vector2]
 var current_frame: int:
 	set(cf):
 		if current_frame == cf:
@@ -210,10 +235,6 @@ var playing: bool = false:
 		if playing:
 			_playback_time = 0.0
 		_sync_processing()
-@export_storage var looping: bool = true:
-	set(l):
-		looping = l
-		notify_property_list_changed()
 
 var _playback_time: float = 0.0
 var _follow_applied: Vector2
@@ -225,7 +246,7 @@ func _ready() -> void:
 	if autoplay:
 		play()
 	for subsprite: SmartSprite2D in subsprites:
-		subsprite_initial_offsets.set(subsprite, subsprite.position)
+		subsprite_initial_offsets[subsprite] = subsprite.position
 	
 	_follow_applied = position
 	_follow_applied_rotation = rotation_degrees
@@ -233,14 +254,155 @@ func _ready() -> void:
 	_sync_processing()
 
 
-## A sprite with nothing to animate and no root to follow costs a script call per frame for both
-## callbacks and does nothing with either. That is invisible for a handful of sprites and the single
-## largest per-frame cost in the level designer, which holds one per placed object and animates
-## none of them, so the callbacks are switched off until something needs them. Everything that can
-## give them work to do sets one of the properties below, and each of those re-syncs.
-func _sync_processing() -> void:
-	set_process(follow_root or playing)
-	set_physics_process(flip_with_velocity and not lock_flipping and rotation_source is Entity)
+func _process(delta: float) -> void:
+	if follow_root:
+		_follow_root_sprite()
+	if not diffuse_frames or not playing:
+		return
+	if current_animation == "" or not diffuse_frames.has_animation(current_animation):
+		return
+	
+	var fps: float = diffuse_frames.get_animation_speed(current_animation)
+	var frame_count: int = diffuse_frames.get_frame_count(current_animation)
+	
+	if fps <= 0.0 or frame_count == 0:
+		return
+	
+	_playback_time += delta * speed_scale
+	
+	var new_frame: int = int(_playback_time * fps)
+	
+	if new_frame >= frame_count:
+		if looping and diffuse_frames.get_animation_loop(current_animation):
+			_playback_time = fmod(_playback_time, float(frame_count) / fps)
+			current_frame = int(_playback_time * fps)
+			if not Engine.is_editor_hint():
+				animation_looped.emit()
+		else:
+			current_frame = frame_count - 1
+			playing = false
+			if not Engine.is_editor_hint():
+				animation_finished.emit()
+	else:
+		current_frame = new_frame
+
+
+func _physics_process(_delta: float) -> void:
+	if flip_with_velocity and rotation_source and rotation_source is Entity and not lock_flipping:
+		flip_h = rotation_source.velocity.x < 0
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_POST_ENTER_TREE:
+		if not canvas_texture:
+			canvas_texture = CanvasTexture.new()
+		texture = canvas_texture
+
+
+func _set(property: StringName, value: Variant) -> bool:
+	# Subsprite horizontal handling
+	if property == &"flip_h":
+		if not lock_flipping:
+			_apply_hidden_flip(value)
+		for subsprite: SmartSprite2D in subsprites:
+			subsprite.flip_h = value
+			if subsprite.follow_root:
+				continue
+			var original_offset: Vector2 = subsprite_initial_offsets[subsprite]
+			
+			subsprite.position.x = original_offset.x * (-1 if value else 1)
+	# Subsprite vertical handling
+	if property == &"flip_v":
+		for subsprite: SmartSprite2D in subsprites:
+			subsprite.flip_v = value
+			if subsprite.follow_root:
+				continue
+			var original_offset: Vector2 = subsprite_initial_offsets[subsprite]
+			
+			subsprite.position.y = original_offset.y * (-1 if value else 1)
+		return true
+	
+	# Subsprite speed scale
+	if property == &"speed_scale":
+		for subsprite: SmartSprite2D in subsprites:
+			subsprite.speed_scale = value
+		return true
+	
+	return property == &"flip_h" and lock_flipping
+
+
+func _get_property_list() -> Array[Dictionary]:
+	var property_list: Array[Dictionary] = []
+	var animation_names: PackedStringArray = \
+			diffuse_frames.get_animation_names() if diffuse_frames else PackedStringArray()
+	var frame_count: int = (
+			diffuse_frames.get_frame_count(current_animation) - 1
+			if diffuse_frames and current_animation != ""
+			else 0
+	)
+	var locked_usage: int = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_READ_ONLY
+	var normal_usage: int = PROPERTY_USAGE_DEFAULT
+	
+	property_list.append({
+		"name": "current_animation",
+		"type": TYPE_STRING,
+		"hint": PROPERTY_HINT_ENUM,
+		"hint_string": ",".join(animation_names),
+		"usage": locked_usage if playing else normal_usage,
+	})
+	property_list.append({
+		"name": "current_frame",
+		"type": TYPE_INT,
+		"hint": PROPERTY_HINT_RANGE,
+		"hint_string": "0,%d" % frame_count,
+		"usage": locked_usage if playing else normal_usage,
+	})
+	property_list.append({
+		"name": "speed_scale",
+		"type": TYPE_FLOAT,
+	})
+	property_list.append({
+		"name": "playing",
+		"type": TYPE_BOOL,
+	})
+	property_list.append({
+		"name": "looping",
+		"type": TYPE_BOOL,
+	})
+	
+	return property_list
+
+
+func _validate_property(property: Dictionary) -> void:
+	if property["name"] in [
+			"texture",
+			"region_rect",
+			"region_enabled",
+			"region_filter_clip_enabled",
+			"hframes",
+			"vframes",
+			"frame",
+			"frame_coords",
+	]: property["usage"] = PROPERTY_USAGE_NO_EDITOR
+	elif property["name"] in ["diffuse_texture", "normal_texture", "sheen_texture"]:
+		if animated:
+			property["usage"] = PROPERTY_USAGE_NO_EDITOR
+	elif property["name"] == "follow_preview":
+		var root: SmartSprite2D = get_parent() as SmartSprite2D
+		if root and root.diffuse_frames:
+			property["hint"] = PROPERTY_HINT_ENUM
+			property["hint_string"] = ",".join(root.diffuse_frames.get_animation_names())
+	elif property["name"] == "follow_default" and diffuse_frames:
+		property["hint"] = PROPERTY_HINT_ENUM
+		property["hint_string"] = ",".join(diffuse_frames.get_animation_names())
+	elif property["name"] == "follow_frame_animation" and diffuse_frames:
+		property["hint"] = PROPERTY_HINT_ENUM
+		property["hint_string"] = \
+				",".join([FOLLOW_NO_OVERRIDE] + Array(diffuse_frames.get_animation_names()))
+	elif property["name"] == "follow_override" and diffuse_frames:
+		property["hint"] = PROPERTY_HINT_ENUM
+		property["hint_string"] = \
+				",".join([FOLLOW_NO_OVERRIDE] + Array(diffuse_frames.get_animation_names()))
 
 
 func get_pose(animation: StringName, frame_index: int) -> SubspritePose:
@@ -248,7 +410,7 @@ func get_pose(animation: StringName, frame_index: int) -> SubspritePose:
 	if frame_index < 0 or frame_index >= frames_poses.size():
 		return null
 	
-	return frames_poses.get(frame_index)
+	return frames_poses[frame_index]
 
 
 func set_pose(animation: StringName, frame_index: int, pose: SubspritePose) -> void:
@@ -256,8 +418,82 @@ func set_pose(animation: StringName, frame_index: int, pose: SubspritePose) -> v
 	while frames_poses.size() <= frame_index:
 		frames_poses.append(null)
 	
-	frames_poses.set(frame_index, pose)
-	follow_poses.set(animation, frames_poses)
+	frames_poses[frame_index] = pose
+	follow_poses[animation] = frames_poses
+
+
+func play(animation_name: StringName = current_animation) -> void:
+	if current_animation == animation_name and playing:
+		return
+	current_animation = animation_name
+	_playback_time = 0.0
+	current_frame = 0
+	region_enabled = true
+	playing = true
+
+
+func play_at_frame(animation_name: StringName, frame_index: int) -> void:
+	play(animation_name)
+	if not diffuse_frames or not diffuse_frames.has_animation(animation_name):
+		return
+	
+	var count: int = diffuse_frames.get_frame_count(animation_name)
+	if count <= 0:
+		return
+	
+	var wrapped: int = posmod(frame_index, count)
+	var fps: float = diffuse_frames.get_animation_speed(animation_name)
+	if fps > 0.0:
+		_playback_time = float(wrapped) / fps
+	current_frame = wrapped
+
+
+func stop() -> void:
+	playing = false
+
+
+func has_animation(animation_name: StringName) -> bool:
+	return diffuse_frames != null and diffuse_frames.has_animation(animation_name)
+
+
+func apply_frame(animation_name: StringName, animation_frame: int) -> void:
+	var all_frames: Array[SpriteFrames] = [
+		diffuse_frames,
+		normal_frames,
+		specular_frames,
+	]
+	var new_canvas: CanvasTexture = CanvasTexture.new()
+	new_canvas.diffuse_texture = canvas_texture.diffuse_texture
+	new_canvas.normal_texture = canvas_texture.normal_texture
+	new_canvas.specular_texture = canvas_texture.specular_texture
+	
+	for i: int in 3:
+		var frames: SpriteFrames = all_frames[i]
+		if not frames or not frames.has_animation(animation_name):
+			continue
+		if frames.get_frame_count(animation_name) <= animation_frame:
+			continue
+		var tex: Texture2D = frames.get_frame_texture(animation_name, animation_frame)
+		match i:
+			0: new_canvas.diffuse_texture = tex
+			1: new_canvas.normal_texture = tex
+			2: new_canvas.specular_texture = tex
+	
+	canvas_texture = new_canvas
+	texture = canvas_texture
+	_update_preview()
+
+
+## A sprite with nothing to animate and no root to follow costs a script call
+## per frame for both callbacks and does nothing with either. That is invisible
+## for a handful of sprites and the single largest per-frame cost in the level
+## designer, which holds one per placed object and animates none of them, so the
+## callbacks are switched off until something needs them. Everything that can
+## give them work to do sets one of the properties below, and each of those
+## re-syncs.
+func _sync_processing() -> void:
+	set_process(follow_root or playing)
+	set_physics_process(flip_with_velocity and not lock_flipping and rotation_source is Entity)
 
 
 func _follow_root_sprite() -> void:
@@ -267,12 +503,18 @@ func _follow_root_sprite() -> void:
 	
 	var pose: SubspritePose = get_pose(StringName(root.current_animation), root.current_frame)
 	var root_animation: StringName = StringName(root.current_animation)
-	var wanted: StringName = follow_overrides.get(root_animation, root_animation if follow_default.is_empty() else follow_default)
+	var wanted: StringName = follow_overrides.get(
+			root_animation,
+			root_animation if follow_default.is_empty() else follow_default,
+	)
 	if pose and not pose.animation.is_empty():
 		wanted = pose.animation
 	wanted = _variant_of(wanted)
 	var has_wanted: bool = diffuse_frames != null and diffuse_frames.has_animation(wanted)
-	if not Engine.is_editor_hint() and (not follow_shown or (follow_hide_missing and not has_wanted)):
+	if (
+			not Engine.is_editor_hint()
+			and (not follow_shown or (follow_hide_missing and not has_wanted))
+	):
 		visible = false
 		return
 	
@@ -292,7 +534,14 @@ func _follow_root_sprite() -> void:
 			if current_frame != posmod(wanted_frame, count):
 				current_frame = posmod(wanted_frame, count)
 	
-	if follow_record and Engine.is_editor_hint() and (position != _follow_applied or not is_equal_approx(rotation_degrees, _follow_applied_rotation)):
+	if (
+			follow_record
+			and Engine.is_editor_hint()
+			and (
+					position != _follow_applied
+					or not is_equal_approx(rotation_degrees, _follow_applied_rotation)
+			)
+	):
 		_record_pose(root)
 		return
 	
@@ -307,7 +556,7 @@ func _variant_of(animation_name: StringName) -> StringName:
 	if parts.size() < 2:
 		return animation_name
 	
-	var swapped: StringName = StringName("%s:%s" % [follow_variant, parts.get(1)])
+	var swapped: StringName = StringName("%s:%s" % [follow_variant, parts[1]])
 	return swapped if diffuse_frames.has_animation(swapped) else animation_name
 
 
@@ -329,7 +578,11 @@ func _editing_pose() -> SubspritePose:
 
 func _step_follow_frame(step: int) -> void:
 	var root: SmartSprite2D = get_parent() as SmartSprite2D
-	if not root or not root.diffuse_frames or not root.diffuse_frames.has_animation(root.current_animation):
+	if (
+			not root
+			or not root.diffuse_frames
+			or not root.diffuse_frames.has_animation(root.current_animation)
+	):
 		return
 	
 	var count: int = root.diffuse_frames.get_frame_count(root.current_animation)
@@ -375,179 +628,8 @@ func _apply_pose(root: SmartSprite2D) -> void:
 	_follow_applied_rotation = rotation_degrees
 
 
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_POST_ENTER_TREE:
-		if not canvas_texture:
-			canvas_texture = CanvasTexture.new()
-		texture = canvas_texture
-
-
-func _set(property: StringName, value: Variant) -> bool:
-	# Subsprite horizontal handling
-	if property == "flip_h":
-		if not lock_flipping:
-			_apply_hidden_flip(value)
-		for subsprite: SmartSprite2D in subsprites:
-			subsprite.flip_h = value
-			if subsprite.follow_root:
-				continue
-			var original_offset: Vector2 = subsprite_initial_offsets.get(subsprite)
-			
-			subsprite.position.x = original_offset.x * (-1 if value else 1)
-	# Subsprite vertical handling
-	if property == "flip_v":
-		for subsprite: SmartSprite2D in subsprites:
-			subsprite.flip_v = value
-			if subsprite.follow_root:
-				continue
-			var original_offset: Vector2 = subsprite_initial_offsets.get(subsprite)
-			
-			subsprite.position.y = original_offset.y * (-1 if value else 1)
-		return true
-	
-	# Subsprite speed scale
-	if property == "speed_scale":
-		for subsprite: SmartSprite2D in subsprites:
-			subsprite.speed_scale = value
-		return true
-	
-	return property == "flip_h" and lock_flipping
-
-
 func _apply_hidden_flip(flipped: bool) -> void:
 	scale.x = absf(scale.x) * (-1.0 if hide_flipping and flipped else 1.0)
-
-
-func _process(delta: float) -> void:
-	if follow_root:
-		_follow_root_sprite()
-	if not diffuse_frames or not playing:
-		return
-	if current_animation == "" or not diffuse_frames.has_animation(current_animation):
-		return
-	
-	var fps: float = diffuse_frames.get_animation_speed(current_animation)
-	var frame_count: int = diffuse_frames.get_frame_count(current_animation)
-	
-	if fps <= 0.0 or frame_count == 0:
-		return
-	
-	_playback_time += delta * speed_scale
-	
-	var new_frame: int = int(_playback_time * fps)
-	
-	if new_frame >= frame_count:
-		if looping and diffuse_frames.get_animation_loop(current_animation):
-			_playback_time = fmod(_playback_time, float(frame_count) / fps)
-			current_frame = int(_playback_time * fps)
-			if not Engine.is_editor_hint():
-				animation_looped.emit()
-		else:
-			current_frame = frame_count - 1
-			playing = false
-			if not Engine.is_editor_hint():
-				animation_finished.emit()
-	else:
-		current_frame = new_frame
-
-
-func _physics_process(_delta: float) -> void:
-	if flip_with_velocity and rotation_source and rotation_source is Entity and not lock_flipping:
-		flip_h = rotation_source.velocity.x < 0
-
-
-func play(animation_name: StringName = current_animation) -> void:
-	if current_animation == animation_name and playing:
-		return
-	current_animation = animation_name
-	_playback_time = 0.0
-	current_frame = 0
-	region_enabled = true
-	playing = true
-
-
-func play_at_frame(animation_name: StringName, frame_index: int) -> void:
-	play(animation_name)
-	if not diffuse_frames or not diffuse_frames.has_animation(animation_name):
-		return
-	
-	var count: int = diffuse_frames.get_frame_count(animation_name)
-	if count <= 0:
-		return
-	
-	var wrapped: int = posmod(frame_index, count)
-	var fps: float = diffuse_frames.get_animation_speed(animation_name)
-	if fps > 0.0:
-		_playback_time = float(wrapped) / fps
-	current_frame = wrapped
-
-
-func stop() -> void:
-	playing = false
-
-
-func has_animation(animation_name: StringName) -> bool:
-	return diffuse_frames != null and diffuse_frames.has_animation(animation_name)
-
-
-func _get_property_list() -> Array[Dictionary]:
-	var property_list: Array[Dictionary] = []
-	var animation_names: PackedStringArray = diffuse_frames.get_animation_names() if diffuse_frames else PackedStringArray()
-	var frame_count: int = diffuse_frames.get_frame_count(current_animation) - 1 if diffuse_frames and current_animation != "" else 0
-	var locked_usage: int = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_READ_ONLY
-	var normal_usage: int = PROPERTY_USAGE_DEFAULT
-	
-	property_list.append({
-		"name": "current_animation",
-		"type": TYPE_STRING,
-		"hint": PROPERTY_HINT_ENUM,
-		"hint_string": ",".join(animation_names),
-		"usage": locked_usage if playing else normal_usage
-	})
-	property_list.append({
-		"name": "current_frame",
-		"type": TYPE_INT,
-		"hint": PROPERTY_HINT_RANGE,
-		"hint_string": "0,%d" % frame_count,
-		"usage": locked_usage if playing else normal_usage
-	})
-	property_list.append({
-		"name": "speed_scale",
-		"type": TYPE_FLOAT,
-	})
-	property_list.append({
-		"name": "playing",
-		"type": TYPE_BOOL
-	})
-	property_list.append({
-		"name": "looping",
-		"type": TYPE_BOOL
-	})
-	
-	return property_list
-
-
-func _validate_property(property: Dictionary) -> void:
-	if property.get("name") in [
-		"texture", "region_rect", "region_enabled", "region_filter_clip_enabled",
-		"hframes", "vframes", "frame", "frame_coords"
-	]: property.set("usage", PROPERTY_USAGE_NO_EDITOR)
-	elif property.get("name") in ["diffuse_texture", "normal_texture", "sheen_texture"]:
-		if animated: property.set("usage", PROPERTY_USAGE_NO_EDITOR)
-	elif property.get("name") == "follow_preview":
-		var root: SmartSprite2D = get_parent() as SmartSprite2D
-		if root and root.diffuse_frames:
-			property.set("hint", PROPERTY_HINT_ENUM)
-			property.set("hint_string", ",".join(root.diffuse_frames.get_animation_names()))
-	elif property.get("name") == "follow_default" and diffuse_frames:
-		property.set("hint", PROPERTY_HINT_ENUM)
-		property.set("hint_string", ",".join(diffuse_frames.get_animation_names()))
-	elif property.get("name") == "follow_frame_animation" and diffuse_frames:
-		property.set("hint", PROPERTY_HINT_ENUM)
-		property.set("hint_string", ",".join([FOLLOW_NO_OVERRIDE] + Array(diffuse_frames.get_animation_names())))
-	elif property.get("name") == "follow_override" and diffuse_frames:
-		property.set("hint", PROPERTY_HINT_ENUM)
-		property.set("hint_string", ",".join([FOLLOW_NO_OVERRIDE] + Array(diffuse_frames.get_animation_names())))
 
 
 func _update_preview() -> void:
@@ -566,27 +648,3 @@ func _update_preview() -> void:
 		DIFFUSE: texture = canvas_texture.diffuse_texture
 		NORMAL: texture = canvas_texture.normal_texture
 		SHEEN: texture = canvas_texture.specular_texture
-
-
-func apply_frame(animation_name: StringName, animation_frame: int) -> void:
-	var all_frames: Array[SpriteFrames] = [diffuse_frames, normal_frames, specular_frames]
-	var new_canvas: CanvasTexture = CanvasTexture.new()
-	new_canvas.diffuse_texture = canvas_texture.diffuse_texture
-	new_canvas.normal_texture = canvas_texture.normal_texture
-	new_canvas.specular_texture = canvas_texture.specular_texture
-	
-	for i: int in 3:
-		var frames: SpriteFrames = all_frames[i]
-		if not frames or not frames.has_animation(animation_name):
-			continue
-		if frames.get_frame_count(animation_name) <= animation_frame:
-			continue
-		var tex: Texture2D = frames.get_frame_texture(animation_name, animation_frame)
-		match i:
-			0: new_canvas.diffuse_texture = tex
-			1: new_canvas.normal_texture = tex
-			2: new_canvas.specular_texture = tex
-	
-	canvas_texture = new_canvas
-	texture = canvas_texture
-	_update_preview()

@@ -13,7 +13,16 @@ static func run_test() -> void:
 	middle.objects.append(coin)
 	front.objects.append(ObjectData.create(&"goomba"))
 	front.objects.append(ObjectData.create(&"missing_object_id"))
-	data.layer_groups.append({"uuid": &"group", "distance": 2.0, "is_decoration": true, "modulation": Color.RED, "enabled": false, "visible": false})
+	data.layer_groups.append(
+			{
+				"uuid": &"group",
+				"distance": 2.0,
+				"is_decoration": true,
+				"modulation": Color.RED,
+				"enabled": false,
+				"visible": false,
+			}
+	)
 	back.group = &"group"
 	back.distance = 0.5
 	
@@ -26,9 +35,9 @@ static func run_test() -> void:
 	var layers: Array[LevelLayer] = area.get_layers()
 	assert(layers.size() == 3)
 	for i: int in layers.size():
-		assert(layers.get(i).index == i)
-		assert(layers.get(i).z_index == i * LevelLayer.Z_STRIDE)
-		assert(layers.get(i).get_index() == i)
+		assert(layers[i].index == i)
+		assert(layers[i].z_index == i * LevelLayer.Z_STRIDE)
+		assert(layers[i].get_index() == i)
 	assert(area.get_layer(2).name == "Layer2")
 	assert(area.get_layer(7) == null)
 	
@@ -79,9 +88,9 @@ static func run_test() -> void:
 	var captured: AreaData = area.capture()
 	assert(captured.layers.size() == 3)
 	assert(captured.layer_groups == data.layer_groups)
-	assert((captured.layers.get(0) as LayerData).objects.size() == 1)
-	assert((captured.layers.get(1) as LayerData).objects.size() == 1)
-	assert((captured.layers.get(2) as LayerData).group == &"group")
+	assert((captured.layers[0] as LayerData).objects.size() == 1)
+	assert((captured.layers[1] as LayerData).objects.size() == 1)
+	assert((captured.layers[2] as LayerData).group == &"group")
 	var plain: AreaData = area.to_data()
 	assert(plain.layers.is_empty())
 	assert(plain.area_name == "Main Area")
@@ -95,7 +104,7 @@ static func run_test() -> void:
 	hidden.editor_visible = false
 	var group_disabled: LayerData = LayerData.create(3)
 	group_disabled.group = &"off"
-	game_data.layer_groups.append({"uuid": &"off", "enabled": false, "visible": false})
+	game_data.layer_groups.append({ "uuid": &"off", "enabled": false, "visible": false })
 	game_data.layers.append_array([disabled, hidden, group_disabled])
 	var game_area: LevelArea = LevelArea.build(game_data, GameObject.Context.GAME)
 	assert(game_area.get_layers().size() == 2)

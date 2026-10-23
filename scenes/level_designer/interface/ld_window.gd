@@ -28,6 +28,12 @@ var _open: bool = false
 var _tween: Tween
 
 
+func _enter_tree() -> void:
+	get_viewport().size_changed.connect(_on_viewport_resized)
+	if is_node_ready():
+		_on_viewport_resized()
+
+
 func _ready() -> void:
 	visible = false
 	close_button.pressed.connect(close)
@@ -35,18 +41,12 @@ func _ready() -> void:
 	set_process(false)
 
 
-func _enter_tree() -> void:
-	get_viewport().size_changed.connect(_on_viewport_resized)
-	if is_node_ready():
-		_on_viewport_resized()
+func _process(_delta: float) -> void:
+	_set_backdrop(_backdrop_weight * _dim)
 
 
 func _exit_tree() -> void:
 	get_viewport().size_changed.disconnect(_on_viewport_resized)
-
-
-func _process(_delta: float) -> void:
-	_set_backdrop(_backdrop_weight * _dim)
 
 
 func is_open() -> bool:
@@ -56,13 +56,21 @@ func is_open() -> bool:
 func set_title(title: String) -> void:
 	title_label.text = title
 	title_plate.visible = not title.is_empty()
-	title_margin.add_theme_constant_override(&"margin_top", title_space if title_plate.visible else 0)
+	title_margin.add_theme_constant_override(
+			&"margin_top",
+			title_space if title_plate.visible else 0,
+	)
 
 
 func show_view(view: Control, title: String, view_scale: Vector2, dim: bool = true) -> void:
 	var dim_weight: float = 1.0 if dim else 0.0
 	if _open:
-		create_tween().tween_property(self, ^"_dim", dim_weight, SWITCH_DURATION if Settings.ui.animations.current_value else 0.0)
+		create_tween().tween_property(
+				self,
+				^"_dim",
+				dim_weight,
+				(SWITCH_DURATION if Settings.ui.animations.current_value else 0.0),
+		)
 		_switch(view, title, view_scale)
 		return
 	
@@ -84,7 +92,23 @@ func close() -> void:
 	
 	_open = false
 	SFX.play(SFX.LD_CLOSE)
-	_animate(_target_scale() * START_RATIO, -START_ROTATION, Color.TRANSPARENT, 0.0).finished.connect(_on_closed)
+	_animate(
+			_target_scale() * START_RATIO,
+			-START_ROTATION,
+			Color.TRANSPARENT,
+			0.0,
+	).finished.connect(_on_closed)
+
+
+func fit() -> void:
+	frame.reset_size()
+	var screen: Vector2 = get_viewport_rect().size
+	var available: Vector2 = screen - Vector2.ONE * screen_margin * 2.0
+	_fit = minf(1.0, minf(available.x / frame.size.x, available.y / frame.size.y))
+	frame.pivot_offset = frame.size / 2.0
+	frame.position = ((screen - frame.size) / 2.0).round()
+	if _tween == null or not _tween.is_running():
+		frame.scale = _target_scale()
 
 
 func _apply(view: Control, title: String, view_scale: Vector2) -> void:
@@ -118,7 +142,12 @@ func _switch(view: Control, title: String, view_scale: Vector2) -> void:
 	_tween.tween_property(fade, ^"modulate", Color.WHITE, SWITCH_DURATION / 2.0)
 
 
-func _animate(target_scale: Vector2, target_rotation: float, target_modulate: Color, backdrop_weight: float) -> Tween:
+func _animate(
+		target_scale: Vector2,
+		target_rotation: float,
+		target_modulate: Color,
+		backdrop_weight: float,
+) -> Tween:
 	if _tween and _tween.is_valid():
 		_tween.kill()
 	
@@ -127,24 +156,18 @@ func _animate(target_scale: Vector2, target_rotation: float, target_modulate: Co
 	_tween.tween_property(frame, ^"scale", target_scale, duration)
 	_tween.tween_property(frame, ^"rotation", target_rotation, duration)
 	_tween.tween_property(fade, ^"modulate", target_modulate, duration).set_trans(Tween.TRANS_CUBIC)
-	_tween.tween_property(self, ^"_backdrop_weight", backdrop_weight, duration * 1.5).set_trans(Tween.TRANS_CUBIC)
+	_tween.tween_property(
+			self,
+			^"_backdrop_weight",
+			backdrop_weight,
+			duration * 1.5,
+	).set_trans(Tween.TRANS_CUBIC)
 	return _tween
 
 
 func _set_backdrop(weight: float) -> void:
 	backdrop.blur_strength = 5.0 * Settings.ui.blur_strength.current_value / 100.0 * weight
 	backdrop.tint = Color(backdrop_tint, backdrop_tint.a * weight)
-
-
-func fit() -> void:
-	frame.reset_size()
-	var screen: Vector2 = get_viewport_rect().size
-	var available: Vector2 = screen - Vector2.ONE * screen_margin * 2.0
-	_fit = minf(1.0, minf(available.x / frame.size.x, available.y / frame.size.y))
-	frame.pivot_offset = frame.size / 2.0
-	frame.position = ((screen - frame.size) / 2.0).round()
-	if _tween == null or not _tween.is_running():
-		frame.scale = _target_scale()
 
 
 func _release_scrollbars(view: Control) -> void:

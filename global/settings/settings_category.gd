@@ -25,4 +25,9 @@ func _get_ignored_settings() -> Array[SettingsType]:
 
 
 func _apply_setting(setting: SettingsType) -> void:
-	push_error("Settings: no apply branch for '%s' in category '%s'." % [setting.setting_key, name])
+	push_error(
+			"Settings: no apply branch for '%s' in category '%s'." % [
+				setting.setting_key,
+				name,
+			]
+	)

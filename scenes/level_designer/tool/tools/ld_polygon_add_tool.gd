@@ -25,7 +25,7 @@ func _plan(targets: Array[GameObject], stroke: PackedVector2Array) -> Plan:
 	
 	var merged: Array[GameObject] = []
 	for shape: Array in absorbed:
-		merged.append(candidates.get(shapes.find(shape)))
+		merged.append(candidates[shapes.find(shape)])
 	
 	var keep: GameObject = primary if merged.has(primary) else merged.front()
 	plan.output(keep, result.front(), false)

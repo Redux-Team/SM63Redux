@@ -87,13 +87,16 @@ static func add_hole(shape: Array, hole: PackedVector2Array) -> void:
 	var merged: PackedVector2Array = hole
 	var index: int = 1
 	while index < shape.size():
-		var existing: PackedVector2Array = shape.get(index)
+		var existing: PackedVector2Array = shape[index]
 		if Geometry2D.intersect_polygons(merged, existing).is_empty():
 			index += 1
 			continue
 		
 		var combined: Array[PackedVector2Array] = Geometry2D.merge_polygons(merged, existing)
-		merged = combined.filter(func(polygon: PackedVector2Array) -> bool: return not Geometry2D.is_polygon_clockwise(polygon)).front()
+		merged = combined.filter(
+				func(polygon: PackedVector2Array) -> bool:
+					return not Geometry2D.is_polygon_clockwise(polygon)
+		).front()
 		shape.remove_at(index)
 		index = 1
 	
@@ -103,12 +106,15 @@ static func add_hole(shape: Array, hole: PackedVector2Array) -> void:
 static func inner_point(polygon: PackedVector2Array) -> Vector2:
 	var triangles: PackedInt32Array = Geometry2D.triangulate_polygon(polygon)
 	if triangles.size() < 3:
-		return polygon.get(0)
+		return polygon[0]
 	
-	return (polygon.get(triangles.get(0)) + polygon.get(triangles.get(1)) + polygon.get(triangles.get(2))) / 3.0
+	return (polygon[triangles[0]] + polygon[triangles[1]] + polygon[triangles[2]]) / 3.0
 
 
-static func _outside(polygon: PackedVector2Array, cutter: PackedVector2Array) -> Array[PackedVector2Array]:
+static func _outside(
+		polygon: PackedVector2Array,
+		cutter: PackedVector2Array,
+) -> Array[PackedVector2Array]:
 	var result: Array[PackedVector2Array] = []
 	for shape: Array in split(Geometry2D.clip_polygons(polygon, cutter)):
 		result.append(shape.front())

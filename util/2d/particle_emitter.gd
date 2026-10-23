@@ -23,29 +23,12 @@ var _elapsed: float = 0.0
 func _ready() -> void:
 	if one_shot and free_on_finish:
 		finished.connect(func() -> void:
-			queue_free()
+				queue_free()
 		)
 	if high_particle_amount > 0:
 		var density: int = _amount_for_density()
 		amount = maxi(density, 1)
 		visible = density > 0
-
-
-## Particle count for the player's chosen density. Scene-authored amounts stay untouched in the
-## editor, where reading player settings would mean writing a config file from a tool script.
-func _amount_for_density() -> int:
-	if Engine.is_editor_hint():
-		return high_particle_amount
-	
-	match Settings.graphics.particle_amount.option():
-		"None":
-			return 0
-		"Performance":
-			return low_particle_amount
-		"Low":
-			return medium_particle_amount
-	
-	return high_particle_amount
 
 
 func _process(delta: float) -> void:
@@ -60,10 +43,32 @@ func _process(delta: float) -> void:
 		return
 	_elapsed = fmod(_elapsed, frame_duration)
 	var count: int = sprite_frames.get_frame_count(animation)
-	_frame = (_frame + 1) % count if sprite_frames.get_animation_loop(animation) else mini(_frame + 1, count - 1)
+	_frame = (
+			(_frame + 1) % count
+			if sprite_frames.get_animation_loop(animation)
+			else mini(_frame + 1, count - 1)
+	)
 	texture = sprite_frames.get_frame_texture(animation, _frame)
 
 
 func _validate_property(property: Dictionary) -> void:
-	if property.get("name") == "texture" and animated or property.name == "amount":
-		property.set("usage", PROPERTY_USAGE_NO_EDITOR)
+	if property["name"] == "texture" and animated or property.name == "amount":
+		property["usage"] = PROPERTY_USAGE_NO_EDITOR
+
+
+## Particle count for the player's chosen density. Scene-authored amounts stay
+## untouched in the editor, where reading player settings would mean writing a
+## config file from a tool script.
+func _amount_for_density() -> int:
+	if Engine.is_editor_hint():
+		return high_particle_amount
+	
+	match Settings.graphics.particle_amount.option():
+		"None":
+			return 0
+		"Performance":
+			return low_particle_amount
+		"Low":
+			return medium_particle_amount
+	
+	return high_particle_amount

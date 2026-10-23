@@ -13,9 +13,10 @@ const HISTORY_SIZE: int = 20
 @export var default_sfx_bus: StringName = &"SFX"
 @export var manual_tick: bool = false
 
+var last_variant_index: int = 0
+
 var _current: State
 var _previous: State
-var last_variant_index: int = 0
 var _stack: Array[State] = []
 var _states: Dictionary[StringName, State] = {}
 var _history: Array[StringName] = []
@@ -33,11 +34,44 @@ func _ready() -> void:
 		_switch_to(initial_state)
 
 
+func _process(delta: float) -> void:
+	if Engine.is_editor_hint() or not _running:
+		return
+	
+	for state: State in _stack:
+		state._render_tick(delta)
+		if state.effects:
+			state.effects.render_tick(state)
+
+
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint() or manual_tick:
 		return
 	
 	tick(delta)
+
+
+func _validate_property(property: Dictionary) -> void:
+	if property.name == &"default_sfx_bus":
+		property.hint = PROPERTY_HINT_ENUM
+		property.hint_string = _bus_hint_string()
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var warnings: PackedStringArray = []
+	if not entity:
+		warnings.append("No entity assigned.")
+	if not initial_state:
+		warnings.append("No initial state assigned.")
+	elif not is_ancestor_of(initial_state):
+		warnings.append("The initial state is not a descendant of this machine.")
+	
+	var seen: Dictionary[StringName, bool] = {}
+	for state: State in find_children("*", "State", true, false):
+		if seen.has(state.name):
+			warnings.append("Duplicate state name '%s'." % state.name)
+		seen[state.name] = true
+	return warnings
 
 
 func tick(delta: float) -> void:
@@ -57,16 +91,6 @@ func tick(delta: float) -> void:
 		_switch_to(target)
 	
 	_poll()
-
-
-func _process(delta: float) -> void:
-	if Engine.is_editor_hint() or not _running:
-		return
-	
-	for state: State in _stack:
-		state._render_tick(delta)
-		if state.effects:
-			state.effects.render_tick(state)
 
 
 func change_state(state_name: StringName) -> void:
@@ -121,7 +145,7 @@ func stop() -> void:
 		return
 	
 	for index: int in range(_stack.size() - 1, -1, -1):
-		_exit_state(_stack.get(index))
+		_exit_state(_stack[index])
 	_running = false
 	_current = null
 	_queued = null
@@ -153,7 +177,7 @@ func _add_name(state_name: StringName, state: State) -> void:
 	if existing and existing != state:
 		push_error("StateMachine (%s): duplicate state name '%s'" % [_owner_name(), state_name])
 		return
-	_states.set(state_name, state)
+	_states[state_name] = state
 
 
 func _poll() -> void:
@@ -165,7 +189,10 @@ func _poll() -> void:
 	
 	var target: State = _states.get(requested)
 	if not target:
-		push_error("StateMachine (%s): '%s' requested unknown state '%s'" % [_owner_name(), _current.name, requested])
+		push_error(
+				"StateMachine (%s): '%s' requested unknown state '%s'"
+				% [_owner_name(), _current.name, requested]
+		)
 		return
 	if target != _current:
 		_switch_to(target)
@@ -177,7 +204,7 @@ func _redirect(state_name: StringName) -> StringName:
 
 func _request_from_stack() -> StringName:
 	for index: int in range(_stack.size() - 1, -1, -1):
-		var requested: StringName = _stack.get(index)._next()
+		var requested: StringName = _stack[index]._next()
 		if not requested.is_empty():
 			return requested
 	return &""
@@ -189,7 +216,7 @@ func _switch_to(target: State) -> void:
 	var next_stack: Array[State] = _build_stack(target)
 	
 	for index: int in range(previous.size() - 1, -1, -1):
-		var state: State = previous.get(index)
+		var state: State = previous[index]
 		if not next_stack.has(state):
 			_exit_state(state)
 	
@@ -237,31 +264,8 @@ func _owner_name() -> String:
 	return String(entity.name) if entity else String(name)
 
 
-func _validate_property(property: Dictionary) -> void:
-	if property.name == &"default_sfx_bus":
-		property.hint = PROPERTY_HINT_ENUM
-		property.hint_string = _bus_hint_string()
-
-
 func _bus_hint_string() -> String:
 	var names: PackedStringArray = []
 	for i: int in AudioServer.get_bus_count():
 		names.append(AudioServer.get_bus_name(i))
 	return ",".join(names)
-
-
-func _get_configuration_warnings() -> PackedStringArray:
-	var warnings: PackedStringArray = []
-	if not entity:
-		warnings.append("No entity assigned.")
-	if not initial_state:
-		warnings.append("No initial state assigned.")
-	elif not is_ancestor_of(initial_state):
-		warnings.append("The initial state is not a descendant of this machine.")
-	
-	var seen: Dictionary[StringName, bool] = {}
-	for state: State in find_children("*", "State", true, false):
-		if seen.has(state.name):
-			warnings.append("Duplicate state name '%s'." % state.name)
-		seen.set(state.name, true)
-	return warnings

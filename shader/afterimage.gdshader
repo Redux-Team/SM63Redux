@@ -12,5 +12,8 @@ void vertex() {
 
 void fragment() {
 	vec4 texel = texture(TEXTURE, UV);
-	COLOR = vec4(mix(texel.rgb, modulate_color.rgb, tint_strength), texel.a * modulate_color.a);
+	COLOR = vec4(
+		mix(texel.rgb, modulate_color.rgb, tint_strength),
+		texel.a * modulate_color.a
+	);
 }

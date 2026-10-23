@@ -29,13 +29,18 @@ float luminance(vec3 col) {
 float sheen(vec2 pos) {
 	vec2 pixel = floor(pos);
 	float band = pixel.x + pixel.y * sheen_slant - TIME * sheen_speed;
-	float distance_to_band = abs(mod(band, sheen_interval) - sheen_interval * 0.5);
+	float distance_to_band = abs(
+		mod(band, sheen_interval) - sheen_interval * 0.5
+	);
 	return 1.0 - smoothstep(0.0, sheen_width, distance_to_band);
 }
 
 
 vec2 light_step(vec2 uv, vec2 texel) {
-	mat2 local_to_uv = mat2(dFdx(uv), dFdy(uv)) * inverse(mat2(dFdx(local_position), dFdy(local_position)));
+	mat2 local_to_uv = (
+		mat2(dFdx(uv), dFdy(uv))
+		* inverse(mat2(dFdx(local_position), dFdy(local_position)))
+	);
 	vec2 texels = local_to_uv * normalize(light_direction) / texel;
 	return round(texels / max(max(abs(texels.x), abs(texels.y)), 0.0001));
 }
@@ -43,10 +48,20 @@ vec2 light_step(vec2 uv, vec2 texel) {
 
 void fragment() {
 	vec4 col = COLOR;
-	float lum = clamp((luminance(col.rgb) - 0.5) * ramp_contrast + 0.5, 0.0, 1.0);
+	float lum = clamp(
+		(luminance(col.rgb) - 0.5) * ramp_contrast + 0.5,
+		0.0,
+		1.0
+	);
 	vec3 metal = texture(ramp, vec2(lum, 0.5)).rgb * tint.rgb;
 	metal += sheen(local_position) * sheen_strength;
-	float rim = 1.0 - step(0.5, texture(TEXTURE, UV + light_step(UV, TEXTURE_PIXEL_SIZE) * TEXTURE_PIXEL_SIZE).a);
+	float rim = 1.0 - step(
+		0.5,
+		texture(
+			TEXTURE,
+			UV + light_step(UV, TEXTURE_PIXEL_SIZE) * TEXTURE_PIXEL_SIZE
+		).a
+	);
 	metal += mix(vec3(1.0), accent.rgb, accent_strength) * rim * rim_strength;
 	COLOR = vec4(min(metal, vec3(1.0)), col.a);
 }

@@ -8,17 +8,6 @@ var _objects: Array[Node2D] = []
 var _frame: int = 0
 
 
-func track(object: Node2D) -> void:
-	var colliders: Array[CollisionObject2D] = _colliders_of(object)
-	for collider: CollisionObject2D in colliders:
-		if collider is StaticBody2D:
-			return
-	
-	_objects.append(object)
-	for collider: CollisionObject2D in colliders:
-		collider.disable_mode = CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE
-
-
 func _physics_process(_delta: float) -> void:
 	_frame += 1
 	if _frame % frames_between_updates != 0:
@@ -37,6 +26,17 @@ func _physics_process(_delta: float) -> void:
 	
 	if living.size() != _objects.size():
 		_objects = living
+
+
+func track(object: Node2D) -> void:
+	var colliders: Array[CollisionObject2D] = _colliders_of(object)
+	for collider: CollisionObject2D in colliders:
+		if collider is StaticBody2D:
+			return
+	
+	_objects.append(object)
+	for collider: CollisionObject2D in colliders:
+		collider.disable_mode = CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE
 
 
 func _visible_world_rect() -> Rect2:

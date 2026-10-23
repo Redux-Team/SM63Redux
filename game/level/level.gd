@@ -25,16 +25,16 @@ var _pending: Array[GameObject] = []
 var _pending_layers: Array[LevelLayer] = []
 
 
-func _enter_tree() -> void:
-	add_to_group(&"level")
-
-
 static func of(node: Node) -> Level:
 	var current: Node = node
 	while current and not current is Level:
 		current = current.get_parent()
 	
 	return current as Level
+
+
+func _enter_tree() -> void:
+	add_to_group(&"level")
 
 
 func _physics_process(delta: float) -> void:
@@ -68,18 +68,6 @@ func request_kickout() -> void:
 	kickout_requested.emit()
 
 
-func _get_counter(kind: StringName, group: StringName) -> Vector2i:
-	return _coins.get_or_add(kind, {}).get(group, Vector2i.ZERO)
-
-
-func _set_counter(kind: StringName, group: StringName, counter: Vector2i) -> void:
-	_coins.get_or_add(kind, {}).set(group, counter)
-	var total: Vector2i = Vector2i.ZERO
-	for each: Vector2i in _coins.get(kind).values():
-		total += each
-	coins_changed.emit(kind, total.x, total.y)
-
-
 func load_data(data: LevelData, area_uuid: StringName = &"") -> void:
 	if not Singleton.defer_threaded(prepare.bind(data, area_uuid), attach):
 		prepare(data, area_uuid)
@@ -105,7 +93,7 @@ func attach(batch: int = ATTACH_BATCH) -> void:
 	world.add_child(_area)
 	background.apply_data(_area_data.background)
 	for i: int in _pending.size():
-		_pending_layers.get(i).get_objects_root().add_child(_pending.get(i))
+		_pending_layers[i].get_objects_root().add_child(_pending[i])
 		if batch > 0 and i % batch == batch - 1:
 			await get_tree().process_frame
 	
@@ -152,6 +140,18 @@ func get_area() -> LevelArea:
 
 func get_player() -> Player:
 	return _player
+
+
+func _get_counter(kind: StringName, group: StringName) -> Vector2i:
+	return _coins.get_or_add(kind, {}).get(group, Vector2i.ZERO)
+
+
+func _set_counter(kind: StringName, group: StringName, counter: Vector2i) -> void:
+	_coins.get_or_add(kind, {}).set(group, counter)
+	var total: Vector2i = Vector2i.ZERO
+	for each: Vector2i in _coins[kind].values():
+		total += each
+	coins_changed.emit(kind, total.x, total.y)
 
 
 func _track(object: GameObject) -> void:

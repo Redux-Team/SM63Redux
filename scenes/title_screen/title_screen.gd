@@ -43,13 +43,15 @@ func _on_settings_screen_closed() -> void:
 
 func _on_ld_button_pressed() -> void:
 	animation_player.play(&"close")
-	Singleton.build_screen_transition()\
-		.set_in_duration(0.3)\
-		.set_out_duration(0.3)\
-		.set_in_texture(preload("uid://34v4s1d3h4ag"))\
-		.set_out_texture(preload("uid://34v4s1d3h4ag"))\
-		.set_center()\
-		.set_loading_delay(0.0)\
-		.set_hold_duration(0.0)\
-		.set_destination("uid://b6ofp5p155oy2")\
-		.done()
+	(
+			Singleton.build_screen_transition()
+			.set_in_duration(0.3)
+			.set_out_duration(0.3)
+			.set_in_texture(preload("uid://34v4s1d3h4ag"))
+			.set_out_texture(preload("uid://34v4s1d3h4ag"))
+			.set_center()
+			.set_loading_delay(0.0)
+			.set_hold_duration(0.0)
+			.set_destination("uid://b6ofp5p155oy2")
+			.done()
+	)

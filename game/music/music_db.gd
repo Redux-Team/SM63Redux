@@ -19,12 +19,19 @@ static func get_tracks() -> Array[MusicTrack]:
 			var track: MusicTrack = load(TRACKS_DIR.path_join(file)) as MusicTrack
 			if track:
 				_tracks.append(track)
-		_tracks.sort_custom(func(a: MusicTrack, b: MusicTrack) -> bool: return a.display_name < b.display_name)
+		_tracks.sort_custom(
+				func(a: MusicTrack, b: MusicTrack) -> bool:
+					return a.display_name < b.display_name
+		)
 	
 	return _tracks
 
 
 static func get_tracks_in(category: MusicTrack.Category) -> Array[MusicTrack]:
 	var tracks: Array[MusicTrack] = []
-	tracks.assign(get_tracks().filter(func(track: MusicTrack) -> bool: return track.category == category))
+	tracks.assign(
+			get_tracks().filter(
+					func(track: MusicTrack) -> bool:
+						return track.category == category
+	))
 	return tracks

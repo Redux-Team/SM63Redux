@@ -9,10 +9,6 @@ var _saved_version: int = -1
 var _task: int = -1
 
 
-func _setup() -> void:
-	timer.timeout.connect(save_now)
-
-
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST and handler:
 		save_now(false)
@@ -20,6 +16,10 @@ func _notification(what: int) -> void:
 
 func _exit_tree() -> void:
 	_wait()
+
+
+func _setup() -> void:
+	timer.timeout.connect(save_now)
 
 
 func save_now(threaded: bool = true) -> void:

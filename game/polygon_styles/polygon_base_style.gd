@@ -16,4 +16,12 @@ extends Resource
 
 
 func make_outline_style() -> TerrainPolygon.LineStyle:
-	return TerrainPolygon.LineStyle.new(outline_width, outline_texture, outline_color, outline_scroll_speed, outline_ripple_amplitude, outline_ripple_frequency, outline_ripple_speed)
+	return TerrainPolygon.LineStyle.new(
+			outline_width,
+			outline_texture,
+			outline_color,
+			outline_scroll_speed,
+			outline_ripple_amplitude,
+			outline_ripple_frequency,
+			outline_ripple_speed,
+	)

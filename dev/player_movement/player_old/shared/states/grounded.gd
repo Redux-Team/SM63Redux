@@ -2,7 +2,10 @@ extends PlayerStateOld
 
 
 func _tick(_delta: float) -> void:
-	if absf(player.move_input) > 0.0 and not machine.get_state_name() == &"Crouch":
+	if (
+		absf(player.move_input) > 0.0
+		and not machine.get_state_name() == &"Crouch"
+	):
 		_speed_up(player.move_input)
 	else:
 		_apply_friction()
@@ -19,9 +22,16 @@ func _speed_up(move_input: float) -> void:
 		acceleration *= player.turn_acceleration_multiplier
 	
 	if absf(speed_x) < max_speed or signf(speed_x) != signf(move_input):
-		player.velocity.x = move_toward(speed_x, max_speed * move_input, acceleration)
+		player.velocity.x = move_toward(
+			speed_x,
+			max_speed * move_input,
+			acceleration,
+		)
 	
-	if player.get_local_floor_normal().y < player.slope_normal_threshold and player.velocity.y >= 0.0:
+	if (
+		player.get_local_floor_normal().y < player.slope_normal_threshold
+		and player.velocity.y >= 0.0
+	):
 		player.velocity.y = player.slope_stick_speed
 
 

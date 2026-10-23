@@ -15,7 +15,11 @@ static func is_mobile() -> bool:
 static func is_desktop() -> bool:
 	if OS.has_feature("windows") or OS.has_feature("linuxbsd") or OS.has_feature("macos"):
 		return true
-	elif OS.has_feature("web_windows") or OS.has_feature("web_linuxbsd") or OS.has_feature("web_macos"):
+	elif (
+			OS.has_feature("web_windows")
+			or OS.has_feature("web_linuxbsd")
+			or OS.has_feature("web_macos")
+	):
 		return true
 	
 	return false

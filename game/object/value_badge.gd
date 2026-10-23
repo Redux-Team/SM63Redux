@@ -27,7 +27,17 @@ func _draw() -> void:
 	var left: float = -width * 0.5
 	if icon:
 		draw_texture_rect(icon, Rect2(Vector2(left, -icon_size.y * 0.5), icon_size), false)
-	draw_string(font, Vector2(left + width - text_size.x, font.get_ascent(font_size) - text_size.y * 0.5).round(), _text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+	draw_string(
+			font,
+			Vector2(
+					left + width - text_size.x,
+					font.get_ascent(font_size) - text_size.y * 0.5,
+			).round(),
+			_text,
+			HORIZONTAL_ALIGNMENT_LEFT,
+			-1,
+			font_size,
+	)
 
 
 func _on_value_changed(changed: StringName, value: Variant) -> void:

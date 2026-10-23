@@ -10,14 +10,14 @@ const LAUNCHED_STATE: String = "launched"
 var _starting: bool = false
 
 
-func _setup() -> void:
-	LD.bind_button(playtest_button, start)
-
-
 func _unhandled_input(event: InputEvent) -> void:
 	if editor.is_shortcut(event, &"ld_playtest"):
 		start()
 		get_viewport().set_input_as_handled()
+
+
+func _setup() -> void:
+	LD.bind_button(playtest_button, start)
 
 
 func start() -> void:
@@ -28,11 +28,13 @@ func start() -> void:
 	GDSS.set_state(playtest_button, LAUNCHED_STATE)
 	await get_tree().create_timer(RELEASE_DELAY).timeout
 	_starting = false
-	Singleton.build_screen_transition() \
-		.set_center() \
-		.set_loading_delay(0.0) \
-		.set_swap(_enter_playtest) \
-		.done()
+	(
+			Singleton.build_screen_transition()
+			.set_center()
+			.set_loading_delay(0.0)
+			.set_swap(_enter_playtest)
+			.done()
+	)
 
 
 func _enter_playtest() -> void:

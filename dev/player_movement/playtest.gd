@@ -9,4 +9,4 @@ func _ready() -> void:
 	get_tree().debug_collisions_hint = true
 	
 	for nozzle: PlayerFludd.Nozzle in PlayerFludd.Nozzle.values():
-		player.fludd.held_nozzles.set(nozzle, true)
+		player.fludd.held_nozzles[nozzle] = true

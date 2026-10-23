@@ -13,7 +13,8 @@ extends Mode
 @export var drains_fuel: bool = true
 ## Only runs while power is full.
 @export var requires_full_power: bool = false
-## Time to recharge from empty to full power in the air while not spraying; zero disables recharging.
+## Time to recharge from empty to full power in the air while not spraying; zero
+## disables recharging.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var recharge_time: float = 0.0
 @export_group("Presentation")
 ## Sprite variant shown on the backpack for this nozzle.
@@ -24,7 +25,8 @@ extends Mode
 @export var use_animation: StringName
 ## Shows the water stream while spraying instead of only burst particles.
 @export var continuous_spray: bool = true
-## Stream settings for this nozzle; the stream's default profile is used when empty.
+## Stream settings for this nozzle; the stream's default profile is used when
+## empty.
 @export var spray: SprayProfile
 ## Offset of the plume from its default position.
 @export var plume_offset: Vector2

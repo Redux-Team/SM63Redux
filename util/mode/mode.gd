@@ -9,6 +9,20 @@ var frames: int = 0
 var permanent: bool = false
 
 
+func _to_string() -> String:
+	return String(name)
+
+
+func end() -> void:
+	var multi: MultiModeMachine = machine as MultiModeMachine
+	if multi:
+		multi.end(name)
+
+
+func is_running() -> bool:
+	return machine != null and machine.is_running(name)
+
+
 func _bind() -> void:
 	pass
 
@@ -27,17 +41,3 @@ func _tick(_delta: float) -> void:
 
 func _exit() -> void:
 	pass
-
-
-func end() -> void:
-	var multi: MultiModeMachine = machine as MultiModeMachine
-	if multi:
-		multi.end(name)
-
-
-func is_running() -> bool:
-	return machine != null and machine.is_running(name)
-
-
-func _to_string() -> String:
-	return String(name)

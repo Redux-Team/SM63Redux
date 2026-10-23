@@ -75,7 +75,7 @@ func _ready() -> void:
 	for mode: Mode in modes.get_modes():
 		var fludd_mode: FluddModeOld = mode as FluddModeOld
 		if fludd_mode:
-			_mode_names.set(fludd_mode.nozzle, mode.name)
+			_mode_names[fludd_mode.nozzle] = mode.name
 	
 	modes.select(_mode_names.get(equipped_nozzle, &""))
 
@@ -142,7 +142,11 @@ func _update_spray_particles() -> void:
 		return
 	
 	var mode: FluddModeOld = get_selected_mode()
-	_spray_particles.emitting = _spraying and mode != null and mode.continuous_particles
+	_spray_particles.emitting = (
+		_spraying
+		and mode != null
+		and mode.continuous_particles
+	)
 
 
 func _update_spray_angle() -> void:
@@ -152,12 +156,21 @@ func _update_spray_angle() -> void:
 
 func _can_use_fludd() -> bool:
 	var mode: FluddModeOld = get_selected_mode()
-	return mode != null and \
-		mode.has_charge() and \
-		fludd_fuel > 0 and \
-		player.machine.get_state_name() not in [
-			&"Spin", &"SwimSpin", &"Strike", &"Crouch", &"RolloutF", &"GroundPoundFall", &"GroundPoundStart", &"GroundPoundSlam"
+	return (
+		mode != null
+		and mode.has_charge()
+		and fludd_fuel > 0
+		and player.machine.get_state_name() not in [
+			&"Spin",
+			&"SwimSpin",
+			&"Strike",
+			&"Crouch",
+			&"RolloutF",
+			&"GroundPoundFall",
+			&"GroundPoundStart",
+			&"GroundPoundSlam",
 		]
+	)
 
 
 func _consume_fludd(delta: float, mode: FluddModeOld) -> void:
@@ -214,7 +227,11 @@ func get_context() -> FluddContext:
 
 
 func set_dive_rotation(rotation: float, context: FluddContext) -> void:
-	if context != FluddContext.NONE and not spray_loop_sfx.playing and _spraying:
+	if (
+		context != FluddContext.NONE
+		and not spray_loop_sfx.playing
+		and _spraying
+	):
 		hover_sfx.stop()
 		spray_loop_sfx.play()
 	
@@ -258,16 +275,18 @@ func is_turbo_active() -> bool:
 
 func _input(event: InputEvent) -> void:
 	# FluddNozzle.NONE should never be false, throw an error if it is
-	assert(held_nozzles.get(FluddNozzle.NONE))
+	assert(held_nozzles[FluddNozzle.NONE])
 	
 	if event.is_action_pressed(&"switch_nozzle"):
 		var successful_switch: bool = switch_nozzle()
 		if successful_switch:
-			SFX.build()\
-				.set_stream(nozzle_switch_sfx)\
-				.set_db(fludd_switch_sfx_db)\
-				.set_bus(&"Player")\
+			(
+				SFX.build()
+				.set_stream(nozzle_switch_sfx)
+				.set_db(fludd_switch_sfx_db)
+				.set_bus(&"Player")
 				.play()
+			)
 	if event is InputEventKey:
 		if event.keycode == KEY_I:
 			player.get_fludd_handler().fludd_fuel = 0
@@ -279,7 +298,11 @@ func switch_nozzle() -> bool:
 	var candidate_nozzle: int = equipped_nozzle
 	
 	while not nozzle_switched:
-		candidate_nozzle = wrapi(candidate_nozzle + 1, FluddNozzle.NONE, FluddNozzle.MAX)
+		candidate_nozzle = wrapi(
+			candidate_nozzle + 1,
+			FluddNozzle.NONE,
+			FluddNozzle.MAX,
+		)
 		if held_nozzles.get(candidate_nozzle):
 			equipped_nozzle = candidate_nozzle as FluddNozzle
 			nozzle_switched = true

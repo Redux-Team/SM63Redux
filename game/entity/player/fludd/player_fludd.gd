@@ -39,7 +39,8 @@ const FUEL_MAX: float = 100.0
 		power = clampf(value, 0.0, POWER_MAX)
 		power_changed.emit(power)
 ## Power drained per second while a draining mode runs in the air.
-@export_custom(PROPERTY_HINT_NONE, "suffix:/s") var power_drain_rate: float = 45.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:/s")
+var power_drain_rate: float = 45.0
 ## Water drained per unit of power drained.
 @export var fuel_drain_ratio: float = 0.05
 @export_group("Nozzles")
@@ -58,7 +59,17 @@ const FUEL_MAX: float = 100.0
 	Nozzle.TURBO: false,
 }
 ## States in which no nozzle can spray.
-@export var blocked_states: Array[StringName] = [&"Spin", &"SwimSpin", &"Strike", &"Crouch", &"RolloutF", &"GroundPoundFall", &"GroundPoundStart", &"GroundPoundSlam", &"Glide"]
+@export var blocked_states: Array[StringName] = [
+	&"Spin",
+	&"SwimSpin",
+	&"Strike",
+	&"Crouch",
+	&"RolloutF",
+	&"GroundPoundFall",
+	&"GroundPoundStart",
+	&"GroundPoundSlam",
+	&"Glide",
+]
 @export_group("Launch")
 ## Upward speed set when spraying lifts the player off the ground.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var launch_speed: float = 42.5
@@ -78,7 +89,8 @@ const FUEL_MAX: float = 100.0
 ## Volume of the nozzle switch sound.
 @export var switch_sfx_db: float = -10.0
 
-## Body angle reported by the dive and floorslide states for directional spraying.
+## Body angle reported by the dive and floorslide states for directional
+## spraying.
 var body_rotation: float = 0.0
 
 var _spraying: bool = false:
@@ -99,7 +111,7 @@ func _ready() -> void:
 	for mode: Mode in modes.get_modes():
 		var fludd_mode: FluddMode = mode as FluddMode
 		if fludd_mode:
-			_mode_names.set(fludd_mode.nozzle, mode.name)
+			_mode_names[fludd_mode.nozzle] = mode.name
 	
 	modes.select(_mode_names.get(equipped_nozzle, &""))
 
@@ -264,7 +276,12 @@ func _tick_burst(delta: float) -> void:
 
 func _can_spray() -> bool:
 	var mode: FluddMode = get_selected_mode()
-	return mode != null and mode.has_charge() and fuel > 0.0 and not blocked_states.has(player.machine.get_state_name())
+	return (
+			mode != null
+			and mode.has_charge()
+			and fuel > 0.0
+			and not blocked_states.has(player.machine.get_state_name())
+	)
 
 
 func _drain(mode: FluddMode, delta: float) -> void:

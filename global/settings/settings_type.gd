@@ -7,16 +7,10 @@ extends Node
 @export var name_override: String = ""
 @export var requires_apply: bool = true
 @warning_ignore("unused_private_class_variable")
-@export_tool_button("Refresh Properties", "Reload") var _refresh_properties: Callable:
+@export_tool_button("Refresh Properties", "Reload")
+var _refresh_properties: Callable:
 	get: return func() -> void:
 		notify_property_list_changed()
-
-
-@abstract func _serialize() -> String
-@abstract func _deserialize(string: String) -> void
-@abstract func _get_default_value() -> Variant
-@abstract func _restore_default() -> void
-@abstract func _get_value() -> Variant
 
 
 func apply() -> void:
@@ -39,6 +33,21 @@ func display_name() -> String:
 
 func binding() -> PropertyBinding:
 	return PropertyBinding.from_property(self, &"current_value", display_name(), _property_info())
+
+
+@abstract func _serialize() -> String
+
+
+@abstract func _deserialize(string: String) -> void
+
+
+@abstract func _get_default_value() -> Variant
+
+
+@abstract func _restore_default() -> void
+
+
+@abstract func _get_value() -> Variant
 
 
 func _property_info() -> Dictionary:

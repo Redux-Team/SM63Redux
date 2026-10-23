@@ -20,7 +20,7 @@ func _ready() -> void:
 func _apply_setting(setting: SettingsType) -> void:
 	match setting:
 		output_device:
-			AudioServer.output_device = output_device.options.get(output_device.current_value)
+			AudioServer.output_device = output_device.options[output_device.current_value]
 		master_volume:
 			_apply_bus(&"Master", master_volume)
 		music_volume:

@@ -9,7 +9,8 @@ extends PlayerState
 @export var pierce_grace_frames: int = 3
 @export_group("Water")
 ## Time for water to halve the fall speed.
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var water_halflife: float = 0.1385
+@export_custom(PROPERTY_HINT_NONE, "suffix:s")
+var water_halflife: float = 0.1385
 ## Fall speed in water below which the pound ends and swimming resumes.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var swim_speed: float = 50.0
 
@@ -22,12 +23,6 @@ func _enter() -> void:
 	player.velocity.y = fall_speed
 	_impact_speed = fall_speed
 	_grace = 0
-
-
-func pierce() -> void:
-	_pierce_speed = maxf(_impact_speed, player.velocity.y) * (1.0 - pierce_damping)
-	player.velocity.y = _pierce_speed
-	_grace = pierce_grace_frames
 
 
 func _tick(delta: float) -> void:
@@ -46,3 +41,9 @@ func _tick(delta: float) -> void:
 
 func _next() -> StringName:
 	return &"GroundPoundSlam" if player.is_on_floor() and _grace == 0 else &""
+
+
+func pierce() -> void:
+	_pierce_speed = maxf(_impact_speed, player.velocity.y) * (1.0 - pierce_damping)
+	player.velocity.y = _pierce_speed
+	_grace = pierce_grace_frames

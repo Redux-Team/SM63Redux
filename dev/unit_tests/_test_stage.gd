@@ -11,7 +11,11 @@ var player: Player
 var _held: Array[StringName] = []
 
 
-static func create(with_player: bool = true, with_floor: bool = true, player_position: Vector2 = Vector2.ZERO) -> TestStage:
+static func create(
+		with_player: bool = true,
+		with_floor: bool = true,
+		player_position: Vector2 = Vector2.ZERO,
+) -> TestStage:
 	var stage: TestStage = TestStage.new()
 	if with_player:
 		stage.add(&"player_mario", player_position)
@@ -20,12 +24,20 @@ static func create(with_player: bool = true, with_floor: bool = true, player_pos
 	return stage
 
 
+static func reset() -> void:
+	for action: StringName in InputMap.get_actions():
+		Input.action_release(action)
+	
+	for leftover: Node in ((Engine.get_main_loop() as SceneTree).get_nodes_in_group(&"level")):
+		leftover.free()
+
+
 func get_area() -> AreaData:
 	return data.areas.front()
 
 
 func get_layer(index: int = 0) -> LayerData:
-	return get_area().layers.get(index)
+	return get_area().layers[index]
 
 
 func add_layer(decoration: bool = false) -> LayerData:
@@ -35,7 +47,11 @@ func add_layer(decoration: bool = false) -> LayerData:
 	return layer
 
 
-func add(id: StringName, position: Vector2 = Vector2.ZERO, layer: LayerData = get_layer()) -> ObjectData:
+func add(
+		id: StringName,
+		position: Vector2 = Vector2.ZERO,
+		layer: LayerData = get_layer(),
+) -> ObjectData:
 	var object: ObjectData = ObjectData.create(id)
 	object.position = position
 	layer.objects.append(object)
@@ -43,12 +59,25 @@ func add(id: StringName, position: Vector2 = Vector2.ZERO, layer: LayerData = ge
 
 
 func add_polygon(id: StringName, rect: Rect2, layer: LayerData = get_layer()) -> ObjectData:
-	return add_shape(id, PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)]), layer)
+	return add_shape(
+			id,
+			PackedVector2Array([
+				rect.position,
+				Vector2(rect.end.x, rect.position.y),
+				rect.end,
+				Vector2(rect.position.x, rect.end.y),
+			]),
+			layer,
+	)
 
 
-func add_shape(id: StringName, outer: PackedVector2Array, layer: LayerData = get_layer()) -> ObjectData:
+func add_shape(
+		id: StringName,
+		outer: PackedVector2Array,
+		layer: LayerData = get_layer(),
+) -> ObjectData:
 	var object: ObjectData = add(id, Vector2.ZERO, layer)
-	object.shape = {"outer": outer, "holes": [], "toplines": []}
+	object.shape = { "outer": outer, "holes": [], "toplines": [] }
 	return object
 
 
@@ -98,7 +127,7 @@ func give_cap(cap: StringName) -> void:
 
 
 func equip_nozzle(nozzle: PlayerFludd.Nozzle) -> void:
-	player.fludd.held_nozzles.set(nozzle, true)
+	player.fludd.held_nozzles[nozzle] = true
 	player.fludd.equipped_nozzle = nozzle
 
 
@@ -127,14 +156,6 @@ func finish() -> void:
 		level.free()
 	
 	await step()
-
-
-static func reset() -> void:
-	for action: StringName in InputMap.get_actions():
-		Input.action_release(action)
-	
-	for leftover: Node in (Engine.get_main_loop() as SceneTree).get_nodes_in_group(&"level"):
-		leftover.free()
 
 
 func _get_tree() -> SceneTree:

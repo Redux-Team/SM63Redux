@@ -26,9 +26,9 @@ func poll(delta: float) -> void:
 	glide = Input.get_axis(&"glide_up", &"glide_down")
 	for action: StringName in ACTIONS:
 		if Input.is_action_just_pressed(action):
-			_press_ages.set(action, 0.0)
+			_press_ages[action] = 0.0
 		elif _press_ages.has(action):
-			_press_ages.set(action, _press_ages.get(action) + delta)
+			_press_ages[action] = _press_ages[action] + delta
 
 
 func is_held(action: StringName) -> bool:

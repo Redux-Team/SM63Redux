@@ -3,7 +3,11 @@ extends LDPanel
 
 signal picked(entry: ObjectRegistry.Entry)
 
-enum Scope { BOTH, ALL, CATEGORY }
+enum Scope {
+	BOTH,
+	ALL,
+	CATEGORY,
+}
 
 const CHIP_CLASS: String = "Chip"
 const LEADING_CATEGORY: StringName = &"Solids"
@@ -25,14 +29,12 @@ var _query: String = ""
 var _searched: bool = false
 
 
-func _setup() -> void:
-	super()
-	_chips.pressed.connect(_on_chip_pressed)
-	search.text_changed.connect(_on_search_changed)
-	_build_chips()
-	_queue.assign(ObjectRegistry.get_entries().filter(func(entry: ObjectRegistry.Entry) -> bool: return entry.browsable))
-	_queue.sort_custom(_compare)
-	_build_sections()
+static func _all_section(entry: ObjectRegistry.Entry) -> String:
+	return String(entry.biome) if not entry.biome.is_empty() else _category_section(entry)
+
+
+static func _category_section(entry: ObjectRegistry.Entry) -> String:
+	return String(entry.group) if not entry.group.is_empty() else String(entry.category)
 
 
 func _process(_delta: float) -> void:
@@ -41,6 +43,20 @@ func _process(_delta: float) -> void:
 		return
 	
 	_build(build_budget_usec)
+
+
+func _setup() -> void:
+	super()
+	_chips.pressed.connect(_on_chip_pressed)
+	search.text_changed.connect(_on_search_changed)
+	_build_chips()
+	_queue.assign(
+			ObjectRegistry.get_entries().filter(
+					func(entry: ObjectRegistry.Entry) -> bool:
+						return entry.browsable
+	))
+	_queue.sort_custom(_compare)
+	_build_sections()
 
 
 func get_title() -> String:
@@ -56,7 +72,10 @@ func _build_chips() -> void:
 	for entry: ObjectRegistry.Entry in ObjectRegistry.get_entries():
 		if entry.browsable and not categories.has(entry.category):
 			categories.append(entry.category)
-	categories.sort_custom(func(a: StringName, b: StringName) -> bool: return a.is_empty() or (not b.is_empty() and String(a) < String(b)))
+	categories.sort_custom(
+			func(a: StringName, b: StringName) -> bool:
+				return (a.is_empty() or (not b.is_empty() and String(a) < String(b)))
+	)
 	
 	for category: StringName in categories:
 		var chip: Button = Button.new()
@@ -88,17 +107,20 @@ func _build_sections() -> void:
 	var primary: Dictionary[String, String] = {}
 	for entry: ObjectRegistry.Entry in _queue:
 		for section: String in [_all_section(entry), _category_section(entry)]:
-			if not primary.has(section) or String(entry.category) < primary.get(section):
-				primary.set(section, String(entry.category))
+			if not primary.has(section) or String(entry.category) < primary[section]:
+				primary[section] = String(entry.category)
 	
 	var names: Array[String] = primary.keys()
-	names.sort_custom(func(a: String, b: String) -> bool: return primary.get(a) < primary.get(b) if primary.get(a) != primary.get(b) else a < b)
+	names.sort_custom(
+			func(a: String, b: String) -> bool:
+				return (primary[a] < primary[b] if primary[a] != primary[b] else a < b)
+	)
 	for section: String in names:
 		var group_view: LDObjectGroup = group_scene.instantiate()
 		group_view.set_group_name(section)
 		group_view.visible = false
 		groups.add_child(group_view)
-		_sections.set(section, group_view)
+		_sections[section] = group_view
 
 
 func _build(budget_usec: int) -> void:
@@ -117,7 +139,7 @@ func _build(budget_usec: int) -> void:
 
 
 func _add_tile(entry: ObjectRegistry.Entry, section: String, scope: Scope) -> void:
-	var group_view: LDObjectGroup = _sections.get(section)
+	var group_view: LDObjectGroup = _sections[section]
 	var tile: LDObjectEntry = entry_scene.instantiate()
 	tile.setup(entry)
 	tile.pressed.connect(_on_entry_pressed.bind(entry))
@@ -136,7 +158,7 @@ func _filter() -> void:
 	for tile: LDObjectEntry in _tiles:
 		_apply_filter(tile)
 		if tile.visible:
-			shown.set(tile.get_meta(&"group"), true)
+			shown[tile.get_meta(&"group")] = true
 	
 	for group_view: LDObjectGroup in _sections.values():
 		group_view.visible = shown.has(group_view)
@@ -145,24 +167,21 @@ func _filter() -> void:
 	_searched = not _query.is_empty()
 
 
-static func _all_section(entry: ObjectRegistry.Entry) -> String:
-	return String(entry.biome) if not entry.biome.is_empty() else _category_section(entry)
-
-
-static func _category_section(entry: ObjectRegistry.Entry) -> String:
-	return String(entry.group) if not entry.group.is_empty() else String(entry.category)
-
-
 func _apply_filter(tile: LDObjectEntry) -> void:
 	var entry: ObjectRegistry.Entry = tile.entry
 	var scope: Scope = tile.get_meta(&"scope")
 	if _query.is_empty():
-		tile.visible = scope != Scope.CATEGORY if _category.is_empty() else scope != Scope.ALL and entry.category == _category
+		tile.visible = (
+				scope != Scope.CATEGORY
+				if _category.is_empty()
+				else scope != Scope.ALL and entry.category == _category
+		)
 		tile.set_meta(&"score", 0)
 		Tooltip.set_text(tile, entry.display_name, Tooltip.Placement.UNDER)
 		return
 	
-	var score: int = _fuzzy_score(_query, entry.display_name.to_lower()) if scope != Scope.CATEGORY else 0
+	var score: int = \
+			_fuzzy_score(_query, entry.display_name.to_lower()) if scope != Scope.CATEGORY else 0
 	tile.visible = score > 0
 	tile.set_meta(&"score", score)
 	if tile.visible:
@@ -172,12 +191,15 @@ func _apply_filter(tile: LDObjectEntry) -> void:
 func _sort_group(group_view: LDObjectGroup) -> void:
 	var tiles: Array[Node] = group_view.list.get_children()
 	var sorted: Array[Node] = tiles.duplicate()
-	sorted.sort_custom(func(a: Node, b: Node) -> bool: return _compare_tiles(a as LDObjectEntry, b as LDObjectEntry))
+	sorted.sort_custom(
+			func(a: Node, b: Node) -> bool:
+				return _compare_tiles(a as LDObjectEntry, b as LDObjectEntry)
+	)
 	if sorted == tiles:
 		return
 	
 	for i: int in sorted.size():
-		group_view.list.move_child(sorted.get(i), i)
+		group_view.list.move_child(sorted[i], i)
 
 
 func _compare_tiles(a: LDObjectEntry, b: LDObjectEntry) -> bool:
@@ -198,7 +220,13 @@ func _on_entry_pressed(entry: ObjectRegistry.Entry) -> void:
 
 func _compare(first: ObjectRegistry.Entry, second: ObjectRegistry.Entry) -> bool:
 	if first.category != second.category:
-		return first.category == LEADING_CATEGORY or (second.category != LEADING_CATEGORY and String(first.category) < String(second.category))
+		return (
+				first.category == LEADING_CATEGORY
+				or (
+						second.category != LEADING_CATEGORY
+						and String(first.category) < String(second.category)
+				)
+		)
 	if first.order != second.order:
 		return first.order < second.order
 	return first.display_name < second.display_name

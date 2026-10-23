@@ -2,7 +2,8 @@ extends PlayerState
 
 @export_group("Launch")
 ## Caps horizontal speed on takeoff.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var max_horizontal_speed: float = 625.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var max_horizontal_speed: float = 625.0
 ## Upward speed set on takeoff.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var rise_speed: float = 192.5
 @export_group("Timing")
@@ -16,9 +17,11 @@ extends PlayerState
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var fall_time: float = 0.3
 @export_group("Exits")
 ## Downward speed needed before the rollout turns into a fall.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var fall_min_speed: float = 30.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var fall_min_speed: float = 30.0
 ## Downward speed that must be reached before a spin can interrupt the rollout.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var spin_min_speed: float = -40.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var spin_min_speed: float = -40.0
 
 
 func _enter() -> void:

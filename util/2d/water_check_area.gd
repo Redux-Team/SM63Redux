@@ -7,10 +7,6 @@ signal water_exited
 var area_stack: Dictionary[Area2D, bool]
 
 
-func is_in_water() -> bool:
-	return not area_stack.is_empty()
-
-
 func _ready() -> void:
 	collision_layer = 0
 	collision_mask = 4
@@ -19,20 +15,8 @@ func _ready() -> void:
 	area_exited.connect(_on_area_exited)
 
 
-func _on_area_entered(area: Area2D) -> void:
-	if area.has_meta(&"water") and area not in area_stack:
-		if area_stack.is_empty():
-			water_entered.emit()
-		
-		area_stack.set(area, true)
-
-
-func _on_area_exited(area: Area2D) -> void:
-	if area.has_meta(&"water") and area in area_stack:
-		area_stack.erase(area)
-		
-		if area_stack.is_empty():
-			water_exited.emit()
+func is_in_water() -> bool:
+	return not area_stack.is_empty()
 
 
 func disable() -> void:
@@ -41,3 +25,19 @@ func disable() -> void:
 
 func enable() -> void:
 	set_deferred(&"monitoring", true)
+
+
+func _on_area_entered(area: Area2D) -> void:
+	if area.has_meta(&"water") and area not in area_stack:
+		if area_stack.is_empty():
+			water_entered.emit()
+		
+		area_stack[area] = true
+
+
+func _on_area_exited(area: Area2D) -> void:
+	if area.has_meta(&"water") and area in area_stack:
+		area_stack.erase(area)
+		
+		if area_stack.is_empty():
+			water_exited.emit()

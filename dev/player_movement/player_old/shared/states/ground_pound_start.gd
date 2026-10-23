@@ -12,4 +12,8 @@ func _tick(_delta: float) -> void:
 
 
 func _next() -> StringName:
-	return &"GroundPoundFall" if time >= player.ground_pound_start_duration else &""
+	return (
+		&"GroundPoundFall"
+		if time >= player.ground_pound_start_duration
+		else &""
+	)

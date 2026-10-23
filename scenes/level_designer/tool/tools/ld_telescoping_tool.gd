@@ -13,6 +13,14 @@ func _resize_preview(object: GameObject, origin: Vector2, current: Vector2) -> v
 	var axis: Vector2 = shape.get_axis_vector()
 	var reach: float = (current - origin).dot(axis)
 	var base: float = shape.get_segment_length() * shape.default_units
-	shape.set_units(maxi(shape.default_units, roundi((absf(reach) + base * 0.5) / shape.get_segment_length())))
-	object.position = origin + axis * signf(reach) * (shape.get_length() - shape.get_caps_length() - base) * 0.5
+	shape.set_units(
+			maxi(
+					shape.default_units,
+					roundi((absf(reach) + base * 0.5) / shape.get_segment_length()),
+			)
+	)
+	object.position = (
+			origin
+			+ (axis * signf(reach) * (shape.get_length() - shape.get_caps_length() - base) * 0.5)
+	)
 	object.invalidate_bounds()

@@ -10,21 +10,26 @@ var _points: PackedVector2Array = PackedVector2Array()
 var _preview: GameObject
 
 
-func _setup() -> void:
-	editor.tool_handler.armed_changed.connect(_on_armed_changed.unbind(1))
-
-
-func _activate() -> void:
-	_reset()
-
-
-func _deactivate() -> void:
-	_reset()
-	_clear_preview()
-
-
-func _cancel() -> void:
-	_reset()
+func _process(_delta: float) -> void:
+	var layer: LevelLayer = editor.level_handler.active_layer
+	if layer == null or editor.tool_handler.armed == null or not is_active():
+		return
+	
+	if _preview == null:
+		_preview = editor.object_handler.spawn(editor.tool_handler.armed.id, Vector2.ZERO)
+		preview_root.add_child(_preview)
+	
+	preview_root.global_transform = layer.get_objects_root().get_global_transform()
+	var points: PackedVector2Array = _with_cursor()
+	var shape: PathShape = _preview.shape as PathShape
+	if points.size() >= PathShape.MIN_POINTS:
+		_preview.position = points[0]
+		shape.set_points(LDPolygonTool.localize(points, points[0]))
+		_preview.modulate = preview_modulate
+	else:
+		_preview.position = _snapped_mouse()
+		shape.set_points(shape.default_points)
+		_preview.modulate = invalid_modulate if not _points.is_empty() else preview_modulate
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -41,26 +46,21 @@ func _unhandled_input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 
-func _process(_delta: float) -> void:
-	var layer: LevelLayer = editor.level_handler.active_layer
-	if layer == null or editor.tool_handler.armed == null or not is_active():
-		return
-	
-	if _preview == null:
-		_preview = editor.object_handler.spawn(editor.tool_handler.armed.id, Vector2.ZERO)
-		preview_root.add_child(_preview)
-	
-	preview_root.global_transform = layer.get_objects_root().get_global_transform()
-	var points: PackedVector2Array = _with_cursor()
-	var shape: PathShape = _preview.shape as PathShape
-	if points.size() >= PathShape.MIN_POINTS:
-		_preview.position = points.get(0)
-		shape.set_points(LDPolygonTool.localize(points, points.get(0)))
-		_preview.modulate = preview_modulate
-	else:
-		_preview.position = _snapped_mouse()
-		shape.set_points(shape.default_points)
-		_preview.modulate = invalid_modulate if not _points.is_empty() else preview_modulate
+func _setup() -> void:
+	editor.tool_handler.armed_changed.connect(_on_armed_changed.unbind(1))
+
+
+func _activate() -> void:
+	_reset()
+
+
+func _deactivate() -> void:
+	_reset()
+	_clear_preview()
+
+
+func _cancel() -> void:
+	_reset()
 
 
 func _tool_input(event: InputEvent, _world_position: Vector2) -> bool:
@@ -79,7 +79,13 @@ func _tool_input(event: InputEvent, _world_position: Vector2) -> bool:
 		return false
 	
 	var point: Vector2 = _snapped_mouse()
-	if _points.is_empty() or _points.get(_points.size() - 1).distance_to(point) >= LDPolygonStrokeTool.MIN_POINT_DISTANCE:
+	if (
+			_points.is_empty()
+			or (
+					_points[_points.size() - 1].distance_to(point)
+					>= LDPolygonStrokeTool.MIN_POINT_DISTANCE
+			)
+	):
 		_points.append(point)
 	return true
 
@@ -100,25 +106,38 @@ func _finish(points: PackedVector2Array) -> void:
 	if points.size() < PathShape.MIN_POINTS:
 		return
 	
-	var object: GameObject = editor.object_handler.spawn(editor.tool_handler.armed.id, points.get(0))
-	(object.shape as PathShape).set_points(LDPolygonTool.localize(points, points.get(0)))
+	var object: GameObject = editor.object_handler.spawn(editor.tool_handler.armed.id, points[0])
+	(object.shape as PathShape).set_points(LDPolygonTool.localize(points, points[0]))
 	for property: ObjectProperty in object.properties:
 		if editor.tool_handler.should_randomize(property):
 			object.set_value(property.key, property.random_value())
-	editor.object_handler.add_objects([object], editor.level_handler.active_layer, "Place %s" % editor.tool_handler.armed.display_name, false)
+	editor.object_handler.add_objects(
+			[object],
+			editor.level_handler.active_layer,
+			"Place %s" % editor.tool_handler.armed.display_name,
+			false,
+	)
 
 
 func _with_cursor() -> PackedVector2Array:
 	var points: PackedVector2Array = _points.duplicate()
 	var cursor_point: Vector2 = _snapped_mouse()
-	if not points.is_empty() and points.get(points.size() - 1).distance_to(cursor_point) >= LDPolygonStrokeTool.MIN_POINT_DISTANCE:
+	if (
+			not points.is_empty()
+			and (
+					points[points.size() - 1].distance_to(cursor_point)
+					>= LDPolygonStrokeTool.MIN_POINT_DISTANCE
+			)
+	):
 		points.append(cursor_point)
 	
 	return points
 
 
 func _snapped_mouse() -> Vector2:
-	return editor.viewport_handler.snap(editor.viewport_handler.get_layer_mouse(editor.level_handler.active_layer))
+	return editor.viewport_handler.snap(
+			editor.viewport_handler.get_layer_mouse(editor.level_handler.active_layer)
+	)
 
 
 func _reset() -> void:

@@ -11,7 +11,8 @@ const FRICTION_KEY: StringName = &"fludd_rocket"
 ## Time held before the rocket launches.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var charge_time: float = 1.0
 ## Speed set along the launch direction.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var launch_speed: float = 692.5
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var launch_speed: float = 692.5
 ## Water spent per launch.
 @export var fuel_cost: float = 5.0
 ## Time after a launch before charging can resume.
@@ -22,13 +23,15 @@ const FRICTION_KEY: StringName = &"fludd_rocket"
 ## Floor friction multiplier after a floorslide launch.
 @export var slide_friction_scale: float = 0.2
 ## Time the floorslide friction multiplier lasts.
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var slide_friction_time: float = 0.75
+@export_custom(PROPERTY_HINT_NONE, "suffix:s")
+var slide_friction_time: float = 0.75
 @export_group("Burst")
 ## Length of the launch particle burst.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var burst_time: float = 0.18
 ## Scale of the launch particle burst.
 @export var burst_scale: float = 2.0
-## Time after a launch during which launch-only effects apply, such as a stronger water exit.
+## Time after a launch during which launch-only effects apply, such as a
+## stronger water exit.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var launch_window: float = 1.5
 
 var _charge: float = 0.0
@@ -103,7 +106,11 @@ func _launch() -> void:
 	if boom:
 		boom.fire(fludd.spray_particles.global_position)
 	if sliding:
-		player.friction_modifiers.set_modifier(FRICTION_KEY, slide_friction_scale, slide_friction_time)
+		player.friction_modifiers.set_modifier(
+				FRICTION_KEY,
+				slide_friction_scale,
+				slide_friction_time,
+		)
 
 
 func _get_direction(sliding: bool) -> Vector2:

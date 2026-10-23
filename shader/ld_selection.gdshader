@@ -48,7 +48,11 @@ void fragment() {
 	if (state == 1) {
 		if (tex.a > 0.1) {
 			float wave = sin(TIME * hover_pulse_speed * TAU) * 0.5 + 0.5;
-			color.rgb = mix(color.rgb, hover_tint.rgb, mix(hover_tint_min, hover_tint_max, wave));
+			color.rgb = mix(
+				color.rgb,
+				hover_tint.rgb,
+				mix(hover_tint_min, hover_tint_max, wave)
+			);
 		}
 	} else if (state == 2) {
 		vec2 texel = outline_width / vec2(textureSize(TEXTURE, 0));
@@ -56,7 +60,10 @@ void fragment() {
 		float around = 0.0;
 		for (float x = -1.0; x <= 1.0; x += 1.0) {
 			for (float y = -1.0; y <= 1.0; y += 1.0) {
-				around = max(around, texture(TEXTURE, UV + vec2(x, y) * texel).a);
+				around = max(
+					around,
+					texture(TEXTURE, UV + vec2(x, y) * texel).a
+				);
 			}
 		}
 		bool enclosed = texture(TEXTURE, UV + vec2(-texel.x, 0.0)).a > 0.1
@@ -64,11 +71,23 @@ void fragment() {
 			&& texture(TEXTURE, UV + vec2(0.0, texel.y)).a > 0.1
 			&& texture(TEXTURE, UV + vec2(0.0, -texel.y)).a > 0.1;
 		bool outline = !inside && around > 0.1 && !enclosed;
-		float pulse = pulse_min + (pulse_max - pulse_min) * (sin(TIME * pulse_speed * 5.0) * 0.5 + 0.5);
+		float pulse = (
+			pulse_min
+			+ (pulse_max - pulse_min) * (
+				sin(TIME * pulse_speed * 5.0) * 0.5 + 0.5
+			)
+		);
 		if (outline) {
-			color = vec4(selected_outline.rgb, selected_outline.a * pulse * vertex_color.a);
+			color = vec4(
+				selected_outline.rgb,
+				selected_outline.a * pulse * vertex_color.a
+			);
 		} else if (inside) {
-			color.rgb = mix(color.rgb, selected_fill.rgb, selected_fill.a * pulse);
+			color.rgb = mix(
+				color.rgb,
+				selected_fill.rgb,
+				selected_fill.a * pulse
+			);
 		}
 	}
 	COLOR = color;

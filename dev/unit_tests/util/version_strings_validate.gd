@@ -59,5 +59,5 @@ static func run_test() -> void:
 	var v_reconstruct: Version = Version.from_string("1.2.3-dev")
 	assert(str(v_reconstruct) == "1.2.3-dev")
 	assert(str(v_partial) == "3.1")
-	assert(str(Singleton.get_version()) == ProjectSettings.get("application/config/version"))
+	assert(str(Singleton.get_version()) == ProjectSettings.get(&"application/config/version"))
 	#endregion

@@ -39,8 +39,8 @@ func _on_nozzle_changed(_nozzle: PlayerFludd.Nozzle) -> void:
 	var mode: FluddMode = fludd.get_selected_mode()
 	var variant: StringName = mode.fludd_variant if mode else &""
 	var fludd_tween: Tween = create_tween()
-	fludd_tween.tween_property(fludd_sprite, "offset:y", 3, 0.02)
-	fludd_tween.tween_property(fludd_sprite, "offset:y", 0, 0.05)
+	fludd_tween.tween_property(fludd_sprite, ^"offset:y", 3, 0.02)
+	fludd_tween.tween_property(fludd_sprite, ^"offset:y", 0, 0.05)
 	fludd_sprite.follow_root = not variant.is_empty()
 	fludd_sprite.visible = not variant.is_empty()
 	fludd_sprite.follow_variant = variant
@@ -50,7 +50,11 @@ func _on_nozzle_changed(_nozzle: PlayerFludd.Nozzle) -> void:
 
 func _animate_nozzle(mode: FluddMode, spraying: bool) -> void:
 	var using: bool = spraying and mode != null and not mode.use_animation.is_empty()
-	var animation: StringName = StringName("%s:%s" % [mode.fludd_variant, mode.use_animation]) if using else _default_animation
+	var animation: StringName = (
+			StringName("%s:%s" % [mode.fludd_variant, mode.use_animation])
+			if using
+			else _default_animation
+	)
 	if fludd_sprite.follow_default != animation:
 		fludd_sprite.follow_default = animation
 	
@@ -63,6 +67,8 @@ func _animate_nozzle(mode: FluddMode, spraying: bool) -> void:
 func _place_plume(mode: FluddMode) -> void:
 	var facing: float = float(fludd.player.get_facing())
 	var offset: Vector2 = mode.plume_offset if mode else Vector2.ZERO
-	plume_sprite.position = Vector2((_plume_origin.x + offset.x) * facing, _plume_origin.y + offset.y)
+	plume_sprite.position = \
+			Vector2((_plume_origin.x + offset.x) * facing, _plume_origin.y + offset.y)
 	var particle_offset: Vector2 = mode.particle_offset if mode else Vector2.ZERO
-	plume_particles.global_position = plume_sprite.global_position + Vector2(particle_offset.x * facing, particle_offset.y)
+	plume_particles.global_position = \
+			plume_sprite.global_position + Vector2(particle_offset.x * facing, particle_offset.y)

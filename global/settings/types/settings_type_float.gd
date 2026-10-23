@@ -37,4 +37,10 @@ func _get_value() -> Variant:
 
 
 func _property_info() -> Dictionary:
-	return {"hint": PROPERTY_HINT_RANGE, "hint_string": "%s,%s,%s" % [minimum, maximum, step], "format": slider_text, "max_text": max_text, "update_on_release": update_on_release}
+	return {
+		"hint": PROPERTY_HINT_RANGE,
+		"hint_string": "%s,%s,%s" % [minimum, maximum, step],
+		"format": slider_text,
+		"max_text": max_text,
+		"update_on_release": update_on_release,
+	}

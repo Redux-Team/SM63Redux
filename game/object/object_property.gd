@@ -54,7 +54,7 @@ const VARIANT_TYPES: Dictionary[Type, Variant.Type] = {
 
 
 func get_variant_type() -> Variant.Type:
-	return VARIANT_TYPES.get(type)
+	return VARIANT_TYPES[type]
 
 
 func get_label() -> String:
@@ -113,23 +113,23 @@ func apply(object: GameObject, value: Variant) -> void:
 
 
 func to_info() -> Dictionary:
-	var info: Dictionary = {"type": get_variant_type()}
+	var info: Dictionary = { "type": get_variant_type() }
 	match type:
 		Type.STRING:
 			if multiline:
-				info.set("widget", &"text")
+				info["widget"] = &"text"
 			if bbcode:
-				info.set("bbcode", true)
+				info["bbcode"] = true
 		Type.ENUM:
-			info.set("hint", PROPERTY_HINT_ENUM)
-			info.set("hint_string", ",".join(options))
+			info["hint"] = PROPERTY_HINT_ENUM
+			info["hint_string"] = ",".join(options)
 		Type.INT, Type.FLOAT:
 			if is_finite(min_value) and is_finite(max_value):
-				info.set("hint", PROPERTY_HINT_RANGE)
-				info.set("hint_string", "%s,%s,%s" % [min_value, max_value, step])
+				info["hint"] = PROPERTY_HINT_RANGE
+				info["hint_string"] = "%s,%s,%s" % [min_value, max_value, step]
 				if type == Type.INT:
-					info.set("format", "%d")
+					info["format"] = "%d"
 			else:
-				info.set("step", step)
+				info["step"] = step
 	
 	return info

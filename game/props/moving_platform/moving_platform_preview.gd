@@ -41,10 +41,20 @@ func _rebuild() -> void:
 	for container: Node2D in [_rest, _ghosts]:
 		for child: Node in container.get_children():
 			child.free()
-		for offset: Vector2 in MovingPlatform.get_offsets(_object.get_value(&"platform_amount"), _object.get_value(&"platform_radius")):
+		for offset: Vector2 in MovingPlatform.get_offsets(
+				_object.get_value(&"platform_amount"),
+				_object.get_value(&"platform_radius"),
+		):
 			var holder: Node2D = Node2D.new()
 			holder.position = offset
-			holder.add_child(MovingPlatform.build_visual(texture, margin_left, margin_right, _object.get_value(&"platform_width")))
+			holder.add_child(
+					MovingPlatform.build_visual(
+							texture,
+							margin_left,
+							margin_right,
+							_object.get_value(&"platform_width"),
+					)
+			)
 			container.add_child(holder)
 	
 	queue_redraw()

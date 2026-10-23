@@ -16,22 +16,32 @@ var _hidden: Array[GameObject] = []
 var _brush_rings: Array[PackedVector2Array] = []
 
 
-class Plan:
-	var targets: Array[GameObject]
-	var id: StringName
-	var cells: Dictionary[Vector2i, bool]
-	var before: Dictionary[Vector2i, bool]
+static func _origin(shape: TileGrid.Shape) -> Vector2:
+	return TerrainPolygon.get_bounds(shape.outer).position
+
+
+static func _localize(shape: TileGrid.Shape, origin: Vector2) -> Array[PackedVector2Array]:
+	var rings: Array[PackedVector2Array] = []
+	for ring: PackedVector2Array in shape.get_rings():
+		rings.append(LDPolygonTool.localize(ring, origin))
 	
+	return rings
+
+
+static func _overlaps(cells: Dictionary[Vector2i, bool], other: Dictionary[Vector2i, bool]) -> bool:
+	return cells.keys().any(func(cell: Vector2i) -> bool: return other.has(cell))
+
+
+static func _without(
+		cells: Dictionary[Vector2i, bool],
+		removed: Dictionary[Vector2i, bool],
+) -> Dictionary[Vector2i, bool]:
+	var result: Dictionary[Vector2i, bool] = {}
+	for cell: Vector2i in cells:
+		if not removed.has(cell):
+			result[cell] = true
 	
-	func _init(group: Array[GameObject], object_id: StringName, after: Dictionary[Vector2i, bool], current: Dictionary[Vector2i, bool]) -> void:
-		targets = group
-		id = object_id
-		cells = after
-		before = current
-	
-	
-	func is_noop() -> bool:
-		return cells.size() == before.size() and cells.keys().all(func(cell: Vector2i) -> bool: return before.has(cell))
+	return result
 
 
 func _setup() -> void:
@@ -63,13 +73,16 @@ func _tool_input(event: InputEvent, _world_position: Vector2) -> bool:
 		return is_painting()
 	
 	var mouse_button: InputEventMouseButton = event as InputEventMouseButton
-	if mouse_button == null or not mouse_button.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
+	if (
+			mouse_button == null
+			or not mouse_button.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]
+	):
 		return false
 	
 	if mouse_button.pressed and not is_painting():
 		_stroke_button = mouse_button.button_index
 		_hover = _cell_at_cursor()
-		_cells = {_hover: true}
+		_cells = { _hover: true }
 		_refresh_preview()
 	elif not mouse_button.pressed and mouse_button.button_index == _stroke_button:
 		_commit()
@@ -77,21 +90,24 @@ func _tool_input(event: InputEvent, _world_position: Vector2) -> bool:
 
 
 func _view_changed() -> void:
-	preview_root.global_transform = editor.level_handler.active_layer.get_objects_root().get_global_transform()
+	preview_root.global_transform = \
+			editor.level_handler.active_layer.get_objects_root().get_global_transform()
 	if editor.tool_handler.armed:
 		_track_cursor()
 
 
-func _track_cursor() -> void:
-	var cell: Vector2i = _cell_at_cursor()
-	if cell == _hover:
+func _draw_overlay(overlay: LDOverlay) -> void:
+	var layer: LevelLayer = editor.level_handler.active_layer
+	if layer == null or editor.tool_handler.armed == null:
 		return
 	
-	if is_painting():
-		for step: Vector2i in TileGrid.line(_hover, cell):
-			_cells.set(step, true)
-	_hover = cell
-	_refresh_preview()
+	var to_world: Transform2D = layer.get_objects_root().get_global_transform()
+	for ring: PackedVector2Array in _brush_rings:
+		overlay.draw_world_polyline(
+				to_world * TerrainPolygon.get_closed_points(ring),
+				erase_color if is_erasing() else paint_color,
+				2.0,
+		)
 
 
 func is_painting() -> bool:
@@ -102,18 +118,9 @@ func is_erasing() -> bool:
 	return _stroke_button == MOUSE_BUTTON_RIGHT
 
 
-func _draw_overlay(overlay: LDOverlay) -> void:
-	var layer: LevelLayer = editor.level_handler.active_layer
-	if layer == null or editor.tool_handler.armed == null:
-		return
-	
-	var to_world: Transform2D = layer.get_objects_root().get_global_transform()
-	for ring: PackedVector2Array in _brush_rings:
-		overlay.draw_world_polyline(to_world * TerrainPolygon.get_closed_points(ring), erase_color if is_erasing() else paint_color, 2.0)
-
-
 func apply(brush: Dictionary[Vector2i, bool], erasing: bool, action_name: String) -> void:
-	var plans: Array[Plan] = _plan(brush, erasing).filter(func(plan: Plan) -> bool: return not plan.is_noop())
+	var plans: Array[Plan] = \
+			_plan(brush, erasing).filter(func(plan: Plan) -> bool: return not plan.is_noop())
 	if plans.is_empty():
 		return
 	
@@ -130,6 +137,18 @@ func get_layer_cells() -> Dictionary[Vector2i, bool]:
 		cells.merge(_rasterize(object, everywhere))
 	
 	return cells
+
+
+func _track_cursor() -> void:
+	var cell: Vector2i = _cell_at_cursor()
+	if cell == _hover:
+		return
+	
+	if is_painting():
+		for step: Vector2i in TileGrid.line(_hover, cell):
+			_cells[step] = true
+	_hover = cell
+	_refresh_preview()
 
 
 func _commit() -> void:
@@ -174,7 +193,12 @@ func _rasterize(object: GameObject, reach: Rect2i) -> Dictionary[Vector2i, bool]
 		return {}
 	
 	var rings: Array = LDPolygonBooleanTool.to_layer_rings(object)
-	if not TileGrid.point_bounds(rings.front()).intersects(reach) or not rings.all(func(ring: PackedVector2Array) -> bool: return TileGrid.is_aligned(ring)):
+	if (
+			not TileGrid.point_bounds(rings.front()).intersects(reach)
+			or not rings.all(
+					func(ring: PackedVector2Array) -> bool: return (TileGrid.is_aligned(ring))
+			)
+	):
 		return {}
 	
 	var holes: Array[PackedVector2Array] = []
@@ -186,20 +210,32 @@ func _rewrite(plan: Plan, history: LDHistoryHandler.Action) -> void:
 	var shapes: Array[TileGrid.Shape] = TileGrid.trace(plan.cells)
 	for i: int in maxi(shapes.size(), plan.targets.size()):
 		if i >= shapes.size():
-			editor.object_handler.queue_removal(history, plan.targets.get(i))
+			editor.object_handler.queue_removal(history, plan.targets[i])
 		elif i < plan.targets.size():
-			var target: GameObject = plan.targets.get(i)
+			var target: GameObject = plan.targets[i]
 			var polygon: PolygonShape = target.shape as PolygonShape
-			var rings: Array[PackedVector2Array] = _localize(shapes.get(i), target.position)
-			history.do(polygon.set.bind(&"tiled", true)).undo(polygon.set.bind(&"tiled", polygon.tiled))
-			history.do(polygon.set_rings.bind(rings, [] as Array[Dictionary])).undo(polygon.set_rings.bind(polygon.get_rings(), polygon.get_toplines()))
+			var rings: Array[PackedVector2Array] = _localize(shapes[i], target.position)
+			history.do(polygon.set.bind(&"tiled", true)).undo(
+					polygon.set.bind(&"tiled", polygon.tiled)
+			)
+			history.do(polygon.set_rings.bind(rings, [] as Array[Dictionary])).undo(
+					polygon.set_rings.bind(polygon.get_rings(), polygon.get_toplines())
+			)
 		else:
-			editor.object_handler.queue_addition(history, _spawn(plan, shapes.get(i)), editor.level_handler.active_layer)
+			editor.object_handler.queue_addition(
+					history,
+					_spawn(plan, shapes[i]),
+					editor.level_handler.active_layer,
+			)
 
 
 func _spawn(plan: Plan, shape: TileGrid.Shape) -> GameObject:
 	var origin: Vector2 = _origin(shape)
-	var data: ObjectData = plan.targets.front().to_data() if not plan.targets.is_empty() else ObjectData.create(plan.id)
+	var data: ObjectData = (
+			plan.targets.front().to_data()
+			if not plan.targets.is_empty()
+			else ObjectData.create(plan.id)
+	)
 	if plan.targets.is_empty():
 		editor.tool_handler.apply_placement_values(data)
 	data.uuid = StringName(Packer.generate_uuid())
@@ -215,11 +251,16 @@ func _refresh_preview() -> void:
 	_restore_hidden()
 	_brush_rings.clear()
 	var layer: LevelLayer = editor.level_handler.active_layer
-	if not is_active() or layer == null or editor.tool_handler.armed == null or not shape_kinds.has(editor.tool_handler.armed.get_shape_kind()):
+	if (
+			not is_active()
+			or layer == null
+			or editor.tool_handler.armed == null
+			or not shape_kinds.has(editor.tool_handler.armed.get_shape_kind())
+	):
 		_park_previews(0)
 		return
 	
-	var brush: Dictionary[Vector2i, bool] = {_hover: true}
+	var brush: Dictionary[Vector2i, bool] = { _hover: true }
 	if is_painting():
 		brush = _cells
 	for shape: TileGrid.Shape in TileGrid.trace(brush):
@@ -245,16 +286,20 @@ func _refresh_preview() -> void:
 
 
 func _take_preview(index: int, plan: Plan) -> GameObject:
-	if index < _previews.size() and _previews.get(index).id == plan.id:
-		var parked: GameObject = _previews.get(index)
+	if index < _previews.size() and _previews[index].id == plan.id:
+		var parked: GameObject = _previews[index]
 		parked.visible = true
 		return parked
 	
 	if index < _previews.size():
-		_previews.get(index).free()
+		_previews[index].free()
 		_previews.remove_at(index)
 	
-	var data: ObjectData = plan.targets.front().to_data() if not plan.targets.is_empty() else ObjectData.create(plan.id)
+	var data: ObjectData = (
+			plan.targets.front().to_data()
+			if not plan.targets.is_empty()
+			else ObjectData.create(plan.id)
+	)
 	if plan.targets.is_empty():
 		editor.tool_handler.apply_placement_values(data)
 	data.shape = {}
@@ -266,7 +311,7 @@ func _take_preview(index: int, plan: Plan) -> GameObject:
 
 func _park_previews(used: int) -> void:
 	for i: int in range(used, _previews.size()):
-		_previews.get(i).visible = false
+		_previews[i].visible = false
 
 
 func _clear_preview() -> void:
@@ -290,7 +335,9 @@ func _reset_stroke() -> void:
 
 
 func _cell_at_cursor() -> Vector2i:
-	return TileGrid.world_to_cell(editor.viewport_handler.get_layer_mouse(editor.level_handler.active_layer))
+	return TileGrid.world_to_cell(
+			editor.viewport_handler.get_layer_mouse(editor.level_handler.active_layer)
+	)
 
 
 func _on_armed_changed() -> void:
@@ -300,26 +347,27 @@ func _on_armed_changed() -> void:
 		_refresh_preview()
 
 
-static func _origin(shape: TileGrid.Shape) -> Vector2:
-	return TerrainPolygon.get_bounds(shape.outer).position
-
-
-static func _localize(shape: TileGrid.Shape, origin: Vector2) -> Array[PackedVector2Array]:
-	var rings: Array[PackedVector2Array] = []
-	for ring: PackedVector2Array in shape.get_rings():
-		rings.append(LDPolygonTool.localize(ring, origin))
+class Plan:
+	var targets: Array[GameObject]
+	var id: StringName
+	var cells: Dictionary[Vector2i, bool]
+	var before: Dictionary[Vector2i, bool]
 	
-	return rings
-
-
-static func _overlaps(cells: Dictionary[Vector2i, bool], other: Dictionary[Vector2i, bool]) -> bool:
-	return cells.keys().any(func(cell: Vector2i) -> bool: return other.has(cell))
-
-
-static func _without(cells: Dictionary[Vector2i, bool], removed: Dictionary[Vector2i, bool]) -> Dictionary[Vector2i, bool]:
-	var result: Dictionary[Vector2i, bool] = {}
-	for cell: Vector2i in cells:
-		if not removed.has(cell):
-			result.set(cell, true)
 	
-	return result
+	func _init(
+			group: Array[GameObject],
+			object_id: StringName,
+			after: Dictionary[Vector2i, bool],
+			current: Dictionary[Vector2i, bool],
+	) -> void:
+		targets = group
+		id = object_id
+		cells = after
+		before = current
+	
+	
+	func is_noop() -> bool:
+		return (
+				cells.size() == before.size()
+				and cells.keys().all(func(cell: Vector2i) -> bool: return before.has(cell))
+		)

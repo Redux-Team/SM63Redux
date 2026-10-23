@@ -12,35 +12,31 @@ const STEP_EPSILON: float = 0.05
 @export var exit_objects: Dictionary[PackedScene, int]
 @export var water_check: WaterCheckArea
 @export var step_height: float = 4.0
-## Objects off screen are suspended by [LevelCuller]. Turn this off for anything that must keep
-## running out of view, such as a platform carrying the player or a timed hazard.
+## Objects off screen are suspended by [LevelCuller]. Turn this off for anything
+## that must keep running out of view, such as a platform carrying the player or
+## a timed hazard.
 @export var cull_when_offscreen: bool = true
 
 
 var object: GameObject
 var components: Array[EntityComponent]
 var drops_coins: bool = true
-var _velocity_lock: bool = false
-var _exit_objs_spawned: bool = false
 
-## Helper variable which takes into account the [member sprite]'s flip_h property.
+## Helper variable which takes into account the [member sprite]'s flip_h
+## property.
 var local_velocity: Vector2:
 	get():
 		if not sprite:
 			return velocity
 		
-		return Vector2(
-			velocity.x * (-1 if sprite.flip_h else 1),
-			velocity.y
-		)
+		return Vector2(velocity.x * (-1 if sprite.flip_h else 1), velocity.y)
 	set(lv):
 		if not sprite:
 			velocity = lv
 		
-		velocity = Vector2(
-			lv.x * (-1 if sprite.flip_h else 1),
-			lv.y
-		)
+		velocity = Vector2(lv.x * (-1 if sprite.flip_h else 1), lv.y)
+var _velocity_lock: bool = false
+var _exit_objs_spawned: bool = false
 
 
 func _ready() -> void:
@@ -69,6 +65,14 @@ func _physics_process(delta: float) -> void:
 		if not _velocity_lock:
 			_try_step()
 			move_and_slide()
+
+
+## Only a real death (queue_free) should leave exit objects behind. Leaving the
+## tree because the whole scene is being torn down must not spawn: the deferred
+## add_child would be dropped and the spawned nodes stranded outside the tree.
+func _exit_tree() -> void:
+	if is_queued_for_deletion():
+		spawn_exit_objects()
 
 
 func get_property(key: StringName) -> Variant:
@@ -161,65 +165,6 @@ func kill() -> void:
 	_on_death(HitBox.DamageType.GENERIC)
 
 
-func _find_object() -> GameObject:
-	var current: Node = get_parent()
-	while current:
-		if current is GameObject:
-			return current
-		current = current.get_parent()
-	
-	return null
-
-
-func _try_step() -> void:
-	if is_zero_approx(velocity.x) or not is_on_floor():
-		return
-	
-	var reach: Vector2 = Vector2(signf(velocity.x) * maxf(absf(velocity.x) * get_physics_process_delta_time(), 1.0), 0.0)
-	var blocked: KinematicCollision2D = KinematicCollision2D.new()
-	if not test_move(global_transform, reach, blocked) or blocked.get_angle(up_direction) <= floor_max_angle:
-		return
-	
-	var lift: Vector2 = up_direction * (step_height + safe_margin * 2.0)
-	if test_move(global_transform, lift):
-		return
-	
-	var lifted: Transform2D = global_transform.translated(lift)
-	if test_move(lifted, reach):
-		return
-	
-	var params: PhysicsTestMotionParameters2D = PhysicsTestMotionParameters2D.new()
-	params.from = lifted.translated(reach)
-	params.motion = -lift
-	var result: PhysicsTestMotionResult2D = PhysicsTestMotionResult2D.new()
-	if not PhysicsServer2D.body_test_motion(get_rid(), params, result) or absf(result.get_collision_normal().angle_to(up_direction)) > floor_max_angle:
-		return
-	
-	var rise: float = lift.length() - result.get_travel().length() + safe_margin
-	if rise > STEP_EPSILON:
-		global_position += up_direction * rise
-
-
-func _on_init() -> void:
-	pass
-
-
-func _on_tick(delta: float) -> void:
-	pass
-
-
-func _on_death(type: HitBox.DamageType, source: Node2D = null) -> void:
-	queue_free()
-
-
-func _on_damage(amount: float, type: HitBox.DamageType, source: Node2D = null) -> void:
-	pass
-
-
-func _on_property_changed(_key: StringName, _value: Variant) -> void:
-	pass
-
-
 func disable() -> void:
 	_velocity_lock = true
 	for c: EntityComponent in components_root.get_children():
@@ -259,7 +204,7 @@ func spawn_exit_objects() -> void:
 		return
 	
 	for packed: PackedScene in exit_objects:
-		for i: int in exit_objects.get(packed):
+		for i: int in exit_objects[packed]:
 			var node: Node = packed.instantiate()
 			if node is Coin and not drops_coins:
 				node.free()
@@ -269,9 +214,69 @@ func spawn_exit_objects() -> void:
 	_exit_objs_spawned = true
 
 
-## Only a real death (queue_free) should leave exit objects behind. Leaving the tree because the
-## whole scene is being torn down must not spawn: the deferred add_child would be dropped and the
-## spawned nodes stranded outside the tree.
-func _exit_tree() -> void:
-	if is_queued_for_deletion():
-		spawn_exit_objects()
+func _find_object() -> GameObject:
+	var current: Node = get_parent()
+	while current:
+		if current is GameObject:
+			return current
+		current = current.get_parent()
+	
+	return null
+
+
+func _try_step() -> void:
+	if is_zero_approx(velocity.x) or not is_on_floor():
+		return
+	
+	var reach: Vector2 = Vector2(
+			(signf(velocity.x) * maxf(absf(velocity.x) * get_physics_process_delta_time(), 1.0)),
+			0.0,
+	)
+	var blocked: KinematicCollision2D = KinematicCollision2D.new()
+	if (
+			not test_move(global_transform, reach, blocked)
+			or blocked.get_angle(up_direction) <= floor_max_angle
+	):
+		return
+	
+	var lift: Vector2 = up_direction * (step_height + safe_margin * 2.0)
+	if test_move(global_transform, lift):
+		return
+	
+	var lifted: Transform2D = global_transform.translated(lift)
+	if test_move(lifted, reach):
+		return
+	
+	var params: PhysicsTestMotionParameters2D = PhysicsTestMotionParameters2D.new()
+	params.from = lifted.translated(reach)
+	params.motion = -lift
+	var result: PhysicsTestMotionResult2D = PhysicsTestMotionResult2D.new()
+	if (
+			not PhysicsServer2D.body_test_motion(get_rid(), params, result)
+			or (absf(result.get_collision_normal().angle_to(up_direction)) > floor_max_angle)
+	):
+		return
+	
+	var rise: float = lift.length() - result.get_travel().length() + safe_margin
+	if rise > STEP_EPSILON:
+		global_position += up_direction * rise
+
+
+func _on_init() -> void:
+	pass
+
+
+func _on_tick(delta: float) -> void:
+	pass
+
+
+func _on_death(type: HitBox.DamageType, source: Node2D = null) -> void:
+	queue_free()
+
+
+func _on_damage(amount: float, type: HitBox.DamageType, source: Node2D = null) -> void:
+	pass
+
+
+func _on_property_changed(_key: StringName, _value: Variant) -> void:
+	pass

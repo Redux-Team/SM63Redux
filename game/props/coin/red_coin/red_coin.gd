@@ -29,7 +29,8 @@ func _on_entity_check_area_player_entered(player: Player) -> void:
 	if is_last:
 		all_collected_sfx.play()
 	else:
-		sfx_player.pitch_scale = lerpf(1.0, MAX_PITCH_SCALE, float(counter.x) / float(maxi(counter.y, 1)))
+		sfx_player.pitch_scale = \
+				lerpf(1.0, MAX_PITCH_SCALE, float(counter.x) / float(maxi(counter.y, 1)))
 		sfx_player.play()
 	
 	if level:
@@ -44,6 +45,12 @@ func _on_entity_check_area_player_entered(player: Player) -> void:
 func _animate_text(count: int) -> void:
 	collect_label.show()
 	collect_label.text = str(count)
-	var tween: Tween = create_tween().set_parallel().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+	var tween: Tween = \
+			create_tween().set_parallel().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	tween.tween_property(collect_label, ^"self_modulate", Color.WHITE, LABEL_FADE_DURATION)
-	tween.tween_property(collect_label, ^"position:y", collect_label.position.y - LABEL_RISE, LABEL_RISE_DURATION)
+	tween.tween_property(
+			collect_label,
+			^"position:y",
+			collect_label.position.y - LABEL_RISE,
+			LABEL_RISE_DURATION,
+	)

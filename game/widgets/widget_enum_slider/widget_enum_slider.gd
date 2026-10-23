@@ -19,8 +19,8 @@ func _info(widget_info: Dictionary) -> void:
 	for entry: String in String(widget_info.get("hint_string", "")).split(",", false):
 		var parts: PackedStringArray = entry.split(":")
 		if parts.size() > 1:
-			next_id = parts.get(1).to_int()
-		_names.append(parts.get(0))
+			next_id = parts[1].to_int()
+		_names.append(parts[0])
 		_ids.append(next_id)
 		next_id += 1
 	slider.max_value = maxi(_names.size() - 1, 0)
@@ -32,8 +32,8 @@ func _value(widget_value: Variant) -> void:
 	if index == -1:
 		return
 	slider.value = index
-	value_label.text = _names.get(index)
+	value_label.text = _names[index]
 
 
 func _on_slider_value_changed(slider_value: float) -> void:
-	_commit(_ids.get(int(slider_value)))
+	_commit(_ids[int(slider_value)])

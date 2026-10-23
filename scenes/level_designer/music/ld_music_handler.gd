@@ -64,7 +64,11 @@ func _next_track() -> void:
 
 
 func _stream_for(track: MusicTrack) -> AudioStream:
-	return track.get_looped_stream() if Settings.level_designer.loop_music.current_value else track.get_stream()
+	return (
+			track.get_looped_stream()
+			if Settings.level_designer.loop_music.current_value
+			else track.get_stream()
+	)
 
 
 func _announce() -> void:
@@ -86,22 +90,52 @@ func _announce() -> void:
 		return
 	
 	song_panel.position.y = hidden
-	_tween.tween_property(song_panel, ^"position:y", shown, SLIDE_TIME).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_tween.tween_method(_set_reveal, 0.0, 1.0, REVEAL_TIME).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_tween.tween_property(
+			song_panel,
+			^"position:y",
+			shown,
+			SLIDE_TIME,
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_tween.tween_method(
+			_set_reveal,
+			0.0,
+			1.0,
+			REVEAL_TIME,
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_tween.tween_interval(HOLD_TIME)
-	_tween.tween_method(_set_reveal, 1.0, 0.0, SLIDE_TIME).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	_tween.tween_property(song_panel, ^"position:y", hidden, SLIDE_TIME).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	_tween.tween_method(
+			_set_reveal,
+			1.0,
+			0.0,
+			SLIDE_TIME,
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	_tween.tween_property(
+			song_panel,
+			^"position:y",
+			hidden,
+			SLIDE_TIME,
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	_tween.tween_callback(song_panel.hide)
 
 
 func _set_reveal(amount: float) -> void:
 	var line: float = maxf(song_label.size.y, song_icon.custom_minimum_size.y)
-	var chrome: Vector2 = song_panel.get_theme_stylebox(&"panel").get_minimum_size() + Vector2(song_icon.custom_minimum_size.x, line)
+	var chrome: Vector2 = (
+			song_panel.get_theme_stylebox(&"panel").get_minimum_size()
+			+ Vector2(song_icon.custom_minimum_size.x, line)
+	)
 	var start: float = left_bar.get_rect().end.x + BAR_CLEARANCE
 	var room: float = right_bar.position.x - BAR_CLEARANCE - start
-	var reveal: float = clampf(amount * song_label.size.x, 0.0, maxf(room - chrome.x - song_row.get_theme_constant(&"separation"), 0.0))
+	var reveal: float = clampf(
+			amount * song_label.size.x,
+			0.0,
+			maxf((room - chrome.x - song_row.get_theme_constant(&"separation")), 0.0),
+	)
 	song_clip.visible = reveal > 0.0
 	song_clip.custom_minimum_size = Vector2(reveal, line)
-	var width: float = chrome.x + (reveal + song_row.get_theme_constant(&"separation") if song_clip.visible else 0.0)
+	var width: float = (
+			chrome.x
+			+ (reveal + song_row.get_theme_constant(&"separation") if song_clip.visible else 0.0)
+	)
 	song_panel.size = Vector2(width, chrome.y)
 	song_panel.position.x = start + (room - width) * 0.5

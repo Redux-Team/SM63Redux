@@ -7,7 +7,8 @@ extends CapMode
 @export var trail: AfterimageTrail
 @export var ground_speed_scale: float = 1.0
 @export_group("Trail")
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var trail_shrink_time: float = 4.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:s")
+var trail_shrink_time: float = 4.0
 @export_range(0.0, 1.0, 0.01) var trail_min_scale: float = 0.4
 
 var _overlay: CanvasGroup
@@ -66,4 +67,5 @@ func _sync_trail() -> void:
 		trail.lifetime_scale = 1.0
 		return
 	
-	trail.lifetime_scale = lerpf(trail_min_scale, 1.0, clampf((duration - time) / trail_shrink_time, 0.0, 1.0))
+	trail.lifetime_scale = \
+			lerpf(trail_min_scale, 1.0, clampf((duration - time) / trail_shrink_time, 0.0, 1.0))

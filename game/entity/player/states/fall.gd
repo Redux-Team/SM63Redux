@@ -1,10 +1,12 @@
 extends PlayerState
 
 ## Downward speed that must be reached before a spin can start.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var spin_min_speed: float = 100.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var spin_min_speed: float = 100.0
 @export_group("Wing Flap")
 @export var flap_gravity_scale: float = 0.35
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var flap_fall_speed: float = 90.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var flap_fall_speed: float = 90.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var flap_halflife: float = 0.08
 
 var _flapping: bool = false

@@ -45,17 +45,19 @@ func _process(_delta: float) -> void:
 	_update_background()
 
 
-func _queue_refresh() -> void:
-	_dirty = true
-
-
 func _validate_property(property: Dictionary) -> void:
 	if property.name in [&"follow_viewport_enabled", &"follow_viewport_scale"]:
 		property.usage = PROPERTY_USAGE_NONE
 
 
+func _queue_refresh() -> void:
+	_dirty = true
+
+
 #func _get_configuration_warnings() -> PackedStringArray:
-	#if get_children(true).filter(func(c: Node) -> bool: return c is not BackgroundNode):
+	#if get_children(true).filter(
+		#func(c: Node) -> bool: return c is not BackgroundNode
+	#):
 		#return ["This node cannot have children!"]
 	#return []
 
@@ -112,7 +114,7 @@ func _update_background() -> void:
 		sprite.scale = _visible_size / background_texture.get_size()
 		bg_offset = 1
 	for i: int in _active.size():
-		_active.get(i)._update(get_child(i + bg_offset, true), visible_rect)
+		_active[i]._update(get_child(i + bg_offset, true), visible_rect)
 
 
 func _get_visible_size(content_scale: float) -> Vector2:
@@ -130,8 +132,10 @@ func _get_content_scale() -> float:
 
 
 func _get_design_size() -> Vector2:
-	var width: int = ProjectSettings.get_setting_with_override(&"display/window/size/viewport_width")
-	var height: int = ProjectSettings.get_setting_with_override(&"display/window/size/viewport_height")
+	var width: int = \
+			ProjectSettings.get_setting_with_override(&"display/window/size/viewport_width")
+	var height: int = \
+			ProjectSettings.get_setting_with_override(&"display/window/size/viewport_height")
 	return Vector2(width, height)
 
 

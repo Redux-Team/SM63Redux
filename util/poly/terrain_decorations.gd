@@ -2,9 +2,9 @@
 class_name TerrainDecorations
 extends Node2D
 
-const HASH_X: int = 2654435761
-const HASH_Y: int = 2246822519
-const HASH_TEXTURE: int = 374761393
+const HASH_X: int = 2_654_435_761
+const HASH_Y: int = 2_246_822_519
+const HASH_TEXTURE: int = 374_761_393
 
 var _canvas_items: Array[RID] = []
 var _signature: Array = []
@@ -18,7 +18,13 @@ func _notification(what: int) -> void:
 		_clear()
 
 
-func rebuild(outer: PackedVector2Array, holes: Array[PackedVector2Array], style: PolygonDecorationStyle, rng_seed: int, enabled: bool) -> void:
+func rebuild(
+		outer: PackedVector2Array,
+		holes: Array[PackedVector2Array],
+		style: PolygonDecorationStyle,
+		rng_seed: int,
+		enabled: bool,
+) -> void:
 	if not prepare(outer, holes, style, rng_seed, enabled) and not _canvas_items.is_empty():
 		return
 	
@@ -27,8 +33,20 @@ func rebuild(outer: PackedVector2Array, holes: Array[PackedVector2Array], style:
 		_draw_placements(_placements)
 
 
-func prepare(outer: PackedVector2Array, holes: Array[PackedVector2Array], style: PolygonDecorationStyle, rng_seed: int, enabled: bool) -> bool:
-	var active: bool = enabled and style != null and not style.weightmap.is_empty() and style.max_count > 0 and outer.size() >= 3
+func prepare(
+		outer: PackedVector2Array,
+		holes: Array[PackedVector2Array],
+		style: PolygonDecorationStyle,
+		rng_seed: int,
+		enabled: bool,
+) -> bool:
+	var active: bool = (
+			enabled
+			and style != null
+			and not style.weightmap.is_empty()
+			and style.max_count > 0
+			and outer.size() >= 3
+	)
 	var signature: Array = [outer, holes.duplicate(), style, rng_seed, active]
 	if signature == _signature:
 		return false
@@ -40,7 +58,12 @@ func prepare(outer: PackedVector2Array, holes: Array[PackedVector2Array], style:
 	return true
 
 
-func _scatter(outer: PackedVector2Array, holes: Array[PackedVector2Array], style: PolygonDecorationStyle, rng_seed: int) -> Dictionary[Texture2D, PackedVector2Array]:
+func _scatter(
+		outer: PackedVector2Array,
+		holes: Array[PackedVector2Array],
+		style: PolygonDecorationStyle,
+		rng_seed: int,
+) -> Dictionary[Texture2D, PackedVector2Array]:
 	var placements: Dictionary[Texture2D, PackedVector2Array] = {}
 	var eroded: Array[PackedVector2Array] = Geometry2D.offset_polygon(outer, -style.edge_buffer)
 	if eroded.is_empty() or eroded.front().size() < 3:
@@ -76,17 +99,26 @@ func _scatter(outer: PackedVector2Array, holes: Array[PackedVector2Array], style
 				continue
 			
 			rng.seed = cell_seed
-			var point: Vector2 = bounds.position + Vector2(column, row) * cell_size + Vector2(rng.randf(), rng.randf()) * cell_size
-			if not Geometry2D.is_point_in_polygon(point, inner) or eroded_holes.any(func(hole: PackedVector2Array) -> bool: return Geometry2D.is_point_in_polygon(point, hole)):
+			var point: Vector2 = (
+					bounds.position
+					+ Vector2(column, row) * cell_size
+					+ Vector2(rng.randf(), rng.randf()) * cell_size
+			)
+			if (
+					not Geometry2D.is_point_in_polygon(point, inner)
+					or eroded_holes.any(
+							func(hole: PackedVector2Array) -> bool:
+								return Geometry2D.is_point_in_polygon(point, hole)
+			)):
 				continue
 			
 			for index: int in textures.size():
-				var texture: Texture2D = textures.get(index)
+				var texture: Texture2D = textures[index]
 				if texture == null:
 					continue
 				
 				rng.seed = cell_seed ^ (index * HASH_TEXTURE)
-				if rng.randf() * 100.0 > style.weightmap.get(texture):
+				if rng.randf() * 100.0 > style.weightmap[texture]:
 					continue
 				
 				var half_size: Vector2 = Vector2(texture.get_size()) * 0.5
@@ -100,13 +132,18 @@ func _scatter(outer: PackedVector2Array, holes: Array[PackedVector2Array], style
 	return placements
 
 
-func _any_winner(rng: RandomNumberGenerator, cell_seed: int, textures: Array[Texture2D], weightmap: Dictionary[Texture2D, float]) -> bool:
+func _any_winner(
+		rng: RandomNumberGenerator,
+		cell_seed: int,
+		textures: Array[Texture2D],
+		weightmap: Dictionary[Texture2D, float],
+) -> bool:
 	for index: int in textures.size():
-		if textures.get(index) == null:
+		if textures[index] == null:
 			continue
 		
 		rng.seed = cell_seed ^ (index * HASH_TEXTURE)
-		if rng.randf() * 100.0 <= weightmap.get(textures.get(index)):
+		if rng.randf() * 100.0 <= weightmap[textures[index]]:
 			return true
 	
 	return false
@@ -117,9 +154,16 @@ func _draw_placements(placements: Dictionary[Texture2D, PackedVector2Array]) -> 
 		var size: Vector2 = Vector2(texture.get_size())
 		var item: RID = RenderingServer.canvas_item_create()
 		RenderingServer.canvas_item_set_parent(item, get_canvas_item())
-		RenderingServer.canvas_item_set_default_texture_filter(item, RenderingServer.CANVAS_ITEM_TEXTURE_FILTER_NEAREST)
-		for point: Vector2 in placements.get(texture):
-			RenderingServer.canvas_item_add_texture_rect(item, Rect2(point - size * 0.5, size), texture.get_rid())
+		RenderingServer.canvas_item_set_default_texture_filter(
+				item,
+				RenderingServer.CANVAS_ITEM_TEXTURE_FILTER_NEAREST,
+		)
+		for point: Vector2 in placements[texture]:
+			RenderingServer.canvas_item_add_texture_rect(
+					item,
+					Rect2(point - size * 0.5, size),
+					texture.get_rid(),
+			)
 		_canvas_items.append(item)
 
 

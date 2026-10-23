@@ -35,4 +35,8 @@ func _mirror() -> void:
 	region_rect = target.region_rect
 	visible = target.is_visible_in_tree()
 	var parent: CanvasItem = get_parent() as CanvasItem
-	transform = parent.get_global_transform().affine_inverse() * target.get_global_transform() if parent else target.get_global_transform()
+	transform = (
+			(parent.get_global_transform().affine_inverse() * target.get_global_transform())
+			if parent
+			else target.get_global_transform()
+	)

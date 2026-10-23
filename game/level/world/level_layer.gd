@@ -192,12 +192,17 @@ func get_effective_distance() -> float:
 
 
 func _apply_decoration() -> void:
-	_objects_root.process_mode = Node.PROCESS_MODE_DISABLED if is_effective_decoration() else Node.PROCESS_MODE_INHERIT
+	_objects_root.process_mode = \
+			Node.PROCESS_MODE_DISABLED if is_effective_decoration() else Node.PROCESS_MODE_INHERIT
 	_apply_distance()
 
 
 func _apply_distance() -> void:
-	var factor: Vector2 = Vector2.ONE * scale_from_distance(get_effective_distance()) / scale_from_distance(focus_distance)
+	var factor: Vector2 = (
+			Vector2.ONE
+			* scale_from_distance(get_effective_distance())
+			/ scale_from_distance(focus_distance)
+	)
 	var half_view: Vector2 = get_viewport_rect().size / 2.0 if is_inside_tree() else Vector2.ZERO
 	_parallax.scroll_scale = factor
 	_parallax.scroll_offset = (Vector2.ONE - factor) * half_view
@@ -212,4 +217,8 @@ func _apply_visibility() -> void:
 
 
 func _apply_modulate() -> void:
-	modulate = (modulation * group_modulation if modulation_enabled else Color.WHITE) * tint * Color(1.0, 1.0, 1.0, 1.0 if is_effective_enabled() else DISABLED_ALPHA)
+	modulate = (
+			(modulation * group_modulation if modulation_enabled else Color.WHITE)
+			* tint
+			* Color(1.0, 1.0, 1.0, 1.0 if is_effective_enabled() else DISABLED_ALPHA)
+	)

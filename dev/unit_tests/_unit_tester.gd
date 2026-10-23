@@ -11,22 +11,23 @@ static var _capture: Capture
 @export_tool_button("Run tests", "Debug") var _run_unit_tests: Callable:
 	get:
 		return _run_tests.bind(false)
-@export_tool_button("Run tests (Verbose)", "Debug") var _run_unit_tests_verbose: Callable:
+@export_tool_button("Run tests (Verbose)", "Debug")
+var _run_unit_tests_verbose: Callable:
 	get:
 		return _run_tests.bind(true)
-
-
-func _run_tests(verbose: bool) -> void:
-	await run_all(verbose, "", true)
 
 
 static func run_all(verbose: bool, filter: String = "", tool_only: bool = false) -> Array[Result]:
 	var results: Array[Result] = []
 	_capture = Capture.new()
 	OS.add_logger(_capture)
+	var filters: PackedStringArray = filter.split(",", false)
 	for path: String in find_tests(ROOT):
-		if filter.is_empty() or filter in path:
-			var result: Result = await run(path, _capture, verbose, tool_only or Engine.is_editor_hint())
+		if filters.is_empty() or Array(filters).any(
+				func(part: String) -> bool: return part in path
+		):
+			var result: Result = \
+					await run(path, _capture, verbose, tool_only or Engine.is_editor_hint())
 			results.append(result)
 			_print_result(result, verbose)
 	
@@ -109,10 +110,22 @@ static func _print_result(result: Result, verbose: bool) -> void:
 
 static func _print_summary(results: Array[Result]) -> void:
 	var failed: int = count_failed(results)
-	var skipped: int = results.filter(func(result: Result) -> bool: return result.is_skipped()).size()
+	var skipped: int = \
+			results.filter(func(result: Result) -> bool: return result.is_skipped()).size()
 	var passed: int = results.size() - failed - skipped
 	var color: String = "red" if failed > 0 else "green"
-	print_rich("[color=%s]%d passed, %d failed, %d skipped[/color]" % [color, passed, failed, skipped])
+	print_rich(
+			"[color=%s]%d passed, %d failed, %d skipped[/color]" % [
+				color,
+				passed,
+				failed,
+				skipped,
+			]
+	)
+
+
+func _run_tests(verbose: bool) -> void:
+	await run_all(verbose, "", true)
 
 
 class Failure:
@@ -194,7 +207,16 @@ class Capture extends Logger:
 		return failures
 	
 	
-	func _log_error(_function: String, file: String, line: int, code: String, rationale: String, _editor_notify: bool, error_type: int, script_backtraces: Array[ScriptBacktrace]) -> void:
+	func _log_error(
+			_function: String,
+			file: String,
+			line: int,
+			code: String,
+			rationale: String,
+			_editor_notify: bool,
+			error_type: int,
+			script_backtraces: Array[ScriptBacktrace],
+	) -> void:
 		if error_type == ERROR_TYPE_WARNING:
 			return
 		
@@ -210,7 +232,9 @@ class Capture extends Logger:
 			_mutex.unlock()
 			return
 		
-		var at: int = Array(_expected).find_custom(func(fragment: String) -> bool: return fragment in message)
+		var at: int = Array(_expected).find_custom(
+				func(fragment: String) -> bool: return fragment in message
+		)
 		if at >= 0:
 			_expected.remove_at(at)
 		elif _active:

@@ -33,17 +33,17 @@ func from_data(data: Dictionary) -> void:
 
 
 func to_data() -> Dictionary:
-	return {"size": size}
-
-
-func set_size(value: Vector2) -> void:
-	size = value.clamp(min_size, max_size)
-	_apply()
+	return { "size": size }
 
 
 func get_local_bounds() -> Rect2:
 	var visual: Vector2 = size + Vector2.ONE * padding
 	return Rect2(-visual * 0.5, visual)
+
+
+func set_size(value: Vector2) -> void:
+	size = value.clamp(min_size, max_size)
+	_apply()
 
 
 func _apply() -> void:

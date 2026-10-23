@@ -11,7 +11,13 @@ void fragment() {
 	
 	for (int x = -thickness; x <= thickness; x++) {
 		for (int y = -thickness; y <= thickness; y++) {
-			edge = max(edge, alpha - texture(TEXTURE, UV + vec2(float(x), float(y)) * TEXTURE_PIXEL_SIZE).a);
+			edge = max(
+				edge,
+				alpha - texture(
+					TEXTURE,
+					UV + vec2(float(x), float(y)) * TEXTURE_PIXEL_SIZE
+				).a
+			);
 		}
 	}
 	

@@ -35,7 +35,10 @@ func _bind() -> void:
 
 func has_charge() -> bool:
 	if requires_full_power:
-		return is_equal_approx(fludd.fludd_power, PlayerFluddHandlerOld.FLUDD_POWER_MAX)
+		return is_equal_approx(
+			fludd.fludd_power,
+			PlayerFluddHandlerOld.FLUDD_POWER_MAX,
+		)
 	
 	return fludd.fludd_power > 0.0
 
@@ -59,7 +62,10 @@ func _is_available() -> bool:
 func get_spray_angle() -> float:
 	const RIGHT: float = PI / 2.0
 	
-	if fludd.get_context() in [PlayerFluddHandlerOld.FluddContext.DIVE, PlayerFluddHandlerOld.FluddContext.FLOOR_SLIDE]:
+	if fludd.get_context() in [
+		PlayerFluddHandlerOld.FluddContext.DIVE,
+		PlayerFluddHandlerOld.FluddContext.FLOOR_SLIDE,
+	]:
 		if player.sprite.flip_h:
 			return (3.0 * RIGHT) - deg_to_rad(player.sprite.local_rotation)
 		

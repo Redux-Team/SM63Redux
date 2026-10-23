@@ -31,6 +31,9 @@ vec3 swap_palette(sampler2D pal, vec3 rgb, vec2 pal_size) {
 void fragment() {
 	vec2 pal_size = vec2(textureSize(palette_texture, 0));
 	vec4 tex = texture(TEXTURE, UV);
-	vec4 tex_swapped = vec4(swap_palette(palette_texture, tex.rgb, pal_size), tex.a);
+	vec4 tex_swapped = vec4(
+		swap_palette(palette_texture, tex.rgb, pal_size),
+		tex.a
+	);
 	COLOR = tex_swapped;
 }

@@ -165,7 +165,7 @@ prefix = "h"
 
 [node name="Texture" type="Button" parent="Margin/Split/Right/Details/IconRow" unique_id=1370170137]
 layout_mode = 2
-text = "Texture…"
+text = "Texture..."
 
 [node name="Full" type="Button" parent="Margin/Split/Right/Details/IconRow" unique_id=1134653510]
 layout_mode = 2

@@ -28,6 +28,21 @@ var _tween: Tween
 var _dirty: bool = false
 
 
+func _process(delta: float) -> void:
+	if not _flyout_open:
+		return
+	
+	_place_flyout()
+	var mouse: Vector2 = flyout.get_global_mouse_position()
+	var hovered: bool = (
+			placement_button.get_global_rect().grow(FLYOUT_GAP).has_point(mouse)
+			or flyout.get_global_rect().grow(FLYOUT_GAP).has_point(mouse)
+	)
+	_flyout_idle = 0.0 if hovered else _flyout_idle + delta
+	if _flyout_idle >= FLYOUT_CLOSE_DELAY or not placement_button.is_visible_in_tree():
+		_close_flyout()
+
+
 func _setup() -> void:
 	for button: Control in hidden_buttons:
 		button.visible = false
@@ -45,16 +60,29 @@ func _setup() -> void:
 func _on_armed_changed(entry: ObjectRegistry.Entry) -> void:
 	var kind: ObjectShape.Kind = entry.get_shape_kind() if entry else ObjectShape.Kind.NONE
 	if placement_icons.has(kind):
-		placement_button.icon = placement_icons.get(kind)
-	_placement_tip = placement_tooltips.get(kind, _placement_tip if not _placement_tip.is_empty() else Tooltip.get_text(placement_button))
+		placement_button.icon = placement_icons[kind]
+	_placement_tip = placement_tooltips.get(
+			kind,
+			(
+					_placement_tip
+					if not _placement_tip.is_empty()
+					else Tooltip.get_text(placement_button)
+			),
+	)
 	_refresh_flyout()
 	_on_tool_changed()
 
 
 func _on_selection_changed() -> void:
 	var objects: Array[GameObject] = editor.object_handler.selection.get_objects()
-	_set_shown(rotate_button, objects.any(func(object: GameObject) -> bool: return not LDRotateTool.get_ring_keys(object).is_empty()))
-	_set_shown(scale_button, objects.any(func(object: GameObject) -> bool: return object.has_flag(GameObject.Flag.SCALABLE)))
+	_set_shown(rotate_button, objects.any(
+			func(object: GameObject) -> bool:
+				return not LDRotateTool.get_ring_keys(object).is_empty()
+	))
+	_set_shown(scale_button, objects.any(
+			func(object: GameObject) -> bool:
+				return object.has_flag(GameObject.Flag.SCALABLE)
+	))
 	_set_shown(topline_button, LDToplineTool.is_available(objects))
 	_refresh_flyout()
 
@@ -63,22 +91,10 @@ func _set_shown(button: Control, shown: bool) -> void:
 	if _shown.get_or_add(button, button.visible) == shown:
 		return
 	
-	_shown.set(button, shown)
+	_shown[button] = shown
 	if not _dirty:
 		_dirty = true
 		_animate.call_deferred()
-
-
-func _process(delta: float) -> void:
-	if not _flyout_open:
-		return
-	
-	_place_flyout()
-	var mouse: Vector2 = flyout.get_global_mouse_position()
-	var hovered: bool = placement_button.get_global_rect().grow(FLYOUT_GAP).has_point(mouse) or flyout.get_global_rect().grow(FLYOUT_GAP).has_point(mouse)
-	_flyout_idle = 0.0 if hovered else _flyout_idle + delta
-	if _flyout_idle >= FLYOUT_CLOSE_DELAY or not placement_button.is_visible_in_tree():
-		_close_flyout()
 
 
 func _has_subtools() -> bool:
@@ -106,7 +122,11 @@ func _refresh_flyout() -> void:
 	if separator:
 		separator.visible = before and after
 	_available = before or after
-	Tooltip.set_text(placement_button, "" if _available else _placement_tip, Tooltip.Placement.RIGHT)
+	Tooltip.set_text(
+			placement_button,
+			"" if _available else _placement_tip,
+			Tooltip.Placement.RIGHT,
+	)
 	if not _available:
 		_close_flyout()
 	flyout.reset_size()
@@ -128,7 +148,11 @@ func _applies(tool: LDTool) -> bool:
 	if tool is LDPolygonBooleanTool:
 		return not (tool as LDPolygonBooleanTool).get_targets().is_empty()
 	
-	var kind: ObjectShape.Kind = editor.tool_handler.armed.get_shape_kind() if editor.tool_handler.armed else ObjectShape.Kind.NONE
+	var kind: ObjectShape.Kind = (
+			editor.tool_handler.armed.get_shape_kind()
+			if editor.tool_handler.armed
+			else ObjectShape.Kind.NONE
+	)
 	return tool.shape_kinds.has(kind)
 
 
@@ -161,8 +185,8 @@ func _close_flyout() -> void:
 	
 	_flyout_open = false
 	_animate_flyout(Vector2(0.6, 1.0), 0.0).finished.connect(func() -> void:
-		if not _flyout_open:
-			flyout.visible = false)
+			if not _flyout_open:
+				flyout.visible = false)
 
 
 func _animate_flyout(target_scale: Vector2, target_alpha: float) -> Tween:
@@ -172,7 +196,8 @@ func _animate_flyout(target_scale: Vector2, target_alpha: float) -> Tween:
 	if target_alpha > 0.0 and flyout.modulate.a <= 0.01:
 		flyout.scale = Vector2(0.6, 1.0)
 	var duration: float = FLYOUT_DURATION if Settings.ui.animations.current_value else 0.0
-	_flyout_tween = create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_flyout_tween = \
+			create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	_flyout_tween.tween_property(flyout, ^"scale", target_scale, duration)
 	_flyout_tween.tween_property(flyout, ^"modulate:a", target_alpha, duration)
 	return _flyout_tween
@@ -182,7 +207,10 @@ func _place_flyout() -> void:
 	var button_rect: Rect2 = placement_button.get_global_rect()
 	var rail_right: float = bar.get_global_rect().end.x
 	flyout.pivot_offset = Vector2(0.0, flyout.size.y * 0.5)
-	flyout.global_position = Vector2(rail_right + FLYOUT_GAP * 2.0, button_rect.get_center().y - flyout.get_global_rect().size.y * 0.5)
+	flyout.global_position = Vector2(
+			rail_right + FLYOUT_GAP * 2.0,
+			button_rect.get_center().y - flyout.get_global_rect().size.y * 0.5,
+	)
 
 
 func _animate() -> void:
@@ -191,7 +219,7 @@ func _animate() -> void:
 		_tween.kill()
 	
 	for button: Control in _shown:
-		if _shown.get(button):
+		if _shown[button]:
 			button.visible = true
 	
 	clip.clip_contents = true
@@ -204,7 +232,7 @@ func _animate() -> void:
 func _settle() -> void:
 	clip.clip_contents = false
 	for button: Control in _shown:
-		button.visible = _shown.get(button)
+		button.visible = _shown[button]
 	
 	var tool: LDTool = editor.tool_handler.active_tool
 	if tool.button and not _shown.get(tool.button, true):

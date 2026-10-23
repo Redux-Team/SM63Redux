@@ -17,10 +17,15 @@ func _name(widget_name: String) -> void:
 
 func _info(widget_info: Dictionary) -> void:
 	var range_hint: PackedStringArray = String(widget_info.get("hint_string", "0,1")).split(",")
-	slider.min_value = range_hint.get(0).to_float()
-	slider.max_value = range_hint.get(1).to_float()
-	slider.step = range_hint.get(2).to_float() if range_hint.size() > 2 and range_hint.get(2).is_valid_float() else 0.0
-	var steps: int = roundi((slider.max_value - slider.min_value) / slider.step) if slider.step > 0.0 else 0
+	slider.min_value = range_hint[0].to_float()
+	slider.max_value = range_hint[1].to_float()
+	slider.step = (
+			range_hint[2].to_float()
+			if range_hint.size() > 2 and range_hint[2].is_valid_float()
+			else 0.0
+	)
+	var steps: int = \
+			roundi((slider.max_value - slider.min_value) / slider.step) if slider.step > 0.0 else 0
 	slider.set(&"tick_count", steps + 1 if steps <= MAX_TICK_STEPS else 0)
 	_format = widget_info.get("format", "%s")
 	_max_text = widget_info.get("max_text", "")
@@ -39,7 +44,11 @@ func _on_slider_value_changed(slider_value: float) -> void:
 
 
 func _display(number: float) -> String:
-	return _max_text if not _max_text.is_empty() and number >= slider.max_value else _format % number
+	return (
+			_max_text
+			if not _max_text.is_empty() and number >= slider.max_value
+			else _format % number
+	)
 
 
 func _on_slider_drag_ended(_value_changed: bool) -> void:

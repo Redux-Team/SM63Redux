@@ -9,8 +9,19 @@ const EXTENSIONS: PackedStringArray = ["png", "svg", "webp", "jpg"]
 var _textures: Array[Texture2D] = []
 
 
+static func _collect(directory: String) -> PackedStringArray:
+	var paths: PackedStringArray = []
+	for file: String in ResourceLoader.list_directory(directory):
+		if file.ends_with("/"):
+			paths.append_array(_collect(directory.path_join(file)))
+		elif EXTENSIONS.has(file.get_extension()):
+			paths.append(directory.path_join(file))
+	
+	return paths
+
+
 func _ready() -> void:
-	option_button.item_selected.connect(func(index: int) -> void: _commit(_textures.get(index)))
+	option_button.item_selected.connect(func(index: int) -> void: _commit(_textures[index]))
 
 
 func _name(widget_name: String) -> void:
@@ -39,14 +50,3 @@ func _value(widget_value: Variant) -> void:
 func _add_item(text: String, texture: Texture2D) -> void:
 	option_button.add_item(text)
 	_textures.append(texture)
-
-
-static func _collect(directory: String) -> PackedStringArray:
-	var paths: PackedStringArray = []
-	for file: String in ResourceLoader.list_directory(directory):
-		if file.ends_with("/"):
-			paths.append_array(_collect(directory.path_join(file)))
-		elif EXTENSIONS.has(file.get_extension()):
-			paths.append(directory.path_join(file))
-	
-	return paths

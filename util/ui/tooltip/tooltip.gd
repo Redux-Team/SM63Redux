@@ -20,7 +20,12 @@ const ARROW_CLASSES: Dictionary[Placement, String] = {
 	Placement.RIGHT: "TooltipArrowLeft",
 	Placement.LEFT: "TooltipArrowRight",
 }
-const AUTO_ORDER: Array[Placement] = [Placement.UNDER, Placement.ABOVE, Placement.RIGHT, Placement.LEFT]
+const AUTO_ORDER: Array[Placement] = [
+	Placement.UNDER,
+	Placement.ABOVE,
+	Placement.RIGHT,
+	Placement.LEFT,
+]
 const WARM_TIME: float = 0.4
 const OPAQUE_THRESHOLD: float = 0.99
 
@@ -60,7 +65,8 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	var target: Control = _current_target() if Settings.level_designer.is_tooltip_enabled() else null
+	var target: Control = \
+			_current_target() if Settings.level_designer.is_tooltip_enabled() else null
 	if not is_instance_valid(_target):
 		_target = null
 		if _shown:
@@ -86,7 +92,8 @@ func _process(delta: float) -> void:
 		return
 	
 	_hover_time += delta
-	if not _shown and (_warm > 0.0 or _hover_time >= Settings.level_designer.tooltip_delay.current_value):
+	var delay: float = Settings.level_designer.tooltip_delay.current_value
+	if not _shown and (_warm > 0.0 or _hover_time >= delay):
 		_show(_warm <= 0.0)
 	
 	if _shown:
@@ -117,7 +124,11 @@ func _find_target(control: Control) -> Control:
 
 
 func _is_presentable(control: Variant) -> bool:
-	if not is_instance_valid(control) or not (control as Control).is_inside_tree() or not (control as Control).is_visible_in_tree():
+	if (
+			not is_instance_valid(control)
+			or not (control as Control).is_inside_tree()
+			or not (control as Control).is_visible_in_tree()
+	):
 		return false
 	
 	var alpha: float = 1.0
@@ -155,8 +166,8 @@ func _hide() -> void:
 	
 	_shown = false
 	_animate(Color.TRANSPARENT).finished.connect(func() -> void:
-		if not _shown:
-			root.visible = false)
+			if not _shown:
+				root.visible = false)
 
 
 func _animate(target: Color) -> Tween:
@@ -173,7 +184,8 @@ func _duration() -> float:
 
 
 func _place() -> void:
-	var anchor: Rect2 = _target.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, _target.size)
+	var anchor: Rect2 = \
+			_target.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, _target.size)
 	var size: Vector2 = bubble.size
 	var screen: Rect2 = root.get_viewport_rect().grow(-margin)
 	var placement: Array = [anchor, size, screen, _slide, _target]
@@ -190,25 +202,39 @@ func _place() -> void:
 				break
 	
 	_mode = mode
-	var position: Vector2 = _bubble_position(mode, anchor, size).clamp(screen.position, screen.end - size).round()
+	var position: Vector2 = \
+			_bubble_position(mode, anchor, size).clamp(screen.position, screen.end - size).round()
 	bubble.position = position + _slide
 	
 	var vertical: bool = mode == Placement.UNDER or mode == Placement.ABOVE
-	var arrow_size: Vector2 = Vector2(ARROW_WIDTH, ARROW_LENGTH) if vertical else Vector2(ARROW_LENGTH, ARROW_WIDTH)
+	var arrow_size: Vector2 = \
+			Vector2(ARROW_WIDTH, ARROW_LENGTH) if vertical else Vector2(ARROW_LENGTH, ARROW_WIDTH)
 	var inset: float = ARROW_WIDTH
 	var center: Vector2 = anchor.get_center()
 	var tip: Vector2 = center
 	match mode:
 		Placement.UNDER:
-			tip = Vector2(clampf(center.x, position.x + inset, position.x + size.x - inset), position.y - ARROW_LENGTH / 2.0 + overlap)
+			tip = Vector2(
+					clampf(center.x, position.x + inset, position.x + size.x - inset),
+					position.y - ARROW_LENGTH / 2.0 + overlap,
+			)
 		Placement.ABOVE:
-			tip = Vector2(clampf(center.x, position.x + inset, position.x + size.x - inset), position.y + size.y + ARROW_LENGTH / 2.0 - overlap)
+			tip = Vector2(
+					clampf(center.x, position.x + inset, position.x + size.x - inset),
+					position.y + size.y + ARROW_LENGTH / 2.0 - overlap,
+			)
 		Placement.RIGHT:
-			tip = Vector2(position.x - ARROW_LENGTH / 2.0 + overlap, clampf(center.y, position.y + inset, position.y + size.y - inset))
+			tip = Vector2(
+					position.x - ARROW_LENGTH / 2.0 + overlap,
+					clampf(center.y, position.y + inset, position.y + size.y - inset),
+			)
 		Placement.LEFT:
-			tip = Vector2(position.x + size.x + ARROW_LENGTH / 2.0 - overlap, clampf(center.y, position.y + inset, position.y + size.y - inset))
+			tip = Vector2(
+					position.x + size.x + ARROW_LENGTH / 2.0 - overlap,
+					clampf(center.y, position.y + inset, position.y + size.y - inset),
+			)
 	
-	var arrow_class: String = ARROW_CLASSES.get(mode)
+	var arrow_class: String = ARROW_CLASSES[mode]
 	if not GDSS.get_classes(arrow).has(arrow_class):
 		GDSS.set_classes(arrow, PackedStringArray([arrow_class]))
 	arrow.size = arrow_size

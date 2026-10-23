@@ -1,26 +1,32 @@
 class_name TextDisplay
 extends RichTextLabel
 
-const ITALIC_TAGS: Dictionary[String, String] = {"[i]": "[i][skew]", "[/i]": "[/skew][/i]"}
+const ITALIC_TAGS: Dictionary[String, String] = {
+	"[i]": "[i][skew]",
+	"[/i]": "[/skew][/i]",
+}
 
 @export var fonts: Array[Font] = []
 @export var bold_fonts: Array[Font] = []
 
 
 static func apply_fonts(label: RichTextLabel, font: Font, bold_font: Font) -> void:
-	_set_font(label, &"normal", font)
-	_set_font(label, &"mono", font)
-	_set_font(label, &"italics", font)
-	_set_font(label, &"bold", bold_font)
-	_set_font(label, &"bold_italics", bold_font)
-	if not label.custom_effects.any(func(effect: RichTextEffect) -> bool: return effect is SkewTextEffect):
+	_set_font(label, "normal", font)
+	_set_font(label, "mono", font)
+	_set_font(label, "italics", font)
+	_set_font(label, "bold", bold_font)
+	_set_font(label, "bold_italics", bold_font)
+	if not label.custom_effects.any(
+			func(effect: RichTextEffect) -> bool:
+				return effect is SkewTextEffect
+	):
 		label.install_effect(SkewTextEffect.new())
 
 
 static func format(content: String) -> String:
 	var formatted: String = content
 	for tag: String in ITALIC_TAGS:
-		formatted = formatted.replace(tag, ITALIC_TAGS.get(tag))
+		formatted = formatted.replace(tag, ITALIC_TAGS[tag])
 	return formatted
 
 
@@ -48,11 +54,14 @@ func set_content(content: String) -> void:
 
 func set_font_index(index: int) -> void:
 	var at: int = clampi(index, 0, fonts.size() - 1)
-	apply_fonts(self, fonts.get(at), bold_fonts.get(at))
+	apply_fonts(self, fonts[at], bold_fonts[at])
 
 
 func _fit() -> void:
-	size = Vector2(get_content_width(), get_content_height()) + get_theme_stylebox(&"normal").get_minimum_size()
+	size = (
+			Vector2(get_content_width(), get_content_height())
+			+ get_theme_stylebox(&"normal").get_minimum_size()
+	)
 	position = -size * 0.5
 	var object: GameObject = GameObject.of(self)
 	if object:

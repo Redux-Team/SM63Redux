@@ -9,7 +9,9 @@ extends PropertyWidget
 
 func _ready() -> void:
 	TextDisplay.apply_fonts(preview, font, bold_font)
-	text_edit.text_changed.connect(func() -> void: preview.text = TextDisplay.format(text_edit.text))
+	text_edit.text_changed.connect(
+			func() -> void: preview.text = TextDisplay.format(text_edit.text)
+	)
 	text_edit.focus_exited.connect(func() -> void: _commit(text_edit.text))
 
 

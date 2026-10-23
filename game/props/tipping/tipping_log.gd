@@ -26,13 +26,20 @@ static func get_gravity_of(entity: Entity) -> float:
 func _physics_process(_delta: float) -> void:
 	var net_torque: float = 0.0
 	for entity: Entity in ride_area.get_riders():
-		net_torque += (get_gravity_of(entity) / GRAVITY_BASELINE) * ride_area.get_entity_offset(entity).x * RIDER_TORQUE_SCALE
+		net_torque += (
+				(get_gravity_of(entity) / GRAVITY_BASELINE)
+				* ride_area.get_entity_offset(entity).x
+				* RIDER_TORQUE_SCALE
+		)
 	
 	var shape: TelescopingShape = object.shape as TelescopingShape if object else null
 	var pivot: Node2D = self
 	if object:
 		pivot = object
-	_angular_velocity += (net_torque / TORQUE_DENOMINATOR) / (INERTIA * 0.4 * maxi(shape.units if shape else 1, 1))
+	_angular_velocity += (
+			(net_torque / TORQUE_DENOMINATOR)
+			/ (INERTIA * 0.4 * maxi(shape.units if shape else 1, 1))
+	)
 	pivot.rotation += _angular_velocity
 	if ride_area.has_rider():
 		_angular_velocity = lerpf(_angular_velocity, 0.0, LERP_FACTOR)

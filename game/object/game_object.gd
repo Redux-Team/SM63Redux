@@ -40,7 +40,16 @@ enum Flag {
 @export var unique: bool = false
 @export var cullable: bool = true
 @export var inspect_transform: bool = true
-@export_flags("Selectable", "Deletable", "Layerable", "Copyable", "Movable", "Rotatable", "Scalable") var flags: int = 31
+@export_flags(
+		"Selectable",
+		"Deletable",
+		"Layerable",
+		"Copyable",
+		"Movable",
+		"Rotatable",
+		"Scalable",
+)
+var flags: int = 31
 @export var properties: Array[ObjectProperty]
 @export_group("Nodes")
 @export var game_root: Node
@@ -64,7 +73,11 @@ static func of(node: Node) -> GameObject:
 	return current as GameObject
 
 
-static func spawn(scene: PackedScene, spawn_context: Context, data: ObjectData = null) -> GameObject:
+static func spawn(
+		scene: PackedScene,
+		spawn_context: Context,
+		data: ObjectData = null,
+) -> GameObject:
 	var object: GameObject = scene.instantiate() as GameObject
 	if object == null:
 		push_error("GameObject: '%s' does not have a GameObject root." % scene.resource_path)
@@ -73,6 +86,48 @@ static func spawn(scene: PackedScene, spawn_context: Context, data: ObjectData =
 	object.build(spawn_context)
 	object.apply_data(data if data else ObjectData.create(object.id))
 	return object
+
+
+static func relative_transform(ancestor: Node, node: Node) -> Transform2D:
+	var result: Transform2D = Transform2D.IDENTITY
+	var current: Node = node
+	while current and current != ancestor:
+		if current is Node2D:
+			result = (current as Node2D).transform * result
+		current = current.get_parent()
+	
+	return result
+
+
+static func _find_visuals(root: Node) -> Array[CanvasItem]:
+	var visuals: Array[CanvasItem] = []
+	for child: Node in root.get_children():
+		var item: CanvasItem = child as CanvasItem
+		if item and not item.visible:
+			continue
+		if (
+				item is Sprite2D
+				or item is AnimatedSprite2D
+				or item is Line2D
+				or item is NinePatchRect
+				or item is TextureRect
+		):
+			visuals.append(item)
+		visuals.append_array(_find_visuals(child))
+	
+	return visuals
+
+
+static func _find_sprites(root: Node) -> Array[Sprite2D]:
+	var sprites: Array[Sprite2D] = []
+	for child: Node in root.get_children():
+		if child is Sprite2D and (child as Sprite2D).visible:
+			sprites.append(child)
+		if child is CanvasItem and not (child as CanvasItem).visible:
+			continue
+		sprites.append_array(_find_sprites(child))
+	
+	return sprites
 
 
 func build(spawn_context: Context) -> void:
@@ -129,7 +184,7 @@ func set_value(key: StringName, value: Variant) -> void:
 		return
 	
 	var resolved: Variant = property.coerce(value)
-	_values.set(key, resolved)
+	_values[key] = resolved
 	property.apply(self, resolved)
 	invalidate_bounds()
 	value_changed.emit(key, resolved)
@@ -179,7 +234,10 @@ func is_solid() -> bool:
 	if game_root == null or not game_root.can_process():
 		return false
 	
-	return game_root is CollisionObject2D or not game_root.find_children("*", "CollisionObject2D", true, false).is_empty()
+	return (
+			game_root is CollisionObject2D
+			or not game_root.find_children("*", "CollisionObject2D", true, false).is_empty()
+	)
 
 
 func get_local_bounds() -> Rect2:
@@ -209,7 +267,16 @@ func get_outlines() -> Array[PackedVector2Array]:
 		return shape.get_outlines()
 	
 	var rect: Rect2 = get_local_bounds()
-	return [PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)])]
+	return [
+			PackedVector2Array(
+					[
+						rect.position,
+						Vector2(rect.end.x, rect.position.y),
+						rect.end,
+						Vector2(rect.position.x, rect.end.y),
+					]
+			)
+	]
 
 
 func get_global_bounds() -> Rect2:
@@ -232,42 +299,6 @@ func _compute_sprite_bounds() -> Rect2:
 		first = false
 	
 	return bounds if not first else Rect2(-8.0, -8.0, 16.0, 16.0)
-
-
-static func relative_transform(ancestor: Node, node: Node) -> Transform2D:
-	var result: Transform2D = Transform2D.IDENTITY
-	var current: Node = node
-	while current and current != ancestor:
-		if current is Node2D:
-			result = (current as Node2D).transform * result
-		current = current.get_parent()
-	
-	return result
-
-
-static func _find_visuals(root: Node) -> Array[CanvasItem]:
-	var visuals: Array[CanvasItem] = []
-	for child: Node in root.get_children():
-		var item: CanvasItem = child as CanvasItem
-		if item and not item.visible:
-			continue
-		if item is Sprite2D or item is AnimatedSprite2D or item is Line2D or item is NinePatchRect or item is TextureRect:
-			visuals.append(item)
-		visuals.append_array(_find_visuals(child))
-	
-	return visuals
-
-
-static func _find_sprites(root: Node) -> Array[Sprite2D]:
-	var sprites: Array[Sprite2D] = []
-	for child: Node in root.get_children():
-		if child is Sprite2D and (child as Sprite2D).visible:
-			sprites.append(child)
-		if child is CanvasItem and not (child as CanvasItem).visible:
-			continue
-		sprites.append_array(_find_sprites(child))
-	
-	return sprites
 
 
 func _capture_snapshots(root: Node) -> void:

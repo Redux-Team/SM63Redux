@@ -1,11 +1,16 @@
-## Helper class to easily handle and pack/unpack/transform different types of data.
+## Helper class to easily handle and pack/unpack/transform different types of
+## data.
 class_name Packer
 
 
 static func merge_deep(base: Dictionary, override: Dictionary) -> Dictionary:
 	var result: Dictionary = base.duplicate(true)
 	for key: Variant in override.keys():
-		if result.has(key) and typeof(result[key]) == TYPE_DICTIONARY and typeof(override[key]) == TYPE_DICTIONARY:
+		if (
+				result.has(key)
+				and typeof(result[key]) == TYPE_DICTIONARY
+				and typeof(override[key]) == TYPE_DICTIONARY
+		):
 			result[key] = merge_deep(result[key], override[key])
 		else:
 			result[key] = override[key]
@@ -18,12 +23,15 @@ static func generate_uuid() -> String:
 	var b: PackedByteArray = PackedByteArray()
 	for i: int in 16:
 		b.append(rng.randi() % 256)
-	b[6] = (b[6] & 0x0F) | 0x40
-	b[8] = (b[8] & 0x3F) | 0x80
-	return "%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x" % [
-		b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7],
-		b[8], b[9], b[10], b[11], b[12], b[13], b[14], b[15]
-	]
+	b[6] = (b[6] & 0x0f) | 0x40
+	b[8] = (b[8] & 0x3f) | 0x80
+	return (
+			("%02x%02x%02x%02x-%02x%02x-%02x%02x-" + "%02x%02x-%02x%02x%02x%02x%02x%02x")
+			% [
+				b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7],
+				b[8], b[9], b[10], b[11], b[12], b[13], b[14], b[15],
+			]
+	)
 
 
 static func get_texture_as_shape(texture: Texture2D) -> Shape2D:
@@ -50,8 +58,9 @@ static func array_to_packed_vec2(array: Variant) -> PackedVector2Array:
 	return packed
 
 
-## Accepts any shape a point list can arrive in: already packed, an array of [x, y] pairs from a
-## save file, or the "[(x, y), (x, y)]" text a hand-edited level ends up with.
+## Accepts any shape a point list can arrive in: already packed, an array of
+## [x, y] pairs from a save file, or the "[(x, y), (x, y)]" text a hand-edited
+## level ends up with.
 static func to_packed_vec2(value: Variant) -> PackedVector2Array:
 	if value is PackedVector2Array:
 		return value

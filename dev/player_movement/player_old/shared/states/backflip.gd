@@ -20,6 +20,9 @@ func _next() -> StringName:
 		return &"Idle"
 	if player.is_action_just_pressed("dive"):
 		return &"Dive"
-	if player.is_input_spin and player.velocity.y > player.backflip_spin_min_speed:
+	if (
+		player.is_input_spin
+		and player.velocity.y > player.backflip_spin_min_speed
+	):
 		return &"Spin"
 	return &""

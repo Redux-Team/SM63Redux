@@ -26,7 +26,10 @@ extends Control
 @export var bob_amplitude: float = 3.0
 @export var bob_speed: float = 2.0
 @export var bob_speed_spraying: float = 18.0
-@export var bob_nozzles: Array[PlayerFludd.Nozzle] = [PlayerFludd.Nozzle.HOVER, PlayerFludd.Nozzle.TURBO]
+@export var bob_nozzles: Array[PlayerFludd.Nozzle] = [
+	PlayerFludd.Nozzle.HOVER,
+	PlayerFludd.Nozzle.TURBO,
+]
 
 var _fludd: PlayerFludd
 var _fuel: float = 0.0
@@ -63,7 +66,11 @@ func _on_nozzle_changed(nozzle: PlayerFludd.Nozzle) -> void:
 
 
 func _on_spraying_changed(spraying: bool) -> void:
-	_bob_rate = bob_speed_spraying if spraying and bob_nozzles.has(_fludd.equipped_nozzle) else bob_speed
+	_bob_rate = (
+			bob_speed_spraying
+			if spraying and bob_nozzles.has(_fludd.equipped_nozzle)
+			else bob_speed
+	)
 
 
 func _on_fuel_changed(fuel: float) -> void:

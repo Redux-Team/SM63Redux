@@ -71,22 +71,37 @@ func _ready() -> void:
 func draw_shape(shape: PolygonShape) -> void:
 	_shape = shape
 	if decorations and not is_inside_tree():
-		decorations.prepare(shape.outer, shape.holes, get_decoration_style(), rng_seed, decorations_enabled)
+		decorations.prepare(
+				shape.outer,
+				shape.holes,
+				get_decoration_style(),
+				rng_seed,
+				decorations_enabled,
+		)
 	queue_rebuild()
 
 
 func get_base_style() -> PolygonBaseStyle:
-	var preset: PolygonBaseStyle = PolygonStyleRegistry.find(PolygonStyleRegistry.Kind.BASE, base_style_name) as PolygonBaseStyle
+	var preset: PolygonBaseStyle = PolygonStyleRegistry.find(
+			PolygonStyleRegistry.Kind.BASE,
+			base_style_name,
+	) as PolygonBaseStyle
 	return preset if preset else base_style
 
 
 func get_topline_style() -> PolygonToplineStyle:
-	var preset: PolygonToplineStyle = PolygonStyleRegistry.find(PolygonStyleRegistry.Kind.TOPLINE, topline_style_name) as PolygonToplineStyle
+	var preset: PolygonToplineStyle = PolygonStyleRegistry.find(
+			PolygonStyleRegistry.Kind.TOPLINE,
+			topline_style_name,
+	) as PolygonToplineStyle
 	return preset if preset else topline_style
 
 
 func get_decoration_style() -> PolygonDecorationStyle:
-	var preset: PolygonDecorationStyle = PolygonStyleRegistry.find(PolygonStyleRegistry.Kind.DECORATION, decoration_style_name) as PolygonDecorationStyle
+	var preset: PolygonDecorationStyle = PolygonStyleRegistry.find(
+			PolygonStyleRegistry.Kind.DECORATION,
+			decoration_style_name,
+	) as PolygonDecorationStyle
 	return preset if preset else decoration_style
 
 
@@ -120,7 +135,13 @@ func rebuild() -> void:
 				child.queue_free()
 	
 	if decorations:
-		decorations.rebuild(_shape.outer, _shape.holes, get_decoration_style(), rng_seed, decorations_enabled)
+		decorations.rebuild(
+				_shape.outer,
+				_shape.holes,
+				get_decoration_style(),
+				rng_seed,
+				decorations_enabled,
+		)
 	
 	if _shape.outer.size() < 3 or line_mode == LineMode.NONE:
 		return
@@ -158,16 +179,30 @@ func _build_toplines() -> void:
 		if topline_container:
 			TerrainPolygon.add_topline_segment(topline_container, segment, line, caps)
 		if shadow_container:
-			TerrainPolygon.add_topline_shadow(shadow_container, segment, shadow, caps, style.shadow_gap)
+			TerrainPolygon.add_topline_shadow(
+					shadow_container,
+					segment,
+					shadow,
+					caps,
+					style.shadow_gap,
+			)
 
 
 func _build_outlines(style: TerrainPolygon.LineStyle) -> void:
 	if outline_container == null:
 		return
 	
-	TerrainPolygon.add_outline(outline_container, TerrainPolygon.get_closed_points(TerrainPolygon.ensure_clockwise(_shape.outer)), style)
+	TerrainPolygon.add_outline(
+			outline_container,
+			TerrainPolygon.get_closed_points(TerrainPolygon.ensure_clockwise(_shape.outer)),
+			style,
+	)
 	for hole: PackedVector2Array in _shape.holes:
-		TerrainPolygon.add_outline(outline_container, TerrainPolygon.get_closed_points(TerrainPolygon.ensure_counter_clockwise(hole)), style)
+		TerrainPolygon.add_outline(
+				outline_container,
+				TerrainPolygon.get_closed_points(TerrainPolygon.ensure_counter_clockwise(hole)),
+				style,
+		)
 
 
 func _style_changed() -> void:

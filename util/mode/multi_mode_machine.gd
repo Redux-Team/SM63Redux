@@ -18,11 +18,37 @@ func _unhandled_input(event: InputEvent) -> void:
 	if key.keycode == debug_clear_key:
 		stop()
 	elif debug_toggles.has(key.keycode):
-		toggle(debug_toggles.get(key.keycode), true)
+		toggle(debug_toggles[key.keycode], true)
 	else:
 		return
 	
 	get_viewport().set_input_as_handled()
+
+
+func tick(delta: float, wanted: bool = true) -> void:
+	if not wanted:
+		return
+	
+	for mode: Mode in _active.duplicate():
+		if not _active.has(mode):
+			continue
+		
+		mode.time += delta
+		mode.frames += 1
+		mode._tick(delta)
+
+
+func get_running() -> Mode:
+	return _active.back() if not _active.is_empty() else null
+
+
+func is_running(mode_name: StringName) -> bool:
+	return _active.any(func(mode: Mode) -> bool: return mode.name == mode_name)
+
+
+func stop() -> void:
+	for mode: Mode in _active.duplicate():
+		end(mode.name)
 
 
 func start(mode_name: StringName, permanent: bool = false) -> void:
@@ -59,31 +85,5 @@ func toggle(mode_name: StringName, permanent: bool = false) -> void:
 		start(mode_name, permanent)
 
 
-func tick(delta: float, wanted: bool = true) -> void:
-	if not wanted:
-		return
-	
-	for mode: Mode in _active.duplicate():
-		if not _active.has(mode):
-			continue
-		
-		mode.time += delta
-		mode.frames += 1
-		mode._tick(delta)
-
-
-func get_running() -> Mode:
-	return _active.back() if not _active.is_empty() else null
-
-
 func get_running_modes() -> Array[Mode]:
 	return _active.duplicate()
-
-
-func is_running(mode_name: StringName) -> bool:
-	return _active.any(func(mode: Mode) -> bool: return mode.name == mode_name)
-
-
-func stop() -> void:
-	for mode: Mode in _active.duplicate():
-		end(mode.name)

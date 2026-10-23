@@ -36,6 +36,11 @@ func _physics_process(delta: float) -> void:
 		_spawn(sprite, Color.from_hsv(hue, saturation, value, start_alpha))
 
 
+func _exit_tree() -> void:
+	if is_instance_valid(_container) and _container.get_parent() != self:
+		_container.queue_free()
+
+
 func _spawn(sprite: Sprite2D, color: Color) -> void:
 	var ghost: Sprite2D = Sprite2D.new()
 	ghost.texture = sprite.texture
@@ -73,11 +78,6 @@ func _get_container() -> Node2D:
 		add_child(_container)
 	
 	return _container
-
-
-func _exit_tree() -> void:
-	if is_instance_valid(_container) and _container.get_parent() != self:
-		_container.queue_free()
 
 
 func _collect(node: Node) -> Array[Sprite2D]:

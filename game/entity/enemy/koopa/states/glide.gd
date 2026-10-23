@@ -1,8 +1,8 @@
 extends State
 
-## The winged form: hovers in place, bobbing. Gravity is held off for as long as the wings are on
-## rather than the form going without a gravity component, so losing them is a state change instead
-## of a different scene.
+## The winged form: hovers in place, bobbing. Gravity is held off for as long as
+## the wings are on rather than the form going without a gravity component, so
+## losing them is a state change instead of a different scene.
 
 
 const BOB_AMPLITUDE: float = 10.0

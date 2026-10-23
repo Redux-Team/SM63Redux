@@ -20,7 +20,11 @@ void vertex() {
 
 
 vec3 hue_to_rgb(float hue) {
-	vec3 channels = clamp(abs(mod(hue * 6.0 + vec3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
+	vec3 channels = clamp(
+		abs(mod(hue * 6.0 + vec3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0,
+		0.0,
+		1.0
+	);
 	return brightness * mix(vec3(1.0), channels, saturation);
 }
 
@@ -35,11 +39,20 @@ void fragment() {
 	
 	for (int x = -thickness; x <= thickness; x++) {
 		for (int y = -thickness; y <= thickness; y++) {
-			edge = max(edge, alpha - texture(screen_texture, SCREEN_UV + vec2(float(x), float(y)) * texel).a);
+			edge = max(
+				edge,
+				alpha - texture(
+					screen_texture,
+					SCREEN_UV + vec2(float(x), float(y)) * texel
+				).a
+			);
 		}
 	}
 	
 	vec2 pixel = floor(local_position);
 	float hue = fract(TIME * cycle_speed - (pixel.x + pixel.y) * spread);
-	COLOR = vec4(hue_to_rgb(hue), max(step(0.5, edge), step(0.5, alpha) * fill_alpha) * modulate_alpha);
+	COLOR = vec4(
+		hue_to_rgb(hue),
+		max(step(0.5, edge), step(0.5, alpha) * fill_alpha) * modulate_alpha
+	);
 }

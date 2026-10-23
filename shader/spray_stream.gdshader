@@ -34,18 +34,42 @@ void vertex() {
 void fragment() {
 	float distance_along = UV.x * uv_length;
 	float progress = clamp(distance_along / max(line_length, 0.001), 0.0, 1.0);
-	float width_scale = mix(1.0, mix(1.0, tail_width_scale, ramp(progress, tail_taper_start)), tail_amount) * stream_width / width_padding;
+	float width_scale = (
+		mix(
+			1.0,
+			mix(1.0, tail_width_scale, ramp(progress, tail_taper_start)),
+			tail_amount
+		)
+		* stream_width
+		/ width_padding
+	);
 	float across = (UV.y - 0.5) / width_scale + 0.5;
 	float top = min(top_length, line_length);
 	vec4 water;
 	if (distance_along < top) {
-		water = texture(TEXTURE, region_uv(top_region, vec2(across, (distance_along - top + top_length) / top_length)));
+		water = texture(
+			TEXTURE,
+			region_uv(
+				top_region,
+				vec2(across, (distance_along - top + top_length) / top_length)
+			)
+		);
 	} else {
 		float tiles = (distance_along - top - TIME * flow_speed) / body_length;
-		across += sin(tiles * wobble_frequency * TAU + TIME * wobble_speed) * wobble_amount;
-		water = texture(TEXTURE, region_uv(body_region, vec2(across, fract(tiles))));
+		across += (
+			sin(tiles * wobble_frequency * TAU + TIME * wobble_speed)
+			* wobble_amount
+		);
+		water = texture(
+			TEXTURE,
+			region_uv(body_region, vec2(across, fract(tiles)))
+		);
 	}
 	
-	water.a *= step(0.0, across) * step(across, 1.0) * (1.0 - ramp(progress, tail_fade_start) * tail_amount);
+	water.a *= (
+		step(0.0, across)
+		* step(across, 1.0)
+		* (1.0 - ramp(progress, tail_fade_start) * tail_amount)
+	);
 	COLOR = water * line_color;
 }

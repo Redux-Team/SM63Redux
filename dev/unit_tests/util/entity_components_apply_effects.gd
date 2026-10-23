@@ -6,7 +6,10 @@ static func run_test() -> void:
 	
 	var damages: Array[float] = []
 	var deaths: Array[bool] = []
-	health.damaged.connect(func(amount: float, _type: HitBox.DamageType) -> void: damages.append(amount))
+	health.damaged.connect(
+			func(amount: float, _type: HitBox.DamageType) -> void:
+				damages.append(amount)
+	)
 	health.died.connect(func() -> void: deaths.append(true))
 	
 	health.damage(2.4, HitBox.DamageType.STRIKE)

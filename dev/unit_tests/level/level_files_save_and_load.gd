@@ -12,7 +12,8 @@ static func run_test() -> void:
 	assert(not LevelFile.is_legacy(json_path))
 	assert(not LevelFile.is_legacy(binary_path))
 	
-	var header: PackedByteArray = FileAccess.get_file_as_bytes(binary_path).slice(0, LevelFile.COMPRESSED_MAGIC.size())
+	var header: PackedByteArray = \
+			FileAccess.get_file_as_bytes(binary_path).slice(0, LevelFile.COMPRESSED_MAGIC.size())
 	assert(header == LevelFile.COMPRESSED_MAGIC)
 	assert(FileAccess.get_file_as_string(json_path).begins_with("{"))
 	
@@ -28,13 +29,36 @@ static func run_test() -> void:
 	
 	var legacy_path: String = dir.path_join("legacy.json")
 	var legacy: FileAccess = FileAccess.open(legacy_path, FileAccess.WRITE)
-	legacy.store_string(JSON.stringify({"version": 1, "areas": [{"name": "Old", "layers": [{"layer_index": 0, "objects": [{"object_id": "yellow_coin", "position": [16, 32]}]}]}]}))
+	legacy.store_string(
+			JSON.stringify(
+					{
+						"version": 1,
+						"areas": [
+							{
+								"name": "Old",
+								"layers": [
+									{
+										"layer_index": 0,
+										"objects": [
+											{
+												"object_id": "yellow_coin",
+												"position": [16, 32],
+											},
+										],
+									},
+								],
+							},
+						],
+					}
+			)
+	)
 	legacy.close()
 	assert(LevelFile.is_legacy(legacy_path))
 	var converted: LevelData = LevelFile.read(legacy_path)
 	assert(converted.version == LevelData.VERSION)
 	assert((converted.areas.front() as AreaData).area_name == "Old")
-	var coin: ObjectData = ((converted.areas.front() as AreaData).layers.front() as LayerData).objects.front()
+	var coin: ObjectData = \
+			((converted.areas.front() as AreaData).layers.front() as LayerData).objects.front()
 	assert(coin.id == &"yellow_coin")
 	assert(coin.position == Vector2(16.0, 32.0))
 	

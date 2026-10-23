@@ -38,8 +38,18 @@ func _tool_input(event: InputEvent, world_position: Vector2) -> bool:
 		return true
 	
 	if event is InputEventMouseMotion:
-		editor.viewport_handler.set_cursor(Control.CURSOR_POINTING_HAND if editor.viewport_handler.pick(world_position) else cursor)
+		editor.viewport_handler.set_cursor(
+				Control.CURSOR_POINTING_HAND
+				if editor.viewport_handler.pick(world_position)
+				else cursor
+		)
 	return false
+
+
+func _draw_overlay(overlay: LDOverlay) -> void:
+	if _boxing:
+		overlay.draw_world_rect(_get_box(), box_color, true)
+		overlay.draw_world_rect(_get_box(), box_outline_color)
 
 
 func _press(mouse_button: InputEventMouseButton, world_position: Vector2) -> void:
@@ -77,7 +87,9 @@ func _release(mouse_button: InputEventMouseButton) -> void:
 	
 	_boxing = false
 	editor.viewport_handler.reset_cursor()
-	if editor.viewport_handler.to_screen(_box_start).distance_to(editor.viewport_handler.to_screen(_box_end)) <= CLICK_THRESHOLD:
+	if editor.viewport_handler.to_screen(_box_start).distance_to(
+			editor.viewport_handler.to_screen(_box_end)
+	) <= CLICK_THRESHOLD:
 		return
 	
 	var found: Array[GameObject] = editor.viewport_handler.objects_in_rect(_get_box())
@@ -89,9 +101,3 @@ func _release(mouse_button: InputEventMouseButton) -> void:
 
 func _get_box() -> Rect2:
 	return Rect2(_box_start, Vector2.ZERO).expand(_box_end)
-
-
-func _draw_overlay(overlay: LDOverlay) -> void:
-	if _boxing:
-		overlay.draw_world_rect(_get_box(), box_color, true)
-		overlay.draw_world_rect(_get_box(), box_outline_color)

@@ -92,7 +92,7 @@ func heal(amount: float, time: float = 0.0) -> void:
 func heal_percentage(amount: float, time: float = 0.0) -> void:
 	var heal_amount: float = max_hp * amount
 	var tween: Tween = create_tween()
-	tween.tween_property(self, "_hp", _hp + heal_amount, time)
+	tween.tween_property(self, ^"_hp", _hp + heal_amount, time)
 
 
 func set_hp(amount: float) -> void:

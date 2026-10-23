@@ -5,19 +5,6 @@ var _origin: Vector2
 var _dragging: bool = false
 
 
-@abstract func _resize_preview(object: GameObject, origin: Vector2, current: Vector2) -> void
-@abstract func _idle_preview(object: GameObject, at: Vector2) -> void
-
-
-func _deactivate() -> void:
-	_dragging = false
-	super()
-
-
-func _cancel() -> void:
-	_dragging = false
-
-
 func _process(_delta: float) -> void:
 	var layer: LevelLayer = editor.level_handler.active_layer
 	if _preview == null or layer == null:
@@ -28,6 +15,15 @@ func _process(_delta: float) -> void:
 		_resize_preview(_preview, _origin, get_snapped_mouse())
 	else:
 		_idle_preview(_preview, get_snapped_mouse())
+
+
+func _deactivate() -> void:
+	_dragging = false
+	super()
+
+
+func _cancel() -> void:
+	_dragging = false
 
 
 func _tool_input(event: InputEvent, _world_position: Vector2) -> bool:
@@ -49,5 +45,16 @@ func _tool_input(event: InputEvent, _world_position: Vector2) -> bool:
 		_dragging = false
 		var object: GameObject = create_object(Vector2.ZERO)
 		_resize_preview(object, _origin, get_snapped_mouse())
-		editor.object_handler.add_objects([object], editor.level_handler.active_layer, "Place %s" % editor.tool_handler.armed.display_name, false)
+		editor.object_handler.add_objects(
+				[object],
+				editor.level_handler.active_layer,
+				"Place %s" % editor.tool_handler.armed.display_name,
+				false,
+		)
 	return true
+
+
+@abstract func _resize_preview(object: GameObject, origin: Vector2, current: Vector2) -> void
+
+
+@abstract func _idle_preview(object: GameObject, at: Vector2) -> void

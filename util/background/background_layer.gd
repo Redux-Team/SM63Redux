@@ -8,7 +8,7 @@ enum RepeatMode {
 	INDEFINITE_X,
 	INDEFINITE_Y,
 	INDEFINITE_BOTH,
-	CUSTOM
+	CUSTOM,
 }
 
 

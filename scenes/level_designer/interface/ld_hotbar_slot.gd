@@ -29,7 +29,16 @@ func _process(delta: float) -> void:
 func _draw() -> void:
 	if _hold > 0.0:
 		var radius: float = minf(size.x, size.y) / 2.0 - 2.0
-		draw_arc(size / 2.0, radius, -PI / 2.0, -PI / 2.0 + TAU * _hold / HOLD_TIME, 32, ring_color, 2.0, true)
+		draw_arc(
+				size / 2.0,
+				radius,
+				-PI / 2.0,
+				-PI / 2.0 + TAU * _hold / HOLD_TIME,
+				32,
+				ring_color,
+				2.0,
+				true,
+		)
 
 
 func _on_button_down() -> void:

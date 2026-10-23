@@ -12,13 +12,13 @@ const HEAL_DURATION: float = 0.5
 var _spin_speed: float = 1.0
 
 
-func _on_init() -> void:
-	sprite.play()
-
-
 func _physics_process(_delta: float) -> void:
 	_spin_speed = lerpf(_spin_speed, 1.0, SPIN_DECAY)
 	sprite.speed_scale = _spin_speed
+
+
+func _on_init() -> void:
+	sprite.play()
 
 
 func _on_entity_check_area_player_entered(player: Player) -> void:

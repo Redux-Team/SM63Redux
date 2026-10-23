@@ -13,7 +13,7 @@ const SCENES: Dictionary[StringName, String] = {
 	&"text": "res://game/widgets/widget_text/widget_text.tscn",
 	&"Vector2": "res://game/widgets/widget_vector2/widget_vector2.tscn",
 	&"Vector2i": "res://game/widgets/widget_vector2/widget_vector2.tscn",
-	&"vector2_range": "res://game/widgets/widget_vector2_range/widget_vector2_range.tscn",
+	&"vector2_range": ("res://game/widgets/widget_vector2_range/widget_vector2_range.tscn"),
 	&"Texture2D": "res://game/widgets/widget_texture/widget_texture.tscn",
 	&"flags": "res://game/widgets/widget_flags/widget_flags.tscn",
 	&"Color": "res://game/widgets/widget_color/widget_color.tscn",
@@ -35,7 +35,7 @@ var binding: PropertyBinding:
 
 
 static func register(kind: StringName, scene: PackedScene) -> void:
-	_registered.set(kind, scene)
+	_registered[kind] = scene
 
 
 static func supports(kind: StringName) -> bool:
@@ -46,23 +46,14 @@ static func create(property_binding: PropertyBinding) -> PropertyWidget:
 	var kind: StringName = property_binding.kind()
 	var scene: PackedScene = _registered.get(kind)
 	if scene == null and SCENES.has(kind):
-		scene = load(SCENES.get(kind))
-		_registered.set(kind, scene)
+		scene = load(SCENES[kind])
+		_registered[kind] = scene
 	if scene == null:
 		push_error("PropertyWidget: no widget registered for kind '%s'." % kind)
 		return null
 	var widget: PropertyWidget = scene.instantiate() as PropertyWidget
 	widget.binding = property_binding
 	return widget
-
-
-@abstract func _name(widget_name: String) -> void
-@abstract func _value(widget_value: Variant) -> void
-
-
-func set_editable(editable: bool) -> void:
-	modulate.a = 1.0 if editable else 0.4
-	_set_editable(self, editable)
 
 
 static func _set_editable(node: Node, editable: bool) -> void:
@@ -84,6 +75,17 @@ static func _set_editable(node: Node, editable: bool) -> void:
 			else:
 				GDSS.set_state(child, "disabled")
 		_set_editable(child, editable)
+
+
+func set_editable(editable: bool) -> void:
+	modulate.a = 1.0 if editable else 0.4
+	_set_editable(self, editable)
+
+
+@abstract func _name(widget_name: String) -> void
+
+
+@abstract func _value(widget_value: Variant) -> void
 
 
 func _info(_widget_info: Dictionary) -> void:

@@ -1,6 +1,7 @@
 extends PlayerState
 
-## The jump chain in order; each jump uses the next entry while its chain window is open.
+## The jump chain in order; each jump uses the next entry while its chain window
+## is open.
 @export var jumps: Array[JumpState]
 ## Dust burst emitted on takeoff.
 @export var particles: AnimatedParticles
@@ -11,10 +12,10 @@ var _cut: bool = false
 
 func _enter() -> void:
 	var index: int = mini(player.jump_chain, jumps.size() - 1)
-	while index > 0 and not jumps.get(index).can_chain():
+	while index > 0 and not jumps[index].can_chain():
 		index -= 1
 	
-	_jump = jumps.get(index)
+	_jump = jumps[index]
 	_cut = false
 	particles.burst()
 	player.velocity.y = -player.get_jump_speed(_jump.strength)

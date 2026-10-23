@@ -3,7 +3,8 @@ extends PlayerState
 ## Input strength needed to start walking.
 @export var walk_input_threshold: float = 0.1
 ## Speed below which crouch starts a crouch instead of a floorslide.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var crouch_max_speed: float = 50.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var crouch_max_speed: float = 50.0
 ## How long a jump press stays valid after it was pressed.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var jump_buffer: float = 0.25
 

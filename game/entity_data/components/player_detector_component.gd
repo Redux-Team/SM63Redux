@@ -55,7 +55,7 @@ func _detect(player: Player) -> void:
 
 func _on_detection_area_entered(area: Area2D) -> void:
 	var player: Player = area.owner as Player
-	if not enabled or not area.has_meta("player") or not player:
+	if not enabled or not area.has_meta(&"player") or not player:
 		return
 	
 	if player.is_detectable():

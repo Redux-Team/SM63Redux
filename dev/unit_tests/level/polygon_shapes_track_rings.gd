@@ -1,8 +1,14 @@
 static func run_test() -> void:
-	var outer: PackedVector2Array = PackedVector2Array([Vector2(0, 0), Vector2(64, 0), Vector2(64, 64), Vector2(0, 64)])
-	var hole: PackedVector2Array = PackedVector2Array([Vector2(16, 16), Vector2(48, 16), Vector2(48, 48), Vector2(16, 48)])
+	var outer: PackedVector2Array = \
+			PackedVector2Array([Vector2(0, 0), Vector2(64, 0), Vector2(64, 64), Vector2(0, 64)])
+	var hole: PackedVector2Array = \
+			PackedVector2Array([Vector2(16, 16), Vector2(48, 16), Vector2(48, 48), Vector2(16, 48)])
 	var data: ObjectData = ObjectData.create(&"terrain_grass")
-	data.shape = {"outer": outer, "holes": [hole, PackedVector2Array([Vector2.ZERO, Vector2.ONE])], "toplines": [Vector3i(0, 2, 1), Vector3i(1, 0, 0), Vector3i(5, 0, 1)]}
+	data.shape = {
+		"outer": outer,
+		"holes": [hole, PackedVector2Array([Vector2.ZERO, Vector2.ONE])],
+		"toplines": [Vector3i(0, 2, 1), Vector3i(1, 0, 0), Vector3i(5, 0, 1)],
+	}
 	var object: GameObject = ObjectRegistry.spawn(data, GameObject.Context.EDITOR)
 	var shape: PolygonShape = object.shape as PolygonShape
 	assert(shape != null)
@@ -11,7 +17,7 @@ static func run_test() -> void:
 	assert(shape.holes.size() == 1)
 	assert(shape.get_rings().size() == 2)
 	assert(shape.get_ring_points(1) == hole)
-	assert(shape.get_toplines() == ([{2: true}, {0: false}] as Array[Dictionary]))
+	assert(shape.get_toplines() == ([{ 2: true }, { 0: false }] as Array[Dictionary]))
 	
 	var saved: Dictionary = object.to_data().shape
 	assert(saved.get("outer") == outer)
@@ -54,16 +60,28 @@ static func run_test() -> void:
 	assert(shape.get_pieces().size() == 1)
 	object.free()
 	
-	assert(PolygonShape.insert_override({0: true, 2: false}, 1, 4) == {0: true, 1: true, 3: false})
-	assert(PolygonShape.insert_override({3: true}, 0, 4) == {0: true, 4: true})
+	assert(
+			PolygonShape.insert_override({ 0: true, 2: false }, 1, 4)
+			== { 0: true, 1: true, 3: false }
+	)
+	assert(PolygonShape.insert_override({ 3: true }, 0, 4) == { 0: true, 4: true })
 	assert(PolygonShape.insert_override({}, 2, 4) == {})
-	assert(PolygonShape.remove_override({0: true, 1: true, 3: false}, 1, 5) == {0: true, 2: false})
-	assert(PolygonShape.remove_override({1: false, 2: true}, 2, 4) == {1: false})
-	assert(PolygonShape.remove_override({0: true}, 0, 4) == {2: true})
+	assert(
+			PolygonShape.remove_override({ 0: true, 1: true, 3: false }, 1, 5)
+			== { 0: true, 2: false }
+	)
+	assert(PolygonShape.remove_override({ 1: false, 2: true }, 2, 4) == { 1: false })
+	assert(PolygonShape.remove_override({ 0: true }, 0, 4) == { 2: true })
 	
-	var aligned: PackedVector2Array = PackedVector2Array([Vector2(16, 16), Vector2(80, 16), Vector2(80, 80), Vector2(16, 80)])
+	var aligned: PackedVector2Array = \
+			PackedVector2Array([Vector2(16, 16), Vector2(80, 16), Vector2(80, 80), Vector2(16, 80)])
 	var tiled_data: ObjectData = ObjectData.create(&"terrain_grass")
-	tiled_data.shape = {"outer": aligned, "holes": [], "toplines": [], "tiled": true}
+	tiled_data.shape = {
+		"outer": aligned,
+		"holes": [],
+		"toplines": [],
+		"tiled": true,
+	}
 	var tiled: GameObject = ObjectRegistry.spawn(tiled_data, GameObject.Context.EDITOR)
 	var tiled_shape: PolygonShape = tiled.shape as PolygonShape
 	assert(tiled_shape.is_tiled())
@@ -84,6 +102,10 @@ static func run_test() -> void:
 	assert(not tiled.to_data().shape.has("tiled"))
 	tiled.free()
 	
-	var defaulted: GameObject = ObjectRegistry.spawn(ObjectData.create(&"water"), GameObject.Context.EDITOR)
-	assert((defaulted.shape as PolygonShape).outer == (defaulted.shape as PolygonShape).default_outer)
+	var defaulted: GameObject = \
+			ObjectRegistry.spawn(ObjectData.create(&"water"), GameObject.Context.EDITOR)
+	assert(
+			(defaulted.shape as PolygonShape).outer
+			== (defaulted.shape as PolygonShape).default_outer
+	)
 	defaulted.free()

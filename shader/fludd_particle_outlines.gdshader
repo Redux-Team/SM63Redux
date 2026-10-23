@@ -23,14 +23,38 @@ void fragment() {
 		neighbor += texture(SCREEN_TEXTURE, SCREEN_UV - vec2(px.x, px.y)).a;
 		neighbor += texture(SCREEN_TEXTURE, SCREEN_UV + vec2(px.x, -px.y)).a;
 		neighbor += texture(SCREEN_TEXTURE, SCREEN_UV + vec2(-px.x, px.y)).a;
-		neighbor += texture(SCREEN_TEXTURE, SCREEN_UV + vec2(px.x * 2.0, 0.0)).a;
-		neighbor += texture(SCREEN_TEXTURE, SCREEN_UV - vec2(px.x * 2.0, 0.0)).a;
-		neighbor += texture(SCREEN_TEXTURE, SCREEN_UV + vec2(0.0, px.y * 2.0)).a;
-		neighbor += texture(SCREEN_TEXTURE, SCREEN_UV - vec2(0.0, px.y * 2.0)).a;
-		neighbor += texture(SCREEN_TEXTURE, SCREEN_UV + vec2(px.x * 2.0, px.y * 2.0)).a;
-		neighbor += texture(SCREEN_TEXTURE, SCREEN_UV - vec2(px.x * 2.0, px.y * 2.0)).a;
-		neighbor += texture(SCREEN_TEXTURE, SCREEN_UV + vec2(px.x * 2.0, -px.y * 2.0)).a;
-		neighbor += texture(SCREEN_TEXTURE, SCREEN_UV + vec2(-px.x * 2.0, px.y * 2.0)).a;
+		neighbor += texture(
+			SCREEN_TEXTURE,
+			SCREEN_UV + vec2(px.x * 2.0, 0.0)
+		).a;
+		neighbor += texture(
+			SCREEN_TEXTURE,
+			SCREEN_UV - vec2(px.x * 2.0, 0.0)
+		).a;
+		neighbor += texture(
+			SCREEN_TEXTURE,
+			SCREEN_UV + vec2(0.0, px.y * 2.0)
+		).a;
+		neighbor += texture(
+			SCREEN_TEXTURE,
+			SCREEN_UV - vec2(0.0, px.y * 2.0)
+		).a;
+		neighbor += texture(
+			SCREEN_TEXTURE,
+			SCREEN_UV + vec2(px.x * 2.0, px.y * 2.0)
+		).a;
+		neighbor += texture(
+			SCREEN_TEXTURE,
+			SCREEN_UV - vec2(px.x * 2.0, px.y * 2.0)
+		).a;
+		neighbor += texture(
+			SCREEN_TEXTURE,
+			SCREEN_UV + vec2(px.x * 2.0, -px.y * 2.0)
+		).a;
+		neighbor += texture(
+			SCREEN_TEXTURE,
+			SCREEN_UV + vec2(-px.x * 2.0, px.y * 2.0)
+		).a;
 		float outline_a = smoothstep(0.0, 16.0 * outline_softness, neighbor);
 		COLOR = vec4(outline_color.rgb, outline_color.a * outline_a);
 	} else {

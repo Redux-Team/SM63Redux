@@ -1,6 +1,6 @@
 # TODO - The player is in a relatively stable state; however, I do plan
-# on reworking the API in the future, especially when it comes to class variables
-# affecting states.
+# on reworking the API in the future, especially when it comes to class
+# variables affecting states.
 class_name PlayerOld
 extends Entity
 
@@ -10,8 +10,9 @@ signal swimming_changed(swimming: bool)
 
 const BUFFERED_ACTIONS: PackedStringArray = ["jump"]
 const FOOTSTEP_LAYER_FIRST: int = 25
-## How long a swim (jump-underwater) press stays buffered. Buffering it means the state machine
-## still sees the press even if it samples on a frame after the one-frame "just pressed".
+## How long a swim (jump-underwater) press stays buffered. Buffering it means
+## the state machine still sees the press even if it samples on a frame after
+## the one-frame "just pressed".
 const SWIM_INPUT_BUFFER_TIME: float = 0.12
 
 @export_group("Movement")
@@ -134,7 +135,8 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 @export var stomp_drag: float = 900.0
 @export var stomp_min_speed: float = 45.0
 @export var stomp_duration: float = 0.4
-## Physics frames the feet hitbox stays live for, so one landing can squish everything under it.
+## Physics frames the feet hitbox stays live for, so one landing can squish
+## everything under it.
 @export var stomp_hitbox_frames: int = 2
 @export var stomp_bounce_speed: float = -280.0
 @export_subgroup("Ground Pound")
@@ -147,15 +149,17 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 
 @export_group("Swim")
 @export_subgroup("Burst")
-## Peak upward velocity applied during the swim burst (pixels/sec, positive = up in velocity space).
+## Peak upward velocity applied during the swim burst (pixels/sec, positive = up
+## in velocity space).
 @export var swim_burst_rise_speed: float = 150.0
-## How quickly velocity lerps toward the burst target each tick during the active burst window.
-## Lower = smoother ramp-up, higher = snappier.
+## How quickly velocity lerps toward the burst target each tick during the
+## active burst window. Lower = smoother ramp-up, higher = snappier.
 @export var swim_burst_rise_smoothing: float = 100.0
-## How quickly upward velocity bleeds off toward neutral float after the burst ends.
-## Lower = floatier tail, higher = quicker stop.
+## How quickly upward velocity bleeds off toward neutral float after the burst
+## ends. Lower = floatier tail, higher = quicker stop.
 @export var swim_rise_decay_smoothing: float = 0.05
-## How long the active burst window lasts before handing off descent control to Submerged.
+## How long the active burst window lasts before handing off descent control to
+## Submerged.
 @export var swim_burst_duration: float = 0.2
 ## How long the player's swim input is buffered after this state fires,
 ## preventing an immediate re-trigger from a held input.
@@ -164,7 +168,8 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 ## Neutral downward drift velocity while submerged and not actively swimming.
 ## Kept low so the player feels weightless rather than sinking.
 @export var swim_neutral_sink_speed: float = 1000.0
-## How quickly velocity lerps toward swim_neutral_sink_speed once the burst has fully decayed.
+## How quickly velocity lerps toward swim_neutral_sink_speed once the burst has
+## fully decayed.
 @export var swim_neutral_sink_smoothing: float = 0.1
 @export var swim_down_speed: float = 140.0
 @export var swim_down_lerp: float = 0.2
@@ -209,7 +214,13 @@ const SWIM_INPUT_BUFFER_TIME: float = 0.12
 @export_group("Footsteps", "footstep_")
 @export var footstep_bank: SFXBank
 @export var footstep_particles: AnimatedParticles
-@export var footstep_terrains: Array[StringName] = [&"grass", &"snow", &"cloud", &"ice", &"metal"]
+@export var footstep_terrains: Array[StringName] = [
+	&"grass",
+	&"snow",
+	&"cloud",
+	&"ice",
+	&"metal",
+]
 @export var footstep_frames: Dictionary[StringName, PackedInt32Array] = {
 	&"walk_loop": PackedInt32Array([0, 4]),
 	&"run_loop": PackedInt32Array([0, 4]),
@@ -275,9 +286,9 @@ func _process(delta: float) -> void:
 		if not Input.is_action_pressed(action):
 			action_hold_times.erase(action)
 		elif action_hold_times.has(action):
-			action_hold_times.set(action, action_hold_times.get(action) + delta)
+			action_hold_times[action] = action_hold_times[action] + delta
 		else:
-			action_hold_times.set(action, 0.0)
+			action_hold_times[action] = 0.0
 
 
 func get_facing() -> int:
@@ -290,7 +301,11 @@ func get_facing_velocity() -> float:
 
 func get_local_floor_normal() -> Vector2:
 	var gravity_component: GravityComponent = get_component(GravityComponent)
-	return get_floor_normal().rotated(-gravity_component.get_angle()) if gravity_component else get_floor_normal()
+	return (
+		get_floor_normal().rotated(-gravity_component.get_angle())
+		if gravity_component
+		else get_floor_normal()
+	)
 
 
 func get_effective_friction() -> float:
@@ -311,7 +326,10 @@ func is_action_pressed(action: String) -> bool:
 func is_action_just_pressed(action: String, buffer: float = 0.0) -> bool:
 	if buffer > 0:
 		if action in BUFFERED_ACTIONS and action_hold_times.has(action):
-			return action_hold_times.get(action) < buffer and Input.is_action_pressed(action)
+			return (
+				action_hold_times[action] < buffer
+				and Input.is_action_pressed(action)
+			)
 	return Input.is_action_just_pressed(action)
 
 
@@ -373,13 +391,15 @@ func get_terrain() -> StringName:
 	if not floor_slope_raycast.is_colliding():
 		return &""
 	
-	var collider: CollisionObject2D = floor_slope_raycast.get_collider() as CollisionObject2D
+	var collider: CollisionObject2D = (
+		floor_slope_raycast.get_collider() as CollisionObject2D
+	)
 	if not collider:
 		return &""
 	
 	for i: int in footstep_terrains.size():
 		if collider.get_collision_layer_value(FOOTSTEP_LAYER_FIRST + i):
-			return footstep_terrains.get(i)
+			return footstep_terrains[i]
 	
 	return StringName(collider.get_meta(&"terrain", ""))
 
@@ -397,20 +417,41 @@ func get_spin_speed_scale(elapsed: float) -> float:
 	if not spin_speed_scale_curve:
 		return 1.0
 	
-	var ratio: float = clampf(elapsed / maxf(spin_fast_duration, 0.001), 0.0, 1.0)
-	return spin_speed_scale_curve.sample(lerpf(spin_speed_scale_curve.min_domain, spin_speed_scale_curve.max_domain, ratio))
+	var ratio: float = clampf(
+		elapsed / maxf(spin_fast_duration, 0.001),
+		0.0,
+		1.0,
+	)
+	return spin_speed_scale_curve.sample(
+		lerpf(
+			spin_speed_scale_curve.min_domain,
+			spin_speed_scale_curve.max_domain,
+			ratio,
+		)
+	)
 
 
 func enter_slow_spin() -> void:
 	var sprite_frames: SpriteFrames = sprite.diffuse_frames
-	var current_fps: float = sprite.speed_scale * sprite_frames.get_animation_speed(sprite.current_animation)
+	var current_fps: float = (
+		sprite.speed_scale
+		* sprite_frames.get_animation_speed(sprite.current_animation)
+	)
 	sprite.play_at_frame(&"spin_loop", sprite.current_frame)
-	sprite.speed_scale = current_fps / maxf(sprite_frames.get_animation_speed(&"spin_loop"), 0.001)
+	sprite.speed_scale = (
+		current_fps
+		/ maxf(sprite_frames.get_animation_speed(&"spin_loop"), 0.001)
+	)
 
 
 func play_footstep() -> void:
 	if footstep_bank:
-		footstep_bank.play_sfx_at(global_position, footstep_bank.bank_group, self, sprite)
+		footstep_bank.play_sfx_at(
+			global_position,
+			footstep_bank.bank_group,
+			self,
+			sprite,
+		)
 	if footstep_particles and abs(velocity.x) > 20:
 		footstep_particles.burst()
 
@@ -442,7 +483,11 @@ func cancel_stomp() -> void:
 
 
 func _on_feet_landed(_hurt_box: HurtBox) -> void:
-	if velocity.y < 0.0 or stomp_timer > 0.0 or machine.is_active(&"GroundPound"):
+	if (
+		velocity.y < 0.0
+		or stomp_timer > 0.0
+		or machine.is_active(&"GroundPound")
+	):
 		return
 	
 	if machine.is_active(&"Dive"):

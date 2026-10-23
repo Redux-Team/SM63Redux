@@ -11,8 +11,10 @@ extends CapMode
 @export_group("Water")
 @export var water_gravity_scale: float = 1.0
 @export var water_entry_damping: float = 1.0
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var water_max_fall_speed: float = 0.0
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var water_pound_fall_speed: float = 0.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var water_max_fall_speed: float = 0.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var water_pound_fall_speed: float = 0.0
 @export_group("Damage")
 @export var damage_scale: float = 1.0
 @export var knockback_scale: float = 1.0
@@ -28,7 +30,11 @@ func get_footstep_terrain() -> StringName:
 
 
 func get_water_fall_speed(pounding: bool) -> float:
-	return water_pound_fall_speed if pounding and water_pound_fall_speed > 0.0 else water_max_fall_speed
+	return (
+			water_pound_fall_speed
+			if pounding and water_pound_fall_speed > 0.0
+			else water_max_fall_speed
+	)
 
 
 func ignores_water() -> bool:

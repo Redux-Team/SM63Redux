@@ -22,4 +22,8 @@ func _process(_delta: float) -> void:
 		return
 	
 	_ghost.pivot_offset = _ghost.size * 0.5
-	_ghost.rotation_degrees = SpinningBlock.get_degrees(Time.get_ticks_msec() / 1000.0, _object.get_value(&"b_rotate_speed"), _object.get_value(&"b_wait_time"))
+	_ghost.rotation_degrees = SpinningBlock.get_degrees(
+			Time.get_ticks_msec() / 1000.0,
+			_object.get_value(&"b_rotate_speed"),
+			_object.get_value(&"b_wait_time"),
+	)

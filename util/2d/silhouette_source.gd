@@ -23,6 +23,10 @@ func _init() -> void:
 	RenderingServer.canvas_item_set_parent(_canvas, _viewport.world_2d.canvas)
 
 
+func _enter_tree() -> void:
+	RenderingServer.frame_pre_draw.connect(_redraw)
+
+
 func _ready() -> void:
 	_viewport.size = canvas_size
 	process_physics_priority = 1
@@ -35,6 +39,15 @@ func _physics_process(_delta: float) -> void:
 		_current = anchor.global_transform
 
 
+func _exit_tree() -> void:
+	RenderingServer.frame_pre_draw.disconnect(_redraw)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		RenderingServer.free_rid(_canvas)
+
+
 func get_anchor_transform() -> Transform2D:
 	return _previous.interpolate_with(_current, Engine.get_physics_interpolation_fraction())
 
@@ -43,19 +56,6 @@ func reset_anchor() -> void:
 	if is_instance_valid(anchor):
 		_previous = anchor.global_transform
 		_current = anchor.global_transform
-
-
-func _enter_tree() -> void:
-	RenderingServer.frame_pre_draw.connect(_redraw)
-
-
-func _exit_tree() -> void:
-	RenderingServer.frame_pre_draw.disconnect(_redraw)
-
-
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_PREDELETE:
-		RenderingServer.free_rid(_canvas)
 
 
 func get_texture() -> ViewportTexture:
@@ -67,17 +67,32 @@ func _redraw() -> void:
 	if not is_instance_valid(anchor):
 		return
 	
-	var origin: Transform2D = Transform2D(0.0, Vector2(canvas_size) / 2.0) * anchor.get_global_transform().affine_inverse()
+	var origin: Transform2D = (
+			Transform2D(0.0, Vector2(canvas_size) / 2.0)
+			* anchor.get_global_transform().affine_inverse()
+	)
 	for target: Sprite2D in targets:
 		if not is_instance_valid(target) or not target.texture or not target.is_visible_in_tree():
 			continue
 		
-		RenderingServer.canvas_item_add_set_transform(_canvas, origin * target.get_global_transform())
-		RenderingServer.canvas_item_add_texture_rect_region(_canvas, _destination_rect(target), target.texture.get_rid(), _source_rect(target))
+		RenderingServer.canvas_item_add_set_transform(
+				_canvas,
+				origin * target.get_global_transform(),
+		)
+		RenderingServer.canvas_item_add_texture_rect_region(
+				_canvas,
+				_destination_rect(target),
+				target.texture.get_rid(),
+				_source_rect(target),
+		)
 
 
 func _source_rect(sprite: Sprite2D) -> Rect2:
-	var full: Rect2 = sprite.region_rect if sprite.region_enabled else Rect2(Vector2.ZERO, sprite.texture.get_size())
+	var full: Rect2 = (
+			sprite.region_rect
+			if sprite.region_enabled
+			else Rect2(Vector2.ZERO, sprite.texture.get_size())
+	)
 	var size: Vector2 = full.size / Vector2(sprite.hframes, sprite.vframes)
 	return Rect2(full.position + size * Vector2(sprite.frame_coords), size)
 

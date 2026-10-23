@@ -111,7 +111,7 @@ func sort_layers() -> void:
 	var layers: Array[LevelLayer] = get_layers()
 	layers.sort_custom(func(a: LevelLayer, b: LevelLayer) -> bool: return a.index < b.index)
 	for i: int in layers.size():
-		var layer: LevelLayer = layers.get(i)
+		var layer: LevelLayer = layers[i]
 		move_child(layer, i)
 		layer.z_index = i * LevelLayer.Z_STRIDE
 

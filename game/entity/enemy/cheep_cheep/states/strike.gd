@@ -17,7 +17,7 @@ func _enter() -> void:
 	hurt_box_shape.set_deferred(&"disabled", true)
 	
 	var tween: Tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-	tween.tween_property(sprite, "rotation_degrees", SPIN_OUT_DEGREES, SPIN_OUT_DURATION)
+	tween.tween_property(sprite, ^"rotation_degrees", SPIN_OUT_DEGREES, SPIN_OUT_DURATION)
 
 
 func _tick(_delta: float) -> void:

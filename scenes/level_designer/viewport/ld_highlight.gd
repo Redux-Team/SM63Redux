@@ -16,14 +16,34 @@ var _materials: Dictionary[HighlightState, ShaderMaterial] = {}
 var _hover_dirty: bool = true
 
 
-func _setup() -> void:
-	for state: HighlightState in [HighlightState.HOVERED, HighlightState.SELECTED]:
-		_materials.set(state, _make_material(state, null))
-	editor.object_handler.selection.changed.connect(_sync)
-	editor.object_handler.objects_changed.connect(_on_objects_changed)
-	editor.tool_handler.tool_changed.connect(_mark_hover.unbind(1))
-	editor.viewport_handler.input_surface.gui_input.connect(_on_gui_input)
-	editor.viewport_handler.input_surface.mouse_exited.connect(_mark_hover)
+static func has_texture_visuals(object: GameObject) -> bool:
+	return not object.shape is PolygonShape and not _collect(object).is_empty()
+
+
+static func _collect(root: Node) -> Array[CanvasItem]:
+	var items: Array[CanvasItem] = []
+	for child: Node in root.get_children():
+		if child is CanvasItem and not (child as CanvasItem).visible:
+			continue
+		
+		if _is_textured(child):
+			items.append(child)
+		items.append_array(_collect(child))
+	
+	return items
+
+
+static func _is_textured(node: Node) -> bool:
+	if node is Sprite2D:
+		return (node as Sprite2D).texture != null
+	if node is NinePatchRect:
+		return (node as NinePatchRect).texture != null
+	if node is TextureRect:
+		return (node as TextureRect).texture != null
+	if node is Line2D:
+		return (node as Line2D).texture != null
+	
+	return node is AnimatedSprite2D
 
 
 func _process(_delta: float) -> void:
@@ -39,8 +59,14 @@ func _process(_delta: float) -> void:
 		_sync()
 
 
-static func has_texture_visuals(object: GameObject) -> bool:
-	return not object.shape is PolygonShape and not _collect(object).is_empty()
+func _setup() -> void:
+	for state: HighlightState in [HighlightState.HOVERED, HighlightState.SELECTED]:
+		_materials[state] = _make_material(state, null)
+	editor.object_handler.selection.changed.connect(_sync)
+	editor.object_handler.objects_changed.connect(_on_objects_changed)
+	editor.tool_handler.tool_changed.connect(_mark_hover.unbind(1))
+	editor.viewport_handler.input_surface.gui_input.connect(_on_gui_input)
+	editor.viewport_handler.input_surface.mouse_exited.connect(_mark_hover)
 
 
 func get_state(object: GameObject) -> HighlightState:
@@ -77,9 +103,9 @@ func _on_objects_changed() -> void:
 func _sync() -> void:
 	var wanted: Dictionary[GameObject, HighlightState] = {}
 	if is_instance_valid(hovered):
-		wanted.set(hovered, HighlightState.HOVERED)
+		wanted[hovered] = HighlightState.HOVERED
 	for object: GameObject in editor.object_handler.selection.get_objects():
-		wanted.set(object, HighlightState.SELECTED)
+		wanted[object] = HighlightState.SELECTED
 	
 	for key: Variant in _states.keys():
 		if not is_instance_valid(key):
@@ -89,10 +115,10 @@ func _sync() -> void:
 			_states.erase(key)
 	
 	for object: GameObject in wanted:
-		var state: HighlightState = wanted.get(object)
+		var state: HighlightState = wanted[object]
 		if _states.get(object, HighlightState.NONE) != state:
 			_apply(object, state)
-			_states.set(object, state)
+			_states[object] = state
 
 
 func _apply(object: GameObject, state: HighlightState) -> void:
@@ -112,7 +138,7 @@ func _apply(object: GameObject, state: HighlightState) -> void:
 		if original and original.get_shader_parameter(&"palette_texture") != null:
 			item.material = _make_material(state, original)
 		else:
-			item.material = _materials.get(state)
+			item.material = _materials[state]
 
 
 func _make_material(state: HighlightState, palette_source: ShaderMaterial) -> ShaderMaterial:
@@ -120,32 +146,9 @@ func _make_material(state: HighlightState, palette_source: ShaderMaterial) -> Sh
 	material.shader = SHADER
 	material.set_shader_parameter(&"state", state)
 	if palette_source:
-		material.set_shader_parameter(&"palette_texture", palette_source.get_shader_parameter(&"palette_texture"))
+		material.set_shader_parameter(
+				&"palette_texture",
+				palette_source.get_shader_parameter(&"palette_texture"),
+		)
 	
 	return material
-
-
-static func _collect(root: Node) -> Array[CanvasItem]:
-	var items: Array[CanvasItem] = []
-	for child: Node in root.get_children():
-		if child is CanvasItem and not (child as CanvasItem).visible:
-			continue
-		
-		if _is_textured(child):
-			items.append(child)
-		items.append_array(_collect(child))
-	
-	return items
-
-
-static func _is_textured(node: Node) -> bool:
-	if node is Sprite2D:
-		return (node as Sprite2D).texture != null
-	if node is NinePatchRect:
-		return (node as NinePatchRect).texture != null
-	if node is TextureRect:
-		return (node as TextureRect).texture != null
-	if node is Line2D:
-		return (node as Line2D).texture != null
-	
-	return node is AnimatedSprite2D

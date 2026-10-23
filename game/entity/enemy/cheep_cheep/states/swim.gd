@@ -18,8 +18,10 @@ var _boost: float = 1.0
 func _tick(delta: float) -> void:
 	var sweep: float = pingpong(_phase, 1.0) * 2.0 - 1.0
 	
-	if (sweep > 0.0 and (wall_check_r.is_colliding() or not water_check_r.is_in_water())) \
-	or (sweep < 0.0 and (wall_check_l.is_colliding() or not water_check_l.is_in_water())):
+	if (
+			(sweep > 0.0 and (wall_check_r.is_colliding() or not water_check_r.is_in_water()))
+			or (sweep < 0.0 and (wall_check_l.is_colliding() or not water_check_l.is_in_water()))
+	):
 		_boost = EDGE_BOOST
 	
 	_phase += _boost * delta / PERIOD

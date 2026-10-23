@@ -11,5 +11,5 @@ func _input(event: InputEvent) -> void:
 	if event is not InputEventMouseMotion:
 		text = TEXT % [
 			event.as_text(),
-			event.device
+			event.device,
 		]

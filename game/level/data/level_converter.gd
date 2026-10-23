@@ -3,9 +3,21 @@ class_name LevelConverter
 const LEGACY_VERSION: int = 1
 const DEFAULT_AREA_NAME: String = "Area 1"
 const TRANSFORM_KEYS: PackedStringArray = ["position", "rotation", "scale"]
-const SHAPE_KEYS: PackedStringArray = ["t_size_x", "t_size_y", "b_size_x", "b_size_y", "path_points"]
-const RENAMED: Dictionary[String, String] = {"rotation:arrow": "arrow_rotation"}
-const COLLISION_MODES: Dictionary[String, int] = {"Solid": 0, "Semisolid": 1, "None": 2}
+const SHAPE_KEYS: PackedStringArray = [
+	"t_size_x",
+	"t_size_y",
+	"b_size_x",
+	"b_size_y",
+	"path_points",
+]
+const RENAMED: Dictionary[String, String] = {
+	"rotation:arrow": "arrow_rotation",
+}
+const COLLISION_MODES: Dictionary[String, int] = {
+	"Solid": 0,
+	"Semisolid": 1,
+	"None": 2,
+}
 const BLOCK_DEFAULT: int = 32
 const LAYER_DISTANCE_MIN: float = -0.8
 const LAYER_DISTANCE_MAX: float = 9.0
@@ -33,14 +45,20 @@ static func convert(source: Dictionary) -> Dictionary:
 	var extras: Dictionary = {}
 	for key: String in ["stamps", "tags", "scenarios", "custom_music"]:
 		var value: Variant = legacy.get(key)
-		if value is Dictionary and not (value as Dictionary).is_empty() or value is Array and not (value as Array).is_empty():
+		if (
+				value is Dictionary and not (value as Dictionary).is_empty()
+				or value is Array and not (value as Array).is_empty()
+		):
 			extras.get_or_add("v1", {}).set(key, value)
 	
 	return {
 		"version": LevelData.VERSION,
 		"name": "",
 		"areas": areas,
-		"editor": {"active_area": int(editor.get("active_area", 0)), "hotbar": _convert_hotbar(editor.get("hotbar", []))},
+		"editor": {
+			"active_area": int(editor.get("active_area", 0)),
+			"hotbar": _convert_hotbar(editor.get("hotbar", [])),
+		},
 		"extras": extras,
 	}
 
@@ -48,12 +66,15 @@ static func convert(source: Dictionary) -> Dictionary:
 static func _normalize(source: Dictionary) -> Dictionary:
 	var legacy: Dictionary = source.duplicate(true)
 	if not legacy.has("areas"):
-		var area: Dictionary = {"name": DEFAULT_AREA_NAME, "layers": legacy.get("layers", [])}
+		var area: Dictionary = {
+			"name": DEFAULT_AREA_NAME,
+			"layers": legacy.get("layers", []),
+		}
 		var editor: Dictionary = legacy.get("editor", {})
 		for key: String in ["camera_position", "camera_zoom", "active_layer"]:
 			if editor.has(key):
-				area.set(key, editor.get(key))
-		legacy.set("areas", [area])
+				area[key] = editor[key]
+		legacy["areas"] = [area]
 	
 	return legacy
 
@@ -69,10 +90,14 @@ static func _convert_area(area: Dictionary, editor: Dictionary) -> Dictionary:
 		"uuid": StringName(Packer.generate_uuid()),
 		"name": str(area.get("name", DEFAULT_AREA_NAME)),
 		"camera_position": _vec(area.get("camera_position", Vector2.ZERO)),
-		"camera_zoom": _vec(zoom).x if zoom is Array or zoom is Vector2 else float(zoom),
+		"camera_zoom": (_vec(zoom).x if zoom is Array or zoom is Vector2 else float(zoom)),
 		"active_layer": int(area.get("active_layer", 0)),
 		"background": _convert_background(area.get("background", editor.get("background", {}))),
-		"music": area.get("music", {}) if area.get("music") is Dictionary else {"subtracks": area.get("music", [])},
+		"music": (
+				area.get("music", {})
+				if area.get("music") is Dictionary
+				else { "subtracks": area.get("music", []) }
+		),
 		"layer_groups": [],
 		"layers": layers,
 	}
@@ -101,7 +126,11 @@ static func _convert_layer(layer: Dictionary) -> Dictionary:
 static func _layer_distance(layer: Dictionary) -> float:
 	var legacy: Variant = layer.get("layer_scale", layer.get("parallax_scale"))
 	if legacy != null and not layer.get("is_decoration", false):
-		return clampf(1.0 / maxf(_vec(legacy).x, 0.01) - 1.0, LAYER_DISTANCE_MIN, LAYER_DISTANCE_MAX)
+		return clampf(
+				1.0 / maxf(_vec(legacy).x, 0.01) - 1.0,
+				LAYER_DISTANCE_MIN,
+				LAYER_DISTANCE_MAX,
+		)
 	
 	return clampf(float(layer.get("distance", 0.0)), LAYER_DISTANCE_MIN, LAYER_DISTANCE_MAX)
 
@@ -113,19 +142,20 @@ static func _convert_object(object: Dictionary, offset: Vector2 = Vector2.ZERO) 
 		push_warning("LevelConverter: dropped unknown object '%s'." % id)
 		return {}
 	
-	var properties: Dictionary = object.get("properties", {}) if object.get("properties") is Dictionary else {}
+	var properties: Dictionary = \
+			object.get("properties", {}) if object.get("properties") is Dictionary else {}
 	var values: Dictionary[StringName, Variant] = {}
 	for key: Variant in properties:
 		var name: String = str(key)
 		if TRANSFORM_KEYS.has(name) or SHAPE_KEYS.has(name):
 			continue
 		
-		var value: Variant = _convert_value(name, properties.get(key))
+		var value: Variant = _convert_value(name, properties[key])
 		if value != null:
-			values.set(StringName(RENAMED.get(name, name)), value)
+			values[StringName(RENAMED.get(name, name))] = value
 	
 	if id == &"moving_platform" and properties.has("t_size_x"):
-		values.set(&"platform_width", int(properties.get("t_size_x")))
+		values[&"platform_width"] = int(properties["t_size_x"])
 	
 	return {
 		"uuid": StringName(Packer.generate_uuid()),
@@ -147,18 +177,28 @@ static func _convert_value(key: String, value: Variant) -> Variant:
 	return value
 
 
-static func _convert_shape(kind: ObjectShape.Kind, object: Dictionary, properties: Dictionary) -> Dictionary:
+static func _convert_shape(
+		kind: ObjectShape.Kind,
+		object: Dictionary,
+		properties: Dictionary,
+) -> Dictionary:
 	match kind:
 		ObjectShape.Kind.POLYGON:
 			return _convert_polygon(object)
 		ObjectShape.Kind.PATH:
-			var points: PackedVector2Array = Packer.to_packed_vec2(properties.get("path_points", PackedVector2Array()))
-			return {"points": points} if points.size() >= PathShape.MIN_POINTS else {}
+			var points: PackedVector2Array = \
+					Packer.to_packed_vec2(properties.get("path_points", PackedVector2Array()))
+			return { "points": points } if points.size() >= PathShape.MIN_POINTS else {}
 		ObjectShape.Kind.TELESCOPING:
 			var units: Variant = properties.get("t_size_x", properties.get("t_size_y"))
-			return {"units": int(units)} if units != null else {}
+			return { "units": int(units) } if units != null else {}
 		ObjectShape.Kind.BLOCK:
-			return {"size": Vector2(int(properties.get("b_size_x", BLOCK_DEFAULT)), int(properties.get("b_size_y", BLOCK_DEFAULT)))}
+			return {
+				"size": Vector2(
+						int(properties.get("b_size_x", BLOCK_DEFAULT)),
+						int(properties.get("b_size_y", BLOCK_DEFAULT)),
+				),
+			}
 	
 	return {}
 
@@ -174,16 +214,17 @@ static func _convert_polygon(object: Dictionary) -> Dictionary:
 		if points.size() >= PolygonShape.MIN_POINTS:
 			rings.append(points)
 	
-	var forced: Dictionary = object.get("topline_forced", {}) if object.get("topline_forced") is Dictionary else {}
+	var forced: Dictionary = \
+			object.get("topline_forced", {}) if object.get("topline_forced") is Dictionary else {}
 	var toplines: Array[Vector3i] = []
 	for ring: int in rings.size():
-		var points: PackedVector2Array = rings.get(ring)
+		var points: PackedVector2Array = rings[ring]
 		for edge: int in points.size():
-			var key: String = _midpoint_key(points.get(edge), points.get((edge + 1) % points.size()))
+			var key: String = _midpoint_key(points[edge], points[(edge + 1) % points.size()])
 			if forced.has(key):
-				toplines.append(Vector3i(ring, edge, 1 if forced.get(key) else 0))
+				toplines.append(Vector3i(ring, edge, 1 if forced[key] else 0))
 	
-	return {"outer": outer, "holes": rings.slice(1), "toplines": toplines}
+	return { "outer": outer, "holes": rings.slice(1), "toplines": toplines }
 
 
 static func _midpoint_key(a: Vector2, b: Vector2) -> String:
@@ -196,21 +237,38 @@ static func _expand_stamps(stamps: Variant, areas: Array[Dictionary], legacy_are
 		return
 	
 	for i: int in areas.size():
-		var area_name: String = str((legacy_areas.get(i) as Dictionary).get("name", "")) if i < legacy_areas.size() and legacy_areas.get(i) is Dictionary else ""
+		var area_name: String = (
+				str((legacy_areas[i] as Dictionary).get("name", ""))
+				if i < legacy_areas.size() and legacy_areas[i] is Dictionary
+				else ""
+		)
 		for stamp: Variant in stamps:
 			if not stamp is Dictionary:
 				continue
 			
-			for instance: Dictionary in _stamp_instances((stamp as Dictionary).get("instances", {}), area_name):
+			for instance: Dictionary in _stamp_instances(
+					(stamp as Dictionary).get("instances", {}),
+					area_name,
+			):
 				var base: Vector2 = _vec(instance.get("position", Vector2.ZERO))
 				for entry: Variant in (stamp as Dictionary).get("objects", []):
 					if not entry is Dictionary:
 						continue
 					
-					var converted: Dictionary = _convert_object(entry, base + _vec((entry as Dictionary).get("local_offset", Vector2.ZERO)) - _vec((entry as Dictionary).get("position", Vector2.ZERO)))
+					var converted: Dictionary = _convert_object(
+							entry,
+							(
+									base
+									+ _vec((entry as Dictionary).get("local_offset", Vector2.ZERO))
+									- _vec((entry as Dictionary).get("position", Vector2.ZERO))
+							),
+					)
 					if not converted.is_empty():
-						var index: int = int(instance.get("layer_index", 0)) + int((entry as Dictionary).get("layer_offset", 0))
-						(_layer_for(areas.get(i), index).get("objects") as Array).append(converted)
+						var index: int = (
+								int(instance.get("layer_index", 0))
+								+ int((entry as Dictionary).get("layer_offset", 0))
+						)
+						(_layer_for(areas[i], index)["objects"] as Array).append(converted)
 
 
 static func _stamp_instances(instances: Variant, area_name: String) -> Array[Dictionary]:
@@ -219,7 +277,15 @@ static func _stamp_instances(instances: Variant, area_name: String) -> Array[Dic
 	if instances is Dictionary:
 		source = (instances as Dictionary).get(area_name, [])
 	elif instances is Array:
-		source = (instances as Array).filter(func(instance: Variant) -> bool: return instance is Dictionary and str((instance as Dictionary).get("area_name", area_name)) in ["", area_name])
+		source = (instances as Array).filter(
+				func(instance: Variant) -> bool:
+					return (
+						instance is Dictionary
+						and str(
+							(instance as Dictionary).get("area_name", area_name)
+						) in ["", area_name]
+					)
+		)
 	for instance: Variant in source:
 		if instance is Dictionary:
 			result.append(instance)
@@ -228,12 +294,12 @@ static func _stamp_instances(instances: Variant, area_name: String) -> Array[Dic
 
 
 static func _layer_for(area: Dictionary, index: int) -> Dictionary:
-	for layer: Dictionary in area.get("layers"):
-		if layer.get("index") == index:
+	for layer: Dictionary in area["layers"]:
+		if layer["index"] == index:
 			return layer
 	
-	var created: Dictionary = _convert_layer({"layer_index": index})
-	(area.get("layers") as Array).append(created)
+	var created: Dictionary = _convert_layer({ "layer_index": index })
+	(area["layers"] as Array).append(created)
 	return created
 
 
@@ -289,8 +355,16 @@ static func _background_layer(source: Dictionary) -> BackgroundLayer2D:
 		layer.modulate = _color(source.get("modulate", Color.WHITE))
 	layer.scroll_offset = _vec(source.get("offset", Vector2.ZERO))
 	layer.autoscroll = _vec(source.get("autoscroll", Vector2.ZERO))
-	layer.repeat_mode = BackgroundLayer.RepeatMode.INDEFINITE_X if source.get("repeat", true) else BackgroundLayer.RepeatMode.NONE
-	layer.anchor = BackgroundLayer2D.AnchorPos.TOP if int(source.get("anchor", 0)) == 1 else BackgroundLayer2D.AnchorPos.BOTTOM
+	layer.repeat_mode = (
+			BackgroundLayer.RepeatMode.INDEFINITE_X
+			if source.get("repeat", true)
+			else BackgroundLayer.RepeatMode.NONE
+	)
+	layer.anchor = (
+			BackgroundLayer2D.AnchorPos.TOP
+			if int(source.get("anchor", 0)) == 1
+			else BackgroundLayer2D.AnchorPos.BOTTOM
+	)
 	return layer
 
 

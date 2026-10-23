@@ -87,12 +87,19 @@ func _launch() -> void:
 	fludd.burst_particles(burst_duration, burst_scale)
 	
 	if sliding:
-		player.set_friction_modifier(FRICTION_KEY, slide_friction_scale, slide_duration)
+		player.set_friction_modifier(
+			FRICTION_KEY,
+			slide_friction_scale,
+			slide_duration,
+		)
 
 
 func _launch_direction(sliding: bool) -> Vector2:
 	var facing: float = float(player.get_facing())
-	var heading: Vector2 = Vector2(cos(fludd.body_rotation), sin(fludd.body_rotation))
+	var heading: Vector2 = Vector2(
+		cos(fludd.body_rotation),
+		sin(fludd.body_rotation),
+	)
 	
 	if sliding:
 		return heading * facing

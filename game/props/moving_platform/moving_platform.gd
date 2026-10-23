@@ -12,7 +12,12 @@ var _pivot: Node2D
 var _holder: Node2D
 
 
-static func build_visual(platform_texture: Texture2D, left: int, right: int, units: int) -> NinePatchRect:
+static func build_visual(
+		platform_texture: Texture2D,
+		left: int,
+		right: int,
+		units: int,
+) -> NinePatchRect:
 	var segment: int = platform_texture.get_width() - left - right
 	var patch: NinePatchRect = NinePatchRect.new()
 	patch.texture = platform_texture
@@ -33,13 +38,21 @@ static func get_offsets(amount: int, radius: float) -> PackedVector2Array:
 	return offsets
 
 
+func _physics_process(delta: float) -> void:
+	_pivot.rotation += delta * float(get_property(&"platform_period", 1.0))
+	_holder.global_rotation = 0.0
+
+
 func _on_init() -> void:
 	_pivot = Node2D.new()
 	add_child(_pivot)
 	_holder = Node2D.new()
 	add_child(_holder)
 	var units: int = get_property(&"platform_width", 1)
-	for offset: Vector2 in get_offsets(get_property(&"platform_amount", 1), get_property(&"platform_radius", 64.0)):
+	for offset: Vector2 in get_offsets(
+			get_property(&"platform_amount", 1),
+			get_property(&"platform_radius", 64.0),
+	):
 		var platform: AnimatableBody2D = _build_platform(units)
 		_holder.add_child(platform)
 		var remote: RemoteTransform2D = RemoteTransform2D.new()
@@ -49,11 +62,6 @@ func _on_init() -> void:
 		_pivot.add_child(remote)
 		remote.remote_path = remote.get_path_to(platform)
 		platform.global_position = remote.global_position
-
-
-func _physics_process(delta: float) -> void:
-	_pivot.rotation += delta * float(get_property(&"platform_period", 1.0))
-	_holder.global_rotation = 0.0
 
 
 func _build_platform(units: int) -> AnimatableBody2D:

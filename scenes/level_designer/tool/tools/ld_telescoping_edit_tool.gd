@@ -20,11 +20,19 @@ func _layout_handles() -> void:
 	var shape: TelescopingShape = get_shape(object)
 	var axis: Vector2 = shape.get_axis_vector()
 	var half: float = shape.get_length() * 0.5
-	var resize_cursor: Control.CursorShape = Control.CURSOR_HSIZE if shape.axis == TelescopingShape.Axis.HORIZONTAL else Control.CURSOR_VSIZE
+	var resize_cursor: Control.CursorShape = (
+			Control.CURSOR_HSIZE
+			if shape.axis == TelescopingShape.Axis.HORIZONTAL
+			else Control.CURSOR_VSIZE
+	)
 	for side: int in [-1, 1]:
-		var handle: LDHandle = place_handle(side, object.get_global_transform() * (axis * half * side), cap_style)
+		var handle: LDHandle = \
+				place_handle(side, object.get_global_transform() * (axis * half * side), cap_style)
 		handle.cursor = resize_cursor
-		handle.angle = (editor.world.get_canvas_transform() * object.get_global_transform()).get_rotation() + (0.0 if shape.axis == TelescopingShape.Axis.HORIZONTAL else PI * 0.5)
+		handle.angle = (
+				(editor.world.get_canvas_transform() * object.get_global_transform()).get_rotation()
+				+ (0.0 if shape.axis == TelescopingShape.Axis.HORIZONTAL else PI * 0.5)
+		)
 
 
 func _on_handle_pressed(_handle: LDHandle) -> void:
@@ -38,9 +46,14 @@ func _on_handle_dragged(handle: LDHandle, world_position: Vector2) -> void:
 	var side: int = handle.key
 	var axis: Vector2 = shape.get_axis_vector()
 	var start_length: float = shape.get_length(_before_units)
-	var local: Vector2 = _before_transform.affine_inverse() * to_parent(object, world_position, false)
+	var local: Vector2 = \
+			_before_transform.affine_inverse() * to_parent(object, world_position, false)
 	var reach: float = local.dot(axis) * side + start_length * 0.5
-	var units: int = clampi(roundi((reach - shape.get_caps_length()) / shape.get_segment_length()), shape.min_units, shape.max_units)
+	var units: int = clampi(
+			roundi((reach - shape.get_caps_length()) / shape.get_segment_length()),
+			shape.min_units,
+			shape.max_units,
+	)
 	_resize(object, units, side)
 
 
@@ -65,7 +78,10 @@ func _resize(object: GameObject, units: int, side: int) -> void:
 	var shape: TelescopingShape = get_shape(object)
 	var shift: float = (shape.get_length(units) - shape.get_length(_before_units)) * 0.5 * side
 	shape.set_units(units)
-	object.position = _before_transform.origin + _before_transform.basis_xform(shape.get_axis_vector() * shift)
+	object.position = (
+			_before_transform.origin
+			+ _before_transform.basis_xform(shape.get_axis_vector() * shift)
+	)
 	object.invalidate_bounds()
 
 
@@ -75,10 +91,9 @@ func _commit(action_name: String) -> void:
 	if shape.units == _before_units:
 		return
 	
-	editor.history_handler.create(action_name) \
-		.do(_apply.bind(object, shape.units, object.transform)) \
-		.undo(_apply.bind(object, _before_units, _before_transform)) \
-		.commit()
+	editor.history_handler.create(action_name).do(
+			_apply.bind(object, shape.units, object.transform)
+	).undo(_apply.bind(object, _before_units, _before_transform)).commit()
 
 
 func _apply(object: GameObject, units: int, object_transform: Transform2D) -> void:

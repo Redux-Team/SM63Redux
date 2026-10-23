@@ -26,21 +26,6 @@ var _saved_version: int = 0
 var _pending: Callable
 
 
-func _setup() -> void:
-	DirAccess.make_dir_recursive_absolute(SESSION_PATH.get_base_dir())
-	LD.bind_button(new_button, reset_level)
-	LD.bind_button(open_button, open)
-	LD.bind_button(save_button, save)
-	LD.bind_button(save_as_button, save_as)
-	open_dialog.filters = FILTERS
-	save_dialog.filters = FILTERS
-	open_dialog.file_selected.connect(open_path)
-	save_dialog.file_selected.connect(save_to)
-	confirm_dialog.confirmed.connect(_on_confirmed)
-	editor.history_handler.changed.connect(_refresh_title)
-	_open_initial()
-
-
 func _unhandled_input(event: InputEvent) -> void:
 	if editor.is_shortcut(event, &"ld_save"):
 		save()
@@ -54,6 +39,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	
 	get_viewport().set_input_as_handled()
+
+
+func _setup() -> void:
+	DirAccess.make_dir_recursive_absolute(SESSION_PATH.get_base_dir())
+	LD.bind_button(new_button, reset_level)
+	LD.bind_button(open_button, open)
+	LD.bind_button(save_button, save)
+	LD.bind_button(save_as_button, save_as)
+	open_dialog.filters = FILTERS
+	save_dialog.filters = FILTERS
+	open_dialog.file_selected.connect(open_path)
+	save_dialog.file_selected.connect(save_to)
+	confirm_dialog.confirmed.connect(_on_confirmed)
+	editor.history_handler.changed.connect(_refresh_title)
+	_open_initial()
 
 
 func has_unsaved_changes() -> bool:
@@ -91,12 +91,50 @@ func open_path(path: String) -> void:
 		return
 	
 	editor.viewport_handler.camera_control.depart()
-	Singleton.build_screen_transition() \
-		.set_blur() \
-		.set_hold_duration(0.0) \
-		.set_loading_delay(0.0) \
-		.add_threaded_task(_prepare.bind(path), _finish_open.bind(path, true)) \
-		.done()
+	(
+			Singleton.build_screen_transition()
+			.set_blur()
+			.set_hold_duration(0.0)
+			.set_loading_delay(0.0)
+			.add_threaded_task(_prepare.bind(path), _finish_open.bind(path, true))
+			.done()
+	)
+
+
+func save() -> void:
+	if file_path.is_empty():
+		save_as()
+	else:
+		save_to(file_path)
+
+
+func save_as() -> void:
+	save_dialog.current_path = file_path
+	save_dialog.popup_centered()
+
+
+func save_to(path: String) -> void:
+	if path == _legacy_path and not FileAccess.file_exists(path + LEGACY_BACKUP_SUFFIX):
+		DirAccess.copy_absolute(path, path + LEGACY_BACKUP_SUFFIX)
+	
+	var error: Error = LevelFile.write(path, editor.level_handler.capture())
+	if error != OK:
+		push_error(
+				"LDFileHandler: could not save '%s' (%s)." % [
+					path,
+					error_string(error),
+				]
+		)
+		return
+	
+	file_path = path
+	_remember(path)
+	autosave.discard()
+	_mark_saved()
+
+
+func discard_autosave() -> void:
+	autosave.discard()
 
 
 func _open_now(path: String) -> void:
@@ -145,37 +183,6 @@ func _apply_pending(path: String) -> bool:
 	return true
 
 
-func save() -> void:
-	if file_path.is_empty():
-		save_as()
-	else:
-		save_to(file_path)
-
-
-func save_as() -> void:
-	save_dialog.current_path = file_path
-	save_dialog.popup_centered()
-
-
-func save_to(path: String) -> void:
-	if path == _legacy_path and not FileAccess.file_exists(path + LEGACY_BACKUP_SUFFIX):
-		DirAccess.copy_absolute(path, path + LEGACY_BACKUP_SUFFIX)
-	
-	var error: Error = LevelFile.write(path, editor.level_handler.capture())
-	if error != OK:
-		push_error("LDFileHandler: could not save '%s' (%s)." % [path, error_string(error)])
-		return
-	
-	file_path = path
-	_remember(path)
-	autosave.discard()
-	_mark_saved()
-
-
-func discard_autosave() -> void:
-	autosave.discard()
-
-
 func _open_initial() -> void:
 	var session: EditorSession = Singleton.editor_session
 	var remembered: String = _read_session_path()
@@ -185,7 +192,10 @@ func _open_initial() -> void:
 	if recovery:
 		_pending_legacy = false
 		editor.level_handler.new_level()
-		if not Singleton.defer_threaded(_prepare_data.bind(recovery), _finish_recovery.bind(remembered)):
+		if not Singleton.defer_threaded(
+				_prepare_data.bind(recovery),
+				_finish_recovery.bind(remembered),
+		):
 			_prepare_data(recovery)
 			_finish_recovery(remembered)
 	elif FileAccess.file_exists(remembered):

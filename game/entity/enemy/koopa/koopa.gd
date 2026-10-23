@@ -1,13 +1,18 @@
 class_name Koopa
 extends Entity
 
-## The koopa, the parakoopa and the loose shell are one entity in three forms. The entry a designer
-## places says which form it wakes up in (see [SetupTrait]), and a hit walks it one step down the
-## chain - winged, then walking, then shell - by changing state rather than by freeing this object
+## The koopa, the parakoopa and the loose shell are one entity in three forms.
+## The entry a designer places says which form it wakes up in (see
+## [SetupTrait]), and a hit walks it one step down the chain - winged, then
+## walking, then shell - by changing state rather than by freeing this object
 ## and spawning the next one in its place.
 
 
-enum Form { KOOPA, PARAKOOPA, SHELL }
+enum Form {
+	KOOPA,
+	PARAKOOPA,
+	SHELL,
+}
 
 
 const SHELL_DROP_OFFSET: float = 8.0
@@ -26,8 +31,9 @@ const FORM_STATES: Dictionary[Form, StringName] = {
 @export var sfx_player: AudioStreamPlayer2D
 @export var wing_emitter: ParticleEmitter
 @export var back_wing_texture: Texture2D
-## The boxes each form fights with: one set is live at a time, so the single scene can carry the
-## walking body and the shell without both answering the same hit.
+## The boxes each form fights with: one set is live at a time, so the single
+## scene can carry the walking body and the shell without both answering the
+## same hit.
 @export var walker_boxes: Array[Node]
 @export var shell_boxes: Array[Node]
 
@@ -37,7 +43,8 @@ func _ready() -> void:
 	_apply_form()
 
 
-## Every hit lands here, whichever box caught it; what it means depends on the form being worn.
+## Every hit lands here, whichever box caught it; what it means depends on the
+## form being worn.
 func _on_hurt_box_damaged(source_hitbox: HitBox) -> void:
 	match form:
 		Form.SHELL:
@@ -64,8 +71,8 @@ func _change_form(next_form: Form) -> void:
 	sfx_player.play()
 
 
-## Hands the live boxes and the state over to the current form. Also the way the form the entry
-## asked for is put on in the first place.
+## Hands the live boxes and the state over to the current form. Also the way the
+## form the entry asked for is put on in the first place.
 func _apply_form() -> void:
 	var shelled: bool = form == Form.SHELL
 	for node: Node in walker_boxes:
@@ -73,7 +80,7 @@ func _apply_form() -> void:
 	for node: Node in shell_boxes:
 		_set_box_enabled(node, shelled)
 	
-	machine.change_state(FORM_STATES.get(form))
+	machine.change_state(FORM_STATES[form])
 
 
 func _set_box_enabled(node: Node, enabled: bool) -> void:
@@ -98,9 +105,10 @@ func _set_box_enabled(node: Node, enabled: bool) -> void:
 		shape.set_deferred(&"disabled", not enabled)
 
 
-## Kicked away from whatever hit it. Read from where the hit came rather than from which of a pair
-## of side boxes caught it: a stomp covering the whole shell landed on both, and whichever fired
-## last decided the direction. A hit landing dead centre sends the shell the way it already faces.
+## Kicked away from whatever hit it. Read from where the hit came rather than
+## from which of a pair of side boxes caught it: a stomp covering the whole
+## shell landed on both, and whichever fired last decided the direction. A hit
+## landing dead centre sends the shell the way it already faces.
 func _kick(source_hitbox: HitBox) -> void:
 	var direction: float = signf(global_position.x - source_hitbox.global_position.x)
 	if is_zero_approx(direction):
@@ -110,9 +118,10 @@ func _kick(source_hitbox: HitBox) -> void:
 	sfx_player.play()
 
 
-## Copies the idle in-scene emitter into the level as a one-shot wing puff. Duplicating on losing
-## the wings rather than in _ready keeps every copy parented, so a parakoopa still winged when the
-## level unloads cannot strand them outside the tree.
+## Copies the idle in-scene emitter into the level as a one-shot wing puff.
+## Duplicating on losing the wings rather than in _ready keeps every copy
+## parented, so a parakoopa still winged when the level unloads cannot strand
+## them outside the tree.
 func _shed_wings() -> void:
 	_spawn_wing_particle()
 	var back_wing: ParticleEmitter = _spawn_wing_particle()

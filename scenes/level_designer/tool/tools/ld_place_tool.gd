@@ -7,6 +7,15 @@ extends LDTool
 var _preview: GameObject
 
 
+func _process(_delta: float) -> void:
+	var layer: LevelLayer = editor.level_handler.active_layer
+	if _preview == null or layer == null:
+		return
+	
+	preview_root.global_transform = layer.get_objects_root().get_global_transform()
+	_preview.position = get_snapped_mouse()
+
+
 func _setup() -> void:
 	editor.tool_handler.armed_changed.connect(_on_armed_changed.unbind(1))
 
@@ -19,31 +28,35 @@ func _deactivate() -> void:
 	_clear_preview()
 
 
-func _process(_delta: float) -> void:
-	var layer: LevelLayer = editor.level_handler.active_layer
-	if _preview == null or layer == null:
-		return
-	
-	preview_root.global_transform = layer.get_objects_root().get_global_transform()
-	_preview.position = get_snapped_mouse()
-
-
 func _tool_input(event: InputEvent, _world_position: Vector2) -> bool:
 	var mouse_button: InputEventMouseButton = event as InputEventMouseButton
-	if mouse_button == null or mouse_button.button_index != MOUSE_BUTTON_LEFT or not mouse_button.pressed or editor.tool_handler.armed == null:
+	if (
+			mouse_button == null
+			or mouse_button.button_index != MOUSE_BUTTON_LEFT
+			or not mouse_button.pressed
+			or editor.tool_handler.armed == null
+	):
 		return false
 	
 	var object: GameObject = create_object(get_snapped_mouse())
-	editor.object_handler.add_objects([object], editor.level_handler.active_layer, "Place %s" % editor.tool_handler.armed.display_name, false)
+	editor.object_handler.add_objects(
+			[object],
+			editor.level_handler.active_layer,
+			"Place %s" % editor.tool_handler.armed.display_name,
+			false,
+	)
 	return true
 
 
 func get_snapped_mouse() -> Vector2:
-	return editor.viewport_handler.snap(editor.viewport_handler.get_layer_mouse(editor.level_handler.active_layer))
+	return editor.viewport_handler.snap(
+			editor.viewport_handler.get_layer_mouse(editor.level_handler.active_layer)
+	)
 
 
 func create_object(local_position: Vector2) -> GameObject:
-	var object: GameObject = editor.object_handler.spawn(editor.tool_handler.armed.id, local_position)
+	var object: GameObject = \
+			editor.object_handler.spawn(editor.tool_handler.armed.id, local_position)
 	for property: ObjectProperty in object.properties:
 		if editor.tool_handler.should_randomize(property):
 			object.set_value(property.key, property.random_value())

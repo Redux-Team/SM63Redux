@@ -3,35 +3,14 @@
 const CELL_SIZE: int = 32
 const ALIGN_EPSILON: float = 0.5
 const PINCH_EPSILON: float = 0.1
-const NEIGHBOURS: Array[Vector2i] = [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
+const NEIGHBOURS: Array[Vector2i] = [
+	Vector2i.UP,
+	Vector2i.DOWN,
+	Vector2i.LEFT,
+	Vector2i.RIGHT,
+]
 
 static var cell_offset: Vector2 = Vector2(CELL_SIZE, CELL_SIZE) * 0.5
-
-
-class Shape:
-	var outer: PackedVector2Array
-	var holes: Array[PackedVector2Array]
-	
-	
-	func _init(outer_ring: PackedVector2Array, hole_rings: Array[PackedVector2Array]) -> void:
-		outer = outer_ring
-		holes = hole_rings
-	
-	
-	func get_rings() -> Array[PackedVector2Array]:
-		var rings: Array[PackedVector2Array] = [outer]
-		rings.append_array(holes)
-		return rings
-
-
-class Ring:
-	var points: PackedVector2Array
-	var owners: Array[Vector2i]
-	
-	
-	func _init(ring_points: PackedVector2Array, owner_cells: Array[Vector2i]) -> void:
-		points = ring_points
-		owners = owner_cells
 
 
 static func world_to_cell(point: Vector2) -> Vector2i:
@@ -46,13 +25,19 @@ static func cell_to_world(cell: Vector2i) -> Vector2:
 static func is_aligned(points: PackedVector2Array) -> bool:
 	for point: Vector2 in points:
 		var local: Vector2 = point - cell_offset
-		if absf(local.x - snappedf(local.x, CELL_SIZE)) > ALIGN_EPSILON or absf(local.y - snappedf(local.y, CELL_SIZE)) > ALIGN_EPSILON:
+		if (
+				absf(local.x - snappedf(local.x, CELL_SIZE)) > ALIGN_EPSILON
+				or absf(local.y - snappedf(local.y, CELL_SIZE)) > ALIGN_EPSILON
+		):
 			return false
 	
 	return true
 
 
-static func rasterize(outer: PackedVector2Array, holes: Array[PackedVector2Array]) -> Dictionary[Vector2i, bool]:
+static func rasterize(
+		outer: PackedVector2Array,
+		holes: Array[PackedVector2Array],
+) -> Dictionary[Vector2i, bool]:
 	var cells: Dictionary[Vector2i, bool] = {}
 	if outer.size() < 3:
 		return cells
@@ -63,8 +48,11 @@ static func rasterize(outer: PackedVector2Array, holes: Array[PackedVector2Array
 		for x: int in range(area.position.x, area.end.x):
 			var cell: Vector2i = Vector2i(x, y)
 			var centre: Vector2 = cell_to_world(cell) + half
-			if Geometry2D.is_point_in_polygon(centre, outer) and not holes.any(func(hole: PackedVector2Array) -> bool: return Geometry2D.is_point_in_polygon(centre, hole)):
-				cells.set(cell, true)
+			if Geometry2D.is_point_in_polygon(centre, outer) and not holes.any(
+					func(hole: PackedVector2Array) -> bool:
+						return Geometry2D.is_point_in_polygon(centre, hole)
+			):
+				cells[cell] = true
 	
 	return cells
 
@@ -89,7 +77,7 @@ static func trace(cells: Dictionary[Vector2i, bool]) -> Array[Shape]:
 		var current: Vector2i = start
 		var heading: Vector2i = Vector2i.ZERO
 		while links.has(current):
-			var outgoing: Array = links.get(current)
+			var outgoing: Array = links[current]
 			var next: Vector2i = _pick_next(outgoing, current, heading)
 			outgoing.erase(next)
 			if outgoing.is_empty():
@@ -118,13 +106,16 @@ static func trace(cells: Dictionary[Vector2i, bool]) -> Array[Shape]:
 		var owner_index: int = -1
 		var owner_area: float = 0.0
 		for i: int in outers.size():
-			var candidate: PackedVector2Array = outers.get(i).points
+			var candidate: PackedVector2Array = outers[i].points
 			var area: float = absf(TerrainPolygon.signed_area(candidate))
-			if Geometry2D.is_point_in_polygon(probe, candidate) and (owner_index < 0 or area < owner_area):
+			if (
+					Geometry2D.is_point_in_polygon(probe, candidate)
+					and (owner_index < 0 or area < owner_area)
+			):
 				owner_index = i
 				owner_area = area
 		if owner_index >= 0:
-			grouped.get(owner_index).append(hole)
+			grouped[owner_index].append(hole)
 	
 	var shapes: Array[Shape] = []
 	for entry: Array in grouped:
@@ -133,7 +124,7 @@ static func trace(cells: Dictionary[Vector2i, bool]) -> Array[Shape]:
 		_open_pinches(rings)
 		var hole_points: Array[PackedVector2Array] = []
 		for i: int in range(1, rings.size()):
-			hole_points.append(rings.get(i).points)
+			hole_points.append(rings[i].points)
 		shapes.append(Shape.new(rings.front().points, hole_points))
 	
 	return shapes
@@ -142,9 +133,9 @@ static func trace(cells: Dictionary[Vector2i, bool]) -> Array[Shape]:
 static func dilate(cells: Dictionary[Vector2i, bool]) -> Dictionary[Vector2i, bool]:
 	var result: Dictionary[Vector2i, bool] = {}
 	for cell: Vector2i in cells:
-		result.set(cell, true)
+		result[cell] = true
 		for step: Vector2i in NEIGHBOURS:
-			result.set(cell + step, true)
+			result[cell + step] = true
 	
 	return result
 
@@ -155,39 +146,42 @@ static func enclosed(cells: Dictionary[Vector2i, bool]) -> Dictionary[Vector2i, 
 		return result
 	
 	var bounds: Rect2i = cell_bounds(cells).grow(1)
-	var reached: Dictionary[Vector2i, bool] = {bounds.position: true}
+	var reached: Dictionary[Vector2i, bool] = { bounds.position: true }
 	var frontier: Array[Vector2i] = [bounds.position]
 	while not frontier.is_empty():
 		var cell: Vector2i = frontier.pop_back()
 		for step: Vector2i in NEIGHBOURS:
 			var next: Vector2i = cell + step
 			if bounds.has_point(next) and not cells.has(next) and not reached.has(next):
-				reached.set(next, true)
+				reached[next] = true
 				frontier.append(next)
 	
 	for y: int in range(bounds.position.y, bounds.end.y):
 		for x: int in range(bounds.position.x, bounds.end.x):
 			var cell: Vector2i = Vector2i(x, y)
 			if not cells.has(cell) and not reached.has(cell):
-				result.set(cell, true)
+				result[cell] = true
 	
 	return result
 
 
-static func region(cells: Dictionary[Vector2i, bool], start: Vector2i) -> Dictionary[Vector2i, bool]:
+static func region(
+		cells: Dictionary[Vector2i, bool],
+		start: Vector2i,
+) -> Dictionary[Vector2i, bool]:
 	var holes: Dictionary[Vector2i, bool] = enclosed(cells)
 	var result: Dictionary[Vector2i, bool] = {}
 	if not holes.has(start):
 		return result
 	
-	result.set(start, true)
+	result[start] = true
 	var frontier: Array[Vector2i] = [start]
 	while not frontier.is_empty():
 		var cell: Vector2i = frontier.pop_back()
 		for step: Vector2i in NEIGHBOURS:
 			var next: Vector2i = cell + step
 			if holes.has(next) and not result.has(next):
-				result.set(next, true)
+				result[next] = true
 				frontier.append(next)
 	
 	return result
@@ -259,9 +253,9 @@ static func _to_ring(corners: Array[Vector2i]) -> Ring:
 	var owners: Array[Vector2i] = []
 	var count: int = corners.size()
 	for i: int in count:
-		var current: Vector2i = corners.get(i)
-		var into: Vector2i = current - corners.get((i - 1 + count) % count)
-		var out_of: Vector2i = corners.get((i + 1) % count) - current
+		var current: Vector2i = corners[i]
+		var into: Vector2i = current - corners[(i - 1 + count) % count]
+		var out_of: Vector2i = corners[(i + 1) % count] - current
 		if into.x * out_of.y - into.y * out_of.x == 0 and into.x * out_of.x + into.y * out_of.y > 0:
 			continue
 		
@@ -287,20 +281,48 @@ static func _open_pinches(rings: Array[Ring]) -> void:
 	var counts: Dictionary[Vector2, int] = {}
 	for ring: Ring in rings:
 		for point: Vector2 in ring.points:
-			counts.set(point, counts.get(point, 0) + 1)
+			counts[point] = counts.get(point, 0) + 1
 	
 	var half: Vector2 = Vector2(CELL_SIZE, CELL_SIZE) * 0.5
 	for ring: Ring in rings:
 		for i: int in ring.points.size():
-			var point: Vector2 = ring.points.get(i)
+			var point: Vector2 = ring.points[i]
 			if counts.get(point, 0) >= 2:
-				ring.points.set(i, point + (cell_to_world(ring.owners.get(i)) + half - point).normalized() * PINCH_EPSILON)
+				ring.points[i] = point + (
+						cell_to_world(ring.owners[i]) + half - point
+				).normalized() * PINCH_EPSILON
 
 
 static func _interior_probe(ring: PackedVector2Array) -> Vector2:
-	var corner: Vector2 = ring.get(0)
+	var corner: Vector2 = ring[0]
 	for point: Vector2 in ring:
 		if point.y < corner.y or (point.y == corner.y and point.x < corner.x):
 			corner = point
 	
 	return corner + Vector2(CELL_SIZE, CELL_SIZE) * 0.5
+
+
+class Shape:
+	var outer: PackedVector2Array
+	var holes: Array[PackedVector2Array]
+	
+	
+	func _init(outer_ring: PackedVector2Array, hole_rings: Array[PackedVector2Array]) -> void:
+		outer = outer_ring
+		holes = hole_rings
+	
+	
+	func get_rings() -> Array[PackedVector2Array]:
+		var rings: Array[PackedVector2Array] = [outer]
+		rings.append_array(holes)
+		return rings
+
+
+class Ring:
+	var points: PackedVector2Array
+	var owners: Array[Vector2i]
+	
+	
+	func _init(ring_points: PackedVector2Array, owner_cells: Array[Vector2i]) -> void:
+		points = ring_points
+		owners = owner_cells

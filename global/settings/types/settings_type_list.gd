@@ -4,7 +4,7 @@ extends SettingsType
 
 enum Hint {
 	DROPDOWN,
-	SLIDER
+	SLIDER,
 }
 
 @export var options: PackedStringArray
@@ -16,8 +16,10 @@ var current_value: int = 0:
 		apply()
 
 
-func option() -> String:
-	return options.get(current_value) if current_value < options.size() else ""
+func _validate_property(property: Dictionary) -> void:
+	if property.name == "default_value":
+		property["hint"] = PROPERTY_HINT_ENUM
+		property["hint_string"] = ",".join(options)
 
 
 func _serialize() -> String:
@@ -30,7 +32,7 @@ func _deserialize(string: String) -> void:
 
 
 func _get_default_value() -> Variant:
-	return options.get(default_value)
+	return options[default_value]
 
 
 func _restore_default() -> void:
@@ -42,13 +44,14 @@ func _get_value() -> Variant:
 
 
 func _property_info() -> Dictionary:
-	var info: Dictionary = {"hint": PROPERTY_HINT_ENUM, "hint_string": ",".join(options)}
+	var info: Dictionary = {
+		"hint": PROPERTY_HINT_ENUM,
+		"hint_string": ",".join(options),
+	}
 	if hint == Hint.SLIDER:
-		info.set("widget", &"enum_slider")
+		info["widget"] = &"enum_slider"
 	return info
 
 
-func _validate_property(property: Dictionary) -> void:
-	if property.name == "default_value":
-		property.set("hint", PROPERTY_HINT_ENUM)
-		property.set("hint_string", ",".join(options))
+func option() -> String:
+	return options[current_value] if current_value < options.size() else ""

@@ -17,4 +17,12 @@ func _draw() -> void:
 	var step: float = TAU / dash_count
 	for dash: int in dash_count:
 		var start: float = step * dash
-		draw_arc(Vector2.ZERO, radius, start, start + step * dash_fraction, points_per_dash, color, width)
+		draw_arc(
+				Vector2.ZERO,
+				radius,
+				start,
+				start + step * dash_fraction,
+				points_per_dash,
+				color,
+				width,
+		)

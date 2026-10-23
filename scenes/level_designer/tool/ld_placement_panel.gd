@@ -12,6 +12,10 @@ var _on_change: Callable
 var _bindings: Array[PropertyBinding] = []
 
 
+func get_title() -> String:
+	return "%s - %s" % [title, _entry.display_name] if _entry else title
+
+
 func edit(entry: ObjectRegistry.Entry, values: Dictionary, on_change: Callable) -> void:
 	_entry = entry
 	_values = values
@@ -23,21 +27,28 @@ func edit(entry: ObjectRegistry.Entry, values: Dictionary, on_change: Callable) 
 		open()
 
 
-func get_title() -> String:
-	return "%s - %s" % [title, _entry.display_name] if _entry else title
-
-
 func _build() -> void:
 	for child: Node in container.get_children():
 		child.queue_free()
 	_bindings.clear()
-	var sample: GameObject = ObjectRegistry.spawn(ObjectData.create(_entry.id), GameObject.Context.EDITOR)
+	var sample: GameObject = \
+			ObjectRegistry.spawn(ObjectData.create(_entry.id), GameObject.Context.EDITOR)
 	if sample.has_flag(GameObject.Flag.ROTATABLE) or sample.has_flag(GameObject.Flag.SCALABLE):
 		_add_header("Transform")
 	if sample.has_flag(GameObject.Flag.ROTATABLE):
-		_add_row(LDToolHandler.ROTATION_KEY, 0.0, "Rotation", {"type": TYPE_FLOAT})
+		_add_row(LDToolHandler.ROTATION_KEY, 0.0, "Rotation", { "type": TYPE_FLOAT })
 	if sample.has_flag(GameObject.Flag.SCALABLE):
-		_add_row(LDToolHandler.SCALE_KEY, Vector2.ONE, "Scale", {"type": TYPE_VECTOR2, "widget": &"vector2_range", "hint_string": "0.25,4,0.05", "format": "%.2fx"})
+		_add_row(
+				LDToolHandler.SCALE_KEY,
+				Vector2.ONE,
+				"Scale",
+				{
+					"type": TYPE_VECTOR2,
+					"widget": &"vector2_range",
+					"hint_string": "0.25,4,0.05",
+					"format": "%.2fx",
+				},
+		)
 	var section: StringName = &""
 	var first: bool = true
 	for property: ObjectProperty in sample.properties:
@@ -63,9 +74,9 @@ func _add_header(text: String) -> void:
 
 func _add_row(key: StringName, default: Variant, label: String, info: Dictionary) -> void:
 	var binding: PropertyBinding = PropertyBinding.new(
-		func() -> Variant: return _values.get(key, default),
-		_store.bind(key, default),
-		label, info)
+			func() -> Variant: return _values.get(key, default),
+			_store.bind(key, default),
+			label, info)
 	var row: Control = LDInspector.make_row(binding, default, reset_icon)
 	if row:
 		_bindings.append(binding)
@@ -76,7 +87,7 @@ func _store(value: Variant, key: StringName, default: Variant) -> void:
 	if value == default:
 		_values.erase(key)
 	else:
-		_values.set(key, value)
+		_values[key] = value
 	
 	for binding: PropertyBinding in _bindings:
 		binding.refresh()

@@ -35,13 +35,15 @@ const DETACH_LOOKAHEAD_STEPS: float = 4.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var impact_hold: float = 0.05
 @export_group("Drawing")
 ## Minimum distance between drawn points.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px") var min_point_spacing: float = 1.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px")
+var min_point_spacing: float = 1.0
 ## Distance the stream starts back from the nozzle along its direction.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var start_offset: float = 6.0
 @export_group("Breaking")
 ## Nozzle turn within one tick that splits the stream.
 @export_range(0.0, 180.0, 0.1, "degrees") var break_angle: float = 45.0
-## Nozzle jump relative to the carrier within one tick that splits the stream; zero disables it.
+## Nozzle jump relative to the carrier within one tick that splits the stream;
+## zero disables it.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var break_distance: float = 0.0
 ## Age below which a split restarts the current stream instead of detaching it.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var break_cooldown: float = 0.1
@@ -66,7 +68,8 @@ const DETACH_LOOKAHEAD_STEPS: float = 4.0
 
 ## FLUDD power from zero to one, used to scale the stream's width.
 var power_ratio: float = 1.0
-## Stream settings overriding the default profile; changing it detaches the current stream.
+## Stream settings overriding the default profile; changing it detaches the
+## current stream.
 var profile: SprayProfile:
 	set(value):
 		if value != profile:
@@ -100,10 +103,38 @@ func _ready() -> void:
 	_carrier_previous = _carrier_current
 
 
-func _attach(anchor: GameObject) -> void:
-	reparent(anchor, false)
-	anchor.move_child(self, 0)
-	global_transform = Transform2D.IDENTITY
+func _process(delta: float) -> void:
+	var fraction: float = (
+			Engine.get_physics_interpolation_fraction()
+			if nozzle.is_physics_interpolated_and_enabled()
+			else 1.0
+	)
+	var origin: Vector2 = _get_origin(_previous).lerp(_get_origin(_current), fraction)
+	for segment: Segment in _segments:
+		_draw_segment(segment, origin, fraction, delta)
+	
+	var shader: ShaderMaterial = line.material as ShaderMaterial
+	shader.set_shader_parameter(&"body_region", _get_region(line.texture))
+	shader.set_shader_parameter(&"top_region", _get_region(top_cap))
+	shader.set_shader_parameter(
+			&"uv_length",
+			(
+					line.width
+					* _get_width_padding()
+					* line.texture.get_width()
+					/ line.texture.get_height()
+			),
+	)
+	shader.set_shader_parameter(&"width_padding", _get_width_padding())
+	shader.set_shader_parameter(&"tail_width_scale", tail_width_scale)
+	shader.set_shader_parameter(&"tail_taper_start", tail_taper_start)
+	shader.set_shader_parameter(&"tail_fade_start", tail_fade_start)
+	shader.set_shader_parameter(&"body_length", _get_natural_length(line.texture))
+	shader.set_shader_parameter(&"top_length", _get_natural_length(top_cap))
+	shader.set_shader_parameter(&"flow_speed", flow_speed)
+	shader.set_shader_parameter(&"wobble_amount", wobble_amount)
+	shader.set_shader_parameter(&"wobble_frequency", wobble_frequency)
+	shader.set_shader_parameter(&"wobble_speed", wobble_speed)
 
 
 func _physics_process(delta: float) -> void:
@@ -130,26 +161,10 @@ func _physics_process(delta: float) -> void:
 	_prune()
 
 
-func _process(delta: float) -> void:
-	var fraction: float = Engine.get_physics_interpolation_fraction() if nozzle.is_physics_interpolated_and_enabled() else 1.0
-	var origin: Vector2 = _get_origin(_previous).lerp(_get_origin(_current), fraction)
-	for segment: Segment in _segments:
-		_draw_segment(segment, origin, fraction, delta)
-	
-	var shader: ShaderMaterial = line.material as ShaderMaterial
-	shader.set_shader_parameter(&"body_region", _get_region(line.texture))
-	shader.set_shader_parameter(&"top_region", _get_region(top_cap))
-	shader.set_shader_parameter(&"uv_length", line.width * _get_width_padding() * line.texture.get_width() / line.texture.get_height())
-	shader.set_shader_parameter(&"width_padding", _get_width_padding())
-	shader.set_shader_parameter(&"tail_width_scale", tail_width_scale)
-	shader.set_shader_parameter(&"tail_taper_start", tail_taper_start)
-	shader.set_shader_parameter(&"tail_fade_start", tail_fade_start)
-	shader.set_shader_parameter(&"body_length", _get_natural_length(line.texture))
-	shader.set_shader_parameter(&"top_length", _get_natural_length(top_cap))
-	shader.set_shader_parameter(&"flow_speed", flow_speed)
-	shader.set_shader_parameter(&"wobble_amount", wobble_amount)
-	shader.set_shader_parameter(&"wobble_frequency", wobble_frequency)
-	shader.set_shader_parameter(&"wobble_speed", wobble_speed)
+func _attach(anchor: GameObject) -> void:
+	reparent(anchor, false)
+	anchor.move_child(self, 0)
+	global_transform = Transform2D.IDENTITY
 
 
 func _get_origin(nozzle_transform: Transform2D) -> Vector2:
@@ -165,7 +180,12 @@ func _get_region(texture: Texture2D) -> Vector4:
 	if not atlas:
 		return Vector4(0.0, 0.0, 1.0, 1.0)
 	var size: Vector2 = atlas.atlas.get_size()
-	return Vector4(atlas.region.position.x / size.x, atlas.region.position.y / size.y, atlas.region.size.x / size.x, atlas.region.size.y / size.y)
+	return Vector4(
+			atlas.region.position.x / size.x,
+			atlas.region.position.y / size.y,
+			atlas.region.size.x / size.x,
+			atlas.region.size.y / size.y,
+	)
 
 
 func _get_natural_length(texture: Texture2D) -> float:
@@ -174,8 +194,14 @@ func _get_natural_length(texture: Texture2D) -> float:
 
 func _is_discontinuous() -> bool:
 	var turn: float = absf(_previous.y.angle_to(_current.y))
-	var shift: Vector2 = (_current.origin - _carrier_current) - (_previous.origin - _carrier_previous)
-	return turn > deg_to_rad(break_angle) or carrier and break_distance > 0.0 and shift.length() > break_distance
+	var shift: Vector2 = \
+			(_current.origin - _carrier_current) - (_previous.origin - _carrier_previous)
+	return (
+			turn > deg_to_rad(break_angle)
+			or carrier
+			and break_distance > 0.0
+			and shift.length() > break_distance
+	)
 
 
 func _break(delta: float) -> void:
@@ -213,8 +239,16 @@ func _emit(delta: float) -> void:
 		_emit_clock -= interval
 		var sample: Sample = Sample.new()
 		sample.age = _emit_clock
-		sample.velocity = direction.rotated(deg_to_rad(randf_range(-spread, spread))) * _active.profile.speed + source_velocity * _active.profile.inherit_velocity
-		sample.position = origin + sample.velocity * sample.age + 0.5 * _active.profile.gravity * sample.age * sample.age
+		sample.velocity = (
+				direction.rotated(deg_to_rad(randf_range(-spread, spread)))
+				* _active.profile.speed
+				+ source_velocity * _active.profile.inherit_velocity
+		)
+		sample.position = (
+				origin
+				+ sample.velocity * sample.age
+				+ 0.5 * _active.profile.gravity * sample.age * sample.age
+		)
 		sample.previous = sample.position - (origin - _get_origin(_previous))
 		_active.samples.push_front(sample)
 
@@ -225,11 +259,17 @@ func _advance(segment: Segment, space: PhysicsDirectSpaceState2D, delta: float) 
 	var reach: float = 0.0
 	var last: Vector2 = _get_origin(_current)
 	for index: int in segment.samples.size():
-		var sample: Sample = segment.samples.get(index)
-		var next: Vector2 = sample.position + sample.velocity * delta + 0.5 * segment.profile.gravity * delta * delta
-		var hit: Dictionary = space.intersect_ray(PhysicsRayQueryParameters2D.create(sample.position, next, collision_mask))
+		var sample: Sample = segment.samples[index]
+		var next: Vector2 = (
+				sample.position
+				+ sample.velocity * delta
+				+ 0.5 * segment.profile.gravity * delta * delta
+		)
+		var hit: Dictionary = space.intersect_ray(
+				PhysicsRayQueryParameters2D.create(sample.position, next, collision_mask)
+		)
 		if segment.attached or index > 0:
-			reach += last.distance_to(next if hit.is_empty() else hit.get("position"))
+			reach += last.distance_to(next if hit.is_empty() else hit["position"])
 		
 		if reach > segment.profile.max_length:
 			_move(sample, next, segment.profile.gravity, delta)
@@ -237,7 +277,7 @@ func _advance(segment: Segment, space: PhysicsDirectSpaceState2D, delta: float) 
 			return
 		
 		if not hit.is_empty():
-			_impact(segment, hit.get("position"))
+			_impact(segment, hit["position"])
 			_split(segment, index + 1, space, delta)
 			segment.samples.resize(index)
 			return
@@ -253,9 +293,11 @@ func _split(segment: Segment, from: int, space: PhysicsDirectSpaceState2D, delta
 	if segment.samples.size() - from < 2:
 		return
 	
-	var head: Sample = segment.samples.get(from)
+	var head: Sample = segment.samples[from]
 	var ahead: Vector2 = head.position + head.velocity * delta * DETACH_LOOKAHEAD_STEPS
-	if not space.intersect_ray(PhysicsRayQueryParameters2D.create(head.position, ahead, collision_mask)).is_empty():
+	if not space.intersect_ray(
+			PhysicsRayQueryParameters2D.create(head.position, ahead, collision_mask)
+	).is_empty():
 		return
 	
 	var detached: Segment = Segment.new(line.duplicate() as Line2D, segment.profile)
@@ -289,7 +331,7 @@ func _impact(segment: Segment, point: Vector2) -> void:
 
 func _prune() -> void:
 	for index: int in range(_segments.size() - 1, -1, -1):
-		var segment: Segment = _segments.get(index)
+		var segment: Segment = _segments[index]
 		if not segment.attached and segment.samples.is_empty():
 			segment.line.queue_free()
 			_segments.remove_at(index)
@@ -305,7 +347,8 @@ func _draw_segment(segment: Segment, origin: Vector2, fraction: float, delta: fl
 	if hitting:
 		_append_spaced(points, segment.impact)
 	
-	var limited: PackedVector2Array = points if hitting else _limit(points, segment.profile.max_length)
+	var limited: PackedVector2Array = \
+			points if hitting else _limit(points, segment.profile.max_length)
 	segment.tail = Motion.damp(segment.tail, 0.0 if hitting else 1.0, tail_halflife, delta)
 	segment.line.points = limited if limited.size() > 1 else PackedVector2Array()
 	segment.line.set_instance_shader_parameter(&"line_length", _get_length(limited))
@@ -319,9 +362,9 @@ func _limit(points: PackedVector2Array, max_length: float) -> PackedVector2Array
 	var limited: PackedVector2Array = PackedVector2Array()
 	var length: float = 0.0
 	for index: int in points.size():
-		var point: Vector2 = points.get(index)
+		var point: Vector2 = points[index]
 		if index > 0:
-			var previous: Vector2 = points.get(index - 1)
+			var previous: Vector2 = points[index - 1]
 			var step: float = previous.distance_to(point)
 			if length + step > max_length:
 				limited.append(previous.move_toward(point, max_length - length))
@@ -334,12 +377,12 @@ func _limit(points: PackedVector2Array, max_length: float) -> PackedVector2Array
 func _get_length(points: PackedVector2Array) -> float:
 	var length: float = 0.0
 	for index: int in range(1, points.size()):
-		length += points.get(index - 1).distance_to(points.get(index))
+		length += points[index - 1].distance_to(points[index])
 	return length
 
 
 func _append_spaced(points: PackedVector2Array, point: Vector2) -> void:
-	if points.is_empty() or points.get(points.size() - 1).distance_to(point) >= min_point_spacing:
+	if points.is_empty() or points[points.size() - 1].distance_to(point) >= min_point_spacing:
 		points.append(point)
 
 

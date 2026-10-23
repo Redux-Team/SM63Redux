@@ -56,7 +56,7 @@ func sync() -> void:
 	if mode == CollisionMode.SEMISOLID and body:
 		for segment: PackedVector2Array in shape.get_topline_segments():
 			for i: int in segment.size() - 1:
-				_add_slab(segment.get(i), segment.get(i + 1))
+				_add_slab(segment[i], segment[i + 1])
 
 
 func _fill_polygons(target: CollisionPolygon2D, pieces: Array[PackedVector2Array]) -> void:
@@ -74,7 +74,14 @@ func _add_slab(a: Vector2, b: Vector2) -> void:
 		return
 	
 	var slab: ConvexPolygonShape2D = ConvexPolygonShape2D.new()
-	slab.points = PackedVector2Array([Vector2(-length * 0.5, 0.0), Vector2(length * 0.5, 0.0), Vector2(length * 0.5, semisolid_depth), Vector2(-length * 0.5, semisolid_depth)])
+	slab.points = PackedVector2Array(
+			[
+				Vector2(-length * 0.5, 0.0),
+				Vector2(length * 0.5, 0.0),
+				Vector2(length * 0.5, semisolid_depth),
+				Vector2(-length * 0.5, semisolid_depth),
+			]
+	)
 	var node: CollisionShape2D = CollisionShape2D.new()
 	node.shape = slab
 	node.position = (a + b) * 0.5

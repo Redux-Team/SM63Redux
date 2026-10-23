@@ -2,9 +2,10 @@ class_name GlideState
 extends PlayerState
 
 @export_group("Flight")
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var max_lift: float = 2000.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s^2") var max_lift: float = 2000.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:/s") var steer_rate: float = 5.0
-@export_custom(PROPERTY_HINT_NONE, "suffix:°/s") var max_turn_rate: float = 220.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:deg/s")
+var max_turn_rate: float = 220.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:/s") var drag_rate: float = 0.032
 @export_custom(PROPERTY_HINT_NONE, "suffix:/s") var climb_drag: float = 0.35
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var min_speed: float = 8.4
@@ -21,7 +22,8 @@ extends PlayerState
 @export_group("Exit")
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var slide_speed: float = 150.0
 @export_group("Visual")
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var rotation_halflife: float = 0.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:s")
+var rotation_halflife: float = 0.0
 @export var up_animation: StringName = &"fly_up"
 @export var down_animation: StringName = &"fly_down"
 
@@ -46,11 +48,14 @@ func _tick(delta: float) -> void:
 	var drag: float = drag_rate + climb_drag * maxf(-player.velocity.normalized().y, 0.0)
 	player.velocity *= exp(-drag * delta)
 	if player.velocity.length() < min_speed:
-		player.velocity = Vector2(player.get_facing(), 0.0).rotated(get_heading() * player.get_facing()) * min_speed
+		player.velocity = (
+				Vector2(player.get_facing(), 0.0).rotated(get_heading() * player.get_facing())
+				* min_speed
+		)
 	
-	player.debug_forces.set(&"lift", (player.velocity - before) / delta + player.velocity * drag)
-	player.debug_forces.set(&"drag", -player.velocity * drag)
-	player.debug_forces.set(&"gravity", Vector2(0.0, player.get_gravity_strength()))
+	player.debug_forces[&"lift"] = (player.velocity - before) / delta + player.velocity * drag
+	player.debug_forces[&"drag"] = -player.velocity * drag
+	player.debug_forces[&"gravity"] = Vector2(0.0, player.get_gravity_strength())
 
 
 func _render_tick(delta: float) -> void:
@@ -87,7 +92,8 @@ func _ease_entry(delta: float) -> void:
 	if time > entry_time or forward >= entry_speed:
 		return
 	
-	player.velocity.x = Motion.damp(forward, entry_speed, entry_halflife, delta) * player.get_facing()
+	player.velocity.x = \
+			Motion.damp(forward, entry_speed, entry_halflife, delta) * player.get_facing()
 
 
 func _steer(delta: float) -> void:

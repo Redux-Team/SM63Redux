@@ -25,5 +25,12 @@ func _init() -> void:
 
 
 func _update_group() -> void:
-	RenderingServer.canvas_item_set_canvas_group_mode(get_canvas_item(), RenderingServer.CANVAS_GROUP_MODE_TRANSPARENT, clear_margin, true, fit_margin, use_mipmaps)
+	RenderingServer.canvas_item_set_canvas_group_mode(
+			get_canvas_item(),
+			RenderingServer.CANVAS_GROUP_MODE_TRANSPARENT,
+			clear_margin,
+			true,
+			fit_margin,
+			use_mipmaps,
+	)
 	queue_redraw()

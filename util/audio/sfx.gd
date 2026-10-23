@@ -37,7 +37,13 @@ static func play(source: Variant, bus: StringName = &"SFX") -> void:
 		_play_stream(source, bus)
 
 
-static func play_at(source: Variant, at: Variant, bus: StringName = &"Master", max_distance: float = SPATIAL_MAX_DISTANCE, attenuation: float = SPATIAL_ATTENUATION) -> void:
+static func play_at(
+		source: Variant,
+		at: Variant,
+		bus: StringName = &"Master",
+		max_distance: float = SPATIAL_MAX_DISTANCE,
+		attenuation: float = SPATIAL_ATTENUATION,
+) -> void:
 	if source is SFXBank:
 		(source as SFXBank).play_sfx_at(at, bus)
 	elif source is AudioStream:
@@ -50,15 +56,30 @@ static func stop_group(group: StringName) -> void:
 			bank.stop_all()
 
 
-## Plays an [AudioStream] and returns the created [AudioStreamPlayer] so the caller can
-## stop it early. It still frees itself when the sound finishes on its own.
+## Plays an [AudioStream] and returns the created [AudioStreamPlayer] so the
+## caller can stop it early. It still frees itself when the sound finishes on
+## its own.
 static func play_tracked(source: AudioStream, bus: StringName = &"SFX") -> AudioStreamPlayer:
 	return _play_stream(source, bus)
 
 
-## Positional variant of [method play_tracked]. Returns the [AudioStreamPlayer2D].
-static func play_tracked_at(source: AudioStream, at: Variant, bus: StringName = &"SFX", max_distance: float = SPATIAL_MAX_DISTANCE, attenuation: float = SPATIAL_ATTENUATION) -> AudioStreamPlayer2D:
+## Positional variant of [method play_tracked]. Returns the
+## [AudioStreamPlayer2D].
+static func play_tracked_at(
+		source: AudioStream,
+		at: Variant,
+		bus: StringName = &"SFX",
+		max_distance: float = SPATIAL_MAX_DISTANCE,
+		attenuation: float = SPATIAL_ATTENUATION,
+) -> AudioStreamPlayer2D:
 	return _play_stream_at(source, at, bus, max_distance, attenuation)
+
+
+static func build(audio_stream: AudioStream = null) -> SFXBuilder:
+	var builder: SFXBuilder = SFXBuilder.new()
+	if audio_stream:
+		builder.set_stream(audio_stream)
+	return builder
 
 
 static func _play_stream(stream: AudioStream, bus: StringName) -> AudioStreamPlayer:
@@ -71,7 +92,13 @@ static func _play_stream(stream: AudioStream, bus: StringName) -> AudioStreamPla
 	return player
 
 
-static func _play_stream_at(stream: AudioStream, at: Variant, bus: StringName, max_distance: float = SPATIAL_MAX_DISTANCE, attenuation: float = SPATIAL_ATTENUATION) -> AudioStreamPlayer2D:
+static func _play_stream_at(
+		stream: AudioStream,
+		at: Variant,
+		bus: StringName,
+		max_distance: float = SPATIAL_MAX_DISTANCE,
+		attenuation: float = SPATIAL_ATTENUATION,
+) -> AudioStreamPlayer2D:
 	var player: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
 	player.stream = stream
 	player.bus = bus
@@ -87,17 +114,11 @@ static func _play_stream_at(stream: AudioStream, at: Variant, bus: StringName, m
 	return player
 
 
-static func build(audio_stream: AudioStream = null) -> SFXBuilder:
-	var builder: SFXBuilder = SFXBuilder.new()
-	if audio_stream:
-		builder.set_stream(audio_stream)
-	return builder
-
-
 class SFXBuilder:
 	var _stream: AudioStream
 	var _bus: StringName = &"SFX"
 	var _db: float = 0
+	
 	
 	func set_stream(audio_stream: AudioStream) -> SFXBuilder:
 		_stream = audio_stream

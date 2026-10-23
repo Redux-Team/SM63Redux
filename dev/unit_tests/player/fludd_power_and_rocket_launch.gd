@@ -11,9 +11,7 @@ static func run_test() -> void:
 	stage.release(&"use_fludd")
 	await stage.step()
 	assert(not player.fludd.is_spraying())
-	assert(
-		await stage.step_until(func() -> bool: return player.is_on_floor(), 180)
-	)
+	assert(await stage.step_until(func() -> bool: return player.is_on_floor(), 180))
 	await stage.step()
 	assert(is_equal_approx(player.fludd.power, PlayerFludd.POWER_MAX))
 	await stage.finish()
@@ -23,19 +21,12 @@ static func run_test() -> void:
 	player = stage.player
 	stage.equip_nozzle(PlayerFludd.Nozzle.ROCKET)
 	var rocket: Node = player.fludd.modes.get_mode(&"Rocket")
-	var charge_frames: int = roundi(
-		rocket.get(&"charge_time") * Engine.physics_ticks_per_second
-	)
+	var charge_frames: int = roundi(rocket.get(&"charge_time") * Engine.physics_ticks_per_second)
 	stage.hold(&"use_fludd")
 	await stage.step(charge_frames - 5)
 	assert(not player.fludd.is_launching())
 	assert(player.is_on_floor())
-	assert(
-		await stage.step_until(
-			func() -> bool: return player.fludd.is_launching(),
-			10,
-		)
-	)
+	assert(await stage.step_until(func() -> bool: return player.fludd.is_launching(), 10))
 	stage.release(&"use_fludd")
 	assert(is_zero_approx(player.fludd.power))
 	await stage.finish()
@@ -46,12 +37,7 @@ static func run_test() -> void:
 	player = stage.player
 	stage.equip_nozzle(PlayerFludd.Nozzle.ROCKET)
 	stage.hold(&"use_fludd")
-	assert(
-		await stage.step_until(
-			func() -> bool: return not player.is_swimming(),
-			120,
-		)
-	)
+	assert(await stage.step_until(func() -> bool: return not player.is_swimming(), 120))
 	stage.release(&"use_fludd")
 	assert(player.fludd.is_launching())
 	await stage.finish()

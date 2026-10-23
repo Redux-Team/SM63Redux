@@ -37,7 +37,9 @@ static func run_test() -> void:
 	assert(target.position == Vector2(6, 0))
 	
 	var owned_by_do: Node = Node.new()
-	history.create("Spawn").do(target.set_position.bind(Vector2(7, 0))).undo(target.set_position.bind(Vector2(6, 0))).keep_on_do(owned_by_do).commit()
+	history.create("Spawn").do(target.set_position.bind(Vector2(7, 0))).undo(
+			target.set_position.bind(Vector2(6, 0))
+	).keep_on_do(owned_by_do).commit()
 	history.undo()
 	assert(is_instance_valid(owned_by_do))
 	history.undo()
@@ -50,7 +52,9 @@ static func run_test() -> void:
 	history.redo()
 	
 	for x: int in [10, 20, 30]:
-		history.create("Drag", UndoRedo.MERGE_ENDS).do(target.set_position.bind(Vector2(x, 0))).undo(target.set_position.bind(Vector2(42, 0))).commit()
+		history.create("Drag", UndoRedo.MERGE_ENDS).do(
+				target.set_position.bind(Vector2(x, 0))
+		).undo(target.set_position.bind(Vector2(42, 0))).commit()
 	assert(target.position == Vector2(30, 0))
 	history.undo()
 	assert(target.position == Vector2(42, 0))
@@ -68,4 +72,6 @@ static func run_test() -> void:
 
 
 static func _move(history: LDHistoryHandler, target: Node2D, to: Vector2) -> void:
-	history.create("Move").do(target.set_position.bind(to)).undo(target.set_position.bind(target.position)).commit()
+	history.create("Move").do(target.set_position.bind(to)).undo(
+			target.set_position.bind(target.position)
+	).commit()

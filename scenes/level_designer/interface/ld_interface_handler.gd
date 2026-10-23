@@ -12,11 +12,6 @@ const TOUCH_SCALE: float = 1.0
 var current_panel: LDPanel
 
 
-func _setup() -> void:
-	window.closed.connect(_on_window_closed)
-	_rescale()
-
-
 func _enter_tree() -> void:
 	get_viewport().size_changed.connect(_rescale)
 	if is_node_ready():
@@ -31,6 +26,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	if current_panel and editor.is_shortcut(event, &"ld_back"):
 		hide_panel()
 		get_viewport().set_input_as_handled()
+
+
+func _setup() -> void:
+	window.closed.connect(_on_window_closed)
+	_rescale()
 
 
 func get_ui_scale() -> float:

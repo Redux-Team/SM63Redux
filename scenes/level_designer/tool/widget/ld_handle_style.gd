@@ -40,17 +40,22 @@ enum HandleState {
 
 
 func get_fill(state: HandleState) -> Color:
-	return [fill, hover_fill, pressed_fill, disabled_fill].get(state)
+	return [fill, hover_fill, pressed_fill, disabled_fill][state]
 
 
 func get_outline(state: HandleState) -> Color:
-	return [outline, hover_outline, pressed_outline, disabled_outline].get(state)
+	return [outline, hover_outline, pressed_outline, disabled_outline][state]
 
 
 func get_scale(state: HandleState) -> float:
-	return [1.0, hover_scale, pressed_scale, 1.0].get(state)
+	return [1.0, hover_scale, pressed_scale, 1.0][state]
 
 
 func get_texture(state: HandleState) -> Texture2D:
-	var fallbacks: Array[Texture2D] = [texture, hover_texture if hover_texture else texture, pressed_texture if pressed_texture else hover_texture if hover_texture else texture, texture]
-	return fallbacks.get(state)
+	var fallbacks: Array[Texture2D] = [
+		texture,
+		hover_texture if hover_texture else texture,
+		(pressed_texture if pressed_texture else hover_texture if hover_texture else texture),
+		texture,
+	]
+	return fallbacks[state]

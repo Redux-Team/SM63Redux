@@ -7,8 +7,8 @@ const UNIT_SIZE: int = 32
 static func free_nodes(nodes: Array, tree: SceneTree) -> void:
 	var start: int = Time.get_ticks_usec()
 	for i: int in nodes.size():
-		if is_instance_valid(nodes.get(i)):
-			(nodes.get(i) as Node).free()
+		if is_instance_valid(nodes[i]):
+			(nodes[i] as Node).free()
 		if Time.get_ticks_usec() - start > FRAME_BUDGET_USEC:
 			await tree.process_frame
 			start = Time.get_ticks_usec()

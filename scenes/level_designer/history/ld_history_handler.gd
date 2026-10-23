@@ -10,14 +10,6 @@ signal changed
 var _undo_redo: UndoRedo = UndoRedo.new()
 
 
-func _setup() -> void:
-	_undo_redo.max_steps = max_steps
-	_undo_redo.version_changed.connect(_on_version_changed)
-	LD.bind_button(undo_button, undo)
-	LD.bind_button(redo_button, redo)
-	_refresh_buttons()
-
-
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
 		_undo_redo.clear_history()
@@ -33,6 +25,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	
 	get_viewport().set_input_as_handled()
+
+
+func _setup() -> void:
+	_undo_redo.max_steps = max_steps
+	_undo_redo.version_changed.connect(_on_version_changed)
+	LD.bind_button(undo_button, undo)
+	LD.bind_button(redo_button, redo)
+	_refresh_buttons()
 
 
 func create(action_name: String, merge: UndoRedo.MergeMode = UndoRedo.MERGE_DISABLE) -> Action:

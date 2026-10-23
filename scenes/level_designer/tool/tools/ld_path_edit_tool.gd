@@ -26,8 +26,13 @@ func _layout_handles() -> void:
 	var object: GameObject = targets.front()
 	var points: PackedVector2Array = get_shape(object).points
 	for index: int in points.size():
-		var handle: LDHandle = place_handle(index, object.get_global_transform() * points.get(index), head_style if index == 0 else node_style)
-		handle.cursor = Control.CURSOR_DRAG if is_dragging() or index == 0 else Control.CURSOR_POINTING_HAND
+		var handle: LDHandle = place_handle(
+				index,
+				object.get_global_transform() * points[index],
+				head_style if index == 0 else node_style,
+		)
+		handle.cursor = \
+				Control.CURSOR_DRAG if is_dragging() or index == 0 else Control.CURSOR_POINTING_HAND
 
 
 func _draw_guides(overlay: LDOverlay) -> void:
@@ -36,7 +41,12 @@ func _draw_guides(overlay: LDOverlay) -> void:
 	
 	if _preview == null:
 		_preview = LDHandle.new(&"preview", preview_style)
-	_preview.draw(overlay.canvas, editor.viewport_handler.to_screen(targets.front().get_global_transform() * _edge_point), LDHandleStyle.HandleState.NORMAL, get_process_delta_time())
+	_preview.draw(
+			overlay.canvas,
+			editor.viewport_handler.to_screen(targets.front().get_global_transform() * _edge_point),
+			LDHandleStyle.HandleState.NORMAL,
+			get_process_delta_time(),
+	)
 
 
 func _on_empty_pressed(world_position: Vector2, screen: Vector2) -> bool:
@@ -45,7 +55,10 @@ func _on_empty_pressed(world_position: Vector2, screen: Vector2) -> bool:
 	
 	var shape: PathShape = get_shape(targets.front())
 	var points: PackedVector2Array = shape.get_points()
-	if Array(points).any(func(existing: Vector2) -> bool: return existing.distance_to(_edge_point) < LDPolygonStrokeTool.MIN_POINT_DISTANCE):
+	if Array(points).any(
+			func(existing: Vector2) -> bool:
+				return (existing.distance_to(_edge_point) < LDPolygonStrokeTool.MIN_POINT_DISTANCE)
+	):
 		return true
 	
 	_before = shape.get_points()
@@ -67,7 +80,7 @@ func _on_handle_dragged(handle: LDHandle, world_position: Vector2) -> void:
 	var object: GameObject = targets.front()
 	var shape: PathShape = get_shape(object)
 	var points: PackedVector2Array = shape.get_points()
-	points.set(handle.key, object.transform.affine_inverse() * to_parent(object, world_position))
+	points[handle.key] = object.transform.affine_inverse() * to_parent(object, world_position)
 	shape.set_points(points)
 	object.invalidate_bounds()
 
@@ -107,9 +120,10 @@ func _find_edge(world_position: Vector2) -> bool:
 	var mouse: Vector2 = editor.viewport_handler.to_screen(world_position)
 	var nearest: float = EDGE_RADIUS
 	for index: int in points.size() - 1:
-		var a: Vector2 = editor.viewport_handler.to_screen(to_world * points.get(index))
-		var b: Vector2 = editor.viewport_handler.to_screen(to_world * points.get(index + 1))
-		var distance: float = Geometry2D.get_closest_point_to_segment(mouse, a, b).distance_to(mouse)
+		var a: Vector2 = editor.viewport_handler.to_screen(to_world * points[index])
+		var b: Vector2 = editor.viewport_handler.to_screen(to_world * points[index + 1])
+		var distance: float = \
+				Geometry2D.get_closest_point_to_segment(mouse, a, b).distance_to(mouse)
 		if distance < nearest:
 			nearest = distance
 			_edge = index
@@ -118,7 +132,8 @@ func _find_edge(world_position: Vector2) -> bool:
 		return false
 	
 	var local: Vector2 = object.transform.affine_inverse() * to_parent(object, world_position)
-	_edge_point = Geometry2D.get_closest_point_to_segment(local, points.get(_edge), points.get(_edge + 1)).round()
+	_edge_point = \
+			Geometry2D.get_closest_point_to_segment(local, points[_edge], points[_edge + 1]).round()
 	return true
 
 
@@ -127,10 +142,9 @@ func _commit(action_name: String, points: PackedVector2Array) -> void:
 		return
 	
 	var object: GameObject = targets.front()
-	editor.history_handler.create(action_name) \
-		.do(_apply.bind(object, points)) \
-		.undo(_apply.bind(object, _before)) \
-		.commit()
+	editor.history_handler.create(action_name).do(_apply.bind(object, points)).undo(
+			_apply.bind(object, _before)
+	).commit()
 
 
 func _apply(object: GameObject, points: PackedVector2Array) -> void:

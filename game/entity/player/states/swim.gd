@@ -2,9 +2,11 @@ extends PlayerState
 
 @export_group("Stroke")
 ## Upward speed each stroke pulls toward.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var stroke_speed: float = 142.85
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s")
+var stroke_speed: float = 142.85
 ## Time for a stroke to close half the gap to the stroke speed.
-@export_custom(PROPERTY_HINT_NONE, "suffix:s") var stroke_halflife: float = 0.0066
+@export_custom(PROPERTY_HINT_NONE, "suffix:s")
+var stroke_halflife: float = 0.0066
 ## Length of each stroke's upward pull.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var stroke_time: float = 0.175
 ## Minimum time between strokes.
@@ -34,7 +36,10 @@ func _tick(delta: float) -> void:
 		_stroke()
 	
 	if overrides_vertical():
-		player.velocity.y = minf(player.velocity.y, Motion.damp(player.velocity.y, -stroke_speed, stroke_halflife, delta))
+		player.velocity.y = minf(
+				player.velocity.y,
+				Motion.damp(player.velocity.y, -stroke_speed, stroke_halflife, delta),
+		)
 
 
 func _next() -> StringName:

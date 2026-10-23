@@ -15,17 +15,6 @@ var placement_values: Dictionary = {}
 var _last_subtool: Dictionary[BaseButton, LDTool] = {}
 
 
-func _setup() -> void:
-	var buttons: Array[BaseButton] = []
-	for tool: LDTool in get_tools():
-		for button: BaseButton in [tool.button, tool.group_button]:
-			if button and not buttons.has(button):
-				buttons.append(button)
-				button.pressed.connect(_on_button_pressed.bind(button))
-	
-	set_tool(default_tool)
-
-
 func _unhandled_input(event: InputEvent) -> void:
 	if editor.is_shortcut(event, &"ld_tool_next") or editor.is_shortcut(event, &"ld_tool_previous"):
 		cycle_tool(1 if event.is_action(&"ld_tool_next") else -1)
@@ -37,6 +26,17 @@ func _unhandled_input(event: InputEvent) -> void:
 			set_tool(tool)
 			get_viewport().set_input_as_handled()
 			return
+
+
+func _setup() -> void:
+	var buttons: Array[BaseButton] = []
+	for tool: LDTool in get_tools():
+		for button: BaseButton in [tool.button, tool.group_button]:
+			if button and not buttons.has(button):
+				buttons.append(button)
+				button.pressed.connect(_on_button_pressed.bind(button))
+	
+	set_tool(default_tool)
 
 
 func get_tools() -> Array[LDTool]:
@@ -57,12 +57,15 @@ func set_tool(tool: LDTool) -> void:
 			editor.object_handler.selection.clear()
 		active_tool._activate()
 		if tool.group_button:
-			_last_subtool.set(tool.group_button, tool)
+			_last_subtool[tool.group_button] = tool
 		tool_changed.emit(tool)
 	
 	var highlighted: BaseButton = active_tool.button if active_tool.button else default_tool.button
 	for other: LDTool in get_tools():
-		LD.set_active(other.button, other.button == highlighted or other.button == active_tool.group_button)
+		LD.set_active(
+				other.button,
+				(other.button == highlighted or other.button == active_tool.group_button),
+		)
 
 
 func arm(entry: ObjectRegistry.Entry, values: Dictionary = {}) -> void:
@@ -86,7 +89,10 @@ func matches_placement(object: GameObject) -> bool:
 		if should_randomize(property):
 			continue
 		
-		if object.get_value(property.key) != placement_values.get(property.key, property.coerce(null)):
+		if (
+				object.get_value(property.key)
+				!= placement_values.get(property.key, property.coerce(null))
+		):
 			return false
 	
 	return true
@@ -99,27 +105,22 @@ func apply_placement_values(data: ObjectData) -> void:
 	for key: StringName in placement_values:
 		match key:
 			ROTATION_KEY:
-				data.rotation = deg_to_rad(placement_values.get(key))
+				data.rotation = deg_to_rad(placement_values[key])
 			SCALE_KEY:
-				data.scale = placement_values.get(key)
+				data.scale = placement_values[key]
 			_:
-				data.values.set(key, placement_values.get(key))
+				data.values[key] = placement_values[key]
 
 
 func get_placement_tool(entry: ObjectRegistry.Entry) -> LDTool:
-	return _pick(get_tools().filter(func(tool: LDTool) -> bool: return tool.shape_kinds.has(entry.get_shape_kind())))
+	return _pick(get_tools().filter(
+			func(tool: LDTool) -> bool:
+				return tool.shape_kinds.has(entry.get_shape_kind())
+	))
 
 
 func get_last_subtool(button: BaseButton) -> LDTool:
 	return _last_subtool.get(button)
-
-
-func _pick(fitting: Array[LDTool]) -> LDTool:
-	for tool: LDTool in fitting:
-		if tool.group_button and _last_subtool.get(tool.group_button) == tool:
-			return tool
-	fitting.sort_custom(func(a: LDTool, b: LDTool) -> bool: return a.preferred and not b.preferred)
-	return fitting.front() if not fitting.is_empty() else null
 
 
 func get_edit_tool(object: GameObject) -> LDTool:
@@ -142,19 +143,19 @@ func enter_edit_tool(object: GameObject) -> void:
 	tool.continue_forwarding()
 
 
-func _on_button_pressed(button: BaseButton) -> void:
-	var tools: Array[LDTool] = get_tools().filter(func(tool: LDTool) -> bool: return tool.button == button or tool.group_button == button)
-	var kind: ObjectShape.Kind = armed.get_shape_kind() if armed else ObjectShape.Kind.NONE
-	var picked: LDTool = _pick(tools.filter(func(tool: LDTool) -> bool: return tool.shape_kinds.has(kind)))
-	set_tool(picked if picked else tools.front())
-
-
 func cycle_tool(direction: int) -> void:
-	var available: Array[LDTool] = get_tools().filter(func(tool: LDTool) -> bool: return tool.button and tool.button.is_visible_in_tree() and not tool.button.disabled)
+	var available: Array[LDTool] = get_tools().filter(
+			func(tool: LDTool) -> bool:
+				return (
+					tool.button
+					and tool.button.is_visible_in_tree()
+					and not tool.button.disabled
+				)
+	)
 	if available.is_empty():
 		return
 	
-	set_tool(available.get(posmod(available.find(active_tool) + direction, available.size())))
+	set_tool(available[posmod(available.find(active_tool) + direction, available.size())])
 
 
 func cancel() -> void:
@@ -163,3 +164,25 @@ func cancel() -> void:
 
 func handle_input(event: InputEvent, world_position: Vector2) -> bool:
 	return active_tool._tool_input(event, world_position)
+
+
+func _pick(fitting: Array[LDTool]) -> LDTool:
+	for tool: LDTool in fitting:
+		if tool.group_button and _last_subtool.get(tool.group_button) == tool:
+			return tool
+	fitting.sort_custom(
+			func(a: LDTool, b: LDTool) -> bool:
+				return a.preferred and not b.preferred
+	)
+	return fitting.front() if not fitting.is_empty() else null
+
+
+func _on_button_pressed(button: BaseButton) -> void:
+	var tools: Array[LDTool] = get_tools().filter(
+			func(tool: LDTool) -> bool:
+				return tool.button == button or tool.group_button == button
+	)
+	var kind: ObjectShape.Kind = armed.get_shape_kind() if armed else ObjectShape.Kind.NONE
+	var picked: LDTool = \
+			_pick(tools.filter(func(tool: LDTool) -> bool: return (tool.shape_kinds.has(kind))))
+	set_tool(picked if picked else tools.front())

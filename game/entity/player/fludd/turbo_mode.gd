@@ -5,7 +5,8 @@ const MODIFIER_KEY: StringName = &"fludd_turbo"
 @export_group("Turbo")
 @export var hitbox: HitBox
 @export_range(0.0, 1.0) var bump_damp: float = 0.75
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var rebuild_acceleration: float = 250.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s^2")
+var rebuild_acceleration: float = 250.0
 ## Run and air speed while the turbo runs.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px/s") var speed: float = 450.0
 @export_group("Underwater Aim")
@@ -16,7 +17,8 @@ const MODIFIER_KEY: StringName = &"fludd_turbo"
 ## Time for the aim to turn halfway toward the input.
 @export_custom(PROPERTY_HINT_NONE, "suffix:s") var aim_halflife: float = 0.08
 ## Acceleration toward the aimed direction underwater.
-@export_custom(PROPERTY_HINT_NONE, "suffix:px/s²") var aim_acceleration: float = 1200.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:px/s^2")
+var aim_acceleration: float = 1200.0
 
 var _aiming: bool = false
 var _aim_degrees: float = 0.0
@@ -66,12 +68,16 @@ func get_spray_angle() -> float:
 
 
 func _aim(delta: float) -> void:
-	var aim: float = float(player.controls.is_held(&"crouch")) - float(player.controls.is_held(&"jump"))
+	var aim: float = \
+			float(player.controls.is_held(&"crouch")) - float(player.controls.is_held(&"jump"))
 	var target: float = aim * (max_down_angle if aim > 0.0 else max_up_angle)
 	_aim_degrees = Motion.damp(_aim_degrees, target, aim_halflife, delta)
 	var direction: Vector2 = Vector2.from_angle(deg_to_rad(_aim_degrees))
 	direction.x *= float(player.get_facing())
-	player.velocity = player.velocity.move_toward(direction * maxf(speed, player.velocity.length()), aim_acceleration * delta)
+	player.velocity = player.velocity.move_toward(
+			direction * maxf(speed, player.velocity.length()),
+			aim_acceleration * delta,
+	)
 	player.sprite.local_rotation = _aim_degrees
 
 

@@ -15,14 +15,16 @@ static func run_test() -> void:
 	assert(player_entry.get_shape_kind() == ObjectShape.Kind.NONE)
 	assert(ObjectRegistry.get_entry(&"missing_object") == null)
 	
-	var editor_player: GameObject = ObjectRegistry.spawn(ObjectData.create(&"player_mario"), GameObject.Context.EDITOR)
+	var editor_player: GameObject = \
+			ObjectRegistry.spawn(ObjectData.create(&"player_mario"), GameObject.Context.EDITOR)
 	assert(editor_player.game_root == null)
 	assert(not editor_player.has_node(^"Game"))
 	assert(editor_player.editor_root.get_child_count() > 0)
 	assert(editor_player.get_local_bounds().has_area())
 	editor_player.free()
 	
-	var game_player: GameObject = ObjectRegistry.spawn(ObjectData.create(&"player_mario"), GameObject.Context.GAME)
+	var game_player: GameObject = \
+			ObjectRegistry.spawn(ObjectData.create(&"player_mario"), GameObject.Context.GAME)
 	assert(game_player.editor_root == null)
 	assert(not game_player.has_node(^"Editor"))
 	assert(game_player.game_root is Player)

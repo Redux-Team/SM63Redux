@@ -10,17 +10,6 @@ var _objects: Array[GameObject] = []
 var _forgotten: bool = false
 
 
-func _setup() -> void:
-	LD.bind_button(deselect_button, clear)
-	LD.bind_button(delete_button, func() -> void: editor.object_handler.remove_objects(get_objects()))
-	changed.connect(_refresh_buttons)
-	_refresh_buttons()
-	editor.level_handler.level_opened.connect(clear)
-	editor.level_handler.area_changed.connect(clear.unbind(1))
-	editor.level_handler.structure_changed.connect(_prune)
-	editor.object_handler.objects_changed.connect(_prune)
-
-
 func _unhandled_input(event: InputEvent) -> void:
 	if editor.is_shortcut(event, &"ld_select_all"):
 		set_objects(editor.level_handler.get_selectable_objects())
@@ -32,6 +21,20 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	
 	get_viewport().set_input_as_handled()
+
+
+func _setup() -> void:
+	LD.bind_button(deselect_button, clear)
+	LD.bind_button(
+			delete_button,
+			func() -> void: editor.object_handler.remove_objects(get_objects())
+	)
+	changed.connect(_refresh_buttons)
+	_refresh_buttons()
+	editor.level_handler.level_opened.connect(clear)
+	editor.level_handler.area_changed.connect(clear.unbind(1))
+	editor.level_handler.structure_changed.connect(_prune)
+	editor.object_handler.objects_changed.connect(_prune)
 
 
 func get_objects() -> Array[GameObject]:
@@ -79,7 +82,7 @@ func is_empty() -> bool:
 func get_global_bounds() -> Rect2:
 	var bounds: Rect2 = Rect2()
 	for i: int in _objects.size():
-		var rect: Rect2 = _objects.get(i).get_global_bounds()
+		var rect: Rect2 = _objects[i].get_global_bounds()
 		bounds = rect if i == 0 else bounds.merge(rect)
 	
 	return bounds
@@ -92,7 +95,10 @@ func forget(object: GameObject) -> void:
 
 
 func _prune() -> void:
-	var kept: Array[GameObject] = _objects.filter(func(object: GameObject) -> bool: return is_instance_valid(object) and object.is_inside_tree())
+	var kept: Array[GameObject] = _objects.filter(
+			func(object: GameObject) -> bool:
+				return is_instance_valid(object) and object.is_inside_tree()
+	)
 	if kept.size() != _objects.size() or _forgotten:
 		_forgotten = false
 		_objects = kept
@@ -100,9 +106,20 @@ func _prune() -> void:
 
 
 func _is_selectable(object: GameObject) -> bool:
-	return is_instance_valid(object) and object.is_inside_tree() and object.has_flag(GameObject.Flag.SELECTABLE)
+	return (
+			is_instance_valid(object)
+			and object.is_inside_tree()
+			and object.has_flag(GameObject.Flag.SELECTABLE)
+	)
 
 
 func _refresh_buttons() -> void:
 	LD.set_disabled(deselect_button, _objects.is_empty())
-	LD.set_disabled(delete_button, not _objects.any(func(object: GameObject) -> bool: return object.has_flag(GameObject.Flag.DELETABLE)))
+	LD.set_disabled(
+			delete_button,
+			not _objects.any(
+					func(object: GameObject) -> bool: return (
+							object.has_flag(GameObject.Flag.DELETABLE)
+					)
+			),
+	)

@@ -11,22 +11,27 @@ const INHERIT_BUS: StringName = &"Inherit"
 @export var speed_scale: float = 1.0
 @export var stop_on_exit: bool = false
 @export var lock_flipping: bool = false
-## Keeps the sprite drawn unflipped for the whole state, without touching the facing direction.
+## Keeps the sprite drawn unflipped for the whole state, without touching the
+## facing direction.
 @export var hide_flipping: bool = false
 @export_subgroup("Variants", "variant_")
-@export_custom(PROPERTY_HINT_GROUP_ENABLE, "variant_") var variant_enabled: bool = false
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "variant_")
+var variant_enabled: bool = false
 @export var variant_animations: Array[StringName] = []
 @export var variant_no_repeat: bool = false
 @export var variant_follow: bool = false
 @export_subgroup("Chain", "chain_")
-@export_custom(PROPERTY_HINT_GROUP_ENABLE, "chain_") var chain_enabled: bool = false
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "chain_")
+var chain_enabled: bool = false
 @export var chain_animations: Array[StringName] = []
 @export var chain_loop_last: bool = true
 @export_subgroup("Offset", "offset_")
-@export_custom(PROPERTY_HINT_GROUP_ENABLE, "offset_") var offset_enabled: bool = false
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "offset_")
+var offset_enabled: bool = false
 @export var offset_value: Vector2 = Vector2.ZERO
 @export_subgroup("Loop", "loop_")
-@export_custom(PROPERTY_HINT_GROUP_ENABLE, "loop_") var loop_override: bool = false
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "loop_")
+var loop_override: bool = false
 @export var loop_enabled: bool = true
 
 @export_group("Physics")
@@ -40,16 +45,25 @@ const INHERIT_BUS: StringName = &"Inherit"
 @export var sfx_bus: StringName = INHERIT_BUS
 @export var sfx_spatial: bool = true
 @export_subgroup("Enter", "sfx_enter_")
-@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sfx_enter_") var sfx_enter_enabled: bool = false
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sfx_enter_")
+var sfx_enter_enabled: bool = false
 @export var sfx_enter_sound: AudioStream
 @export var sfx_enter_stop_on_exit: bool = false
 @export_subgroup("Exit", "sfx_exit_")
-@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sfx_exit_") var sfx_exit_enabled: bool = false
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sfx_exit_")
+var sfx_exit_enabled: bool = false
 @export var sfx_exit_sound: AudioStream
 @export_subgroup("Frame", "sfx_frame_")
-@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sfx_frame_") var sfx_frame_enabled: bool = false
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, "sfx_frame_")
+var sfx_frame_enabled: bool = false
 @export var sfx_frame_sound: AudioStream
 @export var sfx_frame_indices: Array[int] = []
+
+
+func _validate_property(property: Dictionary) -> void:
+	if property.name == &"sfx_bus":
+		property.hint = PROPERTY_HINT_ENUM
+		property.hint_string = _bus_hint_string()
 
 
 func enter(state: State) -> void:
@@ -95,7 +109,12 @@ func exit(state: State) -> void:
 
 
 func render_tick(state: State) -> void:
-	if not sfx_frame_enabled or not sfx_frame_sound or sfx_frame_indices.is_empty() or not state.sprite:
+	if (
+			not sfx_frame_enabled
+			or not sfx_frame_sound
+			or sfx_frame_indices.is_empty()
+			or not state.sprite
+	):
 		return
 	
 	var frame: int = state.sprite.current_frame
@@ -112,7 +131,7 @@ func advance_chain(state: State) -> void:
 	if not state.sprite or state.chain_index >= chain.size():
 		return
 	
-	var next: StringName = chain.get(state.chain_index)
+	var next: StringName = chain[state.chain_index]
 	state.chain_index += 1
 	var is_last: bool = state.chain_index >= chain.size()
 	if loop_override:
@@ -141,7 +160,7 @@ func _pick_variant(state: State) -> StringName:
 	
 	var pool: Array[StringName] = _pool()
 	if variant_follow and state.machine:
-		state.last_variant = pool.get(mini(state.machine.last_variant_index, pool.size() - 1))
+		state.last_variant = pool[mini(state.machine.last_variant_index, pool.size() - 1)]
 		return state.last_variant
 	
 	var choices: Array[StringName] = pool.duplicate()
@@ -156,7 +175,11 @@ func _pick_variant(state: State) -> StringName:
 func _play_animation(state: State) -> void:
 	if animation.is_empty() or not state.sprite:
 		return
-	if not restart_if_playing and state.sprite.playing and _pool().has(StringName(state.sprite.current_animation)):
+	if (
+			not restart_if_playing
+			and state.sprite.playing
+			and _pool().has(StringName(state.sprite.current_animation))
+	):
 		return
 	
 	var chosen: StringName = _pick_variant(state)
@@ -184,12 +207,6 @@ func _play_sfx(state: State, stream: AudioStream) -> Node:
 	if sfx_spatial and state.sprite:
 		return SFX.play_tracked_at(stream, state.sprite, bus)
 	return SFX.play_tracked(stream, bus)
-
-
-func _validate_property(property: Dictionary) -> void:
-	if property.name == &"sfx_bus":
-		property.hint = PROPERTY_HINT_ENUM
-		property.hint_string = _bus_hint_string()
 
 
 func _bus_hint_string() -> String:

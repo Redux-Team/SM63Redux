@@ -7,9 +7,9 @@ var _lifetimes: Dictionary[StringName, float] = {}
 
 
 func set_modifier(key: StringName, value: float, duration: float = 0.0) -> void:
-	_values.set(key, value)
+	_values[key] = value
 	if duration > 0.0:
-		_lifetimes.set(key, duration)
+		_lifetimes[key] = duration
 	else:
 		_lifetimes.erase(key)
 
@@ -33,9 +33,9 @@ func tick(delta: float) -> void:
 		return
 	
 	for key: StringName in _lifetimes.keys():
-		var remaining: float = _lifetimes.get(key) - delta
+		var remaining: float = _lifetimes[key] - delta
 		if remaining > 0.0:
-			_lifetimes.set(key, remaining)
+			_lifetimes[key] = remaining
 			continue
 		
 		clear_modifier(key)
@@ -44,6 +44,6 @@ func tick(delta: float) -> void:
 func product() -> float:
 	var result: float = 1.0
 	for key: StringName in _values:
-		result *= _values.get(key)
+		result *= _values[key]
 	
 	return result

@@ -48,21 +48,31 @@ func _exit() -> void:
 
 
 func get_spray_angle() -> float:
-	return float(player.get_facing()) * (PI / 2.0 + deg_to_rad(player.sprite.local_rotation))
+	return (
+		float(player.get_facing())
+		* (PI / 2.0 + deg_to_rad(player.sprite.local_rotation))
+	)
 
 
 func _apply_aim(delta: float) -> void:
 	var aim: float = Input.get_axis(&"jump", &"crouch")
 	var target: float = aim * (angle_max if aim > 0.0 else angle_min)
 	
-	_aim_degrees = lerpf(_aim_degrees, target, 1.0 - pow(0.5, delta / aim_turn_halflife))
+	_aim_degrees = lerpf(
+		_aim_degrees,
+		target,
+		1.0 - pow(0.5, delta / aim_turn_halflife),
+	)
 	
 	var facing: float = float(player.get_facing())
 	var radians: float = deg_to_rad(_aim_degrees)
 	var direction: Vector2 = Vector2(cos(radians) * facing, sin(radians))
 	var speed: float = maxf(turbo_speed, player.velocity.length())
 	
-	player.velocity = player.velocity.move_toward(direction * speed, aim_acceleration * delta)
+	player.velocity = player.velocity.move_toward(
+		direction * speed,
+		aim_acceleration * delta,
+	)
 	player.sprite.local_rotation = _aim_degrees
 
 

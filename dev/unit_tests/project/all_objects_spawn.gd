@@ -14,7 +14,12 @@ static func run_test() -> void:
 		for context: GameObject.Context in [GameObject.Context.EDITOR, GameObject.Context.GAME]:
 			var object: GameObject = ObjectRegistry.spawn(ObjectData.create(entry.id), context)
 			if object == null:
-				push_error("Object failed to spawn: %s (%s)" % [entry.id, GameObject.Context.find_key(context)])
+				push_error(
+						"Object failed to spawn: %s (%s)" % [
+							entry.id,
+							GameObject.Context.find_key(context),
+						]
+				)
 				continue
 			
 			assert(object.to_data().id == entry.id)
