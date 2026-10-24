@@ -38,10 +38,10 @@ Rules marked with an exclamation point `!` are mostly enforced as well, but exce
 - \* Multi-line arrays, dictionaries and enums end with a trailing comma, and single-line lists don't. Enum constants go on their own lines.
 - \* Write floats with both digits (`0.5`, `13.0`), hexadecimal in lowercase (`0xff`), and large numbers with `_` separators (`1_000_000`).
 - \* Continuation lines (inside `( )`, multi-line indexes, and after a `\`) take **two** indent levels; the contents of array, dictionary and enum literals take **one**. The closing bracket returns to the indent of the line that opened it.
-- \* A backslash `\` is only used to break a line right after an `=`; everywhere else, wrap with brackets.
 - \* No parentheses around a whole condition, right-hand side or `return` value unless the expression is wrapped over several lines.
 - \* No trailing whitespace & have exactly one newline at the end of the file.
 - \* Lines are at most 100 characters wide, counting a tab as 4. Aim for 80 where it reads naturally, but don't wrap a line just to get under 80. These 2 numbers are the 2 vertical lines seen in the godot script editor.
+- A backslash `\` should be used to break a line that exceeds the character limit, normally this happens in assignment expresions, to which I'd recommend placing it after the `=`.
 - Shaders are checked for tabs, blank lines, whitespace, line endings and width; the other formatting rules mainly just apply to GDScript.
 - Anything not mentioned here should follow Godot's established convention: https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html
 - Only wrap a line when it would go past 100, and break it wherever it flows and reads best. For a long assignment, breaking right after the `=` often reads well; otherwise use bracket blocks: the opening bracket ends the line, each item goes on its own line with a trailing comma, and the closing bracket goes back on its own line. Long conditions and expressions are wrapped in parentheses with the operator leading each line:
