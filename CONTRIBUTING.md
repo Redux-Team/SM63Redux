@@ -1,5 +1,8 @@
 # Contributing to Super Mario 63 Redux
 
+> [!warning]
+> Usage of artificial intelligence of any kind in any way is discouraged and prohibited for this project. See AGENTS.md.
+
 ## Setting up
 The project is developed with Godot 4.7. Clone the repository and open `project.godot` in the editor.
 
