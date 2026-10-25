@@ -1,0 +1,55 @@
+name: Other Topic (Custom)
+description: Discuss a topic which doesn't fall under the other issue templates.
+title: "[Other]: "
+
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Please fill out the values below in **English** to the best of your ability. Use translation tools if necessary.
+        The more respectful and descriptive you are, the easier it will be to have substance in the discussion.
+        Please keep discussion relevant to one general topic at a time;
+        if multiple different topic issues are necessary, make different question issues for each topic.
+
+  - type: textarea
+    id: topic
+    attributes:
+      label: Topic
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Extra fields (Optional)
+      placeholder: Place any extra notes, screenshots, or videos here.
+
+  - type: dropdown
+    id: portion
+    attributes:
+      label: Portion (Optional)
+      description: What portion of the game is this in relation to, if any?
+      multiple: true
+      options:
+        - Campaign
+        - Level Designer
+        - General gameplay
+        - Other
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Is this a valid issue?
+      options:
+        - label: >
+            I have verified that this topic or something similar has not been asked nor addressed
+            in a separate issue/pull request.
+          required: true
+
+  - type: markdown
+    attributes:
+      value: >
+        Thank you for the topic!
+
