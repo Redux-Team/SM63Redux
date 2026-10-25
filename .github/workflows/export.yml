@@ -74,7 +74,7 @@ jobs:
         run: |
           mkdir -p "$(dirname "$OUTPUT")"
           timeout 900 godot --headless --path . --audio-driver Dummy --export-release "$PRESET" "$OUTPUT" 2>&1 | tee "$RUNNER_TEMP/export.log"
-          if grep -E '^(ERROR|SCRIPT ERROR)' "$RUNNER_TEMP/export.log" | grep -v 'still in use at exit'; then
+          if ! .github/scripts/check-godot-log.sh "$RUNNER_TEMP/import.log"; then
             echo "::error::Exporting $PRESET reported errors."
             exit 1
           fi
