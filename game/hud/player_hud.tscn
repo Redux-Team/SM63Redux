@@ -34,7 +34,7 @@
 [ext_resource type="Script" uid="uid://iuvdpa51jtfn" path="res://game/hud/health_meter.gd" id="hud_health"]
 [ext_resource type="Shader" uid="uid://ckfhgfselhw1l" path="res://shader/hud_cap_overlay.gdshader" id="hud_overlay_shader"]
 [ext_resource type="Shader" uid="uid://cryu32fppqg1h" path="res://shader/hud_cap_rainbow.gdshader" id="hud_rainbow_shader"]
-[ext_resource type="FontFile" path="res://assets/font/pixel_redux_border.fnt" id="wing_font"]
+[ext_resource type="FontFile" uid="uid://cnmgtcgow66hp" path="res://assets/font/pixel_redux_border.fnt" id="wing_font"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pm01n"]
 
@@ -55,6 +55,8 @@ gradient = SubResource("Gradient_hud_metal")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hud_overlay"]
 shader = ExtResource("hud_overlay_shader")
 shader_parameter/outline_width = 1.0
+shader_parameter/fill_top = 0.0
+shader_parameter/fill_bottom = 1.0
 shader_parameter/center = Vector2(32, 32)
 shader_parameter/metal_progress = 0.0
 shader_parameter/metal_ramp = SubResource("GradientTexture1D_hud_metal")
@@ -76,14 +78,33 @@ shader_parameter/ghost_stripe_speed = 10.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hud_overlay_inner"]
 shader = ExtResource("hud_overlay_shader")
-shader_parameter/metal_ramp = SubResource("GradientTexture1D_hud_metal")
+shader_parameter/outline_width = 2.0
 shader_parameter/fill_top = 0.1667
 shader_parameter/fill_bottom = 0.8333
 shader_parameter/center = Vector2(24, 24)
+shader_parameter/metal_progress = 0.0
+shader_parameter/metal_ramp = SubResource("GradientTexture1D_hud_metal")
+shader_parameter/metal_tint = Color(0.85, 0.9, 1, 1)
+shader_parameter/metal_outline = Color(0.12, 0.13, 0.17, 1)
+shader_parameter/metal_contrast = 1.3
+shader_parameter/metal_sheen = 0.35
+shader_parameter/metal_sheen_width = 4.0
+shader_parameter/metal_sheen_interval = 720.0
+shader_parameter/metal_sheen_speed = 120.0
+shader_parameter/ghost_progress = 0.0
+shader_parameter/ghost_tint = Color(0.6, 0.85, 1, 1)
+shader_parameter/ghost_outline = Color(0.88, 0.96, 1, 1)
+shader_parameter/ghost_tint_strength = 0.5
+shader_parameter/ghost_alpha = 0.45
+shader_parameter/ghost_stripe_alpha = 0.3
+shader_parameter/ghost_stripe_spacing = 3.0
+shader_parameter/ghost_stripe_speed = 10.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0c88u"]
 shader = ExtResource("3_d64ys")
 shader_parameter/outline_width = 1.0
+shader_parameter/fill_top = 0.1667
+shader_parameter/fill_bottom = 0.8333
 shader_parameter/modulate_color = Color(1, 1, 1, 1)
 shader_parameter/health_texture = ExtResource("3_hbyb8")
 shader_parameter/total_slices = 8
@@ -107,14 +128,12 @@ shader_parameter/ghost_alpha = 0.45
 shader_parameter/ghost_stripe_alpha = 0.3
 shader_parameter/ghost_stripe_spacing = 3.0
 shader_parameter/ghost_stripe_speed = 10.0
-shader_parameter/fill_top = 0.1667
-shader_parameter/fill_bottom = 0.8333
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1hbjs"]
 atlas = ExtResource("2_fsh6l")
 region = Rect2(0, 0, 64, 16)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_f6djn"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_6aeor"]
 diffuse_texture = SubResource("AtlasTexture_1hbjs")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nayuj"]
@@ -207,7 +226,7 @@ animations = [{
 atlas = ExtResource("13_erhw5")
 region = Rect2(0, 0, 14, 14)
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_6aeor"]
+[sub_resource type="CanvasTexture" id="CanvasTexture_vi8ud"]
 diffuse_texture = SubResource("AtlasTexture_tg085")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aqq40"]
@@ -307,12 +326,12 @@ animations = [{
 shader = ExtResource("hud_rainbow_shader")
 shader_parameter/progress = 1.0
 shader_parameter/half_width = 32.0
+shader_parameter/fill_left = 0.0625
+shader_parameter/fill_right = 0.9375
 shader_parameter/saturation = 0.85
 shader_parameter/shading = 0.6
 shader_parameter/cycle_speed = 0.6
 shader_parameter/spread = 0.01
-shader_parameter/fill_left = 0.0625
-shader_parameter/fill_right = 0.9375
 
 [sub_resource type="Texture2D" id="Texture2D_1f64a"]
 resource_local_to_scene = false
@@ -512,8 +531,8 @@ grow_horizontal = 2
 texture = ExtResource("1_e2fet")
 
 [node name="InnerHPBG" type="TextureRect" parent="HealthContainer/Base" unique_id=2134494592]
-material = SubResource("ShaderMaterial_hud_overlay_inner")
 show_behind_parent = true
+material = SubResource("ShaderMaterial_hud_overlay_inner")
 layout_mode = 0
 offset_left = 8.0
 offset_top = 8.0
@@ -539,11 +558,11 @@ grow_vertical = 2
 [node name="POWER" type="Sprite2D" parent="HealthContainer/Base" unique_id=457957822]
 position = Vector2(31.499989, 9)
 scale = Vector2(1.0781246, 1)
-texture = SubResource("CanvasTexture_f6djn")
+texture = SubResource("CanvasTexture_6aeor")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 16)
 script = ExtResource("11_fsh6l")
-canvas_texture = SubResource("CanvasTexture_f6djn")
+canvas_texture = SubResource("CanvasTexture_6aeor")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_rmsoo")
 current_animation = "default"
@@ -554,11 +573,11 @@ metadata/_custom_type_script = "uid://cvolonferossj"
 
 [node name="CoinMeter" type="Sprite2D" parent="HealthContainer/Base" unique_id=281389693]
 position = Vector2(32, 32)
-texture = SubResource("CanvasTexture_6aeor")
+texture = SubResource("CanvasTexture_vi8ud")
 region_enabled = true
 region_rect = Rect2(0, 0, 14, 14)
 script = ExtResource("11_fsh6l")
-canvas_texture = SubResource("CanvasTexture_6aeor")
+canvas_texture = SubResource("CanvasTexture_vi8ud")
 animated = true
 diffuse_frames = SubResource("SpriteFrames_871rv")
 current_animation = "default"
@@ -587,12 +606,12 @@ cap = &"Invincible"
 targets = [NodePath("../../Base/POWER")]
 material = SubResource("ShaderMaterial_hud_rainbow")
 
-[node name="Wing" type="Node" parent="HealthContainer/CapEffects" node_paths=PackedStringArray("indicators")]
+[node name="Wing" type="Node" parent="HealthContainer/CapEffects" unique_id=1128982682 node_paths=PackedStringArray("indicators")]
 script = ExtResource("hud_cap_effect")
 cap = &"Wing"
 indicators = [NodePath("../../WingIndicator")]
 
-[node name="WingIndicator" type="Label" parent="HealthContainer"]
+[node name="WingIndicator" type="Label" parent="HealthContainer" unique_id=1253932335]
 visible = false
 layout_mode = 1
 anchors_preset = 5

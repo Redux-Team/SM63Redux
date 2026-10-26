@@ -1,0 +1,318 @@
+[gd_scene format=3 uid="uid://ceovaq1upqjev"]
+
+[ext_resource type="Shader" uid="uid://wxepa6euigw5" path="res://shader/blur.gdshader" id="1_5n7he"]
+[ext_resource type="Script" uid="uid://c1lna1yvmwak1" path="res://game/pause/pause_screen.gd" id="1_vycpd"]
+[ext_resource type="Script" uid="uid://djwxqlemhil25" path="res://util/ui/ui_blur_rect/blur_rect.gd" id="2_vycpd"]
+[ext_resource type="Script" uid="uid://bmkoc7l020aqo" path="res://util/ui/slope_box_container/slope_box_container.gd" id="4_hfb25"]
+[ext_resource type="Shader" uid="uid://cutgicj2s5not" path="res://shader/ui_canvas_group.gdshader" id="4_kn6ic"]
+[ext_resource type="Script" uid="uid://dhgqv1os58v6y" path="res://util/ui/ui_canvas_group/ui_canvas_group.gd" id="5_qoevq"]
+[ext_resource type="AudioStream" uid="uid://vkf1w8d56huc" path="res://assets/sfx/gui/pause_open.ogg" id="7_qoevq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hfb25"]
+shader = ExtResource("1_5n7he")
+shader_parameter/tint = Color(0, 0, 0, 0)
+shader_parameter/blur = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kn6ic"]
+shader = ExtResource("4_kn6ic")
+
+[sub_resource type="Animation" id="Animation_hfb25"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/BlurRect:blur_strength")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Control/Panel:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Control/Panel/UICanvasGroup:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Control/BlurRect:tint")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_kn6ic"]
+resource_name = "close"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.43333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/BlurRect:blur_strength")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(2.9802322e-08, 0.16666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [3.0, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Control/Panel:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.033333335, 0.23333333),
+"transitions": PackedFloat32Array(0.3, 0.3),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Control/Panel/UICanvasGroup:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(1, 0.3),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Control/BlurRect:tint")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.16666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0.2627451), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_bitfh"]
+resource_name = "open"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/BlurRect:blur_strength")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.20000003),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 3.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Control/Panel:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Vector2(0, 1), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Control/Panel/UICanvasGroup:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.033333335, 0.4),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Control/BlurRect:tint")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.20165114),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.2627451)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fb2si"]
+_data = {
+&"RESET": SubResource("Animation_hfb25"),
+&"close": SubResource("Animation_kn6ic"),
+&"open": SubResource("Animation_bitfh")
+}
+
+[node name="PauseScreen" type="CanvasLayer" unique_id=1165494419 node_paths=PackedStringArray("animation_player", "audio_stream_player", "resume_button")]
+process_mode = 3
+visible = false
+script = ExtResource("1_vycpd")
+animation_player = NodePath("AnimationPlayer")
+audio_stream_player = NodePath("AudioStreamPlayer")
+resume_button = NodePath("Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer/ResumeButton")
+
+[node name="Control" type="Control" parent="." unique_id=1621893195]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/gdss_mode = 1
+
+[node name="BlurRect" type="ColorRect" parent="Control" unique_id=818530008]
+material = SubResource("ShaderMaterial_hfb25")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_vycpd")
+blur_strength = 0.0
+metadata/_custom_type_script = "uid://djwxqlemhil25"
+metadata/gdss_mode = 3
+
+[node name="Panel" type="PanelContainer" parent="Control" unique_id=1847324817]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.609
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.23999023
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(1e-05, 1)
+pivot_offset_ratio = Vector2(1, 0.5)
+metadata/gdss_classes = PackedStringArray("PausePanel")
+
+[node name="UICanvasGroup" type="Control" parent="Control/Panel" unique_id=1135120307]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_kn6ic")
+layout_mode = 2
+script = ExtResource("5_qoevq")
+metadata/_custom_type_script = "uid://dhgqv1os58v6y"
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/Panel/UICanvasGroup" unique_id=697317221]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 55
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 45
+metadata/_gdss_applied = [Rect2(0, 0, 240, 360), true]
+metadata/gdss_mode = 3
+
+[node name="SlopeBoxContainer" type="BoxContainer" parent="Control/Panel/UICanvasGroup/MarginContainer" unique_id=1888149766]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 14
+alignment = 1
+vertical = true
+script = ExtResource("4_hfb25")
+slope = 0.2
+metadata/_custom_type_script = "uid://bmkoc7l020aqo"
+metadata/_gdss_applied = [Rect2(52, 105.5, 136, 149), true]
+metadata/gdss_mode = 3
+
+[node name="ResumeButton" type="Button" parent="Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer" unique_id=1901766720]
+layout_mode = 2
+text = "RESUME"
+metadata/gdss_classes = PackedStringArray("PauseResume")
+
+[node name="RetryButton" type="Button" parent="Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer" unique_id=1909480880]
+layout_mode = 2
+text = "Retry"
+metadata/gdss_classes = PackedStringArray("PauseResume")
+
+[node name="SettingsButton" type="Button" parent="Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer" unique_id=347750108]
+layout_mode = 2
+text = "settings"
+metadata/gdss_classes = PackedStringArray("PauseSettings")
+
+[node name="ExitButton" type="Button" parent="Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer" unique_id=1760559940]
+layout_mode = 2
+text = "Exit"
+metadata/gdss_classes = PackedStringArray("PauseButton")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=271967985]
+libraries/ = SubResource("AnimationLibrary_fb2si")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=510222109]
+stream = ExtResource("7_qoevq")
+volume_db = 10.0
+bus = &"SFX"
