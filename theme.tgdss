@@ -9,6 +9,8 @@
 	MAIN_FONT: font("uid://cnmgtcgow66hp")
 	HOLLOW_FONT: font("uid://k76pvtok3f2u")
 	PLAYTEST_TEXTURE: texture("uid://br1pxo7vu7i6m", NEAREST, true, true)
+	EXIT_TEXTURE: texture("uid://b1kmt3oj7maca", NEAREST, true, true)
+	PIXEL_64_FONT: font("uid://c4fspc7t5o2ac")
 }
 
 
@@ -269,6 +271,9 @@ var shadow_drop: 0.65
 var campaign_col: "#FF5D5D"
 var ld_col: "#2FBF71"
 var settings_col: "#8B93A1"
+var retry_col: "#FF5D5D"
+var exit_col: "#E8474C"
+@instance var hold_progress: 0.0
 
 Panel {
 	BlurPanel {
@@ -700,21 +705,49 @@ Button {
 				font_size: 24
 				padding: 40 40 8 8
 				skew_x: 0.15
+				transition_time: 0 "bg_texture"
 				font_color: lighten($accent, 0.2)
 				bg_tint: lighten($accent, 0.3)
 				border_color: darken($accent, $shadow_drop)
 				shadow_color: darken($accent, $shadow_drop)
+				
+				:hover, :focus {
+					transition_time: 0.1 "bg_texture"
+					bg_texture: $art
+				}
 				
 				:pressed {
 					transform_scale: 0.9
 				}
 				
 				PauseResume {
-					var accent: $campaign_col 
+					var accent: $global_accent
+					var art: $CAMPAIGN_TEXTURE
+				}
+				
+				PauseRetry {
+					var accent: $retry_col
+					var art: $PLAYTEST_TEXTURE
+					
+					:pressed, :hover_pressed {
+						transition_time: 0 "bg_color"
+						bg_color: linear_gradient(lighten($accent, 0.35), darken($accent, 0.3), 0, $hold_progress, $hold_progress)
+					}
 				}
 				
 				PauseSettings {
-					var accent: $settings_col 
+					var accent: $settings_col
+					var art: $SETTINGS_TEXTURE
+				}
+				
+				PauseExit {
+					var accent: $exit_col
+					var art: $EXIT_TEXTURE
+				}
+				
+				PauseExitLD {
+					var accent: $ld_col
+					var art: $LD_TEXTURE
 				}
 			}
 		}
@@ -913,6 +946,29 @@ RichTextLabel {
 }
 
 # @chunk Level
+Label {
+	PauseHeader {
+		font: $MAIN_FONT
+		font_size: 64
+	}
+	
+	PauseLevelName {
+		font: $PIXEL_64_FONT 
+		font_size: 48
+	}
+	
+	PauseScenarioName {
+		font: $MAIN_FONT 
+		font_size: 28
+	}
+	
+	PauseScenarioDescription {
+		font: $BUTTON_FONT  
+		font_size: 9
+		font_color: alpha(WHITE, 0.8)
+	}
+}
+
 PanelContainer {
 	PausePanel {
 		bg_color: blur(4, BLACK, 0.5)
