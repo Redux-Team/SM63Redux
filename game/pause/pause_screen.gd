@@ -13,7 +13,6 @@ var _is_open: bool = false
 var _level: Level
 var _speed: float = 1.0
 var _time_scale: float = 1.0
-var _physics_ticks: int = 60
 var _last_ticks_usec: int = 0
 
 
@@ -40,7 +39,6 @@ func _exit_tree() -> void:
 		_pause_tween.kill()
 	if _speed < 1.0:
 		Engine.time_scale = _time_scale
-		Engine.physics_ticks_per_second = _physics_ticks
 		_speed = 1.0
 	_inst = null
 
@@ -75,7 +73,6 @@ func open() -> void:
 	_is_open = true
 	if _speed >= 1.0:
 		_time_scale = Engine.time_scale
-		_physics_ticks = Engine.physics_ticks_per_second
 	
 	audio_stream_player.play()
 	animation_player.play(&"open")
@@ -103,14 +100,7 @@ func _tween_speed(to: float) -> void:
 
 func _set_speed(speed: float) -> void:
 	_speed = speed
-	var ticks: int = roundi(_physics_ticks * speed)
-	var stopped: bool = ticks <= 0
-	if stopped:
-		Engine.time_scale = 0.0
-		Engine.physics_ticks_per_second = _physics_ticks
-	else:
-		Engine.physics_ticks_per_second = ticks
-		Engine.time_scale = _time_scale * ticks / _physics_ticks
-	
+	var stopped: bool = speed <= 0.0
+	Engine.time_scale = _time_scale * speed
 	if _level and _level.is_world_frozen() != stopped:
 		_level.set_world_frozen(stopped)
