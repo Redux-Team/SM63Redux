@@ -5,7 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://bv0xjii76r1en" path="res://assets/sfx/object/water_bottle/bottle_big_collect.wav" id="2_hle02"]
 [ext_resource type="Script" uid="uid://cvolonferossj" path="res://util/2d/smart_sprite_2d.gd" id="3_lg1go"]
 [ext_resource type="Script" uid="uid://cf0fqotw8gu4p" path="res://util/2d/entity_check_area.gd" id="4_lg1go"]
-[ext_resource type="Texture2D" uid="uid://dpjbbets5ofo2" path="res://assets/textures/particle/item/Water_bottle_big_particle.png" id="6_8vyn5"]
+[ext_resource type="Texture2D" uid="uid://dpjbbets5ofo2" path="res://assets/textures/particle/item/water_bottle_big_particle.png" id="6_8vyn5"]
 [ext_resource type="Script" uid="uid://c2df6xnsl5aem" path="res://util/2d/particle_emitter.gd" id="7_nof14"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_8vyn5"]

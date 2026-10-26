@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://game/object/text_display.gd" id="4"]
 [ext_resource type="FontFile" path="res://assets/font/pixel_redux.fnt" id="5"]
 [ext_resource type="FontVariation" path="res://assets/font/pixel_redux_bold.tres" id="6"]
-[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/hints/Text_LD.png" id="icon_texture"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/decoration/hints/text_ld.png" id="icon_texture"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBox_margin"]
 content_margin_left = 4.0
