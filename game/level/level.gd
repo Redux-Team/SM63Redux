@@ -5,6 +5,13 @@ signal loaded
 signal coins_changed(kind: StringName, count: int, total: int)
 signal shine_collected(scenario: int)
 signal kickout_requested
+signal retry_requested(clean: bool)
+signal exit_requested
+
+enum Context {
+	CAMPAIGN,
+	PLAYTEST,
+}
 
 const ATTACH_BATCH: int = 64
 
@@ -15,7 +22,9 @@ const ATTACH_BATCH: int = 64
 @export var silhouette_source: SilhouetteSource
 @export var silhouette_material: Material
 @export var background: LevelBackground
+@export var context: Context = Context.CAMPAIGN
 
+var _data: LevelData
 var _area: LevelArea
 var _area_data: AreaData
 var _player: Player
@@ -23,6 +32,7 @@ var _time: float = 0.0
 var _coins: Dictionary[StringName, Dictionary] = {}
 var _pending: Array[GameObject] = []
 var _pending_layers: Array[LevelLayer] = []
+var _world_frozen: bool = false
 
 
 static func of(node: Node) -> Level:
@@ -68,6 +78,32 @@ func request_kickout() -> void:
 	kickout_requested.emit()
 
 
+func can_retry() -> bool:
+	return not retry_requested.get_connections().is_empty()
+
+
+func request_retry(clean: bool = false) -> void:
+	retry_requested.emit(clean)
+
+
+func can_exit() -> bool:
+	return not exit_requested.get_connections().is_empty()
+
+
+func request_exit() -> void:
+	exit_requested.emit()
+
+
+func set_world_frozen(frozen: bool) -> void:
+	_world_frozen = frozen
+	if _pending.is_empty():
+		_apply_world_frozen()
+
+
+func is_world_frozen() -> bool:
+	return _world_frozen
+
+
 func load_data(data: LevelData, area_uuid: StringName = &"") -> void:
 	if not Singleton.defer_threaded(prepare.bind(data, area_uuid), attach):
 		prepare(data, area_uuid)
@@ -75,6 +111,7 @@ func load_data(data: LevelData, area_uuid: StringName = &"") -> void:
 
 
 func prepare(data: LevelData, area_uuid: StringName = &"") -> void:
+	_data = data
 	_area_data = data.find_area(area_uuid)
 	if _area_data == null:
 		_area_data = data.areas.front()
@@ -99,7 +136,7 @@ func attach(batch: int = ATTACH_BATCH) -> void:
 	
 	_pending.clear()
 	_pending_layers.clear()
-	world.process_mode = Node.PROCESS_MODE_INHERIT
+	_apply_world_frozen()
 	for object: GameObject in _area.get_all_objects():
 		if object.game_root is Player:
 			_player = object.game_root
@@ -134,12 +171,28 @@ func dismantle() -> void:
 	await Teardown.free_nodes(_area.get_all_objects() if _area else [], get_tree())
 
 
+func get_level_name() -> String:
+	return _data.level_name if _data and not _data.level_name.is_empty() else "Untitled Level"
+
+
+func get_scenario_name() -> String:
+	return "Scenario Name"
+
+
+func get_scenario_description() -> String:
+	return "A short description of what this scenario is about."
+
+
 func get_area() -> LevelArea:
 	return _area
 
 
 func get_player() -> Player:
 	return _player
+
+
+func _apply_world_frozen() -> void:
+	world.process_mode = Node.PROCESS_MODE_DISABLED if _world_frozen else Node.PROCESS_MODE_INHERIT
 
 
 func _get_counter(kind: StringName, group: StringName) -> Vector2i:

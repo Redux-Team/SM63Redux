@@ -63,8 +63,9 @@ func play(builder: Builder) -> void:
 	await _tween_mask(_revealed, _covered, builder.out_duration, Tween.EASE_OUT).finished
 	await _settle()
 	
-	var hold: SceneTreeTimer = get_tree().create_timer(builder.hold_duration)
-	var loading_timer: SceneTreeTimer = get_tree().create_timer(builder.loading_delay)
+	var hold: SceneTreeTimer = get_tree().create_timer(builder.hold_duration, true, false, true)
+	var loading_timer: SceneTreeTimer = \
+			get_tree().create_timer(builder.loading_delay, true, false, true)
 	loading_timer.timeout.connect(loading_screen.open)
 	if builder.loading_delay <= 0.0 or builder.type == Type.BLUR:
 		await loading_screen.open(builder.type == Type.BLUR)
@@ -167,7 +168,8 @@ func _await_scene(path: String) -> PackedScene:
 
 
 func _tween_mask(from: float, to: float, duration: float, easing: Tween.EaseType) -> Tween:
-	var tween: Tween = create_tween().set_trans(_transition_type).set_ease(easing)
+	var tween: Tween = \
+			create_tween().set_ignore_time_scale().set_trans(_transition_type).set_ease(easing)
 	tween.tween_method(_set_parameter, from, to, duration * _duration_scale)
 	return tween
 

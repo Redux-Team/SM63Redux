@@ -1,0 +1,441 @@
+[gd_scene format=3 uid="uid://ceovaq1upqjev"]
+
+[ext_resource type="Shader" uid="uid://wxepa6euigw5" path="res://shader/blur.gdshader" id="1_5n7he"]
+[ext_resource type="Script" uid="uid://c1lna1yvmwak1" path="res://game/pause/pause_screen.gd" id="1_vycpd"]
+[ext_resource type="Script" uid="uid://djwxqlemhil25" path="res://util/ui/ui_blur_rect/blur_rect.gd" id="2_vycpd"]
+[ext_resource type="Script" uid="uid://bmkoc7l020aqo" path="res://util/ui/slope_box_container/slope_box_container.gd" id="4_hfb25"]
+[ext_resource type="Shader" uid="uid://cutgicj2s5not" path="res://shader/ui_canvas_group.gdshader" id="4_kn6ic"]
+[ext_resource type="Script" uid="uid://dhgqv1os58v6y" path="res://util/ui/ui_canvas_group/ui_canvas_group.gd" id="5_qoevq"]
+[ext_resource type="AudioStream" uid="uid://vkf1w8d56huc" path="res://assets/sfx/gui/pause_open.ogg" id="7_qoevq"]
+[ext_resource type="Script" uid="uid://camcb5y235a46" path="res://game/pause/pause_panel.gd" id="8_panel"]
+[ext_resource type="PackedScene" uid="uid://5ihpqfwwsxbo" path="res://scenes/settings_screen/settings_screen.tscn" id="9_settings"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hfb25"]
+shader = ExtResource("1_5n7he")
+shader_parameter/tint = Color(0, 0, 0, 0)
+shader_parameter/blur = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kn6ic"]
+shader = ExtResource("4_kn6ic")
+
+[sub_resource type="Animation" id="Animation_hfb25"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/BlurRect:blur_strength")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Control/Panel:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Control/Panel/UICanvasGroup:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Control/BlurRect:tint")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Control/LevelInfo:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_kn6ic"]
+resource_name = "close"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.43333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/BlurRect:blur_strength")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(2.9802322e-08, 0.16666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [3.0, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Control/Panel:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.033333335, 0.23333333),
+"transitions": PackedFloat32Array(0.3, 0.3),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Control/Panel/UICanvasGroup:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(1, 0.3),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Control/BlurRect:tint")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.16666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0.2627451), Color(0, 0, 0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Control/LevelInfo:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_bitfh"]
+resource_name = "open"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/BlurRect:blur_strength")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.20000003),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 3.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Control/Panel:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Vector2(0, 1), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Control/Panel/UICanvasGroup:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.033333335, 0.4),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Control/BlurRect:tint")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.20165114),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.2627451)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Control/LevelInfo:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.1, 0.4),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fb2si"]
+_data = {
+&"RESET": SubResource("Animation_hfb25"),
+&"close": SubResource("Animation_kn6ic"),
+&"open": SubResource("Animation_bitfh")
+}
+
+[node name="PauseScreen" type="CanvasLayer" unique_id=1165494419 node_paths=PackedStringArray("animation_player", "audio_stream_player", "resume_button", "retry_button", "settings_button", "exit_button", "panel", "button_group", "level_info", "level_name_label", "scenario_name_label", "scenario_description_label", "settings_screen")]
+process_mode = 3
+visible = false
+script = ExtResource("1_vycpd")
+animation_player = NodePath("AnimationPlayer")
+audio_stream_player = NodePath("AudioStreamPlayer")
+resume_button = NodePath("Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer/HBoxContainer/ResumeButton")
+retry_button = NodePath("Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer/HBoxContainer/RetryButton")
+settings_button = NodePath("Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer/SettingsButton")
+exit_button = NodePath("Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer/ExitButton")
+panel = NodePath("Control/Panel")
+button_group = NodePath("Control/Panel/UICanvasGroup")
+level_info = NodePath("Control/LevelInfo")
+level_name_label = NodePath("Control/LevelInfo/LevelName")
+scenario_name_label = NodePath("Control/LevelInfo/ScenarioName")
+scenario_description_label = NodePath("Control/LevelInfo/ScenarioDescription")
+settings_screen = NodePath("Control/SettingsScreen")
+
+[node name="Control" type="Control" parent="." unique_id=1621893195]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/gdss_mode = 1
+
+[node name="BlurRect" type="ColorRect" parent="Control" unique_id=818530008]
+material = SubResource("ShaderMaterial_hfb25")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_vycpd")
+blur_strength = 0.0
+metadata/_custom_type_script = "uid://djwxqlemhil25"
+metadata/gdss_mode = 3
+
+[node name="LevelInfo" type="VBoxContainer" parent="Control" unique_id=2028054624]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 20.0
+offset_right = -485.0
+grow_horizontal = 2
+theme_override_constants/separation = 6
+metadata/_gdss_applied = [Rect2(24, 20, 131, 131), true]
+
+[node name="LevelName" type="Label" parent="Control/LevelInfo" unique_id=871406514]
+layout_mode = 2
+text = "Level Name"
+autowrap_mode = 3
+metadata/gdss_classes = PackedStringArray("PauseLevelName")
+metadata/_gdss_applied = [Rect2(0, 0, 131, 99), true]
+
+[node name="ScenarioName" type="Label" parent="Control/LevelInfo" unique_id=2127647215]
+visible = false
+layout_mode = 2
+text = "Scenario Name"
+autowrap_mode = 3
+metadata/gdss_classes = PackedStringArray("PauseScenarioName")
+
+[node name="ScenarioDescription" type="Label" parent="Control/LevelInfo" unique_id=2081880813]
+layout_mode = 2
+text = "\"Scenario description\""
+autowrap_mode = 3
+metadata/gdss_classes = PackedStringArray("PauseScenarioDescription")
+metadata/_gdss_applied = [Rect2(0, 105, 131, 25.153847), true]
+
+[node name="Panel" type="PanelContainer" parent="Control" unique_id=1847324817 node_paths=PackedStringArray("margin_container", "buttons", "header")]
+custom_minimum_size = Vector2(407, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(1e-05, 1)
+pivot_offset_ratio = Vector2(1, 0.5)
+script = ExtResource("8_panel")
+edge_padding = 32.0
+margin_container = NodePath("UICanvasGroup/MarginContainer")
+buttons = NodePath("UICanvasGroup/MarginContainer/SlopeBoxContainer")
+header = NodePath("UICanvasGroup/PausedLabel")
+header_gap = 20.0
+metadata/gdss_classes = PackedStringArray("PausePanel")
+
+[node name="UICanvasGroup" type="Control" parent="Control/Panel" unique_id=1135120307]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_kn6ic")
+layout_mode = 2
+script = ExtResource("5_qoevq")
+metadata/_custom_type_script = "uid://dhgqv1os58v6y"
+
+[node name="PausedLabel" type="Label" parent="Control/Panel/UICanvasGroup" unique_id=1673255125]
+layout_mode = 0
+offset_left = 108.0
+offset_top = 27.0
+offset_right = 274.0
+offset_bottom = 91.0
+offset_transform_position = Vector2(8, 0)
+text = "PAUSED"
+horizontal_alignment = 1
+metadata/gdss_classes = PackedStringArray("PauseHeader")
+metadata/_gdss_applied = [Rect2(108, 27, 166, 64), true]
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/Panel/UICanvasGroup" unique_id=697317221]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 58
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 32
+metadata/_gdss_applied = [Rect2(0, 0, 240, 360), true]
+metadata/gdss_mode = 3
+
+[node name="SlopeBoxContainer" type="BoxContainer" parent="Control/Panel/UICanvasGroup/MarginContainer" unique_id=1888149766]
+custom_minimum_size = Vector2(316.6, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 14
+alignment = 1
+vertical = true
+script = ExtResource("4_hfb25")
+slope = 0.2
+metadata/_custom_type_script = "uid://bmkoc7l020aqo"
+metadata/_gdss_applied = [Rect2(52, 105.5, 136, 149), true]
+metadata/gdss_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer" unique_id=1794289391]
+layout_mode = 2
+theme_override_constants/separation = 20
+metadata/_gdss_applied = [Rect2(0, 0, 155, 40), true]
+metadata/gdss_mode = 3
+
+[node name="ResumeButton" type="Button" parent="Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer/HBoxContainer" unique_id=1901766720]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_neighbor_right = NodePath("../RetryButton")
+focus_neighbor_bottom = NodePath("../../SettingsButton")
+text = "RESUME"
+metadata/gdss_classes = PackedStringArray("PauseResume")
+
+[node name="RetryButton" type="Button" parent="Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer/HBoxContainer" unique_id=1909480880]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_neighbor_left = NodePath("../ResumeButton")
+focus_neighbor_bottom = NodePath("../../SettingsButton")
+focus_next = NodePath("../../SettingsButton")
+focus_previous = NodePath("../ResumeButton")
+text = "Retry"
+metadata/gdss_classes = PackedStringArray("PauseRetry")
+
+[node name="SettingsButton" type="Button" parent="Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer" unique_id=347750108]
+layout_mode = 2
+focus_neighbor_top = NodePath("../HBoxContainer/ResumeButton")
+focus_neighbor_bottom = NodePath("../ExitButton")
+focus_next = NodePath("../ExitButton")
+focus_previous = NodePath("../HBoxContainer/RetryButton")
+text = "settings"
+metadata/gdss_classes = PackedStringArray("PauseSettings")
+
+[node name="ExitButton" type="Button" parent="Control/Panel/UICanvasGroup/MarginContainer/SlopeBoxContainer" unique_id=1760559940]
+layout_mode = 2
+text = "Exit"
+metadata/gdss_classes = PackedStringArray("PauseExit")
+
+[node name="SettingsScreen" parent="Control" unique_id=901817208 instance=ExtResource("9_settings")]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=271967985]
+libraries/ = SubResource("AnimationLibrary_fb2si")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=510222109]
+stream = ExtResource("7_qoevq")
+volume_db = 10.0
+bus = &"SFX"

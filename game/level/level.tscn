@@ -1,19 +1,20 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://clpelpscd74y6"]
 
-[ext_resource type="Script" path="res://game/level/level.gd" id="1_level"]
-[ext_resource type="Script" path="res://game/level/world/level_culler.gd" id="2_culler"]
-[ext_resource type="Script" path="res://util/2d/silhouette_source.gd" id="3_silhouette"]
+[ext_resource type="Script" uid="uid://b0inc5ahyirt0" path="res://game/level/level.gd" id="1_level"]
+[ext_resource type="Script" uid="uid://50ras4s7dchj" path="res://game/level/world/level_culler.gd" id="2_culler"]
+[ext_resource type="Script" uid="uid://bfm66pksrtvtp" path="res://util/2d/silhouette_source.gd" id="3_silhouette"]
 [ext_resource type="Shader" uid="uid://dbj7imkpljnnh" path="res://shader/silhouette_outline.gdshader" id="4_outline"]
 [ext_resource type="PackedScene" uid="uid://vgcwqugyqu40" path="res://game/hud/player_hud.tscn" id="5_hud"]
-[ext_resource type="Script" path="res://game/level/background/level_background.gd" id="6_background"]
-[ext_resource type="Script" path="res://game/level/level_camera.gd" id="7_camera"]
+[ext_resource type="Script" uid="uid://8lsmy3lnmyui" path="res://game/level/background/level_background.gd" id="6_background"]
+[ext_resource type="Script" uid="uid://cks7d1prwd7s6" path="res://game/level/level_camera.gd" id="7_camera"]
+[ext_resource type="PackedScene" uid="uid://ceovaq1upqjev" path="res://game/pause/pause_screen.tscn" id="8_m2x2l"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_silhouette"]
 shader = ExtResource("4_outline")
 shader_parameter/outline_color = Color(1, 0, 0, 1)
 shader_parameter/thickness = 1
 
-[node name="Level" type="Node2D" node_paths=PackedStringArray("world", "culler", "camera", "hud", "silhouette_source", "background")]
+[node name="Level" type="Node2D" unique_id=913672508 node_paths=PackedStringArray("world", "culler", "camera", "hud", "silhouette_source", "background")]
 script = ExtResource("1_level")
 world = NodePath("World")
 culler = NodePath("Culler")
@@ -23,22 +24,29 @@ silhouette_source = NodePath("SilhouetteSource")
 silhouette_material = SubResource("ShaderMaterial_silhouette")
 background = NodePath("Background")
 
-[node name="Background" type="CanvasLayer" parent="."]
+[node name="Background" type="CanvasLayer" parent="." unique_id=1182880526]
 layer = -10
 script = ExtResource("6_background")
 
-[node name="World" type="Node2D" parent="."]
+[node name="World" type="Node2D" parent="." unique_id=612798933]
 
-[node name="Camera" type="Camera2D" parent="."]
-physics_interpolation_mode = 2
+[node name="Camera" type="Camera2D" parent="." unique_id=1937300052]
 process_physics_priority = 1000
-script = ExtResource("7_camera")
+physics_interpolation_mode = 2
 zoom = Vector2(2, 2)
+script = ExtResource("7_camera")
 
-[node name="Culler" type="Node" parent="."]
+[node name="Culler" type="Node" parent="." unique_id=1419629507]
 script = ExtResource("2_culler")
 
-[node name="SilhouetteSource" type="Node" parent="."]
+[node name="SilhouetteSource" type="Node" parent="." unique_id=1695426110]
 script = ExtResource("3_silhouette")
 
-[node name="PlayerHUD" parent="." instance=ExtResource("5_hud")]
+[node name="PlayerHUD" parent="." unique_id=773809394 node_paths=PackedStringArray("coin_counters") instance=ExtResource("5_hud")]
+coin_counters = {
+&"purple": NodePath("CollectibleContainer/VBoxContainer/PurpleCoinContainer"),
+&"red": NodePath("CollectibleContainer/VBoxContainer/RedCoinContainer"),
+&"yellow": NodePath("CollectibleContainer/VBoxContainer/YellowCoinContainer")
+}
+
+[node name="PauseScreen" parent="." unique_id=1165494419 instance=ExtResource("8_m2x2l")]

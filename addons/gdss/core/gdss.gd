@@ -10,6 +10,8 @@ const CLASSES_META: StringName = &"gdss_classes"
 const MODE_META: StringName = &"gdss_mode"
 const OVERRIDES_META: StringName = &"gdss_overrides"
 const STATE_META: StringName = &"gdss_state"
+const TIME_PARAM: StringName = &"gdss_time"
+const TIME_ROLLOVER: float = 3600.0
 
 enum GdssMode {
 	INHERIT,
@@ -260,7 +262,7 @@ static func tween_global_vars(values: Dictionary, tween_time: float = 0.0, trans
 	var from: Dictionary = {}
 	for key: String in values:
 		from.set(key, GdssStylesheet.globals.get(key, values.get(key)))
-	var tween: Tween = (Engine.get_main_loop() as SceneTree).create_tween()
+	var tween: Tween = (Engine.get_main_loop() as SceneTree).create_tween().set_ignore_time_scale()
 	tween.set_trans(GdssStylebox.tween_trans(trans))
 	tween.set_ease(GdssStylebox.tween_ease(ease))
 	tween.tween_method(func(t: float) -> void:
@@ -301,7 +303,7 @@ static func set_scheme(name: String, tween_time: float = 0.0, trans: TransitionF
 	for key: String in keys:
 		var current: Variant = _scheme_value(key)
 		from.set(key, current if current != null else target.get(key))
-	_scheme_tween = (Engine.get_main_loop() as SceneTree).create_tween()
+	_scheme_tween = (Engine.get_main_loop() as SceneTree).create_tween().set_ignore_time_scale()
 	_scheme_tween.set_trans(GdssStylebox.tween_trans(trans))
 	_scheme_tween.set_ease(GdssStylebox.tween_ease(ease))
 	_scheme_tween.tween_method(func(t: float) -> void:
@@ -824,6 +826,19 @@ static func gpu_panels_enabled() -> bool:
 			ProjectSettings.set_setting("gdss/rendering/gpu_panels", true)
 		_gpu_panels = 1 if ProjectSettings.get_setting("gdss/rendering/gpu_panels", true) else 0
 	return _gpu_panels == 1
+
+
+static func ensure_time_param() -> void:
+	if not RenderingServer.global_shader_parameter_get_list().has(TIME_PARAM):
+		RenderingServer.global_shader_parameter_add(
+				TIME_PARAM, RenderingServer.GLOBAL_VAR_TYPE_FLOAT, 0.0
+		)
+
+
+static func update_time() -> void:
+	RenderingServer.global_shader_parameter_set(
+			TIME_PARAM, fmod(Time.get_ticks_usec() / 1_000_000.0, TIME_ROLLOVER)
+	)
 
 
 ## Returns [param seconds] scaled by [member animation_speed_scale], or [code]0.0[/code]

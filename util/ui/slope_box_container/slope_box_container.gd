@@ -50,5 +50,13 @@ func _offset_children(controls: Array[Control], offset_slope: float) -> void:
 	running_offset -= get_theme_constant(&"separation")
 	
 	# Resize all nodes to fit it within the rect after the offsets
+	var target_size: float = size[1^v] - running_offset * offset_slope
 	for node: Control in controls:
 		node.size[1^v] -= running_offset * offset_slope
+		target_size = maxf(target_size, node.get_combined_minimum_size()[1^v])
+	
+	# Resize all children based on the largest one if they are set to fill
+	for node: Control in controls:
+		var flags: int = node.size_flags_vertical if v == 0 else node.size_flags_horizontal
+		if flags & SIZE_FILL:
+			node.size[1^v] = target_size

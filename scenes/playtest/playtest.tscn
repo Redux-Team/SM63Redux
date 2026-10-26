@@ -1,38 +1,11 @@
 [gd_scene format=3 uid="uid://cym47aynsljut"]
 
 [ext_resource type="Script" uid="uid://bi81p0acw8mn5" path="res://scenes/playtest/playtest.gd" id="1_playtest"]
-[ext_resource type="PackedScene" path="res://game/level/level.tscn" id="2_level"]
+[ext_resource type="PackedScene" uid="uid://clpelpscd74y6" path="res://game/level/level.tscn" id="2_level"]
 
 [node name="Playtest" type="Node" unique_id=856723805 node_paths=PackedStringArray("level", "return_button")]
 script = ExtResource("1_playtest")
 level = NodePath("Level")
-return_button = NodePath("Interface/Root/ReturnButton")
+return_button = NodePath("")
 
 [node name="Level" parent="." unique_id=1100343167 instance=ExtResource("2_level")]
-
-[node name="Interface" type="CanvasLayer" parent="." unique_id=1951743540]
-layer = 5
-
-[node name="Root" type="Control" parent="Interface" unique_id=611893352]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-metadata/gdss_mode = 1
-
-[node name="ReturnButton" type="Button" parent="Interface/Root" unique_id=411130]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 14.0
-offset_top = -56.0
-offset_right = 153.0
-offset_bottom = -12.0
-grow_vertical = 0
-focus_mode = 0
-text = "Return to LD"
-metadata/gdss_classes = PackedStringArray("ReturnToLDButton")

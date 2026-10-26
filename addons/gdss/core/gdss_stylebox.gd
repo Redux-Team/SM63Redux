@@ -771,7 +771,7 @@ func _start_transition(from_state: String, to_state: String, timing_state: Strin
 	var ease: Tween.EaseType = _resolve_ease_val(_get_parsed_val("transition_type", ts, "EASE_OUT"))
 	
 	var tweener_count: int = 0
-	var pending_tween: Tween = (Engine.get_main_loop() as SceneTree).create_tween()
+	var pending_tween: Tween = (Engine.get_main_loop() as SceneTree).create_tween().set_ignore_time_scale()
 	pending_tween.set_parallel(true)
 	pending_tween.set_trans(trans)
 	pending_tween.set_ease(ease)
@@ -2293,7 +2293,7 @@ func _fade_to(target: Texture2D, duration: float) -> Texture2D:
 		# picks up from wherever it got to.
 		_fade_texture = target
 		_fade_value = 0.0
-	_fade_tween = (Engine.get_main_loop() as SceneTree).create_tween()
+	_fade_tween = (Engine.get_main_loop() as SceneTree).create_tween().set_ignore_time_scale()
 	_fade_tween.tween_method(func(v: float) -> void:
 		_fade_value = v
 		_safe_redraw()
