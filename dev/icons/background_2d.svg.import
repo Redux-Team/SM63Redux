@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dl48gyw37ryc4"
-path="res://.godot/imported/HurtBox.svg-9d44748336deb1f269fcec8f9bee4359.ctex"
+uid="uid://nflw8vbs4mrj"
+path="res://.godot/imported/background_2d.svg-6bbc1a7d7fcc135f0acd24daf1aedfc3.ctex"
 metadata={
 "has_editor_variant": true,
 "vram_texture": false
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://dev/icons/HurtBox.svg"
-dest_files=["res://.godot/imported/HurtBox.svg-9d44748336deb1f269fcec8f9bee4359.ctex"]
+source_file="res://dev/icons/background_2d.svg"
+dest_files=["res://.godot/imported/background_2d.svg-6bbc1a7d7fcc135f0acd24daf1aedfc3.ctex"]
 
 [params]
 
@@ -41,4 +41,4 @@ process/size_limit=0
 detect_3d/compress_to=1
 svg/scale=1.0
 editor/scale_with_editor_scale=true
-editor/convert_colors_with_editor_theme=false
+editor/convert_colors_with_editor_theme=true
