@@ -10,6 +10,8 @@ const CLASSES_META: StringName = &"gdss_classes"
 const MODE_META: StringName = &"gdss_mode"
 const OVERRIDES_META: StringName = &"gdss_overrides"
 const STATE_META: StringName = &"gdss_state"
+const TIME_PARAM: StringName = &"gdss_time"
+const TIME_ROLLOVER: float = 3600.0
 
 enum GdssMode {
 	INHERIT,
@@ -824,6 +826,19 @@ static func gpu_panels_enabled() -> bool:
 			ProjectSettings.set_setting("gdss/rendering/gpu_panels", true)
 		_gpu_panels = 1 if ProjectSettings.get_setting("gdss/rendering/gpu_panels", true) else 0
 	return _gpu_panels == 1
+
+
+static func ensure_time_param() -> void:
+	if not RenderingServer.global_shader_parameter_get_list().has(TIME_PARAM):
+		RenderingServer.global_shader_parameter_add(
+				TIME_PARAM, RenderingServer.GLOBAL_VAR_TYPE_FLOAT, 0.0
+		)
+
+
+static func update_time() -> void:
+	RenderingServer.global_shader_parameter_set(
+			TIME_PARAM, fmod(Time.get_ticks_usec() / 1_000_000.0, TIME_ROLLOVER)
+	)
 
 
 ## Returns [param seconds] scaled by [member animation_speed_scale], or [code]0.0[/code]

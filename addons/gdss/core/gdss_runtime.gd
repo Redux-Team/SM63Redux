@@ -17,6 +17,7 @@ var _last_visibility: Dictionary[int, bool] = {}
 
 
 func _process(_delta: float) -> void:
+	GDSS.update_time()
 	if _pending_purge.is_empty():
 		return
 	for id: int in _pending_purge.keys():
@@ -33,6 +34,7 @@ func _process(_delta: float) -> void:
 
 func _ready() -> void:
 	GDSS._runtime = self
+	GDSS.ensure_time_param()
 	_ensure_parsed()
 	GDSS.reset_config()
 	if not Engine.is_editor_hint():

@@ -47,6 +47,8 @@ var _slide: Vector2 = Vector2.ZERO
 var _warm: float = 0.0
 var _tween: Tween
 var _placement: Array = []
+var _last_ticks_usec: int = 0
+var _dismissed: Control
 
 
 static func set_text(control: Control, text: String, mode: Placement = Placement.AUTO) -> void:
@@ -62,18 +64,28 @@ static func get_text(control: Control) -> String:
 func _ready() -> void:
 	root.modulate = Color.TRANSPARENT
 	root.visible = false
+	_last_ticks_usec = Time.get_ticks_usec()
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
+	var now: int = Time.get_ticks_usec()
+	var delta: float = (now - _last_ticks_usec) / 1_000_000.0
+	_last_ticks_usec = now
 	var target: Control = \
 			_current_target() if Settings.level_designer.is_tooltip_enabled() else null
+	if target != _dismissed:
+		_dismissed = null
+	elif target:
+		target = null
 	if not is_instance_valid(_target):
 		_target = null
 		if _shown:
 			_hide_now()
 	if target != _target:
 		var was_shown: bool = _shown
-		var vanished: bool = _target != null and not _is_presentable(_target)
+		var vanished: bool = _target != null and (
+				_target == _dismissed or not _is_presentable(_target)
+		)
 		_target = target
 		_hover_time = 0.0
 		if was_shown:
@@ -98,6 +110,21 @@ func _process(delta: float) -> void:
 	
 	if _shown:
 		_place()
+
+
+func _input(event: InputEvent) -> void:
+	var clicked: bool = event is InputEventMouseButton or event is InputEventScreenTouch
+	if not event.is_pressed() or event.is_echo():
+		return
+	if not clicked and not event.is_action(&"ui_accept"):
+		return
+	
+	var target: Control = _current_target()
+	if target:
+		_dismissed = target
+		if target == _target:
+			_target = null
+			_hide_now()
 
 
 func _current_target() -> Control:
@@ -175,6 +202,7 @@ func _animate(target: Color) -> Tween:
 		_tween.kill()
 	
 	_tween = create_tween().set_parallel().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	_tween.set_ignore_time_scale()
 	_tween.tween_property(root, ^"modulate", target, _duration())
 	return _tween
 

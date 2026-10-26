@@ -32,7 +32,7 @@ func close() -> void:
 	if _tween and _tween.is_running():
 		await _tween.finished
 	if _centered:
-		_tween = create_tween()
+		_tween = create_tween().set_ignore_time_scale()
 		_tween.tween_property(indicator, ^"modulate:a", 0.0, fade_duration)
 		await _tween.finished
 	await _fade(0.0).finished
@@ -44,7 +44,7 @@ func _fade(alpha: float) -> Tween:
 	if _tween:
 		_tween.kill()
 	
-	_tween = create_tween()
+	_tween = create_tween().set_ignore_time_scale()
 	_tween.tween_property(self, ^"modulate:a", alpha, fade_duration)
 	return _tween
 

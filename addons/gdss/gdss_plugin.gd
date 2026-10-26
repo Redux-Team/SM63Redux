@@ -36,6 +36,10 @@ func _enter_tree() -> void:
 	_setup_editor()
 
 
+func _process(_delta: float) -> void:
+	GDSS.update_time()
+
+
 func _exit_tree() -> void:
 	if scene_changed.is_connected(_on_scene_changed):
 		scene_changed.disconnect(_on_scene_changed)
@@ -109,6 +113,10 @@ func _setup_settings() -> void:
 			"hint": PROPERTY_HINT_ENUM,
 			"hint_string": "Disable,Enable"
 		})
+	var time_setting: String = "shader_globals/%s" % GDSS.TIME_PARAM
+	if not ProjectSettings.has_setting(time_setting):
+		ProjectSettings.set_setting(time_setting, {"type": "float", "value": 0.0})
+	GDSS.ensure_time_param()
 	ProjectSettings.save()
 
 

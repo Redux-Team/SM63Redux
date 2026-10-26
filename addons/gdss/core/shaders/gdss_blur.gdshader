@@ -4,6 +4,8 @@ render_mode unshaded;
 // The liquid-glass refraction (sample-scaling lens + edge glow) is ported from
 // OverShifted/LiquidGlass (MIT): https://github.com/OverShifted/LiquidGlass
 
+global uniform float gdss_time;
+
 uniform vec2 u_size = vec2(100.0, 40.0);
 // Per-side quad padding (left, right, top, bottom) that holds the shadow.
 uniform vec4 u_pad = vec4(0.0);
@@ -235,7 +237,7 @@ void fragment() {
 		// p runs -half_size..+half_size across the panel, so this is panel-local. UV spans
 		// the padded quad instead, so UV * full only agrees with it when u_pad is zero -
 		// with a shadow it shifts the fill and puts the contain bars in the wrong place.
-		vec2 px = p + half_size - u_fill_scroll * TIME;
+		vec2 px = p + half_size - u_fill_scroll * gdss_time;
 		// Only the sampler in use holds the texture; the other is left unbound, because
 		// GLES3 stores filter and repeat on the texture object, so binding one texture to
 		// both would let the second bind overwrite the first's filtering.
