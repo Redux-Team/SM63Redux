@@ -23,6 +23,7 @@ var _time: float = 0.0
 var _coins: Dictionary[StringName, Dictionary] = {}
 var _pending: Array[GameObject] = []
 var _pending_layers: Array[LevelLayer] = []
+var _world_frozen: bool = false
 
 
 static func of(node: Node) -> Level:
@@ -68,6 +69,16 @@ func request_kickout() -> void:
 	kickout_requested.emit()
 
 
+func set_world_frozen(frozen: bool) -> void:
+	_world_frozen = frozen
+	if _pending.is_empty():
+		_apply_world_frozen()
+
+
+func is_world_frozen() -> bool:
+	return _world_frozen
+
+
 func load_data(data: LevelData, area_uuid: StringName = &"") -> void:
 	if not Singleton.defer_threaded(prepare.bind(data, area_uuid), attach):
 		prepare(data, area_uuid)
@@ -99,7 +110,7 @@ func attach(batch: int = ATTACH_BATCH) -> void:
 	
 	_pending.clear()
 	_pending_layers.clear()
-	world.process_mode = Node.PROCESS_MODE_INHERIT
+	_apply_world_frozen()
 	for object: GameObject in _area.get_all_objects():
 		if object.game_root is Player:
 			_player = object.game_root
@@ -140,6 +151,10 @@ func get_area() -> LevelArea:
 
 func get_player() -> Player:
 	return _player
+
+
+func _apply_world_frozen() -> void:
+	world.process_mode = Node.PROCESS_MODE_DISABLED if _world_frozen else Node.PROCESS_MODE_INHERIT
 
 
 func _get_counter(kind: StringName, group: StringName) -> Vector2i:
