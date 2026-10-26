@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 awk '
     function flush() {
-        if (err != "" & err !~ /still in use at exit/) {
+        if (err != "" && err !~ /still in use at exit/) {
             print err
             found = 1
         }
