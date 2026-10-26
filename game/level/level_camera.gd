@@ -134,15 +134,15 @@ func follow(body: CharacterBody2D) -> void:
 	_previous = body.global_position
 	_current = body.global_position
 	_focus = body.global_position
-	_lead = Vector2.ZERO
-	_desired = _focus
-	_resolved_previous = _focus
-	_resolved_current = _focus
+	_lead = Vector2(0.0, ground_bias)
+	_desired = _focus + _lead
+	_resolved_previous = _desired
+	_resolved_current = _desired
 	_blocked = Vector2.ZERO
 	_limit_min = -Vector2.INF
 	_limit_max = Vector2.INF
-	_stopper.global_position = _focus
-	global_position = _focus
+	_stopper.global_position = _desired
+	global_position = _desired
 	offset = Vector2.ZERO
 	reset_smoothing()
 

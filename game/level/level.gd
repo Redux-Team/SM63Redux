@@ -5,6 +5,13 @@ signal loaded
 signal coins_changed(kind: StringName, count: int, total: int)
 signal shine_collected(scenario: int)
 signal kickout_requested
+signal retry_requested(clean: bool)
+signal exit_requested
+
+enum Context {
+	CAMPAIGN,
+	PLAYTEST,
+}
 
 const ATTACH_BATCH: int = 64
 
@@ -15,7 +22,9 @@ const ATTACH_BATCH: int = 64
 @export var silhouette_source: SilhouetteSource
 @export var silhouette_material: Material
 @export var background: LevelBackground
+@export var context: Context = Context.CAMPAIGN
 
+var _data: LevelData
 var _area: LevelArea
 var _area_data: AreaData
 var _player: Player
@@ -69,6 +78,22 @@ func request_kickout() -> void:
 	kickout_requested.emit()
 
 
+func can_retry() -> bool:
+	return not retry_requested.get_connections().is_empty()
+
+
+func request_retry(clean: bool = false) -> void:
+	retry_requested.emit(clean)
+
+
+func can_exit() -> bool:
+	return not exit_requested.get_connections().is_empty()
+
+
+func request_exit() -> void:
+	exit_requested.emit()
+
+
 func set_world_frozen(frozen: bool) -> void:
 	_world_frozen = frozen
 	if _pending.is_empty():
@@ -86,6 +111,7 @@ func load_data(data: LevelData, area_uuid: StringName = &"") -> void:
 
 
 func prepare(data: LevelData, area_uuid: StringName = &"") -> void:
+	_data = data
 	_area_data = data.find_area(area_uuid)
 	if _area_data == null:
 		_area_data = data.areas.front()
@@ -143,6 +169,18 @@ func respawn(old: GameObject, data: ObjectData, drops_coins: bool = false) -> vo
 func dismantle() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
 	await Teardown.free_nodes(_area.get_all_objects() if _area else [], get_tree())
+
+
+func get_level_name() -> String:
+	return _data.level_name if _data and not _data.level_name.is_empty() else "Untitled Level"
+
+
+func get_scenario_name() -> String:
+	return "Scenario Name"
+
+
+func get_scenario_description() -> String:
+	return "A short description of what this scenario is about."
 
 
 func get_area() -> LevelArea:

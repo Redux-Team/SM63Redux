@@ -12,7 +12,10 @@ var _returning: bool = false
 
 
 func _ready() -> void:
+	level.context = Level.Context.PLAYTEST
 	level.kickout_requested.connect(_on_kickout)
+	level.retry_requested.connect(retry)
+	level.exit_requested.connect(return_to_editor)
 	var session: EditorSession = Singleton.editor_session
 	if session.level:
 		level.load_data(session.level, session.area_uuid)
@@ -23,14 +26,30 @@ func return_to_editor() -> void:
 		return
 	
 	_returning = true
-	GDSS.set_state(return_button, LAUNCHED_STATE)
-	await get_tree().create_timer(RELEASE_DELAY).timeout
+	if return_button:
+		GDSS.set_state(return_button, LAUNCHED_STATE)
+		await get_tree().create_timer(RELEASE_DELAY).timeout
 	(
 			Singleton.build_screen_transition()
 			.set_center()
 			.set_loading_delay(0.0)
 			.load(level.dismantle)
 			.set_swap(Singleton.editor_session.resume_or_open.bind(get_tree(), LEVEL_DESIGNER))
+			.done()
+	)
+
+
+func retry(_clean: bool = false) -> void:
+	if _returning or Singleton.is_transitioning():
+		return
+	
+	_returning = true
+	(
+			Singleton.build_screen_transition()
+			.set_center()
+			.set_loading_delay(0.0)
+			.load(level.dismantle)
+			.set_destination(scene_file_path)
 			.done()
 	)
 
