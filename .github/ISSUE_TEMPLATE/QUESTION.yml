@@ -1,0 +1,57 @@
+name: Question
+description: Ask a question regarding the codebase, plans, or implementation of something.
+title: "[Question]: "
+labels: ["question"]
+type: question
+
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Please fill out the values below in **English** to the best of your ability. Use translation tools if necessary.
+        The more respectful and descriptive you are, the easier it will be to have substance in the discussion.
+        Please keep discussion relevant to one general topic at a time;
+        if multiple different questions across different topics are necessary, make different question issues for each topic.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Extra fields (Optional)
+      placeholder: Place any extra notes, screenshots, or videos here.
+
+  - type: dropdown
+    id: portion
+    attributes:
+      label: Portion (Optional)
+      description: What portion of the game is this in relation to, if any?
+      multiple: true
+      options:
+        - Campaign
+        - Level Designer
+        - General gameplay
+        - Other
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Is this a valid issue?
+      options:
+        - label: >
+            I have verified that this question or something similar has not been asked nor addressed
+            in a separate issue/pull request.
+          required: true
+
+  - type: markdown
+    attributes:
+      value: >
+        Thank you for your question!
+

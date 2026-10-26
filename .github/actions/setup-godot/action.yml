@@ -98,7 +98,7 @@ runs:
         timeout 600 godot --headless --path . --audio-driver Dummy --import || true
         echo "::endgroup::"
         timeout 600 godot --headless --path . --audio-driver Dummy --import 2>&1 | tee "$RUNNER_TEMP/import.log"
-        if grep -E '^(ERROR|SCRIPT ERROR)' "$RUNNER_TEMP/import.log" | grep -v 'still in use at exit'; then
+        if ! .github/scripts/check-godot-log.sh "$RUNNER_TEMP/import.log"; then
           echo "::error::The project import reported errors."
           exit 1
         fi

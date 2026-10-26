@@ -1,0 +1,98 @@
+name: Bug Report
+description: Recommended template for filing a bug report
+title: "[Bug]: "
+labels: ["bug"]
+type: bug
+
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Please fill out the values below in **English** to the best of your ability. Use translation tools if necessary.
+        The more respectful and descriptive you are, the easier it will be to have substance in the discussion.
+        Please keep discussion relevant to one general topic at a time;
+        if multiple different things must be reported, make different bug report issues for each one.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the issue/bug
+      placeholder: When I do this, X happens.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start in a level
+        2. Do this action
+        3. Do that action
+        4. Bug should happen
+
+        Type "Unknown" if you do not know how to reproduce this bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What was the expected result? (Optional)
+      placeholder: I expected this to happen.
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Extra fields (Optional)
+      placeholder: Place any extra notes, screenshots, or videos here.
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: On what platform are you experiencing this issue?
+      multiple: false
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Android
+        - iOS
+        - Other
+      default: 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: version
+    attributes:
+      label: Version
+      description: On what version are you experiencing this issue?
+      placeholder: |
+        branch: <commit>
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: web
+    attributes:
+      label: Is this a web build?
+      options:
+        - label: "Yes"
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Is this a valid issue?
+      options:
+        - label: >
+            I have verified that this bug has not been reported nor addressed
+            in a separate issue/pull request.
+          required: true
+
+  - type: markdown
+    attributes:
+      value: >
+        Thank you for reporting this issue!
+

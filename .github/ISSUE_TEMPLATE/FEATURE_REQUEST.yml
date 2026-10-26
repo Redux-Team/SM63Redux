@@ -1,0 +1,63 @@
+name: Feature Request
+description: Request and discuss a new feature
+title: "[Feature]: "
+labels: ["feature"]
+type: suggestion
+
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Please fill out the values below in **English** to the best of your ability. Use translation tools if necessary.
+        The more respectful and descriptive you are, the easier it will be to have substance in the discussion.
+        Please keep discussion relevant to one general topic at a time;
+        if multiple different things are requested, make different feature request issues for each one.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the feature
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Why should this feature be implemented, and does it fit the game?
+      placeholder: "ex: It is currently not possible to do X, and this would be a good means of solving it."
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Extra fields (Optional)
+      placeholder: Place any extra notes, screenshots, or videos here.
+
+  - type: dropdown
+    id: portion
+    attributes:
+      label: Portion
+      description: What portion of the game would this affect?
+      multiple: true
+      options:
+        - Campaign
+        - Level Designer
+        - General gameplay
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Is this a valid issue?
+      options:
+        - label: >
+            I have verified that this feature or something similar has not been requested nor addressed
+            in a separate issue/pull request.
+          required: true
+
+  - type: markdown
+    attributes:
+      value: >
+        Thank you for your suggestion!
+
