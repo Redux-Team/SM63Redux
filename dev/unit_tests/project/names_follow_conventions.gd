@@ -2,7 +2,6 @@ const Files: GDScript = preload("res://dev/unit_tests/project/_files.gd")
 const SNAKE_CASE: String = "^_?[a-z][a-z0-9_]*$"
 const CONSTANT_CASE: String = "^_?[A-Z][A-Z0-9_]*$"
 const PASCAL_CASE: String = "^[A-Z][A-Za-z0-9]*$"
-const FILE_NAME: String = "^_?[a-z0-9]+(_[a-z0-9]+)*$"
 const DECLARATIONS: Dictionary[String, String] = {
 	"^(?:@\\w+(?:\\([^)]*\\))?\\s+)*(?:static\\s+)?var\\s+(\\w+)": "variable",
 	"^(?:static\\s+)?func\\s+(\\w+)": "function",
@@ -37,13 +36,7 @@ static func run_test() -> void:
 	for pattern: String in DECLARATIONS:
 		regexes[pattern] = RegEx.create_from_string(pattern)
 	
-	var extensions: PackedStringArray = ["gd", "gdshader", "tscn"]
-	for path: String in Files.find(extensions, Files.LINT_IGNORED):
-		if not RegEx.create_from_string(FILE_NAME).search(path.get_file().get_basename()):
-			UnitTester.fail(path, 0, "file names are snake_case")
-		if path.get_extension() != "gd":
-			continue
-		
+	for path: String in Files.find(["gd"], Files.LINT_IGNORED):
 		var source: SourceFile = SourceFile.new(path)
 		for i: int in source.lines.size():
 			if source.string_lines.has(i):

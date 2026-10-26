@@ -2,6 +2,7 @@
 set -uo pipefail
 
 cd "$(git rev-parse --show-toplevel)" || exit 1
+bash .githooks/rename_to_snake_case.sh || exit 1
 if ! git diff --cached --name-only --diff-filter=ACMR | grep -qE '\.(gd|gdshader)$'; then
 	exit 0
 fi

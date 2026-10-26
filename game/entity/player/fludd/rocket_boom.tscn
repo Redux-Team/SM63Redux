@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c7h6sn8qwj7c3" path="res://game/entity/player/fludd/rocket_boom.gd" id="1_boom"]
 [ext_resource type="Script" uid="uid://df82mcnubnp0h" path="res://util/2d/animated_particles.gd" id="4_particles"]
-[ext_resource type="Texture2D" uid="uid://8mb3v6n2k6er" path="res://assets/textures/entity/player/shared/Splash_water.png" id="5_splash"]
+[ext_resource type="Texture2D" uid="uid://8mb3v6n2k6er" path="res://assets/textures/entity/player/shared/splash_water.png" id="5_splash"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_splash0"]
 atlas = ExtResource("5_splash")

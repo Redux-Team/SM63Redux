@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://hw4uo0e1rkta" path="res://shader/spray_stream.gdshader" id="2_shader"]
 [ext_resource type="Texture2D" uid="uid://b1h2fwidh3p1i" path="res://assets/textures/entity/player/shared/fludd_spray.png" id="3_spray"]
 [ext_resource type="Script" uid="uid://df82mcnubnp0h" path="res://util/2d/animated_particles.gd" id="4_particles"]
-[ext_resource type="Texture2D" uid="uid://8mb3v6n2k6er" path="res://assets/textures/entity/player/shared/Splash_water.png" id="6_12xtr"]
+[ext_resource type="Texture2D" uid="uid://8mb3v6n2k6er" path="res://assets/textures/entity/player/shared/splash_water.png" id="6_12xtr"]
 [ext_resource type="Script" uid="uid://cwdgtyt2wh132" path="res://game/entity/player/fludd/spray_profile.gd" id="6_profile"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_top"]
