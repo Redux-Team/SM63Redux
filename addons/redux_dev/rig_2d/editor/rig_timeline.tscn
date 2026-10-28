@@ -1,0 +1,310 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://dw1oxcuix2ejf" path="res://addons/redux_dev/rig_2d/editor/rig_timeline.gd" id="1_timeline"]
+[ext_resource type="Script" uid="uid://c8uw3iabg5yue" path="res://addons/redux_dev/rig_2d/editor/rig_timeline_grid.gd" id="2_grid"]
+[ext_resource type="Script" uid="uid://b3a0q7v6ljimf" path="res://addons/redux_dev/rig_2d/editor/rig_edits.gd" id="3_edits"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_previous"]
+keycode = 4194319
+
+[sub_resource type="Shortcut" id="Shortcut_previous"]
+events = [SubResource("InputEventKey_previous")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_play"]
+keycode = 32
+
+[sub_resource type="Shortcut" id="Shortcut_play"]
+events = [SubResource("InputEventKey_play")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_next"]
+keycode = 4194321
+
+[sub_resource type="Shortcut" id="Shortcut_next"]
+events = [SubResource("InputEventKey_next")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_key"]
+keycode = 75
+
+[sub_resource type="Shortcut" id="Shortcut_key"]
+events = [SubResource("InputEventKey_key")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_clear_key"]
+keycode = 4194312
+
+[sub_resource type="Shortcut" id="Shortcut_clear_key"]
+events = [SubResource("InputEventKey_clear_key")]
+
+[node name="RigTimeline" type="VBoxContainer" node_paths=PackedStringArray("edits", "previous", "next", "clips", "clip_menu", "fps", "loop", "play", "reset", "preview", "add_menu", "auto_key", "key_scope", "grid", "rename_dialog", "rename_field", "variant_dialog", "variant_axis", "variant_value")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+script = ExtResource("1_timeline")
+edits = NodePath("Edits")
+previous = NodePath("Toolbar/Previous")
+next = NodePath("Toolbar/Next")
+clips = NodePath("Toolbar/Clips")
+clip_menu = NodePath("Toolbar/ClipMenu")
+fps = NodePath("Toolbar/Fps")
+loop = NodePath("Toolbar/Loop")
+play = NodePath("Toolbar/Play")
+reset = NodePath("Toolbar/Reset")
+preview = NodePath("Toolbar/Preview")
+add_menu = NodePath("Toolbar/Add")
+auto_key = NodePath("Toolbar/AutoKey")
+key_scope = NodePath("Toolbar/KeyScope")
+grid = NodePath("Scroll/Grid")
+rename_dialog = NodePath("RenameDialog")
+rename_field = NodePath("RenameDialog/Box/Field")
+variant_dialog = NodePath("VariantDialog")
+variant_axis = NodePath("VariantDialog/Fields/Axis")
+variant_value = NodePath("VariantDialog/Fields/Value")
+
+[node name="Toolbar" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Previous" type="Button" parent="Toolbar" node_paths=PackedStringArray("shortcut_context")]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+tooltip_text = "Previous frame (Left)"
+shortcut_context = NodePath("../..")
+shortcut_in_tooltip = false
+shortcut = SubResource("Shortcut_previous")
+metadata/editor_icon = &"Back"
+
+[node name="Play" type="Button" parent="Toolbar" node_paths=PackedStringArray("shortcut_context")]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+tooltip_text = "Play / pause (Space)"
+shortcut_context = NodePath("../..")
+shortcut_in_tooltip = false
+shortcut = SubResource("Shortcut_play")
+toggle_mode = true
+metadata/editor_icon = &"Play"
+
+[node name="Next" type="Button" parent="Toolbar" node_paths=PackedStringArray("shortcut_context")]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+tooltip_text = "Next frame (Right)"
+shortcut_context = NodePath("../..")
+shortcut_in_tooltip = false
+shortcut = SubResource("Shortcut_next")
+metadata/editor_icon = &"Forward"
+
+[node name="TransportRule" type="VSeparator" parent="Toolbar"]
+layout_mode = 2
+
+[node name="Clips" type="OptionButton" parent="Toolbar"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+tooltip_text = "Clip being edited"
+fit_to_longest_item = false
+
+[node name="ClipMenu" type="MenuButton" parent="Toolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatMenuButton"
+flat = false
+tooltip_text = "Clip and reset actions"
+item_count = 10
+popup/item_0/text = "New Clip"
+popup/item_0/id = 0
+popup/item_1/text = "Rename..."
+popup/item_1/id = 1
+popup/item_2/text = "Duplicate"
+popup/item_2/id = 2
+popup/item_3/text = "Delete"
+popup/item_3/id = 3
+popup/item_4/separator = true
+popup/item_4/id = 100
+popup/item_5/text = "Move Up"
+popup/item_5/id = 4
+popup/item_6/text = "Move Down"
+popup/item_6/id = 5
+popup/item_7/text = "Reset State"
+popup/item_7/id = 101
+popup/item_7/separator = true
+popup/item_8/text = "Store Current State as Reset"
+popup/item_8/id = 6
+popup/item_9/text = "Clear Reset"
+popup/item_9/id = 7
+metadata/editor_icon = &"GuiTabMenuHl"
+
+[node name="Fps" type="SpinBox" parent="Toolbar"]
+custom_minimum_size = Vector2(84, 0)
+layout_mode = 2
+tooltip_text = "Frames per second"
+max_value = 120.0
+step = 0.5
+suffix = "fps"
+
+[node name="Loop" type="Button" parent="Toolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+tooltip_text = "Loop this clip"
+toggle_mode = true
+metadata/editor_icon = &"Loop"
+
+[node name="Spacer" type="Control" parent="Toolbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Reset" type="Button" parent="Toolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+metadata/editor_icon = &"Reload"
+
+[node name="Preview" type="MenuButton" parent="Toolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatMenuButton"
+flat = false
+tooltip_text = "Preview variants such as caps, nozzles and hold poses"
+metadata/editor_icon = &"GuiVisibilityVisible"
+
+[node name="Add" type="MenuButton" parent="Toolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatMenuButton"
+flat = false
+tooltip_text = "Add a layer or anchor"
+item_count = 2
+popup/item_0/text = "Layer"
+popup/item_0/id = 0
+popup/item_1/text = "Anchor"
+popup/item_1/id = 1
+metadata/editor_icon = &"Add"
+
+[node name="KeyRule" type="VSeparator" parent="Toolbar"]
+layout_mode = 2
+
+[node name="Key" type="Button" parent="Toolbar" node_paths=PackedStringArray("shortcut_context")]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+tooltip_text = "Key the selected anchor on this frame (K)"
+shortcut_context = NodePath("../..")
+shortcut_in_tooltip = false
+shortcut = SubResource("Shortcut_key")
+metadata/editor_icon = &"KeyValue"
+
+[node name="ClearKey" type="Button" parent="Toolbar" node_paths=PackedStringArray("shortcut_context")]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+tooltip_text = "Clear the selected anchor's key on this frame (Delete)"
+shortcut_context = NodePath("../..")
+shortcut_in_tooltip = false
+shortcut = SubResource("Shortcut_clear_key")
+metadata/editor_icon = &"Remove"
+
+[node name="AutoKey" type="Button" parent="Toolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+tooltip_text = "Auto key: store a key whenever an anchor is moved in the 2D viewport"
+theme_override_colors/icon_pressed_color = Color(1, 0.42, 0.42, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 0.55, 0.55, 1)
+toggle_mode = true
+metadata/editor_icon = &"AutoKey"
+
+[node name="KeyScope" type="MenuButton" parent="Toolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatMenuButton"
+flat = false
+tooltip_text = "What auto key changes when an anchor is moved"
+text = "Frame"
+item_count = 3
+popup/item_0/text = "Key This Frame"
+popup/item_0/checkable = 2
+popup/item_0/id = 0
+popup/item_1/text = "Offset Every Frame in Clip"
+popup/item_1/checkable = 2
+popup/item_1/id = 1
+popup/item_2/text = "Offset Every Frame in All Clips"
+popup/item_2/checkable = 2
+popup/item_2/id = 2
+
+[node name="Rule" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Grid" type="Control" parent="Scroll" node_paths=PackedStringArray("scroll", "menu", "edits")]
+texture_filter = 1
+layout_mode = 2
+focus_mode = 1
+mouse_filter = 1
+script = ExtResource("2_grid")
+scroll = NodePath("..")
+menu = NodePath("Menu")
+edits = NodePath("../../Edits")
+
+[node name="Menu" type="PopupMenu" parent="Scroll/Grid"]
+
+[node name="Edits" type="Node" parent="."]
+script = ExtResource("3_edits")
+
+[node name="RenameDialog" type="ConfirmationDialog" parent="."]
+title = "Rename Clip"
+size = Vector2i(380, 120)
+
+[node name="Box" type="VBoxContainer" parent="RenameDialog"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 372.0
+offset_bottom = 71.0
+
+[node name="Field" type="LineEdit" parent="RenameDialog/Box"]
+layout_mode = 2
+placeholder_text = "clip_name"
+
+[node name="Note" type="Label" parent="RenameDialog/Box"]
+modulate = Color(1, 1, 1, 0.6)
+layout_mode = 2
+text = "Strips, aliases and anchor keys follow the new name.
+State effects that play it by name do not."
+
+[node name="VariantDialog" type="ConfirmationDialog" parent="."]
+title = "Edit Variant"
+size = Vector2i(320, 120)
+
+[node name="Fields" type="GridContainer" parent="VariantDialog"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 312.0
+offset_bottom = 71.0
+columns = 2
+
+[node name="AxisLabel" type="Label" parent="VariantDialog/Fields"]
+layout_mode = 2
+text = "Axis"
+
+[node name="Axis" type="LineEdit" parent="VariantDialog/Fields"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "hold"
+
+[node name="ValueLabel" type="Label" parent="VariantDialog/Fields"]
+layout_mode = 2
+text = "Value"
+
+[node name="Value" type="LineEdit" parent="VariantDialog/Fields"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "heavy"
+
+[connection signal="pressed" from="Toolbar/Previous" to="." method="_step" binds= [-1]]
+[connection signal="toggled" from="Toolbar/Play" to="." method="_on_play_toggled"]
+[connection signal="pressed" from="Toolbar/Next" to="." method="_step" binds= [1]]
+[connection signal="item_selected" from="Toolbar/Clips" to="." method="_on_clip_selected"]
+[connection signal="value_changed" from="Toolbar/Fps" to="." method="_on_fps_changed"]
+[connection signal="toggled" from="Toolbar/Loop" to="." method="_on_loop_toggled"]
+[connection signal="pressed" from="Toolbar/Reset" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="Toolbar/Key" to="." method="_key" binds= [true]]
+[connection signal="pressed" from="Toolbar/ClearKey" to="." method="_key" binds= [false]]
+[connection signal="toggled" from="Toolbar/AutoKey" to="." method="_on_auto_key_toggled"]
+[connection signal="gui_input" from="Scroll/Grid" to="." method="_on_grid_input"]
+[connection signal="variant_edit_requested" from="Scroll/Grid" to="." method="_open_variant_dialog"]
+[connection signal="confirmed" from="RenameDialog" to="." method="_on_rename_confirmed"]
+[connection signal="confirmed" from="VariantDialog" to="." method="_on_variant_confirmed"]
