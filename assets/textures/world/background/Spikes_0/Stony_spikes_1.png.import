@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bs3hqxp8gnnto"
-path="res://.godot/imported/Stony_spikes_1.png-b2534dd2e00dd3001d7af9d60fd84a3f.ctex"
+path="res://.godot/imported/stony_spikes_1.png-bc47c5457a45df4b6a598ff632f56349.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/world/background/Spikes_0/Stony_spikes_1.png"
-dest_files=["res://.godot/imported/Stony_spikes_1.png-b2534dd2e00dd3001d7af9d60fd84a3f.ctex"]
+source_file="res://assets/textures/world/background/spikes_0/stony_spikes_1.png"
+dest_files=["res://.godot/imported/stony_spikes_1.png-bc47c5457a45df4b6a598ff632f56349.ctex"]
 
 [params]
 
