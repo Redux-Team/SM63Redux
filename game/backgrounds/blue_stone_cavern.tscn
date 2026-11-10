@@ -3,12 +3,12 @@
 [ext_resource type="Script" uid="uid://t463o2ocnavq" path="res://util/background/background.gd" id="1_ls0ll"]
 [ext_resource type="Script" uid="uid://bch8jy3lorqya" path="res://util/background/background_layer.gd" id="2_8uc0w"]
 [ext_resource type="Script" uid="uid://dirasfi12sai2" path="res://util/background/background_layer_2d.gd" id="3_il4n6"]
-[ext_resource type="Texture2D" uid="uid://bjjpev443ip80" path="res://assets/textures/world/background/spikes_0/stony_spikes_4.png" id="4_6mysl"]
-[ext_resource type="Texture2D" uid="uid://crhqq278ht8fj" path="res://assets/textures/world/background/spikes_0/stony_spikes_3.png" id="5_lncng"]
-[ext_resource type="Texture2D" uid="uid://bskgu7loy0i7i" path="res://assets/textures/world/background/spikes_0/stony_spikes_2.png" id="6_3q2x7"]
+[ext_resource type="Texture2D" uid="uid://bjjpev443ip80" path="res://assets/textures/world/background/blue_spikes_0/blue_stony_spikes_4.png" id="4_6mysl"]
+[ext_resource type="Texture2D" uid="uid://crhqq278ht8fj" path="res://assets/textures/world/background/blue_spikes_0/blue_stony_spikes_3.png" id="5_lncng"]
+[ext_resource type="Texture2D" uid="uid://bskgu7loy0i7i" path="res://assets/textures/world/background/blue_spikes_0/blue_stony_spikes_2.png" id="6_3q2x7"]
 [ext_resource type="Script" uid="uid://bqv4ukposul3v" path="res://util/background/background_layer_group.gd" id="6_bxc80"]
-[ext_resource type="Texture2D" uid="uid://bs3hqxp8gnnto" path="res://assets/textures/world/background/spikes_0/stony_spikes_1.png" id="7_medr1"]
-[ext_resource type="Texture2D" uid="uid://ta42h0n23vel" path="res://assets/textures/world/background/spikes_0/stony_spikes_0.png" id="8_6gkrd"]
+[ext_resource type="Texture2D" uid="uid://bs3hqxp8gnnto" path="res://assets/textures/world/background/blue_spikes_0/blue_stony_spikes_1.png" id="7_medr1"]
+[ext_resource type="Texture2D" uid="uid://ta42h0n23vel" path="res://assets/textures/world/background/blue_spikes_0/blue_stony_spikes_0.png" id="8_6gkrd"]
 
 [sub_resource type="Gradient" id="Gradient_4xypt"]
 offsets = PackedFloat32Array(0, 0.98086125)

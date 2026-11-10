@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjjpev443ip80"
-path="res://.godot/imported/stony_spikes_4.png-6b22de054bdbbc0d53a48f8020ea3493.ctex"
+uid="uid://ta42h0n23vel"
+path="res://.godot/imported/blue_stony_spikes_0.png-e63487fed9dc0249feb06db2d2c47175.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/world/background/spikes_0/stony_spikes_4.png"
-dest_files=["res://.godot/imported/stony_spikes_4.png-6b22de054bdbbc0d53a48f8020ea3493.ctex"]
+source_file="res://assets/textures/world/background/blue_spikes_0/blue_stony_spikes_0.png"
+dest_files=["res://.godot/imported/blue_stony_spikes_0.png-e63487fed9dc0249feb06db2d2c47175.ctex"]
 
 [params]
 
